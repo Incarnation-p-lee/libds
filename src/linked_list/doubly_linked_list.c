@@ -5,17 +5,18 @@
 struct doubly_linked_list *
 dlinked_list_initial(void)
 {
-  struct doubly_linked_list *head;
+    struct doubly_linked_list *head;
 
-  head = (struct doubly_linked_list *)malloc(sizeof(*head));
-  if (head) {
-    head->index = 0;
-    head->next = head;
-    head->previous = head;
-  } else {
-  }
+    head = (struct doubly_linked_list *)malloc(sizeof(*head));
+    if (!head) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        head->index = 0;
+        head->next = head;
+        head->previous = head;
+    }
 
-  return head;
+    return head;
 }
 
 /*
@@ -25,29 +26,31 @@ dlinked_list_initial(void)
 struct doubly_linked_list *
 dlinked_list_generate(int *val, int size)
 {
-  struct doubly_linked_list *head;
-  struct doubly_linked_list *node;
-  register int *iterator;
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *node;
+    register int *iterator;
 
-  head = NULL;
-  if (val && size > 0) {
-    iterator = val;
-    node = (struct doubly_linked_list *)malloc(sizeof(*node));
+    head = NULL;
+    if (val && size > 0) {
+        iterator = val;
+        node = (struct doubly_linked_list *)malloc(sizeof(*node));
 
-    if (node) {
-      node->index = *iterator++;
-      node->next = node;
-      node->previous = node;
-      head = node;
+        if (!node) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            node->index = *iterator++;
+            node->next = node;
+            node->previous = node;
+            head = node;
 
-      while(iterator < val + size) {
-        append_dlinked_list_node(node, *iterator++);
-        node = node->next;
-      }
+            while (iterator < val + size) {
+                append_dlinked_list_node(node, *iterator++);
+                node = node->next;
+            }
+        }
     }
-  }
 
-  return head;
+    return head;
 }
 
 /*
@@ -56,196 +59,160 @@ dlinked_list_generate(int *val, int size)
  *   If uninitialized or destroyed, export warning, nothing else will be done.
  */
 void
-append_dlinked_list_node(struct doubly_linked_list *node, int value)
+dlinked_list_append_node(struct doubly_linked_list *node, int value)
 {
-  struct doubly_linked_list *next;
+    struct doubly_linked_list *next;
 
-
-  if (node) {
-    next = (struct doubly_linked_list *)malloc(sizeof(*next));
-  next->index = value;
-  next->previous = NULL;
-  next->next = NULL;
-  }
-
-  if(NULL != node->next)
-  {
-    next->next = node->next;
-    node->next->previous = next;
-  }
-  node->next = next;
-  next->previous = node;
-
-END_OF_APPEND:
-  LEAVE;
-  return;
-}
-
-void
-insert_after_dlinked_list(struct doubly_linked_list *cur,
-                          struct doubly_linked_list *node)
-{
-  ENTER("insert_after_dlinked_list");
-
-  if(cur && node)
-  {
-    cur->next->previous = node;
-    node->next = cur->next;
-    cur->next = node;
-    node->previous = cur;
-  }
-
-  LEAVE;
-  return;
-}
-
-void
-destroy_dlinked_list(struct doubly_linked_list **head)
-{
-  struct doubly_linked_list *cur;
-  struct doubly_linked_list **iter;
-  ENTER("destroy_dlinked_list");
-
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_CLEAR;
-  }
-
-  iter = head;
-  while(NULL != (cur = *iter))
-  {
-    iter = &cur->next;
-    remove_node_dlinked_list(cur);
-    saft_free((void**)&cur);
-  }
-
-  *head = NULL;
-
-END_OF_CLEAR:
-  LEAVE;
-  return;
-}
-
-
-int
-lengthof_dlinked_list(struct doubly_linked_list *head)
-{
-  int length;
-  struct doubly_linked_list *node;
-  ENTER("lengthof_dlinked_list");
-
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    length = -1;
-    goto END_OF_LENGTHOF;
-  }
-
-  length = 0;
-  node = head;
-  while(node->next != head)
-  {
-    length++;
-    node = node->next;
-  }
-
-END_OF_LENGTHOF:
-  LEAVE;
-  return length;
-}
-
-
-struct doubly_linked_list *
-accessby_index_dlinked_list(struct doubly_linked_list *head, int index)
-{
-  struct doubly_linked_list *node;
-  ENTER("accessby_index_slinked_list");
-
-  node = head;
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_ACCESS;
-  }
-  if(0 > index)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[1]));
-    goto END_OF_ACCESS;
-  }
-
-  while(index > 0)
-  {
-    node = node->next;
-    index--;
-  }
-
-END_OF_ACCESS:
-  LEAVE;
-  return node;
-}
-
-
-void
-print_dlinked_list(FILE *fd, char *msg, struct doubly_linked_list *head)
-{
-  int align;
-  register struct doubly_linked_list *iterator;
-  char *default_msg = "Default doubly linked list";
-  ENTER("print_dlinked_list");
-
-  if(NULL == msg)
-    msg = default_msg;
-
-  if(head)
-  {
-    align = 0;
-    iterator = head;
-    fprintf(fd, "[%s]:\n", msg);
-    iterator = iterator->next;
-    while(head != iterator)
-    {
-      fprintf(fd, "%d-> ", iterator->index);
-      if(!(++align % PRINT_WIDTH))
-        fprintf(fd, "\n");
-      iterator = iterator->next;
+    if (node) {
+        next = (struct doubly_linked_list *)malloc(sizeof(*next));
+        if (!next) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            next->index = value;
+            next->previous = NULL;
+            next->next = NULL;
+        }
     }
-  }
-  fprintf(fd, "NULL\n");
 
-  LEAVE;
-  return;
+    if (!node->next || !node->previous) {
+        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+        free(next);
+    } else {
+        dlinked_list_insert_after(node, next);
+    }
+
+    return;
 }
 
-
+/*
+ * Insert one existed node after another given node.
+ * _ARGV_, cur current given node.
+ *         node inserted node.
+ *         If either of _ARGV_ is NULL, nothing will be done.
+ */
 void
-print_reverse_dlinked_list(FILE *fd, char *msg, struct doubly_linked_list *tail)
+dlinked_list_insert_after(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node)
 {
-  int align;
-  register struct doubly_linked_list *iterator;
-  char *default_msg = "Default doubly linked list";
-  ENTER("print_dlinked_list");
+    if (cur && node)
+    {
+        cur->next->previous = node;
+        node->next = cur->next;
+        cur->next = node;
+        node->previous = cur;
+    }
 
-  if(NULL == msg)
-    msg = default_msg;
-
-  align = 0;
-  iterator = tail;
-  fprintf(fd, "[%s]:\n", msg);
-  iterator = iterator->next;
-  while(tail != iterator)
-  {
-    fprintf(fd, "%d-> ", iterator->index);
-    if(!(++align % PRINT_WIDTH))
-      fprintf(fd, "\n");
-    iterator = iterator->previous;
-  }
-  fprintf(fd, "NULL\n");
-
-  LEAVE;
-  return;
+    return;
 }
 
+/*
+ * Destroy the whole doubly linked list, set head to NULL.
+ */
+void
+dlinked_list_destroy(struct doubly_linked_list **head)
+{
+    struct doubly_linked_list *node;
+
+    node = *head;
+    while (node) {
+        node = dlinked_list_remove_node(node);
+    }
+
+    *head = NULL;
+
+    return;
+}
+
+/*
+ * _RETURN_the whole doubly linked list, set head to NULL.
+ */
+void
+dlinked_list_next(struct doubly_linked_list **head)
+{
+    struct doubly_linked_list *node;
+
+    node = *head;
+    while (node) {
+        node = dlinked_list_remove_node(node);
+    }
+
+    *head = NULL;
+
+    return;
+}
+
+/*
+ * _RETURN_ Length of given linked list.
+ *   If NULL linked list, _RETURN_ 0.
+ */
+int
+dlinked_list_length(struct doubly_linked_list *head)
+{
+    int length;
+    struct doubly_linked_list *node;
+
+    length = 0;
+
+    if (head) {
+        length++;
+        node = head->next;
+
+        while (node != head) {
+            length++;
+            node = node->next;
+        }
+    }
+
+    return length;
+}
+
+/*
+ * _RETURN_ the node of index by given head node.
+ *   If invalid _ARGV_, nothing will done, _RETURN_ NULL.
+ */
+struct doubly_linked_list *
+dlinked_list_accessby_index(struct doubly_linked_list *head, int index)
+{
+    register struct doubly_linked_list *node;
+
+    node = NULL;
+    if (head && index >= 0) {
+        node = head;
+        while (index > 0) {
+            node = node->next;
+            index--;
+        }
+    }
+
+    return node;
+}
+
+/*
+ * Print doubly linked list
+ *   If invalid head, nothing will be done.
+ */
+void
+dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head)
+{
+    register struct doubly_linked_list *iterator;
+    char *default_msg = "Default doubly linked list";
+
+    if (head) {
+        fprintf(fd, "[%s]:\n", msg);
+        if (!msg) {
+            msg = default_msg;
+        }
+
+        iterator = head;
+        do {
+            fprintf(fd, "%d ->\n", iterator->index);
+            iterator = iterator->next;
+        } while (iterator != head);
+    }
+    fprintf(fd, "NULL\n");
+
+    return;
+}
 
 void
 exchange_dlinked_list(struct doubly_linked_list **head,
@@ -297,52 +264,47 @@ END_OF_EXCHANGE:
   return;
 }
 
-
+/*
+ * Serialize the given linked list.
+ *   If NULL, nothing will be done.
+ */
 void
-serialize_dlinked_list(struct doubly_linked_list *head)
+dlinked_list_serialize(struct doubly_linked_list *head)
 {
-  struct doubly_linked_list *node;
-  int index;
-  ENTER("serialize_dlinked_list");
+    struct doubly_linked_list *node;
+    int index;
 
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_SERIAL;
-  }
+    if (head) {
+        index = 0;
+        node = head;
+        do {
+            node->index = index++;
+            node = node->next;
+        } while (node != head);
+    }
 
-  index = 0;
-  node = head->next;
-  while(head != node)
-  {
-    node->index = index++;
-    node = node->next;
-  }
-
-END_OF_SERIAL:
-  LEAVE;
-  return;
+    return;
 }
 
 /*
-* As doubly linked list, remove operation will return next node by default.
-*/
+ * Remove the given node.
+ * _RETURN_ the next node.
+ *   If only one node of linked list, _RETURN_ NULL.
+ */
 struct doubly_linked_list *
-remove_node_dlinked_list(struct doubly_linked_list *node)
+dlinked_list_remove_node(struct doubly_linked_list *node)
 {
-  struct doubly_linked_list *next;
-  ENTER("remove_node_dlinked_list");
+    struct doubly_linked_list *next;
 
-  next = NULL;
-  if(node && node->next == node)
-    node->next = node->previous = NULL;
-  else if(node)
-  {
-    next = node->next;
-    node->previous->next = node->next;
-    node->next->previous = node->previous;
-  }
+    next = NULL;
+    if (node) {
+        if (node->next != node) {
+            next = node->next;
+            node->previous->next = node->next;
+            node->next->previous = node->previous;
+        }
+        free(node);
+    }
 
-  LEAVE;
-  return next;
+    return next;
 }

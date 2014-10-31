@@ -38,14 +38,14 @@ libds_log_print(enum log_level lvl, const char *msg)
         fprintf(ds_log, "%5s >%s", SYM_2_STR(WARN), msg);
         break;
       case ERROR:
-        fprintf(ds_log, "%5s >%s", SYM_2_STR(ERROR), msg);
+        fprintf(stdout, "%5s >%s", SYM_2_STR(ERROR), msg);
         break;
       case DEBUG:
         fprintf(ds_log, "%5s >%s", SYM_2_STR(DEBUG), msg);
         break;
       default:
         msg = "Unknown enum value of enum log_level.\n";
-        fprintf(ds_log, "%5s >%s", SYM_2_STR(ERROR), msg);
+        fprintf(ds_log , "%5s >%s", SYM_2_STR(WARN), msg);
         break;
     }
   }
