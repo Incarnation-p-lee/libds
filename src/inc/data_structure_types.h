@@ -11,6 +11,8 @@
    };
    Then, we can only care about this linked list opertion
  for all other linked list.
+   Both single_linked_list and doubly_linked_list are
+ _CIRCULAR_ linked list.
  */
 struct single_linked_list {
   int    index;

@@ -6,17 +6,17 @@
 struct single_linked_list *
 slinked_list_initial(void)
 {
-  struct single_linked_list *head;
+    struct single_linked_list *head;
 
-  head = (struct single_linked_list *)malloc(sizeof(*head));
-  if (!head) {
-    pr_log_err("Fail to get memory from system.\n");
-  } else {
-    head->index = 0;
-    head->next = NULL;
-  }
+    head = (struct single_linked_list *)malloc(sizeof(*head));
+    if (!head) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        head->index = 0;
+        head->next = head;
+    }
 
-  return head;
+    return head;
 }
 
 /*
@@ -27,30 +27,30 @@ slinked_list_initial(void)
 struct single_linked_list *
 slinked_list_generate(int *values, int size)
 {
-  struct single_linked_list *head;
-  struct single_linked_list *node;
-  register int *iterator;
+    struct single_linked_list *head;
+    struct single_linked_list *node;
+    register int *iterator;
 
-  head = NULL;
-  if (valuse && size > 0) {
-    iterator = values;
-    node = (struct single_linked_list *)malloc(sizeof(*node));
+    head = NULL;
+    if (valuse && size > 0) {
+        iterator = values;
+        node = (struct single_linked_list *)malloc(sizeof(*node));
 
-    if (!node) {
-      pr_log_err("Fail to get memory from system.\n");
-    } else {
-      node->index = *iterator++;
-      node->next = NULL;
+        if (!node) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            node->index = *iterator++;
+            node->next = node;
+            head = node;
 
-      head = node;
-      while (iterator < values + size) {
-        append_slinked_list_node(node, *iterator++);
-        node = node->next;
-      }
+            while (iterator < values + size) {
+                slinked_list_append_node(node, *iterator++);
+                node = node->next;
+            }
+        }
     }
-  }
 
-  return head;
+    return head;
 }
 
 /*
@@ -62,19 +62,22 @@ slinked_list_generate(int *values, int size)
 struct single_linked_list *
 append_slinked_list_node(struct single_linked_list *node, int value)
 {
-  struct single_linked_list *next;
+    struct single_linked_list *next;
 
-  next = NULL;
-  if (node) {
-    next = (struct single_linked_list *)malloc(sizeof(*next));
-    next->index = value;
-    next->next = NULL;
+    next = NULL;
+    if (node) {
+        next = (struct single_linked_list *)malloc(sizeof(*next));
+        if (!next) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            next->index = value;
+            next->next = NULL;
+            next->next = node->next;
+            node->next = next;
+        }
+    }
 
-    next->next = node->next;
-    node->next = next;
-  }
-
-  return next;
+    return next;
 }
 
 /*
@@ -85,7 +88,7 @@ append_slinked_list_node(struct single_linked_list *node, int value)
  */
 void
 delete_slinked_list_node(struct single_linked_list **head,
-                         struct single_linked_list *node)
+    struct single_linked_list *node)
 {
   struct single_linked_list *cur;
 
@@ -104,6 +107,9 @@ delete_slinked_list_node(struct single_linked_list **head,
 
   return;
 }
+
+struct single_linked_list *
+slinked_list_remove_node
 
 /*
  * _RETURN_ the next node of single linked list. 
