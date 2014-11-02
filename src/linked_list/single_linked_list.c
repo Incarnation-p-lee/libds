@@ -25,28 +25,22 @@ slinked_list_initial(void)
  * _ARGV_ the int array, if invaild array, _RETURN_ NULL.
  */
 struct single_linked_list *
-slinked_list_generate(int *values, int size)
+slinked_list_generate(int *val, int size)
 {
     struct single_linked_list *head;
     struct single_linked_list *node;
     register int *iterator;
 
     head = NULL;
-    if (valuse && size > 0) {
-        iterator = values;
-        node = (struct single_linked_list *)malloc(sizeof(*node));
+    if (val && size > 0) {
+        iterator = val;
+        node = slinked_list_initial();
+        node->index = *iterator++;
+        head = node;
 
-        if (!node) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
-            node->index = *iterator++;
-            node->next = node;
-            head = node;
-
-            while (iterator < values + size) {
-                slinked_list_append_node(node, *iterator++);
-                node = node->next;
-            }
+        while (iterator < val + size) {
+            slinked_list_append_node(node, *iterator++);
+            node = node->next;
         }
     }
 
