@@ -49,248 +49,320 @@ slinked_list_generate(int *val, int size)
 
 /*
  * Append one single linked list node to the node your specified.
- * _RETURN_ the appended node.
- * _ARGV_ node, if NULL, _RETURN_ NULL.
+ * _ARGV_ node, if NULL, nothing will be done.
  *        value, the value for the append node. 
  */
-struct single_linked_list *
-append_slinked_list_node(struct single_linked_list *node, int value)
+void
+slinked_list_append_node(struct single_linked_list *node, int value)
 {
     struct single_linked_list *next;
 
     next = NULL;
     if (node) {
-        next = (struct single_linked_list *)malloc(sizeof(*next));
-        if (!next) {
-            pr_log_err("Fail to get memory from system.\n");
+        if (!node->next) {
+            pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
         } else {
+            next = slinked_list_initial();
             next->index = value;
-            next->next = NULL;
-            next->next = node->next;
+            slinked_list_insert_after(node, next);
             node->next = next;
         }
+    }
+
+    return;
+}
+
+/*
+ * _RETURN_ the next node of linked list.
+ *   If NULL _ARGV_, _RETURN_ NULL.
+ *   If uninitialized or destroyed _ARGV_, _RETURN_ NULL.
+ */
+struct single_linked_list *
+slinked_list_next_node(struct single_linked_list *node)
+{
+    struct single_linked_list *next;
+
+    next = NULL;
+    if (node && node->next) {
+        next = node->next;
+    } else if (!node->next) {
+        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
     }
 
     return next;
 }
 
 /*
- * Delete one single linked list node from the given head. 
- * _ARGV_ head, head node.
- *        node, deletion node.
- *        If NULL, nothing will be done.
+ * _RETURN_ the previous node of linked list.
+ *   If NULL _ARGV_, _RETURN_ NULL.
+ *   If uninitialized or destroyed _ARGV_, _RETURN_ NULL.
+ */
+struct single_linked_list *
+slinked_list_previous_node(struct single_linked_list *node)
+{
+    register struct single_linked_list *previous;
+
+    previous = NULL;
+    if (node && node->next) {
+        previous = node;
+        do {
+            preivous = previous->next;
+        } while (previous->next != node);
+    } else if (!node->next) {
+        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+    }
+
+    return previous;
+}
+
+/*
+ * Insert one existed node after another given node.
+ * _ARGV_, cur current given node.
+ *         node inserted node.
+ *         If either of _ARGV_ is NULL, nothing will be done.
  */
 void
-delete_slinked_list_node(struct single_linked_list **head,
+slinked_list_insert_after(struct single_linked_list *cur,
     struct single_linked_list *node)
 {
-  struct single_linked_list *cur;
-
-  if (head && *head && node) {
-    cur = *head;
-    if (cur == node) {
-      *head = node->next;
-    } else {
-      while (node != cur->next) {
-        cur = cur->next;
-      }
-      cur->next = node->next;
+    if (cur && node)
+    {
+        node->next = cur->next;
+        cur->next = node;
     }
-    free(node);
-  }
 
-  return;
-}
-
-struct single_linked_list *
-slinked_list_remove_node
-
-/*
- * _RETURN_ the next node of single linked list. 
- * _ARGV_ current node.
- *        If NULL, _RETURN_ NULL.
- */
-struct single_linked_list *
-next_slinked_list(struct single_linked_list *cur)
-{
-  struct single_linked_list *next;
-
-  next = NULL;
-  if (cur) {
-    next = cur->next;
-  }
-
-  return next;
+    return;
 }
 
 /*
- * _ARGV_ head node.
- *        If NULL, nothing will be done.
+ * Insert one existed node before another given node.
+ * _ARGV_, cur current given node.
+ *         node inserted node.
+ *         If either of _ARGV_ is NULL, nothing will be done.
  */
 void
-destroy_slinked_list(struct single_linked_list **head)
+slinked_list_insert_before(struct single_linked_list *cur,
+    struct single_linked_list *node)
 {
-  struct single_linked_list *cur;
-  struct single_linked_list **iter;
+    struct single_linked_list *previous;
 
-  if (head && *head) {
-    iter = head;
-    while (NULL != (cur = *iter)) {
-      iter = &cur->next;
-      free(cur);
+    if (cur && node)
+    {
+        previous = slinked_list_previous_node(cur);
+        if (previous) {
+            slinked_list_insert_after(previous, node);
+        }
     }
 
-    *head = NULL;
-  }
-
-  return;
+    return;
 }
 
 /*
- * _RETURN_ the length of single linked list
- * _ARGV_ head node.
- *        If NULL, return -1
+ * Destroy the whole linked list, set head to NULL.
+ *   If NULL _ARGV_, nothing will be done.
+ */
+void
+slinked_list_destroy(struct single_linked_list **head)
+{
+    register struct single_linked_list *node;
+
+    if (head) {
+        node = *head;
+        while (node) {
+            node = slinked_list_remove_node(node);
+        }
+
+        *head = NULL;
+    }
+
+    return;
+}
+
+/*
+ * _RETURN_ Length of given linked list.
+ *   If NULL linked list, _RETURN_ 0.
  */
 int
-lengthof_slinked_list(struct single_linked_list *head)
+slinked_list_length(struct single_linked_list *head)
 {
-  int length;
+    int length;
+    register struct single_linked_list *node;
 
-  length = -1;
-  if (head) {
-    lengh = 0;
-    while (NULL != head) {
-      length++;
-      head = head->next;
+    length = 0;
+    if (head) {
+        node = head;
+        do {
+            lenght++;
+            node = node->next;
+        } while (node != head);
     }
-  }
 
-  return length;
+    return length;
 }
 
-
+/*
+ * _RETURN_ the node of index by given head node.
+ *   If invalid _ARGV_, nothing will done, _RETURN_ NULL.
+ */
 struct single_linked_list *
-accessby_index_slinked_list(struct single_linked_list *head, int index)
+slinked_list_get_node_by_index(struct single_linked_list *head, int index)
 {
-  struct single_linked_list *node;
-  ENTER("accessby_index_slinked_list");
+    register struct single_linked_list *node;
 
-  node = head;
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_ACCESS;
-  }
-  if(0 > index || index > lengthof_slinked_list(head))
-  {
-    warning_prompt(ADD_TRACE(warning_digest[1]));
-    goto END_OF_ACCESS;
-  }
+    node = NULL;
+    if (head && index >= 0) {
+        node = head;
+        while (index > 0) {
+            node = node->next;
+            index--;
+        }
+    }
 
-  while(index > 0)
-  {
-    node = node->next;
-    index--;
-  }
-
-END_OF_ACCESS:
-  LEAVE;
-  return node;
+    return node;
 }
 
-
+/*
+ * Print single linked list
+ *   If invalid head, nothing will be done.
+ */
 void
-serialize_slinked_list(struct single_linked_list *head)
+slinked_list_print(FILE *fd, char *msg, struct single_linked_list *head)
 {
-  struct single_linked_list *node;
-  int index;
-  ENTER("serialize_slinked_list");
+    register struct single_linked_list *iterator;
+    char *default_msg = "Default single linked list";
 
-  if(NULL == head)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_SERIAL;
-  }
+    if (head) {
+        fprintf(fd, "[%s]:\n", msg);
+        if (!msg) {
+            msg = default_msg;
+        }
 
-  index = 0;
-  node = head;
-  while(node)
-  {
-    node->index = index++;
-    node = node->next;
-  }
+        iterator = head;
+        do {
+            fprintf(fd, "%d ->\n", iterator->index);
+            iterator = iterator->next;
+        } while (iterator != head);
+    }
+    fprintf(fd, "NULL\n");
 
-END_OF_SERIAL:
-  LEAVE;
-  return;
+    return;
 }
 
+/*
+ * Exchange two node of linked list.
+ *   If either _ARGV_ is NULL, nothing will be done.
+ *   If the same node, nothing will be done.
+ */
 void
-print_slinked_list(FILE *fd, char *msg, struct single_linked_list *head)
+slinked_list_exchange_node(struct single_linked_list *fir,
+    struct single_linked_list *sec)
 {
-  int align;
-  register struct single_linked_list *iterator;
-  char *default_msg = "Default single linked list";
-  ENTER("print_slinked_list");
+    struct single_linked_list *prev_fir;
+    struct single_linked_list *prev_sec;
 
-  if(NULL == msg)
-    msg = default_msg;
+    if (fir && sec) {
+        if (slinked_list_is_contains(fir, sec) && (fir != sec)) {
+            prev_fir = slinked_list_previous_node(fir);
+            prev_sec = slinked_list_previous_node(sec);
 
-  align = 0;
-  iterator = head;
-  fprintf(fd, "[%s]:\n", msg);
-  while(NULL != iterator)
-  {
-    fprintf(fd, "%d-> ", iterator->index);
-    if(!(++align % PRINT_WIDTH))
-      fprintf(fd, "\n");
-    iterator = iterator->next;
-  }
-  fprintf(fd, "NULL\n");
+            if (prev_fir && prev_sec) {
+                slinked_list_lazy_remove_node(fir);
+                slinked_list_lazy_remove_node(sec);
+                slinked_list_insert_after(prev_fir, sec);
+                slinked_list_insert_after(sec_fir, fir);
+            }
+        }
+    }
 
-  LEAVE;
-  return;
+    return;
 }
 
-
-void
-exchange_slinked_list(struct single_linked_list **head,
-  struct single_linked_list *node)
+/*
+ * _RETURN_ true if _ARGV_ node in the list of _ARGV_ tar, else false.
+ *   If either of _ARGV_ is NULL, return false.
+ */
+bool
+slinked_list_is_contains(struct single_linked_list *tar,
+    struct single_linked_list *node)
 {
-  struct single_linked_list *cur;
-  struct single_linked_list *pre;
-  ENTER("exchange_slinked_list");
+    register struct single_linked_list *iter;
+    bool contains;
 
-  if(NULL == head || NULL == *head || NULL == node)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_EXCHANGE;
-  }
-  if(*head == node)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[2]));
-    goto END_OF_EXCHANGE;
-  }
+    contains = false;
+    if (tar && node) {
+        iter = tar;
+        do {
+            if (iter == node) {
+                contains = true;
+                break;
+            }
+            iter = iter->next;
+        } while (iter != tar);
+    }
 
-  pre = *head;
-  while((cur = *head))
-  {
-    if(cur->next == node)
-      break;
-    pre = cur;
-    head = &cur->next;
-  }
+    return contains;
+}
 
-  if(cur)
-  {
-    pre->next = node;
-    cur->next = node->next;
-    node->next = cur;
-  }
-  else
-    warning_prompt(ADD_TRACE(warning_digest[3]));
+/*
+ * Serialize the given linked list.
+ *   If NULL, nothing will be done.
+ */
+void
+slinked_list_serialize(struct single_linked_list *head)
+{
+    struct single_linked_list *node;
+    int index;
 
-END_OF_EXCHANGE:
-  LEAVE;
-  return;
+    if (head) {
+        index = 0;
+        node = head;
+        do {
+            node->index = index++;
+            node = node->next;
+        } while (node != head);
+    }
+
+    return;
+}
+
+/*
+ * Remove the given node.
+ * _RETURN_ the next node.
+ *   If only one node of linked list, _RETURN_ NULL.
+ *   If NULL _ARGV_, _RETURN_ NULL
+ */
+struct single_linked_list *
+slinked_list_remove_node(struct single_linked_list *node)
+{
+    struct single_linked_list *next;
+
+    next = NULL;
+    if (node) {
+        slinked_list_lazy_remove_node(node);
+        if (node->next != node) {
+            next = node->next;
+        }
+        free(node);
+    }
+
+    return next;
+}
+
+/*
+ * Remove the given node without free the memory.
+ *   If only one node of linked list, nothing will be done.
+ */
+void
+slinked_list_lazy_remove_node(struct single_linked_list *node)
+{
+    struct single_linked_list *previous;
+
+    if (node) {
+        previous = slinked_list_previous_node(node);
+        if (previsou) {
+            previous->next = node->next;
+        }
+    }
+
+    return;
 }

@@ -153,18 +153,21 @@ dlinked_list_insert_before(struct doubly_linked_list *cur,
 
 /*
  * Destroy the whole doubly linked list, set head to NULL.
+ *   If NULL _ARGV_, nothing will be done.
  */
 void
 dlinked_list_destroy(struct doubly_linked_list **head)
 {
     register struct doubly_linked_list *node;
 
-    node = *head;
-    while (node) {
-        node = dlinked_list_remove_node(node);
-    }
+    if (head) {
+        node = *head;
+        while (node) {
+            node = dlinked_list_remove_node(node);
+        }
 
-    *head = NULL;
+        *head = NULL;
+    }
 
     return;
 }
@@ -318,6 +321,7 @@ dlinked_list_serialize(struct doubly_linked_list *head)
  * Remove the given node.
  * _RETURN_ the next node.
  *   If only one node of linked list, _RETURN_ NULL.
+ *   If NULL _ARGV_, _RETURN_ NULL
  */
 struct doubly_linked_list *
 dlinked_list_remove_node(struct doubly_linked_list *node)
@@ -338,19 +342,15 @@ dlinked_list_remove_node(struct doubly_linked_list *node)
 
 /*
  * Remove the given node without free the memory.
- * _RETURN_ the current node.
- *   If only one node of linked list, _RETURN_ itself.
- *   If _ARGV_ NULL, _RETURN_ NULL.
+ *   If only one node of linked list, nothing will be done.
  */
-struct doubly_linked_list *
+void
 dlinked_list_lazy_remove_node(struct doubly_linked_list *node)
 {
     if (node) {
-        if (node->next != node) {
-            node->previous->next = node->next;
-            node->next->previous = node->previous;
-        }
+        node->previous->next = node->next;
+        node->next->previous = node->previous;
     }
 
-    return node;
+    return;
 }
