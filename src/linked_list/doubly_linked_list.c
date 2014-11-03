@@ -1,6 +1,6 @@
 /*
  * _RETURN_ one node linked list.
- *   If no memory, _RETURN_ NULL.
+ *   If no memory available, it never return, export an error and exit.
  */
 struct doubly_linked_list *
 dlinked_list_initial(void)

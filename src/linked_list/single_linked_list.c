@@ -1,7 +1,7 @@
 /*
  * Init single linked list data structure.
  * _RETURN_ single linked list node: (0, NULL).
- *   If no memory available, return NULL.
+ *   If no memory available, it never return, export an error and exit.
  */
 struct single_linked_list *
 slinked_list_initial(void)
