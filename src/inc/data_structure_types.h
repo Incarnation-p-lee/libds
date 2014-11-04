@@ -15,14 +15,14 @@
  _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-  int    index;
-  struct single_linked_list *next;
+    int    index;
+    struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-  int    index;
-  struct doubly_linked_list *next;
-  struct doubly_linked_list *previous;
+    int    index;
+    struct doubly_linked_list *next;
+    struct doubly_linked_list *previous;
 };
 
 /*
@@ -30,22 +30,22 @@ struct doubly_linked_list {
  * bp point to the first element of a array in void * type
  */
 struct stack_loc {
-  void **sp;
-  void *bp;
+    void **sp;
+    void *bp;
 };
 
 struct array_stack {
-  struct stack_loc loc;
-  unsigned         rest;
-  unsigned         size;
+    struct stack_loc loc;
+    unsigned         rest;
+    unsigned         size;
 };
 
 struct array_queue {
-  unsigned size;
-  unsigned rest;
-  void     **front;
-  void     **rear;
-  void     *queue;
+    unsigned size;
+    unsigned rest;
+    void     **front;
+    void     **rear;
+    void     *queue;
 };
 
 #endif

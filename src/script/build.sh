@@ -37,6 +37,8 @@ fi
 
 mkdir -vp $objdir
 mkdir -vp $objdir/out/
+perl src/script/export_api_include.plx
+cp src/inc/ds.h $objdir/out/
 
 function compile_obj() {
   cd $1 > /dev/null
@@ -48,16 +50,27 @@ function compile_obj() {
 # compiling .o files for all subdir
 for dir in `ls -d src/*/`
 do
-  case $dir in
-    "src/script/")
-    continue
-  ;;
-    "src/inc/")
-    continue
-  ;;
-  esac
-
-  compile_obj $dir
+#  case $dir in
+#    "src/script/")
+#    continue
+#  ;;
+#    "src/inc/")
+#    continue
+#  ;;
+#  esac
+#
+#  compile_obj $dir
+   case $dir in
+     "src/linked_list/")
+      compile_obj $dir
+   ;;
+     "src/test/")
+      compile_obj $dir
+   ;;
+     "src/log/")
+      compile_obj $dir
+   ;;
+   esac
 done
 
 # compiling main.o

@@ -101,7 +101,7 @@ dlinked_list_previous_node(struct doubly_linked_list *node)
 
     previous = NULL;
     if (node && node->next && node->previous) {
-        next = node->previous;
+        previous = node->previous;
     } else if (!node->next || !node->previous) {
         pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
     }
@@ -186,7 +186,7 @@ dlinked_list_length(struct doubly_linked_list *head)
     if (head) {
         node = head;
         do {
-            lenght++;
+            length++;
             node = node->next;
         } while (node != head);
     }
@@ -262,7 +262,7 @@ dlinked_list_exchange_node(struct doubly_linked_list *fir,
             dlinked_list_lazy_remove_node(fir);
             dlinked_list_lazy_remove_node(sec);
             dlinked_list_insert_after(prev_fir, sec);
-            dlinked_list_insert_after(sec_fir, fir);
+            dlinked_list_insert_after(prev_sec, fir);
         }
     }
 

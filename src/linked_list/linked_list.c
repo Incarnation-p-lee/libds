@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "types.h"
-#include "log.h"
+#include "defines.h"
 #include "data_structure_types.h"
 #include "linked_list.h"
 

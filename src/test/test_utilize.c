@@ -1,5 +1,5 @@
 static void
-test_result_print(const char *name, bool passed)
+test_result_print(char *name, bool passed)
 {
    char *msg = "Unknown Test Function";
 
@@ -8,9 +8,9 @@ test_result_print(const char *name, bool passed)
    }
 
    if (passed) {
-       fprintf(stdout, " ... [32mPass[0m ... %s\n", msg);
+       fprintf(stdout, "  . [32mPass[0m ... %s\n", msg);
    } else {
-       fprintf(stdout, " ... [31mFail[0m ... %s\n", msg);
+       fprintf(stdout, "  . [31mFail[0m ... %s\n", msg);
    }
 
    return;

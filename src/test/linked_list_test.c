@@ -1,8 +1,15 @@
+void
+linked_list_unit_test(void)
+{
+    doubly_linked_list_unit_test();
+    return;
+}
+
 static void
 doubly_linked_list_unit_test(void)
 {
     void (*all_tests[])(void) = {
-        &test_dlinked_list_initial;
+        &test_dlinked_list_initial,
     };
     register void (**iter)(void);
 
@@ -30,6 +37,6 @@ test_dlinked_list_initial(void)
         }
     }
 
-    test_result_print(SYMBOL_2_STR(dlinked_list_initial), is_passed);
+    test_result_print(SYM_2_STR(dlinked_list_initial), is_passed);
     return;
 }
