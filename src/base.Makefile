@@ -3,8 +3,7 @@
 
 SHELL        =/bin/sh
 CC           =gcc
-#CFLAG        =-Wall -Werror -c
-CFLAG        =-c
+CFLAG        =-Wall -Werror -c
 CFLAG        +=$(ARGV_CFG)
 LFLAG        =
 LFLAG        +=$(ARGV_LNK)
