@@ -23,6 +23,8 @@ static void
 test_dlinked_list_destroy(void);
 static void
 test_dlinked_list_length(void);
+static void
+test_dlinked_list_get_node_by_index(void);
 
 static void
 test_result_print(char *name, bool passed);

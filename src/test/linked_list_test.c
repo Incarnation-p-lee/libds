@@ -18,10 +18,11 @@ doubly_linked_list_unit_test(void)
         &test_dlinked_list_insert_after,
         &test_dlinked_list_destroy,
         &test_dlinked_list_length,
+        &test_dlinked_list_get_node_by_index,
     };
     register void (**iter)(void);
 
-    fprintf(stdout, "\n  >> Doubly Linked List Unit Test <<\n");
+    fprintf(stdout, "\n\n  >> Doubly Linked List Unit Test <<\n\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();
@@ -292,6 +293,42 @@ test_dlinked_list_length(void)
     }
 
     test_result_print(SYM_2_STR(dlinked_list_length), is_passed);
+    return;
+}
+
+static void
+test_dlinked_list_get_node_by_index (void)
+{
+    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *tmp;
+    bool is_passed;
+
+    is_passed = true;
+    head = dlinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    tmp = dlinked_list_get_node_by_index(head, 0);
+    if (head != tmp) {
+        is_passed = false;
+    }
+
+    tmp = dlinked_list_get_node_by_index(head, -1);
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
+    tmp = dlinked_list_get_node_by_index(NULL, 0);
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
+    tmp = dlinked_list_get_node_by_index(head, sizeof(raw) / sizeof(raw[0]));
+    if (head != tmp) {
+        is_passed = false;
+    }
+
+    dlinked_list_destroy(&head);
+
+    test_result_print(SYM_2_STR(dlinked_list_get_node_by_index), is_passed);
     return;
 }
 

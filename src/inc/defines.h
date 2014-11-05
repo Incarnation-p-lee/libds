@@ -11,9 +11,9 @@
 #define pr_log_warn(msg)    libds_log_print(WARN, msg);
 #define pr_log_debug(msg)   libds_log_print(DEBUG, msg);
 #define pr_log_err(msg)     \
-  do {                           \
-    libds_log_print(ERROR, msg); \
-    exit(1);                     \
-  } while (0);
+    do {                             \
+        libds_log_print(ERROR, msg); \
+        exit(1);                     \
+    } while (0);
 
 #endif

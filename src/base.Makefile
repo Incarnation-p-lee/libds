@@ -9,3 +9,4 @@ LFLAG        =
 LFLAG        +=$(ARGV_LNK)
 TARGET       =ds.elf
 EXTLIB       =-lm
+EXTLIB       +=$(ARGV_LIB)

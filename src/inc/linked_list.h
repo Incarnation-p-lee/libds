@@ -1,6 +1,17 @@
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
+
+#ifdef DEBUG
+    extern void * malloc_wrap(size_t size);
+    extern void free_wrap(void *ptr);
+    #define DS_MALLOC      malloc_wrap
+    #define DS_FREE        free_wrap
+#else
+    #define DS_MALLOC      malloc
+    #define DS_FREE        free
+#endif
+
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
 

@@ -2,6 +2,7 @@
 
 argv_cfg=
 argv_lnk=
+argv_lib=
 
 for argv in "$@"
 do
@@ -70,6 +71,9 @@ do
      "src/log/")
       compile_obj $dir
    ;;
+     "src/common/")
+      compile_obj $dir
+   ;;
    esac
 done
 
@@ -80,5 +84,5 @@ compile_obj "src/"
 sh src/script/update_lk_mk.sh
 # link to elf
 cd $objdir > /dev/null
-make "ARGV_LNK=$argv_lnk"
+make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
 cd - > /dev/null

@@ -73,6 +73,17 @@ libds_log_print(enum log_level lvl, const char *msg);
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
+
+#ifdef DEBUG
+    extern void * malloc_wrap(size_t size);
+    extern void free_wrap(void *ptr);
+    #define DS_MALLOC      malloc_wrap
+    #define DS_FREE        free_wrap
+#else
+    #define DS_MALLOC      malloc
+    #define DS_FREE        free
+#endif
+
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
 
@@ -171,10 +182,10 @@ slinked_list_lazy_remove_node(struct single_linked_list *node);
 #define pr_log_warn(msg)    libds_log_print(WARN, msg);
 #define pr_log_debug(msg)   libds_log_print(DEBUG, msg);
 #define pr_log_err(msg)     \
-  do {                           \
-    libds_log_print(ERROR, msg); \
-    exit(1);                     \
-  } while (0);
+    do {                             \
+        libds_log_print(ERROR, msg); \
+        exit(1);                     \
+    } while (0);
 
 #endif
 /* END of ./src/inc/defines.h */
