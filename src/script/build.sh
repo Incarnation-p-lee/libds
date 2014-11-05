@@ -3,6 +3,8 @@
 argv_cfg=
 argv_lnk=
 argv_lib=
+argv_dfg=
+lib_build=0
 
 for argv in "$@"
 do
@@ -12,6 +14,12 @@ do
     ;;
     "DEBUG=0")
       argv_cfg="$argv_cfg -o2"
+    ;;
+    "PIC=1")
+      argv_cfg="$argv_cfg -fPIC"
+      argv_dfg="$argv_dfg -fPIC"
+    ;;
+    "PIC=0")
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"
@@ -24,6 +32,14 @@ do
     "CODE_COVERAGE=0")
     ;;
     "PROFILE=0")
+    ;;
+    "LIB=1")
+      lib_build=1
+      argv_cfg="$argv_cfg -fPIC"
+      argv_dfg="$argv_dfg -fPIC"
+    ;;
+    "LIB=0")
+      lib_build=0
     ;;
   esac
 done
@@ -81,5 +97,10 @@ compile_obj "src/"
 sh src/script/update_lk_mk.sh
 # link to elf
 cd $objdir > /dev/null
+
 make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
+if [ "$lib_build" -eq "1" ]
+then
+  make "lib" "ARGV_DFG=$argv_dfg"
+fi
 cd - > /dev/null
