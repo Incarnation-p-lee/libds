@@ -71,9 +71,6 @@ do
      "src/log/")
       compile_obj $dir
    ;;
-     "src/common/")
-      compile_obj $dir
-   ;;
    esac
 done
 

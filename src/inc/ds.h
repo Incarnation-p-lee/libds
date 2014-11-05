@@ -73,20 +73,13 @@ libds_log_print(enum log_level lvl, const char *msg);
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
-
 #ifdef DEBUG
     extern void * malloc_wrap(size_t size);
     extern void free_wrap(void *ptr);
-    #define DS_MALLOC      malloc_wrap
-    #define DS_FREE        free_wrap
-#else
-    #define DS_MALLOC      malloc
-    #define DS_FREE        free
 #endif
 
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
-
 
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list *
@@ -178,9 +171,25 @@ slinked_list_lazy_remove_node(struct single_linked_list *node);
 
 #define DEFAULT_LOG_FILE    "./ds.log"
 #define SYM_2_STR(symbol)   (#symbol)
-#define pr_log_info(msg)    libds_log_print(INFO, msg);
-#define pr_log_warn(msg)    libds_log_print(WARN, msg);
-#define pr_log_debug(msg)   libds_log_print(DEBUG, msg);
+
+#ifdef DEBUG
+    #define pr_log_info(msg)    libds_log_print(INFO, msg);
+    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
+    #define pr_log_debug(msg)   libds_log_print(DEBUG, msg);
+#else
+    #define pr_log_info(msg)
+    #define pr_log_warn(msg)
+    #define pr_log_debug(msg)
+#endif
+
+#ifdef DEBUG
+    #define malloc_ds      malloc_wrap
+    #define free_ds        free_wrap
+#else
+    #define malloc_ds      malloc
+    #define free_ds        free
+#endif
+
 #define pr_log_err(msg)     \
     do {                             \
         libds_log_print(ERROR, msg); \

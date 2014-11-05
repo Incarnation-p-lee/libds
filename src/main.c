@@ -4,6 +4,8 @@ extern int
 libds_log_initial(void);
 extern void
 libds_log_close(void);
+extern void
+memory_trace_print(void);
 
 static void (*run_test[])(void) = {
     &linked_list_unit_test,
@@ -19,6 +21,7 @@ main(int argc, char **argv)
         (*iter++)();
     }
     libds_log_close();
+    memory_trace_print();
 
     return 0;
 }

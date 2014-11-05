@@ -7,7 +7,7 @@ dlinked_list_initial(void)
 {
     struct doubly_linked_list *head;
 
-    head = (struct doubly_linked_list *)DS_MALLOC(sizeof(*head));
+    head = (struct doubly_linked_list *)malloc_ds(sizeof(*head));
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
@@ -334,7 +334,7 @@ dlinked_list_remove_node(struct doubly_linked_list *node)
         if (node->next != node) {
             next = node->next;
         }
-        DS_FREE(node);
+        free_ds(node);
     }
 
     return next;
