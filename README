@@ -1,0 +1,8 @@
+UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
+
+    1. sh src/script/build.sh [options]
+       DEBUG=0/1
+       PROFILE=0/1
+       CODE_COVERAGE=0/1
+    2. Output obj_out/out/ds.elf
+              obj_out/out/ds.h
