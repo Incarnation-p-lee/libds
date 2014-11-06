@@ -1,39 +1,45 @@
-/*----------------------------------------------------------------------------*/
-/*-AUTHOR:      Incarnation.P Lee                                            -*/
-/*-DATE:        07102014                                                     -*/
-/*-WHAT:        Basic data structure                                         -*/
-/*-REVISION:                                                                 -*/
-/*- DATE -------------------- DESCRIPTION ------------------------------------*/
-/*- 07102014    Basic Stack in Array Implement.                              -*/
-/*----------------------------------------------------------------------------*/
+/*
+ * _RETURN_ one instance of array_stack.
+ *   If no memory available, it never _RETURN_, export an error and exit.
+ */
 struct array_stack *
-create_array_stack_space(void)
+array_stack_create_space(void)
 {
-  struct array_stack *base_ptr;
-  ENTER("init_array_stack_space");
+    struct array_stack *ptr;
 
-  malloc_initial((void**)&base_ptr, sizeof(*base_ptr));
-  base_ptr->size = STACK_SIZE_DEFAULT;
-  base_ptr->rest = STACK_SIZE_DEFAULT;
+    ptr = (struct array_stack *)malloc_ds(sizeof(*ptr));
+    if (!ptr) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        ptr->size = DEFAULT_STACK_SPACE_SIZE;
+        ptr->rest = DEFAULT_STACK_SPACE_SIZE;
+    }
 
-  malloc_initial((void**)&base_ptr->loc.bp, sizeof(base_ptr->loc.bp) *
-    base_ptr->size);
-  base_ptr->loc.sp = (void**)base_ptr->loc.bp;
+    ptr->loc.bp = malloc_ds(sizeof(ptr->loc.bp) * DEFAULT_STACK_SPACE_SIZE);
+    if (!ptr->loc.bp) {
+        free_ds(ptr);
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        ptr->loc.sp = (void **)ptr->loc.bp;
+    }
 
-  LEAVE;
-  return base_ptr;
+    return ptr;
 }
 
+/*
+ * Destroy the instance of array stack.
+ *   If NULL _ARGV_, nothing will be done.
+ */
 void
 destroy_array_stack_space(struct array_stack **stack)
 {
-  ENTER("destroy_array_stack_space");
+    if (stack && *stack) {
+        free_ds((*stack)->loc.bp);
+        free_ds(*stack);
+        *stack = NULL;
+    }
 
-  saft_free((void**)&(*stack)->loc.bp);
-  saft_free((void**)stack);
-
-  LEAVE;
-  return;
+    return;
 }
 
 void

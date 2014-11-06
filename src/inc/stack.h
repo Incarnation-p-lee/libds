@@ -1,0 +1,6 @@
+#ifndef HAVE_STACK_H
+#define HAVE_STACK_H
+
+#define DEFAULT_STACK_SPACE_SIZE   128
+
+#endif HAVE_STACK_H

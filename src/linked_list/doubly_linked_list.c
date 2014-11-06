@@ -159,13 +159,20 @@ void
 dlinked_list_destroy(struct doubly_linked_list **head)
 {
     register struct doubly_linked_list *node;
+    register struct doubly_linked_list *next;
 
     if (head && *head) {
-        node = *head;
-        while (node) {
-            node = dlinked_list_remove_node(node);
+        /*
+         * Do not call dlinked_list_remove_node for
+         * the consider of performance drop.
+         */
+        next = (*head)->next;
+        while (*head != (node = next)) {
+            next = node->next;
+            free_ds(node);
         }
 
+        free_ds(node);
         *head = NULL;
     }
 
