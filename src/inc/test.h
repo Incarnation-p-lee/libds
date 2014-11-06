@@ -49,6 +49,8 @@ static void
 test_dlinked_list_remove_node(void);
 static void
 test_dlinked_list_lazy_remove_node(void);
+static void
+test_dlinker_list_iterate_node(void);
 
 
 static void
@@ -81,12 +83,17 @@ static void
 test_slinked_list_remove_node(void);
 static void
 test_slinked_list_lazy_remove_node(void);
-
+static void
+test_slinker_list_iterate_node(void);
 
 
 static void
 test_result_print(char *name, bool passed);
 static int *
 int_array_generate(int size);
+static void
+dlinked_list_iterate_handler(struct doubly_linked_list *node);
+static void
+slinked_list_iterate_handler(struct single_linked_list *node);
 
 #endif

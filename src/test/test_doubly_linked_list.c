@@ -446,7 +446,6 @@ test_dlinked_list_remove_node(void)
 static void
 test_dlinked_list_lazy_remove_node(void)
 {
-
     int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
@@ -478,4 +477,29 @@ test_dlinked_list_lazy_remove_node(void)
     return;
 }
 
+static void
+test_dlinker_list_iterate_node(void)
+{
+    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *tmp;
+    bool is_passed;
 
+    is_passed = true;
+    head = dlinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+
+    dlinked_list_iterate_node(head, &dlinked_list_iterate_handler);
+
+    tmp = head;
+    do {
+        if (tmp->index != 0xDEAD) {
+            is_passed = false;
+        }
+        tmp = tmp->next;
+    } while (tmp != head);
+
+    dlinked_list_destroy(&head);
+
+    test_result_print(SYM_2_STR(dlinked_list_iterate_node), is_passed);
+    return;
+}

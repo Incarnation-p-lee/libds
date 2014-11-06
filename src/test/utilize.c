@@ -25,3 +25,22 @@ memory_trace_print(void)
     printf("  >> Memory End.\n\n");
 }
 
+static void
+dlinked_list_iterate_handler(struct doubly_linked_list *node)
+{
+    if (node) {
+        node->index = 0xDEAD;
+    }
+
+    return;
+}
+
+static void
+slinked_list_iterate_handler(struct single_linked_list *node)
+{
+    if (node) {
+        node->index = 0xDAED;
+    }
+
+    return;
+}

@@ -478,3 +478,30 @@ test_slinked_list_lazy_remove_node(void)
     test_result_print(SYM_2_STR(slinked_list_lazy_remove_node), is_passed);
     return;
 }
+
+static void
+test_slinker_list_iterate_node(void)
+{
+    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    struct single_linked_list *head;
+    struct single_linked_list *tmp;
+    bool is_passed;
+
+    is_passed = true;
+    head = slinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+
+    slinked_list_iterate_node(head, &slinked_list_iterate_handler);
+
+    tmp = head;
+    do {
+        if (tmp->index != 0xDAED) {
+            is_passed = false;
+        }
+        tmp = tmp->next;
+    } while (tmp != head);
+
+    slinked_list_destroy(&head);
+
+    test_result_print(SYM_2_STR(slinked_list_iterate_node), is_passed);
+    return;
+}

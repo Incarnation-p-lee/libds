@@ -354,3 +354,24 @@ dlinked_list_lazy_remove_node(struct doubly_linked_list *node)
 
     return;
 }
+
+/*
+ * Iterate each node by given function handler.
+ *   If NULL _ARGV_, nothing will be done.
+ */
+void
+dlinked_list_iterate_node(struct doubly_linked_list *head,
+    void (*handler)(struct doubly_linked_list *))
+{
+    register struct doubly_linked_list *node;
+
+    if (head && handler) {
+        node = head;
+        do {
+            (*handler)(node);
+            node = node->next;
+        } while (node != head);
+    }
+
+    return;
+}

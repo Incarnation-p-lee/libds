@@ -46,6 +46,9 @@ struct doubly_linked_list *
 dlinked_list_remove_node(struct doubly_linked_list *node);
 void
 dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+void
+dlinked_list_iterate_node(struct doubly_linked_list *head,
+    void (*handler)(struct doubly_linked_list *));
 
 
 /* single linked list, Circular. */
@@ -85,5 +88,8 @@ struct single_linked_list *
 slinked_list_remove_node(struct single_linked_list *node);
 void
 slinked_list_lazy_remove_node(struct single_linked_list *node);
+void
+slinked_list_iterate_node(struct single_linked_list *head,
+    void (*handler)(struct single_linked_list *));
 
 #endif
