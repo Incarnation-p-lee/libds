@@ -8,7 +8,7 @@ slinked_list_initial(void)
 {
     struct single_linked_list *head;
 
-    head = (struct single_linked_list *)malloc(sizeof(*head));
+    head = (struct single_linked_list *)malloc_ds(sizeof(*head));
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
@@ -60,7 +60,7 @@ slinked_list_append_node(struct single_linked_list *node, int value)
     next = NULL;
     if (node) {
         if (!node->next) {
-            pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+            pr_log_warn("Uninitialized or destroyed single linked list node.\n");
         } else {
             next = slinked_list_initial();
             next->index = value;
@@ -86,7 +86,7 @@ slinked_list_next_node(struct single_linked_list *node)
     if (node && node->next) {
         next = node->next;
     } else if (!node->next) {
-        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+        pr_log_warn("Uninitialized or destroyed single linked list node.\n");
     }
 
     return next;
@@ -106,10 +106,10 @@ slinked_list_previous_node(struct single_linked_list *node)
     if (node && node->next) {
         previous = node;
         do {
-            preivous = previous->next;
+            previous = previous->next;
         } while (previous->next != node);
     } else if (!node->next) {
-        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+        pr_log_warn("Uninitialized or destroyed single linked list node.\n");
     }
 
     return previous;
@@ -165,13 +165,22 @@ void
 slinked_list_destroy(struct single_linked_list **head)
 {
     register struct single_linked_list *node;
+    register struct single_linked_list *next;
 
-    if (head) {
-        node = *head;
-        while (node) {
-            node = slinked_list_remove_node(node);
+    if (head && *head) {
+        /*
+         * We do not use the way like douby linked list used, because
+         * lazy remove need to get previous node. This will result in
+         * go through all node in list, which has heavy performance
+         * drop in unit test.
+         */
+        next = (*head)->next;
+        while (*head != (node = next)) {
+            next = node->next;
+            free_ds(node);
         }
 
+        free_ds(node);
         *head = NULL;
     }
 
@@ -192,7 +201,7 @@ slinked_list_length(struct single_linked_list *head)
     if (head) {
         node = head;
         do {
-            lenght++;
+            length++;
             node = node->next;
         } while (node != head);
     }
@@ -269,7 +278,7 @@ slinked_list_exchange_node(struct single_linked_list *fir,
                 slinked_list_lazy_remove_node(fir);
                 slinked_list_lazy_remove_node(sec);
                 slinked_list_insert_after(prev_fir, sec);
-                slinked_list_insert_after(sec_fir, fir);
+                slinked_list_insert_after(prev_sec, fir);
             }
         }
     }
@@ -338,11 +347,11 @@ slinked_list_remove_node(struct single_linked_list *node)
 
     next = NULL;
     if (node) {
-        slinked_list_lazy_remove_node(node);
+         slinked_list_lazy_remove_node(node);
         if (node->next != node) {
             next = node->next;
         }
-        free(node);
+        free_ds(node);
     }
 
     return next;
@@ -359,7 +368,7 @@ slinked_list_lazy_remove_node(struct single_linked_list *node)
 
     if (node) {
         previous = slinked_list_previous_node(node);
-        if (previsou) {
+        if (previous) {
             previous->next = node->next;
         }
     }

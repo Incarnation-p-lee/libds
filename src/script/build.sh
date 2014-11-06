@@ -3,7 +3,6 @@
 argv_cfg=
 argv_lnk=
 argv_lib=
-argv_dfg=
 lib_build=0
 
 for argv in "$@"
@@ -14,12 +13,6 @@ do
     ;;
     "DEBUG=0")
       argv_cfg="$argv_cfg -o2"
-    ;;
-    "PIC=1")
-      argv_cfg="$argv_cfg -fPIC"
-      argv_dfg="$argv_dfg -fPIC"
-    ;;
-    "PIC=0")
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"
@@ -35,8 +28,6 @@ do
     ;;
     "LIB=1")
       lib_build=1
-      argv_cfg="$argv_cfg -fPIC"
-      argv_dfg="$argv_dfg -fPIC"
     ;;
     "LIB=0")
       lib_build=0
@@ -67,27 +58,16 @@ function compile_obj() {
 # compiling .o files for all subdir
 for dir in `ls -d src/*/`
 do
-#  case $dir in
-#    "src/script/")
-#    continue
-#  ;;
-#    "src/inc/")
-#    continue
-#  ;;
-#  esac
-#
-#  compile_obj $dir
-   case $dir in
-     "src/linked_list/")
-      compile_obj $dir
-   ;;
-     "src/test/")
-      compile_obj $dir
-   ;;
-     "src/log/")
-      compile_obj $dir
-   ;;
-   esac
+  case $dir in
+    "src/script/")
+    continue
+  ;;
+    "src/inc/")
+    continue
+  ;;
+  esac
+
+  compile_obj $dir
 done
 
 # compiling main.o
@@ -101,6 +81,6 @@ cd $objdir > /dev/null
 make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
 if [ "$lib_build" -eq "1" ]
 then
-  make "lib" "ARGV_DFG=$argv_dfg"
+  make "lib"
 fi
 cd - > /dev/null

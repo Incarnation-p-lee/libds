@@ -6,11 +6,10 @@ CC           =gcc
 AR           =ar
 AFLAG        =-rc
 
-DFLAG        =-shared
-DFLAG        +=$(ARGV_DFG)
+DFLAG        =-shared -fPIC
 
-#CFLAG        =-Wall -Werror -c
-CFLAG        =-c
+CFLAG        =-Wall -Werror -c -fPIC
+#CFLAG        =-c
 CFLAG        +=$(ARGV_CFG)
 
 LFLAG        =
@@ -21,4 +20,5 @@ STLIB        =libds.a
 DYLIB        =libds.so
 EXTLIB       =-lm
 EXTLIB       +=$(ARGV_LIB)
+
 LIBOBJ       =linked_list.o

@@ -13,17 +13,18 @@ include ../$srcdir/base.Makefile
 \$(TARGET):`echo $objfile`
 	\$(CC) \$(LFLAG) -o \$@ \$^ \$(EXTLIB)
 	@mv -v \$@ ./out
+	@echo "Build Executable .................................... [32mOK[0m."
 
-lib:\$(LIBOBJ)
-	make stlib
-	make dylib
+lib:\$(STLIB) \$(DYLIB)
+	@echo "Build Library ....................................... [32mOK[0m."
+	@date
 
-stlib:\$(LIBOBJ)
-	\$(AR) \$(AFLAG) -o \$(STLIB) \$(LIBOBJ)
-	@mv -v \$(STLIB) ./out
+\$(STLIB):\$(LIBOBJ)
+	\$(AR) \$(AFLAG) -o \$@ \$^
+	@mv -v \$@ ./out
 
-dylib:\$(LIBOBJ)
-	\$(CC) \$(DFLAG) -o \$(DYLIB) \$(LIBOBJ)
-	@mv -v \$(DYLIB) ./out
+\$(DYLIB):\$(LIBOBJ)
+	\$(CC) \$(DFLAG) -o \$@ \$^
+	@mv -v \$@ ./out
 
 EOF

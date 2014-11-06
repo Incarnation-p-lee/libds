@@ -16,6 +16,10 @@ linked_list_unit_test(void);
 static void
 doubly_linked_list_unit_test(void);
 static void
+single_linked_list_unit_test(void);
+
+
+static void
 test_dlinked_list_initial(void);
 static void
 test_dlinked_list_generate(void);
@@ -45,6 +49,40 @@ static void
 test_dlinked_list_remove_node(void);
 static void
 test_dlinked_list_lazy_remove_node(void);
+
+
+static void
+test_slinked_list_initial(void);
+static void
+test_slinked_list_generate(void);
+static void
+test_slinked_list_append_node(void);
+static void
+test_slinked_list_next_node(void);
+static void
+test_slinked_list_previous_node(void);
+static void
+test_slinked_list_insert_before(void);
+static void
+test_slinked_list_insert_after(void);
+static void
+test_slinked_list_destroy(void);
+static void
+test_slinked_list_length(void);
+static void
+test_slinked_list_get_node_by_index(void);
+static void
+test_slinked_list_exchange_node(void);
+static void
+test_slinked_list_is_contains(void);
+static void
+test_slinked_list_serialize(void);
+static void
+test_slinked_list_remove_node(void);
+static void
+test_slinked_list_lazy_remove_node(void);
+
+
 
 static void
 test_result_print(char *name, bool passed);

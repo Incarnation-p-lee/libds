@@ -4,5 +4,8 @@ UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
        DEBUG=0/1
        PROFILE=0/1
        CODE_COVERAGE=0/1
+       LIB=0/1
     2. Output obj_out/out/ds.elf
               obj_out/out/ds.h
+              obj_out/out/libds.a
+              obj_out/out/libds.so
