@@ -3,7 +3,7 @@
  *   If no memory available, it never _RETURN_, export an error and exit.
  */
 struct array_stack *
-array_stack_create_space(void)
+array_stack_create(void)
 {
     struct array_stack *ptr;
 
@@ -31,7 +31,7 @@ array_stack_create_space(void)
  *   If NULL _ARGV_, nothing will be done.
  */
 void
-destroy_array_stack_space(struct array_stack **stack)
+array_stack_destroy(struct array_stack **stack)
 {
     if (stack && *stack) {
         free_ds((*stack)->loc.bp);
@@ -42,117 +42,129 @@ destroy_array_stack_space(struct array_stack **stack)
     return;
 }
 
+/*
+ * Expand the stack space if need.
+ *   If NULL stack, nothing will be done.
+ *   If extra is zero, expand to 2x + min.
+ */
 void
-expand_array_stack_space(struct array_stack *stack, unsigned extra)
+array_stack_expand_space(struct array_stack *stack, unsigned extra)
 {
-  unsigned new_size;
-  ENTER("expand_array_stack_space");
+    unsigned new_size;
+    void *new_addr;
 
-  if(0 == extra)
-    new_size = stack->size * 2 + STACK_SIZE_MIN;
-  else
-    new_size = stack->size + extra;
+    new_size = 0;
+    new_addr = NULL;
+    if (stack && extra) {
+        new_size = stack->size + extra;
+    } else if (stack && !extra) {
+        new_size = stack->size * 2 + EXPAND_STACK_SPACE_MIN;
+    }
 
-  realloc_noinitial((void**)&stack->loc.bp, sizeof(stack->loc.bp) * new_size);
-  stack->rest += new_size - stack->size;
-  stack->size = new_size;
+    if (new_size) {
+        new_addr = malloc_ds(sizeof(stack->loc.bp) * new_size);
+        if (!new_addr) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            memcpy(new_addr, stack->loc.bp, sizeof(stack->loc.bp) * stack->size);
+            free_ds(stack->loc.bp);
+            stack->loc.bp = new_addr;
+            stack->rest += new_size - stack->size;
+            stack->size = new_size;
+        }
+    }
 
-  LEAVE;
-  return;
+    return;
 }
 
-int
-is_array_stack_full(struct array_stack *stack)
+/*
+ * _RETURN_ true if no space left in stack, or _RETURN_ false;
+ *   If NULL _ARGV_, _RETURN_ false.
+ */
+bool
+array_stack_is_full(struct array_stack *stack)
 {
-  int issfull;
-  ENTER("is_array_stack_full");
-
-  issfull = 0;
-  if(!rest_space_of_array_stack(stack))
-    issfull = 1;
-
-  LEAVE;
-  return issfull;
+    return 0 == array_stack_rest_space(stack) ? true : false;
 }
 
+/*
+ * _RETURN_ rest space of stack.
+ *   If NULL _ARGV_, _RETURN_ 0.
+ */
 unsigned
-rest_space_of_array_stack(struct array_stack *stack)
+array_stack_rest_space(struct array_stack *stack)
 {
-  unsigned rest;
-  ENTER("rest_space_of_array_stack");
-
-  rest = stack->rest;
-
-  LEAVE;
-  return rest;
+    return stack ? stack->rest : 0;
 }
 
+/*
+ * Push one void pointer to stack
+ *   If NULL stack, nothing will be done.
+ */
 void
-push_array_stack(struct array_stack *stack, void *member)
+array_stack_push(struct array_stack *stack, void *member)
 {
-  ENTER("push_array_stack");
+    if (stack) {
+        if (array_stack_is_full(stack)) {
+            expand_array_stack_space(stack, EXPAND_STACK_SPACE_MIN);
+        }
+        *stack->loc.sp++ = member;
+        stack->rest--;
+    }
 
-  if(NULL == member)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_PUSH;
-  }
-
-  if(is_array_stack_full(stack))
-    expand_array_stack_space(stack, STACK_SIZE_MIN);
-
-  *stack->loc.sp++ = member;
-  stack->rest--;
-
-END_OF_PUSH:
-  LEAVE;
-  return;
+    return;
 }
 
+/*
+ * _RETURN_ one void pointer from stack
+ *  If NULL _ARGV_, _RETURN_ NULL.
+ */
 void *
-pop_array_stack(struct array_stack *stack)
+array_stack_pop(struct array_stack *stack)
 {
-  void *data;
-  ENTER("pop_array_stack");
+    void *data;
 
-  data = NULL;
-  if(!is_empty_array_stack(stack))
-  {
-    data = *(--stack->loc.sp);
-    stack->rest++;
-  }
+    data = NULL;
+    if (stack && !array_stack_is_empty(stack)) {
+        data = *(--stack->loc.sp);
+        stack->rest++;
+    }
 
-  LEAVE;
-  return data;
+    return data;
 }
 
-int
-is_empty_array_stack(struct array_stack *stack)
+/*
+ * _RETURN_ true if empty stack, or _RETURN_ false.
+ *  If NULL _ARGV_, _RETURN_ false.
+ */
+bool
+array_stack_is_empty(struct array_stack *stack)
 {
-  int isempty;
-  ENTER("is_empty_array_stack");
+    if (stack) {
+        return stack->rest == stack->size ? true : false;
+    }
 
-  isempty = stack->rest == stack->size ? 1 : 0;
+    return false;
+}
 
-  LEAVE;
-  return isempty;
+/*
+ * Clean up stack space. Discard all data in stack.
+ *   If NULL _ARGV_, nothing will be done.  
+ */
+void
+array_stack_cleanup(struct array_stack *stack)
+{
+    if (stack) {
+        memset(stack->loc.bp, 0, sizeof(stack->loc.bp) * stack->size);
+        stack->loc.sp = (void**)stack->loc.bp;
+        stack->rest = stack->size;
+    }
+
+    return;
 }
 
 void
-cleanup_array_stack(struct array_stack *stack)
-{
-  ENTER("cleanup_array_stack");
-
-  memset(stack->loc.bp, 0, sizeof(stack->loc.bp) * stack->size);
-  stack->loc.sp = (void**)stack->loc.bp;
-  stack->rest = stack->size;
-
-  LEAVE;
-  return;
-}
-
-void
-traverse_array_stack(struct array_stack *stack, void (*operation)(void *))
+array_stack_iterate(struct array_stack *stack, void (*operation)(void *))
 {
   register void **iter;
   ENTER("traverse_array_stack");

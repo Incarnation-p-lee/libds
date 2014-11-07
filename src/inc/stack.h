@@ -2,5 +2,6 @@
 #define HAVE_STACK_H
 
 #define DEFAULT_STACK_SPACE_SIZE   128
+#define EXPAND_STACK_SPACE_MIN     32
 
 #endif HAVE_STACK_H
