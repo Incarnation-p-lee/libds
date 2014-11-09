@@ -6,6 +6,7 @@
 
 #ifdef DEBUG
     extern void * malloc_wrap(size_t size);
+    extern void * realloc_wrap(void *ptr, size_t size);
     extern void free_wrap(void *ptr);
 #endif
 

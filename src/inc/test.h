@@ -3,9 +3,12 @@
 
 static int malloc_cnt = 0;
 static int free_cnt = 0;
+static int realloc_cnt = 0;
 
 void *
 malloc_wrap(size_t size);
+void *
+realloc_wrap(void *ptr, size_t size);
 void
 free_wrap(void *ptr);
 void

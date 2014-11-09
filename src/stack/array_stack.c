@@ -52,7 +52,6 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra)
 {
     unsigned new_size;
     void *new_addr;
-    void *tmp;
 
     new_size = 0;
     new_addr = NULL;
@@ -63,14 +62,10 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra)
     }
 
     if (new_size) {
-        new_addr = malloc_ds(sizeof(stack->loc.bp) * new_size);
+        new_addr = realloc_ds(stack->loc.bp, sizeof(stack->loc.bp) * new_size);
         if (!new_addr) {
             pr_log_err("Fail to get memory from system.\n");
         } else {
-            memcpy(new_addr, stack->loc.bp, sizeof(stack->loc.bp) * stack->size);
-            free_ds(stack->loc.bp);
-            tmp = new_addr + ((void *)stack->loc.sp - stack->loc.bp);
-            stack->loc.sp = (void **)tmp;
             stack->loc.bp = new_addr;
             stack->rest += new_size - stack->size;
             stack->size = new_size;

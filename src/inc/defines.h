@@ -20,9 +20,11 @@
 
 #ifdef DEBUG
     #define malloc_ds      malloc_wrap
+    #define realloc_ds     realloc_wrap
     #define free_ds        free_wrap
 #else
     #define malloc_ds      malloc
+    #define realloc_ds     realloc
     #define free_ds        free
 #endif
 

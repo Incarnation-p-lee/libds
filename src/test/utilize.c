@@ -20,8 +20,9 @@ void
 memory_trace_print(void)
 {
     printf("  >> Memory Usage Summary <<\n\n");
-    printf("  . Malloc %10d\n", malloc_cnt);
-    printf("  . Free   %10d\n", free_cnt);
+    printf("  . Malloc  %10d\n", malloc_cnt);
+    printf("  . Realloc %10d\n", realloc_cnt);
+    printf("  . Free    %10d\n", free_cnt);
     printf("  >> Memory End.\n\n");
 }
 

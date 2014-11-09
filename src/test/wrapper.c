@@ -5,6 +5,13 @@ malloc_wrap(size_t size)
     return malloc(size);
 }
 
+void *
+realloc_wrap(void *ptr, size_t size)
+{
+    realloc_cnt++;
+    return realloc(ptr, size);
+}
+
 void
 free_wrap(void *ptr)
 {

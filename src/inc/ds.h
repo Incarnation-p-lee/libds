@@ -177,6 +177,7 @@ slinked_list_iterate(struct single_linked_list *head,
 
 #ifdef DEBUG
     extern void * malloc_wrap(size_t size);
+    extern void * realloc_wrap(void *ptr, size_t size);
     extern void free_wrap(void *ptr);
 #endif
 
@@ -231,9 +232,11 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
 
 #ifdef DEBUG
     #define malloc_ds      malloc_wrap
+    #define realloc_ds     realloc_wrap
     #define free_ds        free_wrap
 #else
     #define malloc_ds      malloc
+    #define realloc_ds     realloc
     #define free_ds        free
 #endif
 
