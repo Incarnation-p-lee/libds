@@ -1,7 +1,6 @@
 #include "test_doubly_linked_list.c"
 #include "test_single_linked_list.c"
 
-
 void
 linked_list_unit_test(void)
 {
@@ -14,7 +13,6 @@ static void
 doubly_linked_list_unit_test(void)
 {
     void (*all_tests[])(void) = {
-#if 1
         &test_dlinked_list_initial,
         &test_dlinked_list_generate,
         &test_dlinked_list_append_node,
@@ -31,8 +29,6 @@ doubly_linked_list_unit_test(void)
         &test_dlinked_list_remove_node,
         &test_dlinked_list_lazy_remove_node,
         &test_dlinker_list_iterate,
-#else
-#endif
     };
     register void (**iter)(void);
 
@@ -50,7 +46,6 @@ static void
 single_linked_list_unit_test(void)
 {
     void (*all_tests[])(void) = {
-#if 1
         &test_slinked_list_initial,
         &test_slinked_list_generate,
         &test_slinked_list_append_node,
@@ -67,8 +62,6 @@ single_linked_list_unit_test(void)
         &test_slinked_list_remove_node,
         &test_slinked_list_lazy_remove_node,
         &test_slinker_list_iterate,
-#else
-#endif
     };
     register void (**iter)(void);
 

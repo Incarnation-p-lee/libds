@@ -6,5 +6,6 @@
 #include "test.h"
 
 #include "test_linked_list.c"
+#include "test_stack.c"
 #include "utilize.c"
 #include "wrapper.c"
