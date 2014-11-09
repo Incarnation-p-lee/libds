@@ -4,6 +4,27 @@ argv_cfg=
 argv_lnk=
 argv_lib=
 lib_build=0
+root_dir=`pwd | xargs basename`
+
+if [ "$root_dir" != "libds" ]
+then
+  echo "Please execute build script under root dir: libds/"
+  echo "Example:"
+  echo "    sh src/script/build.sh DEBUG=1 LIB=1"
+  exit 1
+fi
+
+function print_help() {
+  cat << EOF
+Build Script Usage:
+    sh src/script/build.sh DEBUG=0/1
+                           PROFILE=0/1
+                           LIB=0/1
+                           CODE_COVERAGE=0/1
+EOF
+  exit 2
+}
+
 
 for argv in "$@"
 do
@@ -31,6 +52,12 @@ do
     ;;
     "LIB=0")
       lib_build=0
+    ;;
+    "-h")
+      print_help
+    ;;
+    "--help")
+      print_help
     ;;
   esac
 done
