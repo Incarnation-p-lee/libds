@@ -106,7 +106,7 @@ array_stack_push(struct array_stack *stack, void *member)
 {
     if (stack) {
         if (array_stack_is_full(stack)) {
-            expand_array_stack_space(stack, EXPAND_STACK_SPACE_MIN);
+            array_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
         }
         *stack->loc.sp++ = member;
         stack->rest--;
@@ -163,23 +163,21 @@ array_stack_cleanup(struct array_stack *stack)
     return;
 }
 
+/*
+ * Iterate each element of stack.
+ *   If NULL stack, nothing will be done.
+ */
 void
-array_stack_iterate(struct array_stack *stack, void (*operation)(void *))
+array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
 {
-  register void **iter;
-  ENTER("traverse_array_stack");
+    register void **iter;
 
-  if(NULL == operation)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_TRAVERSE;
-  }
+    if (stack && handler) {
+        iter = (void**)stack->loc.bp;
+        while(iter != stack->loc.sp) {
+            handler(*iter++);
+        }
+    }
 
-  iter = (void**)stack->loc.bp;
-  while(iter != stack->loc.sp)
-    operation(*iter++);
-
-END_OF_TRAVERSE:
-  LEAVE;
-  return;
+    return;
 }

@@ -30,7 +30,7 @@ doubly_linked_list_unit_test(void)
         &test_dlinked_list_serialize,
         &test_dlinked_list_remove_node,
         &test_dlinked_list_lazy_remove_node,
-        &test_dlinker_list_iterate_node,
+        &test_dlinker_list_iterate,
 #else
 #endif
     };
@@ -66,7 +66,7 @@ single_linked_list_unit_test(void)
         &test_slinked_list_serialize,
         &test_slinked_list_remove_node,
         &test_slinked_list_lazy_remove_node,
-        &test_slinker_list_iterate_node,
+        &test_slinker_list_iterate,
 #else
 #endif
     };

@@ -381,7 +381,7 @@ slinked_list_lazy_remove_node(struct single_linked_list *node)
  *   If NULL _ARGV_, nothing will be done.
  */
 void
-slinked_list_iterate_node(struct single_linked_list *head,
+slinked_list_iterate(struct single_linked_list *head,
     void (*handler)(struct single_linked_list *))
 {
     register struct single_linked_list *node;

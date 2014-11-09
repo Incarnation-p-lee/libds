@@ -480,7 +480,7 @@ test_slinked_list_lazy_remove_node(void)
 }
 
 static void
-test_slinker_list_iterate_node(void)
+test_slinker_list_iterate(void)
 {
     int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
@@ -490,7 +490,7 @@ test_slinker_list_iterate_node(void)
     is_passed = true;
     head = slinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
 
-    slinked_list_iterate_node(head, &slinked_list_iterate_handler);
+    slinked_list_iterate(head, &slinked_list_iterate_handler);
 
     tmp = head;
     do {

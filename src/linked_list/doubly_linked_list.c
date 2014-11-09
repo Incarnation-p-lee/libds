@@ -367,7 +367,7 @@ dlinked_list_lazy_remove_node(struct doubly_linked_list *node)
  *   If NULL _ARGV_, nothing will be done.
  */
 void
-dlinked_list_iterate_node(struct doubly_linked_list *head,
+dlinked_list_iterate(struct doubly_linked_list *head,
     void (*handler)(struct doubly_linked_list *))
 {
     register struct doubly_linked_list *node;

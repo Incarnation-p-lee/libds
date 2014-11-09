@@ -478,7 +478,7 @@ test_dlinked_list_lazy_remove_node(void)
 }
 
 static void
-test_dlinker_list_iterate_node(void)
+test_dlinker_list_iterate(void)
 {
     int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -488,7 +488,7 @@ test_dlinker_list_iterate_node(void)
     is_passed = true;
     head = dlinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
 
-    dlinked_list_iterate_node(head, &dlinked_list_iterate_handler);
+    dlinked_list_iterate(head, &dlinked_list_iterate_handler);
 
     tmp = head;
     do {
