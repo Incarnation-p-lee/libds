@@ -13,10 +13,17 @@ memory_trace_print(void);
 
 void
 linked_list_unit_test(void);
+void
+stack_unit_test(void);
+
+
 static void
 doubly_linked_list_unit_test(void);
 static void
 single_linked_list_unit_test(void);
+static void
+array_stack_unit_test(void);
+
 static void
 test_result_print(char *name, bool passed);
 static int *
@@ -25,5 +32,7 @@ static void
 dlinked_list_iterate_handler(struct doubly_linked_list *node);
 static void
 slinked_list_iterate_handler(struct single_linked_list *node);
+static void
+array_stack_iterate_handler(void *);
 
 #endif

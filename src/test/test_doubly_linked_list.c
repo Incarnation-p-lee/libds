@@ -494,6 +494,7 @@ test_dlinker_list_iterate(void)
     do {
         if (tmp->index != 0xDEAD) {
             is_passed = false;
+            break;
         }
         tmp = tmp->next;
     } while (tmp != head);

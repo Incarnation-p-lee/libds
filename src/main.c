@@ -1,5 +1,7 @@
 extern void
 linked_list_unit_test(void);
+extern void
+stack_unit_test(void);
 extern int
 libds_log_initial(void);
 extern void
@@ -9,6 +11,7 @@ memory_trace_print(void);
 
 static void (*run_test[])(void) = {
     &linked_list_unit_test,
+    &stack_unit_test,
 };
 
 int

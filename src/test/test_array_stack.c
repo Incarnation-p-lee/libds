@@ -56,7 +56,7 @@ test_array_stack_expand_space(void)
 
     stk_size = ins->size;
     stk_rest = ins->rest;
-    ins = array_stack_expand_space(ins, 1024);
+    array_stack_expand_space(ins, 1024);
     if ((ins->size != stk_size + 1024) || (ins->rest != stk_rest + 1024)) {
         is_passed = false;
     }
@@ -184,14 +184,85 @@ test_array_stack_pop(void)
 static void
 test_array_stack_is_empty(void)
 {
+    bool is_passed;
+    struct array_stack *ins;
+
+    ins = array_stack_create();
+    is_passed = true;
+
+    if (false != array_stack_is_empty(NULL)) {
+        is_passed = false;
+    }
+
+    if (true != array_stack_is_empty(ins)) {
+        is_passed = false;
+    }
+
+    array_stack_push(ins, ins);
+    if (false != array_stack_is_empty(ins)) {
+        is_passed = false;
+    }
+
+    array_stack_destroy(&ins);
+
+    test_result_print(SYM_2_STR(array_stack_is_empty), is_passed);
+    return;
 }
 
 static void
 test_array_stack_cleanup(void)
 {
+    bool is_passed;
+    struct array_stack *ins;
+
+    ins = array_stack_create();
+    is_passed = true;
+
+    array_stack_push(ins, ins);
+    array_stack_cleanup(ins);
+
+    if (true != array_stack_is_empty(ins)) {
+        is_passed = false;
+    }
+
+    array_stack_destroy(&ins);
+
+    test_result_print(SYM_2_STR(array_stack_cleanup), is_passed);
+    return;
 }
 
 static void
 test_array_stack_iterate(void)
 {
+    bool is_passed;
+    struct array_stack *ins;
+    int *tmp;
+    int data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };
+    int expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
+    register int *d1;
+    register int *e1;
+
+    ins = array_stack_create();
+    is_passed = true;
+
+    d1 = data;
+    while (d1 < data + sizeof(data) / sizeof(data[0])) {
+        array_stack_push(ins, d1++);
+    }
+
+    array_stack_iterate(ins, &array_stack_iterate_handler);
+
+    e1 = expect;
+    while (e1 < expect + sizeof(expect) / sizeof(expect[0])) {
+        tmp = array_stack_pop(ins);
+        if (*e1++ != *tmp) {
+            is_passed = false;
+            break;
+        }
+    }
+
+    array_stack_destroy(&ins);
+
+    test_result_print(SYM_2_STR(array_stack_iterate), is_passed);
+    return;
 }

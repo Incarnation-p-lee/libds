@@ -44,3 +44,13 @@ slinked_list_iterate_handler(struct single_linked_list *node)
 
     return;
 }
+
+static void
+array_stack_iterate_handler(void *ptr)
+{
+    if (ptr) {
+        *(int *)ptr += 1;
+    }
+
+    return;
+}

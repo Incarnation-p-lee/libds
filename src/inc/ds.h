@@ -39,6 +39,7 @@ struct stack_loc {
 };
 
 struct array_stack {
+    int              index;
     struct stack_loc loc;
     unsigned         rest;
     unsigned         size;
