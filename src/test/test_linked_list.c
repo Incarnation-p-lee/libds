@@ -14,6 +14,7 @@ doubly_linked_list_unit_test(void)
 {
     void (*all_tests[])(void) = {
         &test_dlinked_list_initial,
+        &test_dlinked_list_create,
         &test_dlinked_list_generate,
         &test_dlinked_list_append_node,
         &test_dlinked_list_next_node,
@@ -46,6 +47,7 @@ static void
 single_linked_list_unit_test(void)
 {
     void (*all_tests[])(void) = {
+        &test_slinked_list_create,
         &test_slinked_list_initial,
         &test_slinked_list_generate,
         &test_slinked_list_append_node,

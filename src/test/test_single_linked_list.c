@@ -1,11 +1,32 @@
 static void
+test_slinked_list_create(void)
+{
+    struct single_linked_list *tmp;
+    bool is_passed;
+
+    is_passed = false;
+    tmp = slinked_list_create();
+    if (tmp) {
+        if (tmp->index == 0 && tmp->next == tmp
+            && slinked_list_previous_node(tmp) == tmp) {
+            is_passed = true;
+        }
+    }
+    slinked_list_destroy(&tmp);
+
+    test_result_print(SYM_2_STR(slinked_list_create), is_passed);
+    return;
+}
+
+static void
 test_slinked_list_initial(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = false;
-    tmp = slinked_list_initial();
+    tmp = malloc_ds(sizeof(*tmp));
+    slinked_list_initial(tmp);
     if (tmp) {
         if (tmp->index == 0 && tmp->next == tmp
             && slinked_list_previous_node(tmp) == tmp) {
@@ -64,7 +85,7 @@ test_slinked_list_append_node(void)
     bool is_passed;
     int tmp = 0xA;
 
-    head = slinked_list_initial();
+    head = slinked_list_create();
     is_passed = false;
     next = head->next;
 
@@ -88,7 +109,7 @@ test_slinked_list_next_node(void)
     bool is_passed;
 
     is_passed = false;
-    head = slinked_list_initial();
+    head = slinked_list_create();
     slinked_list_append_node(head, 0xDEAD);
 
     next = slinked_list_next_node(head);
@@ -117,7 +138,7 @@ test_slinked_list_previous_node(void)
     bool is_passed;
 
     is_passed = false;
-    head = slinked_list_initial();
+    head = slinked_list_create();
     slinked_list_append_node(head, 0xDEAD);
 
     prev = slinked_list_previous_node(head);
@@ -149,11 +170,11 @@ test_slinked_list_insert_before(void)
 
     is_passed = false;
     mark = 0xDEAD;
-    head = slinked_list_initial();
+    head = slinked_list_create();
     slinked_list_append_node(head, mark);
 
     prev = slinked_list_previous_node(head);
-    node = slinked_list_initial();
+    node = slinked_list_create();
     slinked_list_insert_before(head, node);
     if (slinked_list_previous_node(head) == node && node->next == head
         && slinked_list_previous_node(node) == prev && prev->next == node) {
@@ -176,11 +197,11 @@ test_slinked_list_insert_after(void)
 
     is_passed = false;
     mark = 0xDEAD;
-    head = slinked_list_initial();
+    head = slinked_list_create();
     slinked_list_append_node(head, mark);
 
     next = head->next;
-    node = slinked_list_initial();
+    node = slinked_list_create();
     slinked_list_insert_after(head, node);
     if (head->next == node && slinked_list_previous_node(node) == head
         && node->next == next && slinked_list_previous_node(next) == node) {
@@ -216,7 +237,7 @@ test_slinked_list_destroy(void)
         }
     }
 
-    head = slinked_list_initial();
+    head = slinked_list_create();
     slinked_list_destroy(&head);
     if (NULL != head) {
         is_passed = false;
@@ -251,7 +272,7 @@ test_slinked_list_length(void)
         slinked_list_destroy(&head);
     }
 
-    head = slinked_list_initial();
+    head = slinked_list_create();
     if (1 != slinked_list_length(head)) {
         is_passed = false;
     }
@@ -359,7 +380,7 @@ test_slinked_list_is_contains(void)
         is_passed = false;
     }
 
-    tmp = slinked_list_initial();
+    tmp = slinked_list_create();
     if (false != slinked_list_is_contains(head, tmp)) {
         is_passed = false;
     }
@@ -435,7 +456,7 @@ test_slinked_list_remove_node(void)
 
     slinked_list_destroy(&tmp);
 
-    tmp = slinked_list_initial();
+    tmp = slinked_list_create();
     if (NULL != slinked_list_remove_node(tmp)) {
         is_passed = false;
     }

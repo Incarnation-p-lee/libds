@@ -45,6 +45,12 @@ struct array_stack {
     unsigned         size;
 };
 
+struct linked_stack {
+    int                index;
+    struct array_stack *stack;
+    struct doubly_linked_list link;
+};
+
 struct array_queue {
     unsigned size;
     unsigned rest;
@@ -84,7 +90,9 @@ libds_log_print(enum log_level lvl, const char *msg);
 
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list *
-dlinked_list_initial(void);
+dlinked_list_create(void);
+extern void
+dlinked_list_initial(struct doubly_linked_list *);
 extern struct doubly_linked_list *
 dlinked_list_generate(int *val, int size);
 extern void
@@ -126,7 +134,9 @@ dlinked_list_iterate(struct doubly_linked_list *head,
 
 /* single linked list, Circular. */
 extern struct single_linked_list *
-slinked_list_initial(void);
+slinked_list_create(void);
+extern void
+slinked_list_initial(struct single_linked_list *);
 extern struct single_linked_list *
 slinked_list_generate(int *val, int size);
 extern void

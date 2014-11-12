@@ -1,9 +1,9 @@
 /*
- * _RETURN_ one node linked list.
+ * _RETURN_ one new node linked list.
  *   If no memory available, it never return, export an error and exit.
  */
 struct doubly_linked_list *
-dlinked_list_initial(void)
+dlinked_list_create(void)
 {
     struct doubly_linked_list *head;
 
@@ -11,12 +11,26 @@ dlinked_list_initial(void)
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
+        dlinked_list_initial(head);
+    }
+
+    return head;
+}
+
+/*
+ * Init single node linked list.
+ *   If NULL _ARGV_, nothing will be done.
+ */
+void
+dlinked_list_initial(struct doubly_linked_list *head)
+{
+    if (head) {
         head->index = 0;
         head->next = head;
         head->previous = head;
     }
 
-    return head;
+    return;
 }
 
 /*
@@ -33,7 +47,7 @@ dlinked_list_generate(int *val, int size)
     head = NULL;
     if (val && size > 0) {
         iterator = val;
-        node = dlinked_list_initial();
+        node = dlinked_list_create();
         node->index = *iterator++;
         head = node;
 
@@ -60,7 +74,7 @@ dlinked_list_append_node(struct doubly_linked_list *node, int value)
         if (!node->next || !node->previous) {
             pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
         } else {
-            next = dlinked_list_initial();
+            next = dlinked_list_create();
             next->index = value;
             dlinked_list_insert_after(node, next);
         }

@@ -11,7 +11,9 @@ libds_log_print(enum log_level lvl, const char *msg);
 
 /* doubly linked list, Circular. */
 struct doubly_linked_list *
-dlinked_list_initial(void);
+dlinked_list_create(void);
+void
+dlinked_list_initial(struct doubly_linked_list *);
 struct doubly_linked_list *
 dlinked_list_generate(int *val, int size);
 void
@@ -53,7 +55,9 @@ dlinked_list_iterate(struct doubly_linked_list *head,
 
 /* single linked list, Circular. */
 struct single_linked_list *
-slinked_list_initial(void);
+slinked_list_create(void);
+void
+slinked_list_initial(struct single_linked_list *);
 struct single_linked_list *
 slinked_list_generate(int *val, int size);
 void

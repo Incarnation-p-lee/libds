@@ -41,6 +41,12 @@ struct array_stack {
     unsigned         size;
 };
 
+struct linked_stack {
+    int                index;
+    struct array_stack *stack;
+    struct doubly_linked_list link;
+};
+
 struct array_queue {
     unsigned size;
     unsigned rest;

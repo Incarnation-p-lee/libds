@@ -1,11 +1,31 @@
 static void
+test_dlinked_list_create(void)
+{
+    struct doubly_linked_list *tmp;
+    bool is_passed;
+
+    is_passed = false;
+    tmp = dlinked_list_create();
+    if (tmp) {
+        if (tmp->index == 0 && tmp->next == tmp && tmp->previous == tmp) {
+            is_passed = true;
+        }
+    }
+    dlinked_list_destroy(&tmp);
+
+    test_result_print(SYM_2_STR(dlinked_list_create), is_passed);
+    return;
+}
+
+static void
 test_dlinked_list_initial(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
 
     is_passed = false;
-    tmp = dlinked_list_initial();
+    tmp = malloc_ds(sizeof(*tmp));
+    dlinked_list_initial(tmp);
     if (tmp) {
         if (tmp->index == 0 && tmp->next == tmp && tmp->previous == tmp) {
             is_passed = true;
@@ -63,7 +83,7 @@ test_dlinked_list_append_node(void)
     bool is_passed;
     int tmp = 0xA;
 
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     is_passed = false;
     next = head->next;
 
@@ -87,7 +107,7 @@ test_dlinked_list_next_node(void)
     bool is_passed;
 
     is_passed = false;
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     dlinked_list_append_node(head, 0xDEAD);
 
     next = dlinked_list_next_node(head);
@@ -116,7 +136,7 @@ test_dlinked_list_previous_node(void)
     bool is_passed;
 
     is_passed = false;
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     dlinked_list_append_node(head, 0xDEAD);
 
     prev = dlinked_list_previous_node(head);
@@ -148,11 +168,11 @@ test_dlinked_list_insert_before(void)
 
     is_passed = false;
     mark = 0xDEAD;
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     dlinked_list_append_node(head, mark);
 
     prev = head->previous;
-    node = dlinked_list_initial();
+    node = dlinked_list_create();
     dlinked_list_insert_before(head, node);
     if (head->previous == node && node->next == head
         && node->previous == prev && prev->next == node) {
@@ -175,11 +195,11 @@ test_dlinked_list_insert_after(void)
 
     is_passed = false;
     mark = 0xDEAD;
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     dlinked_list_append_node(head, mark);
 
     next = head->next;
-    node = dlinked_list_initial();
+    node = dlinked_list_create();
     dlinked_list_insert_after(head, node);
     if (head->next == node && node->previous == head
         && node->next == next && next->previous == node) {
@@ -215,7 +235,7 @@ test_dlinked_list_destroy(void)
         }
     }
 
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     dlinked_list_destroy(&head);
     if (NULL != head) {
         is_passed = false;
@@ -250,7 +270,7 @@ test_dlinked_list_length(void)
         dlinked_list_destroy(&head);
     }
 
-    head = dlinked_list_initial();
+    head = dlinked_list_create();
     if (1 != dlinked_list_length(head)) {
         is_passed = false;
     }
@@ -358,7 +378,7 @@ test_dlinked_list_is_contains(void)
         is_passed = false;
     }
 
-    tmp = dlinked_list_initial();
+    tmp = dlinked_list_create();
     if (false != dlinked_list_is_contains(head, tmp)) {
         is_passed = false;
     }
@@ -434,7 +454,7 @@ test_dlinked_list_remove_node(void)
 
     dlinked_list_destroy(&tmp);
 
-    tmp = dlinked_list_initial();
+    tmp = dlinked_list_create();
     if (NULL != dlinked_list_remove_node(tmp)) {
         is_passed = false;
     }

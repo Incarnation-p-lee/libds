@@ -4,7 +4,7 @@
  *   If no memory available, it never return, export an error and exit.
  */
 struct single_linked_list *
-slinked_list_initial(void)
+slinked_list_create(void)
 {
     struct single_linked_list *head;
 
@@ -12,11 +12,25 @@ slinked_list_initial(void)
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
+        slinked_list_initial(head);
+    }
+
+    return head;
+}
+
+/*
+ * Init single node linked list.
+ *   If NULL _ARGV_, nothing will be done.
+ */
+void
+slinked_list_initial(struct single_linked_list *head)
+{
+    if (head) {
         head->index = 0;
         head->next = head;
     }
 
-    return head;
+    return;
 }
 
 /*
@@ -34,7 +48,7 @@ slinked_list_generate(int *val, int size)
     head = NULL;
     if (val && size > 0) {
         iterator = val;
-        node = slinked_list_initial();
+        node = slinked_list_create();
         node->index = *iterator++;
         head = node;
 
@@ -62,7 +76,7 @@ slinked_list_append_node(struct single_linked_list *node, int value)
         if (!node->next) {
             pr_log_warn("Uninitialized or destroyed single linked list node.\n");
         } else {
-            next = slinked_list_initial();
+            next = slinked_list_create();
             next->index = value;
             slinked_list_insert_after(node, next);
             node->next = next;
