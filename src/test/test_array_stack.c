@@ -7,7 +7,7 @@ test_array_stack_create(void)
     ins = array_stack_create();
     is_passed = true;
 
-    if (ins->size != ins->rest || (void*)ins->loc.sp != ins->loc.bp) {
+    if (ins->size != ins->rest || (void*)ins->space.sp != ins->space.bp) {
         is_passed = false;
     }
     array_stack_destroy(&ins);

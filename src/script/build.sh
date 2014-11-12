@@ -92,6 +92,9 @@ do
     "src/inc/")
     continue
   ;;
+    "src/lib/")
+    continue
+  ;;
   esac
 
   compile_obj $dir

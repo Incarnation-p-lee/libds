@@ -33,21 +33,25 @@ struct doubly_linked_list {
  * sp point to top of stack
  * bp point to the first element of a array in void * type
  */
-struct stack_loc {
+struct array_space {
     void **sp;
     void *bp;
 };
 
 struct array_stack {
-    int              index;
-    struct stack_loc loc;
-    unsigned         rest;
-    unsigned         size;
+    int                index;
+    struct array_space space;
+    unsigned           rest;
+    unsigned           size;
+};
+
+struct linked_space {
+    struct array_space        space;
+    struct doubly_linked_list link;
 };
 
 struct linked_stack {
-    int                index;
-    struct array_stack *stack;
+    int                       index;
     struct doubly_linked_list link;
 };
 
@@ -229,6 +233,8 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
 
 #define DEFAULT_LOG_FILE    "./ds.log"
 #define SYM_2_STR(symbol)   (#symbol)
+#define UNOFFSET_OF(ptr, type, mem) \
+    (void *)((char *)ptr - (char *)(&((type *)0)->mem))
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);

@@ -15,12 +15,12 @@ array_stack_create(void)
         ptr->rest = DEFAULT_STACK_SPACE_SIZE;
     }
 
-    ptr->loc.bp = malloc_ds(sizeof(ptr->loc.bp) * DEFAULT_STACK_SPACE_SIZE);
-    if (!ptr->loc.bp) {
+    ptr->space.bp = malloc_ds(sizeof(ptr->space.bp) * DEFAULT_STACK_SPACE_SIZE);
+    if (!ptr->space.bp) {
         free_ds(ptr);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        ptr->loc.sp = (void **)ptr->loc.bp;
+        ptr->space.sp = (void **)ptr->space.bp;
     }
 
     return ptr;
@@ -34,7 +34,7 @@ void
 array_stack_destroy(struct array_stack **stack)
 {
     if (stack && *stack) {
-        free_ds((*stack)->loc.bp);
+        free_ds((*stack)->space.bp);
         free_ds(*stack);
         *stack = NULL;
     }
@@ -62,11 +62,11 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra)
     }
 
     if (new_size) {
-        new_addr = realloc_ds(stack->loc.bp, sizeof(stack->loc.bp) * new_size);
+        new_addr = realloc_ds(stack->space.bp, sizeof(stack->space.bp) * new_size);
         if (!new_addr) {
             pr_log_err("Fail to get memory from system.\n");
         } else {
-            stack->loc.bp = new_addr;
+            stack->space.bp = new_addr;
             stack->rest += new_size - stack->size;
             stack->size = new_size;
         }
@@ -106,7 +106,7 @@ array_stack_push(struct array_stack *stack, void *member)
         if (array_stack_is_full(stack)) {
             array_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
         }
-        *stack->loc.sp++ = member;
+        *stack->space.sp++ = member;
         stack->rest--;
     }
 
@@ -124,7 +124,7 @@ array_stack_pop(struct array_stack *stack)
 
     data = NULL;
     if (stack && !array_stack_is_empty(stack)) {
-        data = *(--stack->loc.sp);
+        data = *(--stack->space.sp);
         stack->rest++;
     }
 
@@ -153,8 +153,8 @@ void
 array_stack_cleanup(struct array_stack *stack)
 {
     if (stack) {
-        memset(stack->loc.bp, 0, sizeof(stack->loc.bp) * stack->size);
-        stack->loc.sp = (void**)stack->loc.bp;
+        memset(stack->space.bp, 0, sizeof(stack->space.bp) * stack->size);
+        stack->space.sp = (void**)stack->space.bp;
         stack->rest = stack->size;
     }
 
@@ -171,8 +171,8 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
     register void **iter;
 
     if (stack && handler) {
-        iter = (void**)stack->loc.bp;
-        while(iter != stack->loc.sp) {
+        iter = (void**)stack->space.bp;
+        while(iter != stack->space.sp) {
             handler(*iter++);
         }
     }
