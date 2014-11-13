@@ -48,7 +48,8 @@ struct linked_space {
 
 struct linked_stack {
     int                       index;
-    struct doubly_linked_list link;
+    struct linked_space       *base;
+    struct linked_space       *top;
 };
 
 struct array_queue {
