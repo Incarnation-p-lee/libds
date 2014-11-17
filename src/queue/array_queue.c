@@ -1,11 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*-AUTHOR:      Incarnation.P Lee                                            -*/
-/*-DATE:        08042014                                                     -*/
-/*-WHAT:        Baisc Data Structure                                         -*/
-/*-REVISION:                                                                 -*/
-/*- DATE -------------------- DESCRIPTION ------------------------------------*/
-/*- 08042014    Queue of Array Implement.                                    -*/
-/*----------------------------------------------------------------------------*/
 struct array_queue *
 create_array_queue_instance(void)
 {

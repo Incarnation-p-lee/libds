@@ -5,40 +5,39 @@
 struct linked_stack *
 linked_stack_create(void)
 {
-    struct linked_stack *ptr;
-    struct linked_space *base;
+    struct linked_stack *stack;
 
     /* struct linked_stack */
-    ptr = malloc_ds(sizeof(*ptr));
-    if (!ptr) {
+    stack = malloc_ds(sizeof(*stack));
+    if (!stack) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        ptr->index = 0;
+        stack->sid = 0;
     }
 
     /* struct linked_space */
-    base = malloc_ds(sizeof(*base));
-    if (!base) {
-        free_ds(ptr);
+    stack->base = malloc_ds(sizeof(*stack->base));
+    if (!stack->base) {
+        free_ds(stack);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        dlinked_list_initial(&base->link);
-        ptr->base = base;
-        ptr->top = base;
+        dlinked_list_initial(&stack->base.link);
+        stack->top = stack->base;
     }
 
-    /* struct array_space */
-    base->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
-    if (!base->space.bp) {
-        free_ds(base);
-        free_ds(ptr);
+    /* struct array_stack_space */
+    stack->base->space.bp = malloc_ds(sizeof(void *) *
+        DEFAULT_STACK_SPACE_SIZE);
+    if (!stack->base->space.bp) {
+        free_ds(stack->base);
+        free_ds(stack);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        base->size = DEFAULT_STACK_SPACE_SIZE;
-        base->space.sp = (void **)base->space.bp;
+        stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
+        stack->base->space.sp = (void **)stack->base->space.bp;
     }
 
-    return ptr;
+    return stack;
 }
 
 /*
@@ -66,6 +65,15 @@ linked_stack_destroy(struct linked_stack **stack)
     }
 
     return;
+}
+
+void
+linked_stack_destroy_node(struct linked_stack *node)
+{
+    if (node) {
+        
+    }
+
 }
 
 /*
