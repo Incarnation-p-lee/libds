@@ -8,7 +8,7 @@ slinked_list_create(void)
 {
     struct single_linked_list *head;
 
-    head = (struct single_linked_list *)malloc_ds(sizeof(*head));
+    head = malloc_ds(sizeof(*head));
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {

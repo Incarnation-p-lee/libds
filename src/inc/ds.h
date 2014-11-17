@@ -6,17 +6,17 @@
 #define DATA_STRUCTURE_TYPES_H
 
 /*
-   Implement the unify single_linked_list interface
- All other linked list will involved this structure
- for linker, such as
-   struct A {
-     int;
-     struct single_linked_list next;
-   };
-   Then, we can only care about this linked list opertion
- for all other linked list.
-   Both single_linked_list and doubly_linked_list are
- _CIRCULAR_ linked list.
+ *   Implement the unify single_linked_list interface
+ * All other linked list will involved this structure
+ * for linker, such as
+ *   struct A {
+ *     int;
+ *     struct single_linked_list next;
+ *   };
+ *   Then, we can only care about this linked list opertion
+ * for all other linked list.
+ *   Both single_linked_list and doubly_linked_list are
+ * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
     int    index;
@@ -30,31 +30,42 @@ struct doubly_linked_list {
 };
 
 /*
- * sp point to top of stack
- * bp point to the first element of a array in void * type
+ * array stack space 
  */
-struct array_space {
-    void **sp;
-    void *bp;
+struct array_stack_space {
+    unsigned dim;
+    void     **sp;
+    void     *bp;
 };
 
+/*
+ * array stack
+ */
 struct array_stack {
-    int                index;
-    struct array_space space;
-    unsigned           rest;
-    unsigned           size;
+    int                      sid;
+    struct array_stack_space space;
 };
 
-struct linked_space {
-    struct array_space        space;
+/*
+ * linked stack space
+ */
+struct linked_stack_space {
+    struct array_stack_space  space;
     struct doubly_linked_list link;
 };
 
+/*
+ * linked stack
+ */
 struct linked_stack {
-    int                       index;
-    struct doubly_linked_list link;
+    int                       sid;
+    struct linked_stack_space *base;
+    struct linked_stack_space *top;
 };
 
+/*
+ *
+ */
 struct array_queue {
     unsigned size;
     unsigned rest;

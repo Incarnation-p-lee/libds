@@ -7,20 +7,20 @@ array_stack_create(void)
 {
     struct array_stack *ptr;
 
-    ptr = (struct array_stack *)malloc_ds(sizeof(*ptr));
+    ptr = malloc_ds(sizeof(*ptr));
     if (!ptr) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        ptr->size = DEFAULT_STACK_SPACE_SIZE;
-        ptr->rest = DEFAULT_STACK_SPACE_SIZE;
+        ptr->sid = 0;
     }
 
-    ptr->space.bp = malloc_ds(sizeof(ptr->space.bp) * DEFAULT_STACK_SPACE_SIZE);
+    ptr->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
     if (!ptr->space.bp) {
         free_ds(ptr);
         pr_log_err("Fail to get memory from system.\n");
     } else {
         ptr->space.sp = (void **)ptr->space.bp;
+        ptr->space.dim = DEFAULT_STACK_SPACE_SIZE;
     }
 
     return ptr;
@@ -56,19 +56,18 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra)
     new_size = 0;
     new_addr = NULL;
     if (stack && extra) {
-        new_size = stack->size + extra;
+        new_size = stack->space.dim + extra;
     } else if (stack && !extra) {
-        new_size = stack->size * 2 + EXPAND_STACK_SPACE_MIN;
+        new_size = stack->space.dim * 2 + EXPAND_STACK_SPACE_MIN;
     }
 
     if (new_size) {
-        new_addr = realloc_ds(stack->space.bp, sizeof(stack->space.bp) * new_size);
+        new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
         if (!new_addr) {
             pr_log_err("Fail to get memory from system.\n");
         } else {
             stack->space.bp = new_addr;
-            stack->rest += new_size - stack->size;
-            stack->size = new_size;
+            stack->space.dim = new_size;
         }
     }
 
@@ -92,7 +91,22 @@ array_stack_is_full(struct array_stack *stack)
 unsigned
 array_stack_rest_space(struct array_stack *stack)
 {
-    return stack ? stack->rest : 0;
+    void *limit;
+    void *tmp;
+    unsigned rest;
+
+    rest = 0;
+    if (stack) {
+        tmp = (void *)stack->space.sp;
+        limit = stack->space.bp + stack->space.dim;
+        if ((signed)(tmp - limit) > 0) {
+            pr_log_err("Array stack overflow.");
+        } else {
+            rest = (unsigned)(limit - tmp);
+        }
+    }
+
+    return rest;
 }
 
 /*
@@ -107,7 +121,6 @@ array_stack_push(struct array_stack *stack, void *member)
             array_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
         }
         *stack->space.sp++ = member;
-        stack->rest--;
     }
 
     return;
@@ -125,7 +138,6 @@ array_stack_pop(struct array_stack *stack)
     data = NULL;
     if (stack && !array_stack_is_empty(stack)) {
         data = *(--stack->space.sp);
-        stack->rest++;
     }
 
     return data;
@@ -138,11 +150,20 @@ array_stack_pop(struct array_stack *stack)
 bool
 array_stack_is_empty(struct array_stack *stack)
 {
+    void *tmp;
+    bool is_empty;
+
+    is_empty = false;
     if (stack) {
-        return stack->rest == stack->size ? true : false;
+        tmp = (void *)stack->space.sp;
+        if ((signed)(tmp - stack->space.bp) < 0) {
+            pr_log_err("Array stack overflow.");
+        } else {
+            is_empty = stack->space.bp == tmp ? true : false;
+        }
     }
 
-    return false;
+    return is_empty;
 }
 
 /*
@@ -153,9 +174,8 @@ void
 array_stack_cleanup(struct array_stack *stack)
 {
     if (stack) {
-        memset(stack->space.bp, 0, sizeof(stack->space.bp) * stack->size);
+        memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = (void**)stack->space.bp;
-        stack->rest = stack->size;
     }
 
     return;

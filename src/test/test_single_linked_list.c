@@ -118,7 +118,7 @@ test_slinked_list_next_node(void)
     }
     slinked_list_destroy(&head);
 
-    head = (struct single_linked_list *)malloc_ds(sizeof(*head));
+    head = malloc_ds(sizeof(*head));
     head->next = NULL;
     next = slinked_list_next_node(head);
     if (NULL != next) {
@@ -147,7 +147,7 @@ test_slinked_list_previous_node(void)
     }
     slinked_list_destroy(&head);
 
-    head = (struct single_linked_list *)malloc_ds(sizeof(*head));
+    head = malloc_ds(sizeof(*head));
     head->next = NULL;
     prev = slinked_list_previous_node(head);
     if (NULL != prev) {

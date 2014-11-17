@@ -7,7 +7,7 @@ test_array_stack_create(void)
     ins = array_stack_create();
     is_passed = true;
 
-    if (ins->size != ins->rest || (void*)ins->space.sp != ins->space.bp) {
+    if ((void*)ins->space.sp != ins->space.bp) {
         is_passed = false;
     }
     array_stack_destroy(&ins);
@@ -41,23 +41,19 @@ test_array_stack_expand_space(void)
     bool is_passed;
     struct array_stack *ins;
     unsigned stk_size;
-    unsigned stk_rest;
 
     ins = array_stack_create();
     is_passed = true;
-    stk_size = ins->size;
-    stk_rest = ins->rest;
+    stk_size = ins->space.dim;
 
     array_stack_expand_space(ins, 0);
-    if ((ins->size != stk_size * 2 + 32)
-        || (ins->rest != stk_rest + stk_size + 32)) {
+    if (ins->space.dim != stk_size * 2 + 32) {
         is_passed = false;
     }
 
-    stk_size = ins->size;
-    stk_rest = ins->rest;
+    stk_size = ins->space.dim;
     array_stack_expand_space(ins, 1024);
-    if ((ins->size != stk_size + 1024) || (ins->rest != stk_rest + 1024)) {
+    if (ins->space.dim != stk_size + 1024) {
         is_passed = false;
     }
 
@@ -77,7 +73,7 @@ test_array_stack_is_full(void)
 
     ins = array_stack_create();
     is_passed = true;
-    tmp = (int)ins->size;
+    tmp = (int)ins->space.dim;
     mem = &tmp;
 
     if (false != array_stack_is_full(ins)) {
@@ -106,7 +102,7 @@ test_array_stack_rest_space(void)
     unsigned stk_size;
 
     ins = array_stack_create();
-    stk_size = ins->size;
+    stk_size = ins->space.dim;
     is_passed = true;
 
     if (stk_size != array_stack_rest_space(ins)) {
@@ -133,7 +129,7 @@ test_array_stack_push(void)
 
     ins = array_stack_create();
     is_passed = true;
-    tmp = (int)ins->size;
+    tmp = (int)ins->space.dim;
     mem = &tmp;
 
     while (tmp) {
@@ -145,9 +141,9 @@ test_array_stack_push(void)
         is_passed = false;
     }
 
-    tmp = (unsigned)ins->size;
+    tmp = (unsigned)ins->space.dim;
     array_stack_push(ins, mem);
-    if (tmp + 32 != ins->size) {
+    if (tmp + 32 != ins->space.dim) {
         is_passed = false;
     }
 

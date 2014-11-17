@@ -6,16 +6,37 @@ struct linked_stack *
 linked_stack_create(void)
 {
     struct linked_stack *ptr;
+    struct linked_space *base;
 
-    ptr = (struct linked_stack *)malloc_ds(sizeof(*ptr));
+    /* struct linked_stack */
+    ptr = malloc_ds(sizeof(*ptr));
     if (!ptr) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
         ptr->index = 0;
-        dlinked_list_initial(ptr->link);
     }
 
-    ptr->stack = array_stack_create();
+    /* struct linked_space */
+    base = malloc_ds(sizeof(*base));
+    if (!base) {
+        free_ds(ptr);
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        dlinked_list_initial(&base->link);
+        ptr->base = base;
+        ptr->top = base;
+    }
+
+    /* struct array_space */
+    base->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
+    if (!base->space.bp) {
+        free_ds(base);
+        free_ds(ptr);
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        base->size = DEFAULT_STACK_SPACE_SIZE;
+        base->space.sp = (void **)base->space.bp;
+    }
 
     return ptr;
 }

@@ -116,7 +116,7 @@ test_dlinked_list_next_node(void)
     }
     dlinked_list_destroy(&head);
 
-    head = (struct doubly_linked_list *)malloc_ds(sizeof(*head));
+    head = malloc_ds(sizeof(*head));
     head->next = NULL;
     next = dlinked_list_next_node(head);
     if (NULL != next) {
@@ -145,7 +145,7 @@ test_dlinked_list_previous_node(void)
     }
     dlinked_list_destroy(&head);
 
-    head = (struct doubly_linked_list *)malloc_ds(sizeof(*head));
+    head = malloc_ds(sizeof(*head));
     head->previous = NULL;
     prev = dlinked_list_previous_node(head);
     if (NULL != prev) {
