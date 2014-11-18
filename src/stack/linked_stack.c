@@ -47,83 +47,101 @@ linked_stack_create(void)
 void
 linked_stack_destroy(struct linked_stack **stack)
 {
-    register struct linked_stack *node;
-    register struct linked_stack *next;
+    register struct linked_stack_space *node;
 
     if (stack && *stack) {
-        node = linked_stack_next_node(*stack);
-        while (*stack != node) {
-            next = linked_stack_next_node(node);
-            array_stack_destroy(&next->stack);
-            free_ds(node);
-            node = next;
+        node = (*stack)->base;
+        while (node) {
+            node = linked_stack_space_remove_node(node);
         }
-        /* destroy head node */
-        array_stack_destroy(&node->stack);
-        free_ds(node);
+
+        free_ds(*stack);
         *stack = NULL;
     }
 
     return;
 }
 
-void
-linked_stack_destroy_node(struct linked_stack *node)
-{
-    if (node) {
-        
-    }
-
-}
-
 /*
- * _RETURN_ next node of linked stack.
- *   If NULL _ARGV_, _RETURN_ NULL.
+ * _RETURN_ next node of linked stack space.
+ *   If NULL _ARGV_, _RETURN_ NULL
  */
-struct linked_stack *
-linked_stack_next_node(struct linked_stack *node)
+static inline struct linked_stack_space *
+linked_stack_space_next_node(struct linked_stack_space *node)
 {
-    struct linked_stack *next;
+    struct linked_stack_space *next;
+    struct doubly_linked_list *tmp;
 
     next = NULL;
     if (node) {
-        next = UNOFFSET_OF(dlinked_list_next_node(&node->link),
-             struct linked_stack, link);
+        tmp = dlinked_list_next_node(&node->link);
+        if (tmp) {
+            next = UNOFFSET_OF(tmp, struct linked_stack_space, link);
+        }
     }
 
     return next;
 }
 
 /*
- * _RETURN_ previous node of linked stack.
- *   If NULL _ARGV_, _RETURN_ NULL.
+ * _RETURN_ previous node of linked stack space.
+ *   If NULL _ARGV_, _RETURN_ NULL
  */
-struct linked_stack *
-linked_stack_previous_node(struct linked_stack *node)
+static inline struct linked_stack_space *
+linked_stack_space_previous_node(struct linked_stack_space *node)
 {
-    struct linked_stack *prev;
+    struct linked_stack_space *previous;
+    struct doubly_linked_list *tmp;
 
-    prev = NULL;
+    previous = NULL;
     if (node) {
-        prev = UNOFFSET_OF(dlinked_list_previous_node(&node->link),
-             struct linked_stack, link);
+        tmp = dlinked_list_previous_node(&node->link);
+        if (tmp) {
+            previous = UNOFFSET_OF(tmp, struct linked_stack_space, link);
+        }
     }
 
-    return prev;
+    return previous;
 }
 
 /*
- * Expand one new node at the end of linked list.
- *   If NULL stack, nothing will be done.
+ * _RETURN_ the next node of linked stack space
+ *   If NULL _ARGV_, or last node, _RETURN_ NULL.
  */
-void
-linked_stack_append_node(struct array_stack *stack)
+static inline struct linked_stack_space *
+linked_stack_space_remove_node(struct linked_stack_space *node)
 {
-    struct linked_stack *node;
+    struct linked_stack_space *next;
 
-    if (stack) {
-        node = linked_stack_create();
-        dlinked_list_insert_before(st
+    next = NULL;
+    if (node) {
+        dlinked_list_lazy_remove_node(&node->link);
+        next = linked_stack_space_next_node(node);
+
+        /* If only one node */
+        if (next == node) {
+            next = NULL;
+        }
+
+        free_ds(node->space.bp);
+        free_ds(node);
     }
 
+    return next;
+}
+
+void
+linked_stack_expand_space(struct linked_stack *stack, unsigned dim)
+{
+    struct linked_stack_space *node;
+    struct linked_stack_space *last;
+
+    if (stack) {
+        last = linked_stack_space_previous_node(stack->base);
+        if (last) {
+            node = malloc_ds(
+        }
+    }
+
+    return;
 }

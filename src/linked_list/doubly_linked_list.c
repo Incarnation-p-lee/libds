@@ -94,10 +94,10 @@ dlinked_list_next_node(struct doubly_linked_list *node)
     struct doubly_linked_list *next;
 
     next = NULL;
-    if (node && node->next && node->previous) {
-        next = node->next;
-    } else if (!node->next || !node->previous) {
+    if (!node->next || !node->previous) {
         pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
+    } else if (node && node->next && node->previous) {
+        next = node->next;
     }
 
     return next;
