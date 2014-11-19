@@ -244,3 +244,48 @@ linked_stack_push(struct linked_stack *stack, void *member)
 
     return;
 }
+
+/*
+ * _RETURN_ one void pointer from stack
+ *  If NULL _ARGV_, _RETURN_ NULL.
+ */
+void *
+linked_stack_pop(struct linked_stack *stack)
+{
+    void *data;
+
+    data = NULL;
+    if (stack && !linked_stack_is_empty(stack)) {
+        if (!linked_stack_sapce_node_rest_space(stack->top)) {
+            stack->top = linked_stack_space_previous_node(stack->top);
+            data = *(--stack->top->space.sp);
+        }
+    }
+
+    return data;
+}
+
+/*
+ * _RETURN_ true if empty stack, or _RETURN_ false.
+ *  If NULL _ARGV_, _RETURN_ false.
+ */
+bool
+linked_stack_is_empty(struct array_stack *stack)
+{
+    void *tmp;
+    bool is_empty;
+
+    is_empty = false;
+    if (stack) {
+        if (stack->base != stack->top) {
+            is_empty = false;
+        } else if (stack->top->space.dim ==
+                linked_stack_sapce_node_rest_space(stack->top)) {
+                is_empty = true;
+            }
+        }
+    }
+
+    return is_empty;
+}
+
