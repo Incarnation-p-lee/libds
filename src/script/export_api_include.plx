@@ -26,8 +26,12 @@ foreach (@export) {
     print OUT "\n/* BEGIN of $fname */\n";
     while (<EXPORT>) {
         my $line = $_;
-        if (/static/) {
-            $line = 'extern ' . $_;
+        if (/static/) { # filter static function
+            while (<EXPORT>) {
+                $line = $_;
+                last if $line =~ /;$/;
+            }
+            next;
         } elsif (/^struct\s/) {
             unless (/\{$/) {
                 $line = 'extern ' . $_;
@@ -47,7 +51,6 @@ foreach (@export) {
     print OUT "/* END of $fname */\n";
     close EXPORT;
 }
-
 
 print OUT "#endif";
 close OUT;

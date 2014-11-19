@@ -21,7 +21,7 @@ linked_stack_create(void)
         free_ds(stack);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        dlinked_list_initial(&stack->base.link);
+        dlinked_list_initial(&stack->base->link);
         stack->top = stack->base;
     }
 
@@ -211,8 +211,8 @@ linked_stack_sapce_node_rest_space(struct linked_stack_space *node)
 
     rest = 0;
     if (node) {
-        tmp = (void *)stack->space.sp;
-        limit = stack->space.bp + stack->space.dim;
+        tmp = (void *)node->space.sp;
+        limit = node->space.bp + node->space.dim;
         if ((signed)(tmp - limit) > 0) {
             pr_log_err("Array stack overflow.");
         } else {
@@ -272,7 +272,6 @@ linked_stack_pop(struct linked_stack *stack)
 bool
 linked_stack_is_empty(struct linked_stack *stack)
 {
-    void *tmp;
     bool is_empty;
 
     is_empty = false;
@@ -324,7 +323,7 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
         node = stack->top;
         limit = linked_stack_space_previous_node(stack->base);
         do {
-            linked_stack_space_iterate_node(node);
+            linked_stack_space_iterate_node(node, handler);
             node = linked_stack_space_next_node(node);
         } while (node != limit);
 
@@ -345,12 +344,11 @@ linked_stack_space_iterate_node(struct linked_stack_space *node,
 
     if (node && handler) {
         /* iterate from sp to bp */
-        iter = stack->space.sp;
-        while(iter != (void **)stack->space.bp) {
+        iter = node->space.sp;
+        while(iter != (void **)node->space.bp) {
             handler(*(--iter));
         }
     }
 
     return;
 }
-

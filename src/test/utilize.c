@@ -19,7 +19,7 @@ test_result_print(char *name, bool passed)
 void
 memory_trace_print(void)
 {
-    printf("  >> Memory Usage Summary <<\n\n");
+    printf("\n  >> Memory Usage Summary <<\n");
     printf("  . Malloc  %10d\n", malloc_cnt);
     printf("  . Realloc %10d\n", realloc_cnt);
     printf("  . Free    %10d\n", free_cnt);

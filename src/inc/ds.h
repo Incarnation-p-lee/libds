@@ -262,7 +262,20 @@ slinked_list_iterate(struct single_linked_list *head,
 
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
+extern void
+dlinked_list_initial(struct doubly_linked_list *);
+extern struct doubly_linked_list *
+dlinked_list_next_node(struct doubly_linked_list *node);
+extern struct doubly_linked_list *
+dlinked_list_previous_node(struct doubly_linked_list *node);
+extern void
+dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+extern void
+dlinked_list_insert_after(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node);
 
+
+/* ARRAY STACK */
 extern struct array_stack *
 array_stack_create(void);
 extern void
@@ -283,7 +296,31 @@ extern void
 array_stack_cleanup(struct array_stack *stack);
 extern void
 array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+/* END OF ARRAY STACK */
 
+/* LINKED STACK */
+extern struct linked_stack *
+linked_stack_create(void);
+extern void
+linked_stack_destroy(struct linked_stack **stack);
+extern void
+linked_stack_expand_space(struct linked_stack *stack, unsigned dim);
+extern bool
+linked_stack_is_full(struct linked_stack *stack);
+unsigned
+linked_stack_rest_space(struct linked_stack *stack);
+extern void
+linked_stack_push(struct linked_stack *stack, void *member);
+extern void *
+linked_stack_pop(struct linked_stack *stack);
+extern bool
+linked_stack_is_empty(struct linked_stack *stack);
+extern void
+linked_stack_cleanup(struct linked_stack *stack);
+extern void
+linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
+
+/* END OF LINKED STACK */
 
 #endif
 /* END of ./src/inc/stack.h */

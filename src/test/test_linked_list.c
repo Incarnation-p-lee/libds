@@ -33,13 +33,13 @@ doubly_linked_list_unit_test(void)
     };
     register void (**iter)(void);
 
-    fprintf(stdout, "\n\n  >> Doubly Linked List Unit Test <<\n\n");
+    fprintf(stdout, "\n  >> Doubly Linked List Unit Test <<\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();
     }
 
-    fprintf(stdout, "  >> Test Finished.\n\n");
+    fprintf(stdout, "  >> Test Finished.\n");
     return;
 }
 
@@ -67,13 +67,13 @@ single_linked_list_unit_test(void)
     };
     register void (**iter)(void);
 
-    fprintf(stdout, "\n\n  >> Single Linked List Unit Test <<\n\n");
+    fprintf(stdout, "\n  >> Single Linked List Unit Test <<\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();
     }
 
-    fprintf(stdout, "  >> Test Finished.\n\n");
+    fprintf(stdout, "  >> Test Finished.\n");
     return;
 }
 

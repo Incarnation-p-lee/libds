@@ -24,13 +24,13 @@ array_stack_unit_test(void)
     };
     register void (**iter)(void);
 
-    fprintf(stdout, "\n\n  >> Array Stack Unit Test <<\n\n");
+    fprintf(stdout, "\n  >> Array Stack Unit Test <<\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();
     }
 
-    fprintf(stdout, "  >> Test Finished.\n\n");
+    fprintf(stdout, "  >> Test Finished.\n");
     return;
 }
 

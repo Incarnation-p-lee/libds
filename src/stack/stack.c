@@ -7,3 +7,4 @@
 #include "stack.h"
 
 #include "array_stack.c"
+#include "linked_stack.c"
