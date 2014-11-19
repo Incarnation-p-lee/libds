@@ -278,8 +278,8 @@ linked_stack_is_empty(struct linked_stack *stack)
     if (stack) {
         if (stack->base != stack->top) {
             is_empty = false;
-        } else if (stack->top->space.dim ==
-                linked_stack_sapce_node_rest_space(stack->top)) {
+        } else if (stack->top->space.dim
+            == linked_stack_sapce_node_rest_space(stack->top)) {
             is_empty = true;
         }
     }

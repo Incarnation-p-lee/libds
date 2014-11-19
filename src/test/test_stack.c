@@ -33,5 +33,3 @@ array_stack_unit_test(void)
     fprintf(stdout, "  >> Test Finished.\n");
     return;
 }
-
-
