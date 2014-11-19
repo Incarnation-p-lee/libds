@@ -130,17 +130,116 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
     return next;
 }
 
+/*
+ * Add one node with _ARGV_ dim at the end of linked stack space.
+ *   If invalid _ARGV_, nothing will be done.
+ */
 void
 linked_stack_expand_space(struct linked_stack *stack, unsigned dim)
 {
     struct linked_stack_space *node;
     struct linked_stack_space *last;
 
-    if (stack) {
+    if (stack && dim > 0) {
         last = linked_stack_space_previous_node(stack->base);
         if (last) {
-            node = malloc_ds(
+            node = malloc_ds(sizeof(*node));
+            if (!node) {
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                dlinked_list_initial(&node->link);
+            }
+
+            node->space.bp = malloc_ds(sizeof(void *) * dim);
+            if (!node->space.bp) {
+                free_ds(node);
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                node->space.dim = dim;
+                node->space.sp = (void **)node->space.bp;
+                dlinked_list_insert_after(&last->link, &node->link);
+            }
         }
+    }
+
+    return;
+}
+
+/*
+ * _RETURN_ true if no space left in stack, or _RETURN_ false;
+ *   If NULL _ARGV_, _RETURN_ false.
+ */
+bool
+linked_stack_is_full(struct linked_stack *stack)
+{
+    return 0 == linked_stack_rest_space(stack) ? true : false;
+}
+
+/*
+ * _RETURN_ rest space of stack.
+ *   If NULL _ARGV_, _RETURN_ 0.
+ */
+unsigned
+linked_stack_rest_space(struct linked_stack *stack)
+{
+    unsigned rest;
+    struct linked_stack_sapce *st;
+
+    rest = 0;
+    if (stack) {
+        rest = linked_stack_sapce_node_rest_space(stack->top);
+        st = linked_stack_space_next_node(stack->top);
+        while (stack->base != st) {
+            rest += st->space.dim;
+            st = linked_stack_space_next_node(st);
+        }
+    }
+
+    return rest;
+}
+
+/*
+ * _RETURN_ rest space of specific node.
+ *   If NULL _ARGV_, return 0.
+ */
+static inline unsigned
+linked_stack_sapce_node_rest_space(struct linked_stack_sapce *node)
+{
+    unsigned rest;
+    void *limit;
+    void *tmp;
+
+    rest = 0;
+    if (node) {
+        tmp = (void *)stack->space.sp;
+        limit = stack->space.bp + stack->space.dim;
+        if ((signed)(tmp - limit) > 0) {
+            pr_log_err("Array stack overflow.");
+        } else {
+            rest = (unsigned)(limit - tmp);
+        }
+    }
+
+    return rest;
+}
+
+/*
+ * Push one void pointer to stack
+ *   If NULL stack, nothing will be done.
+ */
+void
+linked_stack_push(struct linked_stack *stack, void *member)
+{
+    if (stack) {
+        if (linked_stack_is_full(stack)) {
+            linked_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
+        }
+
+        if (!linked_stack_sapce_node_rest_space(stack->top)) {
+            stack->top = linked_stack_space_next_node(stack->top);
+        }
+
+        *stack->top->space.sp++ = member;
     }
 
     return;
