@@ -30,7 +30,7 @@ struct doubly_linked_list {
 };
 
 /*
- * array stack space 
+ * array stack space
  */
 struct array_stack_space {
     unsigned dim;

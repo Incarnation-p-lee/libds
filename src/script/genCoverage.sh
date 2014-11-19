@@ -1,29 +1,41 @@
 #!/bin/sh
-binarydir="./"
-reportdir="./report"
-outputdir="/output"
+basedir=./obj_out
+reportdir="$basedir/coverage"
+outputdir="$reportdir/output"
 rawdatafile="coverage.info"
-basedir="./"
-binary="dsaaa.out"
-reportname="report.tar.gz"
-archivedir="archive/"
+binary="Data Structure"
+
+root_dir=`pwd | xargs basename`
+
+if [ "$root_dir" != "libds" ]
+then
+  echo "Please execute script under root dir: libds/"
+  exit 1
+fi
+
+if [ ! -x "$basedir" ]; then
+  echo 'Failed to locate BASEDIR'
+  exit 1
+fi
 
 if [ ! -x "$reportdir" ];then
   mkdir "$reportdir"
 fi
 
-mv *.gcda "$reportdir"
-mv *.gcno "$reportdir"
+mv -v ./src/*.gc[dn][ao] "$reportdir"
+mv -v ./src/*/*.gc[dn][ao] "$reportdir"
+cp -v ./src/*.c "$reportdir"
+cp -v ./src/*/*.c "$reportdir"
 
-lcov --capture --directory "$reportdir" --base-directory "$basedir" --output-file "$rawdatafile" --test-name "$binary"
+lcov --capture --directory "$reportdir" --output-file "$rawdatafile" --test-name "$binary"
 
-mv "$rawdatafile" "$archivedir"
+mv "$rawdatafile" "$reportdir"
 
-if [ -x "$reportdir$ouputdir" ];then
-  rm -rf "$reportdir$outputdir"
+echo '---------'
+
+if [ -x "$ouputdir" ];then
+  rm -rf "$outputdir"
 fi
 
-genhtml --output-directory "$reportdir$outputdir" --title "DSAAA" --show-details --legend "$archivedir$rawdatafile"
-cp -rp $reportdir/output/ .
-tar -zcf "$reportname" "$reportdir$outputdir"
-mv "$reportname" "$archivedir"
+
+genhtml --output-directory "$outputdir" --title "LIBDS" --show-details --legend "$reportdir/$rawdatafile"
