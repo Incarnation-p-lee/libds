@@ -77,19 +77,73 @@ struct array_queue {
 #endif
 /* END of ./src/inc/data_structure_types.h */
 
+/* BEGIN of ./src/inc/types.h */
+#ifndef HAVE_TYPES_H
+#define HAVE_TYPES_H
+
+typedef int bool;
+
+enum log_level {
+  INFO,
+  WARN,
+  DBUG,
+  ERRR,
+};
+
+
+#endif
+/* END of ./src/inc/types.h */
+
 /* BEGIN of ./src/inc/log.h */
 #ifndef LOG_OF_LIBDS_H
 #define LOG_OF_LIBDS_H
 
-extern int
-libds_log_initial(void);
-extern void
-libds_log_close(void);
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
 
 #endif
 /* END of ./src/inc/log.h */
+
+/* BEGIN of ./src/inc/defines.h */
+#ifndef HAVE_DEFINES_H
+#define HAVE_DEFINES_H
+
+
+#define true        1
+#define false       0
+
+#define SYM_2_STR(symbol)   (#symbol)
+#define UNOFFSET_OF(ptr, type, mem) \
+    (void *)((char *)ptr - (char *)(&((type *)0)->mem))
+
+#ifdef DEBUG
+    #define pr_log_info(msg)    libds_log_print(INFO, msg);
+    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
+    #define pr_log_debug(msg)   libds_log_print(DBUG, msg);
+#else
+    #define pr_log_info(msg)
+    #define pr_log_warn(msg)
+    #define pr_log_debug(msg)
+#endif
+
+#ifdef DEBUG
+    #define malloc_ds      malloc_wrap
+    #define realloc_ds     realloc_wrap
+    #define free_ds        free_wrap
+#else
+    #define malloc_ds      malloc
+    #define realloc_ds     realloc
+    #define free_ds        free
+#endif
+
+#define pr_log_err(msg)     \
+    do {                             \
+        libds_log_print(ERRR, msg); \
+        exit(1);                     \
+    } while (0);
+
+#endif
+/* END of ./src/inc/defines.h */
 
 /* BEGIN of ./src/inc/linked_list.h */
 #ifndef HAVE_LINKED_LIST_H
@@ -233,62 +287,4 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
 
 #endif
 /* END of ./src/inc/stack.h */
-
-/* BEGIN of ./src/inc/defines.h */
-#ifndef HAVE_DEFINES_H
-#define HAVE_DEFINES_H
-
-
-#define true        1
-#define false       0
-
-#define DEFAULT_LOG_FILE    "./ds.log"
-#define SYM_2_STR(symbol)   (#symbol)
-#define UNOFFSET_OF(ptr, type, mem) \
-    (void *)((char *)ptr - (char *)(&((type *)0)->mem))
-
-#ifdef DEBUG
-    #define pr_log_info(msg)    libds_log_print(INFO, msg);
-    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
-    #define pr_log_debug(msg)   libds_log_print(DEBUG, msg);
-#else
-    #define pr_log_info(msg)
-    #define pr_log_warn(msg)
-    #define pr_log_debug(msg)
-#endif
-
-#ifdef DEBUG
-    #define malloc_ds      malloc_wrap
-    #define realloc_ds     realloc_wrap
-    #define free_ds        free_wrap
-#else
-    #define malloc_ds      malloc
-    #define realloc_ds     realloc
-    #define free_ds        free
-#endif
-
-#define pr_log_err(msg)     \
-    do {                             \
-        libds_log_print(ERROR, msg); \
-        exit(1);                     \
-    } while (0);
-
-#endif
-/* END of ./src/inc/defines.h */
-
-/* BEGIN of ./src/inc/types.h */
-#ifndef HAVE_TYPES_H
-#define HAVE_TYPES_H
-
-typedef int bool;
-
-enum log_level {
-  INFO,
-  WARN,
-  ERROR,
-};
-
-
-#endif
-/* END of ./src/inc/types.h */
 #endif

@@ -183,7 +183,7 @@ unsigned
 linked_stack_rest_space(struct linked_stack *stack)
 {
     unsigned rest;
-    struct linked_stack_sapce *st;
+    struct linked_stack_space *st;
 
     rest = 0;
     if (stack) {
@@ -203,7 +203,7 @@ linked_stack_rest_space(struct linked_stack *stack)
  *   If NULL _ARGV_, return 0.
  */
 static inline unsigned
-linked_stack_sapce_node_rest_space(struct linked_stack_sapce *node)
+linked_stack_sapce_node_rest_space(struct linked_stack_space *node)
 {
     unsigned rest;
     void *limit;
@@ -270,7 +270,7 @@ linked_stack_pop(struct linked_stack *stack)
  *  If NULL _ARGV_, _RETURN_ false.
  */
 bool
-linked_stack_is_empty(struct array_stack *stack)
+linked_stack_is_empty(struct linked_stack *stack)
 {
     void *tmp;
     bool is_empty;
@@ -281,11 +281,76 @@ linked_stack_is_empty(struct array_stack *stack)
             is_empty = false;
         } else if (stack->top->space.dim ==
                 linked_stack_sapce_node_rest_space(stack->top)) {
-                is_empty = true;
-            }
+            is_empty = true;
         }
     }
 
     return is_empty;
+}
+
+/*
+ * Clean up stack space. Discard all data in stack.
+ *   If NULL _ARGV_, nothing will be done.  
+ */
+void
+linked_stack_cleanup(struct linked_stack *stack)
+{
+    register struct linked_stack_space *iter;
+
+    if (stack) {
+        stack->top = stack->base;
+        iter = stack->base;
+        do {
+            memset(iter->space.bp, 0, sizeof(void *) * iter->space.dim);
+            iter->space.sp = (void **)iter->space.bp;
+            iter = linked_stack_space_next_node(iter);
+        } while (iter != stack->base);
+    }
+
+    return;
+}
+
+/*
+ * Iterate each element of stack.
+ *   If NULL stack, nothing will be done.
+ */
+void
+linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
+{
+    register struct linked_stack_space *node;
+    struct linked_stack_space *limit;
+
+    if (stack && handler) {
+        node = stack->top;
+        limit = linked_stack_space_previous_node(stack->base);
+        do {
+            linked_stack_space_iterate_node(node);
+            node = linked_stack_space_next_node(node);
+        } while (node != limit);
+
+    }
+
+    return;
+}
+
+/*
+ * Iterate each element of specific node of linked stack space
+ *   If NULL stack, nothing will be done.
+ */
+static inline void
+linked_stack_space_iterate_node(struct linked_stack_space *node,
+    void (*handler)(void *))
+{
+    register void **iter;
+
+    if (node && handler) {
+        /* iterate from sp to bp */
+        iter = stack->space.sp;
+        while(iter != (void **)stack->space.bp) {
+            handler(*(--iter));
+        }
+    }
+
+    return;
 }
 

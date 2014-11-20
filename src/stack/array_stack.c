@@ -175,7 +175,7 @@ array_stack_cleanup(struct array_stack *stack)
 {
     if (stack) {
         memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
-        stack->space.sp = (void**)stack->space.bp;
+        stack->space.sp = (void **)stack->space.bp;
     }
 
     return;
@@ -191,9 +191,10 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
     register void **iter;
 
     if (stack && handler) {
-        iter = (void**)stack->space.bp;
-        while(iter != stack->space.sp) {
-            handler(*iter++);
+        /* iterate from sp to bp */
+        iter = stack->space.sp;
+        while(iter != (void **)stack->space.bp) {
+            handler(*(--iter));
         }
     }
 

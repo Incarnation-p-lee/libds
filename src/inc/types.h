@@ -6,7 +6,8 @@ typedef int bool;
 enum log_level {
   INFO,
   WARN,
-  ERROR,
+  DBUG,
+  ERRR,
 };
 
 

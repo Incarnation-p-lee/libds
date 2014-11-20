@@ -6,11 +6,11 @@ my $base = ".";
 my $incdir = "$base/src/inc";
 
 my @export = ("$incdir/data_structure_types.h",
+              "$incdir/types.h",
               "$incdir/log.h",
-              "$incdir/linked_list.h",
-              "$incdir/stack.h",
               "$incdir/defines.h",
-              "$incdir/types.h");
+              "$incdir/linked_list.h",
+              "$incdir/stack.h");
 my $out = "$base/src/inc/ds.h";
 
 open OUT, '>', $out or
