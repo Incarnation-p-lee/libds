@@ -176,7 +176,7 @@ linked_stack_is_full(struct linked_stack *stack)
 }
 
 /*
- * _RETURN_ rest space of stack.
+ * _RETURN_ total space of stack.
  *   If NULL _ARGV_, _RETURN_ 0.
  */
 unsigned
@@ -187,7 +187,7 @@ linked_stack_rest_space(struct linked_stack *stack)
 
     rest = 0;
     if (stack) {
-        rest = linked_stack_sapce_node_rest_space(stack->top);
+        rest = linked_stack_space_node_rest_space(stack->top);
         st = linked_stack_space_next_node(stack->top);
         while (stack->base != st) {
             rest += st->space.dim;
@@ -199,11 +199,43 @@ linked_stack_rest_space(struct linked_stack *stack)
 }
 
 /*
+ * _RETURN_ capacity of stack.
+ *   If NULL _ARGV_, _RETURN_ 0.
+ */
+unsigned
+linked_stack_capacity(struct linked_stack *stack)
+{
+    unsigned total;
+    struct linked_stack_space *st;
+
+    total = 0;
+    if (stack) {
+        st = stack->base;
+        do {
+            total += linked_stack_space_node_capacity(st);
+            st = linked_stack_space_next_node(st);
+        } while (st != stack->base);
+    }
+
+    return total;
+}
+
+/*
  * _RETURN_ rest space of specific node.
  *   If NULL _ARGV_, return 0.
  */
 static inline unsigned
-linked_stack_sapce_node_rest_space(struct linked_stack_space *node)
+linked_stack_space_node_capacity(struct linked_stack_space *node)
+{
+    return node ? node->space.dim : 0u;
+}
+
+/*
+ * _RETURN_ rest space of specific node.
+ *   If NULL _ARGV_, return 0.
+ */
+static inline unsigned
+linked_stack_space_node_rest_space(struct linked_stack_space *node)
 {
     unsigned rest;
     void *limit;
@@ -235,7 +267,7 @@ linked_stack_push(struct linked_stack *stack, void *member)
             linked_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
         }
 
-        if (!linked_stack_sapce_node_rest_space(stack->top)) {
+        if (0 == linked_stack_space_node_rest_space(stack->top)) {
             stack->top = linked_stack_space_next_node(stack->top);
         }
 
@@ -256,7 +288,7 @@ linked_stack_pop(struct linked_stack *stack)
 
     data = NULL;
     if (stack && !linked_stack_is_empty(stack)) {
-        if (!linked_stack_sapce_node_rest_space(stack->top)) {
+        if (0 == linked_stack_space_node_rest_space(stack->top)) {
             stack->top = linked_stack_space_previous_node(stack->top);
             data = *(--stack->top->space.sp);
         }
@@ -279,7 +311,7 @@ linked_stack_is_empty(struct linked_stack *stack)
         if (stack->base != stack->top) {
             is_empty = false;
         } else if (stack->top->space.dim
-            == linked_stack_sapce_node_rest_space(stack->top)) {
+            == linked_stack_space_node_rest_space(stack->top)) {
             is_empty = true;
         }
     }

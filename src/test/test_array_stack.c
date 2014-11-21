@@ -94,6 +94,39 @@ test_array_stack_is_full(void)
     return;
 }
 
+
+static void
+test_array_stack_capacity(void)
+{
+    bool is_passed;
+    struct array_stack *ins;
+    unsigned stk_size;
+    unsigned extra;
+
+    ins = array_stack_create();
+    stk_size = ins->space.dim;
+    is_passed = true;
+
+    if (stk_size != array_stack_capacity(ins)) {
+        is_passed = false;
+    }
+
+    if (0 != array_stack_capacity(NULL)) {
+        is_passed = false;
+    }
+
+    extra = 1024;
+    array_stack_expand_space(ins, extra);
+    if (stk_size + extra != array_stack_capacity(ins)) {
+        is_passed = false;
+    }
+
+    array_stack_destroy(&ins);
+
+    test_result_print(SYM_2_STR(array_stack_capacity), is_passed);
+    return;
+}
+
 static void
 test_array_stack_rest_space(void)
 {

@@ -285,6 +285,8 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra);
 extern bool
 array_stack_is_full(struct array_stack *stack);
 unsigned
+array_stack_capacity(struct array_stack *stack);
+unsigned
 array_stack_rest_space(struct array_stack *stack);
 extern void
 array_stack_push(struct array_stack *stack, void *member);
@@ -319,6 +321,8 @@ extern void
 linked_stack_cleanup(struct linked_stack *stack);
 extern void
 linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
+unsigned
+linked_stack_capacity(struct linked_stack *stack);
 
 /* END OF LINKED STACK */
 

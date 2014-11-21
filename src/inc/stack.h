@@ -35,6 +35,8 @@ array_stack_expand_space(struct array_stack *stack, unsigned extra);
 bool
 array_stack_is_full(struct array_stack *stack);
 unsigned
+array_stack_capacity(struct array_stack *stack);
+unsigned
 array_stack_rest_space(struct array_stack *stack);
 void
 array_stack_push(struct array_stack *stack, void *member);
@@ -69,6 +71,8 @@ void
 linked_stack_cleanup(struct linked_stack *stack);
 void
 linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
+unsigned
+linked_stack_capacity(struct linked_stack *stack);
 
 static inline struct linked_stack_space *
 linked_stack_space_next_node(struct linked_stack_space *node);
@@ -76,11 +80,13 @@ static inline struct linked_stack_space *
 linked_stack_space_previous_node(struct linked_stack_space *node);
 static inline struct linked_stack_space *
 linked_stack_space_remove_node(struct linked_stack_space *node);
-static inline unsigned
-linked_stack_sapce_node_rest_space(struct linked_stack_space *node);
 static inline void
 linked_stack_space_iterate_node(struct linked_stack_space *node,
     void (*handler)(void *));
+static inline unsigned
+linked_stack_space_node_capacity(struct linked_stack_space *node);
+static inline unsigned
+linked_stack_space_node_rest_space(struct linked_stack_space *node);
 /* END OF LINKED STACK */
 
 #endif

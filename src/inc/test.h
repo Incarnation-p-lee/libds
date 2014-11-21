@@ -26,6 +26,8 @@ static void
 single_linked_list_unit_test(void);
 static void
 array_stack_unit_test(void);
+static void
+linked_stack_unit_test(void);
 
 static void
 test_result_print(char *name, bool passed);

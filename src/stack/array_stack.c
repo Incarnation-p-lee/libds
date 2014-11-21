@@ -85,6 +85,16 @@ array_stack_is_full(struct array_stack *stack)
 }
 
 /*
+ * _RETURN_ total space of stack.
+ *   If NULL _ARGV_, _RETURN_ 0.
+ */
+unsigned
+array_stack_capacity(struct array_stack *stack)
+{
+    return stack ? stack->space.dim : 0u;
+}
+
+/*
  * _RETURN_ rest space of stack.
  *   If NULL _ARGV_, _RETURN_ 0.
  */
