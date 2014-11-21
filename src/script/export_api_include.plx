@@ -5,8 +5,8 @@ use 5.010;
 my $base = ".";
 my $incdir = "$base/src/inc";
 
-my @export = ("$incdir/data_structure_types.h",
-              "$incdir/types.h",
+my @export = ("$incdir/types.h",
+              "$incdir/data_structure_types.h",
               "$incdir/log.h",
               "$incdir/defines.h",
               "$incdir/linked_list.h",

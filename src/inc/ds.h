@@ -1,6 +1,43 @@
 #ifndef HAVE_DATA_STRUCTURE_INCLUDE_H
 #define HAVE_DATA_STRUCTURE_INCLUDE_H
 
+/* BEGIN of ./src/inc/types.h */
+#ifndef HAVE_TYPES_H
+#define HAVE_TYPES_H
+
+enum log_level {
+  INFO,
+  WARN,
+  DBUG,
+  ERRR,
+};
+
+typedef signed char   sint8;
+typedef unsigned char uint8;
+
+#if defined X86
+    typedef signed short       sint16;
+    typedef unsigned short     uint16;
+    typedef signed int         sint32;
+    typedef unsigned int       uint32;
+    typedef signed long long   sint64;
+    typedef unsigned long long uint64;
+#endif
+
+#if defined X86_64
+    typedef signed short   sint16;
+    typedef unsigned short uint16;
+    typedef signed int     sint32;
+    typedef unsigned int   uint32;
+    typedef signed long    sint64;
+    typedef unsigned long  uint64;
+#endif
+
+typedef unsigned int bool;
+
+#endif
+/* END of ./src/inc/types.h */
+
 /* BEGIN of ./src/inc/data_structure_types.h */
 #ifndef DATA_STRUCTURE_TYPES_H
 #define DATA_STRUCTURE_TYPES_H
@@ -19,12 +56,12 @@
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    int    index;
+    uint32                    index;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-    int    index;
+    uint32                    index;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };
@@ -33,16 +70,16 @@ struct doubly_linked_list {
  * array stack space
  */
 struct array_stack_space {
-    unsigned dim;
-    void     **sp;
-    void     *bp;
+    uint32 dim;
+    void   **sp;
+    void   **bp;
 };
 
 /*
  * array stack
  */
 struct array_stack {
-    int                      sid;
+    uint32                   sid;
     struct array_stack_space space;
 };
 
@@ -58,7 +95,7 @@ struct linked_stack_space {
  * linked stack
  */
 struct linked_stack {
-    int                       sid;
+    uint32                    sid;
     struct linked_stack_space *base;
     struct linked_stack_space *top;
 };
@@ -67,32 +104,15 @@ struct linked_stack {
  *
  */
 struct array_queue {
-    unsigned size;
-    unsigned rest;
-    void     **front;
-    void     **rear;
-    void     *queue;
+    uint32 size;
+    uint32 rest;
+    void   **front;
+    void   **rear;
+    void   *queue;
 };
 
 #endif
 /* END of ./src/inc/data_structure_types.h */
-
-/* BEGIN of ./src/inc/types.h */
-#ifndef HAVE_TYPES_H
-#define HAVE_TYPES_H
-
-typedef int bool;
-
-enum log_level {
-  INFO,
-  WARN,
-  DBUG,
-  ERRR,
-};
-
-
-#endif
-/* END of ./src/inc/types.h */
 
 /* BEGIN of ./src/inc/log.h */
 #ifndef LOG_OF_LIBDS_H
@@ -142,6 +162,7 @@ libds_log_print(enum log_level lvl, const char *msg);
         exit(1);                     \
     } while (0);
 
+
 #endif
 /* END of ./src/inc/defines.h */
 
@@ -163,9 +184,9 @@ dlinked_list_create(void);
 extern void
 dlinked_list_initial(struct doubly_linked_list *);
 extern struct doubly_linked_list *
-dlinked_list_generate(int *val, int size);
+dlinked_list_generate(sint32 *val, uint32 size);
 extern void
-dlinked_list_append_node(struct doubly_linked_list *node, int value);
+dlinked_list_append_node(struct doubly_linked_list *node, uint32 value);
 extern struct doubly_linked_list *
 dlinked_list_next_node(struct doubly_linked_list *node);
 extern struct doubly_linked_list *
@@ -178,10 +199,10 @@ dlinked_list_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *node);
 extern void
 dlinked_list_destroy(struct doubly_linked_list **head);
-extern int
+uint32
 dlinked_list_length(struct doubly_linked_list *head);
 extern struct doubly_linked_list *
-dlinked_list_get_node_by_index(struct doubly_linked_list *head, int index);
+dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index);
 extern void
 dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head);
 extern void
@@ -207,9 +228,9 @@ slinked_list_create(void);
 extern void
 slinked_list_initial(struct single_linked_list *);
 extern struct single_linked_list *
-slinked_list_generate(int *val, int size);
+slinked_list_generate(sint32 *val, uint32 size);
 extern void
-slinked_list_append_node(struct single_linked_list *node, int value);
+slinked_list_append_node(struct single_linked_list *node, uint32 value);
 extern struct single_linked_list *
 slinked_list_next_node(struct single_linked_list *node);
 extern struct single_linked_list *
@@ -222,10 +243,10 @@ slinked_list_insert_before(struct single_linked_list *cur,
     struct single_linked_list *node);
 extern void
 slinked_list_destroy(struct single_linked_list **head);
-extern int
+uint32
 slinked_list_length(struct single_linked_list *head);
 extern struct single_linked_list *
-slinked_list_get_node_by_index(struct single_linked_list *head, int index);
+slinked_list_get_node_by_index(struct single_linked_list *head, uint32 index);
 extern void
 slinked_list_print(FILE *fd, char *msg, struct single_linked_list *head);
 extern void
@@ -281,12 +302,12 @@ array_stack_create(void);
 extern void
 array_stack_destroy(struct array_stack **stack);
 extern void
-array_stack_expand_space(struct array_stack *stack, unsigned extra);
+array_stack_expand_space(struct array_stack *stack, uint32 extra);
 extern bool
 array_stack_is_full(struct array_stack *stack);
-unsigned
+uint32
 array_stack_capacity(struct array_stack *stack);
-unsigned
+uint32
 array_stack_rest_space(struct array_stack *stack);
 extern void
 array_stack_push(struct array_stack *stack, void *member);
@@ -306,10 +327,10 @@ linked_stack_create(void);
 extern void
 linked_stack_destroy(struct linked_stack **stack);
 extern void
-linked_stack_expand_space(struct linked_stack *stack, unsigned dim);
+linked_stack_expand_space(struct linked_stack *stack, uint32 dim);
 extern bool
 linked_stack_is_full(struct linked_stack *stack);
-unsigned
+uint32
 linked_stack_rest_space(struct linked_stack *stack);
 extern void
 linked_stack_push(struct linked_stack *stack, void *member);
@@ -321,7 +342,7 @@ extern void
 linked_stack_cleanup(struct linked_stack *stack);
 extern void
 linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
-unsigned
+uint32
 linked_stack_capacity(struct linked_stack *stack);
 
 /* END OF LINKED STACK */

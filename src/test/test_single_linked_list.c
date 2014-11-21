@@ -7,7 +7,7 @@ test_slinked_list_create(void)
     is_passed = false;
     tmp = slinked_list_create();
     if (tmp) {
-        if (tmp->index == 0 && tmp->next == tmp
+        if (tmp->index == 0u && tmp->next == tmp
             && slinked_list_previous_node(tmp) == tmp) {
             is_passed = true;
         }
@@ -28,7 +28,7 @@ test_slinked_list_initial(void)
     tmp = malloc_ds(sizeof(*tmp));
     slinked_list_initial(tmp);
     if (tmp) {
-        if (tmp->index == 0 && tmp->next == tmp
+        if (tmp->index == 0u && tmp->next == tmp
             && slinked_list_previous_node(tmp) == tmp) {
             is_passed = true;
         }
@@ -44,11 +44,11 @@ test_slinked_list_generate(void)
 {
     struct single_linked_list *head;
     bool is_passed;
-    int *data;
-    int *tmp;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    sint32 *tmp;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -83,7 +83,7 @@ test_slinked_list_append_node(void)
     struct single_linked_list *next;
     struct single_linked_list *append;
     bool is_passed;
-    int tmp = 0xA;
+    uint32 tmp = 0xAu;
 
     head = slinked_list_create();
     is_passed = false;
@@ -110,7 +110,7 @@ test_slinked_list_next_node(void)
 
     is_passed = false;
     head = slinked_list_create();
-    slinked_list_append_node(head, 0xDEAD);
+    slinked_list_append_node(head, 0xDEADu);
 
     next = slinked_list_next_node(head);
     if (next == head->next) {
@@ -139,7 +139,7 @@ test_slinked_list_previous_node(void)
 
     is_passed = false;
     head = slinked_list_create();
-    slinked_list_append_node(head, 0xDEAD);
+    slinked_list_append_node(head, 0xDEADu);
 
     prev = slinked_list_previous_node(head);
     if (prev == slinked_list_previous_node(head)) {
@@ -166,10 +166,10 @@ test_slinked_list_insert_before(void)
     struct single_linked_list *node;
     struct single_linked_list *prev;
     bool is_passed;
-    int mark;
+    uint32 mark;
 
     is_passed = false;
-    mark = 0xDEAD;
+    mark = 0xDEADu;
     head = slinked_list_create();
     slinked_list_append_node(head, mark);
 
@@ -193,10 +193,10 @@ test_slinked_list_insert_after(void)
     struct single_linked_list *node;
     struct single_linked_list *next;
     bool is_passed;
-    int mark;
+    uint32 mark;
 
     is_passed = false;
-    mark = 0xDEAD;
+    mark = 0xDEADu;
     head = slinked_list_create();
     slinked_list_append_node(head, mark);
 
@@ -218,10 +218,10 @@ test_slinked_list_destroy(void)
 {
     struct single_linked_list *head;
     bool is_passed;
-    int *data;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -252,10 +252,10 @@ test_slinked_list_length(void)
 {
     struct single_linked_list *head;
     bool is_passed;
-    int *data;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -273,12 +273,12 @@ test_slinked_list_length(void)
     }
 
     head = slinked_list_create();
-    if (1 != slinked_list_length(head)) {
+    if (1u != slinked_list_length(head)) {
         is_passed = false;
     }
     slinked_list_destroy(&head);
 
-    if (0 != slinked_list_length(NULL)) {
+    if (0u != slinked_list_length(NULL)) {
         is_passed = false;
     }
 
@@ -289,14 +289,14 @@ test_slinked_list_length(void)
 static void
 test_slinked_list_get_node_by_index(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
     head = slinked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
-    tmp = slinked_list_get_node_by_index(head, 0);
+    tmp = slinked_list_get_node_by_index(head, 0u);
     if (head != tmp) {
         is_passed = false;
     }
@@ -306,7 +306,7 @@ test_slinked_list_get_node_by_index(void)
         is_passed = false;
     }
 
-    tmp = slinked_list_get_node_by_index(NULL, 0);
+    tmp = slinked_list_get_node_by_index(NULL, 0u);
     if (NULL != tmp) {
         is_passed = false;
     }
@@ -325,7 +325,7 @@ test_slinked_list_get_node_by_index(void)
 static void
 test_slinked_list_exchange_node(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp_1;
     struct single_linked_list *tmp_2;
@@ -364,7 +364,7 @@ test_slinked_list_exchange_node(void)
 static void
 test_slinked_list_is_contains(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
@@ -398,11 +398,11 @@ test_slinked_list_serialize(void)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
-    int *iter;
-    int *raw;
-    int len;
-    int index;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 *iter;
+    sint32 *raw;
+    uint32 len;
+    uint32 index;
 
     is_passed = true;
     iter = sizes;
@@ -413,7 +413,7 @@ test_slinked_list_serialize(void)
 
         slinked_list_serialize(head);
         tmp = head;
-        index = 0;
+        index = 0u;
         do {
             if (tmp->index != index) {
                 is_passed = false;
@@ -434,8 +434,7 @@ test_slinked_list_serialize(void)
 static void
 test_slinked_list_remove_node(void)
 {
-
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *prev;
     struct single_linked_list *tmp;
@@ -468,8 +467,7 @@ test_slinked_list_remove_node(void)
 static void
 test_slinked_list_lazy_remove_node(void)
 {
-
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *prev;
     struct single_linked_list *tmp;
@@ -503,7 +501,7 @@ test_slinked_list_lazy_remove_node(void)
 static void
 test_slinker_list_iterate(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
@@ -515,7 +513,7 @@ test_slinker_list_iterate(void)
 
     tmp = head;
     do {
-        if (tmp->index != 0xDAED) {
+        if (tmp->index != 0xDAEDu) {
             is_passed = false;
         }
         tmp = tmp->next;

@@ -25,7 +25,7 @@ void
 dlinked_list_initial(struct doubly_linked_list *head)
 {
     if (head) {
-        head->index = 0;
+        head->index = 0u;
         head->next = head;
         head->previous = head;
     }
@@ -38,7 +38,7 @@ dlinked_list_initial(struct doubly_linked_list *head)
  *          If invalid _ARGV_, _RETURN_ NULL.
  */
 struct doubly_linked_list *
-dlinked_list_generate(int *val, int size)
+dlinked_list_generate(sint32 *val, uint32 size)
 {
     struct doubly_linked_list *head;
     register struct doubly_linked_list *node;
@@ -48,7 +48,7 @@ dlinked_list_generate(int *val, int size)
     if (val && size > 0) {
         iterator = val;
         node = dlinked_list_create();
-        node->index = *iterator++;
+        node->index = (uint32)(*iterator++);
         head = node;
 
         while (iterator < val + size) {
@@ -66,7 +66,7 @@ dlinked_list_generate(int *val, int size)
  *   If uninitialized or destroyed, export warning, nothing else will be done.
  */
 void
-dlinked_list_append_node(struct doubly_linked_list *node, int value)
+dlinked_list_append_node(struct doubly_linked_list *node, uint32 value)
 {
     struct doubly_linked_list *next;
 
@@ -197,10 +197,10 @@ dlinked_list_destroy(struct doubly_linked_list **head)
  * _RETURN_ Length of given linked list.
  *   If NULL linked list, _RETURN_ 0.
  */
-int
+uint32
 dlinked_list_length(struct doubly_linked_list *head)
 {
-    int length;
+    uint32 length;
     register struct doubly_linked_list *node;
 
     length = 0;
@@ -220,16 +220,18 @@ dlinked_list_length(struct doubly_linked_list *head)
  *   If invalid _ARGV_, nothing will done, _RETURN_ NULL.
  */
 struct doubly_linked_list *
-dlinked_list_get_node_by_index(struct doubly_linked_list *head, int index)
+dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index)
 {
     register struct doubly_linked_list *node;
 
     node = NULL;
-    if (head && index >= 0) {
-        node = head;
-        while (index > 0) {
-            node = node->next;
-            index--;
+    if (head) {
+        if (index <= dlinked_list_length(head)) {
+            node = head;
+            while (index > 0) {
+                node = node->next;
+                index--;
+            }
         }
     }
 
@@ -324,7 +326,7 @@ void
 dlinked_list_serialize(struct doubly_linked_list *head)
 {
     struct doubly_linked_list *node;
-    int index;
+    uint32 index;
 
     if (head) {
         index = 0;

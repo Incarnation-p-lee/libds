@@ -1,8 +1,6 @@
 #ifndef HAVE_TYPES_H
 #define HAVE_TYPES_H
 
-typedef int bool;
-
 enum log_level {
   INFO,
   WARN,
@@ -10,5 +8,27 @@ enum log_level {
   ERRR,
 };
 
+typedef signed char   sint8;
+typedef unsigned char uint8;
+
+#if defined X86
+    typedef signed short       sint16;
+    typedef unsigned short     uint16;
+    typedef signed int         sint32;
+    typedef unsigned int       uint32;
+    typedef signed long long   sint64;
+    typedef unsigned long long uint64;
+#endif
+
+#if defined X86_64
+    typedef signed short   sint16;
+    typedef unsigned short uint16;
+    typedef signed int     sint32;
+    typedef unsigned int   uint32;
+    typedef signed long    sint64;
+    typedef unsigned long  uint64;
+#endif
+
+typedef unsigned int bool;
 
 #endif

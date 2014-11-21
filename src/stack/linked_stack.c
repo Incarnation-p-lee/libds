@@ -12,7 +12,7 @@ linked_stack_create(void)
     if (!stack) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        stack->sid = 0;
+        stack->sid = 0u;
     }
 
     /* struct linked_space */
@@ -34,7 +34,7 @@ linked_stack_create(void)
         pr_log_err("Fail to get memory from system.\n");
     } else {
         stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
-        stack->base->space.sp = (void **)stack->base->space.bp;
+        stack->base->space.sp = stack->base->space.bp;
     }
 
     return stack;
@@ -135,7 +135,7 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
  *   If invalid _ARGV_, nothing will be done.
  */
 void
-linked_stack_expand_space(struct linked_stack *stack, unsigned dim)
+linked_stack_expand_space(struct linked_stack *stack, uint32 dim)
 {
     struct linked_stack_space *node;
     struct linked_stack_space *last;
@@ -156,7 +156,7 @@ linked_stack_expand_space(struct linked_stack *stack, unsigned dim)
                 pr_log_err("Fail to get memory from system.\n");
             } else {
                 node->space.dim = dim;
-                node->space.sp = (void **)node->space.bp;
+                node->space.sp = node->space.bp;
                 dlinked_list_insert_after(&last->link, &node->link);
             }
         }
@@ -172,20 +172,20 @@ linked_stack_expand_space(struct linked_stack *stack, unsigned dim)
 bool
 linked_stack_is_full(struct linked_stack *stack)
 {
-    return 0 == linked_stack_rest_space(stack) ? true : false;
+    return 0u == linked_stack_rest_space(stack) ? true : false;
 }
 
 /*
  * _RETURN_ total space of stack.
  *   If NULL _ARGV_, _RETURN_ 0.
  */
-unsigned
+uint32
 linked_stack_rest_space(struct linked_stack *stack)
 {
-    unsigned rest;
+    uint32 rest;
     struct linked_stack_space *st;
 
-    rest = 0;
+    rest = 0u;
     if (stack) {
         rest = linked_stack_space_node_rest_space(stack->top);
         st = linked_stack_space_next_node(stack->top);
@@ -202,10 +202,10 @@ linked_stack_rest_space(struct linked_stack *stack)
  * _RETURN_ capacity of stack.
  *   If NULL _ARGV_, _RETURN_ 0.
  */
-unsigned
+uint32
 linked_stack_capacity(struct linked_stack *stack)
 {
-    unsigned total;
+    uint32 total;
     struct linked_stack_space *st;
 
     total = 0;
@@ -224,7 +224,7 @@ linked_stack_capacity(struct linked_stack *stack)
  * _RETURN_ rest space of specific node.
  *   If NULL _ARGV_, return 0.
  */
-static inline unsigned
+static inline uint32
 linked_stack_space_node_capacity(struct linked_stack_space *node)
 {
     return node ? node->space.dim : 0u;
@@ -234,10 +234,10 @@ linked_stack_space_node_capacity(struct linked_stack_space *node)
  * _RETURN_ rest space of specific node.
  *   If NULL _ARGV_, return 0.
  */
-static inline unsigned
+static inline uint32
 linked_stack_space_node_rest_space(struct linked_stack_space *node)
 {
-    unsigned rest;
+    uint32 rest;
     void **limit;
     void **tmp;
 
@@ -245,10 +245,10 @@ linked_stack_space_node_rest_space(struct linked_stack_space *node)
     if (node) {
         tmp = node->space.sp;
         limit = (void **)node->space.bp + node->space.dim;
-        if ((signed)(tmp - limit) > 0) {
+        if ((sint32)(tmp - limit) > 0) {
             pr_log_err("Array stack overflow.");
         } else {
-            rest = (unsigned)(limit - tmp);
+            rest = (uint32)(limit - tmp);
         }
     }
 
@@ -288,7 +288,7 @@ linked_stack_pop(struct linked_stack *stack)
 
     data = NULL;
     if (stack && !linked_stack_is_empty(stack)) {
-        if (0 == linked_stack_space_node_rest_space(stack->top)) {
+        if (0u == linked_stack_space_node_rest_space(stack->top)) {
             stack->top = linked_stack_space_previous_node(stack->top);
             data = *(--stack->top->space.sp);
         }

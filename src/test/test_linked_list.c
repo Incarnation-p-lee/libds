@@ -77,15 +77,15 @@ single_linked_list_unit_test(void)
     return;
 }
 
-static int *
-int_array_generate(int size)
+static sint32 *
+int_array_generate(sint32 size)
 {
-    int *raw;
-    register int *iter;
+    sint32 *raw;
+    register sint32 *iter;
 
     raw = NULL;
     if (size > 0) {
-        raw = (int *)malloc_ds(sizeof(*raw) * size);
+        raw = (sint32 *)malloc_ds(sizeof(*raw) * size);
         if (raw) {
             iter = raw;
             while (iter < raw + size) {

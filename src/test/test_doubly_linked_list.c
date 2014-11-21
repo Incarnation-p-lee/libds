@@ -7,7 +7,7 @@ test_dlinked_list_create(void)
     is_passed = false;
     tmp = dlinked_list_create();
     if (tmp) {
-        if (tmp->index == 0 && tmp->next == tmp && tmp->previous == tmp) {
+        if (tmp->index == 0u && tmp->next == tmp && tmp->previous == tmp) {
             is_passed = true;
         }
     }
@@ -27,7 +27,7 @@ test_dlinked_list_initial(void)
     tmp = malloc_ds(sizeof(*tmp));
     dlinked_list_initial(tmp);
     if (tmp) {
-        if (tmp->index == 0 && tmp->next == tmp && tmp->previous == tmp) {
+        if (tmp->index == 0u && tmp->next == tmp && tmp->previous == tmp) {
             is_passed = true;
         }
     }
@@ -42,11 +42,11 @@ test_dlinked_list_generate(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
-    int *data;
-    int *tmp;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    sint32 *tmp;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -81,7 +81,7 @@ test_dlinked_list_append_node(void)
     struct doubly_linked_list *next;
     struct doubly_linked_list *append;
     bool is_passed;
-    int tmp = 0xA;
+    uint32 tmp = 0xAu;
 
     head = dlinked_list_create();
     is_passed = false;
@@ -108,7 +108,7 @@ test_dlinked_list_next_node(void)
 
     is_passed = false;
     head = dlinked_list_create();
-    dlinked_list_append_node(head, 0xDEAD);
+    dlinked_list_append_node(head, 0xDEADu);
 
     next = dlinked_list_next_node(head);
     if (next == head->next) {
@@ -137,7 +137,7 @@ test_dlinked_list_previous_node(void)
 
     is_passed = false;
     head = dlinked_list_create();
-    dlinked_list_append_node(head, 0xDEAD);
+    dlinked_list_append_node(head, 0xDEADu);
 
     prev = dlinked_list_previous_node(head);
     if (prev == head->previous) {
@@ -167,7 +167,7 @@ test_dlinked_list_insert_before(void)
     int mark;
 
     is_passed = false;
-    mark = 0xDEAD;
+    mark = 0xDEADu;
     head = dlinked_list_create();
     dlinked_list_append_node(head, mark);
 
@@ -191,10 +191,10 @@ test_dlinked_list_insert_after(void)
     struct doubly_linked_list *node;
     struct doubly_linked_list *next;
     bool is_passed;
-    int mark;
+    uint32 mark;
 
     is_passed = false;
-    mark = 0xDEAD;
+    mark = 0xDEADu;
     head = dlinked_list_create();
     dlinked_list_append_node(head, mark);
 
@@ -216,10 +216,10 @@ test_dlinked_list_destroy(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
-    int *data;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -250,10 +250,10 @@ test_dlinked_list_length(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
-    int *data;
-    int *iter;
-    int len;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    sint32 *data;
+    uint32 *iter;
+    uint32 len;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
     iter = sizes;
     is_passed = true;
@@ -271,12 +271,12 @@ test_dlinked_list_length(void)
     }
 
     head = dlinked_list_create();
-    if (1 != dlinked_list_length(head)) {
+    if (1u != dlinked_list_length(head)) {
         is_passed = false;
     }
     dlinked_list_destroy(&head);
 
-    if (0 != dlinked_list_length(NULL)) {
+    if (0u != dlinked_list_length(NULL)) {
         is_passed = false;
     }
 
@@ -362,7 +362,7 @@ test_dlinked_list_exchange_node(void)
 static void
 test_dlinked_list_is_contains(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -396,11 +396,11 @@ test_dlinked_list_serialize(void)
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool is_passed;
-    int sizes[] = {1, 10, 100, 1000, 10000, 100000,};
-    int *iter;
-    int *raw;
-    int len;
-    int index;
+    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 *iter;
+    sint32 *raw;
+    uint32 len;
+    uint32 index;
 
     is_passed = true;
     iter = sizes;
@@ -411,7 +411,7 @@ test_dlinked_list_serialize(void)
 
         dlinked_list_serialize(head);
         tmp = head;
-        index = 0;
+        index = 0u;
         do {
             if (tmp->index != index) {
                 is_passed = false;
@@ -432,8 +432,7 @@ test_dlinked_list_serialize(void)
 static void
 test_dlinked_list_remove_node(void)
 {
-
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
     struct doubly_linked_list *tmp;
@@ -466,7 +465,7 @@ test_dlinked_list_remove_node(void)
 static void
 test_dlinked_list_lazy_remove_node(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
     struct doubly_linked_list *tmp;
@@ -500,7 +499,7 @@ test_dlinked_list_lazy_remove_node(void)
 static void
 test_dlinker_list_iterate(void)
 {
-    int raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    sint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -512,7 +511,7 @@ test_dlinker_list_iterate(void)
 
     tmp = head;
     do {
-        if (tmp->index != 0xDEAD) {
+        if (tmp->index != 0xDEADu) {
             is_passed = false;
             break;
         }

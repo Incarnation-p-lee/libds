@@ -25,10 +25,21 @@ EOF
   exit 2
 }
 
+platform=
 
 for argv in "$@"
 do
   case $argv in
+    "X86_64=0")
+      argv_cfg="$argv_cfg -m32 -DX86"
+      argv_lnk="$argv_lnk -m32"
+      platform="setted"
+    ;;
+    "X86_64=1")
+      argv_cfg="$argv_cfg -m64 -DX86_64"
+      argv_lnk="$argv_lnk -m64"
+      platform="setted"
+    ;;
     "DEBUG=1")
       argv_cfg="$argv_cfg -g -DDEBUG"
     ;;
@@ -62,16 +73,22 @@ do
   esac
 done
 
+# if not specific platform, use X86_64 by default
+if [ "$platform" != "setted" ]
+then
+  argv_cfg="$argv_cfg -m64 -DX86_64"
+  argv_lnk="$argv_lnk -m64"
+fi
 
+# create output directory
 objdir=obj_out
-
 if [ -d $objdir ]
 then
   rm -rfv $objdir
 fi
-
 mkdir -vp $objdir
 mkdir -vp $objdir/out/
+
 perl src/script/export_api_include.plx
 cp src/inc/ds.h $objdir/out/
 

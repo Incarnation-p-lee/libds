@@ -1,3 +1,5 @@
+#include "types.h"
+
 extern void
 linked_list_unit_test(void);
 extern void
@@ -10,8 +12,8 @@ static void (*run_test[])(void) = {
     &stack_unit_test,
 };
 
-int
-main(int argc, char **argv)
+sint32
+main(sint32 argc, char **argv)
 {
     register void (**iter)(void) = run_test;
 

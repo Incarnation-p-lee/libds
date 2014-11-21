@@ -15,12 +15,12 @@
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    int    index;
+    uint32                    index;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-    int    index;
+    uint32                    index;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };
@@ -29,16 +29,16 @@ struct doubly_linked_list {
  * array stack space
  */
 struct array_stack_space {
-    unsigned dim;
-    void     **sp;
-    void     *bp;
+    uint32 dim;
+    void   **sp;
+    void   **bp;
 };
 
 /*
  * array stack
  */
 struct array_stack {
-    int                      sid;
+    uint32                   sid;
     struct array_stack_space space;
 };
 
@@ -54,7 +54,7 @@ struct linked_stack_space {
  * linked stack
  */
 struct linked_stack {
-    int                       sid;
+    uint32                    sid;
     struct linked_stack_space *base;
     struct linked_stack_space *top;
 };
@@ -63,11 +63,11 @@ struct linked_stack {
  *
  */
 struct array_queue {
-    unsigned size;
-    unsigned rest;
-    void     **front;
-    void     **rear;
-    void     *queue;
+    uint32 size;
+    uint32 rest;
+    void   **front;
+    void   **rear;
+    void   *queue;
 };
 
 #endif

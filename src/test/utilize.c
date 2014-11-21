@@ -20,9 +20,9 @@ void
 memory_trace_print(void)
 {
     printf("\n  >> Memory Usage Summary <<\n");
-    printf("  . Malloc  %10d\n", malloc_cnt);
-    printf("  . Realloc %10d\n", realloc_cnt);
-    printf("  . Free    %10d\n", free_cnt);
+    printf("  . Malloc  %10u\n", malloc_cnt);
+    printf("  . Realloc %10u\n", realloc_cnt);
+    printf("  . Free    %10u\n", free_cnt);
     printf("  >> Memory End.\n\n");
 }
 
@@ -30,7 +30,7 @@ static void
 dlinked_list_iterate_handler(struct doubly_linked_list *node)
 {
     if (node) {
-        node->index = 0xDEAD;
+        node->index = 0xDEADu;
     }
 
     return;
@@ -40,7 +40,7 @@ static void
 slinked_list_iterate_handler(struct single_linked_list *node)
 {
     if (node) {
-        node->index = 0xDAED;
+        node->index = 0xDAEDu;
     }
 
     return;

@@ -15,9 +15,9 @@ dlinked_list_create(void);
 void
 dlinked_list_initial(struct doubly_linked_list *);
 struct doubly_linked_list *
-dlinked_list_generate(int *val, int size);
+dlinked_list_generate(sint32 *val, uint32 size);
 void
-dlinked_list_append_node(struct doubly_linked_list *node, int value);
+dlinked_list_append_node(struct doubly_linked_list *node, uint32 value);
 struct doubly_linked_list *
 dlinked_list_next_node(struct doubly_linked_list *node);
 struct doubly_linked_list *
@@ -30,10 +30,10 @@ dlinked_list_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *node);
 void
 dlinked_list_destroy(struct doubly_linked_list **head);
-int
+uint32
 dlinked_list_length(struct doubly_linked_list *head);
 struct doubly_linked_list *
-dlinked_list_get_node_by_index(struct doubly_linked_list *head, int index);
+dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index);
 void
 dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head);
 void
@@ -59,9 +59,9 @@ slinked_list_create(void);
 void
 slinked_list_initial(struct single_linked_list *);
 struct single_linked_list *
-slinked_list_generate(int *val, int size);
+slinked_list_generate(sint32 *val, uint32 size);
 void
-slinked_list_append_node(struct single_linked_list *node, int value);
+slinked_list_append_node(struct single_linked_list *node, uint32 value);
 struct single_linked_list *
 slinked_list_next_node(struct single_linked_list *node);
 struct single_linked_list *
@@ -74,10 +74,10 @@ slinked_list_insert_before(struct single_linked_list *cur,
     struct single_linked_list *node);
 void
 slinked_list_destroy(struct single_linked_list **head);
-int
+uint32
 slinked_list_length(struct single_linked_list *head);
 struct single_linked_list *
-slinked_list_get_node_by_index(struct single_linked_list *head, int index);
+slinked_list_get_node_by_index(struct single_linked_list *head, uint32 index);
 void
 slinked_list_print(FILE *fd, char *msg, struct single_linked_list *head);
 void

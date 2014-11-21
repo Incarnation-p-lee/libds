@@ -40,7 +40,7 @@ test_array_stack_expand_space(void)
 {
     bool is_passed;
     struct array_stack *ins;
-    unsigned stk_size;
+    uint32 stk_size;
 
     ins = array_stack_create();
     is_passed = true;
@@ -69,11 +69,11 @@ test_array_stack_is_full(void)
     bool is_passed;
     struct array_stack *ins;
     void *mem;
-    int tmp;
+    uint32 tmp;
 
     ins = array_stack_create();
     is_passed = true;
-    tmp = (int)ins->space.dim;
+    tmp = ins->space.dim;
     mem = &tmp;
 
     if (false != array_stack_is_full(ins)) {
@@ -100,8 +100,8 @@ test_array_stack_capacity(void)
 {
     bool is_passed;
     struct array_stack *ins;
-    unsigned stk_size;
-    unsigned extra;
+    uint32 stk_size;
+    uint32 extra;
 
     ins = array_stack_create();
     stk_size = ins->space.dim;
@@ -115,7 +115,7 @@ test_array_stack_capacity(void)
         is_passed = false;
     }
 
-    extra = 1024;
+    extra = 1024u;
     array_stack_expand_space(ins, extra);
     if (stk_size + extra != array_stack_capacity(ins)) {
         is_passed = false;
@@ -132,7 +132,7 @@ test_array_stack_rest_space(void)
 {
     bool is_passed;
     struct array_stack *ins;
-    unsigned stk_size;
+    uint32 stk_size;
 
     ins = array_stack_create();
     stk_size = array_stack_capacity(ins);
@@ -143,11 +143,11 @@ test_array_stack_rest_space(void)
     }
 
     array_stack_push(ins, &stk_size);
-    if (stk_size != array_stack_rest_space(ins) + 1) {
+    if (stk_size != array_stack_rest_space(ins) + 1u) {
         is_passed = false;
     }
 
-    if (0 != array_stack_rest_space(NULL)) {
+    if (0u != array_stack_rest_space(NULL)) {
         is_passed = false;
     }
 
@@ -163,11 +163,11 @@ test_array_stack_push(void)
     bool is_passed;
     struct array_stack *ins;
     void *mem;
-    int tmp;
+    uint32 tmp;
 
     ins = array_stack_create();
     is_passed = true;
-    tmp = (int)ins->space.dim;
+    tmp = ins->space.dim;
     mem = &tmp;
 
     while (tmp) {
@@ -179,9 +179,9 @@ test_array_stack_push(void)
         is_passed = false;
     }
 
-    tmp = (unsigned)ins->space.dim;
+    tmp = (uint32)ins->space.dim;
     array_stack_push(ins, mem);
-    if (tmp + 32 != ins->space.dim) {
+    if (tmp + 32u != ins->space.dim) {
         is_passed = false;
     }
 
@@ -270,11 +270,11 @@ test_array_stack_iterate(void)
 {
     bool is_passed;
     struct array_stack *ins;
-    int *tmp;
-    int data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };
-    int expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
-    register int *d1;
-    register int *e1;
+    sint32 *tmp;
+    sint32 data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };
+    sint32 expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
+    register sint32 *d1;
+    register sint32 *e1;
 
     ins = array_stack_create();
     is_passed = true;

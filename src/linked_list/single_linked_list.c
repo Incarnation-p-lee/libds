@@ -26,7 +26,7 @@ void
 slinked_list_initial(struct single_linked_list *head)
 {
     if (head) {
-        head->index = 0;
+        head->index = 0u;
         head->next = head;
     }
 
@@ -39,17 +39,17 @@ slinked_list_initial(struct single_linked_list *head)
  * _ARGV_ the int array, if invaild array, _RETURN_ NULL.
  */
 struct single_linked_list *
-slinked_list_generate(int *val, int size)
+slinked_list_generate(sint32 *val, uint32 size)
 {
     struct single_linked_list *head;
     struct single_linked_list *node;
-    register int *iterator;
+    register sint32 *iterator;
 
     head = NULL;
     if (val && size > 0) {
         iterator = val;
         node = slinked_list_create();
-        node->index = *iterator++;
+        node->index = (uint32)(*iterator++);
         head = node;
 
         while (iterator < val + size) {
@@ -67,7 +67,7 @@ slinked_list_generate(int *val, int size)
  *        value, the value for the append node. 
  */
 void
-slinked_list_append_node(struct single_linked_list *node, int value)
+slinked_list_append_node(struct single_linked_list *node, uint32 value)
 {
     struct single_linked_list *next;
 
@@ -205,10 +205,10 @@ slinked_list_destroy(struct single_linked_list **head)
  * _RETURN_ Length of given linked list.
  *   If NULL linked list, _RETURN_ 0.
  */
-int
+uint32
 slinked_list_length(struct single_linked_list *head)
 {
-    int length;
+    uint32 length;
     register struct single_linked_list *node;
 
     length = 0;
@@ -228,16 +228,18 @@ slinked_list_length(struct single_linked_list *head)
  *   If invalid _ARGV_, nothing will done, _RETURN_ NULL.
  */
 struct single_linked_list *
-slinked_list_get_node_by_index(struct single_linked_list *head, int index)
+slinked_list_get_node_by_index(struct single_linked_list *head, uint32 index)
 {
     register struct single_linked_list *node;
 
     node = NULL;
-    if (head && index >= 0) {
-        node = head;
-        while (index > 0) {
-            node = node->next;
-            index--;
+    if (head) {
+        if (index <= slinked_list_length(head)) {
+            node = head;
+            while (index > 0) {
+                node = node->next;
+                index--;
+            }
         }
     }
 
@@ -334,7 +336,7 @@ void
 slinked_list_serialize(struct single_linked_list *head)
 {
     struct single_linked_list *node;
-    int index;
+    uint32 index;
 
     if (head) {
         index = 0;

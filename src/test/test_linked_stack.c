@@ -7,7 +7,7 @@ test_linked_stack_create(void)
     stack = linked_stack_create();
     is_passed = true;
 
-    if (0 != stack->sid) {
+    if (0u != stack->sid) {
         is_passed = false;
     } else if (!stack->base || stack->base != stack->top) {
         is_passed = false;
@@ -48,16 +48,16 @@ test_linked_stack_expand_space(void)
 {
     bool is_passed;
     struct linked_stack *stack;
-    unsigned extra;
-    unsigned capacity;
+    uint32 extra;
+    uint32 capacity;
 
     stack = linked_stack_create();
     is_passed = true;
-    extra = 1024;
+    extra = 1024u;
     capacity = linked_stack_capacity(stack);
 
     linked_stack_expand_space(stack, extra);
-    if (capacity + 1024 != linked_stack_capacity(stack)) {
+    if (capacity + extra != linked_stack_capacity(stack)) {
         is_passed = false;
     }
 
@@ -72,9 +72,9 @@ test_linked_stack_is_full(void)
 {
     bool is_passed;
     struct linked_stack *stack;
-    int *data;
-    register int *iter;
-    unsigned capacity;
+    sint32 *data;
+    register sint32 *iter;
+    uint32 capacity;
 
     stack = linked_stack_create();
     is_passed = true;
@@ -84,7 +84,7 @@ test_linked_stack_is_full(void)
         is_passed = false;
     }
 
-    data = malloc_ds(sizeof(int *) * capacity);
+    data = malloc_ds(sizeof(sint32 *) * capacity);
     iter = data;
     while (iter < data + capacity) {
         linked_stack_push(stack, iter++);
@@ -106,7 +106,7 @@ test_linked_stack_rest_space(void)
 {
     bool is_passed;
     struct linked_stack *stack;
-    unsigned capacity;
+    uint32 capacity;
 
     stack = linked_stack_create();
     is_passed = true;
@@ -117,7 +117,7 @@ test_linked_stack_rest_space(void)
     }
 
     linked_stack_push(stack, &is_passed);
-    if (capacity != linked_stack_rest_space(stack) + 1) {
+    if (capacity != linked_stack_rest_space(stack) + 1u) {
         is_passed = false;
     }
 
