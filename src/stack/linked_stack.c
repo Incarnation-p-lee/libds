@@ -238,13 +238,13 @@ static inline unsigned
 linked_stack_space_node_rest_space(struct linked_stack_space *node)
 {
     unsigned rest;
-    void *limit;
-    void *tmp;
+    void **limit;
+    void **tmp;
 
     rest = 0;
     if (node) {
-        tmp = (void *)node->space.sp;
-        limit = node->space.bp + node->space.dim;
+        tmp = node->space.sp;
+        limit = (void **)node->space.bp + node->space.dim;
         if ((signed)(tmp - limit) > 0) {
             pr_log_err("Array stack overflow.");
         } else {

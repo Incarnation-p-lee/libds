@@ -101,14 +101,14 @@ array_stack_capacity(struct array_stack *stack)
 unsigned
 array_stack_rest_space(struct array_stack *stack)
 {
-    void *limit;
-    void *tmp;
+    void **limit;
+    void **tmp;
     unsigned rest;
 
     rest = 0;
     if (stack) {
-        tmp = (void *)stack->space.sp;
-        limit = stack->space.bp + stack->space.dim;
+        tmp = stack->space.sp;
+        limit = (void **)stack->space.bp + stack->space.dim;
         if ((signed)(tmp - limit) > 0) {
             pr_log_err("Array stack overflow.");
         } else {

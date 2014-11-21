@@ -135,10 +135,15 @@ test_array_stack_rest_space(void)
     unsigned stk_size;
 
     ins = array_stack_create();
-    stk_size = ins->space.dim;
+    stk_size = array_stack_capacity(ins);
     is_passed = true;
 
     if (stk_size != array_stack_rest_space(ins)) {
+        is_passed = false;
+    }
+
+    array_stack_push(ins, &stk_size);
+    if (stk_size != array_stack_rest_space(ins) + 1) {
         is_passed = false;
     }
 

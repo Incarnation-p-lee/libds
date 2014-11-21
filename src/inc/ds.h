@@ -114,7 +114,7 @@ libds_log_print(enum log_level lvl, const char *msg);
 
 #define SYM_2_STR(symbol)   (#symbol)
 #define UNOFFSET_OF(ptr, type, mem) \
-    (void *)((char *)ptr - (char *)(&((type *)0)->mem))
+    (void *)((void *)ptr - (void *)(&((type *)0)->mem))
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);

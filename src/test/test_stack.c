@@ -43,6 +43,9 @@ linked_stack_unit_test(void)
     void (*all_tests[])(void) = {
         &test_linked_stack_create,
         &test_linked_stack_destroy,
+        &test_linked_stack_expand_space,
+        &test_linked_stack_is_full,
+        &test_linked_stack_rest_space,
     };
     register void (**iter)(void);
 
