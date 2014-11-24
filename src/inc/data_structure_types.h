@@ -61,8 +61,12 @@ struct linked_stack {
 
 /*
  * array queue space
+ *    front -> first node
+ *    rear  -> next address of read node
  */
 struct array_queue_space {
+    /* We need this rest field to tell empty or full if front equals rear */
+    uint32 rest;
     uint32 dim;
     void   **front;
     void   **rear;

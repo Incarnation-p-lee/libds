@@ -76,7 +76,7 @@ array_stack_expand_space(struct array_stack *stack, uint32 extra)
 
 /*
  * _RETURN_ true if no space left in stack, or _RETURN_ false;
- *   If NULL _ARGV_, _RETURN_ false.
+ *   If NULL _ARGV_, _RETURN_ true.
  */
 bool
 array_stack_is_full(struct array_stack *stack)
