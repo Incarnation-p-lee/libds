@@ -60,14 +60,21 @@ struct linked_stack {
 };
 
 /*
- *
+ * array queue space
  */
-struct array_queue {
-    uint32 size;
-    uint32 rest;
+struct array_queue_space {
+    uint32 dim;
     void   **front;
     void   **rear;
-    void   *queue;
+    void   **queue;
+};
+
+/*
+ * array queue
+ */
+struct array_queue {
+    uint32                   sid;
+    struct array_queue_space space;
 };
 
 #endif

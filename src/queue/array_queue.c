@@ -1,19 +1,19 @@
 struct array_queue *
-create_array_queue_instance(void)
+array_queue_create(void)
 {
-  struct array_queue *result;
-  ENTER("create_array_queue_instance");
+    struct array_queue *result;
+    ENTER("create_array_queue_instance");
 
-  malloc_initial((void**)&result, sizeof(*result));
-  result->size = DEFAULT_QUEUE_SIZE;
-  result->rest = DEFAULT_QUEUE_SIZE;
+    malloc_initial((void**)&result, sizeof(*result));
+    result->size = DEFAULT_QUEUE_SIZE;
+    result->rest = DEFAULT_QUEUE_SIZE;
 
-  malloc_initial((void**)&result->queue, sizeof(result->queue) * DEFAULT_QUEUE_SIZE);
-  result->front = (void**)result->queue;
-  result->rear = (void**)result->queue;
+    malloc_initial((void**)&result->queue, sizeof(result->queue) * DEFAULT_QUEUE_SIZE);
+    result->front = (void**)result->queue;
+    result->rear = (void**)result->queue;
 
-  LEAVE;
-  return result;
+    LEAVE;
+    return result;
 }
 
 void
