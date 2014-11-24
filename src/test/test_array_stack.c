@@ -284,7 +284,7 @@ test_array_stack_iterate(void)
         array_stack_push(ins, d1++);
     }
 
-    array_stack_iterate(ins, &array_stack_iterate_handler);
+    array_stack_iterate(ins, &stack_iterate_handler);
 
     e1 = expect;
     while (e1 < expect + sizeof(expect) / sizeof(expect[0])) {

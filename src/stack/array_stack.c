@@ -201,7 +201,7 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
     if (stack && handler) {
         /* iterate from sp to bp */
         iter = stack->space.sp;
-        while(iter != (void **)stack->space.bp) {
+        while(iter != stack->space.bp) {
             handler(*(--iter));
         }
     }

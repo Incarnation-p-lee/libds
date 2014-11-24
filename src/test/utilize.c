@@ -47,7 +47,7 @@ slinked_list_iterate_handler(struct single_linked_list *node)
 }
 
 static void
-array_stack_iterate_handler(void *ptr)
+stack_iterate_handler(void *ptr)
 {
     if (ptr) {
         *(int *)ptr += 1;

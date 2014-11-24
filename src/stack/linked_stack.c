@@ -244,7 +244,7 @@ linked_stack_space_node_rest_space(struct linked_stack_space *node)
     rest = 0;
     if (node) {
         tmp = node->space.sp;
-        limit = (void **)node->space.bp + node->space.dim;
+        limit = node->space.bp + node->space.dim;
         if ((sint32)(tmp - limit) > 0) {
             pr_log_err("Array stack overflow.");
         } else {
@@ -290,8 +290,8 @@ linked_stack_pop(struct linked_stack *stack)
     if (stack && !linked_stack_is_empty(stack)) {
         if (0u == linked_stack_space_node_rest_space(stack->top)) {
             stack->top = linked_stack_space_previous_node(stack->top);
-            data = *(--stack->top->space.sp);
         }
+        data = *(--stack->top->space.sp);
     }
 
     return data;
@@ -333,7 +333,7 @@ linked_stack_cleanup(struct linked_stack *stack)
         iter = stack->base;
         do {
             memset(iter->space.bp, 0, sizeof(void *) * iter->space.dim);
-            iter->space.sp = (void **)iter->space.bp;
+            iter->space.sp = iter->space.bp;
             iter = linked_stack_space_next_node(iter);
         } while (iter != stack->base);
     }
@@ -377,7 +377,7 @@ linked_stack_space_iterate_node(struct linked_stack_space *node,
     if (node && handler) {
         /* iterate from sp to bp */
         iter = node->space.sp;
-        while(iter != (void **)node->space.bp) {
+        while(iter != node->space.bp) {
             handler(*(--iter));
         }
     }

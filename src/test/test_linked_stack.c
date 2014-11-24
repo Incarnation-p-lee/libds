@@ -127,22 +127,188 @@ test_linked_stack_rest_space(void)
     return;
 }
 
-/*
- * Unit test pattern
 static void
-test_linked_stack_destroy(void)
+test_linked_stack_capacity(void)
 {
+    bool is_passed;
+    struct linked_stack *stack;
+    uint32 capacity;
+    uint32 extra;
 
+    stack = linked_stack_create();
+    is_passed = true;
+
+    if (0 != linked_stack_capacity(NULL)) {
+        is_passed = false;
+    }
+
+    extra = 1023u;
+    capacity = linked_stack_capacity(stack);
+    linked_stack_expand_space(stack, extra);
+    if (capacity + extra != linked_stack_capacity(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_destroy(&stack);
+
+    test_result_print(SYM_2_STR(linked_stack_capacity), is_passed);
+    return;
+}
+
+static void
+test_linked_stack_push(void)
+{
+    bool is_passed;
+    uint32 capacity;
+    uint32 tmp;
+    struct linked_stack *stack;
+
+    stack = linked_stack_create();
+    is_passed = true;
+    capacity = linked_stack_capacity(stack);
+    tmp = capacity;
+
+    while (tmp > 0) {
+        linked_stack_push(stack, &is_passed);
+        tmp--;
+        if (tmp != linked_stack_rest_space(stack)) {
+            is_passed = false;
+        }
+    }
+
+    if (!linked_stack_is_full(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_push(stack, &is_passed);
+    if (capacity + EXPAND_STACK_SPACE_MIN != linked_stack_capacity(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_destroy(&stack);
+
+    test_result_print(SYM_2_STR(linked_stack_push), is_passed);
+    return;
+}
+
+static void
+test_linked_stack_pop(void)
+{
+    bool is_passed;
+    struct linked_stack *stack;
+    uint32 mark;
+
+    stack = linked_stack_create();
+    is_passed = true;
+    mark = 0xAD;
+
+    if (NULL != linked_stack_pop(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_push(stack, &mark);
+    if (&mark != linked_stack_pop(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_destroy(&stack);
+
+    test_result_print(SYM_2_STR(linked_stack_pop), is_passed);
+    return;
+}
+
+static void
+test_linked_stack_is_empty(void)
+{
+    bool is_passed;
+    struct linked_stack *stack;
+    uint32 tmp;
+
+    stack = linked_stack_create();
+    is_passed = true;
+
+    if (!linked_stack_is_empty(stack)) {
+        is_passed = false;
+    }
+
+    tmp = linked_stack_capacity(stack);
+    while (tmp > 0) {
+        linked_stack_push(stack, &is_passed);
+        tmp--;
+    }
+    if (linked_stack_is_empty(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_destroy(&stack);
+
+    test_result_print(SYM_2_STR(linked_stack_is_empty), is_passed);
+    return;
+}
+
+
+static void
+test_linked_stack_cleanup(void)
+{
     bool is_passed;
     struct linked_stack *stack;
 
     stack = linked_stack_create();
     is_passed = true;
 
+    linked_stack_push(stack, &is_passed);
+    if (linked_stack_is_empty(stack)) {
+        is_passed = false;
+    }
+
+    linked_stack_cleanup(stack);
+    if (!linked_stack_is_empty(stack)) {
+        is_passed = false;
+    }
+
+    if (stack->base != stack->top) {
+        is_passed = false;
+    }
+
     linked_stack_destroy(&stack);
 
-    test_result_print(SYM_2_STR(linked_stack_create), is_passed);
+    test_result_print(SYM_2_STR(linked_stack_cleanup), is_passed);
     return;
 }
 
-*/
+static void
+test_linked_stack_iterate(void)
+{
+    bool is_passed;
+    struct linked_stack *stack;
+    sint32 data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };
+    sint32 expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
+    register sint32 *d1;
+    register sint32 *e1;
+    sint32 *tmp;
+
+    stack = linked_stack_create();
+    is_passed = true;
+
+    d1 = data;
+    while (d1 < data + sizeof(data) / sizeof(data[0])) {
+        linked_stack_push(stack, d1++);
+    }
+
+    linked_stack_iterate(stack, &stack_iterate_handler);
+
+    e1 = expect;
+    while (e1 < expect + sizeof(expect) / sizeof(expect[0])) {
+        tmp = linked_stack_pop(stack);
+        if (*e1++ != *tmp) {
+            is_passed = false;
+            break;
+        }
+    }
+
+    linked_stack_destroy(&stack);
+
+    test_result_print(SYM_2_STR(linked_stack_iterate), is_passed);
+    return;
+}
+

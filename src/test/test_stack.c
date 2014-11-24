@@ -46,6 +46,12 @@ linked_stack_unit_test(void)
         &test_linked_stack_expand_space,
         &test_linked_stack_is_full,
         &test_linked_stack_rest_space,
+        &test_linked_stack_capacity,
+        &test_linked_stack_push,
+        &test_linked_stack_pop,
+        &test_linked_stack_is_empty,
+        &test_linked_stack_cleanup,
+        &test_linked_stack_iterate,
     };
     register void (**iter)(void);
 
