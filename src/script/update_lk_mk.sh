@@ -4,14 +4,32 @@ objdir=obj_out
 mkfile=Makefile
 srcdir=src
 cd $objdir > /dev/null
-objfile=`ls *.o`
+static=0
+
+for argv in "$@"
+do
+  case $argv in
+    "static=1")
+    static=1
+    ;;
+  esac
+done
+
+if [ "$static" == "1" ]
+then
+  objfile="test.o main.o"
+  static_lib="libds.a"
+else
+  objfile=`ls *.o`
+fi
+
 cat << EOF > $mkfile
 include ../$srcdir/base.Makefile
 
 .phony:lib stlib dylib
 
 \$(TARGET):`echo $objfile`
-	\$(CC) \$(LFLAG) -o \$@ \$^ \$(EXTLIB)
+	\$(CC) \$(LFLAG) -o \$@ \$^ $static_lib \$(EXTLIB)
 	@mv -v \$@ ./out
 	@echo "Build Executable .................................... [32mOK[0m."
 

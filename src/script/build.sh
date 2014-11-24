@@ -21,11 +21,14 @@ Build Script Usage:
                            PROFILE=0/1
                            LIB=0/1
                            CODE_COVERAGE=0/1
+                           X86_64=0/1
+                           STATIC=0/1
 EOF
   exit 2
 }
 
-platform=
+platform=0
+static=0
 
 for argv in "$@"
 do
@@ -33,12 +36,12 @@ do
     "X86_64=0")
       argv_cfg="$argv_cfg -m32 -DX86"
       argv_lnk="$argv_lnk -m32"
-      platform="setted"
+      platform="1"
     ;;
     "X86_64=1")
       argv_cfg="$argv_cfg -m64 -DX86_64"
       argv_lnk="$argv_lnk -m64"
-      platform="setted"
+      platform="1"
     ;;
     "DEBUG=1")
       argv_cfg="$argv_cfg -g -DDEBUG"
@@ -70,11 +73,14 @@ do
     "--help")
       print_help
     ;;
+    "STATIC=1")
+      static=1
+    ;;
   esac
 done
 
 # if not specific platform, use X86_64 by default
-if [ "$platform" != "setted" ]
+if [ "$platform" != "1" ]
 then
   argv_cfg="$argv_cfg -m64 -DX86_64"
   argv_lnk="$argv_lnk -m64"
@@ -121,13 +127,21 @@ done
 compile_obj "src/"
 
 # generate makefile for obj_out
-sh src/script/update_lk_mk.sh
+sh src/script/update_lk_mk.sh "static=$static"
 # link to elf
 cd $objdir > /dev/null
 
-make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
 if [ "$lib_build" -eq "1" ]
 then
   make "lib"
+  cp -v ./out/libds.so ../src/lib
+  cp -v ./out/libds.a ../src/lib
+  if [ "$static" == "1" ]
+  then
+    cp -v ./out/libds.a ./
+  fi
 fi
+
+make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
+
 cd - > /dev/null
