@@ -1,73 +1,79 @@
 struct array_queue *
 array_queue_create(void)
 {
-    struct array_queue *result;
-    ENTER("create_array_queue_instance");
+    struct array_queue *queue;
 
-    malloc_initial((void**)&result, sizeof(*result));
-    result->size = DEFAULT_QUEUE_SIZE;
-    result->rest = DEFAULT_QUEUE_SIZE;
+    queue = malloc_ds(sizeof(*queue));
+    if (!queue) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        queue->sid = 0u;
+    }
 
-    malloc_initial((void**)&result->queue, sizeof(result->queue) * DEFAULT_QUEUE_SIZE);
-    result->front = (void**)result->queue;
-    result->rear = (void**)result->queue;
+    queue->space.queue = malloc_ds(sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
+    if (!queue->space.queue) {
+        free_ds(queue);
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        queue->space.front = queue->space.base;
+        queue->space.rear = queue->space.base;
+    }
 
-    LEAVE;
-    return result;
+    return queue;
 }
 
 void
-destroy_array_queue_instance(struct array_queue **queue)
+array_queue_destroy(struct array_queue **queue)
 {
-  ENTER("destroy_josephus_game_serial_node");
+    if(queue && *queue) {
+    {
+        free_ds((*queue)->space.base);
+        free_ds(*queue);
+        *queue = NULL;
+    }
 
-  if(NULL == *queue || NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_DESTROY;
-  }
-
-  saft_free((void**)&(*queue)->queue);
-  saft_free((void**)queue);
-
-END_OF_DESTROY:
-  LEAVE;
-  return;
+    return;
 }
 
 void
-expand_array_queue(struct array_queue *queue, unsigned size)
+array_queue_expand_space(struct array_queue *queue, uint32 extra)
 {
-  unsigned new_size;
-  void **old, **new;
-  ENTER("expand_array_queue");
+    uint32 new_size;
+    void **new_addr;
 
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_EXPAND;
-  }
+    new_size = 0;
+    if (queue && extra) {
+        new_size = array_queue_capacity(queue) + size;
+    } else if (queue && !extra) {
+        new_size = array_queue_capacity(queue) * 2 + EXPAND_QUEUE_SPACE_MIN;
+    }
 
-  if(size)
-    new_size = queue->size + size;
-  else
-    new_size = queue->size * 2 + DEFAULT_QUEUE_SIZE;
+    if (new_size) {
+        new_addr = realloc_ds(queue->space.base, sizeof(void *) * new_size);
+        if (!new_addr) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            queue->space.base = new_addr;
+        }
+    }
 
-  old = new = NULL;
-  realloc_initial((void**)&queue->queue, sizeof(queue->queue) * new_size);
-  if(queue->front == queue->rear)
-  {
-    old = queue->front;
-    new = queue->front + new_size - queue->size;
-    while(old < (void**)queue->queue + queue->size)
-      *new++ = *old++;
-  }
-  queue->rest = new_size - queue->size;
-  queue->size = new_size;
+    if(queue->front == queue->rear)
+    {
+      old = queue->front;
+      new = queue->front + new_size - queue->size;
+      while(old < (void**)queue->queue + queue->size)
+        *new++ = *old++;
+    }
+    queue->rest = new_size - queue->size;
+    queue->size = new_size;
 
-END_OF_EXPAND:
-  LEAVE;
-  return;
+    return;
+}
+
+uint32
+array_queue_capacity(struct array_queue *queue)
+{
+    return queue ? queue->space.dim : 0u;
 }
 
 void

@@ -66,7 +66,7 @@ struct array_queue_space {
     uint32 dim;
     void   **front;
     void   **rear;
-    void   **queue;
+    void   **base;
 };
 
 /*
