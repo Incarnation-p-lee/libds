@@ -48,9 +48,7 @@ array_queue_expand_space(struct array_queue *queue, uint32 extra)
     void *lmt;
 
     new_size = 0;
-    if (!queue) {
-       return;
-    } else {
+    if (!queue) { return; } else {
        old_size = array_queue_capacity(queue);
     }
 
@@ -75,14 +73,10 @@ array_queue_expand_space(struct array_queue *queue, uint32 extra)
         lmt = queue->space.front;
         to = queue->space.base + new_addr;
         from = queue->space.base + old_addr;
-        while () {
-            *(
+        while ((sint32)(lmt - from) < 0) {
+            *(--to) == *(--from);
         }
     }
-
-    queue->space.rest = new_size - queue->space.rest;
-    queue->space.dim = new_size;
-
     return;
 }
 
@@ -128,76 +122,43 @@ array_queue_is_empty(struct array_queue *queue)
 }
 
 void
-enter_array_queue(struct array_queue *queue, void *member)
+array_queue_enter(struct array_queue *queue, void *member)
 {
-  ENTER("enter_array_queue");
+    if (queue && member) {
+        if (array_queue_is_full(queue)) {
+            array_queue_expand_space(queue);
+        }
 
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_ENTER;
-  }
-
-  if(is_full_array_queue(queue))
-    expand_array_queue(queue, 0);
-
-  //IF rear point to last element of array
-  if(queue->rear == (void**)queue->queue + queue->size - 1)
-  {
-    *queue->rear = member;
-    queue->rear = (void**)queue->queue;
-  }
-  else
-    *queue->rear++ = member;
-
-  queue->rest--;
-
-END_OF_ENTER:
-  LEAVE;
-  return;
+        *queue->space.rear++ = member;
+        if (queue->space.rear == queue->space.base + array_queue_capacity(queue)) {
+            queue->space.rear = queue->space.base;
+        }
+        queue->space.rest--;
+    }
+    return;
 }
 
 void *
-leave_array_queue(struct array_queue *queue)
+array_queue_leave(struct array_queue *queue)
 {
-  void *result;
-  ENTER("leave_array_queue");
+    void *retval;
 
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_LEAVE;
-  }
-
-  result = NULL;
-  if(is_empty_array_queue(queue))
-    goto END_OF_LEAVE;
-
-  if(queue->front == (void**)queue->queue + queue->size - 1)
-  {
-    result = *queue->front;
-    queue->front = (void**)queue->queue;
-  }
-  else
-    result = *queue->front++;
-
-  queue->rest++;
-
-END_OF_LEAVE:
-  LEAVE;
-  return result;
+    retval = NULL;
+    if (!is_empty_array_queue(queue)) {
+        retval = *queue->space.front++;
+        if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
+            queue->space.front = queue->space.base;
+        }
+        queue->space.rest++;
+    }
+    return retval;
 }
 
 void
-clear_array_queue(struct array_queue *queue)
+array_queue_cleanup(struct array_queue *queue)
 {
-  ENTER("clear_array_queue");
-
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_CLEAR;
-  }
+   if (queue) {
+   }
 
   memset(queue->queue, 0, sizeof(queue->queue) * queue->size);
   queue->rest = queue->size;
