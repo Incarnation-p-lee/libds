@@ -5,11 +5,15 @@ linked_list_unit_test(void);
 extern void
 stack_unit_test(void);
 extern void
+queue_unit_test(void);
+
+extern void
 memory_trace_print(void);
 
 static void (*run_test[])(void) = {
     &linked_list_unit_test,
     &stack_unit_test,
+    &queue_unit_test,
 };
 
 sint32

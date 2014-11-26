@@ -21,4 +21,4 @@ DYLIB        =libds.so
 EXTLIB       =-lm
 EXTLIB       +=$(ARGV_LIB)
 
-LIBOBJ       =linked_list.o stack.o log.o
+LIBOBJ       =linked_list.o stack.o log.o queue.o

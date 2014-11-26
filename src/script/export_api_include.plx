@@ -10,6 +10,7 @@ my @export = ("$incdir/types.h",
               "$incdir/log.h",
               "$incdir/defines.h",
               "$incdir/linked_list.h",
+              "$incdir/queue.h",
               "$incdir/stack.h");
 my $out = "$base/src/inc/ds.h";
 

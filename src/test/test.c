@@ -5,7 +5,10 @@
 #include "ds.h"
 #include "test.h"
 
+#include "impl/utilize.c"
+#include "impl/wrapper.c"
+
+/* Unit Test Entries */
 #include "test_linked_list.c"
 #include "test_stack.c"
-#include "utilize.c"
-#include "wrapper.c"
+#include "test_queue.c"

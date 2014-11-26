@@ -4,7 +4,6 @@
 #include "types.h"
 #include "defines.h"
 #include "data_structure_types.h"
-#include "stack.h"
+#include "queue.h"
 
-#include "impl/array_stack.c"
-#include "impl/linked_stack.c"
+#include "impl/array_queue.c"

@@ -17,6 +17,8 @@ void
 linked_list_unit_test(void);
 void
 stack_unit_test(void);
+void
+queue_unit_test(void);
 
 
 static void
@@ -27,6 +29,9 @@ static void
 array_stack_unit_test(void);
 static void
 linked_stack_unit_test(void);
+static void
+array_queue_unit_test(void);
+
 
 static void
 test_result_print(char *name, bool passed);

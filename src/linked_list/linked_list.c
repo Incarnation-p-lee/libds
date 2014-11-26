@@ -5,5 +5,5 @@
 #include "data_structure_types.h"
 #include "linked_list.h"
 
-#include "doubly_linked_list.c"
-#include "single_linked_list.c"
+#include "impl/doubly_linked_list.c"
+#include "impl/single_linked_list.c"

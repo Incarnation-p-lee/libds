@@ -101,14 +101,25 @@ struct linked_stack {
 };
 
 /*
- *
+ * array queue space
+ *    front -> first node
+ *    rear  -> next address of read node
  */
-struct array_queue {
-    uint32 size;
+struct array_queue_space {
+    /* We need this rest field to tell empty or full if front equals rear */
     uint32 rest;
+    uint32 dim;
     void   **front;
     void   **rear;
-    void   *queue;
+    void   **base;
+};
+
+/*
+ * array queue
+ */
+struct array_queue {
+    uint32                   sid;
+    struct array_queue_space space;
 };
 
 #endif
@@ -267,6 +278,48 @@ slinked_list_iterate(struct single_linked_list *head,
 
 #endif
 /* END of ./src/inc/linked_list.h */
+
+/* BEGIN of ./src/inc/queue.h */
+#ifndef HAVE_QUEUE_H
+#define HAVE_QUEUE_H
+
+#define DEFAULT_QUEUE_SPACE_SIZE   128
+#define EXPAND_QUEUE_SPACE_MIN     32
+
+#ifdef DEBUG
+    extern void * malloc_wrap(size_t size);
+    extern void * realloc_wrap(void *ptr, size_t size);
+    extern void free_wrap(void *ptr);
+#endif
+
+extern void
+libds_log_print(enum log_level lvl, const char *msg);
+
+extern struct array_queue *
+array_queue_create(void);
+extern void
+array_queue_destroy(struct array_queue **queue);
+extern void
+array_queue_expand_space(struct array_queue *queue, uint32 extra);
+uint32
+array_queue_capacity(struct array_queue *queue);
+uint32
+array_queue_rest_space(struct array_queue *queue);
+extern bool
+array_queue_is_full(struct array_queue *queue);
+extern bool
+array_queue_is_empty(struct array_queue *queue);
+extern void
+array_queue_enter(struct array_queue *queue, void *member);
+extern void *
+array_queue_leave(struct array_queue *queue);
+extern void
+array_queue_cleanup(struct array_queue *queue);
+extern void
+array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+
+#endif
+/* END of ./src/inc/queue.h */
 
 /* BEGIN of ./src/inc/stack.h */
 #ifndef HAVE_STACK_H

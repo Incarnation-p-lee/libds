@@ -10,8 +10,8 @@ array_queue_create(void)
         queue->sid = 0u;
     }
 
-    queue->space.queue = malloc_ds(sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
-    if (!queue->space.queue) {
+    queue->space.base = malloc_ds(sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
+    if (!queue->space.base) {
         free_ds(queue);
         pr_log_err("Fail to get memory from system.\n");
     } else {
@@ -28,7 +28,6 @@ void
 array_queue_destroy(struct array_queue **queue)
 {
     if(queue && *queue) {
-    {
         free_ds((*queue)->space.base);
         free_ds(*queue);
         *queue = NULL;
@@ -43,9 +42,9 @@ array_queue_expand_space(struct array_queue *queue, uint32 extra)
     uint32 old_size;
     uint32 new_size;
     void **new_addr;
-    void *to;
-    void *from;
-    void *lmt;
+    void **to;
+    void **from;
+    void **lmt;
 
     new_size = 0;
     if (!queue) { return; } else {
@@ -71,10 +70,10 @@ array_queue_expand_space(struct array_queue *queue, uint32 extra)
     if ((queue->space.front == queue->space.rear && array_queue_is_full(queue))
         || queue->space.front > queue->space.rear) {
         lmt = queue->space.front;
-        to = queue->space.base + new_addr;
-        from = queue->space.base + old_addr;
+        to = queue->space.base + new_size;
+        from = queue->space.base + old_size;
         while ((sint32)(lmt - from) < 0) {
-            *(--to) == *(--from);
+            *(--to) = *(--from);
         }
     }
     return;
@@ -126,7 +125,7 @@ array_queue_enter(struct array_queue *queue, void *member)
 {
     if (queue && member) {
         if (array_queue_is_full(queue)) {
-            array_queue_expand_space(queue);
+            array_queue_expand_space(queue, 0u);
         }
 
         *queue->space.rear++ = member;
@@ -144,7 +143,7 @@ array_queue_leave(struct array_queue *queue)
     void *retval;
 
     retval = NULL;
-    if (!is_empty_array_queue(queue)) {
+    if (!array_queue_is_empty(queue)) {
         retval = *queue->space.front++;
         if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
             queue->space.front = queue->space.base;
@@ -157,82 +156,36 @@ array_queue_leave(struct array_queue *queue)
 void
 array_queue_cleanup(struct array_queue *queue)
 {
-   if (queue) {
-   }
+    uint32 capacity;
 
-  memset(queue->queue, 0, sizeof(queue->queue) * queue->size);
-  queue->rest = queue->size;
-  queue->front = (void**)queue->queue;
-  queue->rear = (void**)queue->queue;
+    if (queue) {
+       capacity = array_queue_capacity(queue);
+       memset(queue->space.base, 0, sizeof(void *) * capacity);
+       queue->space.rest = capacity;
+       queue->space.front = queue->space.base;
+       queue->space.rear = queue->space.base;
+    }
 
-END_OF_CLEAR:
-  LEAVE;
-  return;
+    return;
 }
 
 void
-traverse_array_queue(struct array_queue *queue, void (*op)(void *))
+array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
 {
-  void **st, **bound;
-  ENTER("traverse_array_queue");
+    register void **iter;
+    void **lmt;
+    uint32 capacity;
 
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_TRAVERSE;
-  }
-
-  bound = (void**)queue->queue + queue->size - 1;
-  st = queue->front;
-  while(st != queue->rear)
-  {
-    (*op)(*st);
-    if(st == bound)
-      st = (void**)queue->queue;
-    else
-      st++;
-  }
-
-END_OF_TRAVERSE:
-  LEAVE;
-  return;
-}
-
-int
-is_empty_array_queue(struct array_queue *queue)
-{
-  int is_empty;
-  ENTER("is_empty_array_queue");
-
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_EMPTY;
-  }
-
-  is_empty = queue->rest == queue->size ? 1 : 0;
-
-END_OF_EMPTY:
-  LEAVE;
-  return is_empty;
-}
-
-
-int
-is_full_array_queue(struct array_queue *queue)
-{
-  int is_full;
-  ENTER("is_full_array_queue");
-
-  if(NULL == queue)
-  {
-    warning_prompt(ADD_TRACE(warning_digest[0]));
-    goto END_OF_FULL;
-  }
-
-  is_full = queue->rest == 0 ? 1 : 0;
-
-END_OF_FULL:
-  LEAVE;
-  return is_full;
+    if (queue && handler) {
+        capacity = array_queue_capacity(queue);
+        lmt = queue->space.base + capacity;
+        iter = queue->space.front;
+        while (iter != queue->space.rear) {
+            (*handler)(*iter++);
+            if (iter == lmt) {
+                iter = queue->space.base;
+            }
+        }
+    }
+    return;
 }
