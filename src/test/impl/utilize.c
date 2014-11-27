@@ -50,7 +50,17 @@ static void
 stack_iterate_handler(void *ptr)
 {
     if (ptr) {
-        *(int *)ptr += 1;
+        *(sint32 *)ptr += 1;
+    }
+
+    return;
+}
+
+static void
+queue_iterate_handler(void *ptr)
+{
+    if (ptr) {
+        *(uint32 *)ptr += 1;
     }
 
     return;

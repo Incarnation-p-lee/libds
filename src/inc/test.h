@@ -42,6 +42,8 @@ dlinked_list_iterate_handler(struct doubly_linked_list *node);
 static void
 slinked_list_iterate_handler(struct single_linked_list *node);
 static void
-stack_iterate_handler(void *);
+stack_iterate_handler(void *ptr);
+static void
+queue_iterate_handler(void *ptr);
 
 #endif

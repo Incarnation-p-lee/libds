@@ -32,3 +32,4 @@ Session.vim
 core
 ds.log
 tags
+*.swp

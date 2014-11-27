@@ -143,12 +143,14 @@ array_queue_leave(struct array_queue *queue)
     void *retval;
 
     retval = NULL;
-    if (!array_queue_is_empty(queue)) {
-        retval = *queue->space.front++;
-        if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
-            queue->space.front = queue->space.base;
+    if (queue) {
+        if (!array_queue_is_empty(queue)) {
+            retval = *queue->space.front++;
+            if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
+                queue->space.front = queue->space.base;
+            }
+            queue->space.rest++;
         }
-        queue->space.rest++;
     }
     return retval;
 }
@@ -177,14 +179,16 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
     uint32 capacity;
 
     if (queue && handler) {
-        capacity = array_queue_capacity(queue);
-        lmt = queue->space.base + capacity;
-        iter = queue->space.front;
-        while (iter != queue->space.rear) {
-            (*handler)(*iter++);
-            if (iter == lmt) {
-                iter = queue->space.base;
-            }
+        if (!array_queue_is_empty(queue)) {
+            capacity = array_queue_capacity(queue);
+            lmt = queue->space.base + capacity;
+            iter = queue->space.front;
+            do {
+                (*handler)(*iter++);
+                if (iter == lmt) {
+                    iter = queue->space.base;
+                }
+            } while (iter != queue->space.rear);
         }
     }
     return;

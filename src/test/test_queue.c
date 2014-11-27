@@ -18,6 +18,10 @@ array_queue_unit_test(void)
         &test_array_queue_rest_space,
         &test_array_queue_is_full,
         &test_array_queue_is_empty,
+        &test_array_queue_enter,
+        &test_array_queue_leave,
+        &test_array_queue_cleanup,
+        &test_array_queue_iterate,
     };
     register void (**iter)(void);
 
