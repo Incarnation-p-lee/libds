@@ -12,6 +12,12 @@ array_queue_unit_test(void)
 {
     void (*all_tests[])(void) = {
         &test_array_queue_create,
+        &test_array_queue_destroy,
+        &test_array_queue_expand_space,
+        &test_array_queue_capacity,
+        &test_array_queue_rest_space,
+        &test_array_queue_is_full,
+        &test_array_queue_is_empty,
     };
     register void (**iter)(void);
 

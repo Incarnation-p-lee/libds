@@ -134,6 +134,10 @@ cd $objdir > /dev/null
 if [ "$lib_build" -eq "1" ]
 then
   make "lib"
+  if [ ! -d "../src/lib" ]
+  then
+    mkdir "../src/lib"
+  fi
   cp -v ./out/libds.so ../src/lib
   cp -v ./out/libds.a ../src/lib
   if [ "$static" == "1" ]
