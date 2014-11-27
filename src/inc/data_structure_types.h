@@ -81,4 +81,10 @@ struct array_queue {
     struct array_queue_space space;
 };
 
+/*
+ * stacked queue
+ */
+struct stacked_queue {
+};
+
 #endif
