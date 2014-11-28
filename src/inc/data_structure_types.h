@@ -85,6 +85,10 @@ struct array_queue {
  * stacked queue
  */
 struct stacked_queue {
+    uint32             sid;
+    uint32             dim;
+    struct array_stack *space_et; /* enter stack */
+    struct array_stack *space_lv; /* leave stack */
 };
 
 #endif

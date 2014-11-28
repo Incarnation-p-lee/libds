@@ -96,7 +96,7 @@ mkdir -vp $objdir
 mkdir -vp $objdir/out/
 
 perl src/script/export_api_include.plx
-cp src/inc/ds.h $objdir/out/
+cp -v src/inc/ds.h $objdir/out/
 
 function compile_obj() {
   cd $1 > /dev/null

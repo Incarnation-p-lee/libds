@@ -122,6 +122,12 @@ struct array_queue {
     struct array_queue_space space;
 };
 
+/*
+ * stacked queue
+ */
+struct stacked_queue {
+};
+
 #endif
 /* END of ./src/inc/data_structure_types.h */
 
