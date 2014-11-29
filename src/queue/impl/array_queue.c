@@ -113,10 +113,9 @@ array_queue_is_empty(struct array_queue *queue)
 
     is_empty = false;
     if (queue) {
-        is_empty = array_queue_capacity(queue) ==
-            array_queue_rest_space(queue) ? true : false;
+        is_empty = array_queue_capacity(queue)
+            == array_queue_rest_space(queue) ? true : false;
     }
-
     return is_empty;
 }
 
