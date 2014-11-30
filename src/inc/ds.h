@@ -126,6 +126,10 @@ struct array_queue {
  * stacked queue
  */
 struct stacked_queue {
+    uint32             sid;
+    uint32             dim;
+    struct array_stack *enter; /* enter stack */
+    struct array_stack *leave; /* leave stack */
 };
 
 #endif
@@ -216,7 +220,7 @@ dlinked_list_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *node);
 extern void
 dlinked_list_destroy(struct doubly_linked_list **head);
-uint32
+extern uint32
 dlinked_list_length(struct doubly_linked_list *head);
 extern struct doubly_linked_list *
 dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index);
@@ -260,7 +264,7 @@ slinked_list_insert_before(struct single_linked_list *cur,
     struct single_linked_list *node);
 extern void
 slinked_list_destroy(struct single_linked_list **head);
-uint32
+extern uint32
 slinked_list_length(struct single_linked_list *head);
 extern struct single_linked_list *
 slinked_list_get_node_by_index(struct single_linked_list *head, uint32 index);
@@ -298,18 +302,44 @@ slinked_list_iterate(struct single_linked_list *head,
     extern void free_wrap(void *ptr);
 #endif
 
+
 extern void
 libds_log_print(enum log_level lvl, const char *msg);
 
+extern void
+array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern void
+array_stack_cleanup(struct array_stack *stack);
+extern bool
+array_stack_is_full(struct array_stack *stack);
+extern bool
+array_stack_is_empty(struct array_stack *stack);
+extern struct array_stack *
+array_stack_create(void);
+extern uint32
+array_stack_capacity(struct array_stack *stack);
+extern void
+array_stack_destroy(struct array_stack **stack);
+extern void
+array_stack_expand_space(struct array_stack *stack, uint32 extra);
+extern uint32
+array_stack_rest_space(struct array_stack *stack);
+extern void
+array_stack_push(struct array_stack *stack, void *member);
+extern void *
+array_stack_pop(struct array_stack *stack);
+
+
+/* ARRAY STACK */
 extern struct array_queue *
 array_queue_create(void);
 extern void
 array_queue_destroy(struct array_queue **queue);
 extern void
 array_queue_expand_space(struct array_queue *queue, uint32 extra);
-uint32
+extern uint32
 array_queue_capacity(struct array_queue *queue);
-uint32
+extern uint32
 array_queue_rest_space(struct array_queue *queue);
 extern bool
 array_queue_is_full(struct array_queue *queue);
@@ -323,6 +353,33 @@ extern void
 array_queue_cleanup(struct array_queue *queue);
 extern void
 array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+/* END OF ARRAY STACK */
+
+/* STACKED STACK */
+extern struct stacked_queue *
+stacked_queue_create(void);
+extern void
+stacked_queue_destroy(struct stacked_queue **queue);
+extern void
+stacked_queue_expand_space(struct stacked_queue *queue, uint32 extra);
+extern uint32
+stacked_queue_capacity(struct stacked_queue *queue);
+extern uint32
+stacked_queue_rest_space(struct stacked_queue *queue);
+extern bool
+stacked_queue_is_full(struct stacked_queue *queue);
+extern bool
+stacked_queue_is_empty(struct stacked_queue *queue);
+extern void
+stacked_queue_enter(struct stacked_queue *queue, void *member);
+extern void *
+stacked_queue_leave(struct stacked_queue *queue);
+extern void
+stacked_queue_cleanup(struct stacked_queue *queue);
+extern void
+stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
+
+/* END OF STACKED STACK */
 
 #endif
 /* END of ./src/inc/queue.h */
@@ -364,9 +421,9 @@ extern void
 array_stack_expand_space(struct array_stack *stack, uint32 extra);
 extern bool
 array_stack_is_full(struct array_stack *stack);
-uint32
+extern uint32
 array_stack_capacity(struct array_stack *stack);
-uint32
+extern uint32
 array_stack_rest_space(struct array_stack *stack);
 extern void
 array_stack_push(struct array_stack *stack, void *member);
@@ -389,7 +446,7 @@ extern void
 linked_stack_expand_space(struct linked_stack *stack, uint32 dim);
 extern bool
 linked_stack_is_full(struct linked_stack *stack);
-uint32
+extern uint32
 linked_stack_rest_space(struct linked_stack *stack);
 extern void
 linked_stack_push(struct linked_stack *stack, void *member);
@@ -401,7 +458,7 @@ extern void
 linked_stack_cleanup(struct linked_stack *stack);
 extern void
 linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
-uint32
+extern uint32
 linked_stack_capacity(struct linked_stack *stack);
 
 /* END OF LINKED STACK */

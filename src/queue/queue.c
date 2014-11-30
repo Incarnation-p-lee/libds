@@ -8,3 +8,4 @@
 #include "queue.h"
 
 #include "impl/array_queue.c"
+#include "impl/stacked_queue.c"

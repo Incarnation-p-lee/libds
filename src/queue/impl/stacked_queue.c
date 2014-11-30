@@ -25,8 +25,8 @@ void
 stacked_queue_destroy(struct stacked_queue **queue)
 {
     if (queue && *queue) {
-        array_stack_destroy(&queue->enter);
-        array_stack_destroy(&queue->leave);
+        array_stack_destroy(&(*queue)->enter);
+        array_stack_destroy(&(*queue)->leave);
         free_ds(*queue);
         *queue = NULL;
     }
@@ -103,7 +103,7 @@ static inline void
 stacked_queue_dump_stack(struct array_stack *from,
     struct array_stack *to)
 {
-    if (enter && leave) {
+    if (from && to) {
         if (array_stack_rest_space(from) > array_stack_rest_space(to)) {
             pr_log_info("Operation may result in array stack overflow.\n");
         } else {
@@ -115,3 +115,40 @@ stacked_queue_dump_stack(struct array_stack *from,
     return;
 }
 
+void *
+stacked_queue_leave(struct stacked_queue *queue)
+{
+    void *retval;
+
+    retval = NULL;
+    if (queue) {
+        if (!stacked_queue_is_empty(queue)) {
+            if (array_stack_is_empty(queue->leave)) {
+                stacked_queue_dump_stack(queue->enter, queue->leave);
+            }
+            retval = array_stack_pop(queue->leave);
+        }
+    }
+
+    return retval;
+}
+
+void
+stacked_queue_cleanup(struct stacked_queue *queue)
+{
+    if (queue) {
+        array_stack_cleanup(queue->enter);
+        array_stack_cleanup(queue->leave);
+    }
+    return;
+}
+
+void
+stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *))
+{
+    if (queue && handler) {
+        array_stack_iterate(queue->leave, handler);
+        array_stack_iterate(queue->enter, handler);
+    }
+    return;
+}

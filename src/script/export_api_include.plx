@@ -39,7 +39,7 @@ foreach (@export) {
             }
         } elsif (/^void\s/) {
             $line = 'extern ' . $_;
-        } elsif (/^int\s/) {
+        } elsif (/^[us]int\d{2}\s/) {
             $line = 'extern ' . $_;
         } elsif (/^bool\s/) {
             $line = 'extern ' . $_;
