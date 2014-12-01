@@ -31,6 +31,8 @@ static void
 linked_stack_unit_test(void);
 static void
 array_queue_unit_test(void);
+static void
+stacked_queue_unit_test(void);
 
 
 static void

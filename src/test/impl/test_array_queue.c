@@ -36,7 +36,7 @@ test_array_queue_destroy(void)
     is_passed = true;
 
     array_queue_destroy(&queue);
-    if (queue != NULL) {
+    if (NULL != queue) {
         is_passed = false;
     }
 

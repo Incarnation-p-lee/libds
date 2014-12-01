@@ -1,9 +1,11 @@
 #include "impl/test_array_queue.c"
+#include "impl/test_stacked_queue.c"
 
 void
 queue_unit_test(void)
 {
     array_queue_unit_test();
+    stacked_queue_unit_test();
     return;
 }
 
@@ -26,6 +28,28 @@ array_queue_unit_test(void)
     register void (**iter)(void);
 
     fprintf(stdout, "\n  >> Array Queue Unit Test <<\n");
+    iter = all_tests;
+    while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
+        (*iter++)();
+    }
+
+    fprintf(stdout, "  >> Test Finished.\n");
+    return;
+}
+
+static void
+stacked_queue_unit_test(void)
+{
+    void (*all_tests[])(void) = {
+        &test_stacked_queue_create,
+        &test_stacked_queue_destroy,
+        &test_stacked_queue_expand_space,
+        &test_stacked_queue_capacity,
+        &test_stacked_queue_rest_space,
+    };
+    register void (**iter)(void);
+
+    fprintf(stdout, "\n  >> Stacked Queue Unit Test <<\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();

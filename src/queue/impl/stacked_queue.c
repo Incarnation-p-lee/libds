@@ -15,7 +15,6 @@ stacked_queue_create(void)
     queue->leave = array_stack_create();
 
     capacity = array_stack_capacity(queue->enter);
-    assert(capacity == array_stack_capacity(queue->leave));
     queue->dim = capacity;
 
     return queue;
@@ -38,17 +37,22 @@ stacked_queue_expand_space(struct stacked_queue *queue, uint32 extra)
 {
     uint32 capacity;
 
-    if (queue && extra > 0) {
+    if (queue) {
         array_stack_expand_space(queue->enter, extra);
         array_stack_expand_space(queue->leave, extra);
 
         capacity = array_stack_capacity(queue->enter);
-        assert(capacity == array_stack_capacity(queue->leave));
         queue->dim = capacity;
     }
     return;
 }
 
+/*
+ * In face, stacked queue can hold 2 * queue->dim elements in critial case.
+ *   So the capacity should be queue->dim at min
+ *                             queue->dim * 2 at max
+ * For the consideration of safy, We took queu->dim as capacity for interface.
+ */
 uint32
 stacked_queue_capacity(struct stacked_queue *queue)
 {
