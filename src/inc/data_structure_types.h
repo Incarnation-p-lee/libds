@@ -91,4 +91,21 @@ struct stacked_queue {
     struct array_stack *leave; /* leave stack */
 };
 
+/*
+ * doubly_end_queue_list
+ */
+struct doubly_end_queue_list {
+    void                      *val;
+    struct doubly_linked_list link;
+};
+
+/*
+ * doubly end queue
+ */
+struct doubly_end_queue {
+    uint32                       sid;
+    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *tail;
+};
+
 #endif
