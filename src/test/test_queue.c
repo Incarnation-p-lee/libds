@@ -48,6 +48,10 @@ stacked_queue_unit_test(void)
         &test_stacked_queue_rest_space,
         &test_stacked_queue_is_full,
         &test_stacked_queue_is_empty,
+        &test_stacked_queue_enter,
+        &test_stacked_queue_leave,
+        &test_stacked_queue_cleanup,
+        &test_stacked_queue_iterate,
     };
     register void (**iter)(void);
 
