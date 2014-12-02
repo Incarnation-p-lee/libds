@@ -99,25 +99,94 @@ test_stacked_queue_rest_space(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
+    uint32 capacity;
 
     queue = stacked_queue_create();
     is_passed = true;
+    capacity = stacked_queue_capacity(queue);
 
     if (0 != stacked_queue_rest_space(NULL)) {
         is_passed = false;
     }
 
-    if (stacked_queue_capacity(queue) != stacked_queue_rest_space(queue)) {
+    if (capacity * 2 != stacked_queue_rest_space(queue)) {
         is_passed = false;
     }
 
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_capacity(queue) != stacked_queue_rest_space(queue) + 1) {
+    if (capacity * 2 != stacked_queue_rest_space(queue) + 1) {
         is_passed = false;
     }
 
     stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_rest_space), is_passed);
+    return;
+}
+
+static void
+test_stacked_queue_is_full(void)
+{
+    bool is_passed;
+    struct stacked_queue *queue;
+    uint32 cnt;
+    uint32 capacity;
+
+    queue = stacked_queue_create();
+    capacity = stacked_queue_capacity(queue);
+    is_passed = true;
+    cnt = 0;
+
+    if (!stacked_queue_is_full(NULL)) {
+        is_passed = false;
+    }
+
+    if (stacked_queue_is_full(queue)) {
+        is_passed = false;
+    }
+
+    while (!stacked_queue_is_full(queue)) {
+        cnt++;
+        stacked_queue_enter(queue, queue);
+    }
+
+    if (cnt != capacity * 2) {
+        is_passed = false;
+        printf("cnt %d, capacity %d\n", cnt, capacity);
+    }
+
+    if (!stacked_queue_is_full(queue)) {
+        is_passed = false;
+    }
+
+    stacked_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(stacked_queue_is_full), is_passed);
+    return;
+}
+
+static void
+test_stacked_queue_is_empty(void)
+{
+    bool is_passed;
+    struct stacked_queue *queue;
+
+    queue = stacked_queue_create();
+    is_passed = true;
+
+    if (!stacked_queue_is_empty(queue)) {
+        is_passed = false;
+    }
+
+    if (stacked_queue_is_empty(NULL)) {
+        is_passed = false;
+    }
+
+    stacked_queue_enter(queue, queue);
+    if (stacked_queue_is_empty(NULL)) {
+        is_passed = false;
+    }
+
+    stacked_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(stacked_queue_is_empty), is_passed);
     return;
 }
 

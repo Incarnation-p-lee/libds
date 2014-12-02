@@ -65,7 +65,16 @@ stacked_queue_capacity(struct stacked_queue *queue)
 uint32
 stacked_queue_rest_space(struct stacked_queue *queue)
 {
-    return queue ? array_stack_rest_space(queue->enter) : 0u;
+    uint32 rest;
+
+    rest = 0u;
+    if (queue) {
+        rest = array_stack_rest_space(queue->enter);
+        if (array_stack_is_empty(queue->leave)) {
+            rest += array_stack_capacity(queue->leave);
+        }
+    }
+    return rest;
 }
 
 /*
