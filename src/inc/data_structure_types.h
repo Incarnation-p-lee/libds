@@ -16,11 +16,13 @@
  */
 struct single_linked_list {
     uint32                    index;
+    void                      *val;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
     uint32                    index;
+    void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };

@@ -16,6 +16,7 @@ doubly_end_queue_create(void)
         pr_log_err("Fail to get memory from system.\n");
     } else {
         dlinked_list_initial(&queue->front.link);
+        queue->front->val = NULL;
         queue->tail = queue->front;
     }
     return queue;
@@ -25,7 +26,9 @@ void
 doubly_end_queue_destroy(struct doubly_end_queue **queue)
 {
     if (queue && *queue) {
-        free_ds((*queue)->front);
+        if ((*queue)->front) {
+            free_ds((*queue)->front);
+        }
         free_ds(*queue);
         *queue = NULL;
     }
@@ -33,7 +36,7 @@ doubly_end_queue_destroy(struct doubly_end_queue **queue)
 }
 
 uint32
-doubly_end_queue_capacity(struct doubly_end_queue *queue)
+doubly_end_queue_length(struct doubly_end_queue *queue)
 {
     uint32 retval;
     struct doubly_end_queue_list *tmp;
@@ -72,4 +75,84 @@ doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
         previous = UNOFFSET_OF(node->link.previous, struct doubly_end_queue_list, link);
     }
     return previous;
+}
+
+/*
+ * NULL _ARGV_ will be treated as full, _RETURN_ false.
+ */
+bool
+doubly_end_queue_is_empty(struct doubly_end_queue *queue)
+{
+    bool is_empty;
+
+    is_empty = false;
+    if (queue) {
+        if (NULL == queue->front && NULL == queue->tail) {
+            is_empty = true;
+        }
+    }
+
+    return is_empty;
+}
+
+void
+doubly_end_queue_front_enter(struct doubly_end_queue *queue, void *member)
+{
+    struct doubly_end_queue_list *tmp;
+
+    if (queue && member) {
+        tmp = malloc_ds(sizeof(*tmp));
+        if (!tmp) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            tmp->val = member;
+            dlinked_list_insert_before(&queue->front->link, &tmp->link);
+            queue->front = tmp;
+        }
+    }
+    return;
+}
+
+void
+doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
+{
+    struct doubly_end_queue_list *tmp;
+
+    if (queue && member) {
+        tmp = malloc_ds(sizeof(*tmp));
+        if (!tmp) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            tmp->val = member;
+            dlinked_list_insert_after(&queue->tail->link, &tmp->link);
+            queue->tail = tmp;
+        }
+    }
+    return;
+}
+
+void *
+doubly_end_queue_front_leave(struct doubly_end_queue *queue)
+{
+    struct doubly_end_queue_list *next;
+    void *retval;
+
+    retval = NULL;
+    if (queue) {
+        if (!doubly_end_queue_is_empty(queue)) {
+            retval = queue->front->val;
+            next = doubly_end_queue_list_next(queue->front);
+
+            if (next == queue->front) {
+                /* If the last node, empty the deque instance. */
+                free_ds(queue->front);
+                queue->front = NULL;
+                queue->tail = NULL;
+            } else {
+                free_ds(queue->front);
+                queue->front = next;
+            }
+        }
+    }
+    return;
 }
