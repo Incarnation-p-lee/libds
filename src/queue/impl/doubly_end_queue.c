@@ -18,7 +18,7 @@ void
 doubly_end_queue_destroy(struct doubly_end_queue **queue)
 {
     if (queue && *queue) {
-        // ToDo, free linked list , call clean
+        doubly_end_queue_cleanup(*queue);
         free_ds(*queue);
         *queue = NULL;
     }
@@ -33,7 +33,6 @@ doubly_end_queue_length(struct doubly_end_queue *queue)
 
     retval = 0u;
     if (queue) {
-        assert(queue->front == doubly_end_queue_list_next(queue->tail));
         if (doubly_end_queue_is_empty(queue)) {
             tmp = queue->front;
             do {
@@ -83,7 +82,6 @@ doubly_end_queue_is_empty(struct doubly_end_queue *queue)
             is_empty = true;
         }
     }
-
     return is_empty;
 }
 
@@ -148,10 +146,7 @@ doubly_end_queue_front_leave(struct doubly_end_queue *queue)
             next = doubly_end_queue_list_next(queue->front);
 
             if (next == queue->front) {
-                /* If the last node, empty the deque instance. */
-                free_ds(queue->front);
-                queue->front = NULL;
-                queue->tail = NULL;
+                doubly_end_queue_last_node_clean(queue);
             } else {
                 dlinked_list_lazy_remove_node(&queue->front->link);
                 free_ds(queue->front);
@@ -159,7 +154,7 @@ doubly_end_queue_front_leave(struct doubly_end_queue *queue)
             }
         }
     }
-    return;
+    return retval;
 }
 
 void *
@@ -175,10 +170,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             previous = doubly_end_queue_list_previous(queue->front);
 
             if (previous == queue->tail) {
-                /* If the last node, empty the deque instance. */
-                free_ds(queue->tail);
-                queue->tail = NULL;
-                queue->front = NULL;
+                doubly_end_queue_last_node_clean(queue);
             } else {
                 dlinked_list_lazy_remove_node(&queue->tail->link);
                 free_ds(queue->tail);
@@ -186,7 +178,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             }
         }
     }
-    return;
+    return retval;
 }
 
 static inline void
@@ -194,33 +186,47 @@ doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
 {
     assert(queue);
     assert(queue->front == queue->tail);
+
+    free_ds(queue->front);
+    queue->front = NULL;
+    queue->tail = NULL;
+    return;
 }
 
 void
 doubly_end_queue_cleanup(struct doubly_end_queue *queue)
 {
-    struct doubly_end_queue_list *tmp;
-    struct doubly_end_queue_list *next;
+    register struct doubly_end_queue_list *tmp;
+    register struct doubly_end_queue_list *next;
 
     if (queue) {
         tmp = queue->front;
-        while (tmp != queue->tail) {
-            next = doubly_end_queue_list_next(tmp);
-            dlinked_list_lazy_remove_node(&tmp->link);
-            free_ds(tmp);
-            tmp = next;
+        if (tmp) {
+            while (tmp != queue->tail) {
+                next = doubly_end_queue_list_next(tmp);
+                dlinked_list_lazy_remove_node(&tmp->link);
+                free_ds(tmp);
+                tmp = next;
+            }
+            doubly_end_queue_last_node_clean(queue);
         }
-        /* handle the last node of list */
-        free_ds(queue->tail);
-        queue->tail = NULL;
-        queue->front = NULL;
     }
     return;
 }
 
 void
-doubly_end_queue_iterate(struct doubly_end_queue *queue)
+doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *))
 {
+    register struct doubly_end_queue_list *tmp;
 
-
+    if (queue) {
+        tmp = queue->front;
+        if (tmp) {
+            do {
+                (*handle)(tmp->val);
+                tmp = doubly_end_queue_list_next(tmp);
+            } while (tmp != queue->front);
+        }
+    }
+    return;
 }

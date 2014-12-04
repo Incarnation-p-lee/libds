@@ -33,3 +33,4 @@ core
 ds.log
 tags
 *.swp
+obj_out

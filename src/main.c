@@ -11,9 +11,13 @@ extern void
 memory_trace_print(void);
 
 static void (*run_test[])(void) = {
+#if 1
     &linked_list_unit_test,
     &stack_unit_test,
     &queue_unit_test,
+#else
+    &queue_unit_test,
+#endif
 };
 
 sint32

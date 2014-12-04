@@ -57,11 +57,13 @@ typedef unsigned int bool;
  */
 struct single_linked_list {
     uint32                    index;
+    void                      *val;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
     uint32                    index;
+    void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };
@@ -130,6 +132,23 @@ struct stacked_queue {
     uint32             dim;
     struct array_stack *enter; /* enter stack */
     struct array_stack *leave; /* leave stack */
+};
+
+/*
+ * doubly_end_queue_list
+ */
+struct doubly_end_queue_list {
+    void                      *val;
+    struct doubly_linked_list link;
+};
+
+/*
+ * doubly end queue
+ */
+struct doubly_end_queue {
+    uint32                       sid;
+    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *tail;
 };
 
 #endif
@@ -329,6 +348,17 @@ array_stack_push(struct array_stack *stack, void *member);
 extern void *
 array_stack_pop(struct array_stack *stack);
 
+extern void
+dlinked_list_initial(struct doubly_linked_list *);
+extern void
+dlinked_list_insert_before(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node);
+extern void
+dlinked_list_insert_after(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node);
+extern void
+dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+
 
 /* ARRAY STACK */
 extern struct array_queue *
@@ -355,7 +385,7 @@ extern void
 array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
 /* END OF ARRAY STACK */
 
-/* STACKED STACK */
+/* STACKED QUEUE */
 extern struct stacked_queue *
 stacked_queue_create(void);
 extern void
@@ -379,7 +409,31 @@ stacked_queue_cleanup(struct stacked_queue *queue);
 extern void
 stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
 
-/* END OF STACKED STACK */
+/* END OF STACKED QUEUE */
+
+
+/* DOUBLY END QUEUE */
+extern struct doubly_end_queue *
+doubly_end_queue_create(void);
+extern void
+doubly_end_queue_destroy(struct doubly_end_queue **queue);
+extern uint32
+doubly_end_queue_length(struct doubly_end_queue *queue);
+extern bool
+doubly_end_queue_is_empty(struct doubly_end_queue *queue);
+extern void
+doubly_end_queue_front_enter(struct doubly_end_queue *queue, void *member);
+extern void
+doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
+extern void *
+doubly_end_queue_front_leave(struct doubly_end_queue *queue);
+extern void *
+doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
+extern void
+doubly_end_queue_cleanup(struct doubly_end_queue *queue);
+extern void
+doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+/* END OF DOUBLY END QUEUE */
 
 #endif
 /* END of ./src/inc/queue.h */

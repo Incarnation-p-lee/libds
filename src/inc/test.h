@@ -33,6 +33,8 @@ static void
 array_queue_unit_test(void);
 static void
 stacked_queue_unit_test(void);
+static void
+doubly_end_queue_unit_test(void);
 
 
 static void

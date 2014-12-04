@@ -37,6 +37,17 @@ array_stack_push(struct array_stack *stack, void *member);
 extern void *
 array_stack_pop(struct array_stack *stack);
 
+extern void
+dlinked_list_initial(struct doubly_linked_list *);
+extern void
+dlinked_list_insert_before(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node);
+extern void
+dlinked_list_insert_after(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node);
+extern void
+dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+
 
 /* ARRAY STACK */
 struct array_queue *
@@ -63,7 +74,7 @@ void
 array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
 /* END OF ARRAY STACK */
 
-/* STACKED STACK */
+/* STACKED QUEUE */
 struct stacked_queue *
 stacked_queue_create(void);
 void
@@ -90,6 +101,36 @@ stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
 static inline void
 stacked_queue_dump_stack(struct array_stack *from,
     struct array_stack *to);
-/* END OF STACKED STACK */
+/* END OF STACKED QUEUE */
+
+
+/* DOUBLY END QUEUE */
+struct doubly_end_queue *
+doubly_end_queue_create(void);
+void
+doubly_end_queue_destroy(struct doubly_end_queue **queue);
+uint32
+doubly_end_queue_length(struct doubly_end_queue *queue);
+static inline struct doubly_end_queue_list *
+doubly_end_queue_list_next(struct doubly_end_queue_list *node);
+static inline struct doubly_end_queue_list *
+doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
+bool
+doubly_end_queue_is_empty(struct doubly_end_queue *queue);
+void
+doubly_end_queue_front_enter(struct doubly_end_queue *queue, void *member);
+void
+doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
+void *
+doubly_end_queue_front_leave(struct doubly_end_queue *queue);
+void *
+doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
+static inline void
+doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
+void
+doubly_end_queue_cleanup(struct doubly_end_queue *queue);
+void
+doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+/* END OF DOUBLY END QUEUE */
 
 #endif

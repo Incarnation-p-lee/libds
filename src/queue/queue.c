@@ -9,3 +9,4 @@
 
 #include "impl/array_queue.c"
 #include "impl/stacked_queue.c"
+#include "impl/doubly_end_queue.c"
