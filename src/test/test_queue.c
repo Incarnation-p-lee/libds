@@ -73,6 +73,9 @@ doubly_end_queue_unit_test(void)
     void (*all_tests[])(void) = {
         &test_doubly_end_queue_create,
         &test_doubly_end_queue_destroy,
+        &test_doubly_end_queue_length,
+        &test_doubly_end_queue_is_empty,
+        &test_doubly_end_queue_head_enter,
     };
     register void (**iter)(void);
 

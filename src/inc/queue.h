@@ -118,11 +118,11 @@ doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
 bool
 doubly_end_queue_is_empty(struct doubly_end_queue *queue);
 void
-doubly_end_queue_front_enter(struct doubly_end_queue *queue, void *member);
+doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
 void
 doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
 void *
-doubly_end_queue_front_leave(struct doubly_end_queue *queue);
+doubly_end_queue_head_leave(struct doubly_end_queue *queue);
 void *
 doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
 static inline void

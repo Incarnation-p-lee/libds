@@ -106,7 +106,7 @@ struct doubly_end_queue_list {
  */
 struct doubly_end_queue {
     uint32                       sid;
-    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *head;
     struct doubly_end_queue_list *tail;
 };
 

@@ -147,7 +147,7 @@ struct doubly_end_queue_list {
  */
 struct doubly_end_queue {
     uint32                       sid;
-    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *head;
     struct doubly_end_queue_list *tail;
 };
 
@@ -422,11 +422,11 @@ doubly_end_queue_length(struct doubly_end_queue *queue);
 extern bool
 doubly_end_queue_is_empty(struct doubly_end_queue *queue);
 extern void
-doubly_end_queue_front_enter(struct doubly_end_queue *queue, void *member);
+doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
 extern void
 doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
 extern void *
-doubly_end_queue_front_leave(struct doubly_end_queue *queue);
+doubly_end_queue_head_leave(struct doubly_end_queue *queue);
 extern void *
 doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
 extern void
