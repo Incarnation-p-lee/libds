@@ -167,7 +167,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
     if (queue) {
         if (!doubly_end_queue_is_empty(queue)) {
             retval = queue->tail->val;
-            previous = doubly_end_queue_list_previous(queue->head);
+            previous = doubly_end_queue_list_previous(queue->tail);
 
             if (previous == queue->tail) {
                 doubly_end_queue_last_node_clean(queue);
@@ -208,6 +208,7 @@ doubly_end_queue_cleanup(struct doubly_end_queue *queue)
                 free_ds(tmp);
                 tmp = next;
             }
+            queue->head = tmp;
             doubly_end_queue_last_node_clean(queue);
         }
     }

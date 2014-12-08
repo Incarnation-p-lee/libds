@@ -76,6 +76,10 @@ doubly_end_queue_unit_test(void)
         &test_doubly_end_queue_length,
         &test_doubly_end_queue_is_empty,
         &test_doubly_end_queue_head_enter,
+        &test_doubly_end_queue_tail_enter,
+        &test_doubly_end_queue_head_leave,
+        &test_doubly_end_queue_tail_leave,
+        &test_doubly_end_queue_cleanup,
     };
     register void (**iter)(void);
 
