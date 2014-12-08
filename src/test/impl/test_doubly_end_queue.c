@@ -240,22 +240,32 @@ test_doubly_end_queue_cleanup(void)
     return;
 }
 
-/*
-
 static void
-test_doubly_end_queue_create(void)
+test_doubly_end_queue_iterate(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
+    uint32 tmp;
+    uint32 cnt;
 
     queue = doubly_end_queue_create();
     is_passed = true;
+    tmp = 0;
+    cnt = 1023;
 
+    while (cnt) {
+        doubly_end_queue_head_enter(queue, &tmp);
+        cnt--;
+    }
+
+    doubly_end_queue_iterate(queue, queue_iterate_handler);
+    if (tmp != doubly_end_queue_length(queue)) {
+        is_passed = false;
+    }
 
     doubly_end_queue_destroy(&queue);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_create), is_passed);
+    test_result_print(SYM_2_STR(doubly_end_queue_iterate), is_passed);
     return;
 }
 
-*/
