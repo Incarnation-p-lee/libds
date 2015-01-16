@@ -32,87 +32,51 @@ extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
 
 
 /* ARRAY STACK */
-struct array_queue *
-array_queue_create(void);
-void
-array_queue_destroy(struct array_queue **queue);
-void
-array_queue_expand_space(struct array_queue *queue, uint32 extra);
-uint32
-array_queue_capacity(struct array_queue *queue);
-uint32
-array_queue_rest_space(struct array_queue *queue);
-bool
-array_queue_is_full(struct array_queue *queue);
-bool
-array_queue_is_empty(struct array_queue *queue);
-void
-array_queue_enter(struct array_queue *queue, void *member);
-void *
-array_queue_leave(struct array_queue *queue);
-void
-array_queue_cleanup(struct array_queue *queue);
-void
-array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+struct array_queue * array_queue_create(void);
+void array_queue_destroy(struct array_queue **queue);
+void array_queue_expand_space(struct array_queue *queue, uint32 extra);
+uint32 array_queue_capacity(struct array_queue *queue);
+uint32 array_queue_rest_space(struct array_queue *queue);
+bool array_queue_is_full(struct array_queue *queue);
+bool array_queue_is_empty(struct array_queue *queue);
+void array_queue_enter(struct array_queue *queue, void *member);
+void * array_queue_leave(struct array_queue *queue);
+void array_queue_cleanup(struct array_queue *queue);
+void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */
-struct stacked_queue *
-stacked_queue_create(void);
-void
-stacked_queue_destroy(struct stacked_queue **queue);
-void
-stacked_queue_expand_space(struct stacked_queue *queue, uint32 extra);
-uint32
-stacked_queue_capacity(struct stacked_queue *queue);
-uint32
-stacked_queue_rest_space(struct stacked_queue *queue);
-bool
-stacked_queue_is_full(struct stacked_queue *queue);
-bool
-stacked_queue_is_empty(struct stacked_queue *queue);
-void
-stacked_queue_enter(struct stacked_queue *queue, void *member);
-void *
-stacked_queue_leave(struct stacked_queue *queue);
-void
-stacked_queue_cleanup(struct stacked_queue *queue);
-void
-stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
+struct stacked_queue * stacked_queue_create(void);
+void stacked_queue_destroy(struct stacked_queue **queue);
+void stacked_queue_expand_space(struct stacked_queue *queue, uint32 extra);
+uint32 stacked_queue_capacity(struct stacked_queue *queue);
+uint32 stacked_queue_rest_space(struct stacked_queue *queue);
+bool stacked_queue_is_full(struct stacked_queue *queue);
+bool stacked_queue_is_empty(struct stacked_queue *queue);
+void stacked_queue_enter(struct stacked_queue *queue, void *member);
+void * stacked_queue_leave(struct stacked_queue *queue);
+void stacked_queue_cleanup(struct stacked_queue *queue);
+void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
 
-static inline void
-stacked_queue_dump_stack(struct array_stack *from,
-    struct array_stack *to);
+static inline void stacked_queue_dump_stack(struct array_stack *from, struct array_stack *to);
 /* END OF STACKED QUEUE */
 
 
 /* DOUBLY END QUEUE */
-struct doubly_end_queue *
-doubly_end_queue_create(void);
-void
-doubly_end_queue_destroy(struct doubly_end_queue **queue);
-uint32
-doubly_end_queue_length(struct doubly_end_queue *queue);
-static inline struct doubly_end_queue_list *
-doubly_end_queue_list_next(struct doubly_end_queue_list *node);
-static inline struct doubly_end_queue_list *
-doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
-bool
-doubly_end_queue_is_empty(struct doubly_end_queue *queue);
-void
-doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
-void
-doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
-void *
-doubly_end_queue_head_leave(struct doubly_end_queue *queue);
-void *
-doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
-static inline void
-doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
-void
-doubly_end_queue_cleanup(struct doubly_end_queue *queue);
-void
-doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+struct doubly_end_queue * doubly_end_queue_create(void);
+void doubly_end_queue_destroy(struct doubly_end_queue **queue);
+uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
+bool doubly_end_queue_is_empty(struct doubly_end_queue *queue);
+void doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
+void doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
+void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
+void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
+void doubly_end_queue_cleanup(struct doubly_end_queue *queue);
+void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+
+static inline void doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
+static inline struct doubly_end_queue_list * doubly_end_queue_list_next(struct doubly_end_queue_list *node);
+static inline struct doubly_end_queue_list * doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
 /* END OF DOUBLY END QUEUE */
 
 #endif
