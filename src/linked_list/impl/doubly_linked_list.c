@@ -1,9 +1,11 @@
-/*
- * _RETURN_ one new node linked list.
- *   If no memory available, it never return, export an error and exit.
- */
 struct doubly_linked_list *
 dlinked_list_create(void)
+{
+    return dlinked_list_node_create(NULL, 0u);
+}
+
+struct doubly_linked_list *
+dlinked_list_node_create(void *val, uint32 id)
 {
     struct doubly_linked_list *head;
 
@@ -11,48 +13,47 @@ dlinked_list_create(void)
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        dlinked_list_initial(head);
+        dlinked_list_node_initial(head, val, id);
     }
 
     return head;
 }
 
-/*
- * Init single node linked list.
- *   If NULL _ARGV_, nothing will be done.
- */
 void
-dlinked_list_initial(struct doubly_linked_list *head)
+dlinked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id)
 {
     if (head) {
-        head->index = 0u;
+        head->id = id;
         head->next = head;
         head->previous = head;
+        head->val = val;
     }
 
     return;
 }
 
-/*
- * _RETURN_ one linked list from given int array.
- *          If invalid _ARGV_, _RETURN_ NULL.
- */
+void
+dlinked_list_initial(struct doubly_linked_list *head)
+{
+    dlinked_list_node_initial(head, NULL, 0u);
+    return;
+}
+
 struct doubly_linked_list *
-dlinked_list_generate(sint32 *val, uint32 size)
+dlinked_list_generate(uint32 *id, uint32 size)
 {
     struct doubly_linked_list *head;
     register struct doubly_linked_list *node;
-    register int *iterator;
+    register uint32 *iterator;
 
     head = NULL;
-    if (val && size > 0) {
-        iterator = val;
-        node = dlinked_list_create();
-        node->index = (uint32)(*iterator++);
+    if (id && size > 0) {
+        iterator = id;
+        node = dlinked_list_node_create(NULL, *iterator++);
         head = node;
 
-        while (iterator < val + size) {
-            dlinked_list_append_node(node, *iterator++);
+        while (iterator < id + size) {
+            dlinked_list_node_append(node, *iterator++);
             node = node->next;
         }
     }
@@ -60,13 +61,23 @@ dlinked_list_generate(sint32 *val, uint32 size)
     return head;
 }
 
-/*
- * Append one node of given value after the given node.
- *   If NULL _ARGV_, nothing will be done.
- *   If uninitialized or destroyed, export warning, nothing else will be done.
- */
 void
-dlinked_list_append_node(struct doubly_linked_list *node, uint32 value)
+dlinked_list_node_set_val(struct doubly_linked_list *node, void *val)
+{
+    if (node) {
+        node->val = val;
+    }
+    return;
+}
+
+void *
+dlinked_list_node_get_val(struct doubly_linked_list *node)
+{
+    return node ? node->val : NULL;
+}
+
+void
+dlinked_list_node_append(struct doubly_linked_list *node, uint32 id)
 {
     struct doubly_linked_list *next;
 
@@ -74,22 +85,16 @@ dlinked_list_append_node(struct doubly_linked_list *node, uint32 value)
         if (!node->next || !node->previous) {
             pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
         } else {
-            next = dlinked_list_create();
-            next->index = value;
-            dlinked_list_insert_after(node, next);
+            next = dlinked_list_node_create(NULL, id);
+            dlinked_list_node_insert_after(node, next);
         }
     }
 
     return;
 }
 
-/*
- * _RETURN_ the next node of linked list.
- *   If NULL _ARGV_, _RETURN_ NULL.
- *   If uninitialized or destroyed _ARGV_, _RETURN_ NULL.
- */
 struct doubly_linked_list *
-dlinked_list_next_node(struct doubly_linked_list *node)
+dlinked_list_node_next(struct doubly_linked_list *node)
 {
     struct doubly_linked_list *next;
 
@@ -103,13 +108,8 @@ dlinked_list_next_node(struct doubly_linked_list *node)
     return next;
 }
 
-/*
- * _RETURN_ the previous node of linked list.
- *   If NULL _ARGV_, _RETURN_ NULL.
- *   If uninitialized or destroyed _ARGV_, _RETURN_ NULL.
- */
 struct doubly_linked_list *
-dlinked_list_previous_node(struct doubly_linked_list *node)
+dlinked_list_node_previous(struct doubly_linked_list *node)
 {
     struct doubly_linked_list *previous;
 
@@ -123,14 +123,8 @@ dlinked_list_previous_node(struct doubly_linked_list *node)
     return previous;
 }
 
-/*
- * Insert one existed node after another given node.
- * _ARGV_, cur current given node.
- *         node inserted node.
- *         If either of _ARGV_ is NULL, nothing will be done.
- */
 void
-dlinked_list_insert_after(struct doubly_linked_list *cur,
+dlinked_list_node_insert_after(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
     if (cur && node)
@@ -144,14 +138,8 @@ dlinked_list_insert_after(struct doubly_linked_list *cur,
     return;
 }
 
-/*
- * Insert one existed node before another given node.
- * _ARGV_, cur current given node.
- *         node inserted node.
- *         If either of _ARGV_ is NULL, nothing will be done.
- */
 void
-dlinked_list_insert_before(struct doubly_linked_list *cur,
+dlinked_list_node_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
     struct doubly_linked_list *prev;
@@ -159,16 +147,12 @@ dlinked_list_insert_before(struct doubly_linked_list *cur,
     if (cur && node)
     {
         prev = cur->previous;
-        dlinked_list_insert_after(prev, node);
+        dlinked_list_node_insert_after(prev, node);
     }
 
     return;
 }
 
-/*
- * Destroy the whole doubly linked list, set head to NULL.
- *   If NULL _ARGV_, nothing will be done.
- */
 void
 dlinked_list_destroy(struct doubly_linked_list **head)
 {
@@ -193,10 +177,6 @@ dlinked_list_destroy(struct doubly_linked_list **head)
     return;
 }
 
-/*
- * _RETURN_ Length of given linked list.
- *   If NULL linked list, _RETURN_ 0.
- */
 uint32
 dlinked_list_length(struct doubly_linked_list *head)
 {
@@ -215,12 +195,8 @@ dlinked_list_length(struct doubly_linked_list *head)
     return length;
 }
 
-/*
- * _RETURN_ the node of index by given head node.
- *   If invalid _ARGV_, nothing will done, _RETURN_ NULL.
- */
 struct doubly_linked_list *
-dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index)
+dlinked_list_node_get_by_index(struct doubly_linked_list *head, uint32 index)
 {
     register struct doubly_linked_list *node;
 
@@ -238,10 +214,6 @@ dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index)
     return node;
 }
 
-/*
- * Print doubly linked list
- *   If invalid head, nothing will be done.
- */
 void
 dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head)
 {
@@ -256,7 +228,7 @@ dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head)
 
         iterator = head;
         do {
-            fprintf(fd, "%d ->\n", iterator->index);
+            fprintf(fd, "%d ->\n", iterator->id);
             iterator = iterator->next;
         } while (iterator != head);
     }
@@ -265,39 +237,30 @@ dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head)
     return;
 }
 
-/*
- * Exchange two node of linked list.
- *   If either _ARGV_ is NULL, nothing will be done.
- *   If the same node, nothing will be done.
- */
 void
-dlinked_list_exchange_node(struct doubly_linked_list *fir,
+dlinked_list_node_exchange(struct doubly_linked_list *fir,
     struct doubly_linked_list *sec)
 {
     struct doubly_linked_list *prev_fir;
     struct doubly_linked_list *prev_sec;
 
     if (fir && sec) {
-        if (dlinked_list_is_contains(fir, sec) && (fir != sec)) {
+        if (dlinked_list_contains_p(fir, sec) && (fir != sec)) {
             prev_fir = fir->previous;
             prev_sec = sec->previous;
 
-            dlinked_list_lazy_remove_node(fir);
-            dlinked_list_lazy_remove_node(sec);
-            dlinked_list_insert_after(prev_fir, sec);
-            dlinked_list_insert_after(prev_sec, fir);
+            dlinked_list_node_lazy_remove(fir);
+            dlinked_list_node_lazy_remove(sec);
+            dlinked_list_node_insert_after(prev_fir, sec);
+            dlinked_list_node_insert_after(prev_sec, fir);
         }
     }
 
     return;
 }
 
-/*
- * _RETURN_ true if _ARGV_ node in the list of _ARGV_ tar, else false.
- *   If either of _ARGV_ is NULL, return false.
- */
 bool
-dlinked_list_is_contains(struct doubly_linked_list *tar,
+dlinked_list_contains_p(struct doubly_linked_list *tar,
     struct doubly_linked_list *node)
 {
     register struct doubly_linked_list *iter;
@@ -318,10 +281,6 @@ dlinked_list_is_contains(struct doubly_linked_list *tar,
     return contains;
 }
 
-/*
- * Serialize the given linked list.
- *   If NULL, nothing will be done.
- */
 void
 dlinked_list_serialize(struct doubly_linked_list *head)
 {
@@ -332,7 +291,7 @@ dlinked_list_serialize(struct doubly_linked_list *head)
         index = 0;
         node = head;
         do {
-            node->index = index++;
+            node->id = index++;
             node = node->next;
         } while (node != head);
     }
@@ -340,20 +299,14 @@ dlinked_list_serialize(struct doubly_linked_list *head)
     return;
 }
 
-/*
- * Remove the given node.
- * _RETURN_ the next node.
- *   If only one node of linked list, _RETURN_ NULL.
- *   If NULL _ARGV_, _RETURN_ NULL
- */
 struct doubly_linked_list *
-dlinked_list_remove_node(struct doubly_linked_list *node)
+dlinked_list_node_remove(struct doubly_linked_list *node)
 {
     struct doubly_linked_list *next;
 
     next = NULL;
     if (node) {
-        dlinked_list_lazy_remove_node(node);
+        dlinked_list_node_lazy_remove(node);
         if (node->next != node) {
             next = node->next;
         }
@@ -363,12 +316,8 @@ dlinked_list_remove_node(struct doubly_linked_list *node)
     return next;
 }
 
-/*
- * Remove the given node without free the memory.
- *   If only one node of linked list, nothing will be done.
- */
 void
-dlinked_list_lazy_remove_node(struct doubly_linked_list *node)
+dlinked_list_node_lazy_remove(struct doubly_linked_list *node)
 {
     if (node) {
         node->previous->next = node->next;
@@ -378,10 +327,6 @@ dlinked_list_lazy_remove_node(struct doubly_linked_list *node)
     return;
 }
 
-/*
- * Iterate each node by given function handler.
- *   If NULL _ARGV_, nothing will be done.
- */
 void
 dlinked_list_iterate(struct doubly_linked_list *head,
     void (*handler)(struct doubly_linked_list *))

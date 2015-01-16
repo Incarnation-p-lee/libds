@@ -11,42 +11,24 @@
 #endif
 
 
-extern void
-libds_log_print(enum log_level lvl, const char *msg);
+extern void libds_log_print(enum log_level lvl, const char *msg);
 
-extern void
-array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
-extern void
-array_stack_cleanup(struct array_stack *stack);
-extern bool
-array_stack_is_full(struct array_stack *stack);
-extern bool
-array_stack_is_empty(struct array_stack *stack);
-extern struct array_stack *
-array_stack_create(void);
-extern uint32
-array_stack_capacity(struct array_stack *stack);
-extern void
-array_stack_destroy(struct array_stack **stack);
-extern void
-array_stack_expand_space(struct array_stack *stack, uint32 extra);
-extern uint32
-array_stack_rest_space(struct array_stack *stack);
-extern void
-array_stack_push(struct array_stack *stack, void *member);
-extern void *
-array_stack_pop(struct array_stack *stack);
+extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern void array_stack_cleanup(struct array_stack *stack);
+extern bool array_stack_is_full(struct array_stack *stack);
+extern bool array_stack_is_empty(struct array_stack *stack);
+extern struct array_stack * array_stack_create(void);
+extern uint32 array_stack_capacity(struct array_stack *stack);
+extern void array_stack_destroy(struct array_stack **stack);
+extern void array_stack_expand_space(struct array_stack *stack, uint32 extra);
+extern uint32 array_stack_rest_space(struct array_stack *stack);
+extern void array_stack_push(struct array_stack *stack, void *member);
+extern void * array_stack_pop(struct array_stack *stack);
 
-extern void
-dlinked_list_initial(struct doubly_linked_list *);
-extern void
-dlinked_list_insert_before(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_insert_after(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+extern void dlinked_list_initial(struct doubly_linked_list *);
+extern void dlinked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
 
 
 /* ARRAY STACK */

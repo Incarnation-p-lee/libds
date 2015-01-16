@@ -101,7 +101,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 dlinked_list_initial(&queue->head->link);
             } else {
-                dlinked_list_insert_before(&queue->head->link, &tmp->link);
+                dlinked_list_node_insert_before(&queue->head->link, &tmp->link);
                 queue->head = tmp;
             }
         }
@@ -125,7 +125,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 dlinked_list_initial(&queue->head->link);
             } else {
-                dlinked_list_insert_after(&queue->tail->link, &tmp->link);
+                dlinked_list_node_insert_after(&queue->tail->link, &tmp->link);
                 queue->tail = tmp;
             }
         }
@@ -148,7 +148,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
             if (next == queue->head) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                dlinked_list_lazy_remove_node(&queue->head->link);
+                dlinked_list_node_lazy_remove(&queue->head->link);
                 free_ds(queue->head);
                 queue->head = next;
             }
@@ -172,7 +172,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             if (previous == queue->tail) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                dlinked_list_lazy_remove_node(&queue->tail->link);
+                dlinked_list_node_lazy_remove(&queue->tail->link);
                 free_ds(queue->tail);
                 queue->tail = previous;
             }
@@ -204,7 +204,7 @@ doubly_end_queue_cleanup(struct doubly_end_queue *queue)
         if (tmp) {
             while (tmp != queue->tail) {
                 next = doubly_end_queue_list_next(tmp);
-                dlinked_list_lazy_remove_node(&tmp->link);
+                dlinked_list_node_lazy_remove(&tmp->link);
                 free_ds(tmp);
                 tmp = next;
             }

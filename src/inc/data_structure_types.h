@@ -21,7 +21,7 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    uint32                    index;
+    uint32                    id;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
@@ -110,4 +110,20 @@ struct doubly_end_queue {
     struct doubly_end_queue_list *tail;
 };
 
+/*
+ * collision chain of the same nice value
+ */
+struct collision_chain {
+    struct doubly_linked_list link;
+    sint64                    nice;
+};
+
+/*
+ * binary search tree
+ */
+struct binary_search_tree {
+    struct collision_chain    chain;
+    struct binary_search_tree *left;
+    struct binary_search_tree *right;
+};
 #endif

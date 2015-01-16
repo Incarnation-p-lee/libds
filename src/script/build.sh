@@ -75,6 +75,7 @@ do
     ;;
     "STATIC=1")
       static=1
+      lib_build=1
     ;;
   esac
 done
@@ -116,6 +117,9 @@ do
     continue
   ;;
     "src/lib/")
+    continue
+  ;;
+    "src/tree/")  # for temp ignore
     continue
   ;;
   esac

@@ -62,7 +62,7 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    uint32                    index;
+    uint32                    id;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
@@ -151,6 +151,22 @@ struct doubly_end_queue {
     struct doubly_end_queue_list *tail;
 };
 
+/*
+ * collision chain of the same nice value
+ */
+struct collision_chain {
+    struct doubly_linked_list link;
+    sint64                    nice;
+};
+
+/*
+ * binary search tree
+ */
+struct binary_search_tree {
+    struct collision_chain    chain;
+    struct binary_search_tree *left;
+    struct binary_search_tree *right;
+};
 #endif
 /* END of ./src/inc/data_structure_types.h */
 
@@ -215,51 +231,31 @@ libds_log_print(enum log_level lvl, const char *msg);
     extern void free_wrap(void *ptr);
 #endif
 
-extern void
-libds_log_print(enum log_level lvl, const char *msg);
+extern void libds_log_print(enum log_level lvl, const char *msg);
 
 /* doubly linked list, Circular. */
-extern struct doubly_linked_list *
-dlinked_list_create(void);
-extern void
-dlinked_list_initial(struct doubly_linked_list *);
-extern struct doubly_linked_list *
-dlinked_list_generate(sint32 *val, uint32 size);
-extern void
-dlinked_list_append_node(struct doubly_linked_list *node, uint32 value);
-extern struct doubly_linked_list *
-dlinked_list_next_node(struct doubly_linked_list *node);
-extern struct doubly_linked_list *
-dlinked_list_previous_node(struct doubly_linked_list *node);
-extern void
-dlinked_list_insert_after(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_insert_before(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_destroy(struct doubly_linked_list **head);
-extern uint32
-dlinked_list_length(struct doubly_linked_list *head);
-extern struct doubly_linked_list *
-dlinked_list_get_node_by_index(struct doubly_linked_list *head, uint32 index);
-extern void
-dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head);
-extern void
-dlinked_list_exchange_node(struct doubly_linked_list *fir,
-    struct doubly_linked_list *sec);
-extern bool
-dlinked_list_is_contains(struct doubly_linked_list *tar,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_serialize(struct doubly_linked_list *head);
-extern struct doubly_linked_list *
-dlinked_list_remove_node(struct doubly_linked_list *node);
-extern void
-dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
-extern void
-dlinked_list_iterate(struct doubly_linked_list *head,
-    void (*handler)(struct doubly_linked_list *));
+extern struct doubly_linked_list * dlinked_list_create(void);
+extern struct doubly_linked_list * dlinked_list_node_create(void *val, uint32 id);
+extern void dlinked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
+extern void dlinked_list_initial(struct doubly_linked_list *);
+extern struct doubly_linked_list * dlinked_list_generate(uint32 *id, uint32 size);
+extern void dlinked_list_node_set_val(struct doubly_linked_list *node, void *val);
+extern void * dlinked_list_node_get_val(struct doubly_linked_list *node);
+extern void dlinked_list_node_append(struct doubly_linked_list *node, uint32 id);
+extern struct doubly_linked_list * dlinked_list_node_next(struct doubly_linked_list *node);
+extern struct doubly_linked_list * dlinked_list_node_previous(struct doubly_linked_list *node);
+extern void dlinked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_destroy(struct doubly_linked_list **head);
+extern uint32 dlinked_list_length(struct doubly_linked_list *head);
+extern struct doubly_linked_list * dlinked_list_node_get_by_index(struct doubly_linked_list *head, uint32 index);
+extern void dlinked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head);
+extern void dlinked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
+extern bool dlinked_list_contains_p(struct doubly_linked_list *tar, struct doubly_linked_list *node);
+extern void dlinked_list_serialize(struct doubly_linked_list *head);
+extern struct doubly_linked_list * dlinked_list_node_remove(struct doubly_linked_list *node);
+extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
+extern void dlinked_list_iterate(struct doubly_linked_list *head, void (*handler)(struct doubly_linked_list *));
 
 
 /* single linked list, Circular. */
@@ -322,42 +318,24 @@ slinked_list_iterate(struct single_linked_list *head,
 #endif
 
 
-extern void
-libds_log_print(enum log_level lvl, const char *msg);
+extern void libds_log_print(enum log_level lvl, const char *msg);
 
-extern void
-array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
-extern void
-array_stack_cleanup(struct array_stack *stack);
-extern bool
-array_stack_is_full(struct array_stack *stack);
-extern bool
-array_stack_is_empty(struct array_stack *stack);
-extern struct array_stack *
-array_stack_create(void);
-extern uint32
-array_stack_capacity(struct array_stack *stack);
-extern void
-array_stack_destroy(struct array_stack **stack);
-extern void
-array_stack_expand_space(struct array_stack *stack, uint32 extra);
-extern uint32
-array_stack_rest_space(struct array_stack *stack);
-extern void
-array_stack_push(struct array_stack *stack, void *member);
-extern void *
-array_stack_pop(struct array_stack *stack);
+extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern void array_stack_cleanup(struct array_stack *stack);
+extern bool array_stack_is_full(struct array_stack *stack);
+extern bool array_stack_is_empty(struct array_stack *stack);
+extern struct array_stack * array_stack_create(void);
+extern uint32 array_stack_capacity(struct array_stack *stack);
+extern void array_stack_destroy(struct array_stack **stack);
+extern void array_stack_expand_space(struct array_stack *stack, uint32 extra);
+extern uint32 array_stack_rest_space(struct array_stack *stack);
+extern void array_stack_push(struct array_stack *stack, void *member);
+extern void * array_stack_pop(struct array_stack *stack);
 
-extern void
-dlinked_list_initial(struct doubly_linked_list *);
-extern void
-dlinked_list_insert_before(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_insert_after(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
-extern void
-dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
+extern void dlinked_list_initial(struct doubly_linked_list *);
+extern void dlinked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
 
 
 /* ARRAY STACK */
@@ -451,19 +429,12 @@ doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *))
     extern void free_wrap(void *ptr);
 #endif
 
-extern void
-libds_log_print(enum log_level lvl, const char *msg);
-extern void
-dlinked_list_initial(struct doubly_linked_list *);
-extern struct doubly_linked_list *
-dlinked_list_next_node(struct doubly_linked_list *node);
-extern struct doubly_linked_list *
-dlinked_list_previous_node(struct doubly_linked_list *node);
-extern void
-dlinked_list_lazy_remove_node(struct doubly_linked_list *node);
-extern void
-dlinked_list_insert_after(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node);
+extern void libds_log_print(enum log_level lvl, const char *msg);
+extern void dlinked_list_initial(struct doubly_linked_list *);
+extern struct doubly_linked_list * dlinked_list_node_next(struct doubly_linked_list *node);
+extern struct doubly_linked_list * dlinked_list_node_previous(struct doubly_linked_list *node);
+extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
+extern void dlinked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 
 
 /* ARRAY STACK */

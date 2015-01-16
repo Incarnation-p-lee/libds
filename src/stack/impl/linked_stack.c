@@ -74,7 +74,7 @@ linked_stack_space_next_node(struct linked_stack_space *node)
 
     next = NULL;
     if (node) {
-        tmp = dlinked_list_next_node(&node->link);
+        tmp = dlinked_list_node_next(&node->link);
         if (tmp) {
             next = UNOFFSET_OF(tmp, struct linked_stack_space, link);
         }
@@ -95,7 +95,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
 
     previous = NULL;
     if (node) {
-        tmp = dlinked_list_previous_node(&node->link);
+        tmp = dlinked_list_node_previous(&node->link);
         if (tmp) {
             previous = UNOFFSET_OF(tmp, struct linked_stack_space, link);
         }
@@ -115,7 +115,7 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 
     next = NULL;
     if (node) {
-        dlinked_list_lazy_remove_node(&node->link);
+        dlinked_list_node_lazy_remove(&node->link);
         next = linked_stack_space_next_node(node);
 
         /* If only one node */
@@ -157,7 +157,7 @@ linked_stack_expand_space(struct linked_stack *stack, uint32 dim)
             } else {
                 node->space.dim = dim;
                 node->space.sp = node->space.bp;
-                dlinked_list_insert_after(&last->link, &node->link);
+                dlinked_list_node_insert_after(&last->link, &node->link);
             }
         }
     }

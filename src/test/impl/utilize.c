@@ -30,7 +30,7 @@ static void
 dlinked_list_iterate_handler(struct doubly_linked_list *node)
 {
     if (node) {
-        node->index = 0xDEADu;
+        node->id = 0xDEADu;
     }
 
     return;
