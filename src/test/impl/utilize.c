@@ -40,7 +40,7 @@ static void
 slinked_list_iterate_handler(struct single_linked_list *node)
 {
     if (node) {
-        node->index = 0xDAEDu;
+        node->id = 0xDAEDu;
     }
 
     return;

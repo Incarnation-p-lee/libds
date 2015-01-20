@@ -35,22 +35,26 @@ void dlinked_list_iterate(struct doubly_linked_list *head, void (*handler)(struc
 
 /* single linked list, Circular. */
 struct single_linked_list * slinked_list_create(void);
-void slinked_list_initial(struct single_linked_list *);
-struct single_linked_list * slinked_list_generate(sint32 *val, uint32 size);
-void slinked_list_append_node(struct single_linked_list *node, uint32 value);
-struct single_linked_list * slinked_list_next_node(struct single_linked_list *node);
-struct single_linked_list * slinked_list_previous_node(struct single_linked_list *node);
-void slinked_list_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
-void slinked_list_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
+struct single_linked_list * slinked_list_node_create(void *val, uint32 id);
+void slinked_list_initial(struct single_linked_list *head);
+void slinked_list_node_initial(struct single_linked_list *head, void *val, uint32 id);
+struct single_linked_list * slinked_list_generate(uint32 *id, uint32 size);
+void slinked_list_node_set_val(struct single_linked_list *node, void *val);
+void * slinked_list_node_get_val(struct single_linked_list *node);
+void slinked_list_node_append(struct single_linked_list *node, uint32 value);
+struct single_linked_list * slinked_list_node_next(struct single_linked_list *node);
+struct single_linked_list * slinked_list_node_previous(struct single_linked_list *node);
+void slinked_list_node_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
+void slinked_list_node_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
 void slinked_list_destroy(struct single_linked_list **head);
 uint32 slinked_list_length(struct single_linked_list *head);
-struct single_linked_list * slinked_list_get_node_by_index(struct single_linked_list *head, uint32 index);
+struct single_linked_list * slinked_list_node_get_by_index(struct single_linked_list *head, uint32 index);
 void slinked_list_print(FILE *fd, char *msg, struct single_linked_list *head);
-void slinked_list_exchange_node(struct single_linked_list *fir, struct single_linked_list *sec);
-bool slinked_list_is_contains(struct single_linked_list *tar, struct single_linked_list *node);
+void slinked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
+bool slinked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 void slinked_list_serialize(struct single_linked_list *head);
-struct single_linked_list * slinked_list_remove_node(struct single_linked_list *node);
-void slinked_list_lazy_remove_node(struct single_linked_list *node);
+struct single_linked_list * slinked_list_node_remove(struct single_linked_list *node);
+void slinked_list_node_lazy_remove(struct single_linked_list *node);
 void slinked_list_iterate(struct single_linked_list *head, void (*handler)(struct single_linked_list *));
 
 #endif

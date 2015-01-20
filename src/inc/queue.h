@@ -78,5 +78,4 @@ static inline void doubly_end_queue_last_node_clean(struct doubly_end_queue *que
 static inline struct doubly_end_queue_list * doubly_end_queue_list_next(struct doubly_end_queue_list *node);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
 /* END OF DOUBLY END QUEUE */
-
 #endif

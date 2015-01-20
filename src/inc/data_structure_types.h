@@ -15,7 +15,7 @@
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    uint32                    index;
+    uint32                    id;
     void                      *val;
     struct single_linked_list *next;
 };

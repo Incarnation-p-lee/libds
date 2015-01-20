@@ -28,11 +28,7 @@ foreach (@export) {
     while (<EXPORT>) {
         my $line = $_;
         if (/static/) { # filter static function
-            while (<EXPORT>) {
-                $line = $_;
-                last if $line =~ /;$/;
-            }
-            next;
+            next if $line =~ /\);$/;
         } elsif (/^struct\s/) {
             unless (/\{$/) {
                 $line = 'extern ' . $_;
@@ -45,6 +41,8 @@ foreach (@export) {
             $line = 'extern ' . $_;
         } elsif (/^FILE/) {
             next;
+        } elsif (/^extern/) {
+            next;
         }
         print OUT $line;
     }
@@ -53,5 +51,5 @@ foreach (@export) {
     close EXPORT;
 }
 
-print OUT "#endif";
+print OUT "#endif /* END OF FILE */";
 close OUT;
