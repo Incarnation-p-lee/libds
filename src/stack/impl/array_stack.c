@@ -48,7 +48,7 @@ array_stack_destroy(struct array_stack **stack)
  *   If extra is zero, expand to 2x + min.
  */
 void
-array_stack_expand_space(struct array_stack *stack, uint32 extra)
+array_stack_space_expand(struct array_stack *stack, uint32 extra)
 {
     uint32 new_size;
     void **new_addr;
@@ -79,9 +79,9 @@ array_stack_expand_space(struct array_stack *stack, uint32 extra)
  *   If NULL _ARGV_, _RETURN_ true.
  */
 bool
-array_stack_is_full(struct array_stack *stack)
+array_stack_full_p(struct array_stack *stack)
 {
-    return 0u == array_stack_rest_space(stack) ? true : false;
+    return 0u == array_stack_space_rest(stack) ? true : false;
 }
 
 /*
@@ -99,7 +99,7 @@ array_stack_capacity(struct array_stack *stack)
  *   If NULL _ARGV_, _RETURN_ 0.
  */
 uint32
-array_stack_rest_space(struct array_stack *stack)
+array_stack_space_rest(struct array_stack *stack)
 {
     void **limit;
     void **tmp;
@@ -127,8 +127,8 @@ void
 array_stack_push(struct array_stack *stack, void *member)
 {
     if (stack) {
-        if (array_stack_is_full(stack)) {
-            array_stack_expand_space(stack, EXPAND_STACK_SPACE_MIN);
+        if (array_stack_full_p(stack)) {
+            array_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
         }
         *stack->space.sp++ = member;
     }
@@ -146,7 +146,7 @@ array_stack_pop(struct array_stack *stack)
     void *data;
 
     data = NULL;
-    if (stack && !array_stack_is_empty(stack)) {
+    if (stack && !array_stack_empty_p(stack)) {
         data = *(--stack->space.sp);
     }
 
@@ -158,7 +158,7 @@ array_stack_pop(struct array_stack *stack)
  *  If NULL _ARGV_, _RETURN_ false.
  */
 bool
-array_stack_is_empty(struct array_stack *stack)
+array_stack_empty_p(struct array_stack *stack)
 {
     bool is_empty;
 

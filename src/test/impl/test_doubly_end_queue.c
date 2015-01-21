@@ -73,7 +73,7 @@ test_doubly_end_queue_length(void)
 }
 
 static void
-test_doubly_end_queue_is_empty(void)
+test_doubly_end_queue_empty_p(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -81,22 +81,22 @@ test_doubly_end_queue_is_empty(void)
     queue = doubly_end_queue_create();
     is_passed = true;
 
-    if (doubly_end_queue_is_empty(NULL)) {
+    if (doubly_end_queue_empty_p(NULL)) {
         is_passed = false;
     }
 
-    if (!doubly_end_queue_is_empty(queue)) {
+    if (!doubly_end_queue_empty_p(queue)) {
         is_passed = false;
     }
 
     doubly_end_queue_head_enter(queue, queue);
-    if (doubly_end_queue_is_empty(queue)) {
+    if (doubly_end_queue_empty_p(queue)) {
         is_passed = false;
     }
 
     doubly_end_queue_destroy(&queue);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_is_empty), is_passed);
+    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), is_passed);
     return;
 }
 
@@ -112,7 +112,7 @@ test_doubly_end_queue_head_enter(void)
 
     doubly_end_queue_head_enter(queue, queue);
     tmp = queue->tail;
-    if (doubly_end_queue_is_empty(queue) || tmp != queue->tail) {
+    if (doubly_end_queue_empty_p(queue) || tmp != queue->tail) {
         is_passed = false;
     }
 
@@ -139,7 +139,7 @@ test_doubly_end_queue_tail_enter(void)
 
     doubly_end_queue_tail_enter(queue, queue);
     tmp = queue->head;
-    if (doubly_end_queue_is_empty(queue) || tmp != queue->head) {
+    if (doubly_end_queue_empty_p(queue) || tmp != queue->head) {
         is_passed = false;
     }
 
@@ -168,7 +168,7 @@ test_doubly_end_queue_head_leave(void)
     doubly_end_queue_head_enter(queue, queue);
     doubly_end_queue_head_enter(queue, queue);
     tmp = queue->tail;
-    if (doubly_end_queue_is_empty(queue)) {
+    if (doubly_end_queue_empty_p(queue)) {
         is_passed = false;
     }
 
@@ -199,7 +199,7 @@ test_doubly_end_queue_tail_leave(void)
     doubly_end_queue_tail_enter(queue, queue);
     doubly_end_queue_tail_enter(queue, queue);
     tmp = queue->head;
-    if (doubly_end_queue_is_empty(queue)) {
+    if (doubly_end_queue_empty_p(queue)) {
         is_passed = false;
     }
 

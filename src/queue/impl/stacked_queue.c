@@ -33,13 +33,13 @@ stacked_queue_destroy(struct stacked_queue **queue)
 }
 
 void
-stacked_queue_expand_space(struct stacked_queue *queue, uint32 extra)
+stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
 {
     uint32 capacity;
 
     if (queue) {
-        array_stack_expand_space(queue->enter, extra);
-        array_stack_expand_space(queue->leave, extra);
+        array_stack_space_expand(queue->enter, extra);
+        array_stack_space_expand(queue->leave, extra);
 
         capacity = array_stack_capacity(queue->enter);
         queue->dim = capacity;
@@ -63,14 +63,14 @@ stacked_queue_capacity(struct stacked_queue *queue)
  * NULL stacked queue will _RETURN_ 0.
  */
 uint32
-stacked_queue_rest_space(struct stacked_queue *queue)
+stacked_queue_space_rest(struct stacked_queue *queue)
 {
     uint32 rest;
 
     rest = 0u;
     if (queue) {
-        rest = array_stack_rest_space(queue->enter);
-        if (array_stack_is_empty(queue->leave)) {
+        rest = array_stack_space_rest(queue->enter);
+        if (array_stack_empty_p(queue->leave)) {
             rest += array_stack_capacity(queue->leave);
         }
     }
@@ -81,31 +81,31 @@ stacked_queue_rest_space(struct stacked_queue *queue)
  * NULL stacked queue will be treated as full, _RETURN_ true.
  */
 bool
-stacked_queue_is_full(struct stacked_queue *queue)
+stacked_queue_full_p(struct stacked_queue *queue)
 {
-    return 0u == stacked_queue_rest_space(queue) ? true : false;
+    return 0u == stacked_queue_space_rest(queue) ? true : false;
 }
 
 /*
  * NULL stacked queue will be treated as full, _RETURN_ false.
  */
 bool
-stacked_queue_is_empty(struct stacked_queue *queue)
+stacked_queue_empty_p(struct stacked_queue *queue)
 {
-    return queue ? array_stack_is_empty(queue->enter)
-            && array_stack_is_empty(queue->leave) : false;
+    return queue ? array_stack_empty_p(queue->enter)
+            && array_stack_empty_p(queue->leave) : false;
 }
 
 void
 stacked_queue_enter(struct stacked_queue *queue, void *member)
 {
     if (queue && member) {
-        if (array_stack_is_full(queue->enter)
-            && array_stack_is_empty(queue->leave)) {
-            stacked_queue_dump_stack(queue->enter, queue->leave);
-        } else if (array_stack_is_full(queue->enter)) {
-            array_stack_expand_space(queue->enter, 0u);
-            array_stack_expand_space(queue->leave, 0u);
+        if (array_stack_full_p(queue->enter)
+            && array_stack_empty_p(queue->leave)) {
+            stacked_queue_stack_dump(queue->enter, queue->leave);
+        } else if (array_stack_full_p(queue->enter)) {
+            array_stack_space_expand(queue->enter, 0u);
+            array_stack_space_expand(queue->leave, 0u);
         }
         array_stack_push(queue->enter, member);
     }
@@ -113,14 +113,14 @@ stacked_queue_enter(struct stacked_queue *queue, void *member)
 }
 
 static inline void
-stacked_queue_dump_stack(struct array_stack *from,
+stacked_queue_stack_dump(struct array_stack *from,
     struct array_stack *to)
 {
     if (from && to) {
-        if (array_stack_rest_space(from) > array_stack_rest_space(to)) {
+        if (array_stack_space_rest(from) > array_stack_space_rest(to)) {
             pr_log_info("Operation may result in array stack overflow.\n");
         } else {
-            while (!array_stack_is_empty(from)) {
+            while (!array_stack_empty_p(from)) {
                 array_stack_push(to, array_stack_pop(from));
             }
         }
@@ -135,9 +135,9 @@ stacked_queue_leave(struct stacked_queue *queue)
 
     retval = NULL;
     if (queue) {
-        if (!stacked_queue_is_empty(queue)) {
-            if (array_stack_is_empty(queue->leave)) {
-                stacked_queue_dump_stack(queue->enter, queue->leave);
+        if (!stacked_queue_empty_p(queue)) {
+            if (array_stack_empty_p(queue->leave)) {
+                stacked_queue_stack_dump(queue->enter, queue->leave);
             }
             retval = array_stack_pop(queue->leave);
         }

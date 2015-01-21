@@ -36,7 +36,7 @@ test_array_stack_destroy(void)
 }
 
 static void
-test_array_stack_expand_space(void)
+test_array_stack_space_expand(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -46,25 +46,25 @@ test_array_stack_expand_space(void)
     is_passed = true;
     stk_size = ins->space.dim;
 
-    array_stack_expand_space(ins, 0);
+    array_stack_space_expand(ins, 0);
     if (ins->space.dim != stk_size * 2 + 32) {
         is_passed = false;
     }
 
     stk_size = ins->space.dim;
-    array_stack_expand_space(ins, 1024);
+    array_stack_space_expand(ins, 1024);
     if (ins->space.dim != stk_size + 1024) {
         is_passed = false;
     }
 
     array_stack_destroy(&ins);
 
-    test_result_print(SYM_2_STR(array_stack_expand_space), is_passed);
+    test_result_print(SYM_2_STR(array_stack_space_expand), is_passed);
     return;
 }
 
 static void
-test_array_stack_is_full(void)
+test_array_stack_full_p(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -76,7 +76,7 @@ test_array_stack_is_full(void)
     tmp = ins->space.dim;
     mem = &tmp;
 
-    if (false != array_stack_is_full(ins)) {
+    if (false != array_stack_full_p(ins)) {
         is_passed = false;
     }
 
@@ -85,12 +85,12 @@ test_array_stack_is_full(void)
         tmp--;
     }
 
-    if (true != array_stack_is_full(ins)) {
+    if (true != array_stack_full_p(ins)) {
         is_passed = false;
     }
     array_stack_destroy(&ins);
 
-    test_result_print(SYM_2_STR(array_stack_is_full), is_passed);
+    test_result_print(SYM_2_STR(array_stack_full_p), is_passed);
     return;
 }
 
@@ -116,7 +116,7 @@ test_array_stack_capacity(void)
     }
 
     extra = 1024u;
-    array_stack_expand_space(ins, extra);
+    array_stack_space_expand(ins, extra);
     if (stk_size + extra != array_stack_capacity(ins)) {
         is_passed = false;
     }
@@ -128,7 +128,7 @@ test_array_stack_capacity(void)
 }
 
 static void
-test_array_stack_rest_space(void)
+test_array_stack_space_rest(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -138,22 +138,22 @@ test_array_stack_rest_space(void)
     stk_size = array_stack_capacity(ins);
     is_passed = true;
 
-    if (stk_size != array_stack_rest_space(ins)) {
+    if (stk_size != array_stack_space_rest(ins)) {
         is_passed = false;
     }
 
     array_stack_push(ins, &stk_size);
-    if (stk_size != array_stack_rest_space(ins) + 1u) {
+    if (stk_size != array_stack_space_rest(ins) + 1u) {
         is_passed = false;
     }
 
-    if (0u != array_stack_rest_space(NULL)) {
+    if (0u != array_stack_space_rest(NULL)) {
         is_passed = false;
     }
 
     array_stack_destroy(&ins);
 
-    test_result_print(SYM_2_STR(array_stack_rest_space), is_passed);
+    test_result_print(SYM_2_STR(array_stack_space_rest), is_passed);
     return;
 }
 
@@ -175,7 +175,7 @@ test_array_stack_push(void)
         tmp--;
     }
 
-    if (!array_stack_is_full(ins)) {
+    if (!array_stack_full_p(ins)) {
         is_passed = false;
     }
 
@@ -216,7 +216,7 @@ test_array_stack_pop(void)
 }
 
 static void
-test_array_stack_is_empty(void)
+test_array_stack_empty_p(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -224,22 +224,22 @@ test_array_stack_is_empty(void)
     ins = array_stack_create();
     is_passed = true;
 
-    if (false != array_stack_is_empty(NULL)) {
+    if (false != array_stack_empty_p(NULL)) {
         is_passed = false;
     }
 
-    if (true != array_stack_is_empty(ins)) {
+    if (true != array_stack_empty_p(ins)) {
         is_passed = false;
     }
 
     array_stack_push(ins, ins);
-    if (false != array_stack_is_empty(ins)) {
+    if (false != array_stack_empty_p(ins)) {
         is_passed = false;
     }
 
     array_stack_destroy(&ins);
 
-    test_result_print(SYM_2_STR(array_stack_is_empty), is_passed);
+    test_result_print(SYM_2_STR(array_stack_empty_p), is_passed);
     return;
 }
 
@@ -255,7 +255,7 @@ test_array_stack_cleanup(void)
     array_stack_push(ins, ins);
     array_stack_cleanup(ins);
 
-    if (true != array_stack_is_empty(ins)) {
+    if (true != array_stack_empty_p(ins)) {
         is_passed = false;
     }
 

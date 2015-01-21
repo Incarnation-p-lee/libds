@@ -40,7 +40,7 @@ test_stacked_queue_destroy(void)
 }
 
 static void
-test_stacked_queue_expand_space(void)
+test_stacked_queue_space_expand(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
@@ -52,7 +52,7 @@ test_stacked_queue_expand_space(void)
     capacity = stacked_queue_capacity(queue);
     extra = 1023;
 
-    stacked_queue_expand_space(queue, extra);
+    stacked_queue_space_expand(queue, extra);
     if (capacity + extra != stacked_queue_capacity(queue)) {
         is_passed = false;
     }
@@ -63,7 +63,7 @@ test_stacked_queue_expand_space(void)
     }
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_expand_space), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_space_expand), is_passed);
     return;
 }
 
@@ -84,7 +84,7 @@ test_stacked_queue_capacity(void)
         is_passed = false;
     }
 
-    stacked_queue_expand_space(queue, 0);
+    stacked_queue_space_expand(queue, 0);
     if (queue->dim != stacked_queue_capacity(queue)) {
         is_passed = false;
     }
@@ -95,7 +95,7 @@ test_stacked_queue_capacity(void)
 }
 
 static void
-test_stacked_queue_rest_space(void)
+test_stacked_queue_space_rest(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
@@ -105,26 +105,26 @@ test_stacked_queue_rest_space(void)
     is_passed = true;
     capacity = stacked_queue_capacity(queue);
 
-    if (0 != stacked_queue_rest_space(NULL)) {
+    if (0 != stacked_queue_space_rest(NULL)) {
         is_passed = false;
     }
 
-    if (capacity * 2 != stacked_queue_rest_space(queue)) {
+    if (capacity * 2 != stacked_queue_space_rest(queue)) {
         is_passed = false;
     }
 
     stacked_queue_enter(queue, queue);
-    if (capacity * 2 != stacked_queue_rest_space(queue) + 1) {
+    if (capacity * 2 != stacked_queue_space_rest(queue) + 1) {
         is_passed = false;
     }
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_rest_space), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_space_rest), is_passed);
     return;
 }
 
 static void
-test_stacked_queue_is_full(void)
+test_stacked_queue_full_p(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
@@ -136,15 +136,15 @@ test_stacked_queue_is_full(void)
     is_passed = true;
     cnt = 0;
 
-    if (!stacked_queue_is_full(NULL)) {
+    if (!stacked_queue_full_p(NULL)) {
         is_passed = false;
     }
 
-    if (stacked_queue_is_full(queue)) {
+    if (stacked_queue_full_p(queue)) {
         is_passed = false;
     }
 
-    while (!stacked_queue_is_full(queue)) {
+    while (!stacked_queue_full_p(queue)) {
         cnt++;
         stacked_queue_enter(queue, queue);
     }
@@ -154,17 +154,17 @@ test_stacked_queue_is_full(void)
         printf("cnt %d, capacity %d\n", cnt, capacity);
     }
 
-    if (!stacked_queue_is_full(queue)) {
+    if (!stacked_queue_full_p(queue)) {
         is_passed = false;
     }
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_is_full), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_full_p), is_passed);
     return;
 }
 
 static void
-test_stacked_queue_is_empty(void)
+test_stacked_queue_empty_p(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
@@ -172,21 +172,21 @@ test_stacked_queue_is_empty(void)
     queue = stacked_queue_create();
     is_passed = true;
 
-    if (!stacked_queue_is_empty(queue)) {
+    if (!stacked_queue_empty_p(queue)) {
         is_passed = false;
     }
 
-    if (stacked_queue_is_empty(NULL)) {
+    if (stacked_queue_empty_p(NULL)) {
         is_passed = false;
     }
 
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_is_empty(NULL)) {
+    if (stacked_queue_empty_p(NULL)) {
         is_passed = false;
     }
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_is_empty), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_empty_p), is_passed);
     return;
 }
 
@@ -206,9 +206,9 @@ test_stacked_queue_enter(void)
 
     do {
         stacked_queue_enter(queue, queue);
-    } while (!stacked_queue_is_full(queue));
+    } while (!stacked_queue_full_p(queue));
 
-    if (!stacked_queue_is_full(queue)) {
+    if (!stacked_queue_full_p(queue)) {
         is_passed = false;
     }
 
@@ -228,13 +228,13 @@ test_stacked_queue_leave(void)
 
     do {
         stacked_queue_enter(queue, queue);
-    } while (!stacked_queue_is_full(queue));
+    } while (!stacked_queue_full_p(queue));
 
     do {
         if (queue != stacked_queue_leave(queue)) {
             is_passed = false;
         }
-    } while (!stacked_queue_is_empty(queue));
+    } while (!stacked_queue_empty_p(queue));
 
     stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_leave), is_passed);
@@ -251,16 +251,16 @@ test_stacked_queue_cleanup(void)
     is_passed = true;
 
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_is_full(queue)) {
+    if (stacked_queue_full_p(queue)) {
         is_passed = false;
     }
 
-    if (stacked_queue_is_empty(queue)) {
+    if (stacked_queue_empty_p(queue)) {
         is_passed = false;
     }
 
     stacked_queue_cleanup(queue);
-    if (!stacked_queue_is_empty(queue)) {
+    if (!stacked_queue_empty_p(queue)) {
         is_passed = false;
     }
 
@@ -282,7 +282,7 @@ test_stacked_queue_iterate(void)
 
     do {
         stacked_queue_enter(queue, &tmp);
-    } while (!stacked_queue_is_full(queue));
+    } while (!stacked_queue_full_p(queue));
 
     stacked_queue_iterate(queue, queue_iterate_handler);
     if (tmp != stacked_queue_capacity(queue) * 2) {

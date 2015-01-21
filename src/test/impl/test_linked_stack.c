@@ -44,7 +44,7 @@ test_linked_stack_destroy(void)
 }
 
 static void
-test_linked_stack_expand_space(void)
+test_linked_stack_space_expand(void)
 {
     bool is_passed;
     struct linked_stack *stack;
@@ -56,19 +56,19 @@ test_linked_stack_expand_space(void)
     extra = 1024u;
     capacity = linked_stack_capacity(stack);
 
-    linked_stack_expand_space(stack, extra);
+    linked_stack_space_expand(stack, extra);
     if (capacity + extra != linked_stack_capacity(stack)) {
         is_passed = false;
     }
 
     linked_stack_destroy(&stack);
 
-    test_result_print(SYM_2_STR(linked_stack_expand_space), is_passed);
+    test_result_print(SYM_2_STR(linked_stack_space_expand), is_passed);
     return;
 }
 
 static void
-test_linked_stack_is_full(void)
+test_linked_stack_full_p(void)
 {
     bool is_passed;
     struct linked_stack *stack;
@@ -80,7 +80,7 @@ test_linked_stack_is_full(void)
     is_passed = true;
     capacity = linked_stack_capacity(stack);
 
-    if (linked_stack_is_full(stack)) {
+    if (linked_stack_full_p(stack)) {
         is_passed = false;
     }
 
@@ -90,19 +90,19 @@ test_linked_stack_is_full(void)
         linked_stack_push(stack, iter++);
     }
 
-    if (!linked_stack_is_full(stack)) {
+    if (!linked_stack_full_p(stack)) {
         is_passed = false;
     }
 
     free_ds(data);
     linked_stack_destroy(&stack);
 
-    test_result_print(SYM_2_STR(linked_stack_is_full), is_passed);
+    test_result_print(SYM_2_STR(linked_stack_full_p), is_passed);
     return;
 }
 
 static void
-test_linked_stack_rest_space(void)
+test_linked_stack_space_rest(void)
 {
     bool is_passed;
     struct linked_stack *stack;
@@ -112,18 +112,18 @@ test_linked_stack_rest_space(void)
     is_passed = true;
 
     capacity = linked_stack_capacity(stack);
-    if (capacity != linked_stack_rest_space(stack)) {
+    if (capacity != linked_stack_space_rest(stack)) {
         is_passed = false;
     }
 
     linked_stack_push(stack, &is_passed);
-    if (capacity != linked_stack_rest_space(stack) + 1u) {
+    if (capacity != linked_stack_space_rest(stack) + 1u) {
         is_passed = false;
     }
 
     linked_stack_destroy(&stack);
 
-    test_result_print(SYM_2_STR(linked_stack_rest_space), is_passed);
+    test_result_print(SYM_2_STR(linked_stack_space_rest), is_passed);
     return;
 }
 
@@ -144,7 +144,7 @@ test_linked_stack_capacity(void)
 
     extra = 1023u;
     capacity = linked_stack_capacity(stack);
-    linked_stack_expand_space(stack, extra);
+    linked_stack_space_expand(stack, extra);
     if (capacity + extra != linked_stack_capacity(stack)) {
         is_passed = false;
     }
@@ -171,12 +171,12 @@ test_linked_stack_push(void)
     while (tmp > 0) {
         linked_stack_push(stack, &is_passed);
         tmp--;
-        if (tmp != linked_stack_rest_space(stack)) {
+        if (tmp != linked_stack_space_rest(stack)) {
             is_passed = false;
         }
     }
 
-    if (!linked_stack_is_full(stack)) {
+    if (!linked_stack_full_p(stack)) {
         is_passed = false;
     }
 
@@ -218,7 +218,7 @@ test_linked_stack_pop(void)
 }
 
 static void
-test_linked_stack_is_empty(void)
+test_linked_stack_empty_p(void)
 {
     bool is_passed;
     struct linked_stack *stack;
@@ -227,7 +227,7 @@ test_linked_stack_is_empty(void)
     stack = linked_stack_create();
     is_passed = true;
 
-    if (!linked_stack_is_empty(stack)) {
+    if (!linked_stack_empty_p(stack)) {
         is_passed = false;
     }
 
@@ -236,13 +236,13 @@ test_linked_stack_is_empty(void)
         linked_stack_push(stack, &is_passed);
         tmp--;
     }
-    if (linked_stack_is_empty(stack)) {
+    if (linked_stack_empty_p(stack)) {
         is_passed = false;
     }
 
     linked_stack_destroy(&stack);
 
-    test_result_print(SYM_2_STR(linked_stack_is_empty), is_passed);
+    test_result_print(SYM_2_STR(linked_stack_empty_p), is_passed);
     return;
 }
 
@@ -257,12 +257,12 @@ test_linked_stack_cleanup(void)
     is_passed = true;
 
     linked_stack_push(stack, &is_passed);
-    if (linked_stack_is_empty(stack)) {
+    if (linked_stack_empty_p(stack)) {
         is_passed = false;
     }
 
     linked_stack_cleanup(stack);
-    if (!linked_stack_is_empty(stack)) {
+    if (!linked_stack_empty_p(stack)) {
         is_passed = false;
     }
 

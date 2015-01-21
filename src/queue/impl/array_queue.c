@@ -37,7 +37,7 @@ array_queue_destroy(struct array_queue **queue)
 }
 
 void
-array_queue_expand_space(struct array_queue *queue, uint32 extra)
+array_queue_space_expand(struct array_queue *queue, uint32 extra)
 {
     uint32 old_size;
     uint32 new_size;
@@ -67,7 +67,7 @@ array_queue_expand_space(struct array_queue *queue, uint32 extra)
     }
 
     /* No need to do if (queue->space.front < queue->space.rear) */
-    if ((queue->space.front == queue->space.rear && array_queue_is_full(queue))
+    if ((queue->space.front == queue->space.rear && array_queue_full_p(queue))
         || queue->space.front > queue->space.rear) {
         lmt = queue->space.front;
         to = queue->space.base + new_size;
@@ -89,7 +89,7 @@ array_queue_capacity(struct array_queue *queue)
  * NULL array queue will _RETURN_ 0.
  */
 uint32
-array_queue_rest_space(struct array_queue *queue)
+array_queue_space_rest(struct array_queue *queue)
 {
     return queue ? queue->space.rest : 0u;
 }
@@ -98,23 +98,23 @@ array_queue_rest_space(struct array_queue *queue)
  * NULL array queue will be treated as full, _RETURN_ true.
  */
 bool
-array_queue_is_full(struct array_queue *queue)
+array_queue_full_p(struct array_queue *queue)
 {
-    return 0u == array_queue_rest_space(queue) ? true : false;
+    return 0u == array_queue_space_rest(queue) ? true : false;
 }
 
 /*
  * NULL array queue will be treated as full, _RETURN_ false.
  */
 bool
-array_queue_is_empty(struct array_queue *queue)
+array_queue_empty_p(struct array_queue *queue)
 {
     bool is_empty;
 
     is_empty = false;
     if (queue) {
         is_empty = array_queue_capacity(queue)
-            == array_queue_rest_space(queue) ? true : false;
+            == array_queue_space_rest(queue) ? true : false;
     }
     return is_empty;
 }
@@ -123,8 +123,8 @@ void
 array_queue_enter(struct array_queue *queue, void *member)
 {
     if (queue && member) {
-        if (array_queue_is_full(queue)) {
-            array_queue_expand_space(queue, 0u);
+        if (array_queue_full_p(queue)) {
+            array_queue_space_expand(queue, 0u);
         }
 
         *queue->space.rear++ = member;
@@ -143,7 +143,7 @@ array_queue_leave(struct array_queue *queue)
 
     retval = NULL;
     if (queue) {
-        if (!array_queue_is_empty(queue)) {
+        if (!array_queue_empty_p(queue)) {
             retval = *queue->space.front++;
             if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
                 queue->space.front = queue->space.base;
@@ -178,7 +178,7 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
     uint32 capacity;
 
     if (queue && handler) {
-        if (!array_queue_is_empty(queue)) {
+        if (!array_queue_empty_p(queue)) {
             capacity = array_queue_capacity(queue);
             lmt = queue->space.base + capacity;
             iter = queue->space.front;

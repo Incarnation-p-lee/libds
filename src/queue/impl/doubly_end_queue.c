@@ -33,7 +33,7 @@ doubly_end_queue_length(struct doubly_end_queue *queue)
 
     retval = 0u;
     if (queue) {
-        if (!doubly_end_queue_is_empty(queue)) {
+        if (!doubly_end_queue_empty_p(queue)) {
             tmp = queue->head;
             do {
                 tmp = doubly_end_queue_list_next(tmp);
@@ -72,7 +72,7 @@ doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
  * NULL _ARGV_ will be treated as full, _RETURN_ false.
  */
 bool
-doubly_end_queue_is_empty(struct doubly_end_queue *queue)
+doubly_end_queue_empty_p(struct doubly_end_queue *queue)
 {
     bool is_empty;
 
@@ -96,7 +96,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
             pr_log_err("Fail to get memory from system.\n");
         } else {
             tmp->val = member;
-            if (doubly_end_queue_is_empty(queue)) {
+            if (doubly_end_queue_empty_p(queue)) {
                 queue->head = tmp;
                 queue->tail = tmp;
                 dlinked_list_initial(&queue->head->link);
@@ -120,7 +120,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
             pr_log_err("Fail to get memory from system.\n");
         } else {
             tmp->val = member;
-            if (doubly_end_queue_is_empty(queue)) {
+            if (doubly_end_queue_empty_p(queue)) {
                 queue->head = tmp;
                 queue->tail = tmp;
                 dlinked_list_initial(&queue->head->link);
@@ -141,7 +141,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
 
     retval = NULL;
     if (queue) {
-        if (!doubly_end_queue_is_empty(queue)) {
+        if (!doubly_end_queue_empty_p(queue)) {
             retval = queue->head->val;
             next = doubly_end_queue_list_next(queue->head);
 
@@ -165,7 +165,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
 
     retval = NULL;
     if (queue) {
-        if (!doubly_end_queue_is_empty(queue)) {
+        if (!doubly_end_queue_empty_p(queue)) {
             retval = queue->tail->val;
             previous = doubly_end_queue_list_previous(queue->tail);
 
