@@ -1,9 +1,10 @@
-include ../base.Makefile
+include ./src/base.Makefile
 
-INCDIR  =../inc
-SRC     =linked_list.c
+INCDIR  =./src/inc
+SRC     =src/linked_list/linked_list.c
 OBJ     =$(patsubst %.c, %.o, $(SRC))
 INC     +=-I$(INCDIR)
 
 $(OBJ):%.o:%.c
 	$(CC) $(CFLAG) $(INC) -o $@ $<
+

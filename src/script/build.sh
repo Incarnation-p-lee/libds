@@ -100,10 +100,29 @@ perl src/script/export_api_include.plx
 cp -v src/inc/ds.h $objdir/out/
 
 function compile_obj() {
-  cd $1 > /dev/null
-  make "ARGV_CFG=$argv_cfg"
-  cd - > /dev/null
+  make "ARGV_CFG=$argv_cfg" -f $1Makefile
+  if [ "$?" -ne "0" ]
+  then
+    exit $?
+  fi
   mv -v $1*.o $objdir
+}
+
+function generate_makfile {
+  tmp=${1#src/}
+  module=${tmp%/}
+  cat > $1Makefile << EOF
+include ./src/base.Makefile
+
+INCDIR  =./src/inc
+SRC     =$1$module.c
+OBJ     =\$(patsubst %.c, %.o, \$(SRC))
+INC     +=-I\$(INCDIR)
+
+\$(OBJ):%.o:%.c
+	\$(CC) \$(CFLAG) \$(INC) -o \$@ $<
+
+EOF
 }
 
 # compiling .o files for all subdir
@@ -124,11 +143,13 @@ do
   ;;
   esac
 
+  generate_makfile $dir
   compile_obj $dir
 done
 
 # compiling main.o
 compile_obj "src/"
+
 
 # generate makefile for obj_out
 sh src/script/update_lk_mk.sh "static=$static"
