@@ -26,8 +26,8 @@ static void doubly_end_queue_unit_test(void);
 
 static void test_result_print(char *name, bool passed);
 static sint32 * int_array_generate(sint32 size);
-static void dlinked_list_iterate_handler(struct doubly_linked_list *node);
-static void slinked_list_iterate_handler(struct single_linked_list *node);
+static void doubly_linked_list_iterate_handler(struct doubly_linked_list *node);
+static void single_linked_list_iterate_handler(struct single_linked_list *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 

@@ -35,7 +35,7 @@ end_of_report_print(void)
 }
 
 static void
-dlinked_list_iterate_handler(struct doubly_linked_list *node)
+doubly_linked_list_iterate_handler(struct doubly_linked_list *node)
 {
     if (node) {
         node->id = 0xDEADu;
@@ -45,7 +45,7 @@ dlinked_list_iterate_handler(struct doubly_linked_list *node)
 }
 
 static void
-slinked_list_iterate_handler(struct single_linked_list *node)
+single_linked_list_iterate_handler(struct single_linked_list *node)
 {
     if (node) {
         node->id = 0xDAEDu;

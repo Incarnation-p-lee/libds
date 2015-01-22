@@ -21,7 +21,7 @@ linked_stack_create(void)
         free_ds(stack);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        dlinked_list_initial(&stack->base->link);
+        doubly_linked_list_initial(&stack->base->link);
         stack->top = stack->base;
     }
 
@@ -74,7 +74,7 @@ linked_stack_space_next_node(struct linked_stack_space *node)
 
     next = NULL;
     if (node) {
-        tmp = dlinked_list_node_next(&node->link);
+        tmp = doubly_linked_list_node_next(&node->link);
         if (tmp) {
             next = UNOFFSET_OF(tmp, struct linked_stack_space, link);
         }
@@ -95,7 +95,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
 
     previous = NULL;
     if (node) {
-        tmp = dlinked_list_node_previous(&node->link);
+        tmp = doubly_linked_list_node_previous(&node->link);
         if (tmp) {
             previous = UNOFFSET_OF(tmp, struct linked_stack_space, link);
         }
@@ -115,7 +115,7 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 
     next = NULL;
     if (node) {
-        dlinked_list_node_lazy_remove(&node->link);
+        doubly_linked_list_node_lazy_remove(&node->link);
         next = linked_stack_space_next_node(node);
 
         /* If only one node */
@@ -147,7 +147,7 @@ linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
             if (!node) {
                 pr_log_err("Fail to get memory from system.\n");
             } else {
-                dlinked_list_initial(&node->link);
+                doubly_linked_list_initial(&node->link);
             }
 
             node->space.bp = malloc_ds(sizeof(void *) * dim);
@@ -157,7 +157,7 @@ linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
             } else {
                 node->space.dim = dim;
                 node->space.sp = node->space.bp;
-                dlinked_list_node_insert_after(&last->link, &node->link);
+                doubly_linked_list_node_insert_after(&last->link, &node->link);
             }
         }
     }

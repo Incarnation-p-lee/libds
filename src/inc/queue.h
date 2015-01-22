@@ -25,10 +25,10 @@ extern uint32 array_stack_space_rest(struct array_stack *stack);
 extern void array_stack_push(struct array_stack *stack, void *member);
 extern void * array_stack_pop(struct array_stack *stack);
 
-extern void dlinked_list_initial(struct doubly_linked_list *);
-extern void dlinked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void dlinked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
+extern void doubly_linked_list_initial(struct doubly_linked_list *);
+extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 
 
 /* ARRAY STACK */
