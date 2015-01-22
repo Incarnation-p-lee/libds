@@ -9,6 +9,7 @@ void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);
 void free_wrap(void *ptr);
 void memory_trace_print(void);
+void end_of_report_print(void);
 void linked_list_unit_test(void);
 void stack_unit_test(void);
 void queue_unit_test(void);

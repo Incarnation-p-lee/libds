@@ -361,3 +361,10 @@ dlinked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n)
 
     return m ? m : n;
 }
+
+void
+dlinked_list_node_redundant_remove(struct doubly_linked_list *head)
+{
+
+
+}

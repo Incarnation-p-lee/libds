@@ -23,7 +23,15 @@ memory_trace_print(void)
     printf("  . Malloc  %10u\n", malloc_cnt);
     printf("  . Realloc %10u\n", realloc_cnt);
     printf("  . Free    %10u\n", free_cnt);
-    printf("  >> Memory End.\n\n");
+    printf("  >> Memory End.\n");
+
+    return;
+}
+
+void
+end_of_report_print(void)
+{
+    printf("\n  >> End of Data Structure Library.<<\n\n");
 }
 
 static void
