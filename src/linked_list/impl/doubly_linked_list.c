@@ -343,3 +343,21 @@ dlinked_list_iterate(struct doubly_linked_list *head,
 
     return;
 }
+
+struct doubly_linked_list *
+dlinked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n)
+{
+    register struct doubly_linked_list *iter;
+    register struct doubly_linked_list *new;
+
+    if (m && n) {
+        iter = n;
+        do {
+            new = dlinked_list_node_create(iter->val, iter->id);
+            dlinked_list_node_insert_before(m, new);
+            iter = iter->next;
+        } while (iter != n);
+    }
+
+    return m ? m : n;
+}

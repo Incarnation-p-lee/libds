@@ -357,3 +357,21 @@ slinked_list_iterate(struct single_linked_list *head,
 
     return;
 }
+
+struct single_linked_list *
+slinked_list_join(struct single_linked_list *m, struct single_linked_list *n)
+{
+    register struct single_linked_list *iter;
+    register struct single_linked_list *new;
+
+    if (m && n) {
+        iter = n;
+        do {
+            new = slinked_list_node_create(iter->val, iter->id);
+            slinked_list_node_insert_before(m, new);
+            iter = iter->next;
+        } while (iter != n);
+    }
+
+    return m ? m : n;
+}

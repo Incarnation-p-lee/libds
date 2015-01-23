@@ -254,6 +254,7 @@ extern void dlinked_list_serialize(struct doubly_linked_list *head);
 extern struct doubly_linked_list * dlinked_list_node_remove(struct doubly_linked_list *node);
 extern void dlinked_list_node_lazy_remove(struct doubly_linked_list *node);
 extern void dlinked_list_iterate(struct doubly_linked_list *head, void (*handler)(struct doubly_linked_list *));
+extern struct doubly_linked_list * dlinked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 
 
 /* single linked list, Circular. */
@@ -279,6 +280,7 @@ extern void slinked_list_serialize(struct single_linked_list *head);
 extern struct single_linked_list * slinked_list_node_remove(struct single_linked_list *node);
 extern void slinked_list_node_lazy_remove(struct single_linked_list *node);
 extern void slinked_list_iterate(struct single_linked_list *head, void (*handler)(struct single_linked_list *));
+extern struct single_linked_list * slinked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 
 #endif
 /* END of ./src/inc/linked_list.h */

@@ -34,6 +34,7 @@ doubly_linked_list_unit_test(void)
         &test_dlinked_list_node_remove,
         &test_dlinked_list_node_lazy_remove,
         &test_dlinker_list_iterate,
+        &test_dlinked_list_join,
     };
     register void (**iter)(void);
 
@@ -72,6 +73,7 @@ single_linked_list_unit_test(void)
         &test_slinked_list_node_remove,
         &test_slinked_list_node_lazy_remove,
         &test_slinker_list_iterate,
+        &test_slinked_list_join,
     };
     register void (**iter)(void);
 

@@ -607,3 +607,51 @@ test_dlinker_list_iterate(void)
     test_result_print(SYM_2_STR(dlinked_list_iterate_node), is_passed);
     return;
 }
+
+static void
+test_dlinked_list_join(void)
+{
+    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *head_n;
+    struct doubly_linked_list *tmp;
+    bool is_passed;
+
+    is_passed = true;
+    head = dlinked_list_create();
+    dlinked_list_node_initial(head, raw, 0x0u);
+    tmp = dlinked_list_node_create(raw + 1, 0x0u);
+    dlinked_list_node_insert_before(head, tmp);
+    tmp = dlinked_list_node_create(raw + 2, 0x0u);
+    dlinked_list_node_insert_before(head, tmp);
+
+    head_n = dlinked_list_create();
+    dlinked_list_node_initial(head_n, raw + 2, 0x0u);
+    tmp = dlinked_list_node_create(raw + 3, 0x0u);
+    dlinked_list_node_insert_before(head_n, tmp);
+    tmp = dlinked_list_node_create(raw + 4, 0x0u);
+    dlinked_list_node_insert_before(head_n, tmp);
+
+    if (NULL != dlinked_list_join(NULL, NULL)) {
+        is_passed = false;
+    }
+
+    if (head != dlinked_list_join(head, NULL)) {
+        is_passed = false;
+    }
+
+    if (head != dlinked_list_join(NULL, head)) {
+        is_passed = false;
+    }
+
+    head = dlinked_list_join(head, head_n);
+    if (0x6u != dlinked_list_length(head)) {
+        is_passed = false;
+    }
+
+    dlinked_list_destroy(&head);
+    dlinked_list_destroy(&head_n);
+
+    test_result_print(SYM_2_STR(dlinked_list_join), is_passed);
+    return;
+}

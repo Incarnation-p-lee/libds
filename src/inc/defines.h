@@ -6,8 +6,8 @@
 #define false       0
 
 #define SYM_2_STR(symbol)   (#symbol)
-#define UNOFFSET_OF(ptr, type, mem) \
-    (void *)((void *)ptr - (void *)(&((type *)0)->mem))
+#define UNOFFSET_OF(ptr, type, member) \
+    (void *)((void *)ptr - (void *)(&((type *)0)->member))
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);
