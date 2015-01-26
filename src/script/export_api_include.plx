@@ -8,6 +8,7 @@ my $incdir = "$base/src/inc";
 my @export = ("$incdir/types.h",
               "$incdir/data_structure_types.h",
               "$incdir/log.h",
+              "$incdir/tree.h",
               "$incdir/defines.h",
               "$incdir/linked_list.h",
               "$incdir/queue.h",

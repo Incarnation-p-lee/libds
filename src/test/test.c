@@ -12,3 +12,4 @@
 #include "test_linked_list.c"
 #include "test_stack.c"
 #include "test_queue.c"
+#include "test_tree.c"

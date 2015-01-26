@@ -8,9 +8,9 @@ test_result_print(char *name, bool passed)
    }
 
    if (passed) {
-       fprintf(stdout, "  . [32mPass[0m ... %s\n", msg);
+       fprintf(stdout, "    . [32mPass[0m ... %s\n", msg);
    } else {
-       fprintf(stdout, "  . [31mFail[0m ... %s\n", msg);
+       fprintf(stdout, "    . [31mFail[0m ... %s\n", msg);
    }
 
    return;
@@ -20,9 +20,9 @@ void
 memory_trace_print(void)
 {
     printf("\n  >> Memory Usage Summary <<\n");
-    printf("  . Malloc  %10u\n", malloc_cnt);
-    printf("  . Realloc %10u\n", realloc_cnt);
-    printf("  . Free    %10u\n", free_cnt);
+    printf("    . Malloc  %10u\n", malloc_cnt);
+    printf("    . Realloc %10u\n", realloc_cnt);
+    printf("    . Free    %10u\n", free_cnt);
     printf("  >> Memory End.\n");
 
     return;

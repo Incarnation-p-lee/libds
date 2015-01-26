@@ -138,9 +138,6 @@ do
     "src/lib/")
     continue
   ;;
-    "src/tree/")  # for temp ignore
-    continue
-  ;;
   esac
 
   generate_makfile $dir

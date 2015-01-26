@@ -179,6 +179,29 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 #endif
 /* END of ./src/inc/log.h */
 
+/* BEGIN of ./src/inc/tree.h */
+#ifndef HAVE_TREE_H
+#define HAVE_TREE_H
+
+#ifdef DEBUG
+    extern void * malloc_wrap(size_t size);
+    extern void free_wrap(void *ptr);
+#endif
+
+
+/* BINARY SEARCH TREE */
+extern struct binary_search_tree * binary_search_tree_create(void);
+extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
+extern void binary_search_tree_initial(struct binary_search_tree *root);
+extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
+extern void binary_search_tree_destory(struct binary_search_tree **root);
+
+
+/* END OF BINARY SEARCH TREE */
+
+#endif
+/* END of ./src/inc/tree.h */
+
 /* BEGIN of ./src/inc/defines.h */
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H

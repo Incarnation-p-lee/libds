@@ -10,9 +10,13 @@ void * realloc_wrap(void *ptr, size_t size);
 void free_wrap(void *ptr);
 void memory_trace_print(void);
 void end_of_report_print(void);
+
+/* Unit Test List */
 void linked_list_unit_test(void);
 void stack_unit_test(void);
 void queue_unit_test(void);
+void tree_unit_test(void);
+/* End of Unit Test List */
 
 
 static void doubly_linked_list_unit_test(void);
@@ -22,6 +26,7 @@ static void linked_stack_unit_test(void);
 static void array_queue_unit_test(void);
 static void stacked_queue_unit_test(void);
 static void doubly_end_queue_unit_test(void);
+static void binary_search_tree_unit_test(void);
 
 
 static void test_result_print(char *name, bool passed);
