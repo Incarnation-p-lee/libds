@@ -24,7 +24,7 @@ static void (*test_suite[])(void) = {
     &queue_unit_test,
     &tree_unit_test,
 #else
-    &queue_unit_test,
+    &tree_unit_test,
 #endif
 };
 

@@ -114,7 +114,7 @@ struct doubly_end_queue {
  * collision chain of the same nice value
  */
 struct collision_chain {
-    struct doubly_linked_list link;
+    struct doubly_linked_list *link;
     sint64                    nice;
 };
 

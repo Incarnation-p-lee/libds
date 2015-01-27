@@ -155,7 +155,7 @@ struct doubly_end_queue {
  * collision chain of the same nice value
  */
 struct collision_chain {
-    struct doubly_linked_list link;
+    struct doubly_linked_list *link;
     sint64                    nice;
 };
 
@@ -189,12 +189,19 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 #endif
 
 
+
 /* BINARY SEARCH TREE */
 extern struct binary_search_tree * binary_search_tree_create(void);
 extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
 extern void binary_search_tree_initial(struct binary_search_tree *root);
 extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
-extern void binary_search_tree_destory(struct binary_search_tree **root);
+extern void binary_search_tree_destroy(struct binary_search_tree **root);
+extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *root, struct binary_search_tree **node);
+extern struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
+extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
+extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
+
 
 
 /* END OF BINARY SEARCH TREE */

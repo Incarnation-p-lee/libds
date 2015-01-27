@@ -353,8 +353,10 @@ doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list 
     if (m && n) {
         iter = n;
         do {
-            new = doubly_linked_list_node_create(iter->val, iter->id);
-            doubly_linked_list_node_insert_before(m, new);
+            if (!doubly_linked_list_contains_p(m, iter)) {
+                new = doubly_linked_list_node_create(iter->val, iter->id);
+                doubly_linked_list_node_insert_before(m, new);
+            }
             iter = iter->next;
         } while (iter != n);
     }

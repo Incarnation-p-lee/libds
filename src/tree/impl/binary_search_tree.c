@@ -13,7 +13,12 @@ binary_search_tree_node_create(void *val, sint64 nice)
     if (!node) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        binary_search_tree_node_initial(node, val, nice);
+        node->chain.link = malloc_ds(sizeof(*node->chain.link));
+        if (!node->chain.link) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            binary_search_tree_node_initial(node, val, nice);
+        }
     }
 
     return node;
@@ -34,20 +39,21 @@ binary_search_tree_node_initial(struct binary_search_tree *node,
         node->left = NULL;
         node->right = NULL;
         node->chain.nice = nice;
-        doubly_linked_list_initial(&node->chain.link);
-        doubly_linked_list_node_set_val(&node->chain.link, val);
+        doubly_linked_list_initial(node->chain.link);
+        doubly_linked_list_node_set_val(node->chain.link, val);
     }
 
     return;
 }
 
 void
-binary_search_tree_destory(struct binary_search_tree **root)
+binary_search_tree_destroy(struct binary_search_tree **root)
 {
     if (root && *root) {
         /* post-order */
-        binary_search_tree_destory(&(*root)->left);
-        binary_search_tree_destory(&(*root)->right);
+        binary_search_tree_destroy(&(*root)->left);
+        binary_search_tree_destroy(&(*root)->right);
+        doubly_linked_list_destroy(&(*root)->chain.link);
         free_ds(*root);
         *root = NULL;
     }
@@ -55,15 +61,14 @@ binary_search_tree_destory(struct binary_search_tree **root)
     return;
 }
 
-#if 0
 struct binary_search_tree *
 binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
 {
     if (root) {
         if (nice > root->chain.nice) {
-            return binary_search_tree_node_find(root->right, node->chain.nice);
+            return binary_search_tree_node_find(root->right, nice);
         } else if (nice < root->chain.nice) {
-            return binary_search_tree_node_find(root->left, node->chain.nice);
+            return binary_search_tree_node_find(root->left, nice);
         } else {
             return root;
         }
@@ -71,7 +76,6 @@ binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
 
     return NULL;
 }
-
 
 struct binary_search_tree  *
 binary_search_tree_node_find_min(struct binary_search_tree *root)
@@ -103,27 +107,57 @@ binary_search_tree_node_find_max(struct binary_search_tree *root)
 }
 
 
-void
-binary_search_tree_node_insert(struct binary_search_tree *root,
+bool
+binary_search_tree_node_contain_p(struct binary_search_tree *root,
     struct binary_search_tree *node)
 {
     register struct binary_search_tree **iter;
 
-    if (node && root) {
+    if (root && node) {
         iter = &root;
         while (*iter) {
-            if (node->chain.nice > (*iter)->chain.nice) {
-                iter = &(*iter)->right;
-            } else if (node->chain.nice < (*iter)->chain.nice) {
-                iter = &(*iter)->left;
+            if (node == *iter) {
+                return true;
             } else {
-                doubly_linked_list_join(&(*iter)->chain.link, &node->chain.link);
-                return;
+                if (node->chain.nice > (*iter)->chain.nice) {
+                    iter = &(*iter)->right;
+                } else if (node->chain.nice < (*iter)->chain.nice) {
+                    iter = &(*iter)->left;
+                } else {
+                    return false;
+                }
             }
         }
-        *iter = node;
     }
-    return;
+
+    return false;
+}
+
+
+struct binary_search_tree *
+binary_search_tree_node_insert(struct binary_search_tree *root,
+    struct binary_search_tree **node)
+{
+    register struct binary_search_tree **iter;
+
+    if (node && *node && root) {
+        iter = &root;
+        while (*iter) {
+            if ((*node)->chain.nice > (*iter)->chain.nice) {
+                iter = &(*iter)->right;
+            } else if ((*node)->chain.nice < (*iter)->chain.nice) {
+                iter = &(*iter)->left;
+            } else {
+                if (*iter != *node) {
+                    doubly_linked_list_join((*iter)->chain.link, (*node)->chain.link);
+                    binary_search_tree_destroy(node);
+                }
+                return *iter;
+            }
+        }
+        *iter = *node;
+    }
+    return *node;
 }
 
 static inline void
@@ -131,7 +165,6 @@ binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre,
     struct binary_search_tree *node)
 {
     *pre = node->left ? node->left : node->right;
-    return node;
 }
 
 static inline void
@@ -165,7 +198,7 @@ binary_search_tree_node_remove(struct binary_search_tree *root, sint64 nice)
     register struct binary_search_tree *iter;
     register struct binary_search_tree **pre;
 
-    if (root && node) {
+    if (root) {
         iter = root;
         while (iter) {
             if (nice > iter->chain.nice) {
@@ -177,7 +210,7 @@ binary_search_tree_node_remove(struct binary_search_tree *root, sint64 nice)
                 free_ds(iter);
                 break;
             } else {
-                binary_search_tree_node_lt_doubly_strip(pre, iter);
+                binary_search_tree_node_child_lt_doubly_strip(pre, iter);
                 free_ds(iter);
                 break;
             }
@@ -186,4 +219,3 @@ binary_search_tree_node_remove(struct binary_search_tree *root, sint64 nice)
     }
     return;
 }
-#endif
