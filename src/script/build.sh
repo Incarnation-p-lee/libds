@@ -27,6 +27,12 @@ EOF
   exit 2
 }
 
+if [ $# == 0 ]
+then
+  print_help
+  exit 1
+fi
+
 platform=0
 static=0
 

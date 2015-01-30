@@ -103,7 +103,7 @@ binary_search_tree_node_find_max(struct binary_search_tree *root)
 {
     if (root) {
         if (root->right) {
-            return binary_search_tree_node_find_min(root->right);
+            return binary_search_tree_node_find_max(root->right);
         } else {
             return root;
         }
@@ -181,13 +181,9 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
     struct binary_search_tree **min_pre;
 
     min = node;
-    if (!min->left) {
-        min_pre = pre;
-    } else {
-        while (min->left) {
-            min_pre = &min->left;
-            min = *min_pre;
-        }
+    while (min->left) {
+        min_pre = &min->left;
+        min = *min_pre;
     }
 
     binary_search_tree_node_child_lt_doubly_strip(min_pre, min);

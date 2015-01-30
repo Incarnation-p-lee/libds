@@ -7,11 +7,11 @@ test_binary_search_tree_sample(uint64 range, uint32 node_count)
     uint32 i;
 
     retval = binary_search_tree_create();
-    binary_search_tree_node_initial(retval, retval, range / 2);
+    binary_search_tree_node_initial(retval, retval, 0);
     i = 1;
 
     while (i < node_count) {
-        nice = (sint64)(rand() % range - (range / 2));
+        nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_node_create(NULL, 0x0);
         binary_search_tree_node_initial(tmp, tmp, nice);
         binary_search_tree_node_insert(retval, &tmp);
@@ -235,10 +235,15 @@ test_binary_search_tree_node_contain_p(void)
     bool is_passed;
     struct binary_search_tree *root;
     struct binary_search_tree *tmp;
+    struct binary_search_tree *fake;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x1FD7, 0xD31D);
+    root = test_binary_search_tree_sample(0x7FD7, 0xD31D);
     tmp = binary_search_tree_node_create(&is_passed, 0x1234);
+
+    if (binary_search_tree_node_contain_p(root, NULL)) {
+        is_passed = false;
+    }
 
     if (binary_search_tree_node_contain_p(root, tmp)) {
         is_passed = false;
@@ -250,6 +255,12 @@ test_binary_search_tree_node_contain_p(void)
         is_passed = false;
     }
 
+    fake = binary_search_tree_node_create(tmp, tmp->chain.nice);
+    if (binary_search_tree_node_contain_p(root, fake)) {
+        is_passed = false;
+    }
+
+    binary_search_tree_destroy(&fake);
     binary_search_tree_destroy(&root);
 
     test_result_print(SYM_2_STR(binary_search_tree_node_contain_p), is_passed);
