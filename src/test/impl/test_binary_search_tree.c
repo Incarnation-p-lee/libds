@@ -276,7 +276,7 @@ test_binary_search_tree_node_insert(void)
 
     is_passed = true;
     root = test_binary_search_tree_sample(0x4321, 0x1A2B);
-    tmp = binary_search_tree_node_create(&is_passed, 0x1A2B);
+    tmp = binary_search_tree_node_create(&is_passed, 0xFFDEA);
 
     if (NULL != binary_search_tree_node_find(root, tmp->chain.nice)) {
         is_passed = false;

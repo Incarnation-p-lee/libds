@@ -89,7 +89,6 @@ single_linked_list_node_append(struct single_linked_list *node, uint32 value)
             next = single_linked_list_create();
             next->id = value;
             single_linked_list_node_insert_after(node, next);
-            node->next = next;
         }
     }
 

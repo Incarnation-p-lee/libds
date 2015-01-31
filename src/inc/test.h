@@ -36,5 +36,6 @@ static void single_linked_list_iterate_handler(struct single_linked_list *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 static inline struct binary_search_tree * test_binary_search_tree_sample(uint64 range, uint32 node_count);
+static inline struct single_linked_list * test_single_linked_list_sample(uint32 range, uint32 node_count);
 
 #endif

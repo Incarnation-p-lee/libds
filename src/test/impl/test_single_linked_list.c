@@ -1,3 +1,27 @@
+static inline struct single_linked_list *
+test_single_linked_list_sample(uint32 range, uint32 node_count)
+{
+    struct single_linked_list *retval;
+    struct single_linked_list *tmp;
+    uint32 id;
+    uint32 i;
+
+    retval = single_linked_list_create();
+    single_linked_list_node_initial(retval, retval, range);
+
+    i = 1;
+    while (i < node_count) {
+        id = (uint32)(rand() % range);
+        tmp = single_linked_list_create();
+        single_linked_list_node_initial(tmp, tmp, id);
+        single_linked_list_node_insert_before(retval, tmp);
+        i++;
+    }
+
+    return retval;
+}
+
+
 static void
 test_single_linked_list_create(void)
 {
@@ -168,14 +192,15 @@ test_single_linked_list_node_append(void)
     bool is_passed;
     uint32 tmp = 0xAu;
 
-    head = single_linked_list_create();
+    head = test_single_linked_list_sample(0x1A2E, 0x213D);
     is_passed = false;
     next = head->next;
 
     single_linked_list_node_append(head, tmp);
     append = head->next;
-    if (append->id == tmp && single_linked_list_node_previous(append) == next
-        && single_linked_list_node_previous(next) == append && append->next == next) {
+    if (append->id == tmp && append->next == next
+        && single_linked_list_node_previous(append) == head
+        && single_linked_list_node_previous(next) == append) {
         is_passed = true;
     }
     single_linked_list_destroy(&head);
@@ -192,7 +217,7 @@ test_single_linked_list_node_next(void)
     bool is_passed;
 
     is_passed = false;
-    head = single_linked_list_create();
+    head = test_single_linked_list_sample(0x2D34, 0x3A89);
     single_linked_list_node_append(head, 0xDEADu);
 
     next = single_linked_list_node_next(head);
@@ -221,7 +246,7 @@ test_single_linked_list_node_previous(void)
     bool is_passed;
 
     is_passed = false;
-    head = single_linked_list_create();
+    head = test_single_linked_list_sample(0x19AB, 0x2BF3);
     single_linked_list_node_append(head, 0xDEADu);
 
     prev = single_linked_list_node_previous(head);
@@ -253,7 +278,7 @@ test_single_linked_list_node_insert_before(void)
 
     is_passed = false;
     mark = 0xDEADu;
-    head = single_linked_list_create();
+    head = test_single_linked_list_sample(0x1CE5, 0x37A8);
     single_linked_list_node_append(head, mark);
 
     prev = single_linked_list_node_previous(head);
@@ -280,7 +305,7 @@ test_single_linked_list_node_insert_after(void)
 
     is_passed = false;
     mark = 0xDEADu;
-    head = single_linked_list_create();
+    head = test_single_linked_list_sample(0x18AB, 0x2E9C);
     single_linked_list_node_append(head, mark);
 
     next = head->next;
@@ -301,7 +326,6 @@ test_single_linked_list_destroy(void)
 {
     struct single_linked_list *head;
     bool is_passed;
-    uint32 *data;
     uint32 *iter;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
@@ -310,10 +334,8 @@ test_single_linked_list_destroy(void)
     is_passed = true;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        data = (uint32 *)int_array_generate(len);
-        head = single_linked_list_generate(data, len);
+        head = test_single_linked_list_sample(len, 0x16FA);
 
-        free_ds(data);
         single_linked_list_destroy(&head);
         if (NULL != head) {
             is_passed = false;
@@ -335,23 +357,20 @@ test_single_linked_list_length(void)
 {
     struct single_linked_list *head;
     bool is_passed;
-    uint32 *data;
     uint32 *iter;
     uint32 len;
-    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 sizes[] = {1, 10, 100, 1000, 2000, 3000, 4000, 5000, 6000,};
 
     iter = sizes;
     is_passed = true;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        data = (uint32 *)int_array_generate(len);
-        head = single_linked_list_generate(data, len);
+        head = test_single_linked_list_sample(0x2AE8, len);
 
         if (len != single_linked_list_length(head)) {
             is_passed = false;
         }
 
-        free_ds(data);
         single_linked_list_destroy(&head);
     }
 
@@ -372,13 +391,12 @@ test_single_linked_list_length(void)
 static void
 test_single_linked_list_node_get_by_index(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x18FA, 0x23A2);
     tmp = single_linked_list_node_get_by_index(head, 0u);
     if (head != tmp) {
         is_passed = false;
@@ -394,8 +412,9 @@ test_single_linked_list_node_get_by_index(void)
         is_passed = false;
     }
 
-    tmp = single_linked_list_node_get_by_index(head, sizeof(raw) / sizeof(raw[0]));
-    if (head != tmp) {
+    tmp = single_linked_list_node_get_by_index(head,
+        single_linked_list_length(head) - 1);
+    if (head != tmp->next) {
         is_passed = false;
     }
 
@@ -408,14 +427,13 @@ test_single_linked_list_node_get_by_index(void)
 static void
 test_single_linked_list_node_exchange(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp_1;
     struct single_linked_list *tmp_2;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x14A2, 0x2E1D);
     tmp_1 = single_linked_list_node_previous(head);
     tmp_2 = head->next;
 
@@ -447,13 +465,12 @@ test_single_linked_list_node_exchange(void)
 static void
 test_single_linked_list_contains_p(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x1DD2, 0x28AE);
     tmp = head->next;
     if (true != single_linked_list_contains_p(head, tmp)) {
         is_passed = false;
@@ -483,7 +500,6 @@ test_single_linked_list_serialize(void)
     bool is_passed;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
     uint32 *iter;
-    uint32 *raw;
     uint32 len;
     uint32 index;
 
@@ -491,8 +507,7 @@ test_single_linked_list_serialize(void)
     iter = sizes;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        raw = (uint32 *)int_array_generate(len);
-        head = single_linked_list_generate(raw, len);
+        head = test_single_linked_list_sample(len, 0x29E2);
 
         single_linked_list_serialize(head);
         tmp = head;
@@ -506,7 +521,6 @@ test_single_linked_list_serialize(void)
             tmp = tmp->next;
         } while (tmp != head);
 
-        free_ds(raw);
         single_linked_list_destroy(&head);
     }
 
@@ -517,14 +531,13 @@ test_single_linked_list_serialize(void)
 static void
 test_single_linked_list_node_remove(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *prev;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x31E2, 0x28ED);
     tmp = head->next;
     prev = single_linked_list_node_previous(head);
 
@@ -550,14 +563,13 @@ test_single_linked_list_node_remove(void)
 static void
 test_single_linked_list_node_lazy_remove(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *prev;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x1AEE, 0x23EA);
     tmp = head->next;
     prev = single_linked_list_node_previous(head);
 
@@ -584,13 +596,12 @@ test_single_linked_list_node_lazy_remove(void)
 static void
 test_slinker_list_iterate(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = single_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_single_linked_list_sample(0x24E2, 0x1F82);
 
     single_linked_list_iterate(head, &single_linked_list_iterate_handler);
 
