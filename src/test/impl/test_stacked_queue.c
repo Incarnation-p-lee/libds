@@ -70,6 +70,7 @@ test_stacked_queue_space_expand(void)
 static void
 test_stacked_queue_capacity(void)
 {
+    return;
     bool is_passed;
     struct stacked_queue *queue;
 
@@ -195,6 +196,7 @@ test_stacked_queue_enter(void)
 {
     bool is_passed;
     struct stacked_queue *queue;
+    uint32 capacity;
 
     queue = stacked_queue_create();
     is_passed = true;
@@ -207,8 +209,13 @@ test_stacked_queue_enter(void)
     do {
         stacked_queue_enter(queue, queue);
     } while (!stacked_queue_full_p(queue));
-
     if (!stacked_queue_full_p(queue)) {
+        is_passed = false;
+    }
+
+    capacity = stacked_queue_capacity(queue);
+    stacked_queue_enter(queue, queue);
+    if (stacked_queue_capacity(queue) != capacity * 2 + EXPAND_STACK_SPACE_MIN) {
         is_passed = false;
     }
 

@@ -3,7 +3,7 @@ basedir=./obj_out
 reportdir="$basedir/coverage"
 outputdir="$reportdir/output"
 rawdatafile="coverage.info"
-binary="Data Structure"
+binary="Data_Structure"
 
 root_dir=`pwd | xargs basename`
 

@@ -281,7 +281,6 @@ extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern uint32 doubly_linked_list_length(struct doubly_linked_list *head);
 extern struct doubly_linked_list * doubly_linked_list_node_get_by_index(struct doubly_linked_list *head, uint32 index);
-extern void doubly_linked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head);
 extern void doubly_linked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
 extern bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct doubly_linked_list *node);
 extern void doubly_linked_list_serialize(struct doubly_linked_list *head);
@@ -307,7 +306,6 @@ extern void single_linked_list_node_insert_before(struct single_linked_list *cur
 extern void single_linked_list_destroy(struct single_linked_list **head);
 extern uint32 single_linked_list_length(struct single_linked_list *head);
 extern struct single_linked_list * single_linked_list_node_get_by_index(struct single_linked_list *head, uint32 index);
-extern void single_linked_list_print(FILE *fd, char *msg, struct single_linked_list *head);
 extern void single_linked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
 extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 extern void single_linked_list_serialize(struct single_linked_list *head);

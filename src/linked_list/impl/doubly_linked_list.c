@@ -214,28 +214,6 @@ doubly_linked_list_node_get_by_index(struct doubly_linked_list *head, uint32 ind
     return node;
 }
 
-void
-doubly_linked_list_print(FILE *fd, char *msg, struct doubly_linked_list *head)
-{
-    register struct doubly_linked_list *iterator;
-    char *default_msg = "Default doubly linked list";
-
-    if (head) {
-        fprintf(fd, "[%s]:\n", msg);
-        if (!msg) {
-            msg = default_msg;
-        }
-
-        iterator = head;
-        do {
-            fprintf(fd, "%d ->\n", iterator->id);
-            iterator = iterator->next;
-        } while (iterator != head);
-    }
-    fprintf(fd, "NULL\n");
-
-    return;
-}
 
 void
 doubly_linked_list_node_exchange(struct doubly_linked_list *fir,

@@ -179,6 +179,7 @@ test_doubly_end_queue_head_leave(void)
     if (tmp != queue->head || tmp != queue->tail) {
         is_passed = false;
     }
+    doubly_end_queue_head_leave(queue);
 
     doubly_end_queue_destroy(&queue);
 
@@ -210,6 +211,7 @@ test_doubly_end_queue_tail_leave(void)
     if (tmp != queue->head || tmp != queue->tail) {
         is_passed = false;
     }
+    doubly_end_queue_tail_leave(queue);
 
     doubly_end_queue_destroy(&queue);
 

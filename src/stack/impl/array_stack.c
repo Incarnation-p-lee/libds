@@ -51,6 +51,7 @@ void
 array_stack_space_expand(struct array_stack *stack, uint32 extra)
 {
     uint32 new_size;
+    ptrdiff_t offset;
     void **new_addr;
 
     new_size = 0;
@@ -62,11 +63,13 @@ array_stack_space_expand(struct array_stack *stack, uint32 extra)
     }
 
     if (new_size) {
+        offset = (ptrdiff_t)(stack->space.sp - stack->space.bp);
         new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
         if (!new_addr) {
             pr_log_err("Fail to get memory from system.\n");
         } else {
             stack->space.bp = new_addr;
+            stack->space.sp = stack->space.bp + offset;
             stack->space.dim = new_size;
         }
     }

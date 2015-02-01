@@ -104,8 +104,7 @@ stacked_queue_enter(struct stacked_queue *queue, void *member)
             && array_stack_empty_p(queue->leave)) {
             stacked_queue_stack_dump(queue->enter, queue->leave);
         } else if (array_stack_full_p(queue->enter)) {
-            array_stack_space_expand(queue->enter, 0u);
-            array_stack_space_expand(queue->leave, 0u);
+            stacked_queue_space_expand(queue, 0u);
         }
         array_stack_push(queue->enter, member);
     }

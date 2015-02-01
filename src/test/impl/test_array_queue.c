@@ -57,7 +57,7 @@ test_array_queue_space_expand(void)
     is_passed = true;
     capacity = array_queue_capacity(queue);
     rest = array_queue_space_rest(queue);
-    extra = 1101u;
+    extra = 11u;
 
     array_queue_space_expand(queue, extra);
     if (capacity + extra != array_queue_capacity(queue)) {
@@ -65,6 +65,27 @@ test_array_queue_space_expand(void)
     }
 
     if (rest + extra != array_queue_space_rest(queue)) {
+        is_passed = false;
+    }
+
+    capacity = array_queue_capacity(queue);
+    array_queue_space_expand(queue, 0u);
+    if (capacity * 2 + EXPAND_QUEUE_SPACE_MIN != array_queue_capacity(queue)) {
+        is_passed = false;
+    }
+
+    while (!array_queue_full_p(queue)) {
+        array_queue_enter(queue, &is_passed);
+    }
+
+    array_queue_leave(queue);
+    array_queue_leave(queue);
+    array_queue_leave(queue);
+    array_queue_enter(queue, &is_passed);
+    array_queue_enter(queue, &is_passed);
+    capacity = array_queue_capacity(queue);
+    array_queue_space_expand(queue, 0x123u);
+    if (capacity + 0x123u != array_queue_capacity(queue)) {
         is_passed = false;
     }
 
@@ -214,6 +235,15 @@ test_array_queue_enter(void)
         is_passed = false;
     }
 
+    while (!array_queue_full_p(queue)) {
+        array_queue_enter(queue, &is_passed);
+    }
+
+    array_queue_enter(queue, &is_passed);
+    if (array_queue_capacity(queue) != capacity * 2 + EXPAND_QUEUE_SPACE_MIN) {
+        is_passed = false;
+    }
+
     array_queue_destroy(&queue);
 
     test_result_print(SYM_2_STR(array_queue_enter), is_passed);
@@ -243,6 +273,18 @@ test_array_queue_leave(void)
 
     if (array_queue_capacity(queue) != array_queue_space_rest(queue)) {
         is_passed = false;
+    }
+
+    while (!array_queue_full_p(queue)) {
+        array_queue_enter(queue, &is_passed);
+    }
+
+    array_queue_leave(queue);
+    array_queue_leave(queue);
+    array_queue_enter(queue, &is_passed);
+    array_queue_enter(queue, &is_passed);
+    while (!array_queue_empty_p(queue)) {
+        array_queue_leave(queue);
     }
 
     array_queue_destroy(&queue);
