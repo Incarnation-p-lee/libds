@@ -2,7 +2,6 @@ struct stacked_queue *
 stacked_queue_create(void)
 {
     struct stacked_queue *queue;
-    uint32 capacity;
 
     queue = malloc_ds(sizeof(*queue));
     if (!queue) {
@@ -13,9 +12,7 @@ stacked_queue_create(void)
 
     queue->enter = array_stack_create();
     queue->leave = array_stack_create();
-
-    capacity = array_stack_capacity(queue->enter);
-    queue->dim = capacity;
+    queue->dim = array_stack_capacity(queue->enter);
 
     return queue;
 }
@@ -35,14 +32,10 @@ stacked_queue_destroy(struct stacked_queue **queue)
 void
 stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
 {
-    uint32 capacity;
-
     if (queue) {
         array_stack_space_expand(queue->enter, extra);
         array_stack_space_expand(queue->leave, extra);
-
-        capacity = array_stack_capacity(queue->enter);
-        queue->dim = capacity;
+        queue->dim = array_stack_capacity(queue->enter);
     }
     return;
 }

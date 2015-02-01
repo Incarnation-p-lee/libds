@@ -175,12 +175,10 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
 {
     register void **iter;
     void **lmt;
-    uint32 capacity;
 
     if (queue && handler) {
         if (!array_queue_empty_p(queue)) {
-            capacity = array_queue_capacity(queue);
-            lmt = queue->space.base + capacity;
+            lmt = queue->space.base + array_queue_capacity(queue);
             iter = queue->space.front;
             do {
                 (*handler)(*iter++);
