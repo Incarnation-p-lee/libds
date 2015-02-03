@@ -139,6 +139,13 @@ test_binary_search_tree_destroy(void)
         is_passed = false;
     }
 
+    tmp = test_binary_search_tree_sample(0x12345, 0xABCDE);
+    binary_search_tree_destroy(&tmp);
+
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
     test_result_print(SYM_2_STR(binary_search_tree_destroy), is_passed);
     return;
 }
@@ -151,7 +158,7 @@ test_binary_search_tree_node_find(void)
     struct binary_search_tree *tmp;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x1234, 0xCDEF);
+    root = test_binary_search_tree_sample(0x21234, 0xBCDEF);
 
     if (root != binary_search_tree_node_find(root, root->chain.nice)) {
         is_passed = false;
@@ -186,7 +193,7 @@ test_binary_search_tree_node_find_min(void)
     struct binary_search_tree *tmp;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x1234, 0xABCD);
+    root = test_binary_search_tree_sample(0x31234, 0x9ABCD);
 
     if (NULL != binary_search_tree_node_find_min(NULL)) {
         is_passed = false;
@@ -212,7 +219,7 @@ test_binary_search_tree_node_find_max(void)
     struct binary_search_tree *tmp;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x1234, 0xABCD);
+    root = test_binary_search_tree_sample(0x71234, 0x2ABCD);
 
     if (NULL != binary_search_tree_node_find_max(NULL)) {
         is_passed = false;
@@ -238,7 +245,7 @@ test_binary_search_tree_node_contain_p(void)
     struct binary_search_tree *fake;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x7FD7, 0xD31D);
+    root = test_binary_search_tree_sample(0x37FD7, 0xAD31D);
     tmp = binary_search_tree_node_create(&is_passed, 0x1234);
 
     if (binary_search_tree_node_contain_p(root, NULL)) {
@@ -275,7 +282,7 @@ test_binary_search_tree_node_insert(void)
     struct binary_search_tree *tmp;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x4321, 0x1A2B);
+    root = test_binary_search_tree_sample(0xB4321, 0x31A2B);
     tmp = binary_search_tree_node_create(&is_passed, 0xFFDEA);
 
     if (NULL != binary_search_tree_node_find(root, tmp->chain.nice)) {
@@ -307,7 +314,7 @@ test_binary_search_tree_node_remove(void)
     struct binary_search_tree *tmp;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x4321, 0xABCD);
+    root = test_binary_search_tree_sample(0xF4321, 0x2ABCD);
     nice = root->chain.nice;
 
     binary_search_tree_node_remove(&root, nice);

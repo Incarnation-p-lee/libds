@@ -51,6 +51,8 @@ static inline struct linked_stack_space * linked_stack_space_remove_node(struct 
 static inline void linked_stack_space_iterate_node(struct linked_stack_space *node, void (*handler)(void *));
 static inline uint32 linked_stack_space_node_capacity(struct linked_stack_space *node);
 static inline uint32 linked_stack_space_node_space_rest(struct linked_stack_space *node);
+static inline bool linked_stack_space_node_full_p(struct linked_stack_space *node);
+static inline bool linked_stack_space_node_empty_p(struct linked_stack_space *node);
 /* END OF LINKED STACK */
 
 #endif
