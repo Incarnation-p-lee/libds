@@ -70,7 +70,6 @@ test_stacked_queue_space_expand(void)
 static void
 test_stacked_queue_capacity(void)
 {
-    return;
     bool is_passed;
     struct stacked_queue *queue;
 
