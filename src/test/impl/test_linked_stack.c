@@ -121,6 +121,17 @@ test_linked_stack_space_rest(void)
         is_passed = false;
     }
 
+    while (!linked_stack_full_p(stack)) {
+        linked_stack_push(stack, &is_passed);
+    }
+
+    linked_stack_push(stack, &is_passed);
+    linked_stack_pop(stack);
+    linked_stack_pop(stack);
+    if (EXPAND_STACK_SPACE_MIN + 1 != linked_stack_space_rest(stack)) {
+        is_passed = false;
+    }
+
     linked_stack_destroy(&stack);
 
     test_result_print(SYM_2_STR(linked_stack_space_rest), is_passed);

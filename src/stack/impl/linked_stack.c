@@ -220,6 +220,19 @@ linked_stack_capacity(struct linked_stack *stack)
     return total;
 }
 
+static inline bool
+linked_stack_space_node_empty_p(struct linked_stack_space *node)
+{
+    return linked_stack_space_node_capacity(node)
+        == linked_stack_space_node_space_rest(node) ? true : false;
+}
+
+static inline bool
+linked_stack_space_node_full_p(struct linked_stack_space *node)
+{
+    return 0u == linked_stack_space_node_space_rest(node) ? true : false;
+}
+
 /*
  * _RETURN_ rest space of specific node.
  *   If NULL _ARGV_, return 0.
@@ -267,7 +280,7 @@ linked_stack_push(struct linked_stack *stack, void *member)
             linked_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
         }
 
-        if (0 == linked_stack_space_node_space_rest(stack->top)) {
+        if (linked_stack_space_node_full_p(stack->top)) {
             stack->top = linked_stack_space_next_node(stack->top);
         }
 
@@ -288,7 +301,7 @@ linked_stack_pop(struct linked_stack *stack)
 
     data = NULL;
     if (stack && !linked_stack_empty_p(stack)) {
-        if (0u == linked_stack_space_node_space_rest(stack->top)) {
+        if (linked_stack_space_node_empty_p(stack->top)) {
             stack->top = linked_stack_space_previous_node(stack->top);
         }
         data = *(--stack->top->space.sp);
