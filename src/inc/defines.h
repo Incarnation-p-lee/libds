@@ -35,5 +35,7 @@
         exit(1);                     \
     } while (0);
 
+#define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
+
 
 #endif

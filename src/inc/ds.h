@@ -202,6 +202,7 @@ extern struct binary_search_tree * binary_search_tree_node_find_min(struct binar
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
+extern uint32 binary_search_tree_depth(struct binary_search_tree *root);
 
 
 
@@ -250,6 +251,8 @@ extern void binary_search_tree_node_remove(struct binary_search_tree **root, sin
         libds_log_print(ERRR, msg); \
         exit(1);                     \
     } while (0);
+
+#define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
 
 
 #endif

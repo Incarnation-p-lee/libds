@@ -237,6 +237,30 @@ test_binary_search_tree_node_find_max(void)
 }
 
 static void
+test_binary_search_tree_depth(void)
+{
+    bool is_passed;
+    struct binary_search_tree *root;
+    uint32 child;
+
+    is_passed = true;
+    root = test_binary_search_tree_sample(0x183F1, 0x1820C);
+    if (0u != binary_search_tree_depth(NULL)) {
+        is_passed = false;
+    }
+
+    child = MAX_U(binary_search_tree_depth(root->left),
+                  binary_search_tree_depth(root->right));
+    if (child + 1 != binary_search_tree_depth(root)) {
+        is_passed = false;
+    }
+    binary_search_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(binary_search_tree_depth), is_passed);
+    return;
+}
+
+static void
 test_binary_search_tree_node_contain_p(void)
 {
     bool is_passed;

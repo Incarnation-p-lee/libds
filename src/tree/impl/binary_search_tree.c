@@ -113,6 +113,24 @@ binary_search_tree_node_find_max(struct binary_search_tree *root)
 }
 
 
+uint32
+binary_search_tree_depth(struct binary_search_tree *root)
+{
+    uint32 depth;
+    uint32 left;
+    uint32 right;
+
+    depth = 0u;
+    if (root) {
+        left = binary_search_tree_depth(root->left);
+        right = binary_search_tree_depth(root->right);
+        depth = MAX_U(left, right) + 1;
+    }
+
+    return depth;
+}
+
+
 bool
 binary_search_tree_node_contain_p(struct binary_search_tree *root,
     struct binary_search_tree *node)

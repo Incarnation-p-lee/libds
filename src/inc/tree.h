@@ -26,6 +26,7 @@ struct binary_search_tree * binary_search_tree_node_find_min(struct binary_searc
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
+uint32 binary_search_tree_depth(struct binary_search_tree *root);
 
 
 
