@@ -1,3 +1,26 @@
+static inline struct doubly_linked_list *
+test_doubly_linked_list_sample(uint32 range, uint32 node_count)
+{
+    struct doubly_linked_list *retval;
+    struct doubly_linked_list *tmp;
+    uint32 id;
+    uint32 i;
+
+    retval = doubly_linked_list_create();
+    doubly_linked_list_node_initial(retval, retval, range);
+
+    i = 1;
+    while (i < node_count) {
+        id = (uint32)(rand() % range);
+        tmp = doubly_linked_list_create();
+        doubly_linked_list_node_initial(tmp, tmp, id);
+        doubly_linked_list_node_insert_before(retval, tmp);
+        i++;
+    }
+
+    return retval;
+}
+
 static void
 test_doubly_linked_list_create(void)
 {
@@ -581,17 +604,16 @@ test_doubly_linked_list_node_lazy_remove(void)
 }
 
 static void
-test_dlinker_list_iterate(void)
+test_doubly_linked_list_iterate(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = test_doubly_linked_list_sample(0x1FE2, 0xBF81);
 
-    doubly_linked_list_iterate(head, &doubly_linked_list_iterate_handler);
+    doubly_linked_list_iterate(head, &linked_list_iterate_handler);
 
     tmp = head;
     do {
@@ -604,7 +626,7 @@ test_dlinker_list_iterate(void)
 
     doubly_linked_list_destroy(&head);
 
-    test_result_print(SYM_2_STR(doubly_linked_list_iterate_node), is_passed);
+    test_result_print(SYM_2_STR(doubly_linked_list_iterate), is_passed);
     return;
 }
 

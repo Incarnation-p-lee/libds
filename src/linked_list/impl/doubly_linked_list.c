@@ -306,15 +306,14 @@ doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node)
 }
 
 void
-doubly_linked_list_iterate(struct doubly_linked_list *head,
-    void (*handler)(struct doubly_linked_list *))
+doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *))
 {
     register struct doubly_linked_list *node;
 
     if (head && handler) {
         node = head;
         do {
-            (*handler)(node);
+            (*handler)(node->val);
             node = node->next;
         } while (node != head);
     }

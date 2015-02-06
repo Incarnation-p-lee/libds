@@ -33,7 +33,7 @@ doubly_linked_list_unit_test(void)
         &test_doubly_linked_list_serialize,
         &test_doubly_linked_list_node_remove,
         &test_doubly_linked_list_node_lazy_remove,
-        &test_dlinker_list_iterate,
+        &test_doubly_linked_list_iterate,
         &test_doubly_linked_list_join,
     };
     register void (**iter)(void);
@@ -72,7 +72,7 @@ single_linked_list_unit_test(void)
         &test_single_linked_list_serialize,
         &test_single_linked_list_node_remove,
         &test_single_linked_list_node_lazy_remove,
-        &test_slinker_list_iterate,
+        &test_single_linked_list_iterate,
         &test_single_linked_list_join,
     };
     register void (**iter)(void);

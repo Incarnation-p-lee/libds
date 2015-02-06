@@ -29,7 +29,7 @@ bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct doubly
 void doubly_linked_list_serialize(struct doubly_linked_list *head);
 struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list *node);
 void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
-void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(struct doubly_linked_list *));
+void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 
 
@@ -54,7 +54,7 @@ bool single_linked_list_contains_p(struct single_linked_list *tar, struct single
 void single_linked_list_serialize(struct single_linked_list *head);
 struct single_linked_list * single_linked_list_node_remove(struct single_linked_list *node);
 void single_linked_list_node_lazy_remove(struct single_linked_list *node);
-void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(struct single_linked_list *));
+void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 
 #endif

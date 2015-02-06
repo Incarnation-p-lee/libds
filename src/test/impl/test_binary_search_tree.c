@@ -348,3 +348,41 @@ test_binary_search_tree_node_remove(void)
     return;
 
 }
+
+static void
+test_binary_search_tree_iterate(void)
+{
+    bool is_passed;
+    struct binary_search_tree *root;
+    struct binary_search_tree *tmp;
+
+    is_passed = true;
+    root = test_binary_search_tree_sample(0x312A1, 0x72B7C);
+
+    binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_PRE);
+    if (root->chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_IN);
+    tmp = binary_search_tree_node_find(root, 0x1234);
+    if (tmp->chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_POST);
+    tmp = binary_search_tree_node_find_max(root);
+    if (tmp->chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    tmp = binary_search_tree_node_find_min(root);
+    if (tmp->chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    binary_search_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(binary_search_tree_iterate), is_passed);
+    return;
+}

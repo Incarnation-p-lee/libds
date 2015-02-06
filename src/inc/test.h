@@ -31,11 +31,11 @@ static void binary_search_tree_unit_test(void);
 
 static void test_result_print(char *name, bool passed);
 static sint32 * int_array_generate(sint32 size);
-static void doubly_linked_list_iterate_handler(struct doubly_linked_list *node);
-static void single_linked_list_iterate_handler(struct single_linked_list *node);
+static void linked_list_iterate_handler(void *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 static inline struct binary_search_tree * test_binary_search_tree_sample(uint64 range, uint32 node_count);
 static inline struct single_linked_list * test_single_linked_list_sample(uint32 range, uint32 node_count);
+static inline struct doubly_linked_list * test_doubly_linked_list_sample(uint32 range, uint32 node_count);
 
 #endif

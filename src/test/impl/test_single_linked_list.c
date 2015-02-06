@@ -594,7 +594,7 @@ test_single_linked_list_node_lazy_remove(void)
 }
 
 static void
-test_slinker_list_iterate(void)
+test_single_linked_list_iterate(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp;
@@ -603,11 +603,11 @@ test_slinker_list_iterate(void)
     is_passed = true;
     head = test_single_linked_list_sample(0x24E2, 0x1F82);
 
-    single_linked_list_iterate(head, &single_linked_list_iterate_handler);
+    single_linked_list_iterate(head, &linked_list_iterate_handler);
 
     tmp = head;
     do {
-        if (tmp->id != 0xDAEDu) {
+        if (tmp->id != 0xDEADu) {
             is_passed = false;
         }
         tmp = tmp->next;

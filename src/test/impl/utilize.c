@@ -35,20 +35,10 @@ end_of_report_print(void)
 }
 
 static void
-doubly_linked_list_iterate_handler(struct doubly_linked_list *node)
+linked_list_iterate_handler(void *node)
 {
     if (node) {
-        node->id = 0xDEADu;
-    }
-
-    return;
-}
-
-static void
-single_linked_list_iterate_handler(struct single_linked_list *node)
-{
-    if (node) {
-        node->id = 0xDAEDu;
+        *(uint32 *)node = 0xDEADu;
     }
 
     return;
@@ -69,6 +59,19 @@ queue_iterate_handler(void *ptr)
 {
     if (ptr) {
         *(uint32 *)ptr += 1;
+    }
+
+    return;
+}
+
+static void
+tree_iterate_handler(void *ptr)
+{
+    struct binary_search_tree *tmp;
+
+    if (ptr) {
+        tmp = ptr;
+        tmp->chain.link->id = 0xDEADu;
     }
 
     return;
