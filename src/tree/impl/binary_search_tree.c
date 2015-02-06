@@ -240,3 +240,37 @@ binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
     }
     return;
 }
+
+void
+binary_search_tree_iterate(struct binary_search_tree *root,
+    void (*handle)(void *), enum ITER_ORDER order)
+{
+    if (root && handle) {
+        if (LEGAL_ORDER_P(order)) {
+            binary_search_tree_iterate_internal(root, handle, order);
+        }
+    }
+}
+
+static inline void
+binary_search_tree_iterate_internal(struct binary_search_tree *root,
+    void (*handle)(void *), enum ITER_ORDER order)
+{
+    if (root) {
+        if (ORDER_PRE == order) {
+            doubly_linked_list_iterate(root->chain.link, handle);
+        }
+
+        binary_search_tree_iterate_internal(root->left, handle, order);
+
+        if (ORDER_IN == order) {
+            doubly_linked_list_iterate(root->chain.link, handle);
+        }
+
+        binary_search_tree_iterate_internal(root->right, handle, order);
+
+        if (ORDER_POST == order) {
+            doubly_linked_list_iterate(root->chain.link, handle);
+        }
+    }
+}

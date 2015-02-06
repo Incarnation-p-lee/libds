@@ -319,15 +319,14 @@ single_linked_list_node_lazy_remove(struct single_linked_list *node)
 }
 
 void
-single_linked_list_iterate(struct single_linked_list *head,
-    void (*handler)(struct single_linked_list *))
+single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *))
 {
     register struct single_linked_list *node;
 
     if (head && handler) {
         node = head;
         do {
-            (*handler)(node);
+            (*handler)(node->val);
             node = node->next;
         } while (node != head);
     }

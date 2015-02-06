@@ -183,11 +183,20 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 #ifndef HAVE_TREE_H
 #define HAVE_TREE_H
 
+enum ITER_ORDER {
+    ORDER_START,
+    ORDER_PRE,
+    ORDER_IN,
+    ORDER_POST,
+    ORDER_END,
+};
+
+#define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
+
 #ifdef DEBUG
     extern void * malloc_wrap(size_t size);
     extern void free_wrap(void *ptr);
 #endif
-
 
 
 /* BINARY SEARCH TREE */
@@ -203,6 +212,7 @@ extern struct binary_search_tree * binary_search_tree_node_find_max(struct binar
 extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
 extern uint32 binary_search_tree_depth(struct binary_search_tree *root);
+extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
 
 
@@ -289,7 +299,7 @@ extern bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct
 extern void doubly_linked_list_serialize(struct doubly_linked_list *head);
 extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
-extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(struct doubly_linked_list *));
+extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 
 
@@ -314,7 +324,7 @@ extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct
 extern void single_linked_list_serialize(struct single_linked_list *head);
 extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list *node);
 extern void single_linked_list_node_lazy_remove(struct single_linked_list *node);
-extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(struct single_linked_list *));
+extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 extern struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 
 #endif

@@ -23,6 +23,7 @@ binary_search_tree_unit_test(void)
         &test_binary_search_tree_node_contain_p,
         &test_binary_search_tree_node_insert,
         &test_binary_search_tree_node_remove,
+        &test_binary_search_tree_iterate,
     };
     register void (**iter)(void);
 
