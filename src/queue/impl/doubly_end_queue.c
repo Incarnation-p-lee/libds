@@ -45,13 +45,20 @@ doubly_end_queue_length(struct doubly_end_queue *queue)
 }
 
 static inline struct doubly_end_queue_list *
+doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link)
+{
+    return (void *)((void *)link
+        - (void *)(&((struct doubly_end_queue_list *)0)->link));
+}
+
+static inline struct doubly_end_queue_list *
 doubly_end_queue_list_next(struct doubly_end_queue_list *node)
 {
     struct doubly_end_queue_list *next;
 
     next = NULL;
     if (node) {
-        next = UNOFFSET_OF(node->link.next, struct doubly_end_queue_list, link);
+        next = doubly_end_queue_list_offset_reflect(node->link.next);
     }
     return next;
 }
@@ -63,7 +70,7 @@ doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
 
     previous = NULL;
     if (node) {
-        previous = UNOFFSET_OF(node->link.previous, struct doubly_end_queue_list, link);
+        previous = doubly_end_queue_list_offset_reflect(node->link.previous);
     }
     return previous;
 }

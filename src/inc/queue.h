@@ -77,5 +77,6 @@ void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(voi
 static inline void doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_next(struct doubly_end_queue_list *node);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
+static inline struct doubly_end_queue_list * doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link);
 /* END OF DOUBLY END QUEUE */
 #endif

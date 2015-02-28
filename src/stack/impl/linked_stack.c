@@ -62,6 +62,13 @@ linked_stack_destroy(struct linked_stack **stack)
     return;
 }
 
+static inline struct linked_stack_space *
+linked_stack_space_offset_reflect(struct doubly_linked_list *link)
+{
+    return (void *)((void *)link
+        - (void *)(&((struct linked_stack_space *)0)->link));
+}
+
 /*
  * _RETURN_ next node of linked stack space.
  *   If NULL _ARGV_, _RETURN_ NULL
@@ -76,7 +83,7 @@ linked_stack_space_next_node(struct linked_stack_space *node)
     if (node) {
         tmp = doubly_linked_list_node_next(&node->link);
         if (tmp) {
-            next = UNOFFSET_OF(tmp, struct linked_stack_space, link);
+            next = linked_stack_space_offset_reflect(tmp);
         }
     }
 
@@ -97,7 +104,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
     if (node) {
         tmp = doubly_linked_list_node_previous(&node->link);
         if (tmp) {
-            previous = UNOFFSET_OF(tmp, struct linked_stack_space, link);
+            previous = linked_stack_space_offset_reflect(tmp);
         }
     }
 

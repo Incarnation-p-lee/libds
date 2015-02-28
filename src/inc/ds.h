@@ -167,6 +167,15 @@ struct binary_search_tree {
     struct binary_search_tree *left;
     struct binary_search_tree *right;
 };
+
+/*
+ * avl tree
+ */
+struct avl_tree {
+    struct binary_search_tree node;
+    /* root node has height 1 */
+    uint32                    height;
+};
 #endif
 /* END of ./src/inc/data_structure_types.h */
 

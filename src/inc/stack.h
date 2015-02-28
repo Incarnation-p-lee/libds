@@ -53,6 +53,7 @@ static inline uint32 linked_stack_space_node_capacity(struct linked_stack_space 
 static inline uint32 linked_stack_space_node_space_rest(struct linked_stack_space *node);
 static inline bool linked_stack_space_node_full_p(struct linked_stack_space *node);
 static inline bool linked_stack_space_node_empty_p(struct linked_stack_space *node);
+static inline struct linked_stack_space * linked_stack_space_offset_reflect(struct doubly_linked_list *link);
 /* END OF LINKED STACK */
 
 #endif
