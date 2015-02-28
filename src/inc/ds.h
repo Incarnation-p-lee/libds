@@ -172,8 +172,8 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
-    struct binary_search_tree node;
-    /* root node has height 1 */
+    struct binary_search_tree b_node;
+    /* root node has height 0 */
     uint32                    height;
 };
 #endif
@@ -220,7 +220,7 @@ extern struct binary_search_tree * binary_search_tree_node_find_min(struct binar
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-extern uint32 binary_search_tree_depth(struct binary_search_tree *root);
+extern uint32 binary_search_tree_height(struct binary_search_tree *root);
 extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
 
@@ -242,8 +242,6 @@ extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*h
 #define false       0
 
 #define SYM_2_STR(symbol)   (#symbol)
-#define UNOFFSET_OF(ptr, type, member) \
-    (void *)((void *)ptr - (void *)(&((type *)0)->member))
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);

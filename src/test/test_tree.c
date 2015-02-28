@@ -19,7 +19,7 @@ binary_search_tree_unit_test(void)
         &test_binary_search_tree_node_find,
         &test_binary_search_tree_node_find_min,
         &test_binary_search_tree_node_find_max,
-        &test_binary_search_tree_depth,
+        &test_binary_search_tree_height,
         &test_binary_search_tree_node_contain_p,
         &test_binary_search_tree_node_insert,
         &test_binary_search_tree_node_remove,

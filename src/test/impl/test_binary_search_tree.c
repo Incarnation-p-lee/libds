@@ -237,7 +237,7 @@ test_binary_search_tree_node_find_max(void)
 }
 
 static void
-test_binary_search_tree_depth(void)
+test_binary_search_tree_height(void)
 {
     bool is_passed;
     struct binary_search_tree *root;
@@ -245,18 +245,18 @@ test_binary_search_tree_depth(void)
 
     is_passed = true;
     root = test_binary_search_tree_sample(0x183F1, 0x1820C);
-    if (0u != binary_search_tree_depth(NULL)) {
+    if (0u != binary_search_tree_height(NULL)) {
         is_passed = false;
     }
 
-    child = MAX_U(binary_search_tree_depth(root->left),
-                  binary_search_tree_depth(root->right));
-    if (child + 1 != binary_search_tree_depth(root)) {
+    child = MAX_U(binary_search_tree_height(root->left),
+                  binary_search_tree_height(root->right));
+    if (child + 1 != binary_search_tree_height(root)) {
         is_passed = false;
     }
     binary_search_tree_destroy(&root);
 
-    test_result_print(SYM_2_STR(binary_search_tree_depth), is_passed);
+    test_result_print(SYM_2_STR(binary_search_tree_height), is_passed);
     return;
 }
 

@@ -131,8 +131,8 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
-    struct binary_search_tree node;
-    /* root node has height 1 */
+    struct binary_search_tree b_node;
+    /* root node has height 0 */
     uint32                    height;
 };
 #endif

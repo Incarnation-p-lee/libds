@@ -114,7 +114,7 @@ binary_search_tree_node_find_max(struct binary_search_tree *root)
 
 
 uint32
-binary_search_tree_depth(struct binary_search_tree *root)
+binary_search_tree_height(struct binary_search_tree *root)
 {
     uint32 depth;
     uint32 left;
@@ -122,8 +122,8 @@ binary_search_tree_depth(struct binary_search_tree *root)
 
     depth = 0u;
     if (root) {
-        left = binary_search_tree_depth(root->left);
-        right = binary_search_tree_depth(root->right);
+        left = binary_search_tree_height(root->left);
+        right = binary_search_tree_height(root->right);
         depth = MAX_U(left, right) + 1;
     }
 
