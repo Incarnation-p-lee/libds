@@ -241,15 +241,15 @@ test_binary_search_tree_height(void)
 {
     bool is_passed;
     struct binary_search_tree *root;
-    uint32 child;
+    sint32 child;
 
     is_passed = true;
     root = test_binary_search_tree_sample(0x183F1, 0x1820C);
-    if (0u != binary_search_tree_height(NULL)) {
+    if (-1 != binary_search_tree_height(NULL)) {
         is_passed = false;
     }
 
-    child = MAX_U(binary_search_tree_height(root->left),
+    child = MAX_S(binary_search_tree_height(root->left),
                   binary_search_tree_height(root->right));
     if (child + 1 != binary_search_tree_height(root)) {
         is_passed = false;

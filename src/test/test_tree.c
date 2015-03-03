@@ -1,9 +1,11 @@
 #include "impl/test_binary_search_tree.c"
+#include "impl/test_avl_tree.c"
 
 void
 tree_unit_test(void)
 {
     binary_search_tree_unit_test();
+    avl_tree_unit_test();
     return;
 }
 
@@ -28,6 +30,27 @@ binary_search_tree_unit_test(void)
     register void (**iter)(void);
 
     fprintf(stdout, "\n  >> Binary Search Tree Unit Test <<\n");
+    iter = all_tests;
+    while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
+        (*iter++)();
+    }
+
+    fprintf(stdout, "  >> Test Finished.\n");
+    return;
+}
+
+static void
+avl_tree_unit_test(void)
+{
+    void (*all_tests[])(void) = {
+        &test_avl_tree_create,
+        &test_avl_tree_node_create,
+        &test_avl_tree_initial,
+        &test_avl_tree_node_initial,
+    };
+    register void (**iter)(void);
+
+    fprintf(stdout, "\n  >> AVL Tree Unit Test <<\n");
     iter = all_tests;
     while (iter < all_tests + sizeof(all_tests) / sizeof(all_tests[0])) {
         (*iter++)();

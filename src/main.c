@@ -2,8 +2,8 @@
 #include "externs.h"
 
 
-sint32
-main(sint32 argc, char **argv)
+int
+main(int argc, char **argv)
 {
     register void (**iter)(void) = test_suite;
 

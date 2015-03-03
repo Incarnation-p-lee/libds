@@ -167,7 +167,7 @@ struct binary_search_tree {
     struct binary_search_tree *left;
     struct binary_search_tree *right;
     uint32                    height;  /* reserved for avl */
-    /* root node has height 0 */
+    /* root node has height 0, NULL node has height -1 */
 };
 
 /*
@@ -220,7 +220,7 @@ extern struct binary_search_tree * binary_search_tree_node_find_min(struct binar
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-extern uint32 binary_search_tree_height(struct binary_search_tree *root);
+extern sint32 binary_search_tree_height(struct binary_search_tree *root);
 extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
 /* END OF BINARY SEARCH TREE */
@@ -235,6 +235,7 @@ extern void avl_tree_destroy(struct avl_tree **root);
 extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
 extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
 extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
+extern bool avl_tree_balanced_p(struct avl_tree *root);
 
 /* END OF AVL TREE */
 
@@ -278,6 +279,7 @@ extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
     } while (0);
 
 #define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
+#define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 
 #endif

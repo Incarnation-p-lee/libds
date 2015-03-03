@@ -21,7 +21,7 @@ void
 avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
 {
     if (node) {
-        node->b_node.height = 1u;
+        node->b_node.height = 0u;
         binary_search_tree_node_initial(avl_tree_ptr_avl2bst(node), val, nice);
     }
 
@@ -66,4 +66,29 @@ avl_tree_node_find_max(struct avl_tree *root)
 {
     return avl_tree_ptr_bst2avl(
         binary_search_tree_node_find_max(avl_tree_ptr_avl2bst(root)));
+}
+
+bool
+avl_tree_balanced_p(struct avl_tree *root)
+{
+    sint32 left;
+    sint32 right;
+
+    if (root) {
+        left = binary_search_tree_height(root->b_node.left);
+        right = binary_search_tree_height(root->b_node.right);
+        if (abs(left - right) > 1) {
+            return false;
+        } else {
+            if (!avl_tree_balanced_p(avl_tree_ptr_bst2avl(root->b_node.left))) {
+                return false;
+            } else if (!avl_tree_balanced_p(avl_tree_ptr_bst2avl(root->b_node.right))) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    return true;
 }

@@ -36,7 +36,7 @@ struct binary_search_tree * binary_search_tree_node_find_min(struct binary_searc
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
 void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-uint32 binary_search_tree_height(struct binary_search_tree *root);
+sint32 binary_search_tree_height(struct binary_search_tree *root);
 void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
 static void inline binary_search_tree_node_destroy(struct binary_search_tree *node);
@@ -53,6 +53,7 @@ void avl_tree_destroy(struct avl_tree **root);
 struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
 struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
 struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
+bool avl_tree_balanced_p(struct avl_tree *root);
 
 static inline struct avl_tree * avl_tree_ptr_bst2avl(struct binary_search_tree *node);
 static inline struct binary_search_tree * avl_tree_ptr_avl2bst(struct avl_tree *node);
