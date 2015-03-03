@@ -39,13 +39,23 @@ void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nic
 uint32 binary_search_tree_height(struct binary_search_tree *root);
 void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
-
-
 static void inline binary_search_tree_node_destroy(struct binary_search_tree *node);
 static inline void binary_search_tree_iterate_internal(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-
-
 /* END OF BINARY SEARCH TREE */
+
+
+/* AVL TREE */
+struct avl_tree * avl_tree_create(void);
+struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
+void avl_tree_initial(struct avl_tree *root);
+void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
+void avl_tree_destroy(struct avl_tree **root);
+struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
+struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
+struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
+
+static inline struct avl_tree * avl_tree_ptr_bst2avl(struct binary_search_tree *node);
+static inline struct binary_search_tree * avl_tree_ptr_avl2bst(struct avl_tree *node);
+/* END OF AVL TREE */
 
 #endif

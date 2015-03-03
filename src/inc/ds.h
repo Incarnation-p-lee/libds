@@ -166,6 +166,8 @@ struct binary_search_tree {
     struct collision_chain    chain;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
+    uint32                    height;  /* reserved for avl */
+    /* root node has height 0 */
 };
 
 /*
@@ -173,8 +175,6 @@ struct binary_search_tree {
  */
 struct avl_tree {
     struct binary_search_tree b_node;
-    /* root node has height 0 */
-    uint32                    height;
 };
 #endif
 /* END of ./src/inc/data_structure_types.h */
@@ -223,12 +223,20 @@ extern void binary_search_tree_node_remove(struct binary_search_tree **root, sin
 extern uint32 binary_search_tree_height(struct binary_search_tree *root);
 extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
-
-
-
-
-
 /* END OF BINARY SEARCH TREE */
+
+
+/* AVL TREE */
+extern struct avl_tree * avl_tree_create(void);
+extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
+extern void avl_tree_initial(struct avl_tree *root);
+extern void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
+extern void avl_tree_destroy(struct avl_tree **root);
+extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
+extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
+extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
+
+/* END OF AVL TREE */
 
 #endif
 /* END of ./src/inc/tree.h */

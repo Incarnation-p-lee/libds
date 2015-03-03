@@ -6,3 +6,4 @@
 #include "tree.h"
 
 #include "impl/binary_search_tree.c"
+#include "impl/avl_tree.c"
