@@ -128,3 +128,112 @@ test_avl_tree_node_initial(void)
     test_result_print(SYM_2_STR(avl_tree_node_initial), is_passed);
     return;
 }
+
+static void
+test_avl_tree_destroy(void)
+{
+    bool is_passed;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    tmp = avl_tree_create();
+
+    avl_tree_destroy(&tmp);
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
+    tmp = test_avl_tree_sample(0xAB321, 0x18E62);
+    avl_tree_destroy(&tmp);
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
+    test_result_print(SYM_2_STR(avl_tree_destroy), is_passed);
+    return;
+}
+
+static void
+test_avl_tree_node_find(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x7F28A, 0x87D21);
+
+    if (root != avl_tree_node_find(root, root->b_node.chain.nice)) {
+        is_passed = false;
+    }
+
+    if (NULL != avl_tree_node_find(root, 0x7FFFFFFF)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_find_min(root);
+    if (tmp != avl_tree_node_find(root, tmp->b_node.chain.nice)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_create(&is_passed, 0x7FFFFFFF);
+    if (NULL != avl_tree_node_find(root, tmp->b_node.chain.nice)) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+    avl_tree_destroy(&tmp);
+
+    test_result_print(SYM_2_STR(avl_tree_node_find), is_passed);
+    return;
+}
+
+static void
+test_avl_tree_node_find_min(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x39131, 0x264DC);
+
+    if (NULL != avl_tree_node_find_min(NULL)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_find_min(root);
+    if (NULL != tmp->b_node.left) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_node_find_min), is_passed);
+    return;
+}
+
+static void
+test_avl_tree_node_find_max(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x3F1A1, 0x2E494);
+
+    if (NULL != avl_tree_node_find_max(NULL)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_find_max(root);
+    if (NULL != tmp->b_node.right) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_node_find_max), is_passed);
+    return;
+}

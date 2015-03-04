@@ -47,6 +47,10 @@ avl_tree_unit_test(void)
         &test_avl_tree_node_create,
         &test_avl_tree_initial,
         &test_avl_tree_node_initial,
+        &test_avl_tree_destroy,
+        &test_avl_tree_node_find,
+        &test_avl_tree_node_find_min,
+        &test_avl_tree_node_find_max,
     };
     register void (**iter)(void);
 
