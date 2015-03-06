@@ -237,3 +237,28 @@ test_avl_tree_node_find_max(void)
     test_result_print(SYM_2_STR(avl_tree_node_find_max), is_passed);
     return;
 }
+
+static void
+test_avl_tree_height(void)
+{
+    bool is_passed;
+    sint32 child;
+    struct avl_tree *root;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x9E1A2, 0xAB427);
+
+    if (-1 != avl_tree_height(NULL)) {
+        is_passed = false;
+    }
+
+    child = MAX_S(avl_tree_height(root->b_node.avl_left),
+        avl_tree_height(root->b_node.avl_right));
+    if (child + 1 != avl_tree_height(root)) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+    test_result_print(SYM_2_STR(avl_tree_height), is_passed);
+    return;
+}

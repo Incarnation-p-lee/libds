@@ -80,9 +80,9 @@ avl_tree_balanced_p(struct avl_tree *root)
         if (abs(left - right) > 1) {
             return false;
         } else {
-            if (!avl_tree_balanced_p(avl_tree_ptr_bst2avl(root->b_node.left))) {
+            if (!avl_tree_balanced_p(root->b_node.avl_left)) {
                 return false;
-            } else if (!avl_tree_balanced_p(avl_tree_ptr_bst2avl(root->b_node.right))) {
+            } else if (!avl_tree_balanced_p(root->b_node.avl_right)) {
                 return false;
             } else {
                 return true;
@@ -91,4 +91,10 @@ avl_tree_balanced_p(struct avl_tree *root)
     }
 
     return true;
+}
+
+sint32
+avl_tree_height(struct avl_tree *root)
+{
+    return binary_search_tree_height(avl_tree_ptr_avl2bst(root));
 }

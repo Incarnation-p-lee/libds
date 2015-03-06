@@ -250,7 +250,7 @@ test_binary_search_tree_height(void)
     }
 
     child = MAX_S(binary_search_tree_height(root->left),
-                  binary_search_tree_height(root->right));
+        binary_search_tree_height(root->right));
     if (child + 1 != binary_search_tree_height(root)) {
         is_passed = false;
     }

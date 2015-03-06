@@ -163,11 +163,17 @@ struct collision_chain {
  * binary search tree
  */
 struct binary_search_tree {
-    struct collision_chain    chain;
-    struct binary_search_tree *left;
-    struct binary_search_tree *right;
-    uint32                    height;  /* reserved for avl */
+    struct collision_chain chain;
+    uint32                 height;  /* reserved for avl */
     /* root node has height 0, NULL node has height -1 */
+    union {
+        struct binary_search_tree *left;
+        struct avl_tree           *avl_left;  /* reserved for avl */
+    };
+    union {
+        struct binary_search_tree *right;
+        struct avl_tree           *avl_right; /* reserved for avl */
+    };
 };
 
 /*
@@ -236,6 +242,7 @@ extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
 extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
 extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
 extern bool avl_tree_balanced_p(struct avl_tree *root);
+extern sint32 avl_tree_height(struct avl_tree *root);
 
 /* END OF AVL TREE */
 
