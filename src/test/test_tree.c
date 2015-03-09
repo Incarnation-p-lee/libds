@@ -52,6 +52,8 @@ avl_tree_unit_test(void)
         &test_avl_tree_node_find_min,
         &test_avl_tree_node_find_max,
         &test_avl_tree_height,
+        &test_avl_tree_node_contain_p,
+        &test_avl_tree_iterate,
     };
     register void (**iter)(void);
 

@@ -262,3 +262,83 @@ test_avl_tree_height(void)
     test_result_print(SYM_2_STR(avl_tree_height), is_passed);
     return;
 }
+
+static void
+test_avl_tree_node_contain_p(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+    struct avl_tree *fake;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0xE28D1, 0xC251F);
+    tmp = avl_tree_node_create(&is_passed, 0x1234);
+
+    if (avl_tree_node_contain_p(root, NULL)) {
+        is_passed = false;
+    }
+
+    if (avl_tree_node_contain_p(root, tmp)) {
+        is_passed = false;
+    }
+    avl_tree_destroy(&tmp);
+
+    tmp = avl_tree_node_find_max(root);
+    if (!avl_tree_node_contain_p(root, tmp)) {
+        is_passed = false;
+    }
+
+    fake = avl_tree_node_create(tmp, tmp->b_node.chain.nice);
+    if (avl_tree_node_contain_p(root, fake)) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&fake);
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_node_contain_p), is_passed);
+    return;
+}
+
+static void
+test_avl_tree_iterate(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+    sint64 nice;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x3813F, 0xAF3EC);
+
+    avl_tree_iterate(root, &tree_iterate_handler, ORDER_PRE);
+    if (root->b_node.chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    avl_tree_iterate(root, &tree_iterate_handler, ORDER_IN);
+    nice = 0x1;
+    while (!(tmp = avl_tree_node_find(root, nice)))
+        nice++;
+    if (tmp->b_node.chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    avl_tree_iterate(root, &tree_iterate_handler, ORDER_POST);
+    tmp = avl_tree_node_find_max(root);
+    if (tmp->b_node.chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_find_min(root);
+    if (tmp->b_node.chain.link->id != 0xDEADu) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_iterate), is_passed);
+    return;
+
+}

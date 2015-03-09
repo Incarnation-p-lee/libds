@@ -69,6 +69,13 @@ avl_tree_node_find_max(struct avl_tree *root)
 }
 
 bool
+avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node)
+{
+    return binary_search_tree_node_contain_p(avl_tree_ptr_avl2bst(root),
+        avl_tree_ptr_avl2bst(node));
+}
+
+bool
 avl_tree_balanced_p(struct avl_tree *root)
 {
     sint32 left;
@@ -91,6 +98,14 @@ avl_tree_balanced_p(struct avl_tree *root)
     }
 
     return true;
+}
+
+void
+avl_tree_iterate(struct avl_tree *root,
+    void (*handle)(void *), enum ITER_ORDER order)
+{
+    binary_search_tree_iterate(avl_tree_ptr_avl2bst(root), handle, order);
+    return;
 }
 
 sint32

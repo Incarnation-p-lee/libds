@@ -55,6 +55,8 @@ struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
 struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
 bool avl_tree_balanced_p(struct avl_tree *root);
 sint32 avl_tree_height(struct avl_tree *root);
+bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
+void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
 static inline struct avl_tree * avl_tree_ptr_bst2avl(struct binary_search_tree *node);
 static inline struct binary_search_tree * avl_tree_ptr_avl2bst(struct avl_tree *node);

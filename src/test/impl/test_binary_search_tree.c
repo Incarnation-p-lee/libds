@@ -379,9 +379,10 @@ test_binary_search_tree_iterate(void)
     bool is_passed;
     struct binary_search_tree *root;
     struct binary_search_tree *tmp;
+    sint64 nice;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0x312A1, 0x72B7C);
+    root = test_binary_search_tree_sample(0xAE328, 0xC872D);
 
     binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_PRE);
     if (root->chain.link->id != 0xDEADu) {
@@ -389,7 +390,9 @@ test_binary_search_tree_iterate(void)
     }
 
     binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_IN);
-    tmp = binary_search_tree_node_find(root, 0x1234);
+    nice = 0x0;
+    while (!(tmp = binary_search_tree_node_find(root, nice)))
+        nice++;
     if (tmp->chain.link->id != 0xDEADu) {
         is_passed = false;
     }
