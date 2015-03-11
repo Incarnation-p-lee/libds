@@ -54,6 +54,7 @@ avl_tree_unit_test(void)
         &test_avl_tree_height,
         &test_avl_tree_node_contain_p,
         &test_avl_tree_iterate,
+        &test_avl_tree_balanced_p,
     };
     register void (**iter)(void);
 

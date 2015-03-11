@@ -342,3 +342,39 @@ test_avl_tree_iterate(void)
     return;
 
 }
+
+static void
+test_avl_tree_balanced_p(void)
+{
+    bool is_passed;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x183EA, 0xED264);
+    if (!avl_tree_balanced_p(NULL)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_create(&is_passed, 0x1234);
+    if (!avl_tree_balanced_p(tmp)) {
+        is_passed = false;
+    }
+    avl_tree_destroy(&tmp);
+
+    tmp = avl_tree_node_create(&is_passed, 0xFFFFE);
+    binary_search_tree_node_insert((struct binary_search_tree *)root,
+        (struct binary_search_tree **)&tmp);
+    tmp = avl_tree_node_create(&is_passed, 0xFFFFF);
+    binary_search_tree_node_insert((struct binary_search_tree *)root,
+        (struct binary_search_tree **)&tmp);
+
+    if (avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_balanced_p), is_passed);
+    return;
+}
