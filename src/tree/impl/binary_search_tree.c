@@ -157,31 +157,38 @@ binary_search_tree_node_contain_p(struct binary_search_tree *root,
     return false;
 }
 
-
+/*
+ * insert one node into given root binary search tree
+ * @root: the pointer of given tree
+ * @node: the pointer of the node
+ *
+ * RETURN the pointer of inserted node of the binary search tree
+ *        If root is NULL or node is NULL, RETURN NULL.
+ */
 struct binary_search_tree *
 binary_search_tree_node_insert(struct binary_search_tree *root,
-    struct binary_search_tree **node)
+    struct binary_search_tree *node)
 {
     register struct binary_search_tree **iter;
 
-    if (node && *node && root) {
+    if (node && root) {
         iter = &root;
         while (*iter) {
-            if ((*node)->chain.nice > (*iter)->chain.nice) {
+            if (node->chain.nice > (*iter)->chain.nice) {
                 iter = &(*iter)->right;
-            } else if ((*node)->chain.nice < (*iter)->chain.nice) {
+            } else if (node->chain.nice < (*iter)->chain.nice) {
                 iter = &(*iter)->left;
             } else {
-                if (*iter != *node) {
-                    doubly_linked_list_join((*iter)->chain.link, (*node)->chain.link);
-                    binary_search_tree_destroy(node);
+                if (*iter != node) {
+                    doubly_linked_list_join((*iter)->chain.link, node->chain.link);
                 }
                 return *iter;
             }
         }
-        *iter = *node;
+        return *iter = node;
     }
-    return *node;
+
+    return NULL;
 }
 
 static inline void

@@ -14,7 +14,9 @@ test_avl_tree_sample(uint64 range, uint32 node_count)
         nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_node_create(NULL, 0x0);
         binary_search_tree_node_initial(tmp, tmp, nice);
-        binary_search_tree_node_insert(retval, &tmp);
+        if (tmp != binary_search_tree_node_insert(retval, tmp)) {
+            binary_search_tree_destroy(&tmp);
+        }
         i++;
     }
 
@@ -364,10 +366,10 @@ test_avl_tree_balanced_p(void)
 
     tmp = avl_tree_node_create(&is_passed, 0xFFFFE);
     binary_search_tree_node_insert((struct binary_search_tree *)root,
-        (struct binary_search_tree **)&tmp);
+        (struct binary_search_tree *)tmp);
     tmp = avl_tree_node_create(&is_passed, 0xFFFFF);
     binary_search_tree_node_insert((struct binary_search_tree *)root,
-        (struct binary_search_tree **)&tmp);
+        (struct binary_search_tree *)tmp);
 
     if (avl_tree_balanced_p(root)) {
         is_passed = false;

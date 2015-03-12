@@ -14,7 +14,9 @@ test_binary_search_tree_sample(uint64 range, uint32 node_count)
         nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_node_create(NULL, 0x0);
         binary_search_tree_node_initial(tmp, tmp, nice);
-        binary_search_tree_node_insert(retval, &tmp);
+        if (tmp != binary_search_tree_node_insert(retval, tmp)) {
+            binary_search_tree_destroy(&tmp);
+        }
         i++;
     }
 
@@ -309,18 +311,27 @@ test_binary_search_tree_node_insert(void)
     root = test_binary_search_tree_sample(0xB4321, 0x31A2B);
     tmp = binary_search_tree_node_create(&is_passed, 0xFFDEA);
 
-    if (NULL != binary_search_tree_node_find(root, tmp->chain.nice)) {
+    if (NULL != binary_search_tree_node_insert(root, NULL)) {
         is_passed = false;
     }
 
-    binary_search_tree_node_insert(root, &tmp);
+    if (tmp != binary_search_tree_node_insert(root, tmp)) {
+        is_passed = false;
+    }
+
     if (tmp != binary_search_tree_node_find(root, tmp->chain.nice)) {
         is_passed = false;
     }
 
-    if (tmp != binary_search_tree_node_insert(root, &tmp)) {
+    if (tmp != binary_search_tree_node_insert(root, tmp)) {
         is_passed = false;
     }
+
+    tmp = binary_search_tree_node_create(&is_passed, 0xFFDEA);
+    if (tmp == binary_search_tree_node_insert(root, tmp)) {
+        is_passed = false;
+    }
+    binary_search_tree_destroy(&tmp);
 
     binary_search_tree_destroy(&root);
 
