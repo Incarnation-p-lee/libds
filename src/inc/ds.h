@@ -245,6 +245,7 @@ extern bool avl_tree_balanced_p(struct avl_tree *root);
 extern sint32 avl_tree_height(struct avl_tree *root);
 extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
 extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
+extern struct avl_tree * avl_tree_node_insert(struct avl_tree *root, struct avl_tree *node);
 
 /* END OF AVL TREE */
 
