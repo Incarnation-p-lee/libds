@@ -326,7 +326,7 @@ avl_tree_node_insert(struct avl_tree *root, struct avl_tree *node)
             if (!avl_tree_node_child_left(root)) {
                 avl_tree_node_child_left_set(root, node);
             } else {
-                avl_tree_node_insert(avl_tree_node_child_left(root), node);
+                node = avl_tree_node_insert(avl_tree_node_child_left(root), node);
             }
             /* The left child-tree */
             if (!avl_tree_balanced_internal_p(node)) {
@@ -336,7 +336,7 @@ avl_tree_node_insert(struct avl_tree *root, struct avl_tree *node)
             if (!avl_tree_node_child_right(root)) {
                 avl_tree_node_child_right_set(root, node);
             } else {
-                avl_tree_node_insert(avl_tree_node_child_right(root), node);
+                node = avl_tree_node_insert(avl_tree_node_child_right(root), node);
             }
             /* The right child-tree */
             if (!avl_tree_balanced_internal_p(node)) {
@@ -368,7 +368,7 @@ avl_tree_iterate(struct avl_tree *root,
 static inline sint32
 avl_tree_height_get(struct avl_tree *node)
 {
-    return node->b_node.height;
+    return node ? node->b_node.height : -1;
 }
 
 static inline void
@@ -380,5 +380,5 @@ avl_tree_height_set(struct avl_tree *node, sint32 height)
 sint32
 avl_tree_height(struct avl_tree *root)
 {
-    return binary_search_tree_height(avl_tree_ptr_avl2bst(root));
+    return avl_tree_height_get(root);
 }
