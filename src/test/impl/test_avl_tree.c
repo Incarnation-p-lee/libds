@@ -1,21 +1,21 @@
 static inline struct avl_tree *
 test_avl_tree_sample(uint64 range, uint32 node_count)
 {
-    struct binary_search_tree *retval;
-    struct binary_search_tree *tmp;
+    struct avl_tree *retval;
+    struct avl_tree *tmp;
     sint64 nice;
     uint32 i;
 
-    retval = binary_search_tree_create();
-    binary_search_tree_node_initial(retval, retval, 0);
+    retval = avl_tree_create();
+    avl_tree_node_initial(retval, retval, 0);
     i = 1;
 
     while (i < node_count) {
         nice = (sint64)((rand() % range) - (range / 2));
-        tmp = binary_search_tree_node_create(NULL, 0x0);
-        binary_search_tree_node_initial(tmp, tmp, nice);
-        if (tmp != binary_search_tree_node_insert(retval, tmp)) {
-            binary_search_tree_destroy(&tmp);
+        tmp = avl_tree_node_create(NULL, 0x0);
+        avl_tree_node_initial(tmp, tmp, nice);
+        if (tmp != avl_tree_node_insert(retval, tmp)) {
+            avl_tree_destroy(&tmp);
         }
         i++;
     }
@@ -145,7 +145,7 @@ test_avl_tree_destroy(void)
         is_passed = false;
     }
 
-    tmp = test_avl_tree_sample(0xAB321, 0x18E62);
+    tmp = test_avl_tree_sample(0xABDE8, 0x327EF);
     avl_tree_destroy(&tmp);
     if (NULL != tmp) {
         is_passed = false;
