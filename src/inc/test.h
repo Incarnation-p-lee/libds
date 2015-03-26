@@ -4,6 +4,7 @@
 static uint32 malloc_cnt = 0;
 static uint32 free_cnt = 0;
 static uint32 realloc_cnt = 0;
+static uint32 reference = 0;
 
 void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);
