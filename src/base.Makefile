@@ -21,4 +21,5 @@ DYLIB        =libds.so
 EXTLIB       =-lm
 EXTLIB       +=$(ARGV_LIB)
 
-LIBOBJ       =linked_list.o stack.o log.o queue.o
+# update this library object for new data structure
+LIBOBJ       =linked_list.o stack.o log.o queue.o tree.o
