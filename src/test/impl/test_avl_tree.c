@@ -345,8 +345,36 @@ test_avl_tree_balanced_p(void)
     bool is_passed;
     struct avl_tree *root;
     struct avl_tree *tmp;
+    sint64 *iter;
+    sint64 data[] = {
+        0, -1, -2, 1, 2,
+    };
 
     is_passed = true;
+
+    iter = data;
+    root = avl_tree_node_create(&is_passed, *iter++);
+    while (iter < data + sizeof(data) / sizeof(data[0])) {
+        tmp = avl_tree_node_create(&is_passed, *iter++);
+        binary_search_tree_node_insert((struct binary_search_tree *)root,
+            (struct binary_search_tree *)tmp);
+    }
+
+    tmp = avl_tree_node_create(&is_passed, 0x3);
+    binary_search_tree_node_insert((struct binary_search_tree *)root,
+        (struct binary_search_tree *)tmp);
+    if (avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_create(&is_passed, -0x3);
+    binary_search_tree_node_insert((struct binary_search_tree *)root,
+        (struct binary_search_tree *)tmp);
+    if (avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
+    avl_tree_destroy(&root);
+
     root = test_avl_tree_sample(0x183EA, 0xED264);
     if (!avl_tree_balanced_p(NULL)) {
         is_passed = false;
