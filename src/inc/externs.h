@@ -18,7 +18,7 @@ extern void end_of_report_print(void);
 #endif
 
 static void (*test_suite[])(void) = {
-#if 0
+#if 1
     &linked_list_unit_test,
     &stack_unit_test,
     &queue_unit_test,

@@ -4,7 +4,9 @@ objdir=obj_out
 mkfile=Makefile
 srcdir=src
 cd $objdir > /dev/null
-static=0
+static=""
+depend_lib=""
+
 
 for argv in "$@"
 do
@@ -12,13 +14,22 @@ do
     "static=1")
     static=1
     ;;
+    "static=0")
+    static=0
+    ;;
   esac
 done
 
 if [ "$static" == "1" ]
 then
+  # static linked library libds.a
   objfile="test.o main.o"
-  static_lib="libds.a"
+  depend_lib="libds.a"
+elif [ "$static" == "0" ]
+then
+  # dynamic linked library libds.so
+  objfile="test.o main.o"
+  depend_lib="-lds"
 else
   objfile=`ls *.o`
 fi
@@ -29,7 +40,7 @@ include ../$srcdir/base.Makefile
 .phony:lib stlib dylib
 
 \$(TARGET):`echo $objfile`
-	\$(CC) \$(LFLAG) -o \$@ \$^ $static_lib \$(EXTLIB)
+	\$(CC) \$(LFLAG) -o \$@ \$^ $depend_lib \$(EXTLIB)
 	@mv -v \$@ ./out
 	@echo "Build Executable .................................... [32mOK[0m."
 

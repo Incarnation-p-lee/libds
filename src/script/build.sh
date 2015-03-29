@@ -5,6 +5,8 @@ argv_lnk=
 argv_lib=
 lib_build=0
 root_dir=`pwd | xargs basename`
+lib_dir="`pwd`/src/lib"
+
 
 if [ "$root_dir" != "libds" ]
 then
@@ -34,7 +36,7 @@ then
 fi
 
 platform=0
-static=0
+static=""
 
 for argv in "$@"
 do
@@ -83,6 +85,11 @@ do
       static=1
       lib_build=1
     ;;
+    "STATIC=0")
+      static=0
+      argv_lnk="$argv_lnk -L$lib_dir"
+      lib_build=1
+    ;;
   esac
 done
 
@@ -102,6 +109,7 @@ fi
 mkdir -vp $objdir
 mkdir -vp $objdir/out/
 
+# update head file ds.h
 perl src/script/export_api_include.plx
 cp -v src/inc/ds.h $objdir/out/
 
@@ -153,9 +161,9 @@ done
 # compiling main.o
 compile_obj "src/"
 
-
 # generate makefile for obj_out
 sh src/script/update_lk_mk.sh "static=$static"
+
 # link to elf
 cd $objdir > /dev/null
 
