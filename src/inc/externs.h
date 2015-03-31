@@ -9,6 +9,7 @@ extern void tree_unit_test(void);
 /* End of Unit Test List */
 
 extern void end_of_report_print(void);
+extern void memory_maps_obtain(void);
 
 #ifdef DEBUG
     extern void memory_trace_print(void);

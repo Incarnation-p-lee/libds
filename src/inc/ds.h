@@ -6,10 +6,10 @@
 #define HAVE_TYPES_H
 
 enum log_level {
-  INFO,
-  WARN,
-  DBUG,
-  ERRR,
+    INFO,
+    WARN,
+    DBUG,
+    ERRR,
 };
 
 typedef signed char   sint8;
@@ -22,6 +22,8 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    #define M32
+    #define NUMERAL uint32
 #endif
 
 #if defined X86_64
@@ -31,6 +33,8 @@ typedef unsigned char uint8;
     typedef unsigned int   uint32;
     typedef signed long    sint64;
     typedef unsigned long  uint64;
+    #define M64
+    #define NUMERAL uint64
 #endif
 
 typedef unsigned int bool;
@@ -290,7 +294,6 @@ extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl
 
 #define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
-
 
 #endif
 /* END of ./src/inc/defines.h */

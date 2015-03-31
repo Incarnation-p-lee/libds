@@ -7,6 +7,7 @@ main(int argc, char **argv)
 {
     register void (**iter)(void) = test_suite;
 
+    memory_maps_obtain();
     while (iter < test_suite + sizeof(test_suite) / sizeof(test_suite[0])) {
         (*iter++)();
     }

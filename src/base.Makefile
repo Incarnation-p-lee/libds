@@ -22,4 +22,4 @@ EXTLIB       =-lm
 EXTLIB       +=$(ARGV_LIB)
 
 # update this library object for new data structure
-LIBOBJ       =linked_list.o stack.o log.o queue.o tree.o
+LIBOBJ       =linked_list.o stack.o log.o queue.o tree.o common.o
