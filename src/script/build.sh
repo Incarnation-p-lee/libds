@@ -104,14 +104,14 @@ fi
 objdir=obj_out
 if [ -d $objdir ]
 then
-  rm -rfv $objdir
+  rm -rf $objdir
 fi
-mkdir -vp $objdir
-mkdir -vp $objdir/out/
+mkdir -p $objdir
+mkdir -p $objdir/out/
 
 # update head file ds.h
 perl src/script/export_api_include.plx
-cp -v src/inc/ds.h $objdir/out/
+cp src/inc/ds.h $objdir/out/
 
 function compile_obj() {
   make "ARGV_CFG=$argv_cfg" -f $1Makefile
@@ -119,7 +119,7 @@ function compile_obj() {
   then
     exit $?
   fi
-  mv -v $1*.o $objdir
+  mv $1*.o $objdir
 }
 
 function generate_makfile {
