@@ -135,6 +135,10 @@ EOF
 for dir in `ls -d src/*/`
 do
   case $dir in
+    "src/hashing/")
+    continue
+  ;;
+
     "src/script/")
     continue
   ;;

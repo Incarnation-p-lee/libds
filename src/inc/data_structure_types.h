@@ -141,4 +141,15 @@ struct binary_search_tree {
 struct avl_tree {
     struct binary_search_tree b_node;
 };
+
+/*
+ * hashing table with separate chaining
+ *     hashing function for .data and .text address
+ */
+struct linked_hashing {
+    struct doubly_linked_list **base;
+    uint64                    size;
+    uint64                    (*func)(uint64);
+};
 #endif
+

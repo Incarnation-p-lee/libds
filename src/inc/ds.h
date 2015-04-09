@@ -302,7 +302,6 @@ extern struct avl_tree * avl_tree_node_insert(struct avl_tree *root, struct avl_
 #define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
-
 #endif
 /* END of ./src/inc/defines.h */
 
