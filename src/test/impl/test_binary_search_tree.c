@@ -7,13 +7,14 @@ test_binary_search_tree_sample(uint64 range, uint32 node_count)
     uint32 i;
 
     retval = binary_search_tree_create();
-    binary_search_tree_node_initial(retval, retval, 0);
+    binary_search_tree_node_initial(retval, &reference, 0);
+    retval->height = 0;
     i = 1;
 
     while (i < node_count) {
         nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_node_create(NULL, 0x0);
-        binary_search_tree_node_initial(tmp, tmp, nice);
+        binary_search_tree_node_initial(tmp, &reference, nice);
         if (tmp != binary_search_tree_node_insert(retval, tmp)) {
             binary_search_tree_destroy(&tmp);
         }
@@ -389,33 +390,27 @@ test_binary_search_tree_iterate(void)
 {
     bool is_passed;
     struct binary_search_tree *root;
-    struct binary_search_tree *tmp;
-    sint64 nice;
+    uint32 cnt;
 
     is_passed = true;
-    root = test_binary_search_tree_sample(0xAE328, 0xC872D);
+    cnt = 0xC872D;
+    root = test_binary_search_tree_sample(0xAE328, cnt);
 
+    reference = 0;
     binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_PRE);
-    if (root->chain.link->id != 0xDEADu) {
+    if (reference != cnt) {
         is_passed = false;
     }
 
+    reference = 0;
     binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_IN);
-    nice = 0x0;
-    while (!(tmp = binary_search_tree_node_find(root, nice)))
-        nice++;
-    if (tmp->chain.link->id != 0xDEADu) {
+    if (reference != cnt) {
         is_passed = false;
     }
 
+    reference = 0;
     binary_search_tree_iterate(root, &tree_iterate_handler, ORDER_POST);
-    tmp = binary_search_tree_node_find_max(root);
-    if (tmp->chain.link->id != 0xDEADu) {
-        is_passed = false;
-    }
-
-    tmp = binary_search_tree_node_find_min(root);
-    if (tmp->chain.link->id != 0xDEADu) {
+    if (reference != cnt) {
         is_passed = false;
     }
 

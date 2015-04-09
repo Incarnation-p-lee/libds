@@ -2,10 +2,10 @@
 #define HAVE_TYPES_H
 
 enum log_level {
-  INFO,
-  WARN,
-  DBUG,
-  ERRR,
+    INFO,
+    WARN,
+    DBUG,
+    ERRR,
 };
 
 typedef signed char   sint8;
@@ -18,6 +18,8 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    #define M32
+    #define NUMERAL uint32
 #endif
 
 #if defined X86_64
@@ -27,6 +29,8 @@ typedef unsigned char uint8;
     typedef unsigned int   uint32;
     typedef signed long    sint64;
     typedef unsigned long  uint64;
+    #define M64
+    #define NUMERAL uint64
 #endif
 
 typedef unsigned int bool;

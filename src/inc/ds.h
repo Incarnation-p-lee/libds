@@ -6,10 +6,10 @@
 #define HAVE_TYPES_H
 
 enum log_level {
-  INFO,
-  WARN,
-  DBUG,
-  ERRR,
+    INFO,
+    WARN,
+    DBUG,
+    ERRR,
 };
 
 typedef signed char   sint8;
@@ -22,6 +22,8 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    #define M32
+    #define NUMERAL uint32
 #endif
 
 #if defined X86_64
@@ -31,6 +33,8 @@ typedef unsigned char uint8;
     typedef unsigned int   uint32;
     typedef signed long    sint64;
     typedef unsigned long  uint64;
+    #define M64
+    #define NUMERAL uint64
 #endif
 
 typedef unsigned int bool;
@@ -164,7 +168,7 @@ struct collision_chain {
  */
 struct binary_search_tree {
     struct collision_chain chain;
-    uint32                 height;  /* reserved for avl */
+    sint32                 height;  /* reserved for avl */
     /* root node has height 0, NULL node has height -1 */
     union {
         struct binary_search_tree *left;
@@ -256,7 +260,7 @@ extern bool avl_tree_balanced_p(struct avl_tree *root);
 extern sint32 avl_tree_height(struct avl_tree *root);
 extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
 extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-extern struct avl_tree * avl_tree_node_insert(struct avl_tree *root, struct avl_tree *node);
+extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
 
 /* END OF AVL TREE */
 

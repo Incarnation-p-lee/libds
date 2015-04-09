@@ -151,7 +151,6 @@ test_stacked_queue_full_p(void)
 
     if (cnt != capacity * 2) {
         is_passed = false;
-        printf("cnt %d, capacity %d\n", cnt, capacity);
     }
 
     if (!stacked_queue_full_p(queue)) {

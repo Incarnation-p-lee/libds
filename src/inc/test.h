@@ -4,6 +4,7 @@
 static uint32 malloc_cnt = 0;
 static uint32 free_cnt = 0;
 static uint32 realloc_cnt = 0;
+static uint32 reference = 0;
 
 #define FILTER_LEN 32
 

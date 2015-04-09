@@ -145,7 +145,6 @@ test_doubly_end_queue_tail_enter(void)
 
     doubly_end_queue_tail_enter(queue, queue);
     if (2u != doubly_end_queue_length(queue) || tmp != queue->head) {
-        printf("BBB\n");
         is_passed = false;
     }
 

@@ -123,7 +123,7 @@ struct collision_chain {
  */
 struct binary_search_tree {
     struct collision_chain chain;
-    uint32                 height;  /* reserved for avl */
+    sint32                 height;  /* reserved for avl */
     /* root node has height 0, NULL node has height -1 */
     union {
         struct binary_search_tree *left;

@@ -67,11 +67,11 @@ queue_iterate_handler(void *ptr)
 static void
 tree_iterate_handler(void *ptr)
 {
-    struct binary_search_tree *tmp;
+    uint32 *tmp;
 
     if (ptr) {
         tmp = ptr;
-        tmp->chain.link->id = 0xDEADu;
+        *tmp += 1;
     }
 
     return;

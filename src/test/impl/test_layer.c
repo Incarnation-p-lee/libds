@@ -156,7 +156,7 @@ static const struct test_layer_table avl_tree[] = {
     {"height",         {&test_avl_tree_height,},},
     {"node_contain_p", {&test_avl_tree_node_contain_p,},},
     {"balanced_p",     {&test_avl_tree_balanced_p,},},
-    // {"node_insert",    {&test_avl_tree_node_insert,},},
+    {"node_insert",    {&test_avl_tree_node_insert,},},
     // {"node_remove", {   &test_avl_tree_node_remove, NULL,},
     {"iterate",        {&test_avl_tree_iterate,},},
     {NULL,             {NULL,},},
