@@ -36,18 +36,48 @@ array_queue_destroy(struct array_queue **queue)
     return;
 }
 
+static inline void
+array_queue_space_expand_chunk_fixup(struct array_queue *queue,
+    uint32 old_size, uint32 new_size)
+{
+    void **to;
+    void **from;
+    void **lmt;
+
+    lmt = queue->space.front;
+    to = queue->space.base + new_size;
+    from = queue->space.base + old_size;
+
+    while ((sint32)(lmt - from) < 0) {
+        *(--to) = *(--from);
+    }
+}
+
+static inline void
+array_queue_space_expand_attr_update(struct array_queue *queue, uint32 old_size,
+    void **new_addr, uint32 new_size)
+{
+    if (new_addr != queue->space.base) {
+        queue->space.front = new_addr + (queue->space.front - queue->space.base);
+        queue->space.rear = new_addr + (queue->space.rear - queue->space.base);
+    }
+
+    queue->space.base = new_addr;
+    queue->space.dim = new_size;
+    queue->space.rest += new_size - old_size;
+}
+
 void
 array_queue_space_expand(struct array_queue *queue, uint32 extra)
 {
     uint32 old_size;
     uint32 new_size;
     void **new_addr;
-    void **to;
-    void **from;
-    void **lmt;
 
     new_size = 0;
-    if (!queue) { return; } else {
+    if (!queue) {
+        return;
+    } else {
        old_size = array_queue_capacity(queue);
     }
 
@@ -61,20 +91,14 @@ array_queue_space_expand(struct array_queue *queue, uint32 extra)
     if (!new_addr) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        queue->space.base = new_addr;
-        queue->space.dim = new_size;
-        queue->space.rest += new_size - old_size;
+        /* realloc may return a address different from queue->space.base */
+        array_queue_space_expand_attr_update(queue, old_size, new_addr, new_size);
     }
 
     /* No need to do if (queue->space.front < queue->space.rear) */
     if ((queue->space.front == queue->space.rear && array_queue_full_p(queue))
         || queue->space.front > queue->space.rear) {
-        lmt = queue->space.front;
-        to = queue->space.base + new_size;
-        from = queue->space.base + old_size;
-        while ((sint32)(lmt - from) < 0) {
-            *(--to) = *(--from);
-        }
+        array_queue_space_expand_chunk_fixup(queue, old_size, new_size);
     }
     return;
 }

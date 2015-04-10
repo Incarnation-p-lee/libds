@@ -18,8 +18,9 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    typedef unsigned long      ulint32;
     #define M32
-    #define NUMERAL uint32
+    #define NUMERAL ulint32
 #endif
 
 #if defined X86_64

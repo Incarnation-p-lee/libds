@@ -43,6 +43,9 @@ void array_queue_enter(struct array_queue *queue, void *member);
 void * array_queue_leave(struct array_queue *queue);
 void array_queue_cleanup(struct array_queue *queue);
 void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+
+static inline void array_queue_space_expand_attr_update(struct array_queue *queue, uint32 old_size, void **new_addr, uint32 new_size);
+static inline void array_queue_space_expand_chunk_fixup(struct array_queue *queue, uint32 old_size, uint32 new_size);
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */

@@ -22,8 +22,9 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    typedef unsigned long      ulint32;
     #define M32
-    #define NUMERAL uint32
+    #define NUMERAL ulint32
 #endif
 
 #if defined X86_64
@@ -401,6 +402,7 @@ extern void array_queue_enter(struct array_queue *queue, void *member);
 extern void * array_queue_leave(struct array_queue *queue);
 extern void array_queue_cleanup(struct array_queue *queue);
 extern void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */
