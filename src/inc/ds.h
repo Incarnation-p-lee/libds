@@ -22,8 +22,9 @@ typedef unsigned char uint8;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
+    typedef unsigned long      ulint32;
     #define M32
-    #define NUMERAL uint32
+    #define NUMERAL ulint32
 #endif
 
 #if defined X86_64
@@ -261,6 +262,7 @@ extern sint32 avl_tree_height(struct avl_tree *root);
 extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
 extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
+extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 
 /* END OF AVL TREE */
 
@@ -401,6 +403,7 @@ extern void array_queue_enter(struct array_queue *queue, void *member);
 extern void * array_queue_leave(struct array_queue *queue);
 extern void array_queue_cleanup(struct array_queue *queue);
 extern void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */

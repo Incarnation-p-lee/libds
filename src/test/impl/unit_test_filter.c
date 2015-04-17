@@ -1,6 +1,3 @@
-#include <string.h>
-#include <assert.h>
-
 static struct unit_test_filter *
 unit_test_filter_obtain(char *arg)
 {
