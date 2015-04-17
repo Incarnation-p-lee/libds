@@ -219,6 +219,18 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
     return;
 }
 
+static inline bool
+binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
+{
+    assert(NULL != node);
+
+    if (NULL != node->left && NULL != node->right) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void
 binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
 {
@@ -233,7 +245,7 @@ binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
                 pre = &iter->right;
             } else if (nice < iter->chain.nice) {
                 pre = &iter->left;
-            } else if (iter->left && iter->right) {
+            } else if (binary_search_tree_node_child_doubly_p(iter)) {
                 binary_search_tree_node_child_doubly_strip(pre, iter);
                 binary_search_tree_node_destroy(iter);
                 break;
