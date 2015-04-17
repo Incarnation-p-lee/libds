@@ -127,11 +127,13 @@ struct binary_search_tree {
     /* root node has height 0, NULL node has height -1 */
     union {
         struct binary_search_tree *left;
-        struct avl_tree           *avl_left;  /* reserved for avl */
+        struct avl_tree           *avl_left;    /* reserved for avl   */
+        struct splay_tree         *splay_left;  /* reserved for splay */
     };
     union {
         struct binary_search_tree *right;
-        struct avl_tree           *avl_right; /* reserved for avl */
+        struct avl_tree           *avl_right;    /* reserved for avl   */
+        struct splay_tree         *splay_right;  /* reserved for splay */
     };
 };
 
@@ -139,6 +141,13 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
+    struct binary_search_tree b_node;
+};
+
+/*
+ * splay tree
+ */
+struct splay_tree {
     struct binary_search_tree b_node;
 };
 
