@@ -84,11 +84,11 @@ static inline void avl_tree_node_remove_rotate_right(struct avl_tree **root, str
 static inline void avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node);
 static inline void avl_tree_node_insert_rotate_right(struct avl_tree **root, struct avl_tree *node);
 static inline void avl_tree_node_child_lt_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
-static inline void avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
+static inline sint64 avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
 static inline struct avl_tree * avl_tree_node_find_min_parent(struct avl_tree *root);
 static inline struct avl_tree * avl_tree_node_find_max_parent(struct avl_tree *root);
-static inline void avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre, struct avl_tree *node);
-static inline void avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre, struct avl_tree *node);
+static inline sint64 avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre, struct avl_tree *node);
+static inline sint64 avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre, struct avl_tree *node);
 /* END OF AVL TREE */
 
 #endif

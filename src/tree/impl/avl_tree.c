@@ -396,7 +396,7 @@ avl_tree_node_child_lt_doubly_strip(struct avl_tree **pre,
         avl_tree_node_child_right(node);
 }
 
-static inline void
+static inline sint64
 avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node)
 {
     sint32 left;
@@ -408,12 +408,10 @@ avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node)
     right = avl_tree_height_get(avl_tree_node_child_right(node));
 
     if (left > right) {
-        avl_tree_node_child_doubly_strip_from_min(pre, node);
+        return avl_tree_node_child_doubly_strip_from_min(pre, node);
     } else {
-        avl_tree_node_child_doubly_strip_from_max(pre, node);
+        return avl_tree_node_child_doubly_strip_from_max(pre, node);
     }
-
-    return;
 }
 
 static inline struct avl_tree *
@@ -458,7 +456,7 @@ avl_tree_node_find_max_parent(struct avl_tree *root)
     return *tmp;
 }
 
-static inline void
+static inline sint64
 avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     struct avl_tree *node)
 {
@@ -480,12 +478,10 @@ avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     avl_tree_node_child_left_set(node, NULL);
     avl_tree_node_child_right_set(node, NULL);
 
-    avl_tree_node_remove(&node, avl_tree_node_nice_get(tmp));
-
-    return;
+    return avl_tree_node_nice_get(tmp);;
 }
 
-static inline void
+static inline sint64
 avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     struct avl_tree *node)
 {
@@ -507,9 +503,7 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     avl_tree_node_child_left_set(node, NULL);
     avl_tree_node_child_right_set(node, NULL);
 
-    avl_tree_node_remove(&node, avl_tree_node_nice_get(tmp));
-
-    return;
+    return avl_tree_node_nice_get(tmp);
 }
 
 static inline void
@@ -519,33 +513,45 @@ avl_tree_node_destroy(struct avl_tree *node)
     free_ds(node);
 }
 
+/*
+ * remove one node if given root avl tree
+ * @root: the pointer of given tree
+ * @nice: the nice value of the node
+ *
+ */
 void
 avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 {
+    struct avl_tree *node;
+
     if (root && *root) {
-        if (nice < avl_tree_node_nice_get(*root)) {
-            avl_tree_node_remove(&(*root)->b_node.avl_left, nice);
+        node = *root;
+        if (nice < avl_tree_node_nice_get(node)) {
+            avl_tree_node_remove(&node->b_node.avl_left, nice);
             /* The left child-tree */
-            if (!avl_tree_balanced_internal_p(*root)) {
-                avl_tree_node_remove_rotate_right(root, *root);
+            if (!avl_tree_balanced_internal_p(node)) {
+                avl_tree_node_remove_rotate_right(root, node);
             }
-        } else if (nice > avl_tree_node_nice_get(*root)) {
-            avl_tree_node_remove(&(*root)->b_node.avl_right, nice);
+        } else if (nice > avl_tree_node_nice_get(node)) {
+            avl_tree_node_remove(&node->b_node.avl_right, nice);
             /* The right child-tree */
-            if (!avl_tree_balanced_internal_p(*root)) {
-                avl_tree_node_remove_rotate_left(root, *root);
+            if (!avl_tree_balanced_internal_p(node)) {
+                avl_tree_node_remove_rotate_left(root, node);
             }
         } else {
-            if (avl_tree_node_child_doubly_p(*root)) {
-                avl_tree_node_child_doubly_strip(root, *root);
+            if (avl_tree_node_child_doubly_p(node)) {
+                /* Exchange the node, and remove the fake one */
+                nice = avl_tree_node_child_doubly_strip(root, node);
+                avl_tree_node_remove(root, nice);
             } else {
-                avl_tree_node_child_lt_doubly_strip(root, *root);
+                avl_tree_node_child_lt_doubly_strip(root, node);
             }
-            avl_tree_node_destroy(*root);
+            avl_tree_node_destroy(node);
+            /* No need update height here for only one child for removed node */
+            return;
         }
-        avl_tree_height_update(*root);
+        avl_tree_height_update(node);
     }
-
     return;
 }
 

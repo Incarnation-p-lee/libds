@@ -31,9 +31,9 @@ unit_test_layer_table_category(const struct test_layer_table *category,
 
     while (category->name) {
         if (unit_test_layer_table_match_p(category, tmp)) {
-            fprintf(stdout, "  == Unit Test >> %s << ==\n", category->name);
+            fprintf(stdout, "\n  == Unit Test [ %s ] ==\n\n", category->name);
             unit_test_layer_table_implement(category->junior, filter);
-            fprintf(stdout, "  << Test Finished.\n\n");
+            fprintf(stdout, "  << Test Finished.\n");
         }
         category++;
     }

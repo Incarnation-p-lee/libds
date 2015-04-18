@@ -444,3 +444,45 @@ test_avl_tree_node_insert(void)
     test_result_print(SYM_2_STR(avl_tree_node_insert), is_passed);
     return;
 }
+
+static void
+test_avl_tree_node_remove(void)
+{
+    bool is_passed;
+    sint64 nice;
+    struct avl_tree *root;
+    struct avl_tree *tmp;
+
+    is_passed = true;
+    root = test_avl_tree_sample(0x23AEF, 0x20DE7);
+    nice = root->b_node.chain.nice;
+
+    avl_tree_node_remove(&root, nice);
+    if (NULL != avl_tree_node_find(root, nice)) {
+        is_passed = false;
+    }
+    if (!avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_find_min(root);
+    nice = tmp->b_node.chain.nice;
+    avl_tree_node_remove(&root, nice);
+    if (NULL != avl_tree_node_find(root, nice)) {
+        is_passed = false;
+    }
+    if (!avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
+
+    tmp = avl_tree_node_create(&is_passed, 0x1B2D);
+    avl_tree_node_remove(&tmp, tmp->b_node.chain.nice);
+    if (NULL != tmp) {
+        is_passed = false;
+    }
+
+    avl_tree_destroy(&root);
+
+    test_result_print(SYM_2_STR(avl_tree_node_remove), is_passed);
+    return;
+}
