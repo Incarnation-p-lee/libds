@@ -37,7 +37,7 @@ unit_test_binary_search_tree_create(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0 != tmp->chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 
@@ -59,7 +59,7 @@ unit_test_binary_search_tree_node_create(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0xdead != tmp->chain.nice
-        || &is_passed != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || &is_passed != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 
@@ -80,7 +80,7 @@ unit_test_binary_search_tree_initial(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0xdead != tmp->chain.nice
-        || &is_passed != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || &is_passed != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 
@@ -88,7 +88,7 @@ unit_test_binary_search_tree_initial(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0 != tmp->chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 
@@ -110,7 +110,7 @@ unit_test_binary_search_tree_node_initial(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0 != tmp->chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 
@@ -118,7 +118,7 @@ unit_test_binary_search_tree_node_initial(void)
     if (NULL != tmp->left || NULL != tmp->right) {
         is_passed = false;
     } else if (0xdead != tmp->chain.nice
-        || &is_passed != doubly_linked_list_node_get_val(tmp->chain.link)) {
+        || &is_passed != doubly_linked_list_node_val_get(tmp->chain.link)) {
         is_passed = false;
     }
 

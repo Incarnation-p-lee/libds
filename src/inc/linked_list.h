@@ -14,11 +14,7 @@ struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 id)
 void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
 void doubly_linked_list_initial(struct doubly_linked_list *);
 struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
-void doubly_linked_list_node_set_val(struct doubly_linked_list *node, void *val);
-void * doubly_linked_list_node_get_val(struct doubly_linked_list *node);
 void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
-struct doubly_linked_list * doubly_linked_list_node_next(struct doubly_linked_list *node);
-struct doubly_linked_list * doubly_linked_list_node_previous(struct doubly_linked_list *node);
 void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_destroy(struct doubly_linked_list **head);
@@ -31,6 +27,7 @@ struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_
 void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
+/* END of doubly linked list, Circular. */
 
 
 /* single linked list, Circular. */

@@ -34,3 +34,4 @@ ds.log
 tags
 *.swp
 obj_out
+*.gcno

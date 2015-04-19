@@ -40,7 +40,7 @@ binary_search_tree_node_initial(struct binary_search_tree *node,
         node->right = NULL;
         node->chain.nice = nice;
         doubly_linked_list_initial(node->chain.link);
-        doubly_linked_list_node_set_val(node->chain.link, val);
+        doubly_linked_list_node_val_set(node->chain.link, val);
     }
 
     return;

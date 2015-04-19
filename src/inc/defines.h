@@ -1,9 +1,9 @@
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-
 #define true        1
 #define false       0
+#define assert_not_reached() assert(false)
 
 #define SYM_2_STR(symbol)   (#symbol)
 
@@ -13,7 +13,7 @@
     #define pr_log_debug(msg)   libds_log_print(DBUG, msg);
 #else
     #define pr_log_info(msg)
-    #define pr_log_warn(msg)
+    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
     #define pr_log_debug(msg)
 #endif
 

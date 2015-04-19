@@ -27,7 +27,8 @@ single_linked_list_initial(struct single_linked_list *head)
 }
 
 void
-single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 id)
+single_linked_list_node_initial(struct single_linked_list *head,
+    void *val, uint32 id)
 {
     if (head) {
         head->id = id;

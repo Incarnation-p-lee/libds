@@ -22,21 +22,50 @@ unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 }
 
 static void
+unit_test_doubly_linked_list_struct_field(void)
+{
+    uint32 id;
+    bool pass;
+    struct doubly_linked_list *tmp;
+
+    id = 0xfade;
+    pass = true;
+    tmp = doubly_linked_list_create();
+
+    doubly_linked_list_node_id_set(tmp, id);
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(tmp), &pass);
+
+    doubly_linked_list_node_val_set(tmp, &id);
+    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val_get(tmp), &pass);
+
+    doubly_linked_list_node_next_set(tmp, tmp);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
+
+    doubly_linked_list_node_previous_set(tmp, tmp);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+
+    doubly_linked_list_destroy(&tmp);
+    test_result_print(SYM_2_STR(doubly_linked_list_struct_field), pass);
+
+    return;
+}
+
+static void
 unit_test_doubly_linked_list_create(void)
 {
     struct doubly_linked_list *tmp;
-    bool is_passed;
+    bool pass;
 
-    is_passed = false;
+    pass = true;
     tmp = doubly_linked_list_create();
-    if (tmp) {
-        if (tmp->id == 0u && tmp->next == tmp && tmp->previous == tmp) {
-            is_passed = true;
-        }
-    }
-    doubly_linked_list_destroy(&tmp);
 
-    test_result_print(SYM_2_STR(doubly_linked_list_create), is_passed);
+    RESULT_CHECK_uint32(0x0u, doubly_linked_list_node_id_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+
+    doubly_linked_list_destroy(&tmp);
+    test_result_print(SYM_2_STR(doubly_linked_list_create), pass);
+
     return;
 }
 
@@ -44,20 +73,22 @@ unit_test_doubly_linked_list_create(void)
 static void
 unit_test_doubly_linked_list_node_create(void)
 {
+    bool pass;
+    uint32 id;
     struct doubly_linked_list *tmp;
-    bool is_passed;
 
-    is_passed = false;
-    tmp = doubly_linked_list_node_create(&is_passed, 0xdeadu);
-    if (tmp) {
-        if (tmp->id == 0xdeadu && tmp->next == tmp
-            && tmp->previous == tmp && tmp->val == &is_passed) {
-            is_passed = true;
-        }
-    }
+    id = 0xdeadu;
+    pass = true;
+    tmp = doubly_linked_list_node_create(&id, id);
+
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(tmp), &pass);
+    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+
     doubly_linked_list_destroy(&tmp);
+    test_result_print(SYM_2_STR(doubly_linked_list_node_create), pass);
 
-    test_result_print(SYM_2_STR(doubly_linked_list_node_create), is_passed);
     return;
 }
 
@@ -79,48 +110,6 @@ unit_test_doubly_linked_list_node_initial(void)
     doubly_linked_list_destroy(&tmp);
 
     test_result_print(SYM_2_STR(doubly_linked_list_node_initial), is_passed);
-    return;
-}
-
-static void
-unit_test_doubly_linked_list_node_set_val(void)
-{
-    struct doubly_linked_list *tmp;
-    bool is_passed;
-
-    is_passed = false;
-    tmp = malloc_ds(sizeof(*tmp));
-    doubly_linked_list_node_initial(tmp, NULL, 0u);
-    doubly_linked_list_node_set_val(tmp, &is_passed);
-    if (tmp) {
-        if (tmp->val == &is_passed) {
-            is_passed = true;
-        }
-    }
-    doubly_linked_list_destroy(&tmp);
-
-    test_result_print(SYM_2_STR(doubly_linked_list_node_set_val), is_passed);
-    return;
-}
-
-static void
-unit_test_doubly_linked_list_node_get_val(void)
-{
-    struct doubly_linked_list *tmp;
-    bool is_passed;
-
-    is_passed = false;
-    tmp = malloc_ds(sizeof(*tmp));
-    doubly_linked_list_node_initial(tmp, NULL, 0u);
-    doubly_linked_list_node_set_val(tmp, &is_passed);
-    if (tmp) {
-        if (&is_passed == doubly_linked_list_node_get_val(tmp)) {
-            is_passed = true;
-        }
-    }
-    doubly_linked_list_destroy(&tmp);
-
-    test_result_print(SYM_2_STR(doubly_linked_list_node_get_val), is_passed);
     return;
 }
 
@@ -203,64 +192,6 @@ unit_test_doubly_linked_list_node_append(void)
     doubly_linked_list_destroy(&head);
 
     test_result_print(SYM_2_STR(doubly_linked_list_node_append), is_passed);
-    return;
-}
-
-static void
-unit_test_doubly_linked_list_node_next(void)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *next;
-    bool is_passed;
-
-    is_passed = false;
-    head = doubly_linked_list_create();
-    doubly_linked_list_node_append(head, 0xDEADu);
-
-    next = doubly_linked_list_node_next(head);
-    if (next == head->next) {
-        is_passed = true;
-    }
-    doubly_linked_list_destroy(&head);
-
-    head = malloc_ds(sizeof(*head));
-    head->next = NULL;
-    next = doubly_linked_list_node_next(head);
-    if (NULL != next) {
-        is_passed = false;
-    }
-    free_ds(head);
-
-    test_result_print(SYM_2_STR(doubly_linked_list_node_next), is_passed);
-    return;
-}
-
-static void
-unit_test_doubly_linked_list_node_previous(void)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *prev;
-    bool is_passed;
-
-    is_passed = false;
-    head = doubly_linked_list_create();
-    doubly_linked_list_node_append(head, 0xDEADu);
-
-    prev = doubly_linked_list_node_previous(head);
-    if (prev == head->previous) {
-        is_passed = true;
-    }
-    doubly_linked_list_destroy(&head);
-
-    head = malloc_ds(sizeof(*head));
-    head->previous = NULL;
-    prev = doubly_linked_list_node_previous(head);
-    if (NULL != prev) {
-        is_passed = false;
-    }
-    free_ds(head);
-
-    test_result_print(SYM_2_STR(doubly_linked_list_node_previous), is_passed);
     return;
 }
 

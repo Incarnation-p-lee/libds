@@ -7,29 +7,28 @@
     #define LOCATION_PRINT
 #endif
 
-#define RESULT_check_pointer_p(get, expect) \
-    (test_result_check_pointer_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_bool_p(get, expect) \
-    (test_result_check_bool_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_uint32_p(get, expect) \
-    (test_result_check_uint32_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_sint32_p(get, expect) \
-    (test_result_check_sint32_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_uint64_p(get, expect) \
-    (test_result_check_uint64_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_sint64_p(get, expect) \
-    (test_result_check_sint64_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_float_p(get, expect) \
-    (test_result_check_float_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
-#define RESULT_check_double_p(get, expect) \
-    (test_result_check_double_p(get, expect) ? \
-        true : (LOCATION_PRINT, false))
+#define RESULT_CHECK_pointer(get, expect, pass) \
+    (test_result_check_pointer_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_bool(get, expect, pass) \
+    (test_result_check_bool_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_uint32(get, expect, pass) \
+    (test_result_check_uint32_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_sint32(get, expect, pass) \
+    (test_result_check_sint32_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_uint64(get, expect, pass) \
+    (test_result_check_uint64_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_sint64(get, expect, pass) \
+    (test_result_check_sint64_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_float(get, expect, pass) \
+    (test_result_check_float_p(get, expect, pass) ? true : LOCATION_PRINT)
+
+#define RESULT_CHECK_double(get, expect, pass) \
+    (test_result_check_double_p(get, expect, pass) ? true : LOCATION_PRINT)
 
 #endif

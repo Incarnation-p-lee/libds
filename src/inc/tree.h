@@ -18,8 +18,6 @@ enum ITER_ORDER {
 
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern void doubly_linked_list_node_set_val(struct doubly_linked_list *node, void *val);
-extern void * doubly_linked_list_node_get_val(struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));

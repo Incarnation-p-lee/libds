@@ -28,16 +28,13 @@ static const struct test_layer_table single_linked_list_interface[] = {
 };
 
 static const struct test_layer_table doubly_linked_list_interface[] = {
+    {"struct_field",       {&unit_test_doubly_linked_list_struct_field,},},
     {"initial",            {&unit_test_doubly_linked_list_initial,},},
     {"create",             {&unit_test_doubly_linked_list_create,},},
     {"generate",           {&unit_test_doubly_linked_list_generate,},},
     {"node_initial",       {&unit_test_doubly_linked_list_node_initial,},},
     {"node_create",        {&unit_test_doubly_linked_list_node_create,},},
-    {"node_set_val",       {&unit_test_doubly_linked_list_node_set_val,},},
-    {"node_get_val",       {&unit_test_doubly_linked_list_node_get_val,},},
     {"node_append",        {&unit_test_doubly_linked_list_node_append,},},
-    {"node_next",          {&unit_test_doubly_linked_list_node_next,},},
-    {"node_previous",      {&unit_test_doubly_linked_list_node_previous,},},
     {"node_insert_before", {&unit_test_doubly_linked_list_node_insert_before,},},
     {"node_insert_after",  {&unit_test_doubly_linked_list_node_insert_after,},},
     {"node_get_by_index",  {&unit_test_doubly_linked_list_node_get_by_index,},},

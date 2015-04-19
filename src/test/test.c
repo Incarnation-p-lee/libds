@@ -5,9 +5,11 @@
 
 #include "types.h"
 #include "defines.h"
-#include "ds.h"
+#include "data_structure_types.h"
+#include "data_structure_defines.h"
 #include "test.h"
 #include "test_result_check.h"
+#include "ds.h"
 
 #include "impl/utilize.c"
 #include "impl/wrapper.c"

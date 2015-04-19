@@ -35,7 +35,7 @@ unit_test_avl_tree_create(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0 != tmp->b_node.chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     }
 
@@ -57,7 +57,7 @@ unit_test_avl_tree_node_create(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0xdead != tmp->b_node.chain.nice
-        || &is_passed != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || &is_passed != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     }
 
@@ -79,7 +79,7 @@ unit_test_avl_tree_initial(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0 != tmp->b_node.chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     }
 
@@ -87,7 +87,7 @@ unit_test_avl_tree_initial(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0 != tmp->b_node.chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     } else if (0 != tmp->b_node.height) {
         is_passed = false;
@@ -111,7 +111,7 @@ unit_test_avl_tree_node_initial(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0 != tmp->b_node.chain.nice
-        || NULL != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || NULL != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     }
 
@@ -119,7 +119,7 @@ unit_test_avl_tree_node_initial(void)
     if (NULL != tmp->b_node.left || NULL != tmp->b_node.right) {
         is_passed = false;
     } else if (0xdead != tmp->b_node.chain.nice
-        || &is_passed != doubly_linked_list_node_get_val(tmp->b_node.chain.link)) {
+        || &is_passed != doubly_linked_list_node_val_get(tmp->b_node.chain.link)) {
         is_passed = false;
     } else if (0 != tmp->b_node.height) {
         is_passed = false;

@@ -81,7 +81,7 @@ linked_stack_space_next_node(struct linked_stack_space *node)
 
     next = NULL;
     if (node) {
-        tmp = doubly_linked_list_node_next(&node->link);
+        tmp = doubly_linked_list_node_next_get(&node->link);
         if (tmp) {
             next = linked_stack_space_offset_reflect(tmp);
         }
@@ -102,7 +102,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
 
     previous = NULL;
     if (node) {
-        tmp = doubly_linked_list_node_previous(&node->link);
+        tmp = doubly_linked_list_node_previous_get(&node->link);
         if (tmp) {
             previous = linked_stack_space_offset_reflect(tmp);
         }

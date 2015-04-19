@@ -282,9 +282,9 @@ extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-
 #define true        1
 #define false       0
+#define assert_not_reached() assert(false)
 
 #define SYM_2_STR(symbol)   (#symbol)
 
@@ -294,7 +294,7 @@ extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
     #define pr_log_debug(msg)   libds_log_print(DBUG, msg);
 #else
     #define pr_log_info(msg)
-    #define pr_log_warn(msg)
+    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
     #define pr_log_debug(msg)
 #endif
 
@@ -336,11 +336,7 @@ extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uin
 extern void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
 extern struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
-extern void doubly_linked_list_node_set_val(struct doubly_linked_list *node, void *val);
-extern void * doubly_linked_list_node_get_val(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
-extern struct doubly_linked_list * doubly_linked_list_node_next(struct doubly_linked_list *node);
-extern struct doubly_linked_list * doubly_linked_list_node_previous(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
@@ -353,6 +349,7 @@ extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_
 extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
+/* END of doubly linked list, Circular. */
 
 
 /* single linked list, Circular. */

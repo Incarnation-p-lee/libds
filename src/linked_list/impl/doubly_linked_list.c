@@ -20,13 +20,16 @@ doubly_linked_list_node_create(void *val, uint32 id)
 }
 
 void
-doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id)
+doubly_linked_list_node_initial(struct doubly_linked_list *head,
+    void *val, uint32 id)
 {
     if (head) {
-        head->id = id;
-        head->next = head;
-        head->previous = head;
-        head->val = val;
+        doubly_linked_list_node_id_set(head, id);
+        doubly_linked_list_node_next_set(head, head);
+        doubly_linked_list_node_previous_set(head, head);
+        doubly_linked_list_node_val_set(head, val);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -47,33 +50,20 @@ doubly_linked_list_generate(uint32 *id, uint32 size)
     register uint32 *iterator;
 
     head = NULL;
-    if (id && size > 0) {
+    if (id) {
         iterator = id;
         node = doubly_linked_list_node_create(NULL, *iterator++);
         head = node;
 
         while (iterator < id + size) {
             doubly_linked_list_node_append(node, *iterator++);
-            node = node->next;
+            node = doubly_linked_list_node_next_get(node);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return head;
-}
-
-void
-doubly_linked_list_node_set_val(struct doubly_linked_list *node, void *val)
-{
-    if (node) {
-        node->val = val;
-    }
-    return;
-}
-
-void *
-doubly_linked_list_node_get_val(struct doubly_linked_list *node)
-{
-    return node ? node->val : NULL;
 }
 
 void
@@ -82,57 +72,31 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id)
     struct doubly_linked_list *next;
 
     if (node) {
-        if (!node->next || !node->previous) {
-            pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
-        } else {
-            next = doubly_linked_list_node_create(NULL, id);
-            doubly_linked_list_node_insert_after(node, next);
+        if (NULL == doubly_linked_list_node_next_get(node)
+            || NULL == doubly_linked_list_node_previous_get(node)) {
+            pr_log_warn("Destroyed data structure.\n");
         }
+
+        next = doubly_linked_list_node_create(NULL, id);
+        doubly_linked_list_node_insert_after(node, next);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
-}
-
-struct doubly_linked_list *
-doubly_linked_list_node_next(struct doubly_linked_list *node)
-{
-    struct doubly_linked_list *next;
-
-    next = NULL;
-    if (!node->next || !node->previous) {
-        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
-    } else if (node && node->next && node->previous) {
-        next = node->next;
-    }
-
-    return next;
-}
-
-struct doubly_linked_list *
-doubly_linked_list_node_previous(struct doubly_linked_list *node)
-{
-    struct doubly_linked_list *previous;
-
-    previous = NULL;
-    if (node && node->next && node->previous) {
-        previous = node->previous;
-    } else if (!node->next || !node->previous) {
-        pr_log_warn("Uninitialized or destroyed doubly linked list node.\n");
-    }
-
-    return previous;
 }
 
 void
 doubly_linked_list_node_insert_after(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
-    if (cur && node)
-    {
-        cur->next->previous = node;
-        node->next = cur->next;
-        cur->next = node;
-        node->previous = cur;
+    if (cur && node) {
+        doubly_linked_list_node_previous_set(cur->next, node);
+        doubly_linked_list_node_next_set(node, cur->next);
+        doubly_linked_list_node_next_set(cur, node);
+        doubly_linked_list_node_previous_set(node, cur);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -144,10 +108,11 @@ doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
 {
     struct doubly_linked_list *prev;
 
-    if (cur && node)
-    {
-        prev = cur->previous;
+    if (cur && node) {
+        prev = doubly_linked_list_node_previous_get(cur);
         doubly_linked_list_node_insert_after(prev, node);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -164,14 +129,16 @@ doubly_linked_list_destroy(struct doubly_linked_list **head)
          * Do not call doubly_linked_list_remove_node for
          * the consider of performance drop.
          */
-        next = (*head)->next;
+        next = doubly_linked_list_node_next_get(*head);
         while (*head != (node = next)) {
-            next = node->next;
+            next = doubly_linked_list_node_next_get(node);
             free_ds(node);
         }
 
         free_ds(node);
         *head = NULL;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -188,27 +155,37 @@ doubly_linked_list_length(struct doubly_linked_list *head)
         node = head;
         do {
             length++;
-            node = node->next;
+            node = doubly_linked_list_node_next_get(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return length;
 }
 
 struct doubly_linked_list *
-doubly_linked_list_node_get_by_index(struct doubly_linked_list *head, uint32 index)
+doubly_linked_list_node_get_by_index(struct doubly_linked_list *head,
+    uint32 index)
 {
     register struct doubly_linked_list *node;
+    uint32 len;
 
     node = NULL;
     if (head) {
-        if (index <= doubly_linked_list_length(head)) {
-            node = head;
-            while (index > 0) {
-                node = node->next;
-                index--;
-            }
+        len = doubly_linked_list_length(head);
+        if (index >= len) {
+            pr_log_warn("Index out of the lenght, rotated to front.\n");
+            index = index % len;
         }
+
+        node = head;
+        while (index > 0) {
+            node = doubly_linked_list_node_next_get(node);
+            index--;
+        }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return node;
@@ -224,14 +201,18 @@ doubly_linked_list_node_exchange(struct doubly_linked_list *fir,
 
     if (fir && sec) {
         if (doubly_linked_list_contains_p(fir, sec) && (fir != sec)) {
-            prev_fir = fir->previous;
-            prev_sec = sec->previous;
+            prev_fir = doubly_linked_list_node_previous_get(fir);
+            prev_sec = doubly_linked_list_node_previous_get(sec);
 
             doubly_linked_list_node_lazy_remove(fir);
             doubly_linked_list_node_lazy_remove(sec);
             doubly_linked_list_node_insert_after(prev_fir, sec);
             doubly_linked_list_node_insert_after(prev_sec, fir);
+        } else {
+            pr_log_warn("Exchange itself or exchange in different list.\n");
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -252,8 +233,10 @@ doubly_linked_list_contains_p(struct doubly_linked_list *tar,
                 contains = true;
                 break;
             }
-            iter = iter->next;
+            iter = doubly_linked_list_node_next_get(iter);
         } while (iter != tar);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return contains;
@@ -269,9 +252,11 @@ doubly_linked_list_serialize(struct doubly_linked_list *head)
         index = 0;
         node = head;
         do {
-            node->id = index++;
-            node = node->next;
+            doubly_linked_list_node_id_set(node, index++);
+            node = doubly_linked_list_node_next_get(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -285,10 +270,12 @@ doubly_linked_list_node_remove(struct doubly_linked_list *node)
     next = NULL;
     if (node) {
         doubly_linked_list_node_lazy_remove(node);
-        if (node->next != node) {
-            next = node->next;
+        if (doubly_linked_list_node_next_get(node) != node) {
+            next = doubly_linked_list_node_next_get(node);
         }
         free_ds(node);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return next;
@@ -298,8 +285,12 @@ void
 doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node)
 {
     if (node) {
-        node->previous->next = node->next;
-        node->next->previous = node->previous;
+        doubly_linked_list_node_next_set(node->previous,
+            doubly_linked_list_node_next_get(node));
+        doubly_linked_list_node_previous_set(node->next,
+            doubly_linked_list_node_previous_get(node));
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -313,9 +304,11 @@ doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void
     if (head && handler) {
         node = head;
         do {
-            (*handler)(node->val);
-            node = node->next;
+            (*handler)(doubly_linked_list_node_val_get(node));
+            node = doubly_linked_list_node_next_get(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -331,11 +324,16 @@ doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list 
         iter = n;
         do {
             if (!doubly_linked_list_contains_p(m, iter)) {
-                new = doubly_linked_list_node_create(iter->val, iter->id);
+                new = doubly_linked_list_node_create(
+                    doubly_linked_list_node_val_get(iter),
+                    doubly_linked_list_node_id_get(iter));
+
                 doubly_linked_list_node_insert_before(m, new);
             }
-            iter = iter->next;
+            iter = doubly_linked_list_node_next_get(iter);
         } while (iter != n);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return m ? m : n;
