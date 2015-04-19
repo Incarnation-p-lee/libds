@@ -464,6 +464,18 @@ unit_test_avl_tree_node_remove(void)
     if (!avl_tree_balanced_p(root)) {
         is_passed = false;
     }
+    avl_tree_destroy(&root);
+
+    root = unit_test_avl_tree_sample(0x72C8A, 0x10BE6);
+    nice = root->b_node.chain.nice;
+
+    avl_tree_node_remove(&root, nice);
+    if (NULL != avl_tree_node_find(root, nice)) {
+        is_passed = false;
+    }
+    if (!avl_tree_balanced_p(root)) {
+        is_passed = false;
+    }
 
     tmp = avl_tree_node_find_min(root);
     nice = tmp->b_node.chain.nice;
