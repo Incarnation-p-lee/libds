@@ -1,5 +1,5 @@
 static inline struct single_linked_list *
-test_single_linked_list_sample(uint32 range, uint32 node_count)
+unit_test_single_linked_list_sample(uint32 range, uint32 node_count)
 {
     struct single_linked_list *retval;
     struct single_linked_list *tmp;
@@ -23,7 +23,7 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
 
 
 static void
-test_single_linked_list_create(void)
+unit_test_single_linked_list_create(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -43,7 +43,7 @@ test_single_linked_list_create(void)
 }
 
 static void
-test_single_linked_list_node_create(void)
+unit_test_single_linked_list_node_create(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -63,7 +63,7 @@ test_single_linked_list_node_create(void)
 }
 
 static void
-test_single_linked_list_node_initial(void)
+unit_test_single_linked_list_node_initial(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -84,7 +84,7 @@ test_single_linked_list_node_initial(void)
 }
 
 static void
-test_single_linked_list_initial(void)
+unit_test_single_linked_list_initial(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -105,7 +105,7 @@ test_single_linked_list_initial(void)
 }
 
 static void
-test_single_linked_list_node_set_val(void)
+unit_test_single_linked_list_node_set_val(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -126,7 +126,7 @@ test_single_linked_list_node_set_val(void)
 }
 
 static void
-test_single_linked_list_node_get_val(void)
+unit_test_single_linked_list_node_get_val(void)
 {
     struct single_linked_list *tmp;
     bool is_passed;
@@ -147,7 +147,7 @@ test_single_linked_list_node_get_val(void)
 }
 
 static void
-test_single_linked_list_generate(void)
+unit_test_single_linked_list_generate(void)
 {
     struct single_linked_list *head;
     bool is_passed;
@@ -184,7 +184,7 @@ test_single_linked_list_generate(void)
 }
 
 static void
-test_single_linked_list_node_append(void)
+unit_test_single_linked_list_node_append(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *next;
@@ -192,7 +192,7 @@ test_single_linked_list_node_append(void)
     bool is_passed;
     uint32 tmp = 0xAu;
 
-    head = test_single_linked_list_sample(0x1A2E, 0x213D);
+    head = unit_test_single_linked_list_sample(0x1A2E, 0x213D);
     is_passed = false;
     next = head->next;
 
@@ -210,14 +210,14 @@ test_single_linked_list_node_append(void)
 }
 
 static void
-test_single_linked_list_node_next(void)
+unit_test_single_linked_list_node_next(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *next;
     bool is_passed;
 
     is_passed = false;
-    head = test_single_linked_list_sample(0x2D34, 0x3A89);
+    head = unit_test_single_linked_list_sample(0x2D34, 0x3A89);
     single_linked_list_node_append(head, 0xDEADu);
 
     next = single_linked_list_node_next(head);
@@ -239,14 +239,14 @@ test_single_linked_list_node_next(void)
 }
 
 static void
-test_single_linked_list_node_previous(void)
+unit_test_single_linked_list_node_previous(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *prev;
     bool is_passed;
 
     is_passed = false;
-    head = test_single_linked_list_sample(0x19AB, 0x2BF3);
+    head = unit_test_single_linked_list_sample(0x19AB, 0x2BF3);
     single_linked_list_node_append(head, 0xDEADu);
 
     prev = single_linked_list_node_previous(head);
@@ -268,7 +268,7 @@ test_single_linked_list_node_previous(void)
 }
 
 static void
-test_single_linked_list_node_insert_before(void)
+unit_test_single_linked_list_node_insert_before(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *node;
@@ -278,7 +278,7 @@ test_single_linked_list_node_insert_before(void)
 
     is_passed = false;
     mark = 0xDEADu;
-    head = test_single_linked_list_sample(0x1CE5, 0x37A8);
+    head = unit_test_single_linked_list_sample(0x1CE5, 0x37A8);
     single_linked_list_node_append(head, mark);
 
     prev = single_linked_list_node_previous(head);
@@ -295,7 +295,7 @@ test_single_linked_list_node_insert_before(void)
 }
 
 static void
-test_single_linked_list_node_insert_after(void)
+unit_test_single_linked_list_node_insert_after(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *node;
@@ -305,7 +305,7 @@ test_single_linked_list_node_insert_after(void)
 
     is_passed = false;
     mark = 0xDEADu;
-    head = test_single_linked_list_sample(0x18AB, 0x2E9C);
+    head = unit_test_single_linked_list_sample(0x18AB, 0x2E9C);
     single_linked_list_node_append(head, mark);
 
     next = head->next;
@@ -322,7 +322,7 @@ test_single_linked_list_node_insert_after(void)
 }
 
 static void
-test_single_linked_list_destroy(void)
+unit_test_single_linked_list_destroy(void)
 {
     struct single_linked_list *head;
     bool is_passed;
@@ -334,7 +334,7 @@ test_single_linked_list_destroy(void)
     is_passed = true;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        head = test_single_linked_list_sample(len, 0x16FA);
+        head = unit_test_single_linked_list_sample(len, 0x16FA);
 
         single_linked_list_destroy(&head);
         if (NULL != head) {
@@ -353,7 +353,7 @@ test_single_linked_list_destroy(void)
 }
 
 static void
-test_single_linked_list_length(void)
+unit_test_single_linked_list_length(void)
 {
     struct single_linked_list *head;
     bool is_passed;
@@ -365,7 +365,7 @@ test_single_linked_list_length(void)
     is_passed = true;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        head = test_single_linked_list_sample(0x2AE8, len);
+        head = unit_test_single_linked_list_sample(0x2AE8, len);
 
         if (len != single_linked_list_length(head)) {
             is_passed = false;
@@ -389,14 +389,14 @@ test_single_linked_list_length(void)
 }
 
 static void
-test_single_linked_list_node_get_by_index(void)
+unit_test_single_linked_list_node_get_by_index(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x18FA, 0x23A2);
+    head = unit_test_single_linked_list_sample(0x18FA, 0x23A2);
     tmp = single_linked_list_node_get_by_index(head, 0u);
     if (head != tmp) {
         is_passed = false;
@@ -425,7 +425,7 @@ test_single_linked_list_node_get_by_index(void)
 }
 
 static void
-test_single_linked_list_node_exchange(void)
+unit_test_single_linked_list_node_exchange(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp_1;
@@ -433,7 +433,7 @@ test_single_linked_list_node_exchange(void)
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x14A2, 0x2E1D);
+    head = unit_test_single_linked_list_sample(0x14A2, 0x2E1D);
     tmp_1 = single_linked_list_node_previous(head);
     tmp_2 = head->next;
 
@@ -463,14 +463,14 @@ test_single_linked_list_node_exchange(void)
 }
 
 static void
-test_single_linked_list_contains_p(void)
+unit_test_single_linked_list_contains_p(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x1DD2, 0x28AE);
+    head = unit_test_single_linked_list_sample(0x1DD2, 0x28AE);
     tmp = head->next;
     if (true != single_linked_list_contains_p(head, tmp)) {
         is_passed = false;
@@ -493,7 +493,7 @@ test_single_linked_list_contains_p(void)
 }
 
 static void
-test_single_linked_list_serialize(void)
+unit_test_single_linked_list_serialize(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp;
@@ -507,7 +507,7 @@ test_single_linked_list_serialize(void)
     iter = sizes;
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        head = test_single_linked_list_sample(len, 0x29E2);
+        head = unit_test_single_linked_list_sample(len, 0x29E2);
 
         single_linked_list_serialize(head);
         tmp = head;
@@ -529,7 +529,7 @@ test_single_linked_list_serialize(void)
 }
 
 static void
-test_single_linked_list_node_remove(void)
+unit_test_single_linked_list_node_remove(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *prev;
@@ -537,7 +537,7 @@ test_single_linked_list_node_remove(void)
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x31E2, 0x28ED);
+    head = unit_test_single_linked_list_sample(0x31E2, 0x28ED);
     tmp = head->next;
     prev = single_linked_list_node_previous(head);
 
@@ -561,7 +561,7 @@ test_single_linked_list_node_remove(void)
 }
 
 static void
-test_single_linked_list_node_lazy_remove(void)
+unit_test_single_linked_list_node_lazy_remove(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *prev;
@@ -569,7 +569,7 @@ test_single_linked_list_node_lazy_remove(void)
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x1AEE, 0x23EA);
+    head = unit_test_single_linked_list_sample(0x1AEE, 0x23EA);
     tmp = head->next;
     prev = single_linked_list_node_previous(head);
 
@@ -594,14 +594,14 @@ test_single_linked_list_node_lazy_remove(void)
 }
 
 static void
-test_single_linked_list_iterate(void)
+unit_test_single_linked_list_iterate(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = test_single_linked_list_sample(0x24E2, 0x1F82);
+    head = unit_test_single_linked_list_sample(0x24E2, 0x1F82);
 
     single_linked_list_iterate(head, &linked_list_iterate_handler);
 
@@ -620,7 +620,7 @@ test_single_linked_list_iterate(void)
 }
 
 static void
-test_single_linked_list_join(void)
+unit_test_single_linked_list_join(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct single_linked_list *head;

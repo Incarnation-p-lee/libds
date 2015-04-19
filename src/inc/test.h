@@ -19,9 +19,9 @@ static void linked_list_iterate_handler(void *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 static void tree_iterate_handler(void *ptr);
-static inline struct binary_search_tree * test_binary_search_tree_sample(uint64 range, uint32 node_count);
-static inline struct single_linked_list * test_single_linked_list_sample(uint32 range, uint32 node_count);
-static inline struct doubly_linked_list * test_doubly_linked_list_sample(uint32 range, uint32 node_count);
-static inline struct avl_tree * test_avl_tree_sample(uint64 range, uint32 node_count);
+static inline struct binary_search_tree * unit_test_binary_search_tree_sample(uint64 range, uint32 node_count);
+static inline struct single_linked_list * unit_test_single_linked_list_sample(uint32 range, uint32 node_count);
+static inline struct doubly_linked_list * unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count);
+static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
 
 #endif

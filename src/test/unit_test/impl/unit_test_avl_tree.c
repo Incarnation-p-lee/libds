@@ -1,5 +1,5 @@
 static inline struct avl_tree *
-test_avl_tree_sample(uint64 range, uint32 node_count)
+unit_test_avl_tree_sample(uint64 range, uint32 node_count)
 {
     struct avl_tree *retval;
     struct avl_tree *tmp;
@@ -24,7 +24,7 @@ test_avl_tree_sample(uint64 range, uint32 node_count)
 }
 
 static void
-test_avl_tree_create(void)
+unit_test_avl_tree_create(void)
 {
     bool is_passed;
     struct avl_tree *tmp;
@@ -46,7 +46,7 @@ test_avl_tree_create(void)
 }
 
 static void
-test_avl_tree_node_create(void)
+unit_test_avl_tree_node_create(void)
 {
     bool is_passed;
     struct avl_tree *tmp;
@@ -68,7 +68,7 @@ test_avl_tree_node_create(void)
 }
 
 static void
-test_avl_tree_initial(void)
+unit_test_avl_tree_initial(void)
 {
     bool is_passed;
     struct avl_tree *tmp;
@@ -100,7 +100,7 @@ test_avl_tree_initial(void)
 }
 
 static void
-test_avl_tree_node_initial(void)
+unit_test_avl_tree_node_initial(void)
 {
     bool is_passed;
     struct avl_tree *tmp;
@@ -132,7 +132,7 @@ test_avl_tree_node_initial(void)
 }
 
 static void
-test_avl_tree_destroy(void)
+unit_test_avl_tree_destroy(void)
 {
     bool is_passed;
     struct avl_tree *tmp;
@@ -145,7 +145,7 @@ test_avl_tree_destroy(void)
         is_passed = false;
     }
 
-    tmp = test_avl_tree_sample(0xABDE8, 0x327EF);
+    tmp = unit_test_avl_tree_sample(0xABDE8, 0x327EF);
     avl_tree_destroy(&tmp);
     if (NULL != tmp) {
         is_passed = false;
@@ -156,14 +156,14 @@ test_avl_tree_destroy(void)
 }
 
 static void
-test_avl_tree_node_find(void)
+unit_test_avl_tree_node_find(void)
 {
     bool is_passed;
     struct avl_tree *root;
     struct avl_tree *tmp;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x7F28A, 0x87D21);
+    root = unit_test_avl_tree_sample(0x7F28A, 0x87D21);
 
     if (root != avl_tree_node_find(root, root->b_node.chain.nice)) {
         is_passed = false;
@@ -191,14 +191,14 @@ test_avl_tree_node_find(void)
 }
 
 static void
-test_avl_tree_node_find_min(void)
+unit_test_avl_tree_node_find_min(void)
 {
     bool is_passed;
     struct avl_tree *root;
     struct avl_tree *tmp;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x39131, 0x264DC);
+    root = unit_test_avl_tree_sample(0x39131, 0x264DC);
 
     if (NULL != avl_tree_node_find_min(NULL)) {
         is_passed = false;
@@ -216,14 +216,14 @@ test_avl_tree_node_find_min(void)
 }
 
 static void
-test_avl_tree_node_find_max(void)
+unit_test_avl_tree_node_find_max(void)
 {
     bool is_passed;
     struct avl_tree *root;
     struct avl_tree *tmp;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x3F1A1, 0x2E494);
+    root = unit_test_avl_tree_sample(0x3F1A1, 0x2E494);
 
     if (NULL != avl_tree_node_find_max(NULL)) {
         is_passed = false;
@@ -241,14 +241,14 @@ test_avl_tree_node_find_max(void)
 }
 
 static void
-test_avl_tree_height(void)
+unit_test_avl_tree_height(void)
 {
     bool is_passed;
     sint32 child;
     struct avl_tree *root;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x9E1A2, 0xAB427);
+    root = unit_test_avl_tree_sample(0x9E1A2, 0xAB427);
 
     if (-1 != avl_tree_height(NULL)) {
         is_passed = false;
@@ -266,7 +266,7 @@ test_avl_tree_height(void)
 }
 
 static void
-test_avl_tree_node_contain_p(void)
+unit_test_avl_tree_node_contain_p(void)
 {
     bool is_passed;
     struct avl_tree *root;
@@ -274,7 +274,7 @@ test_avl_tree_node_contain_p(void)
     struct avl_tree *fake;
 
     is_passed = true;
-    root = test_avl_tree_sample(0xE28D1, 0xC251F);
+    root = unit_test_avl_tree_sample(0xE28D1, 0xC251F);
     tmp = avl_tree_node_create(&is_passed, 0x1234);
 
     if (avl_tree_node_contain_p(root, NULL)) {
@@ -304,7 +304,7 @@ test_avl_tree_node_contain_p(void)
 }
 
 static void
-test_avl_tree_iterate(void)
+unit_test_avl_tree_iterate(void)
 {
     bool is_passed;
     struct avl_tree *root;
@@ -312,7 +312,7 @@ test_avl_tree_iterate(void)
 
     is_passed = true;
     cnt = 0xAF3EC;
-    root = test_avl_tree_sample(0x3813F, cnt);
+    root = unit_test_avl_tree_sample(0x3813F, cnt);
 
     reference = 0;
     avl_tree_iterate(root, &tree_iterate_handler, ORDER_PRE);
@@ -340,7 +340,7 @@ test_avl_tree_iterate(void)
 }
 
 static void
-test_avl_tree_balanced_p(void)
+unit_test_avl_tree_balanced_p(void)
 {
     bool is_passed;
     struct avl_tree *root;
@@ -375,7 +375,7 @@ test_avl_tree_balanced_p(void)
     }
     avl_tree_destroy(&root);
 
-    root = test_avl_tree_sample(0x183EA, 0xED264);
+    root = unit_test_avl_tree_sample(0x183EA, 0xED264);
     if (!avl_tree_balanced_p(NULL)) {
         is_passed = false;
     }
@@ -404,14 +404,14 @@ test_avl_tree_balanced_p(void)
 }
 
 static void
-test_avl_tree_node_insert(void)
+unit_test_avl_tree_node_insert(void)
 {
     bool is_passed;
     struct avl_tree *root;
     struct avl_tree *tmp;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x2E345, 0x1EF4A);
+    root = unit_test_avl_tree_sample(0x2E345, 0x1EF4A);
     if (!avl_tree_balanced_p(root)) {
         is_passed = false;
     }
@@ -446,7 +446,7 @@ test_avl_tree_node_insert(void)
 }
 
 static void
-test_avl_tree_node_remove(void)
+unit_test_avl_tree_node_remove(void)
 {
     bool is_passed;
     sint64 nice;
@@ -454,7 +454,7 @@ test_avl_tree_node_remove(void)
     struct avl_tree *tmp;
 
     is_passed = true;
-    root = test_avl_tree_sample(0x23AEF, 0x20DE7);
+    root = unit_test_avl_tree_sample(0x23AEF, 0x20DE7);
     nice = root->b_node.chain.nice;
 
     avl_tree_node_remove(&root, nice);

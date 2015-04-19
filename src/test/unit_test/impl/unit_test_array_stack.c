@@ -1,5 +1,5 @@
 static void
-test_array_stack_create(void)
+unit_test_array_stack_create(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -17,7 +17,7 @@ test_array_stack_create(void)
 }
 
 static void
-test_array_stack_destroy(void)
+unit_test_array_stack_destroy(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -36,7 +36,7 @@ test_array_stack_destroy(void)
 }
 
 static void
-test_array_stack_space_expand(void)
+unit_test_array_stack_space_expand(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -64,7 +64,7 @@ test_array_stack_space_expand(void)
 }
 
 static void
-test_array_stack_full_p(void)
+unit_test_array_stack_full_p(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -96,7 +96,7 @@ test_array_stack_full_p(void)
 
 
 static void
-test_array_stack_capacity(void)
+unit_test_array_stack_capacity(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -128,7 +128,7 @@ test_array_stack_capacity(void)
 }
 
 static void
-test_array_stack_space_rest(void)
+unit_test_array_stack_space_rest(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -158,7 +158,7 @@ test_array_stack_space_rest(void)
 }
 
 static void
-test_array_stack_push(void)
+unit_test_array_stack_push(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -192,7 +192,7 @@ test_array_stack_push(void)
 }
 
 static void
-test_array_stack_pop(void)
+unit_test_array_stack_pop(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -216,7 +216,7 @@ test_array_stack_pop(void)
 }
 
 static void
-test_array_stack_empty_p(void)
+unit_test_array_stack_empty_p(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -244,7 +244,7 @@ test_array_stack_empty_p(void)
 }
 
 static void
-test_array_stack_cleanup(void)
+unit_test_array_stack_cleanup(void)
 {
     bool is_passed;
     struct array_stack *ins;
@@ -266,7 +266,7 @@ test_array_stack_cleanup(void)
 }
 
 static void
-test_array_stack_iterate(void)
+unit_test_array_stack_iterate(void)
 {
     bool is_passed;
     struct array_stack *ins;

@@ -1,5 +1,5 @@
 static inline struct doubly_linked_list *
-test_doubly_linked_list_sample(uint32 range, uint32 node_count)
+unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 {
     struct doubly_linked_list *retval;
     struct doubly_linked_list *tmp;
@@ -22,7 +22,7 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 }
 
 static void
-test_doubly_linked_list_create(void)
+unit_test_doubly_linked_list_create(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -42,7 +42,7 @@ test_doubly_linked_list_create(void)
 
 
 static void
-test_doubly_linked_list_node_create(void)
+unit_test_doubly_linked_list_node_create(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -62,7 +62,7 @@ test_doubly_linked_list_node_create(void)
 }
 
 static void
-test_doubly_linked_list_node_initial(void)
+unit_test_doubly_linked_list_node_initial(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -83,7 +83,7 @@ test_doubly_linked_list_node_initial(void)
 }
 
 static void
-test_doubly_linked_list_node_set_val(void)
+unit_test_doubly_linked_list_node_set_val(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -104,7 +104,7 @@ test_doubly_linked_list_node_set_val(void)
 }
 
 static void
-test_doubly_linked_list_node_get_val(void)
+unit_test_doubly_linked_list_node_get_val(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -125,7 +125,7 @@ test_doubly_linked_list_node_get_val(void)
 }
 
 static void
-test_doubly_linked_list_initial(void)
+unit_test_doubly_linked_list_initial(void)
 {
     struct doubly_linked_list *tmp;
     bool is_passed;
@@ -145,7 +145,7 @@ test_doubly_linked_list_initial(void)
 }
 
 static void
-test_doubly_linked_list_generate(void)
+unit_test_doubly_linked_list_generate(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
@@ -182,7 +182,7 @@ test_doubly_linked_list_generate(void)
 }
 
 static void
-test_doubly_linked_list_node_append(void)
+unit_test_doubly_linked_list_node_append(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *next;
@@ -207,7 +207,7 @@ test_doubly_linked_list_node_append(void)
 }
 
 static void
-test_doubly_linked_list_node_next(void)
+unit_test_doubly_linked_list_node_next(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *next;
@@ -236,7 +236,7 @@ test_doubly_linked_list_node_next(void)
 }
 
 static void
-test_doubly_linked_list_node_previous(void)
+unit_test_doubly_linked_list_node_previous(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
@@ -265,7 +265,7 @@ test_doubly_linked_list_node_previous(void)
 }
 
 static void
-test_doubly_linked_list_node_insert_before(void)
+unit_test_doubly_linked_list_node_insert_before(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *node;
@@ -292,7 +292,7 @@ test_doubly_linked_list_node_insert_before(void)
 }
 
 static void
-test_doubly_linked_list_node_insert_after(void)
+unit_test_doubly_linked_list_node_insert_after(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *node;
@@ -319,7 +319,7 @@ test_doubly_linked_list_node_insert_after(void)
 }
 
 static void
-test_doubly_linked_list_destroy(void)
+unit_test_doubly_linked_list_destroy(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
@@ -353,7 +353,7 @@ test_doubly_linked_list_destroy(void)
 }
 
 static void
-test_doubly_linked_list_length(void)
+unit_test_doubly_linked_list_length(void)
 {
     struct doubly_linked_list *head;
     bool is_passed;
@@ -392,7 +392,7 @@ test_doubly_linked_list_length(void)
 }
 
 static void
-test_doubly_linked_list_node_get_by_index(void)
+unit_test_doubly_linked_list_node_get_by_index(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -428,7 +428,7 @@ test_doubly_linked_list_node_get_by_index(void)
 }
 
 static void
-test_doubly_linked_list_node_exchange(void)
+unit_test_doubly_linked_list_node_exchange(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -467,7 +467,7 @@ test_doubly_linked_list_node_exchange(void)
 }
 
 static void
-test_doubly_linked_list_contains_p(void)
+unit_test_doubly_linked_list_contains_p(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -498,7 +498,7 @@ test_doubly_linked_list_contains_p(void)
 }
 
 static void
-test_doubly_linked_list_serialize(void)
+unit_test_doubly_linked_list_serialize(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
@@ -537,7 +537,7 @@ test_doubly_linked_list_serialize(void)
 }
 
 static void
-test_doubly_linked_list_node_remove(void)
+unit_test_doubly_linked_list_node_remove(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -570,7 +570,7 @@ test_doubly_linked_list_node_remove(void)
 }
 
 static void
-test_doubly_linked_list_node_lazy_remove(void)
+unit_test_doubly_linked_list_node_lazy_remove(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
@@ -604,14 +604,14 @@ test_doubly_linked_list_node_lazy_remove(void)
 }
 
 static void
-test_doubly_linked_list_iterate(void)
+unit_test_doubly_linked_list_iterate(void)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool is_passed;
 
     is_passed = true;
-    head = test_doubly_linked_list_sample(0x1FE2, 0xBF81);
+    head = unit_test_doubly_linked_list_sample(0x1FE2, 0xBF81);
 
     doubly_linked_list_iterate(head, &linked_list_iterate_handler);
 
@@ -631,7 +631,7 @@ test_doubly_linked_list_iterate(void)
 }
 
 static void
-test_doubly_linked_list_join(void)
+unit_test_doubly_linked_list_join(void)
 {
     uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;

@@ -1,5 +1,5 @@
 static void
-test_array_queue_create(void)
+unit_test_array_queue_create(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -27,7 +27,7 @@ test_array_queue_create(void)
 }
 
 static void
-test_array_queue_destroy(void)
+unit_test_array_queue_destroy(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -45,7 +45,7 @@ test_array_queue_destroy(void)
 }
 
 static void
-test_array_queue_space_expand(void)
+unit_test_array_queue_space_expand(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -96,7 +96,7 @@ test_array_queue_space_expand(void)
 }
 
 static void
-test_array_queue_capacity(void)
+unit_test_array_queue_capacity(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -119,7 +119,7 @@ test_array_queue_capacity(void)
 }
 
 static void
-test_array_queue_space_rest(void)
+unit_test_array_queue_space_rest(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -152,7 +152,7 @@ test_array_queue_space_rest(void)
 }
 
 static void
-test_array_queue_full_p(void)
+unit_test_array_queue_full_p(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -188,7 +188,7 @@ test_array_queue_full_p(void)
 }
 
 static void
-test_array_queue_empty_p(void)
+unit_test_array_queue_empty_p(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -217,7 +217,7 @@ test_array_queue_empty_p(void)
 
 
 static void
-test_array_queue_enter(void)
+unit_test_array_queue_enter(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -251,7 +251,7 @@ test_array_queue_enter(void)
 }
 
 static void
-test_array_queue_leave(void)
+unit_test_array_queue_leave(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -294,7 +294,7 @@ test_array_queue_leave(void)
 }
 
 static void
-test_array_queue_cleanup(void)
+unit_test_array_queue_cleanup(void)
 {
     bool is_passed;
     struct array_queue *queue;
@@ -318,7 +318,7 @@ test_array_queue_cleanup(void)
 }
 
 static void
-test_array_queue_iterate(void)
+unit_test_array_queue_iterate(void)
 {
     bool is_passed;
     struct array_queue *queue;

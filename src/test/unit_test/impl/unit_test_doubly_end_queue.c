@@ -1,5 +1,5 @@
 static void
-test_doubly_end_queue_create(void)
+unit_test_doubly_end_queue_create(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -22,7 +22,7 @@ test_doubly_end_queue_create(void)
 }
 
 static void
-test_doubly_end_queue_destroy(void)
+unit_test_doubly_end_queue_destroy(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -46,7 +46,7 @@ test_doubly_end_queue_destroy(void)
 }
 
 static void
-test_doubly_end_queue_length(void)
+unit_test_doubly_end_queue_length(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -73,7 +73,7 @@ test_doubly_end_queue_length(void)
 }
 
 static void
-test_doubly_end_queue_empty_p(void)
+unit_test_doubly_end_queue_empty_p(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -101,7 +101,7 @@ test_doubly_end_queue_empty_p(void)
 }
 
 static void
-test_doubly_end_queue_head_enter(void)
+unit_test_doubly_end_queue_head_enter(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -128,7 +128,7 @@ test_doubly_end_queue_head_enter(void)
 }
 
 static void
-test_doubly_end_queue_tail_enter(void)
+unit_test_doubly_end_queue_tail_enter(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -155,7 +155,7 @@ test_doubly_end_queue_tail_enter(void)
 }
 
 static void
-test_doubly_end_queue_head_leave(void)
+unit_test_doubly_end_queue_head_leave(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -187,7 +187,7 @@ test_doubly_end_queue_head_leave(void)
 }
 
 static void
-test_doubly_end_queue_tail_leave(void)
+unit_test_doubly_end_queue_tail_leave(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -220,7 +220,7 @@ test_doubly_end_queue_tail_leave(void)
 
 
 static void
-test_doubly_end_queue_cleanup(void)
+unit_test_doubly_end_queue_cleanup(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
@@ -242,7 +242,7 @@ test_doubly_end_queue_cleanup(void)
 }
 
 static void
-test_doubly_end_queue_iterate(void)
+unit_test_doubly_end_queue_iterate(void)
 {
     bool is_passed;
     struct doubly_end_queue *queue;
