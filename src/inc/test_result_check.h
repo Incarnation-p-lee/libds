@@ -2,7 +2,7 @@
 #define HAVE_TEST_RESULT_CHECK_H
 
 #ifdef DEBUG
-    #define LOCATION_PRINT fprintf(stderr, " ... at %d: %s\n", __LINE__, __FILE__)
+    #define LOCATION_PRINT fprintf(stderr, "           ... at %d: %s\n", __LINE__, __FILE__)
 #else
     #define LOCATION_PRINT
 #endif

@@ -284,9 +284,10 @@ extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 
 #define true        1
 #define false       0
-#define assert_not_reached() assert(false)
+#define assert_not_reached()    assert(false)
 
-#define SYM_2_STR(symbol)   (#symbol)
+#define SYM_2_STR(symbol)       (#symbol)
+#define array_sizeof(a)         (sizeof(a) / sizeof(a[0]))
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);
