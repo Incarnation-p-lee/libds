@@ -71,9 +71,9 @@ static inline struct avl_tree * avl_tree_single_rotate_right(struct avl_tree *k1
 static inline struct avl_tree * avl_tree_doubly_rotate_left(struct avl_tree *k1);
 static inline struct avl_tree * avl_tree_doubly_rotate_right(struct avl_tree *k1);
 static inline bool avl_tree_balanced_internal_p(struct avl_tree *node);
-static inline sint64 avl_tree_node_nice_get(struct avl_tree *node);
+static inline sint64 avl_tree_node_nice(struct avl_tree *node);
 static inline void avl_tree_node_nice_set(struct avl_tree *node, sint64 nice);
-static inline sint32 avl_tree_height_get(struct avl_tree *node);
+static inline sint32 avl_tree_height_internal(struct avl_tree *node);
 static inline void avl_tree_height_set(struct avl_tree *node, sint32 height);
 static inline bool avl_tree_node_leaf_p(struct avl_tree *node);
 static inline bool avl_tree_node_child_doubly_p(struct avl_tree *node);

@@ -33,16 +33,16 @@ unit_test_doubly_linked_list_struct_field(void)
     tmp = doubly_linked_list_create();
 
     doubly_linked_list_node_id_set(tmp, id);
-    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(tmp), &pass);
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id(tmp), &pass);
 
     doubly_linked_list_node_val_set(tmp, &id);
-    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val_get(tmp), &pass);
+    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val(tmp), &pass);
 
     doubly_linked_list_node_next_set(tmp, tmp);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(tmp), &pass);
 
     doubly_linked_list_node_previous_set(tmp, tmp);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous(tmp), &pass);
 
     doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_struct_field), pass);
@@ -59,9 +59,9 @@ unit_test_doubly_linked_list_create(void)
     pass = true;
     tmp = doubly_linked_list_create();
 
-    RESULT_CHECK_uint32(0x0u, doubly_linked_list_node_id_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+    RESULT_CHECK_uint32(0x0u, doubly_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous(tmp), &pass);
 
     doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_create), pass);
@@ -81,10 +81,10 @@ unit_test_doubly_linked_list_node_create(void)
     pass = true;
     tmp = doubly_linked_list_node_create(&id, id);
 
-    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(tmp), &pass);
-    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_pointer(&id, doubly_linked_list_node_val(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous(tmp), &pass);
 
     doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_node_create), pass);
@@ -109,10 +109,10 @@ unit_test_doubly_linked_list_node_initial(void)
     tmp = malloc_ds(sizeof(*tmp));
     doubly_linked_list_node_initial(tmp, &pass, id);
 
-    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val_get(tmp), &pass);
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous(tmp), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(tmp), &pass);
 
     doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_node_initial), pass);
@@ -130,9 +130,9 @@ unit_test_doubly_linked_list_initial(void)
     tmp = malloc_ds(sizeof(*tmp));
     doubly_linked_list_initial(tmp);
 
-    RESULT_CHECK_uint32(0x0u, doubly_linked_list_node_id_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous_get(tmp), &pass);
+    RESULT_CHECK_uint32(0x0u, doubly_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_previous(tmp), &pass);
 
     doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_initial), pass);
@@ -145,9 +145,9 @@ unit_test_doubly_linked_list_generate(void)
 {
     struct doubly_linked_list *head;
     bool pass;
-    uint32 *data;
     uint32 *tmp;
     uint32 *iter;
+    uint32 *data;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
 
@@ -164,12 +164,12 @@ unit_test_doubly_linked_list_generate(void)
 
         tmp = data;
         while (tmp < data + len) {
-            RESULT_CHECK_uint32(*tmp, doubly_linked_list_node_id_get(head), &pass);
-            head = doubly_linked_list_node_next_get(head);
+            RESULT_CHECK_uint32(*tmp, doubly_linked_list_node_id(head), &pass);
+            head = doubly_linked_list_node_next(head);
             tmp++;
         }
 
-        RESULT_CHECK_uint32(*data, doubly_linked_list_node_id_get(head), &pass);
+        RESULT_CHECK_uint32(*data, doubly_linked_list_node_id(head), &pass);
 
         free_ds(data);
         doubly_linked_list_destroy(&head);
@@ -188,7 +188,7 @@ unit_test_doubly_linked_list_node_append(void)
     bool pass;
     uint32 id = 0xfadeu;
 
-    head = doubly_linked_list_create();
+    head = unit_test_doubly_linked_list_sample(0x1a2E, 0x213D);
     pass = true;
 
     doubly_linked_list_node_append(NULL, id);
@@ -197,10 +197,10 @@ unit_test_doubly_linked_list_node_append(void)
     doubly_linked_list_node_append(head, id);
     append = head->next;
 
-    RESULT_CHECK_uint32(id, doubly_linked_list_node_id_get(append), &pass);
-    RESULT_CHECK_pointer(next, doubly_linked_list_node_previous_get(append), &pass);
-    RESULT_CHECK_pointer(next, doubly_linked_list_node_next_get(append), &pass);
-    RESULT_CHECK_pointer(append, doubly_linked_list_node_previous_get(next), &pass);
+    RESULT_CHECK_uint32(id, doubly_linked_list_node_id(append), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(append), &pass);
+    RESULT_CHECK_pointer(next, doubly_linked_list_node_next(append), &pass);
+    RESULT_CHECK_pointer(append, doubly_linked_list_node_previous(next), &pass);
 
     doubly_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(doubly_linked_list_node_append), pass);
@@ -219,7 +219,7 @@ unit_test_doubly_linked_list_node_insert_before(void)
 
     pass = true;
     id = 0xbeadu;
-    head = doubly_linked_list_create();
+    head = unit_test_doubly_linked_list_sample(0x21f26, 0xbef19);
     doubly_linked_list_node_append(head, id);
 
     node = doubly_linked_list_create();
@@ -236,12 +236,12 @@ unit_test_doubly_linked_list_node_insert_before(void)
     doubly_linked_list_node_initial(copy, NULL, 0x0u);
     doubly_linked_list_destroy(&copy);
 
-    prev = head->previous;
+    prev = doubly_linked_list_node_previous(head);
     doubly_linked_list_node_insert_before(head, node);
-    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous_get(head), &pass);
-    RESULT_CHECK_pointer(head, doubly_linked_list_node_next_get(node), &pass);
-    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous_get(node), &pass);
-    RESULT_CHECK_pointer(node, doubly_linked_list_node_next_get(prev), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_next(node), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(node), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_next(prev), &pass);
 
     doubly_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(doubly_linked_list_node_insert_before), pass);
@@ -261,7 +261,7 @@ unit_test_doubly_linked_list_node_insert_after(void)
 
     pass = true;
     id = 0xbedu;
-    head = doubly_linked_list_create();
+    head = unit_test_doubly_linked_list_sample(0x18ab, 0x2e9c);
     doubly_linked_list_node_append(head, id);
 
     node = doubly_linked_list_create();
@@ -280,10 +280,10 @@ unit_test_doubly_linked_list_node_insert_after(void)
 
     next = head->next;
     doubly_linked_list_node_insert_after(head, node);
-    RESULT_CHECK_pointer(node, doubly_linked_list_node_next_get(head), &pass);
-    RESULT_CHECK_pointer(head, doubly_linked_list_node_previous_get(node), &pass);
-    RESULT_CHECK_pointer(next, doubly_linked_list_node_next_get(node), &pass);
-    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous_get(next), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(node), &pass);
+    RESULT_CHECK_pointer(next, doubly_linked_list_node_next(node), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous(next), &pass);
 
     doubly_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(doubly_linked_list_node_insert_after), pass);
@@ -296,7 +296,6 @@ unit_test_doubly_linked_list_destroy(void)
 {
     struct doubly_linked_list *head;
     bool pass;
-    uint32 *data;
     uint32 *iter;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
@@ -308,12 +307,10 @@ unit_test_doubly_linked_list_destroy(void)
     doubly_linked_list_destroy(&head);
     RESULT_CHECK_pointer(NULL, head, &pass);
 
-    while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
+    while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        data = (uint32 *)int_array_generate(len);
-        head = doubly_linked_list_generate(data, len);
+        head = unit_test_doubly_linked_list_sample(0x16FA, len);
 
-        free_ds(data);
         doubly_linked_list_destroy(&head);
         RESULT_CHECK_pointer(NULL, head, &pass);
     }
@@ -332,7 +329,6 @@ unit_test_doubly_linked_list_length(void)
 {
     struct doubly_linked_list *head;
     bool pass;
-    uint32 *data;
     uint32 *iter;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
@@ -342,12 +338,10 @@ unit_test_doubly_linked_list_length(void)
 
     while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
         len = *iter++;
-        data = (uint32 *)int_array_generate(len);
-        head = doubly_linked_list_generate(data, len);
+        head = unit_test_doubly_linked_list_sample(0x2ae8, len);
 
         RESULT_CHECK_uint32(len, doubly_linked_list_length(head), &pass);
 
-        free_ds(data);
         doubly_linked_list_destroy(&head);
     }
 
@@ -362,29 +356,30 @@ unit_test_doubly_linked_list_length(void)
 }
 
 static void
-unit_test_doubly_linked_list_node_get_by_index(void)
+unit_test_doubly_linked_list_node_by_index(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
+    uint32 len;
     bool pass;
 
     pass = true;
-    head = doubly_linked_list_generate(raw, array_sizeof(raw));
-    tmp = doubly_linked_list_node_get_by_index(head, 0);
+    head = unit_test_doubly_linked_list_sample(0x18fa, 0x23a2);
+    len = doubly_linked_list_length(head);
+    tmp = doubly_linked_list_node_by_index(head, 0);
     RESULT_CHECK_pointer(head, tmp, &pass);
 
-    tmp = doubly_linked_list_node_get_by_index(head, array_sizeof(raw));
+    tmp = doubly_linked_list_node_by_index(head, len);
     RESULT_CHECK_pointer(head, tmp, &pass);
 
-    tmp = doubly_linked_list_node_get_by_index(NULL, 0);
+    tmp = doubly_linked_list_node_by_index(NULL, 0);
     RESULT_CHECK_pointer(NULL, tmp, &pass);
 
-    tmp = doubly_linked_list_node_get_by_index(head, array_sizeof(raw) + 1);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(head), &pass);
+    tmp = doubly_linked_list_node_by_index(head, len + 1);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(head), &pass);
 
     doubly_linked_list_destroy(&head);
-    test_result_print(SYM_2_STR(doubly_linked_list_node_get_by_index), pass);
+    test_result_print(SYM_2_STR(doubly_linked_list_node_by_index), pass);
 
     return;
 }
@@ -392,32 +387,31 @@ unit_test_doubly_linked_list_node_get_by_index(void)
 static void
 unit_test_doubly_linked_list_node_exchange(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp_1;
     struct doubly_linked_list *tmp_2;
     bool pass;
 
     pass = true;
-    head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = unit_test_doubly_linked_list_sample(0x14a2, 0x2e1d);
     tmp_1 = head->previous;
     tmp_2 = head->next;
 
     doubly_linked_list_node_exchange(tmp_1, tmp_2);
     /* ->tmp_1->head->tmp_2-> =>
        ->tmp_2->head->tmp_1->    */
-    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous_get(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next_get(head), &pass);
+    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
 
     tmp_1 = head->next;
     tmp_2 = head->previous;
     doubly_linked_list_node_exchange(head, head);
-    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous_get(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next_get(head), &pass);
+    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
 
     doubly_linked_list_node_exchange(head, NULL);
-    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous_get(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next_get(head), &pass);
+    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
 
     tmp_1 = doubly_linked_list_node_copy(head);
     doubly_linked_list_node_exchange(head, head);
@@ -434,13 +428,12 @@ unit_test_doubly_linked_list_node_exchange(void)
 static void
 unit_test_doubly_linked_list_contains_p(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
     bool pass;
 
     pass = true;
-    head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = unit_test_doubly_linked_list_sample(0x1dd2, 0x28ae);
     tmp = head->next;
 
     RESULT_CHECK_bool(true, doubly_linked_list_contains_p(head, tmp), &pass);
@@ -464,7 +457,6 @@ unit_test_doubly_linked_list_serialize(void)
     bool pass;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
     uint32 *iter;
-    uint32 *raw;
     uint32 len;
     uint32 index;
 
@@ -472,21 +464,19 @@ unit_test_doubly_linked_list_serialize(void)
     iter = sizes;
     doubly_linked_list_serialize(NULL);
 
-    while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
+    while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        raw = (uint32 *)int_array_generate(len);
-        head = doubly_linked_list_generate(raw, len);
+        head = unit_test_doubly_linked_list_sample(0x29e2, len);
 
         doubly_linked_list_serialize(head);
         tmp = head;
         index = 0u;
         do {
-            RESULT_CHECK_uint32(index, doubly_linked_list_node_id_get(tmp), &pass);
+            RESULT_CHECK_uint32(index, doubly_linked_list_node_id(tmp), &pass);
             index++;
-            tmp = doubly_linked_list_node_next_get(tmp);
+            tmp = doubly_linked_list_node_next(tmp);
         } while (tmp != head);
 
-        free_ds(raw);
         doubly_linked_list_destroy(&head);
     }
 
@@ -495,23 +485,46 @@ unit_test_doubly_linked_list_serialize(void)
 }
 
 static void
+unit_test_doubly_linked_list_node_copy(void)
+{
+    uint32 id;
+    bool pass;
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *tmp;
+
+    id = 0xbedu;
+    pass = true;
+    head = doubly_linked_list_node_create(&pass, id);
+
+    doubly_linked_list_node_copy(NULL);
+    tmp = doubly_linked_list_node_copy(head);
+
+    RESULT_CHECK_doubly_linked_list_node(tmp, head, &pass);
+
+    doubly_linked_list_destroy(&head);
+    doubly_linked_list_node_initial(tmp, NULL, 0x0u);
+    doubly_linked_list_destroy(&tmp);
+    test_result_print(SYM_2_STR(doubly_linked_list_node_copy), pass);
+    return;
+}
+
+static void
 unit_test_doubly_linked_list_node_remove(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
     struct doubly_linked_list *tmp;
     bool pass;
 
     pass = true;
-    head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
-    tmp = doubly_linked_list_node_next_get(head);
-    prev = doubly_linked_list_node_previous_get(head);
+    head = unit_test_doubly_linked_list_sample(0x31e2, 0x28ed);
+    tmp = doubly_linked_list_node_next(head);
+    prev = doubly_linked_list_node_previous(head);
 
     doubly_linked_list_node_remove(NULL);
 
     RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(head), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(prev), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
 
     doubly_linked_list_destroy(&tmp);
 
@@ -526,14 +539,13 @@ unit_test_doubly_linked_list_node_remove(void)
 static void
 unit_test_doubly_linked_list_node_lazy_remove(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *prev;
     struct doubly_linked_list *tmp;
     bool pass;
 
     pass = true;
-    head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
+    head = unit_test_doubly_linked_list_sample(0xeb28, 0xa23d);
     tmp = head->next;
     prev = head->previous;
 
@@ -543,10 +555,10 @@ unit_test_doubly_linked_list_node_lazy_remove(void)
           tmp->node           */
     doubly_linked_list_node_lazy_remove(head);
 
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(head), &pass);
-    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous_get(head), &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(prev), &pass);
-    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous_get(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(tmp), &pass);
 
     /* Need to free the lazy node independently. */
     free_ds(head);
@@ -572,8 +584,8 @@ unit_test_doubly_linked_list_iterate(void)
 
     tmp = head;
     do {
-        RESULT_CHECK_uint32(0xdeadu, doubly_linked_list_node_id_get(tmp), &pass);
-        tmp = doubly_linked_list_node_next_get(tmp);
+        RESULT_CHECK_uint32(0xdeadu, doubly_linked_list_node_id(tmp), &pass);
+        tmp = doubly_linked_list_node_next(tmp);
     } while (tmp != head);
 
     doubly_linked_list_destroy(&head);
@@ -585,7 +597,7 @@ unit_test_doubly_linked_list_iterate(void)
 static void
 unit_test_doubly_linked_list_join(void)
 {
-    uint32 raw[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF,};
+    uint32 raw[] = {0xa, 0xb, 0xc, 0xd, 0xe, 0xf,};
     struct doubly_linked_list *head;
     struct doubly_linked_list *head_n;
     struct doubly_linked_list *tmp;
@@ -605,7 +617,6 @@ unit_test_doubly_linked_list_join(void)
     doubly_linked_list_node_insert_before(head_n, tmp);
     tmp = doubly_linked_list_node_create(raw + 4, 0x0u);
     doubly_linked_list_node_insert_before(head_n, tmp);
-
 
     RESULT_CHECK_pointer(NULL, doubly_linked_list_join(NULL, NULL), &pass);
     RESULT_CHECK_pointer(head, doubly_linked_list_join(head, NULL), &pass);

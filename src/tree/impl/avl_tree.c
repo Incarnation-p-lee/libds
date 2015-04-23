@@ -145,8 +145,8 @@ avl_tree_height_update(struct avl_tree *node)
 
    assert(NULL != node);
 
-   left = avl_tree_height_get(avl_tree_node_child_left(node));
-   right = avl_tree_height_get(avl_tree_node_child_right(node));
+   left = avl_tree_height(avl_tree_node_child_left(node));
+   right = avl_tree_height(avl_tree_node_child_right(node));
 
    avl_tree_height_set(node, MAX_S(left, right) + 1);
    return;
@@ -281,7 +281,8 @@ avl_tree_balanced_internal_p(struct avl_tree *node)
     left = avl_tree_node_child_left(node);
     right = avl_tree_node_child_right(node);
 
-    if (0x1u < abs(avl_tree_height_get(left) - avl_tree_height_get(right))) {
+    if (0x1u < abs(avl_tree_height_internal(left)
+        - avl_tree_height_internal(right))) {
         return false;
     } else {
         return true;
@@ -289,7 +290,7 @@ avl_tree_balanced_internal_p(struct avl_tree *node)
 }
 
 static inline sint64
-avl_tree_node_nice_get(struct avl_tree *node)
+avl_tree_node_nice(struct avl_tree *node)
 {
     assert(NULL != node);
 
@@ -367,8 +368,8 @@ avl_tree_node_remove_rotate_right(struct avl_tree **root, struct avl_tree *node)
 static inline void
 avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node)
 {
-     if (avl_tree_node_nice_get(node) <
-         avl_tree_node_nice_get(avl_tree_node_child_left(*root))) {
+     if (avl_tree_node_nice(node) <
+         avl_tree_node_nice(avl_tree_node_child_left(*root))) {
          *root = avl_tree_single_rotate_left(*root);
      } else {
          *root =  avl_tree_doubly_rotate_left(*root);
@@ -378,8 +379,8 @@ avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node)
 static inline void
 avl_tree_node_insert_rotate_right(struct avl_tree **root, struct avl_tree *node)
 {
-     if (avl_tree_node_nice_get(node) >
-         avl_tree_node_nice_get(avl_tree_node_child_right(*root))) {
+     if (avl_tree_node_nice(node) >
+         avl_tree_node_nice(avl_tree_node_child_right(*root))) {
          *root = avl_tree_single_rotate_right(*root);
      } else {
          *root = avl_tree_doubly_rotate_right(*root);
@@ -404,8 +405,8 @@ avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node)
 
     assert(pre && node);
 
-    left = avl_tree_height_get(avl_tree_node_child_left(node));
-    right = avl_tree_height_get(avl_tree_node_child_right(node));
+    left = avl_tree_height_internal(avl_tree_node_child_left(node));
+    right = avl_tree_height_internal(avl_tree_node_child_right(node));
 
     if (left > right) {
         return avl_tree_node_child_doubly_strip_from_min(pre, node);
@@ -468,7 +469,7 @@ avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     max = avl_tree_node_child_right(max_parent);
 
     /* Fake one placeholder node for keeping balance */
-    tmp = avl_tree_node_create(NULL, avl_tree_node_nice_get(max) + 1);
+    tmp = avl_tree_node_create(NULL, avl_tree_node_nice(max) + 1);
     avl_tree_node_child_right_set(max_parent, tmp);
 
     *pre = max;
@@ -478,7 +479,7 @@ avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     avl_tree_node_child_left_set(node, NULL);
     avl_tree_node_child_right_set(node, NULL);
 
-    return avl_tree_node_nice_get(tmp);;
+    return avl_tree_node_nice(tmp);;
 }
 
 static inline sint64
@@ -493,7 +494,7 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     min = avl_tree_node_child_left(min_parent);
 
     /* Fake one placeholder node for keeping balance */
-    tmp = avl_tree_node_create(NULL, avl_tree_node_nice_get(min) - 1);
+    tmp = avl_tree_node_create(NULL, avl_tree_node_nice(min) - 1);
     avl_tree_node_child_left_set(min_parent, tmp);
 
     *pre = min;
@@ -503,7 +504,7 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     avl_tree_node_child_left_set(node, NULL);
     avl_tree_node_child_right_set(node, NULL);
 
-    return avl_tree_node_nice_get(tmp);
+    return avl_tree_node_nice(tmp);
 }
 
 static inline void
@@ -526,13 +527,13 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 
     if (root && *root) {
         node = *root;
-        if (nice < avl_tree_node_nice_get(node)) {
+        if (nice < avl_tree_node_nice(node)) {
             avl_tree_node_remove(&node->b_node.avl_left, nice);
             /* The left child-tree */
             if (!avl_tree_balanced_internal_p(node)) {
                 avl_tree_node_remove_rotate_right(root, node);
             }
-        } else if (nice > avl_tree_node_nice_get(node)) {
+        } else if (nice > avl_tree_node_nice(node)) {
             avl_tree_node_remove(&node->b_node.avl_right, nice);
             /* The right child-tree */
             if (!avl_tree_balanced_internal_p(node)) {
@@ -567,7 +568,7 @@ struct avl_tree *
 avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
 {
     if (root && node && *root) {
-        if (avl_tree_node_nice_get(node) < avl_tree_node_nice_get(*root)) {
+        if (avl_tree_node_nice(node) < avl_tree_node_nice(*root)) {
             if (!avl_tree_node_child_left(*root)) {
                 avl_tree_node_child_left_set(*root, node);
             } else {
@@ -577,7 +578,7 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
             if (!avl_tree_balanced_internal_p(*root)) {
                 avl_tree_node_insert_rotate_left(root, node);
             }
-        } else if (avl_tree_node_nice_get(node) > avl_tree_node_nice_get(*root)) {
+        } else if (avl_tree_node_nice(node) > avl_tree_node_nice(*root)) {
             if (!avl_tree_node_child_right(*root)) {
                 avl_tree_node_child_right_set(*root, node);
             } else {
@@ -611,7 +612,7 @@ avl_tree_iterate(struct avl_tree *root,
 }
 
 static inline sint32
-avl_tree_height_get(struct avl_tree *node)
+avl_tree_height_internal(struct avl_tree *node)
 {
     return node ? node->b_node.height : -1;
 }
@@ -625,5 +626,5 @@ avl_tree_height_set(struct avl_tree *node, sint32 height)
 sint32
 avl_tree_height(struct avl_tree *root)
 {
-    return avl_tree_height_get(root);
+    return avl_tree_height(root);
 }

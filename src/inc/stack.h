@@ -12,8 +12,6 @@
 
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern struct doubly_linked_list * doubly_linked_list_node_next(struct doubly_linked_list *node);
-extern struct doubly_linked_list * doubly_linked_list_node_previous(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 

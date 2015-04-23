@@ -31,9 +31,11 @@ single_linked_list_node_initial(struct single_linked_list *head,
     void *val, uint32 id)
 {
     if (head) {
-        head->id = id;
-        head->val = val;
-        head->next = head;
+        single_linked_list_node_id_set(head, id);
+        single_linked_list_node_val_set(head, val);
+        single_linked_list_node_next_set(head, head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -49,94 +51,49 @@ single_linked_list_generate(uint32 *id, uint32 size)
     head = NULL;
     if (id && size > 0) {
         iterator = id;
-        node = single_linked_list_create();
-        node->id = *iterator++;
+        node = single_linked_list_node_create(NULL, *iterator++);
         head = node;
 
         while (iterator < id + size) {
             single_linked_list_node_append(node, *iterator++);
-            node = node->next;
+            node = single_linked_list_node_next(node);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return head;
 }
 
 void
-single_linked_list_node_set_val(struct single_linked_list *node, void *val)
-{
-    if (node) {
-        node->val = val;
-    }
-    return;
-}
-
-void *
-single_linked_list_node_get_val(struct single_linked_list *node)
-{
-    return node ? node->val : node;
-}
-
-void
-single_linked_list_node_append(struct single_linked_list *node, uint32 value)
+single_linked_list_node_append(struct single_linked_list *node, uint32 id)
 {
     struct single_linked_list *next;
 
     next = NULL;
     if (node) {
-        if (!node->next) {
-            pr_log_warn("Uninitialized or destroyed single linked list node.\n");
+        if (NULL == single_linked_list_node_next(node)) {
+            pr_log_warn("Destroyed data structure.\n");
         } else {
-            next = single_linked_list_create();
-            next->id = value;
+            next = single_linked_list_node_create(NULL, id);
             single_linked_list_node_insert_after(node, next);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
-}
-
-struct single_linked_list *
-single_linked_list_node_next(struct single_linked_list *node)
-{
-    struct single_linked_list *next;
-
-    next = NULL;
-    if (node && node->next) {
-        next = node->next;
-    } else if (!node->next) {
-        pr_log_warn("Uninitialized or destroyed single linked list node.\n");
-    }
-
-    return next;
-}
-
-struct single_linked_list *
-single_linked_list_node_previous(struct single_linked_list *node)
-{
-    register struct single_linked_list *previous;
-
-    previous = NULL;
-    if (node && node->next) {
-        previous = node;
-        do {
-            previous = previous->next;
-        } while (previous->next != node);
-    } else if (!node->next) {
-        pr_log_warn("Uninitialized or destroyed single linked list node.\n");
-    }
-
-    return previous;
 }
 
 void
 single_linked_list_node_insert_after(struct single_linked_list *cur,
     struct single_linked_list *node)
 {
-    if (cur && node)
-    {
-        node->next = cur->next;
-        cur->next = node;
+    if (cur && node) {
+        single_linked_list_node_next_set(node, cur->next);
+        single_linked_list_node_next_set(cur, node);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -148,15 +105,36 @@ single_linked_list_node_insert_before(struct single_linked_list *cur,
 {
     struct single_linked_list *previous;
 
-    if (cur && node)
-    {
+    if (cur && node) {
         previous = single_linked_list_node_previous(cur);
         if (previous) {
             single_linked_list_node_insert_after(previous, node);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
+}
+
+struct single_linked_list *
+single_linked_list_node_copy(struct single_linked_list *node)
+{
+    struct single_linked_list *copy;
+
+    copy = NULL;
+    if (node) {
+        copy = single_linked_list_node_create(
+            single_linked_list_node_val(node),
+            single_linked_list_node_id(node));
+
+        single_linked_list_node_next_set(copy,
+            single_linked_list_node_next(node));
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
+
+    return copy;
 }
 
 void
@@ -172,14 +150,17 @@ single_linked_list_destroy(struct single_linked_list **head)
          * go through all node in list, which has heavy performance
          * drop in unit test.
          */
-        next = (*head)->next;
+        next = single_linked_list_node_next(*head);
         while (*head != (node = next)) {
             next = node->next;
+            next = single_linked_list_node_next(node);
             free_ds(node);
         }
 
         free_ds(node);
         *head = NULL;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -196,27 +177,36 @@ single_linked_list_length(struct single_linked_list *head)
         node = head;
         do {
             length++;
-            node = node->next;
+            node = single_linked_list_node_next(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return length;
 }
 
 struct single_linked_list *
-single_linked_list_node_get_by_index(struct single_linked_list *head, uint32 index)
+single_linked_list_node_by_index(struct single_linked_list *head, uint32 index)
 {
     register struct single_linked_list *node;
+    uint32 len;
 
     node = NULL;
     if (head) {
-        if (index <= single_linked_list_length(head)) {
-            node = head;
-            while (index > 0) {
-                node = node->next;
-                index--;
-            }
+        len = single_linked_list_length(head);
+        if (index >= len) {
+            pr_log_warn("Index out of the lenght, rotated to front.\n");
+            index = index % len;
         }
+
+        node = head;
+        while (index > 0) {
+            node = single_linked_list_node_next(node);
+            index--;
+        }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return node;
@@ -235,13 +225,15 @@ single_linked_list_node_exchange(struct single_linked_list *fir,
             prev_fir = single_linked_list_node_previous(fir);
             prev_sec = single_linked_list_node_previous(sec);
 
-            if (prev_fir && prev_sec) {
-                single_linked_list_node_lazy_remove(fir);
-                single_linked_list_node_lazy_remove(sec);
-                single_linked_list_node_insert_after(prev_fir, sec);
-                single_linked_list_node_insert_after(prev_sec, fir);
-            }
+            single_linked_list_node_lazy_remove(fir);
+            single_linked_list_node_lazy_remove(sec);
+            single_linked_list_node_insert_after(prev_fir, sec);
+            single_linked_list_node_insert_after(prev_sec, fir);
+        } else {
+            pr_log_warn("Exchange itself or exchange in different list.\n");
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -262,8 +254,10 @@ single_linked_list_contains_p(struct single_linked_list *tar,
                 contains = true;
                 break;
             }
-            iter = iter->next;
+            iter = single_linked_list_node_next(iter);
         } while (iter != tar);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return contains;
@@ -279,12 +273,34 @@ single_linked_list_serialize(struct single_linked_list *head)
         index = 0;
         node = head;
         do {
-            node->id = index++;
-            node = node->next;
+            single_linked_list_node_id_set(node, index++);
+            node = single_linked_list_node_next(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
+}
+
+struct single_linked_list *
+single_linked_list_node_previous(struct single_linked_list *node)
+{
+    register struct single_linked_list *previous;
+
+    previous = NULL;
+    if (node && NULL != single_linked_list_node_next(node)) {
+        previous = node;
+        do {
+            previous = single_linked_list_node_next(previous);
+        } while (single_linked_list_node_next(previous) != node);
+    } else if (node && NULL == single_linked_list_node_next(node)) {
+        pr_log_warn("Destroyed data structure.\n");
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
+
+    return previous;
 }
 
 struct single_linked_list *
@@ -294,11 +310,13 @@ single_linked_list_node_remove(struct single_linked_list *node)
 
     next = NULL;
     if (node) {
-         single_linked_list_node_lazy_remove(node);
-        if (node->next != node) {
-            next = node->next;
+        single_linked_list_node_lazy_remove(node);
+        if (single_linked_list_node_next(node) != node) {
+            next = single_linked_list_node_next(node);
         }
         free_ds(node);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return next;
@@ -311,32 +329,36 @@ single_linked_list_node_lazy_remove(struct single_linked_list *node)
 
     if (node) {
         previous = single_linked_list_node_previous(node);
-        if (previous) {
-            previous->next = node->next;
-        }
+        single_linked_list_node_next_set(previous, node->next);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
 }
 
 void
-single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *))
+single_linked_list_iterate(struct single_linked_list *head,
+    void (*handler)(void *))
 {
     register struct single_linked_list *node;
 
     if (head && handler) {
         node = head;
         do {
-            (*handler)(node->val);
-            node = node->next;
+            (*handler)(single_linked_list_node_val(node));
+            node = single_linked_list_node_next(node);
         } while (node != head);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
 }
 
 struct single_linked_list *
-single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n)
+single_linked_list_join(struct single_linked_list *m,
+    struct single_linked_list *n)
 {
     register struct single_linked_list *iter;
     register struct single_linked_list *new;
@@ -344,10 +366,17 @@ single_linked_list_join(struct single_linked_list *m, struct single_linked_list 
     if (m && n) {
         iter = n;
         do {
-            new = single_linked_list_node_create(iter->val, iter->id);
-            single_linked_list_node_insert_before(m, new);
-            iter = iter->next;
+            if (!single_linked_list_contains_p(m, iter)) {
+                new = single_linked_list_node_create(
+                    single_linked_list_node_val(iter),
+                    single_linked_list_node_id(iter));
+
+                single_linked_list_node_insert_before(m, new);
+            }
+            iter = single_linked_list_node_next(iter);
         } while (iter != n);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return m ? m : n;

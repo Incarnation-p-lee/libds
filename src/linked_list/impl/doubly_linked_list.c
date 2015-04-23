@@ -57,7 +57,7 @@ doubly_linked_list_generate(uint32 *id, uint32 size)
 
         while (iterator < id + size) {
             doubly_linked_list_node_append(node, *iterator++);
-            node = doubly_linked_list_node_next_get(node);
+            node = doubly_linked_list_node_next(node);
         }
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -72,13 +72,13 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id)
     struct doubly_linked_list *next;
 
     if (node) {
-        if (NULL == doubly_linked_list_node_next_get(node)
-            || NULL == doubly_linked_list_node_previous_get(node)) {
+        if (NULL == doubly_linked_list_node_next(node)
+            || NULL == doubly_linked_list_node_previous(node)) {
             pr_log_warn("Destroyed data structure.\n");
+        } else {
+            next = doubly_linked_list_node_create(NULL, id);
+            doubly_linked_list_node_insert_after(node, next);
         }
-
-        next = doubly_linked_list_node_create(NULL, id);
-        doubly_linked_list_node_insert_after(node, next);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
     }
@@ -109,7 +109,7 @@ doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *prev;
 
     if (cur && node) {
-        prev = doubly_linked_list_node_previous_get(cur);
+        prev = doubly_linked_list_node_previous(cur);
         doubly_linked_list_node_insert_after(prev, node);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -126,13 +126,13 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
     copy = NULL;
     if (node) {
         copy = doubly_linked_list_node_create(
-            doubly_linked_list_node_val_get(node),
-            doubly_linked_list_node_id_get(node));
+            doubly_linked_list_node_val(node),
+            doubly_linked_list_node_id(node));
 
         doubly_linked_list_node_next_set(copy,
-            doubly_linked_list_node_next_get(node));
+            doubly_linked_list_node_next(node));
         doubly_linked_list_node_previous_set(copy,
-            doubly_linked_list_node_previous_get(node));
+            doubly_linked_list_node_previous(node));
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
     }
@@ -151,9 +151,9 @@ doubly_linked_list_destroy(struct doubly_linked_list **head)
          * Do not call doubly_linked_list_remove_node for
          * the consider of performance drop.
          */
-        next = doubly_linked_list_node_next_get(*head);
+        next = doubly_linked_list_node_next(*head);
         while (*head != (node = next)) {
-            next = doubly_linked_list_node_next_get(node);
+            next = doubly_linked_list_node_next(node);
             free_ds(node);
         }
 
@@ -177,7 +177,7 @@ doubly_linked_list_length(struct doubly_linked_list *head)
         node = head;
         do {
             length++;
-            node = doubly_linked_list_node_next_get(node);
+            node = doubly_linked_list_node_next(node);
         } while (node != head);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -187,7 +187,7 @@ doubly_linked_list_length(struct doubly_linked_list *head)
 }
 
 struct doubly_linked_list *
-doubly_linked_list_node_get_by_index(struct doubly_linked_list *head,
+doubly_linked_list_node_by_index(struct doubly_linked_list *head,
     uint32 index)
 {
     register struct doubly_linked_list *node;
@@ -203,7 +203,7 @@ doubly_linked_list_node_get_by_index(struct doubly_linked_list *head,
 
         node = head;
         while (index > 0) {
-            node = doubly_linked_list_node_next_get(node);
+            node = doubly_linked_list_node_next(node);
             index--;
         }
     } else {
@@ -223,8 +223,8 @@ doubly_linked_list_node_exchange(struct doubly_linked_list *fir,
 
     if (fir && sec) {
         if (doubly_linked_list_contains_p(fir, sec) && (fir != sec)) {
-            prev_fir = doubly_linked_list_node_previous_get(fir);
-            prev_sec = doubly_linked_list_node_previous_get(sec);
+            prev_fir = doubly_linked_list_node_previous(fir);
+            prev_sec = doubly_linked_list_node_previous(sec);
 
             doubly_linked_list_node_lazy_remove(fir);
             doubly_linked_list_node_lazy_remove(sec);
@@ -255,7 +255,7 @@ doubly_linked_list_contains_p(struct doubly_linked_list *tar,
                 contains = true;
                 break;
             }
-            iter = doubly_linked_list_node_next_get(iter);
+            iter = doubly_linked_list_node_next(iter);
         } while (iter != tar);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -275,7 +275,7 @@ doubly_linked_list_serialize(struct doubly_linked_list *head)
         node = head;
         do {
             doubly_linked_list_node_id_set(node, index++);
-            node = doubly_linked_list_node_next_get(node);
+            node = doubly_linked_list_node_next(node);
         } while (node != head);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -292,8 +292,8 @@ doubly_linked_list_node_remove(struct doubly_linked_list *node)
     next = NULL;
     if (node) {
         doubly_linked_list_node_lazy_remove(node);
-        if (doubly_linked_list_node_next_get(node) != node) {
-            next = doubly_linked_list_node_next_get(node);
+        if (doubly_linked_list_node_next(node) != node) {
+            next = doubly_linked_list_node_next(node);
         }
         free_ds(node);
     } else {
@@ -308,9 +308,9 @@ doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node)
 {
     if (node) {
         doubly_linked_list_node_next_set(node->previous,
-            doubly_linked_list_node_next_get(node));
+            doubly_linked_list_node_next(node));
         doubly_linked_list_node_previous_set(node->next,
-            doubly_linked_list_node_previous_get(node));
+            doubly_linked_list_node_previous(node));
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
     }
@@ -326,8 +326,8 @@ doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void
     if (head && handler) {
         node = head;
         do {
-            (*handler)(doubly_linked_list_node_val_get(node));
-            node = doubly_linked_list_node_next_get(node);
+            (*handler)(doubly_linked_list_node_val(node));
+            node = doubly_linked_list_node_next(node);
         } while (node != head);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -347,12 +347,12 @@ doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list 
         do {
             if (!doubly_linked_list_contains_p(m, iter)) {
                 new = doubly_linked_list_node_create(
-                    doubly_linked_list_node_val_get(iter),
-                    doubly_linked_list_node_id_get(iter));
+                    doubly_linked_list_node_val(iter),
+                    doubly_linked_list_node_id(iter));
 
                 doubly_linked_list_node_insert_before(m, new);
             }
-            iter = doubly_linked_list_node_next_get(iter);
+            iter = doubly_linked_list_node_next(iter);
         } while (iter != n);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
