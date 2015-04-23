@@ -505,25 +505,21 @@ unit_test_doubly_linked_list_node_remove(void)
 
     pass = true;
     head = doubly_linked_list_generate(raw, sizeof(raw) / sizeof(raw[0]));
-    tmp = head->next;
-    prev = head->previous;
+    tmp = doubly_linked_list_node_next_get(head);
+    prev = doubly_linked_list_node_previous_get(head);
 
-    if (tmp != doubly_linked_list_node_remove(head)) {
-        pass = false;
-    }
+    doubly_linked_list_node_remove(NULL);
 
-    if (tmp != prev->next) {
-        pass = false;
-    }
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(head), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(prev), &pass);
 
     doubly_linked_list_destroy(&tmp);
 
     tmp = doubly_linked_list_create();
-    if (NULL != doubly_linked_list_node_remove(tmp)) {
-        pass = false;
-    }
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_remove(tmp), &pass);
 
     test_result_print(SYM_2_STR(doubly_linked_list_node_remove), pass);
+
     return;
 }
 
@@ -541,23 +537,23 @@ unit_test_doubly_linked_list_node_lazy_remove(void)
     tmp = head->next;
     prev = head->previous;
 
+    doubly_linked_list_node_lazy_remove(NULL);
     /* ->head->tmp->node-> =>
        ->head->node->
           tmp->node           */
     doubly_linked_list_node_lazy_remove(head);
-    if (tmp != head->next && prev != head->previous) {
-        pass = false;
-    }
 
-    if (prev->next != tmp && tmp->previous != prev) {
-        pass = false;
-    }
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(head), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous_get(head), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next_get(prev), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous_get(tmp), &pass);
 
     /* Need to free the lazy node independently. */
     free_ds(head);
-    doubly_linked_list_destroy(&tmp);
 
+    doubly_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(doubly_linked_list_node_lazy_remove), pass);
+
     return;
 }
 
@@ -571,20 +567,18 @@ unit_test_doubly_linked_list_iterate(void)
     pass = true;
     head = unit_test_doubly_linked_list_sample(0x1FE2, 0xBF81);
 
+    doubly_linked_list_iterate(NULL, &linked_list_iterate_handler);
     doubly_linked_list_iterate(head, &linked_list_iterate_handler);
 
     tmp = head;
     do {
-        if (tmp->id != 0xDEADu) {
-            pass = false;
-            break;
-        }
-        tmp = tmp->next;
+        RESULT_CHECK_uint32(0xdeadu, doubly_linked_list_node_id_get(tmp), &pass);
+        tmp = doubly_linked_list_node_next_get(tmp);
     } while (tmp != head);
 
     doubly_linked_list_destroy(&head);
-
     test_result_print(SYM_2_STR(doubly_linked_list_iterate), pass);
+
     return;
 }
 
@@ -612,26 +606,17 @@ unit_test_doubly_linked_list_join(void)
     tmp = doubly_linked_list_node_create(raw + 4, 0x0u);
     doubly_linked_list_node_insert_before(head_n, tmp);
 
-    if (NULL != doubly_linked_list_join(NULL, NULL)) {
-        pass = false;
-    }
 
-    if (head != doubly_linked_list_join(head, NULL)) {
-        pass = false;
-    }
-
-    if (head != doubly_linked_list_join(NULL, head)) {
-        pass = false;
-    }
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_join(NULL, NULL), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_join(head, NULL), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_join(NULL, head), &pass);
 
     head = doubly_linked_list_join(head, head_n);
-    if (0x6u != doubly_linked_list_length(head)) {
-        pass = false;
-    }
+    RESULT_CHECK_uint32(0x6u, doubly_linked_list_length(head), &pass);
 
     doubly_linked_list_destroy(&head);
     doubly_linked_list_destroy(&head_n);
-
     test_result_print(SYM_2_STR(doubly_linked_list_join), pass);
+
     return;
 }
