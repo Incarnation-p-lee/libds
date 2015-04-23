@@ -118,6 +118,28 @@ doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
     return;
 }
 
+struct doubly_linked_list *
+doubly_linked_list_node_copy(struct doubly_linked_list *node)
+{
+    struct doubly_linked_list *copy;
+
+    copy = NULL;
+    if (node) {
+        copy = doubly_linked_list_node_create(
+            doubly_linked_list_node_val_get(node),
+            doubly_linked_list_node_id_get(node));
+
+        doubly_linked_list_node_next_set(copy,
+            doubly_linked_list_node_next_get(node));
+        doubly_linked_list_node_previous_set(copy,
+            doubly_linked_list_node_previous_get(node));
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
+
+    return copy;
+}
+
 void
 doubly_linked_list_destroy(struct doubly_linked_list **head)
 {

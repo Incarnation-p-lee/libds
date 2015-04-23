@@ -330,12 +330,21 @@ extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 #endif
 
 
+#define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
+    do {                                                               \
+        RESULT_CHECK_uint32((aim)->id, (ex)->id, (pass));              \
+        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
+        RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
+        RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
+    } while (false)
+
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list * doubly_linked_list_create(void);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 id);
 extern void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
 extern struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
+extern struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
 extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);

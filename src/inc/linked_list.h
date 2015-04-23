@@ -8,12 +8,21 @@
 
 extern void libds_log_print(enum log_level lvl, const char *msg);
 
+#define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
+    do {                                                               \
+        RESULT_CHECK_uint32((aim)->id, (ex)->id, (pass));              \
+        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
+        RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
+        RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
+    } while (false)
+
 /* doubly linked list, Circular. */
 struct doubly_linked_list * doubly_linked_list_create(void);
 struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 id);
 void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
 void doubly_linked_list_initial(struct doubly_linked_list *);
 struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
+struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
 void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
 void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
