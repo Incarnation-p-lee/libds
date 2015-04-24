@@ -145,8 +145,8 @@ avl_tree_height_update(struct avl_tree *node)
 
    assert(NULL != node);
 
-   left = avl_tree_height(avl_tree_node_child_left(node));
-   right = avl_tree_height(avl_tree_node_child_right(node));
+   left = avl_tree_height_internal(avl_tree_node_child_left(node));
+   right = avl_tree_height_internal(avl_tree_node_child_right(node));
 
    avl_tree_height_set(node, MAX_S(left, right) + 1);
    return;
@@ -626,5 +626,5 @@ avl_tree_height_set(struct avl_tree *node, sint32 height)
 sint32
 avl_tree_height(struct avl_tree *root)
 {
-    return avl_tree_height(root);
+    return binary_search_tree_height(avl_tree_ptr_avl2bst(root));
 }

@@ -157,7 +157,7 @@ unit_test_doubly_linked_list_generate(void)
     head = doubly_linked_list_generate(NULL, 0xdeadu);
     RESULT_CHECK_pointer(NULL, head, &pass);
 
-    while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
+    while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
         data = (uint32 *)int_array_generate(len);
         head = doubly_linked_list_generate(data, len);
@@ -193,9 +193,9 @@ unit_test_doubly_linked_list_node_append(void)
 
     doubly_linked_list_node_append(NULL, id);
 
-    next = head->next;
+    next = doubly_linked_list_node_next(head);
     doubly_linked_list_node_append(head, id);
-    append = head->next;
+    append = doubly_linked_list_node_next(head);
 
     RESULT_CHECK_uint32(id, doubly_linked_list_node_id(append), &pass);
     RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(append), &pass);
@@ -278,7 +278,7 @@ unit_test_doubly_linked_list_node_insert_after(void)
     doubly_linked_list_node_initial(copy, NULL, 0x0u);
     doubly_linked_list_destroy(&copy);
 
-    next = head->next;
+    next = doubly_linked_list_node_next(head);
     doubly_linked_list_node_insert_after(head, node);
     RESULT_CHECK_pointer(node, doubly_linked_list_node_next(head), &pass);
     RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(node), &pass);
@@ -336,7 +336,7 @@ unit_test_doubly_linked_list_length(void)
     pass = true;
     iter = sizes;
 
-    while (iter < sizes + sizeof(sizes) / sizeof(sizes[0])) {
+    while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
         head = unit_test_doubly_linked_list_sample(0x2ae8, len);
 
@@ -394,8 +394,8 @@ unit_test_doubly_linked_list_node_exchange(void)
 
     pass = true;
     head = unit_test_doubly_linked_list_sample(0x14a2, 0x2e1d);
-    tmp_1 = head->previous;
-    tmp_2 = head->next;
+    tmp_1 = doubly_linked_list_node_previous(head);
+    tmp_2 = doubly_linked_list_node_next(head);
 
     doubly_linked_list_node_exchange(tmp_1, tmp_2);
     /* ->tmp_1->head->tmp_2-> =>
@@ -403,8 +403,8 @@ unit_test_doubly_linked_list_node_exchange(void)
     RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
     RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
 
-    tmp_1 = head->next;
-    tmp_2 = head->previous;
+    tmp_1 = doubly_linked_list_node_next(head);
+    tmp_2 = doubly_linked_list_node_previous(head);
     doubly_linked_list_node_exchange(head, head);
     RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
     RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
@@ -434,7 +434,7 @@ unit_test_doubly_linked_list_contains_p(void)
 
     pass = true;
     head = unit_test_doubly_linked_list_sample(0x1dd2, 0x28ae);
-    tmp = head->next;
+    tmp = doubly_linked_list_node_next(head);
 
     RESULT_CHECK_bool(true, doubly_linked_list_contains_p(head, tmp), &pass);
     RESULT_CHECK_bool(false, doubly_linked_list_contains_p(NULL, tmp), &pass);
@@ -546,8 +546,8 @@ unit_test_doubly_linked_list_node_lazy_remove(void)
 
     pass = true;
     head = unit_test_doubly_linked_list_sample(0xeb28, 0xa23d);
-    tmp = head->next;
-    prev = head->previous;
+    prev = doubly_linked_list_node_previous(head);
+    tmp = doubly_linked_list_node_next(head);
 
     doubly_linked_list_node_lazy_remove(NULL);
     /* ->head->tmp->node-> =>
