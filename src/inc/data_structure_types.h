@@ -15,13 +15,13 @@
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    uint32                    id;
+    uint32                    sid;
     void                      *val;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-    uint32                    id;
+    uint32                    sid;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;

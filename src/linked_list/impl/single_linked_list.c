@@ -5,7 +5,7 @@ single_linked_list_create(void)
 }
 
 struct single_linked_list *
-single_linked_list_node_create(void *val, uint32 id)
+single_linked_list_node_create(void *val, uint32 sid)
 {
     struct single_linked_list *head;
 
@@ -13,7 +13,7 @@ single_linked_list_node_create(void *val, uint32 id)
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        single_linked_list_node_initial(head, val, id);
+        single_linked_list_node_initial(head, val, sid);
     }
 
     return head;
@@ -28,10 +28,10 @@ single_linked_list_initial(struct single_linked_list *head)
 
 void
 single_linked_list_node_initial(struct single_linked_list *head,
-    void *val, uint32 id)
+    void *val, uint32 sid)
 {
     if (head) {
-        single_linked_list_node_id_set(head, id);
+        single_linked_list_node_sid_set(head, sid);
         single_linked_list_node_val_set(head, val);
         single_linked_list_node_next_set(head, head);
     } else {
@@ -42,19 +42,19 @@ single_linked_list_node_initial(struct single_linked_list *head,
 }
 
 struct single_linked_list *
-single_linked_list_generate(uint32 *id, uint32 size)
+single_linked_list_generate(uint32 *sid, uint32 size)
 {
     struct single_linked_list *head;
     struct single_linked_list *node;
     register uint32 *iterator;
 
     head = NULL;
-    if (id && size > 0) {
-        iterator = id;
+    if (sid && size > 0) {
+        iterator = sid;
         node = single_linked_list_node_create(NULL, *iterator++);
         head = node;
 
-        while (iterator < id + size) {
+        while (iterator < sid + size) {
             single_linked_list_node_append(node, *iterator++);
             node = single_linked_list_node_next(node);
         }
@@ -66,7 +66,7 @@ single_linked_list_generate(uint32 *id, uint32 size)
 }
 
 void
-single_linked_list_node_append(struct single_linked_list *node, uint32 id)
+single_linked_list_node_append(struct single_linked_list *node, uint32 sid)
 {
     struct single_linked_list *next;
 
@@ -75,7 +75,7 @@ single_linked_list_node_append(struct single_linked_list *node, uint32 id)
         if (NULL == single_linked_list_node_next(node)) {
             pr_log_warn("Destroyed data structure.\n");
         } else {
-            next = single_linked_list_node_create(NULL, id);
+            next = single_linked_list_node_create(NULL, sid);
             single_linked_list_node_insert_after(node, next);
         }
     } else {
@@ -126,7 +126,7 @@ single_linked_list_node_copy(struct single_linked_list *node)
     if (node) {
         copy = single_linked_list_node_create(
             single_linked_list_node_val(node),
-            single_linked_list_node_id(node));
+            single_linked_list_node_sid(node));
 
         single_linked_list_node_next_set(copy,
             single_linked_list_node_next(node));
@@ -273,7 +273,7 @@ single_linked_list_serialize(struct single_linked_list *head)
         index = 0;
         node = head;
         do {
-            single_linked_list_node_id_set(node, index++);
+            single_linked_list_node_sid_set(node, index++);
             node = single_linked_list_node_next(node);
         } while (node != head);
     } else {
@@ -369,7 +369,7 @@ single_linked_list_join(struct single_linked_list *m,
             if (!single_linked_list_contains_p(m, iter)) {
                 new = single_linked_list_node_create(
                     single_linked_list_node_val(iter),
-                    single_linked_list_node_id(iter));
+                    single_linked_list_node_sid(iter));
 
                 single_linked_list_node_insert_before(m, new);
             }

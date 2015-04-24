@@ -3,7 +3,7 @@ unit_test_single_linked_list_sample(uint32 range, uint32 node_count)
 {
     struct single_linked_list *retval;
     struct single_linked_list *tmp;
-    uint32 id;
+    uint32 sid;
     uint32 i;
 
     retval = single_linked_list_create();
@@ -11,9 +11,9 @@ unit_test_single_linked_list_sample(uint32 range, uint32 node_count)
 
     i = 1;
     while (i < node_count) {
-        id = (uint32)(rand() % range);
+        sid = (uint32)(rand() % range);
         tmp = single_linked_list_create();
-        single_linked_list_node_initial(tmp, tmp, id);
+        single_linked_list_node_initial(tmp, tmp, sid);
         single_linked_list_node_insert_after(retval, tmp);
         i++;
     }
@@ -24,19 +24,19 @@ unit_test_single_linked_list_sample(uint32 range, uint32 node_count)
 static void
 unit_test_single_linked_list_struct_field(void)
 {
-    uint32 id;
+    uint32 sid;
     bool pass;
     struct single_linked_list *tmp;
 
-    id = 0xfade;
+    sid = 0xfade;
     pass = true;
     tmp = single_linked_list_create();
 
-    single_linked_list_node_id_set(tmp, id);
-    RESULT_CHECK_uint32(id, single_linked_list_node_id(tmp), &pass);
+    single_linked_list_node_sid_set(tmp, sid);
+    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
 
-    single_linked_list_node_val_set(tmp, &id);
-    RESULT_CHECK_pointer(&id, single_linked_list_node_val(tmp), &pass);
+    single_linked_list_node_val_set(tmp, &sid);
+    RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
 
     single_linked_list_node_next_set(tmp, tmp);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
@@ -56,7 +56,7 @@ unit_test_single_linked_list_create(void)
     pass = true;
     tmp = single_linked_list_create();
 
-    RESULT_CHECK_uint32(0x0u, single_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
 
@@ -70,15 +70,15 @@ static void
 unit_test_single_linked_list_node_create(void)
 {
     bool pass;
-    uint32 id;
+    uint32 sid;
     struct single_linked_list *tmp;
 
     pass = true;
-    id = 0xdeadu;
-    tmp = single_linked_list_node_create(&id, id);
+    sid = 0xdeadu;
+    tmp = single_linked_list_node_create(&sid, sid);
 
-    RESULT_CHECK_uint32(id, single_linked_list_node_id(tmp), &pass);
-    RESULT_CHECK_pointer(&id, single_linked_list_node_val(tmp), &pass);
+    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
+    RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
 
@@ -92,20 +92,20 @@ static void
 unit_test_single_linked_list_node_initial(void)
 {
     bool pass;
-    uint32 id;
+    uint32 sid;
     struct single_linked_list *tmp;
 
     pass = true;
-    id = 0xfadeu;
+    sid = 0xfadeu;
 
     tmp = NULL;
-    single_linked_list_node_initial(tmp, &pass, id);
+    single_linked_list_node_initial(tmp, &pass, sid);
     RESULT_CHECK_pointer(tmp, NULL, &pass);
 
     tmp = malloc_ds(sizeof(*tmp));
-    single_linked_list_node_initial(tmp, &pass, id);
+    single_linked_list_node_initial(tmp, &pass, sid);
 
-    RESULT_CHECK_uint32(id, single_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
     RESULT_CHECK_pointer(&pass, single_linked_list_node_val(tmp), &pass);
@@ -125,7 +125,7 @@ unit_test_single_linked_list_initial(void)
     tmp = malloc_ds(sizeof(*tmp));
     single_linked_list_initial(tmp);
 
-    RESULT_CHECK_uint32(0x0u, single_linked_list_node_id(tmp), &pass);
+    RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
 
@@ -159,12 +159,12 @@ unit_test_single_linked_list_generate(void)
 
         tmp = data;
         while (tmp < data + len) {
-            RESULT_CHECK_uint32(*tmp, single_linked_list_node_id(head), &pass);
+            RESULT_CHECK_uint32(*tmp, single_linked_list_node_sid(head), &pass);
             head = single_linked_list_node_next(head);
             tmp++;
         }
 
-        RESULT_CHECK_uint32(*data, single_linked_list_node_id(head), &pass);
+        RESULT_CHECK_uint32(*data, single_linked_list_node_sid(head), &pass);
 
         free_ds(data);
         single_linked_list_destroy(&head);
@@ -181,18 +181,18 @@ unit_test_single_linked_list_node_append(void)
     struct single_linked_list *next;
     struct single_linked_list *append;
     bool pass;
-    uint32 id = 0xfadeu;
+    uint32 sid = 0xfadeu;
 
     pass = true;
     head = unit_test_single_linked_list_sample(0x1A2E, 0x213D);
 
-    single_linked_list_node_append(NULL, id);
+    single_linked_list_node_append(NULL, sid);
 
     next = single_linked_list_node_next(head);
-    single_linked_list_node_append(head, id);
+    single_linked_list_node_append(head, sid);
     append = single_linked_list_node_next(head);
 
-    RESULT_CHECK_uint32(id, single_linked_list_node_id(append), &pass);
+    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(append), &pass);
     RESULT_CHECK_pointer(head, single_linked_list_node_previous(append), &pass);
     RESULT_CHECK_pointer(next, single_linked_list_node_next(append), &pass);
     RESULT_CHECK_pointer(append, single_linked_list_node_previous(next), &pass);
@@ -240,12 +240,12 @@ unit_test_single_linked_list_node_insert_before(void)
     struct single_linked_list *prev;
     struct single_linked_list *copy;
     bool pass;
-    uint32 id;
+    uint32 sid;
 
     pass = true;
-    id = 0xbedu;
+    sid = 0xbedu;
     head = unit_test_single_linked_list_sample(0x21f26, 0xbef19);
-    single_linked_list_node_append(head, id);
+    single_linked_list_node_append(head, sid);
 
     node = single_linked_list_create();
     copy = single_linked_list_node_copy(node);
@@ -281,12 +281,12 @@ unit_test_single_linked_list_node_insert_after(void)
     struct single_linked_list *next;
     struct single_linked_list *copy;
     bool pass;
-    uint32 id;
+    uint32 sid;
 
     pass = true;
-    id = 0xfadeu;
+    sid = 0xfadeu;
     head = unit_test_single_linked_list_sample(0x18ab, 0x2e9c);
-    single_linked_list_node_append(head, id);
+    single_linked_list_node_append(head, sid);
 
     node = single_linked_list_create();
     copy = single_linked_list_node_copy(node);
@@ -493,7 +493,7 @@ unit_test_single_linked_list_serialize(void)
         tmp = head;
         index = 0u;
         do {
-            RESULT_CHECK_uint32(index, single_linked_list_node_id(tmp), &pass);
+            RESULT_CHECK_uint32(index, single_linked_list_node_sid(tmp), &pass);
             index++;
             tmp = single_linked_list_node_next(tmp);
         } while (tmp != head);
@@ -508,14 +508,14 @@ unit_test_single_linked_list_serialize(void)
 static void
 unit_test_single_linked_list_node_copy(void)
 {
-    uint32 id;
+    uint32 sid;
     bool pass;
     struct single_linked_list *head;
     struct single_linked_list *tmp;
 
-    id = 0xbedu;
+    sid = 0xbedu;
     pass = true;
-    head = single_linked_list_node_create(&pass, id);
+    head = single_linked_list_node_create(&pass, sid);
 
     single_linked_list_node_copy(NULL);
     tmp = single_linked_list_node_copy(head);
@@ -604,7 +604,7 @@ unit_test_single_linked_list_iterate(void)
 
     tmp = head;
     do {
-        RESULT_CHECK_uint32(0xdeadu, single_linked_list_node_id(tmp), &pass);
+        RESULT_CHECK_uint32(0xdeadu, single_linked_list_node_sid(tmp), &pass);
         tmp = single_linked_list_node_next(tmp);
     } while (tmp != head);
 

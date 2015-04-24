@@ -61,13 +61,13 @@ typedef unsigned int bool;
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    uint32                    id;
+    uint32                    sid;
     void                      *val;
     struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-    uint32                    id;
+    uint32                    sid;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
@@ -334,12 +334,12 @@ extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list * doubly_linked_list_create(void);
-extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 id);
-extern void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
+extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
+extern void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 sid);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
+extern struct doubly_linked_list * doubly_linked_list_generate(uint32 *sid, uint32 size);
 extern struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
-extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
+extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
@@ -357,10 +357,10 @@ extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_
 
 /* single linked list, Circular. */
 extern struct single_linked_list * single_linked_list_create(void);
-extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 id);
+extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
 extern void single_linked_list_initial(struct single_linked_list *head);
-extern void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 id);
-extern struct single_linked_list * single_linked_list_generate(uint32 *id, uint32 size);
+extern void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 sid);
+extern struct single_linked_list * single_linked_list_generate(uint32 *sid, uint32 size);
 extern void single_linked_list_node_append(struct single_linked_list *node, uint32 value);
 extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);

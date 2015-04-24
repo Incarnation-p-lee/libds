@@ -1,96 +1,126 @@
 static void
+unit_test_array_stack_struct_field(void)
+{
+    bool pass;
+    uint32 sid;
+    uint32 dim;
+    uint32 tmp;
+    struct array_stack *stack;
+
+    pass = true;
+    sid = 0xfadeu;
+    dim = 0xdeadu;
+    stack = array_stack_create();
+
+    array_stack_sid_set(stack, sid);
+    RESULT_CHECK_uint32(sid, array_stack_sid(stack), &pass);
+
+    tmp = array_stack_space_dim(stack);
+    array_stack_space_dim_set(stack, dim);
+    RESULT_CHECK_uint32(dim, array_stack_space_dim(stack), &pass);
+    array_stack_space_dim_set(stack, tmp);
+
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_struct_field), pass);
+
+    return;
+}
+
+static void
 unit_test_array_stack_create(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
 
-    ins = array_stack_create();
-    is_passed = true;
+    pass = true;
+    stack = array_stack_create();
 
-    if ((void*)ins->space.sp != ins->space.bp) {
-        is_passed = false;
-    }
-    array_stack_destroy(&ins);
+    RESULT_CHECK_uint32(0x0u, array_stack_sid(stack), &pass);
+    RESULT_CHECK_uint32(DEFAULT_STACK_SPACE_SIZE,
+        array_stack_space_dim(stack), &pass);
 
-    test_result_print(SYM_2_STR(array_stack_create), is_passed);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_create), pass);
+
     return;
 }
 
 static void
 unit_test_array_stack_destroy(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
 
-    ins = array_stack_create();
-    is_passed = true;
+    pass = true;
+    stack = NULL;
 
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    RESULT_CHECK_pointer(NULL, stack, &pass);
 
-    if (NULL != ins) {
-        is_passed = false;
-    }
+    stack = array_stack_create();
+    array_stack_destroy(&stack);
+    RESULT_CHECK_pointer(NULL, stack, &pass);
 
-    test_result_print(SYM_2_STR(array_stack_destroy), is_passed);
+    test_result_print(SYM_2_STR(array_stack_destroy), pass);
+
     return;
 }
 
 static void
 unit_test_array_stack_space_expand(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     uint32 stk_size;
 
-    ins = array_stack_create();
-    is_passed = true;
-    stk_size = ins->space.dim;
+    stack = array_stack_create();
+    pass = true;
+    stk_size = array_stack_space_dim(stack);
 
-    array_stack_space_expand(ins, 0);
-    if (ins->space.dim != stk_size * 2 + 32) {
-        is_passed = false;
-    }
+    array_stack_space_expand(NULL, 0);
 
-    stk_size = ins->space.dim;
-    array_stack_space_expand(ins, 1024);
-    if (ins->space.dim != stk_size + 1024) {
-        is_passed = false;
-    }
+    array_stack_space_expand(stack, 0);
+    RESULT_CHECK_uint32(stk_size * 2 + 32u, array_stack_space_dim(stack), &pass);
 
-    array_stack_destroy(&ins);
+    stk_size = array_stack_space_dim(stack);
+    array_stack_space_expand(stack, 1024u);
+    RESULT_CHECK_uint32(stk_size + 1024u, array_stack_space_dim(stack), &pass);
 
-    test_result_print(SYM_2_STR(array_stack_space_expand), is_passed);
+    stk_size = array_stack_space_dim(stack);
+    array_stack_space_expand(stack, 0xffffffffu - stk_size + 1);
+    RESULT_CHECK_uint32(stk_size, array_stack_space_dim(stack), &pass);
+
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_space_expand), pass);
+
     return;
 }
 
 static void
 unit_test_array_stack_full_p(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     void *mem;
     uint32 tmp;
 
-    ins = array_stack_create();
-    is_passed = true;
-    tmp = ins->space.dim;
+    stack = array_stack_create();
+    pass = true;
+    tmp = array_stack_space_dim(stack);
     mem = &tmp;
 
-    if (false != array_stack_full_p(ins)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, array_stack_full_p(NULL), &pass);
+    RESULT_CHECK_bool(false, array_stack_full_p(stack), &pass);
 
     while (tmp) {
-        array_stack_push(ins, mem);
+        array_stack_push(stack, mem);
         tmp--;
     }
+    RESULT_CHECK_bool(true, array_stack_full_p(stack), &pass);
 
-    if (true != array_stack_full_p(ins)) {
-        is_passed = false;
-    }
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_full_p), pass);
 
-    test_result_print(SYM_2_STR(array_stack_full_p), is_passed);
     return;
 }
 
@@ -98,205 +128,177 @@ unit_test_array_stack_full_p(void)
 static void
 unit_test_array_stack_capacity(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     uint32 stk_size;
     uint32 extra;
 
-    ins = array_stack_create();
-    stk_size = ins->space.dim;
-    is_passed = true;
+    pass = true;
+    stack = array_stack_create();
+    stk_size = array_stack_space_dim(stack);
 
-    if (stk_size != array_stack_capacity(ins)) {
-        is_passed = false;
-    }
-
-    if (0 != array_stack_capacity(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_stack_capacity(NULL), &pass);
+    RESULT_CHECK_uint32(stk_size, array_stack_capacity(stack), &pass);
 
     extra = 1024u;
-    array_stack_space_expand(ins, extra);
-    if (stk_size + extra != array_stack_capacity(ins)) {
-        is_passed = false;
-    }
+    array_stack_space_expand(stack, extra);
+    RESULT_CHECK_uint32(stk_size + extra, array_stack_capacity(stack), &pass);
 
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_capacity), pass);
 
-    test_result_print(SYM_2_STR(array_stack_capacity), is_passed);
     return;
 }
 
 static void
 unit_test_array_stack_space_rest(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     uint32 stk_size;
 
-    ins = array_stack_create();
-    stk_size = array_stack_capacity(ins);
-    is_passed = true;
+    pass = true;
+    stack = array_stack_create();
+    stk_size = array_stack_capacity(stack);
 
-    if (stk_size != array_stack_space_rest(ins)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_stack_capacity(NULL), &pass);
+    RESULT_CHECK_uint32(stk_size, array_stack_capacity(stack), &pass);
 
-    array_stack_push(ins, &stk_size);
-    if (stk_size != array_stack_space_rest(ins) + 1u) {
-        is_passed = false;
-    }
+    array_stack_push(stack, &stk_size);
+    RESULT_CHECK_uint32(stk_size, array_stack_space_rest(stack) + 1u, &pass);
 
-    if (0u != array_stack_space_rest(NULL)) {
-        is_passed = false;
-    }
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_space_rest), pass);
 
-    array_stack_destroy(&ins);
-
-    test_result_print(SYM_2_STR(array_stack_space_rest), is_passed);
     return;
 }
 
 static void
 unit_test_array_stack_push(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     void *mem;
     uint32 tmp;
 
-    ins = array_stack_create();
-    is_passed = true;
-    tmp = ins->space.dim;
     mem = &tmp;
+    pass = true;
+    stack = array_stack_create();
+    tmp = array_stack_space_dim(stack);
 
+    array_stack_push(NULL, mem);
     while (tmp) {
-        array_stack_push(ins, mem);
+        array_stack_push(stack, mem);
         tmp--;
     }
 
-    if (!array_stack_full_p(ins)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, array_stack_full_p(stack), &pass);
 
-    tmp = (uint32)ins->space.dim;
-    array_stack_push(ins, mem);
-    if (tmp + 32u != ins->space.dim) {
-        is_passed = false;
-    }
+    tmp = array_stack_space_dim(stack);
+    array_stack_push(stack, mem);
+    RESULT_CHECK_uint32(tmp + 32u, array_stack_space_dim(stack), &pass);
 
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_push), pass);
 
-    test_result_print(SYM_2_STR(array_stack_push), is_passed);
     return;
 }
 
 static void
 unit_test_array_stack_pop(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
 
-    ins = array_stack_create();
-    is_passed = true;
+    stack = array_stack_create();
+    pass = true;
 
-    if (NULL != array_stack_pop(ins)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(NULL, array_stack_pop(NULL), &pass);
+    RESULT_CHECK_pointer(NULL, array_stack_pop(stack), &pass);
 
-    array_stack_push(ins, ins);
-    if (ins != array_stack_pop(ins)) {
-        is_passed = false;
-    }
+    array_stack_push(stack, stack);
+    RESULT_CHECK_pointer(stack, array_stack_pop(stack), &pass);
 
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_pop), pass);
 
-    test_result_print(SYM_2_STR(array_stack_pop), is_passed);
     return;
 }
 
 static void
 unit_test_array_stack_empty_p(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
 
-    ins = array_stack_create();
-    is_passed = true;
+    stack = array_stack_create();
+    pass = true;
 
-    if (false != array_stack_empty_p(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, array_stack_empty_p(NULL), &pass);
+    RESULT_CHECK_bool(true, array_stack_empty_p(stack), &pass);
 
-    if (true != array_stack_empty_p(ins)) {
-        is_passed = false;
-    }
+    array_stack_push(stack, stack);
+    RESULT_CHECK_bool(false, array_stack_empty_p(stack), &pass);
 
-    array_stack_push(ins, ins);
-    if (false != array_stack_empty_p(ins)) {
-        is_passed = false;
-    }
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_empty_p), pass);
 
-    array_stack_destroy(&ins);
-
-    test_result_print(SYM_2_STR(array_stack_empty_p), is_passed);
     return;
 }
 
 static void
 unit_test_array_stack_cleanup(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
 
-    ins = array_stack_create();
-    is_passed = true;
+    stack = array_stack_create();
+    pass = true;
 
-    array_stack_push(ins, ins);
-    array_stack_cleanup(ins);
+    array_stack_cleanup(NULL);
 
-    if (true != array_stack_empty_p(ins)) {
-        is_passed = false;
-    }
+    array_stack_push(stack, stack);
+    array_stack_cleanup(stack);
 
-    array_stack_destroy(&ins);
+    RESULT_CHECK_bool(true, array_stack_empty_p(stack), &pass);
 
-    test_result_print(SYM_2_STR(array_stack_cleanup), is_passed);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_cleanup), pass);
+
     return;
 }
 
 static void
 unit_test_array_stack_iterate(void)
 {
-    bool is_passed;
-    struct array_stack *ins;
+    bool pass;
+    struct array_stack *stack;
     sint32 *tmp;
     sint32 data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };
     sint32 expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
     register sint32 *d1;
     register sint32 *e1;
 
-    ins = array_stack_create();
-    is_passed = true;
+    stack = array_stack_create();
+    pass = true;
 
     d1 = data;
-    while (d1 < data + sizeof(data) / sizeof(data[0])) {
-        array_stack_push(ins, d1++);
+    while (d1 < data + array_sizeof(data)) {
+        array_stack_push(stack, d1++);
     }
 
-    array_stack_iterate(ins, &stack_iterate_handler);
+    array_stack_iterate(NULL, &stack_iterate_handler);
+    array_stack_iterate(stack, &stack_iterate_handler);
 
     e1 = expect;
-    while (e1 < expect + sizeof(expect) / sizeof(expect[0])) {
-        tmp = array_stack_pop(ins);
-        if (*e1++ != *tmp) {
-            is_passed = false;
-            break;
-        }
+    while (e1 < expect + array_sizeof(expect)) {
+        tmp = array_stack_pop(stack);
+        RESULT_CHECK_sint32(*e1, *tmp, &pass);
+        e1++;
     }
 
-    array_stack_destroy(&ins);
+    array_stack_destroy(&stack);
+    test_result_print(SYM_2_STR(array_stack_iterate), pass);
 
-    test_result_print(SYM_2_STR(array_stack_iterate), is_passed);
     return;
 }

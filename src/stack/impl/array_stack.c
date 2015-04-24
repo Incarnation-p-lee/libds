@@ -11,7 +11,7 @@ array_stack_create(void)
     if (!ptr) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        ptr->sid = 0u;
+        array_stack_sid_set(ptr, 0x0u);
     }
 
     ptr->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
@@ -20,7 +20,7 @@ array_stack_create(void)
         pr_log_err("Fail to get memory from system.\n");
     } else {
         ptr->space.sp = ptr->space.bp;
-        ptr->space.dim = DEFAULT_STACK_SPACE_SIZE;
+        array_stack_space_dim_set(ptr, DEFAULT_STACK_SPACE_SIZE);
     }
 
     return ptr;
@@ -37,6 +37,8 @@ array_stack_destroy(struct array_stack **stack)
         free_ds((*stack)->space.bp);
         free_ds(*stack);
         *stack = NULL;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -60,6 +62,10 @@ array_stack_space_expand(struct array_stack *stack, uint32 extra)
         new_size = stack->space.dim + extra;
     } else if (stack && !extra) {
         new_size = stack->space.dim * 2 + EXPAND_STACK_SPACE_MIN;
+        pr_log_info("Expanding size not specified, use default.\n");
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return;
     }
 
     if (new_size) {
@@ -70,8 +76,10 @@ array_stack_space_expand(struct array_stack *stack, uint32 extra)
         } else {
             stack->space.bp = new_addr;
             stack->space.sp = stack->space.bp + offset;
-            stack->space.dim = new_size;
+            array_stack_space_dim_set(stack, new_size);
         }
+    } else {
+        pr_log_warn("Expanding size overflow, nothing will be done.\n");
     }
 
     return;
@@ -94,7 +102,12 @@ array_stack_full_p(struct array_stack *stack)
 uint32
 array_stack_capacity(struct array_stack *stack)
 {
-    return stack ? stack->space.dim : 0u;
+    if (stack) {
+        return array_stack_space_dim(stack);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return 0u;
+    }
 }
 
 /*
@@ -113,10 +126,12 @@ array_stack_space_rest(struct array_stack *stack)
         tmp = stack->space.sp;
         limit = stack->space.bp + stack->space.dim;
         if ((sint32)(tmp - limit) > 0) {
-            pr_log_err("Array stack overflow.");
+            pr_log_err("Array stack overflow.\n");
         } else {
             rest = (uint32)(limit - tmp);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return rest;
@@ -131,9 +146,12 @@ array_stack_push(struct array_stack *stack, void *member)
 {
     if (stack) {
         if (array_stack_full_p(stack)) {
+            pr_log_info("Stack is full, expand stack with default size.\n");
             array_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
         }
         *stack->space.sp++ = member;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -151,6 +169,10 @@ array_stack_pop(struct array_stack *stack)
     data = NULL;
     if (stack && !array_stack_empty_p(stack)) {
         data = *(--stack->space.sp);
+    } else if (stack && array_stack_empty_p(stack)) {
+        pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return data;
@@ -172,6 +194,8 @@ array_stack_empty_p(struct array_stack *stack)
         } else {
             is_empty = stack->space.bp == stack->space.sp ? true : false;
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return is_empty;
@@ -187,6 +211,8 @@ array_stack_cleanup(struct array_stack *stack)
     if (stack) {
         memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = stack->space.bp;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -207,6 +233,8 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
         while(iter != stack->space.bp) {
             handler(*(--iter));
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;

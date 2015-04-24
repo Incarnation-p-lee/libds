@@ -51,6 +51,7 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
 };
 
 static const struct test_layer_table array_stack[] = {
+    {"struct_field", {&unit_test_array_stack_struct_field,},},
     {"create",       {&unit_test_array_stack_create,},},
     {"destroy",      {&unit_test_array_stack_destroy,},},
     {"space_expand", {&unit_test_array_stack_space_expand,},},

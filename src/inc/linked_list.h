@@ -11,12 +11,12 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 
 /* doubly linked list, Circular. */
 struct doubly_linked_list * doubly_linked_list_create(void);
-struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 id);
-void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 id);
+struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
+void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 sid);
 void doubly_linked_list_initial(struct doubly_linked_list *);
-struct doubly_linked_list * doubly_linked_list_generate(uint32 *id, uint32 size);
+struct doubly_linked_list * doubly_linked_list_generate(uint32 *sid, uint32 size);
 struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
-void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id);
+void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid);
 void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_destroy(struct doubly_linked_list **head);
@@ -34,10 +34,10 @@ struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m
 
 /* single linked list, Circular. */
 struct single_linked_list * single_linked_list_create(void);
-struct single_linked_list * single_linked_list_node_create(void *val, uint32 id);
+struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
 void single_linked_list_initial(struct single_linked_list *head);
-void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 id);
-struct single_linked_list * single_linked_list_generate(uint32 *id, uint32 size);
+void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 sid);
+struct single_linked_list * single_linked_list_generate(uint32 *sid, uint32 size);
 void single_linked_list_node_append(struct single_linked_list *node, uint32 value);
 struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
 struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);

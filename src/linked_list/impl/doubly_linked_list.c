@@ -5,7 +5,7 @@ doubly_linked_list_create(void)
 }
 
 struct doubly_linked_list *
-doubly_linked_list_node_create(void *val, uint32 id)
+doubly_linked_list_node_create(void *val, uint32 sid)
 {
     struct doubly_linked_list *head;
 
@@ -13,7 +13,7 @@ doubly_linked_list_node_create(void *val, uint32 id)
     if (!head) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        doubly_linked_list_node_initial(head, val, id);
+        doubly_linked_list_node_initial(head, val, sid);
     }
 
     return head;
@@ -21,10 +21,10 @@ doubly_linked_list_node_create(void *val, uint32 id)
 
 void
 doubly_linked_list_node_initial(struct doubly_linked_list *head,
-    void *val, uint32 id)
+    void *val, uint32 sid)
 {
     if (head) {
-        doubly_linked_list_node_id_set(head, id);
+        doubly_linked_list_node_sid_set(head, sid);
         doubly_linked_list_node_next_set(head, head);
         doubly_linked_list_node_previous_set(head, head);
         doubly_linked_list_node_val_set(head, val);
@@ -43,19 +43,19 @@ doubly_linked_list_initial(struct doubly_linked_list *head)
 }
 
 struct doubly_linked_list *
-doubly_linked_list_generate(uint32 *id, uint32 size)
+doubly_linked_list_generate(uint32 *sid, uint32 size)
 {
     struct doubly_linked_list *head;
     register struct doubly_linked_list *node;
     register uint32 *iterator;
 
     head = NULL;
-    if (id) {
-        iterator = id;
+    if (sid) {
+        iterator = sid;
         node = doubly_linked_list_node_create(NULL, *iterator++);
         head = node;
 
-        while (iterator < id + size) {
+        while (iterator < sid + size) {
             doubly_linked_list_node_append(node, *iterator++);
             node = doubly_linked_list_node_next(node);
         }
@@ -67,7 +67,7 @@ doubly_linked_list_generate(uint32 *id, uint32 size)
 }
 
 void
-doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id)
+doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid)
 {
     struct doubly_linked_list *next;
 
@@ -76,7 +76,7 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 id)
             || NULL == doubly_linked_list_node_previous(node)) {
             pr_log_warn("Destroyed data structure.\n");
         } else {
-            next = doubly_linked_list_node_create(NULL, id);
+            next = doubly_linked_list_node_create(NULL, sid);
             doubly_linked_list_node_insert_after(node, next);
         }
     } else {
@@ -127,7 +127,7 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
     if (node) {
         copy = doubly_linked_list_node_create(
             doubly_linked_list_node_val(node),
-            doubly_linked_list_node_id(node));
+            doubly_linked_list_node_sid(node));
 
         doubly_linked_list_node_next_set(copy,
             doubly_linked_list_node_next(node));
@@ -274,7 +274,7 @@ doubly_linked_list_serialize(struct doubly_linked_list *head)
         index = 0;
         node = head;
         do {
-            doubly_linked_list_node_id_set(node, index++);
+            doubly_linked_list_node_sid_set(node, index++);
             node = doubly_linked_list_node_next(node);
         } while (node != head);
     } else {
@@ -348,7 +348,7 @@ doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list 
             if (!doubly_linked_list_contains_p(m, iter)) {
                 new = doubly_linked_list_node_create(
                     doubly_linked_list_node_val(iter),
-                    doubly_linked_list_node_id(iter));
+                    doubly_linked_list_node_sid(iter));
 
                 doubly_linked_list_node_insert_before(m, new);
             }

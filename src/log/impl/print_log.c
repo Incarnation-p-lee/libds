@@ -17,7 +17,7 @@ libds_log_print(enum log_level lvl, const char *msg)
                 break;
             default:
                 msg = "Unknown enum value of enum log_level.\n";
-                fprintf(stdout, "[35m .. %4s[0m < %s", SYM_2_STR(WARN), msg);
+                fprintf(stdout, "[36m .. %4s[0m < %s", SYM_2_STR(WARN), msg);
                 break;
         }
     }
