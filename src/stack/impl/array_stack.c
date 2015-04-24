@@ -1,6 +1,5 @@
 /*
- * _RETURN_ one instance of array_stack.
- *   If no memory available, it never _RETURN_, export an error and exit.
+ * _RETURN_ one instance of array_stack.  *   If no memory available, it never _RETURN_, export an error and exit.
  */
 struct array_stack *
 array_stack_create(void)

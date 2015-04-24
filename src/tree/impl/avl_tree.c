@@ -439,22 +439,17 @@ avl_tree_node_find_min_parent(struct avl_tree *root)
 static inline struct avl_tree *
 avl_tree_node_find_max_parent(struct avl_tree *root)
 {
-    register struct avl_tree **tmp;
+    struct avl_tree *max;
 
     assert(NULL != root);
+    assert(NULL != avl_tree_node_child_right(root));
 
-    if (avl_tree_node_leaf_p(root)) {
-        return NULL;
-    } else if (NULL == avl_tree_node_child_right(root)) {
-        return root;
+    max = avl_tree_node_child_right(root);
+    while (NULL != avl_tree_node_child_right(max)) {
+        root = max;
+        max = avl_tree_node_child_right(max);
     }
-
-    tmp = &root;
-    while (!avl_tree_node_leaf_p(avl_tree_node_child_right(*tmp))) {
-        tmp = &(*tmp)->b_node.avl_right;
-    }
-
-    return *tmp;
+    return root;
 }
 
 static inline sint64
@@ -551,7 +546,8 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
             /* No need update height here for only one child for removed node */
             return;
         }
-        avl_tree_height_update(node);
+        assert(avl_tree_balanced_p(*root));
+        avl_tree_height_update(*root);
     }
     return;
 }

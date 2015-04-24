@@ -12,7 +12,7 @@ linked_stack_create(void)
     if (!stack) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        stack->sid = 0u;
+        linked_stack_sid_set(stack, 0x0u);
     }
 
     /* struct linked_space */
@@ -57,6 +57,8 @@ linked_stack_destroy(struct linked_stack **stack)
 
         free_ds(*stack);
         *stack = NULL;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -65,13 +67,14 @@ linked_stack_destroy(struct linked_stack **stack)
 static inline struct linked_stack_space *
 linked_stack_space_offset_reflect(struct doubly_linked_list *link)
 {
+    assert(NULL != link);
+
     return (void *)((void *)link
         - (void *)(&((struct linked_stack_space *)0)->link));
 }
 
 /*
  * _RETURN_ next node of linked stack space.
- *   If NULL _ARGV_, _RETURN_ NULL
  */
 static inline struct linked_stack_space *
 linked_stack_space_next_node(struct linked_stack_space *node)
@@ -79,12 +82,14 @@ linked_stack_space_next_node(struct linked_stack_space *node)
     struct linked_stack_space *next;
     struct doubly_linked_list *tmp;
 
+    assert(NULL != node);
+
     next = NULL;
-    if (node) {
-        tmp = doubly_linked_list_node_next(&node->link);
-        if (tmp) {
-            next = linked_stack_space_offset_reflect(tmp);
-        }
+    tmp = doubly_linked_list_node_next(&node->link);
+    if (tmp) {
+        next = linked_stack_space_offset_reflect(tmp);
+    } else {
+        pr_log_err("Destroyed data structure.\n");
     }
 
     return next;
@@ -92,7 +97,6 @@ linked_stack_space_next_node(struct linked_stack_space *node)
 
 /*
  * _RETURN_ previous node of linked stack space.
- *   If NULL _ARGV_, _RETURN_ NULL
  */
 static inline struct linked_stack_space *
 linked_stack_space_previous_node(struct linked_stack_space *node)
@@ -100,12 +104,14 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
 
+    assert(NULL != node);
+
     previous = NULL;
-    if (node) {
-        tmp = doubly_linked_list_node_previous(&node->link);
-        if (tmp) {
-            previous = linked_stack_space_offset_reflect(tmp);
-        }
+    tmp = doubly_linked_list_node_previous(&node->link);
+    if (tmp) {
+        previous = linked_stack_space_offset_reflect(tmp);
+    } else {
+        pr_log_err("Destroyed data structure.\n");
     }
 
     return previous;
@@ -120,19 +126,18 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 {
     struct linked_stack_space *next;
 
-    next = NULL;
-    if (node) {
-        doubly_linked_list_node_lazy_remove(&node->link);
-        next = linked_stack_space_next_node(node);
+    assert(NULL != node);
 
-        /* If only one node */
-        if (next == node) {
-            next = NULL;
-        }
+    doubly_linked_list_node_lazy_remove(&node->link);
+    next = linked_stack_space_next_node(node);
 
-        free_ds(node->space.bp);
-        free_ds(node);
+    /* If only one node */
+    if (next == node) {
+        next = NULL;
     }
+
+    free_ds(node->space.bp);
+    free_ds(node);
 
     return next;
 }
@@ -147,26 +152,34 @@ linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
     struct linked_stack_space *node;
     struct linked_stack_space *last;
 
-    if (stack && dim > 0) {
+    if (stack) {
         last = linked_stack_space_previous_node(stack->base);
         if (last) {
-            node = malloc_ds(sizeof(*node));
-            if (!node) {
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
-                doubly_linked_list_initial(&node->link);
-            }
+            if (0 != dim) {
+                node = malloc_ds(sizeof(*node));
+                if (!node) {
+                    pr_log_err("Fail to get memory from system.\n");
+                } else {
+                    doubly_linked_list_initial(&node->link);
+                }
 
-            node->space.bp = malloc_ds(sizeof(void *) * dim);
-            if (!node->space.bp) {
-                free_ds(node);
-                pr_log_err("Fail to get memory from system.\n");
+                node->space.bp = malloc_ds(sizeof(void *) * dim);
+                if (!node->space.bp) {
+                    free_ds(node);
+                    pr_log_err("Fail to get memory from system.\n");
+                } else {
+                    node->space.dim = dim;
+                    node->space.sp = node->space.bp;
+                    doubly_linked_list_node_insert_after(&last->link, &node->link);
+                }
             } else {
-                node->space.dim = dim;
-                node->space.sp = node->space.bp;
-                doubly_linked_list_node_insert_after(&last->link, &node->link);
+                pr_log_warn("Expanding size zero, nothing will be done.\n");
             }
+        } else {
+            pr_log_err("Destroyed data structure.\n");
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -179,7 +192,12 @@ linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
 bool
 linked_stack_full_p(struct linked_stack *stack)
 {
-    return 0u == linked_stack_space_rest(stack) ? true : false;
+    if (stack) {
+        return 0u == linked_stack_space_rest(stack) ? true : false;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return true;
+    }
 }
 
 /*
@@ -200,6 +218,8 @@ linked_stack_space_rest(struct linked_stack *stack)
             rest += st->space.dim;
             st = linked_stack_space_next_node(st);
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return rest;
@@ -222,6 +242,8 @@ linked_stack_capacity(struct linked_stack *stack)
             total += linked_stack_space_node_capacity(st);
             st = linked_stack_space_next_node(st);
         } while (st != stack->base);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return total;
@@ -230,6 +252,8 @@ linked_stack_capacity(struct linked_stack *stack)
 static inline bool
 linked_stack_space_node_empty_p(struct linked_stack_space *node)
 {
+    assert(NULL != node);
+
     return linked_stack_space_node_capacity(node)
         == linked_stack_space_node_space_rest(node) ? true : false;
 }
@@ -237,6 +261,8 @@ linked_stack_space_node_empty_p(struct linked_stack_space *node)
 static inline bool
 linked_stack_space_node_full_p(struct linked_stack_space *node)
 {
+    assert(NULL != node);
+
     return 0u == linked_stack_space_node_space_rest(node) ? true : false;
 }
 
@@ -247,7 +273,9 @@ linked_stack_space_node_full_p(struct linked_stack_space *node)
 static inline uint32
 linked_stack_space_node_capacity(struct linked_stack_space *node)
 {
-    return node ? node->space.dim : 0u;
+    assert(NULL != node);
+
+    return node->space.dim;
 }
 
 /*
@@ -261,15 +289,15 @@ linked_stack_space_node_space_rest(struct linked_stack_space *node)
     void **limit;
     void **tmp;
 
+    assert(NULL != node);
+
     rest = 0;
-    if (node) {
-        tmp = node->space.sp;
-        limit = node->space.bp + node->space.dim;
-        if ((sint32)(tmp - limit) > 0) {
-            pr_log_err("Array stack overflow.");
-        } else {
-            rest = (uint32)(limit - tmp);
-        }
+    tmp = node->space.sp;
+    limit = node->space.bp + node->space.dim;
+    if ((sint32)(tmp - limit) > 0) {
+        pr_log_err("Array stack overflow.");
+    } else {
+        rest = (uint32)(limit - tmp);
     }
 
     return rest;
@@ -284,14 +312,18 @@ linked_stack_push(struct linked_stack *stack, void *member)
 {
     if (stack) {
         if (linked_stack_full_p(stack)) {
+            pr_log_info("Stack is full, expand stack with default size.\n");
             linked_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
         }
 
         if (linked_stack_space_node_full_p(stack->top)) {
+            pr_log_info("Stack node is full, will move to next node.\n");
             stack->top = linked_stack_space_next_node(stack->top);
         }
 
         *stack->top->space.sp++ = member;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -309,9 +341,14 @@ linked_stack_pop(struct linked_stack *stack)
     data = NULL;
     if (stack && !linked_stack_empty_p(stack)) {
         if (linked_stack_space_node_empty_p(stack->top)) {
+            pr_log_info("Stack node is empty, will move to previous node.\n");
             stack->top = linked_stack_space_previous_node(stack->top);
         }
         data = *(--stack->top->space.sp);
+    } else if (stack && linked_stack_empty_p(stack)) {
+        pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return data;
@@ -334,6 +371,8 @@ linked_stack_empty_p(struct linked_stack *stack)
             == linked_stack_space_node_space_rest(stack->top)) {
             is_empty = true;
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return is_empty;
@@ -356,6 +395,8 @@ linked_stack_cleanup(struct linked_stack *stack)
             iter->space.sp = iter->space.bp;
             iter = linked_stack_space_next_node(iter);
         } while (iter != stack->base);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -378,7 +419,8 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
             linked_stack_space_iterate_node(node, handler);
             node = linked_stack_space_next_node(node);
         } while (node != limit);
-
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -394,12 +436,13 @@ linked_stack_space_iterate_node(struct linked_stack_space *node,
 {
     register void **iter;
 
-    if (node && handler) {
-        /* iterate from sp to bp */
-        iter = node->space.sp;
-        while(iter != node->space.bp) {
-            handler(*(--iter));
-        }
+    assert(NULL != node);
+    assert(NULL != handler);
+
+    /* iterate from sp to bp */
+    iter = node->space.sp;
+    while(iter != node->space.bp) {
+        handler(*(--iter));
     }
 
     return;

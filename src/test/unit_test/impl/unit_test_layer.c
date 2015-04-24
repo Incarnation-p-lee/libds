@@ -67,6 +67,7 @@ static const struct test_layer_table array_stack[] = {
 };
 
 static const struct test_layer_table linked_stack[] = {
+    {"struct_field", {&unit_test_linked_stack_struct_field,},},
     {"create",       {&unit_test_linked_stack_create,},},
     {"destroy",      {&unit_test_linked_stack_destroy,},},
     {"space_expand", {&unit_test_linked_stack_space_expand,},},

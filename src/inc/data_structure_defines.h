@@ -85,4 +85,11 @@
 #define array_stack_space_dim_set(stack, v) \
     (assert(stack), (stack)->space.dim = (v))
 
+/* LINKED STACK */
+#define linked_stack_sid(stack) \
+    (assert(stack), (stack)->sid)
+
+#define linked_stack_sid_set(stack, v) \
+    (assert(stack), (stack)->sid = (v))
+
 #endif
