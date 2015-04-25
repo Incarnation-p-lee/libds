@@ -1,217 +1,203 @@
 static void
+unit_test_array_queue_struct_field(void)
+{
+    bool pass;
+    uint32 sid;
+    uint32 capacity;
+    struct array_queue *queue;
+
+    pass = true;
+    sid = 0xfadeu;
+    queue = array_queue_create();
+
+    array_queue_sid_set(queue, sid);
+    RESULT_CHECK_uint32(sid, array_queue_sid(queue), &pass);
+
+    capacity = array_queue_capacity(queue);
+    RESULT_CHECK_uint32(capacity, array_queue_dim(queue), &pass);
+    RESULT_CHECK_uint32(capacity, array_queue_rest(queue), &pass);
+
+    array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_struct_field), pass);
+
+    return;
+}
+
+static void
 unit_test_array_queue_create(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (0u != queue->sid) {
-        is_passed = false;
-    }
-
-    if (queue->space.rest != queue->space.dim) {
-        is_passed = false;
-    }
-
-    if (queue->space.base != queue->space.front
-        || queue->space.base != queue->space.rear) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_queue_sid(queue), &pass);
+    RESULT_CHECK_uint32(array_queue_rest(queue), array_queue_dim(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_create), pass);
 
-    test_result_print(SYM_2_STR(array_queue_create), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_destroy(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
-    queue = array_queue_create();
-    is_passed = true;
+    pass = true;
+    queue = NULL;
 
     array_queue_destroy(&queue);
-    if (NULL != queue) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(NULL, queue, &pass);
 
-    test_result_print(SYM_2_STR(array_queue_destroy), is_passed);
+    queue = array_queue_create();
+    array_queue_destroy(&queue);
+    RESULT_CHECK_pointer(NULL, queue, &pass);
+
+    test_result_print(SYM_2_STR(array_queue_destroy), pass);
     return;
 }
 
 static void
 unit_test_array_queue_space_expand(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
     uint32 capacity;
     uint32 rest;
     uint32 extra;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
     capacity = array_queue_capacity(queue);
     rest = array_queue_space_rest(queue);
     extra = 11u;
 
+    array_queue_space_expand(NULL, extra);
     array_queue_space_expand(queue, extra);
-    if (capacity + extra != array_queue_capacity(queue)) {
-        is_passed = false;
-    }
-
-    if (rest + extra != array_queue_space_rest(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity + extra, array_queue_capacity(queue), &pass);
+    RESULT_CHECK_uint32(rest + extra, array_queue_capacity(queue), &pass);
 
     capacity = array_queue_capacity(queue);
     array_queue_space_expand(queue, 0u);
-    if (capacity * 2 + EXPAND_QUEUE_SPACE_MIN != array_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity * 2 + EXPAND_QUEUE_SPACE_MIN,
+        array_queue_capacity(queue), &pass);
 
     while (!array_queue_full_p(queue)) {
-        array_queue_enter(queue, &is_passed);
+        array_queue_enter(queue, &pass);
     }
 
     array_queue_leave(queue);
     array_queue_leave(queue);
     array_queue_leave(queue);
-    array_queue_enter(queue, &is_passed);
-    array_queue_enter(queue, &is_passed);
+    array_queue_enter(queue, &pass);
+    array_queue_enter(queue, &pass);
     capacity = array_queue_capacity(queue);
+    extra = 0x123u;
     array_queue_space_expand(queue, 0x123u);
-    if (capacity + 0x123u != array_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity + extra, array_queue_capacity(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_space_expand), pass);
 
-    test_result_print(SYM_2_STR(array_queue_space_expand), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_capacity(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (array_queue_capacity(NULL)) {
-        is_passed = false;
-    }
-
-    if (queue->space.dim != array_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_queue_capacity(NULL), &pass);
+    RESULT_CHECK_uint32(array_queue_dim(queue),
+        array_queue_capacity(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_capacity), pass);
 
-    test_result_print(SYM_2_STR(array_queue_capacity), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_space_rest(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
     uint32 capacity;
 
     queue = array_queue_create();
     capacity = array_queue_capacity(queue);
-    is_passed = true;
+    pass = true;
 
-    if (array_queue_space_rest(NULL)) {
-        is_passed = false;
-    }
-
-    if (capacity != array_queue_space_rest(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_queue_space_rest(NULL), &pass);
+    RESULT_CHECK_uint32(capacity, array_queue_space_rest(queue), &pass);
 
     while (capacity > 0) {
         array_queue_enter(queue, &capacity);
         capacity--;
     }
-    if (0 != array_queue_space_rest(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, array_queue_space_rest(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_space_rest), pass);
 
-    test_result_print(SYM_2_STR(array_queue_space_rest), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_full_p(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
     uint32 capacity;
 
     queue = array_queue_create();
     capacity = array_queue_capacity(queue);
-    is_passed = true;
+    pass = true;
 
-    if (!array_queue_full_p(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, array_queue_full_p(NULL), &pass);
 
     array_queue_enter(queue, &capacity);
-    capacity--;
-    if (array_queue_full_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, array_queue_full_p(queue), &pass);
 
+    capacity--;
     while (capacity > 0) {
         array_queue_enter(queue, &capacity);
         capacity--;
     }
-
-    if (!array_queue_full_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, array_queue_full_p(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_full_p), pass);
 
-    test_result_print(SYM_2_STR(array_queue_create), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_empty_p(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (array_queue_empty_p(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, array_queue_empty_p(NULL), &pass);
+    RESULT_CHECK_bool(true, array_queue_empty_p(queue), &pass);
 
-    if (!array_queue_empty_p(queue)) {
-        is_passed = false;
-    }
-
-    array_queue_enter(queue, &is_passed);
-    if (array_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    array_queue_enter(queue, &pass);
+    RESULT_CHECK_bool(false, array_queue_empty_p(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_empty_p), pass);
 
-    test_result_print(SYM_2_STR(array_queue_empty_p), is_passed);
     return;
 }
 
@@ -219,129 +205,119 @@ unit_test_array_queue_empty_p(void)
 static void
 unit_test_array_queue_enter(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
     uint32 capacity;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
     capacity = array_queue_capacity(queue);
 
+    array_queue_enter(NULL, &capacity);
     array_queue_enter(queue, &capacity);
-    if (capacity != array_queue_space_rest(queue) + 1) {
-        is_passed = false;
-    }
-    if (&capacity != *queue->space.front) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity, array_queue_space_rest(queue) + 1, &pass);
+    RESULT_CHECK_pointer(&capacity, array_queue_leave(queue), &pass);
 
     while (!array_queue_full_p(queue)) {
-        array_queue_enter(queue, &is_passed);
+        array_queue_enter(queue, &pass);
     }
 
-    array_queue_enter(queue, &is_passed);
-    if (array_queue_capacity(queue) != capacity * 2 + EXPAND_QUEUE_SPACE_MIN) {
-        is_passed = false;
-    }
+    array_queue_enter(queue, &pass);
+    RESULT_CHECK_uint32(capacity * 2 + EXPAND_QUEUE_SPACE_MIN,
+        array_queue_capacity(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_enter), pass);
 
-    test_result_print(SYM_2_STR(array_queue_enter), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_leave(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (array_queue_leave(NULL)) {
-        is_passed = false;
-    }
-    if (array_queue_leave(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(NULL, array_queue_leave(NULL), &pass);
+    RESULT_CHECK_pointer(NULL, array_queue_leave(queue), &pass);
 
-    array_queue_enter(queue, &is_passed);
-    if (&is_passed != array_queue_leave(queue)) {
-        is_passed = false;
-    }
-
-    if (array_queue_capacity(queue) != array_queue_space_rest(queue)) {
-        is_passed = false;
-    }
+    array_queue_enter(queue, &pass);
+    RESULT_CHECK_pointer(&pass, array_queue_leave(queue), &pass);
+    RESULT_CHECK_uint32(array_queue_capacity(queue),
+        array_queue_space_rest(queue), &pass);
 
     while (!array_queue_full_p(queue)) {
-        array_queue_enter(queue, &is_passed);
+        array_queue_enter(queue, &pass);
     }
 
     array_queue_leave(queue);
     array_queue_leave(queue);
-    array_queue_enter(queue, &is_passed);
-    array_queue_enter(queue, &is_passed);
+    array_queue_enter(queue, &pass);
+    array_queue_enter(queue, &pass);
     while (!array_queue_empty_p(queue)) {
         array_queue_leave(queue);
     }
+    RESULT_CHECK_pointer(NULL, array_queue_leave(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_leave), pass);
 
-    test_result_print(SYM_2_STR(array_queue_leave), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_cleanup(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
 
     queue = array_queue_create();
-    is_passed = true;
+    pass = true;
 
-    array_queue_enter(queue, &is_passed);
+    array_queue_cleanup(NULL);
+
+    array_queue_enter(queue, &pass);
     array_queue_enter(queue, queue);
     array_queue_cleanup(queue);
-    if (array_queue_capacity(queue) != array_queue_space_rest(queue)
-        || queue->space.front != queue->space.base
-        || queue->space.rear != queue->space.base) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(array_queue_capacity(queue),
+        array_queue_space_rest(queue), &pass);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_cleanup), pass);
 
-    test_result_print(SYM_2_STR(array_queue_cleanup), is_passed);
     return;
 }
 
 static void
 unit_test_array_queue_iterate(void)
 {
-    bool is_passed;
+    bool pass;
     struct array_queue *queue;
     uint32 capacity;
     uint32 tmp;
 
     queue = array_queue_create();
     capacity = array_queue_capacity(queue);
-    is_passed = true;
+    pass = true;
     tmp = 0;
+
+    array_queue_iterate(NULL, queue_iterate_handler);
 
     while (!array_queue_full_p(queue)) {
         array_queue_enter(queue, &tmp);
     }
 
     array_queue_iterate(queue, queue_iterate_handler);
+    RESULT_CHECK_uint32(capacity, tmp, &pass);
 
-    if (capacity != tmp) {
-        is_passed = false;
-    }
+    array_queue_cleanup(queue);
+    array_queue_iterate(queue, queue_iterate_handler);
 
     array_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(array_queue_iterate), pass);
 
-    test_result_print(SYM_2_STR(array_queue_iterate), is_passed);
     return;
 }

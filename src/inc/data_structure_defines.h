@@ -92,4 +92,17 @@
 #define linked_stack_sid_set(stack, v) \
     (assert(stack), (stack)->sid = (v))
 
+/* ARRAY QUEUE */
+#define array_queue_sid(queue) \
+    (assert(queue), (queue)->sid)
+
+#define array_queue_sid_set(queue, v) \
+    (assert(queue), (queue)->sid = (v))
+
+#define array_queue_rest(queue) \
+    (assert(queue), (queue)->space.rest)
+
+#define array_queue_dim(queue) \
+    (assert(queue), (queue)->space.dim)
+
 #endif
