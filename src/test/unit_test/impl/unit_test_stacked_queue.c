@@ -1,301 +1,290 @@
 static void
+unit_test_stacked_queue_struct_field(void)
+{
+    bool pass;
+    uint32 sid;
+    uint32 capacity;
+    struct stacked_queue *queue;
+
+    pass = true;
+    sid = 0xfadeu;
+    queue = stacked_queue_create();
+
+    stacked_queue_sid_set(queue, sid);
+    RESULT_CHECK_uint32(sid, stacked_queue_sid(queue), &pass);
+
+    capacity = stacked_queue_capacity(queue);
+    RESULT_CHECK_uint32(capacity, stacked_queue_dim(queue), &pass);
+
+    stacked_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(stacked_queue_struct_field), pass);
+
+    return;
+}
+
+static void
 unit_test_stacked_queue_create(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (queue->enter->space.dim != queue->leave->space.dim) {
-        is_passed = false;
-    }
-
-    if (queue->enter->space.dim != queue->dim &&
-        0u == queue->sid) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, stacked_queue_sid(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_create), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_create), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_destroy(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
-    queue = stacked_queue_create();
-    is_passed = true;
-
+    pass = true;
+    queue = NULL;
     stacked_queue_destroy(&queue);
-    if (NULL != queue) {
-        is_passed = false;
-    }
 
-    test_result_print(SYM_2_STR(stacked_queue_destroy), is_passed);
+    queue = stacked_queue_create();
+    stacked_queue_destroy(&queue);
+    RESULT_CHECK_pointer(NULL, queue, &pass);
+
+    test_result_print(SYM_2_STR(stacked_queue_destroy), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_space_expand(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
     uint32 capacity;
     uint32 extra;
 
-    queue = stacked_queue_create();
-    is_passed = true;
-    capacity = stacked_queue_capacity(queue);
+    pass = true;
     extra = 1023;
+    stacked_queue_space_expand(NULL, extra);
 
+    queue = stacked_queue_create();
+    capacity = stacked_queue_capacity(queue);
     stacked_queue_space_expand(queue, extra);
-    if (capacity + extra != stacked_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity + extra, stacked_queue_capacity(queue), &pass);
 
-    if (capacity + extra != queue->enter->space.dim
-        || capacity + extra != queue->leave->space.dim) {
-        is_passed = false;
-    }
+    extra = 0;
+    capacity = stacked_queue_capacity(queue);
+    stacked_queue_space_expand(queue, extra);
+    RESULT_CHECK_uint32(capacity * 2 + EXPAND_STACK_SPACE_MIN,
+        stacked_queue_capacity(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_space_expand), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_space_expand), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_capacity(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (0 != stacked_queue_capacity(NULL)) {
-        is_passed = false;
-    }
-
-    if (queue->dim != stacked_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, stacked_queue_capacity(NULL), &pass);
+    RESULT_CHECK_uint32(stacked_queue_dim(queue),
+        stacked_queue_capacity(queue), &pass);
 
     stacked_queue_space_expand(queue, 0);
-    if (queue->dim != stacked_queue_capacity(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(stacked_queue_dim(queue),
+        stacked_queue_capacity(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_capacity), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_capacity), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_space_rest(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
     uint32 capacity;
 
+    pass = true;
     queue = stacked_queue_create();
-    is_passed = true;
     capacity = stacked_queue_capacity(queue);
 
-    if (0 != stacked_queue_space_rest(NULL)) {
-        is_passed = false;
-    }
-
-    if (capacity * 2 != stacked_queue_space_rest(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, stacked_queue_space_rest(NULL), &pass);
+    RESULT_CHECK_uint32(capacity * 2, stacked_queue_space_rest(queue), &pass);
 
     stacked_queue_enter(queue, queue);
-    if (capacity * 2 != stacked_queue_space_rest(queue) + 1) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity * 2, stacked_queue_space_rest(queue) + 1, &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_space_rest), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_space_rest), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_full_p(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
     uint32 cnt;
     uint32 capacity;
 
+    cnt = 0;
+    pass = true;
     queue = stacked_queue_create();
     capacity = stacked_queue_capacity(queue);
-    is_passed = true;
-    cnt = 0;
 
-    if (!stacked_queue_full_p(NULL)) {
-        is_passed = false;
-    }
-
-    if (stacked_queue_full_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, stacked_queue_full_p(NULL), &pass);
+    RESULT_CHECK_bool(false, stacked_queue_full_p(queue), &pass);
 
     while (!stacked_queue_full_p(queue)) {
         cnt++;
         stacked_queue_enter(queue, queue);
     }
-
-    if (cnt != capacity * 2) {
-        is_passed = false;
-    }
-
-    if (!stacked_queue_full_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(cnt, capacity * 2, &pass);
+    RESULT_CHECK_bool(true, stacked_queue_full_p(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_full_p), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_full_p), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_empty_p(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
 
-    if (!stacked_queue_empty_p(queue)) {
-        is_passed = false;
-    }
-
-    if (stacked_queue_empty_p(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, stacked_queue_empty_p(NULL), &pass);
+    RESULT_CHECK_bool(true, stacked_queue_empty_p(queue), &pass);
 
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_empty_p(NULL)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, stacked_queue_empty_p(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_empty_p), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_empty_p), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_enter(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
     uint32 capacity;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
+
+    stacked_queue_enter(NULL, queue);
 
     stacked_queue_enter(queue, queue);
-    if (queue != stacked_queue_leave(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(queue, stacked_queue_leave(queue), &pass);
 
     do {
         stacked_queue_enter(queue, queue);
     } while (!stacked_queue_full_p(queue));
-    if (!stacked_queue_full_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, stacked_queue_full_p(queue), &pass);
 
     capacity = stacked_queue_capacity(queue);
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_capacity(queue) != capacity * 2 + EXPAND_STACK_SPACE_MIN) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(capacity * 2 + EXPAND_STACK_SPACE_MIN,
+        stacked_queue_capacity(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_enter), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_enter), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_leave(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
+
+    RESULT_CHECK_pointer(NULL, stacked_queue_leave(NULL), &pass);
 
     do {
         stacked_queue_enter(queue, queue);
     } while (!stacked_queue_full_p(queue));
 
     do {
-        if (queue != stacked_queue_leave(queue)) {
-            is_passed = false;
-        }
+        RESULT_CHECK_pointer(queue, stacked_queue_leave(queue), &pass);
     } while (!stacked_queue_empty_p(queue));
+    RESULT_CHECK_pointer(NULL, stacked_queue_leave(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_leave), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_leave), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_cleanup(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
 
     queue = stacked_queue_create();
-    is_passed = true;
+    pass = true;
+
+    stacked_queue_cleanup(NULL);
 
     stacked_queue_enter(queue, queue);
-    if (stacked_queue_full_p(queue)) {
-        is_passed = false;
-    }
-
-    if (stacked_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, stacked_queue_full_p(queue), &pass);
+    RESULT_CHECK_bool(false, stacked_queue_empty_p(queue), &pass);
 
     stacked_queue_cleanup(queue);
-    if (!stacked_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, stacked_queue_empty_p(queue), &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_cleanup), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_cleanup), pass);
+
     return;
 }
 
 static void
 unit_test_stacked_queue_iterate(void)
 {
-    bool is_passed;
+    bool pass;
     struct stacked_queue *queue;
     uint32 tmp;
 
-    queue = stacked_queue_create();
-    is_passed = true;
     tmp = 0;
+    pass = true;
+    queue = stacked_queue_create();
 
     do {
         stacked_queue_enter(queue, &tmp);
     } while (!stacked_queue_full_p(queue));
 
     stacked_queue_iterate(queue, queue_iterate_handler);
-    if (tmp != stacked_queue_capacity(queue) * 2) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(tmp, stacked_queue_capacity(queue) * 2, &pass);
 
     stacked_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(stacked_queue_iterate), is_passed);
+    test_result_print(SYM_2_STR(stacked_queue_iterate), pass);
+
     return;
 }
 

@@ -99,6 +99,7 @@ static const struct test_layer_table array_queue[] = {
 };
 
 static const struct test_layer_table stacked_queue[] = {
+    {"struct_field", {&unit_test_stacked_queue_struct_field,},},
     {"create",       {&unit_test_stacked_queue_create,},},
     {"destroy",      {&unit_test_stacked_queue_destroy,},},
     {"space_expand", {&unit_test_stacked_queue_space_expand,},},

@@ -105,4 +105,15 @@
 #define array_queue_dim(queue) \
     (assert(queue), (queue)->space.dim)
 
+/* STACKED QUEUE */
+#define stacked_queue_sid(queue) \
+    (assert(queue), (queue)->sid)
+
+#define stacked_queue_sid_set(queue, v) \
+    (assert(queue), (queue)->sid = (v))
+
+#define stacked_queue_dim(queue) \
+    (assert(queue), (queue)->dim)
+
+
 #endif
