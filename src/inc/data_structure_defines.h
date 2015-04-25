@@ -115,5 +115,11 @@
 #define stacked_queue_dim(queue) \
     (assert(queue), (queue)->dim)
 
+/* DOUBLY END QUEUE */
+#define doubly_end_queue_sid(queue) \
+    (assert(queue), (queue)->sid)
+
+#define doubly_end_queue_sid_set(queue, v) \
+    (assert(queue), (queue)->sid = (v))
 
 #endif

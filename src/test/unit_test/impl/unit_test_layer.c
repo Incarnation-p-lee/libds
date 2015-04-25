@@ -115,17 +115,18 @@ static const struct test_layer_table stacked_queue[] = {
 };
 
 static const struct test_layer_table doubly_end_queue[] = {
-    {"create",     {&unit_test_doubly_end_queue_create,},},
-    {"destroy",    {&unit_test_doubly_end_queue_destroy,},},
-    {"length",     {&unit_test_doubly_end_queue_length,},},
-    {"empty_p",    {&unit_test_doubly_end_queue_empty_p,},},
-    {"head_enter", {&unit_test_doubly_end_queue_head_enter,},},
-    {"head_leave", {&unit_test_doubly_end_queue_head_leave,},},
-    {"tail_enter", {&unit_test_doubly_end_queue_tail_enter,},},
-    {"tail_leave", {&unit_test_doubly_end_queue_tail_leave,},},
-    {"cleanup",    {&unit_test_doubly_end_queue_cleanup,},},
-    {"iterate",    {&unit_test_doubly_end_queue_iterate,},},
-    {NULL,         {NULL,},},
+    {"struct_field", {&unit_test_doubly_end_queue_struct_field,},},
+    {"create",       {&unit_test_doubly_end_queue_create,},},
+    {"destroy",      {&unit_test_doubly_end_queue_destroy,},},
+    {"length",       {&unit_test_doubly_end_queue_length,},},
+    {"empty_p",      {&unit_test_doubly_end_queue_empty_p,},},
+    {"head_enter",   {&unit_test_doubly_end_queue_head_enter,},},
+    {"head_leave",   {&unit_test_doubly_end_queue_head_leave,},},
+    {"tail_enter",   {&unit_test_doubly_end_queue_tail_enter,},},
+    {"tail_leave",   {&unit_test_doubly_end_queue_tail_leave,},},
+    {"cleanup",      {&unit_test_doubly_end_queue_cleanup,},},
+    {"iterate",      {&unit_test_doubly_end_queue_iterate,},},
+    {NULL,           {NULL,},},
 };
 
 static const struct test_layer_table binary_search_tree[] = {

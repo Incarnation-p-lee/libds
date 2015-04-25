@@ -1,220 +1,203 @@
 static void
-unit_test_doubly_end_queue_create(void)
+unit_test_doubly_end_queue_struct_field(void)
 {
-    bool is_passed;
+    bool pass;
+    uint32 sid;
     struct doubly_end_queue *queue;
 
+    pass = true;
+    sid = 0xfadeu;
     queue = doubly_end_queue_create();
-    is_passed = true;
 
-    if (0u != queue->sid) {
-        is_passed = false;
-    }
-
-    if (NULL != queue->head || NULL != queue->tail) {
-        is_passed = false;
-    }
+    doubly_end_queue_sid_set(queue, sid);
+    RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_create), is_passed);
+    return;
+}
+
+static void
+unit_test_doubly_end_queue_create(void)
+{
+    bool pass;
+    struct doubly_end_queue *queue;
+
+    pass = true;
+    queue = doubly_end_queue_create();
+
+    RESULT_CHECK_uint32(0x0u, doubly_end_queue_sid(queue), &pass);
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+
+    doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
+
     return;
 }
 
 static void
 unit_test_doubly_end_queue_destroy(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
 
-    queue = doubly_end_queue_create();
-    is_passed = true;
+    pass = true;
+    queue = NULL;
+
     doubly_end_queue_destroy(&queue);
-    if (NULL != queue) {
-        is_passed = false;
-    }
+
+    queue = doubly_end_queue_create();
+    doubly_end_queue_destroy(&queue);
+    RESULT_CHECK_pointer(NULL, queue, &pass);
 
     queue = doubly_end_queue_create();
     doubly_end_queue_head_enter(queue, queue);
     doubly_end_queue_destroy(&queue);
-    if (NULL != queue) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(NULL, queue, &pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_destroy), is_passed);
+    test_result_print(SYM_2_STR(doubly_end_queue_destroy), pass);
+
     return;
 }
 
 static void
 unit_test_doubly_end_queue_length(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
-    uint32 length;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
 
-    length = doubly_end_queue_length(queue);
-    if (0u != length) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x0u, doubly_end_queue_length(NULL), &pass);
+    RESULT_CHECK_uint32(0x0u, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_head_enter(queue, queue);
-    length = doubly_end_queue_length(queue);
-    if (1u != length) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x1u, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_length), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_empty_p(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
 
-    if (doubly_end_queue_empty_p(NULL)) {
-        is_passed = false;
-    }
-
-    if (!doubly_end_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(NULL), &pass);
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_head_enter(queue, queue);
-    if (doubly_end_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_head_enter(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
-    struct doubly_end_queue_list *tmp;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
+
+    doubly_end_queue_head_enter(NULL, queue);
 
     doubly_end_queue_head_enter(queue, queue);
-    tmp = queue->tail;
-    if (doubly_end_queue_empty_p(queue) || tmp != queue->tail) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_head_enter(queue, queue);
-    if (2u != doubly_end_queue_length(queue) || tmp != queue->tail) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_head_enter), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_head_enter), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_tail_enter(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
-    struct doubly_end_queue_list *tmp;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
+
+    doubly_end_queue_tail_enter(NULL, queue);
 
     doubly_end_queue_tail_enter(queue, queue);
-    tmp = queue->head;
-    if (doubly_end_queue_empty_p(queue) || tmp != queue->head) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_tail_enter(queue, queue);
-    if (2u != doubly_end_queue_length(queue) || tmp != queue->head) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_head_leave(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
-    struct doubly_end_queue_list *tmp;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
+
+    RESULT_CHECK_pointer(NULL, doubly_end_queue_head_leave(queue), &pass);
 
     doubly_end_queue_head_enter(queue, queue);
     doubly_end_queue_head_enter(queue, queue);
-    tmp = queue->tail;
-    if (doubly_end_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
-    if (queue != doubly_end_queue_head_leave(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(queue, doubly_end_queue_head_leave(queue), &pass);
 
-    if (tmp != queue->head || tmp != queue->tail) {
-        is_passed = false;
-    }
     doubly_end_queue_head_leave(queue);
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_head_leave), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_head_leave), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_tail_leave(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
-    struct doubly_end_queue_list *tmp;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
+
+    RESULT_CHECK_pointer(NULL, doubly_end_queue_tail_leave(queue), &pass);
 
     doubly_end_queue_tail_enter(queue, queue);
     doubly_end_queue_tail_enter(queue, queue);
-    tmp = queue->head;
-    if (doubly_end_queue_empty_p(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
-    if (queue != doubly_end_queue_tail_leave(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_pointer(queue, doubly_end_queue_tail_leave(queue), &pass);
 
-    if (tmp != queue->head || tmp != queue->tail) {
-        is_passed = false;
-    }
     doubly_end_queue_tail_leave(queue);
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), is_passed);
     return;
 }
 
@@ -222,37 +205,42 @@ unit_test_doubly_end_queue_tail_leave(void)
 static void
 unit_test_doubly_end_queue_cleanup(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
 
+    pass = true;
     queue = doubly_end_queue_create();
-    is_passed = true;
+
+    doubly_end_queue_cleanup(NULL);
 
     doubly_end_queue_head_enter(queue, queue);
     doubly_end_queue_tail_enter(queue, queue);
     doubly_end_queue_cleanup(queue);
-    if (NULL != queue->head || NULL != queue->tail) {
-        is_passed = false;
-    }
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+
+    doubly_end_queue_cleanup(queue);
+    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_cleanup), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_create), is_passed);
     return;
 }
 
 static void
 unit_test_doubly_end_queue_iterate(void)
 {
-    bool is_passed;
+    bool pass;
     struct doubly_end_queue *queue;
     uint32 tmp;
     uint32 cnt;
 
-    queue = doubly_end_queue_create();
-    is_passed = true;
     tmp = 0;
     cnt = 1023;
+    pass = true;
+    queue = doubly_end_queue_create();
+
+    doubly_end_queue_iterate(NULL, queue_iterate_handler);
 
     while (cnt) {
         doubly_end_queue_head_enter(queue, &tmp);
@@ -260,13 +248,11 @@ unit_test_doubly_end_queue_iterate(void)
     }
 
     doubly_end_queue_iterate(queue, queue_iterate_handler);
-    if (tmp != doubly_end_queue_length(queue)) {
-        is_passed = false;
-    }
+    RESULT_CHECK_uint32(tmp, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
+    test_result_print(SYM_2_STR(doubly_end_queue_iterate), pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_iterate), is_passed);
     return;
 }
 
