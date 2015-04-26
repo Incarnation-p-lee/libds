@@ -73,19 +73,43 @@ binary_search_tree_destroy(struct binary_search_tree **root)
     return;
 }
 
+static inline struct binary_search_tree *
+binary_search_tree_node_find_internal(struct binary_search_tree *root,
+    sint64 nice)
+{
+    if (root) {
+        if (nice > binary_search_tree_node_nice(root)) {
+            return binary_search_tree_node_find_internal(root->right, nice);
+        } else if (nice < binary_search_tree_node_nice(root)) {
+            return binary_search_tree_node_find_internal(root->left, nice);
+        } else {
+            return root;
+        }
+    }
+
+    return NULL;
+}
+
 struct binary_search_tree *
 binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
 {
     if (root) {
-        if (nice > binary_search_tree_node_nice(root)) {
-            return binary_search_tree_node_find(root->right, nice);
-        } else if (nice < binary_search_tree_node_nice(root)) {
-            return binary_search_tree_node_find(root->left, nice);
+        return binary_search_tree_node_find_internal(root, nice);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    }
+}
+
+static inline struct binary_search_tree *
+binary_search_tree_node_find_min_internal(struct binary_search_tree *root)
+{
+    if (root) {
+        if (root->left) {
+            return binary_search_tree_node_find_min_internal(root->left);
         } else {
             return root;
         }
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -95,35 +119,37 @@ struct binary_search_tree  *
 binary_search_tree_node_find_min(struct binary_search_tree *root)
 {
     if (root) {
-        if (root->left) {
-            return binary_search_tree_node_find_min(root->left);
+        return binary_search_tree_node_find_min_internal(root);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    }
+}
+
+static inline struct binary_search_tree *
+binary_search_tree_node_find_max_internal(struct binary_search_tree *root)
+{
+    if (root) {
+        if (root->right) {
+            return binary_search_tree_node_find_max_internal(root->right);
         } else {
             return root;
         }
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
 }
-
 
 struct binary_search_tree *
 binary_search_tree_node_find_max(struct binary_search_tree *root)
 {
     if (root) {
-        if (root->right) {
-            return binary_search_tree_node_find_max(root->right);
-        } else {
-            return root;
-        }
+        return binary_search_tree_node_find_max_internal(root);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
     }
-
-    return NULL;
 }
-
 
 sint32
 binary_search_tree_height(struct binary_search_tree *root)

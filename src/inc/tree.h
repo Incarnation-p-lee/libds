@@ -56,7 +56,7 @@ bool avl_tree_balanced_p(struct avl_tree *root);
 bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
 void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
-void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
+struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 
 static inline void avl_tree_height_update(struct avl_tree *node);
 static inline struct avl_tree * avl_tree_single_rotate_left(struct avl_tree *k1);
