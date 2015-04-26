@@ -130,6 +130,7 @@ static const struct test_layer_table doubly_end_queue[] = {
 };
 
 static const struct test_layer_table binary_search_tree[] = {
+    {"struct_field",   {&unit_test_binary_search_tree_struct_field,},},
     {"create",         {&unit_test_binary_search_tree_create,},},
     {"node_create",    {&unit_test_binary_search_tree_node_create,},},
     {"initial",        {&unit_test_binary_search_tree_initial,},},

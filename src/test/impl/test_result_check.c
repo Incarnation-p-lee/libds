@@ -54,6 +54,17 @@ test_result_check_uint64_p(uint64 get, uint64 expect, bool *pass)
 }
 
 static inline bool
+test_result_check_sint64_p(sint64 get, sint64 expect, bool *pass)
+{
+    bool tmp;
+
+    tmp = (get == expect);
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
 test_result_check_float_p(float get, float expect, bool *pass)
 {
     bool tmp;

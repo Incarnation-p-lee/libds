@@ -122,4 +122,26 @@
 #define doubly_end_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
+/* BINARY SEARCH TREE */
+#define binary_search_tree_node_nice(tree) \
+    (assert(tree), (tree)->chain.nice)
+
+#define binary_search_tree_node_nice_set(tree, v) \
+    (assert(tree), (tree)->chain.nice = (v))
+
+#define binary_search_tree_child_left(tree) \
+    (assert(tree), (tree)->left)
+
+#define binary_search_tree_child_left_set(tree, v) \
+    (assert(tree), (tree)->left = (v))
+
+#define binary_search_tree_child_right(tree) \
+    (assert(tree), (tree)->right)
+
+#define binary_search_tree_child_right_set(tree, v) \
+    (assert(tree), (tree)->right = (v))
+
+#define binary_search_tree_node_link(tree) \
+    (assert(tree), ((tree)->chain).link)
+
 #endif

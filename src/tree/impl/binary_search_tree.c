@@ -36,11 +36,13 @@ binary_search_tree_node_initial(struct binary_search_tree *node,
     void *val, sint64 nice)
 {
     if (node) {
-        node->left = NULL;
-        node->right = NULL;
-        node->chain.nice = nice;
+        binary_search_tree_child_left_set(node, NULL);
+        binary_search_tree_child_right_set(node, NULL);
+        binary_search_tree_node_nice_set(node, nice);
         doubly_linked_list_initial(node->chain.link);
         doubly_linked_list_node_val_set(node->chain.link, val);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -49,8 +51,12 @@ binary_search_tree_node_initial(struct binary_search_tree *node,
 static void inline
 binary_search_tree_node_destroy(struct binary_search_tree *node)
 {
-    doubly_linked_list_destroy(&node->chain.link);
-    free_ds(node);
+    if (node) {
+        doubly_linked_list_destroy(&node->chain.link);
+        free_ds(node);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
 }
 
 void
@@ -71,13 +77,15 @@ struct binary_search_tree *
 binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
 {
     if (root) {
-        if (nice > root->chain.nice) {
+        if (nice > binary_search_tree_node_nice(root)) {
             return binary_search_tree_node_find(root->right, nice);
-        } else if (nice < root->chain.nice) {
+        } else if (nice < binary_search_tree_node_nice(root)) {
             return binary_search_tree_node_find(root->left, nice);
         } else {
             return root;
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -92,6 +100,8 @@ binary_search_tree_node_find_min(struct binary_search_tree *root)
         } else {
             return root;
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -107,6 +117,8 @@ binary_search_tree_node_find_max(struct binary_search_tree *root)
         } else {
             return root;
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -130,7 +142,6 @@ binary_search_tree_height(struct binary_search_tree *root)
     return height;
 }
 
-
 bool
 binary_search_tree_node_contain_p(struct binary_search_tree *root,
     struct binary_search_tree *node)
@@ -152,6 +163,8 @@ binary_search_tree_node_contain_p(struct binary_search_tree *root,
                 }
             }
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return false;
@@ -181,11 +194,15 @@ binary_search_tree_node_insert(struct binary_search_tree *root,
             } else {
                 if (*iter != node) {
                     doubly_linked_list_join((*iter)->chain.link, node->chain.link);
+                } else {
+                    pr_log_info("Insert node exist, nothing will be done.\n");
                 }
                 return *iter;
             }
         }
         return *iter = node;
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -195,6 +212,9 @@ static inline void
 binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre,
     struct binary_search_tree *node)
 {
+    assert(NULL != node);
+    assert(NULL != pre);
+
     *pre = node->left ? node->left : node->right;
 }
 
@@ -204,6 +224,9 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
 {
     struct binary_search_tree *min;
     struct binary_search_tree **min_pre;
+
+    assert(NULL != node);
+    assert(NULL != pre);
 
     min = node;
     while (min->left) {
@@ -237,7 +260,7 @@ binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
     register struct binary_search_tree *iter;
     register struct binary_search_tree **pre;
 
-    if (root) {
+    if (root && *root) {
         iter = *root;
         pre = root;
         while (iter) {
@@ -256,6 +279,11 @@ binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
             }
             iter = *pre;
         }
+        if (!iter) {
+            pr_log_warn("Failed to find the node in given tree.\n");
+        }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
     return;
 }
@@ -267,7 +295,11 @@ binary_search_tree_iterate(struct binary_search_tree *root,
     if (root && handle) {
         if (LEGAL_ORDER_P(order)) {
             binary_search_tree_iterate_internal(root, handle, order);
+        } else {
+            pr_log_warn("Invalid value of enum ITER_ORDER.\n");
         }
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 }
 
