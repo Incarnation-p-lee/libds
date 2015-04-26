@@ -77,6 +77,7 @@ struct binary_search_tree *
 binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
 {
     if (root) {
+        // pli 28 binary_search_tree_node_nice(NULL);
         if (nice > binary_search_tree_node_nice(root)) {
             return binary_search_tree_node_find(root->right, nice);
         } else if (nice < binary_search_tree_node_nice(root)) {

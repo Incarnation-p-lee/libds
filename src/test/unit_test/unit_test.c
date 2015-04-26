@@ -82,7 +82,7 @@ unit_test_layer_table_match_p(const struct test_layer_table *category, char *nam
 {
     if (!strncmp("*", name, 1)) {
         return true;
-    } else if (!strncmp(category->name, name, strlen(name))) {
+    } else if (!strncmp(category->name, name, strlen(category->name))) {
         return true;
     } else {
         return false;

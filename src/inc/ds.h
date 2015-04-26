@@ -357,6 +357,41 @@ struct linked_hashing {
 #define binary_search_tree_node_link(tree) \
     (assert(tree), ((tree)->chain).link)
 
+/* AVL TREE */
+#define avl_tree_node_nice(tree) \
+    (assert(tree), (tree)->b_node.chain.nice)
+
+#define avl_tree_node_nice_set(tree, v) \
+    (assert(tree), (tree)->b_node.chain.nice = (v))
+
+#define avl_tree_child_left(tree) \
+    (assert(tree), (tree)->b_node.avl_left)
+
+#define avl_tree_child_left_set(tree, v) \
+    (assert(tree), (tree)->b_node.avl_left = (v))
+
+#define avl_tree_child_right(tree) \
+    (assert(tree), (tree)->b_node.avl_right)
+
+#define avl_tree_child_right_set(tree, v) \
+    (assert(tree), (tree)->b_node.avl_right = (v))
+
+#define avl_tree_node_link(tree) \
+    (assert(tree), (tree)->b_node.chain.link)
+
+#define avl_tree_height(tree) \
+    (assert(tree), (tree)->b_node.height)
+
+#define avl_tree_height_set(tree, v) \
+    (assert(tree), (tree)->b_node.height = (v))
+
+/* NULL tree pointer is vaild here */
+#define avl_tree_ptr_to_bin(tree) \
+    ((struct binary_search_tree *)(tree))
+
+#define avl_tree_ptr_to_avl(tree) \
+    ((struct avl_tree *)(tree))
+
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
@@ -417,7 +452,6 @@ extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
 extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
 extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
 extern bool avl_tree_balanced_p(struct avl_tree *root);
-extern sint32 avl_tree_height(struct avl_tree *root);
 extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
 extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);

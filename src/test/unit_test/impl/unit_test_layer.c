@@ -148,6 +148,7 @@ static const struct test_layer_table binary_search_tree[] = {
 };
 
 static const struct test_layer_table avl_tree[] = {
+    {"struct_field",   {&unit_test_avl_tree_struct_field,},},
     {"create",         {&unit_test_avl_tree_create,},},
     {"node_create",    {&unit_test_avl_tree_node_create,},},
     {"initial",        {&unit_test_avl_tree_initial,},},
@@ -156,7 +157,6 @@ static const struct test_layer_table avl_tree[] = {
     {"node_find",      {&unit_test_avl_tree_node_find,},},
     {"node_find_min",  {&unit_test_avl_tree_node_find_min,},},
     {"node_find_max",  {&unit_test_avl_tree_node_find_max,},},
-    {"height",         {&unit_test_avl_tree_height,},},
     {"node_contain_p", {&unit_test_avl_tree_node_contain_p,},},
     {"balanced_p",     {&unit_test_avl_tree_balanced_p,},},
     {"node_insert",    {&unit_test_avl_tree_node_insert,},},

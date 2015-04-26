@@ -144,4 +144,39 @@
 #define binary_search_tree_node_link(tree) \
     (assert(tree), ((tree)->chain).link)
 
+/* AVL TREE */
+#define avl_tree_node_nice(tree) \
+    (assert(tree), (tree)->b_node.chain.nice)
+
+#define avl_tree_node_nice_set(tree, v) \
+    (assert(tree), (tree)->b_node.chain.nice = (v))
+
+#define avl_tree_child_left(tree) \
+    (assert(tree), (tree)->b_node.avl_left)
+
+#define avl_tree_child_left_set(tree, v) \
+    (assert(tree), (tree)->b_node.avl_left = (v))
+
+#define avl_tree_child_right(tree) \
+    (assert(tree), (tree)->b_node.avl_right)
+
+#define avl_tree_child_right_set(tree, v) \
+    (assert(tree), (tree)->b_node.avl_right = (v))
+
+#define avl_tree_node_link(tree) \
+    (assert(tree), (tree)->b_node.chain.link)
+
+#define avl_tree_height(tree) \
+    (assert(tree), (tree)->b_node.height)
+
+#define avl_tree_height_set(tree, v) \
+    (assert(tree), (tree)->b_node.height = (v))
+
+/* NULL tree pointer is vaild here */
+#define avl_tree_ptr_to_bin(tree) \
+    ((struct binary_search_tree *)(tree))
+
+#define avl_tree_ptr_to_avl(tree) \
+    ((struct avl_tree *)(tree))
+
 #endif
