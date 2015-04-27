@@ -216,11 +216,12 @@ struct linked_hashing {
 
 /* Macro of struct field set and get.
    We _DO_ NOT use function here for the balance of performance
-   and interface clean. */
+   and interface clean.
+   _Attention_, _DO_ _NOT_ use const parameters for following macro. */
 /* DOUBLY LINKED LIST */
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));              \
+        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
         RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
@@ -254,7 +255,7 @@ struct linked_hashing {
 /* SINGLE LINKED LIST */
 #define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));              \
+        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
     } while (false)

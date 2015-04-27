@@ -428,22 +428,49 @@ unit_test_avl_tree_node_remove(void)
     tree = NULL;
     avl_tree_node_remove(&tree, nice);
 
-    // tree = unit_test_avl_tree_sample(0x23AEF, 0x20DE7);
-    tree = unit_test_avl_tree_sample(0xF, 0xE);
+    tree = unit_test_avl_tree_sample(0x23AEF, 0x30DE7);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
     nice = avl_tree_node_nice(tree);
     avl_tree_node_remove(&tree, nice);
     RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
     avl_tree_destroy(&tree);
 
-    // tree = unit_test_avl_tree_sample(0x72C8A, 0x10BE6);
-    tree = unit_test_avl_tree_sample(0xA, 0xB);
+    tree = unit_test_avl_tree_sample(0x43AEF, 0x12DE7);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
     nice = avl_tree_node_nice(tree);
+    avl_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    avl_tree_destroy(&tree);
+
+    tree = unit_test_avl_tree_sample(0x11D23, 0x21F14);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    tmp = avl_tree_node_find_min(tree);
+    nice = avl_tree_node_nice(tmp);
     avl_tree_node_remove(&tree, nice);
     RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
     tmp = avl_tree_node_find_min(tree);
+    nice = avl_tree_node_nice(tmp);
+    avl_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+
+    tmp = avl_tree_node_find_min(tree);
+    nice = avl_tree_node_nice(tmp);
+    avl_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+
+    tmp = avl_tree_node_find_max(tree);
+    nice = avl_tree_node_nice(tmp);
+    avl_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+
+    tmp = avl_tree_node_find_max(tree);
     nice = avl_tree_node_nice(tmp);
     avl_tree_node_remove(&tree, nice);
     RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);

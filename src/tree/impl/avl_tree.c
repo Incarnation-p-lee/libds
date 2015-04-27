@@ -304,6 +304,8 @@ static inline void
 avl_tree_node_remove_rotate_left(struct avl_tree **root, struct avl_tree *node)
 {
     struct avl_tree *tmp;
+    sint32 left;
+    sint32 right;
 
     assert(NULL != root);
     assert(NULL != node);
@@ -311,9 +313,26 @@ avl_tree_node_remove_rotate_left(struct avl_tree **root, struct avl_tree *node)
     tmp = avl_tree_child_left(node);
     assert(!avl_tree_node_leaf_p(tmp));
 
-    if (NULL != avl_tree_child_left(node)) {
+    left = avl_tree_height_internal(avl_tree_child_left(tmp));
+    right = avl_tree_height_internal(avl_tree_child_right(tmp));
+
+    if (left > right) {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *  /
+         * k3
+         */
         *root = avl_tree_single_rotate_left(*root);
     } else {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *    \
+         *     k3
+        */
         *root = avl_tree_doubly_rotate_left(*root);
     }
 }
@@ -322,6 +341,8 @@ static inline void
 avl_tree_node_remove_rotate_right(struct avl_tree **root, struct avl_tree *node)
 {
     struct avl_tree *tmp;
+    sint32 left;
+    sint32 right;
 
     assert(NULL != root);
     assert(NULL != node);
@@ -329,9 +350,26 @@ avl_tree_node_remove_rotate_right(struct avl_tree **root, struct avl_tree *node)
     tmp = avl_tree_child_right(node);
     assert(!avl_tree_node_leaf_p(tmp));
 
-    if (NULL != avl_tree_child_right(node)) {
+    left = avl_tree_height_internal(avl_tree_child_left(tmp));
+    right = avl_tree_height_internal(avl_tree_child_right(tmp));
+
+    if (left < right) {
+        /*
+         * k1
+         *   \
+         *    k2
+         *     \
+         *      k3
+         */
         *root = avl_tree_single_rotate_right(*root);
     } else {
+        /*
+         * k1
+         *   \
+         *    k2
+         *   /
+         * k3
+         */
         *root = avl_tree_doubly_rotate_right(*root);
     }
 }
@@ -344,8 +382,22 @@ avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node)
 
     if (avl_tree_node_nice(node) <
         avl_tree_node_nice(avl_tree_child_left(*root))) {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *  /
+         * k3
+         */
         *root = avl_tree_single_rotate_left(*root);
     } else {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *    \
+         *     k3
+        */
         *root =  avl_tree_doubly_rotate_left(*root);
     }
 }
@@ -358,8 +410,22 @@ avl_tree_node_insert_rotate_right(struct avl_tree **root, struct avl_tree *node)
 
     if (avl_tree_node_nice(node) >
         avl_tree_node_nice(avl_tree_child_right(*root))) {
+        /*
+         * k1
+         *   \
+         *    k2
+         *     \
+         *      k3
+         */
         *root = avl_tree_single_rotate_right(*root);
     } else {
+        /*
+         * k1
+         *   \
+         *    k2
+         *   /
+         * k3
+         */
         *root = avl_tree_doubly_rotate_right(*root);
     }
 }
@@ -439,8 +505,7 @@ avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     assert(NULL != pre);
     assert(NULL != node);
 
-    // root will be problem
-    max_parent = avl_tree_node_find_max_parent(node);
+    max_parent = avl_tree_node_find_max_parent(avl_tree_child_left(node));
     max = avl_tree_child_right(max_parent);
 
     /* Fake one placeholder node for keeping balance */
@@ -468,7 +533,7 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     assert(NULL != pre);
     assert(NULL != node);
 
-    min_parent = avl_tree_node_find_min_parent(node);
+    min_parent = avl_tree_node_find_min_parent(avl_tree_child_right(node));
     min = avl_tree_child_left(min_parent);
 
     /* Fake one placeholder node for keeping balance */
