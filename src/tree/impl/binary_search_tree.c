@@ -51,11 +51,21 @@ binary_search_tree_node_initial(struct binary_search_tree *node,
 static void inline
 binary_search_tree_node_destroy(struct binary_search_tree *node)
 {
-    if (node) {
-        doubly_linked_list_destroy(&node->chain.link);
-        free_ds(node);
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    assert(NULL != node);
+
+    doubly_linked_list_destroy(&node->chain.link);
+    free_ds(node);
+}
+
+static inline void
+binary_search_tree_destroy_internal(struct binary_search_tree **root)
+{
+    if (*root && root) {
+        /* post-order */
+        binary_search_tree_destroy_internal(&(*root)->left);
+        binary_search_tree_destroy_internal(&(*root)->right);
+        binary_search_tree_node_destroy(*root);
+        *root = NULL;
     }
 }
 
@@ -63,11 +73,9 @@ void
 binary_search_tree_destroy(struct binary_search_tree **root)
 {
     if (root && *root) {
-        /* post-order */
-        binary_search_tree_destroy(&(*root)->left);
-        binary_search_tree_destroy(&(*root)->right);
-        binary_search_tree_node_destroy(*root);
-        *root = NULL;
+        binary_search_tree_destroy_internal(root);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -85,9 +93,9 @@ binary_search_tree_node_find_internal(struct binary_search_tree *root,
         } else {
             return root;
         }
+    } else {
+        return NULL;
     }
-
-    return NULL;
 }
 
 struct binary_search_tree *
@@ -110,9 +118,9 @@ binary_search_tree_node_find_min_internal(struct binary_search_tree *root)
         } else {
             return root;
         }
+    } else {
+        return NULL;
     }
-
-    return NULL;
 }
 
 struct binary_search_tree  *
@@ -135,9 +143,9 @@ binary_search_tree_node_find_max_internal(struct binary_search_tree *root)
         } else {
             return root;
         }
+    } else {
+        return NULL;
     }
-
-    return NULL;
 }
 
 struct binary_search_tree *
@@ -254,7 +262,7 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
     assert(NULL != node);
     assert(NULL != pre);
 
-    min = node;
+    min = binary_search_tree_child_right(node);
     while (min->left) {
         min_pre = &min->left;
         min = *min_pre;
@@ -280,7 +288,7 @@ binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
     }
 }
 
-void
+struct binary_search_tree *
 binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
 {
     register struct binary_search_tree *iter;
@@ -296,22 +304,24 @@ binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice)
                 pre = &iter->left;
             } else if (binary_search_tree_node_child_doubly_p(iter)) {
                 binary_search_tree_node_child_doubly_strip(pre, iter);
-                binary_search_tree_node_destroy(iter);
                 break;
             } else {
                 binary_search_tree_node_child_lt_doubly_strip(pre, iter);
-                binary_search_tree_node_destroy(iter);
                 break;
             }
             iter = *pre;
         }
         if (!iter) {
             pr_log_warn("Failed to find the node in given tree.\n");
+        } else {
+            iter->left = iter->right = NULL;
         }
+        return iter;
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
     }
-    return;
+
+    return NULL;
 }
 
 void

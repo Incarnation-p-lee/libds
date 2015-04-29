@@ -365,32 +365,40 @@ unit_test_binary_search_tree_node_remove(void)
     pass = true;
     tree = NULL;
 
-    binary_search_tree_node_remove(&tree, 0x0);
-    RESULT_CHECK_pointer(NULL, tree, &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, 0x0), &pass);
 
     tree = unit_test_binary_search_tree_sample(0xF4321, 0x2ABCD);
-    nice = binary_search_tree_node_nice(tree);
-    binary_search_tree_node_remove(&tree, nice);
+    tmp = tree;
+    nice = binary_search_tree_node_nice(tmp);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+    binary_search_tree_destroy(&tmp);
 
     tmp = binary_search_tree_node_find_min(tree);
     nice = binary_search_tree_node_nice(tmp);
-    binary_search_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+    binary_search_tree_destroy(&tmp);
 
     tmp = binary_search_tree_node_find_max(tree);
     nice = binary_search_tree_node_nice(tmp);
-    binary_search_tree_node_remove(&tree, nice);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+    binary_search_tree_destroy(&tmp);
 
-    tmp = binary_search_tree_node_create(&pass, 0x1A2B);
+    tmp = binary_search_tree_node_create(&pass, 0x7FFFFF);
     nice = binary_search_tree_node_nice(tmp);
-    binary_search_tree_node_remove(&tmp, nice);
-    RESULT_CHECK_pointer(NULL, tmp, &pass);
-
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, nice), &pass);
+    binary_search_tree_destroy(&tmp);
     binary_search_tree_destroy(&tree);
-    test_result_print(SYM_2_STR(binary_search_tree_node_remove), pass);
 
+    tree = binary_search_tree_node_create(&pass, 0x7FFFFF);
+    tmp = tree;
+    nice = binary_search_tree_node_nice(tmp);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
+    binary_search_tree_destroy(&tmp);
+
+    test_result_print(SYM_2_STR(binary_search_tree_node_remove), pass);
     return;
 }
 

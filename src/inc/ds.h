@@ -436,7 +436,7 @@ extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_
 extern struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
-extern void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
 extern sint32 binary_search_tree_height(struct binary_search_tree *root);
 extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 

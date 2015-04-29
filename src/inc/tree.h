@@ -33,7 +33,7 @@ struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_
 struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
 bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
-void binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
+struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
 sint32 binary_search_tree_height(struct binary_search_tree *root);
 void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
@@ -72,11 +72,11 @@ static inline void avl_tree_node_remove_rotate_right(struct avl_tree **root, str
 static inline void avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node);
 static inline void avl_tree_node_insert_rotate_right(struct avl_tree **root, struct avl_tree *node);
 static inline void avl_tree_node_child_lt_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
-static inline sint64 avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
+static inline void avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
 static inline struct avl_tree * avl_tree_node_find_min_parent(struct avl_tree *root);
 static inline struct avl_tree * avl_tree_node_find_max_parent(struct avl_tree *root);
-static inline sint64 avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre, struct avl_tree *node);
-static inline sint64 avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre, struct avl_tree *node);
+static inline void avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre, struct avl_tree *node);
+static inline void avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre, struct avl_tree *node);
 /* END OF AVL TREE */
 
 #endif
