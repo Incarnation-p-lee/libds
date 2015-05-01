@@ -25,7 +25,7 @@ fi
 mv -v ./src/*.gc[dn][ao] "$reportdir"
 mv -v ./src/*/*.gc[dn][ao] "$reportdir"
 
-lcov --capture --directory "$reportdir" --output-file "$rawdatafile" --test-name "$binary" --base-directory "./"
+lcov --capture --checksum --directory "$reportdir" --output-file "$rawdatafile" --test-name "$binary" --base-directory "./"
 
 mv "$rawdatafile" "$reportdir"
 

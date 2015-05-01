@@ -91,8 +91,8 @@ avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node)
         avl_tree_ptr_to_bin(node));
 }
 
-bool
-avl_tree_balanced_p(struct avl_tree *root)
+static inline bool
+avl_tree_balanced_internal_p(struct avl_tree *root)
 {
     sint32 left;
     sint32 right;
@@ -100,16 +100,16 @@ avl_tree_balanced_p(struct avl_tree *root)
 
     if (root) {
         tmp = avl_tree_child_left(root);
-        left = binary_search_tree_height(avl_tree_ptr_to_bin(tmp));
+        left = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
         tmp = avl_tree_child_right(root);
-        right = binary_search_tree_height(avl_tree_ptr_to_bin(tmp));
+        right = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
 
         if (abs(left - right) > 1) {
             return false;
         } else {
-            if (!avl_tree_balanced_p(avl_tree_child_left(root))) {
+            if (!avl_tree_balanced_internal_p(avl_tree_child_left(root))) {
                 return false;
-            } else if (!avl_tree_balanced_p(avl_tree_child_right(root))) {
+            } else if (!avl_tree_balanced_internal_p(avl_tree_child_right(root))) {
                 return false;
             } else {
                 return true;
@@ -118,6 +118,17 @@ avl_tree_balanced_p(struct avl_tree *root)
     }
 
     return true;
+}
+
+bool
+avl_tree_balanced_p(struct avl_tree *root)
+{
+    if (root) {
+        return avl_tree_balanced_internal_p(root);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return true;
+    }
 }
 
 static inline void
@@ -284,7 +295,7 @@ avl_tree_doubly_rotate_right(struct avl_tree *k1)
 }
 
 static inline bool
-avl_tree_balanced_internal_p(struct avl_tree *node)
+avl_tree_balanced_on_height_p(struct avl_tree *node)
 {
     struct avl_tree *left;
     struct avl_tree *right;
@@ -553,7 +564,7 @@ avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
     /* Clear children pointer of node */
     avl_tree_node_child_clean(node);
 
-    avl_tree_node_remove(&max->b_node.avl_left, avl_tree_node_nice(tmp));
+    avl_tree_node_remove_internal(&max->b_node.avl_left, avl_tree_node_nice(tmp));
     avl_tree_node_destroy(tmp);
 
     return;
@@ -587,21 +598,14 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
     avl_tree_node_child_clean(node);
 
     /* destroy the fake node */
-    avl_tree_node_remove(&min->b_node.avl_right, avl_tree_node_nice(tmp));
+    avl_tree_node_remove_internal(&min->b_node.avl_right, avl_tree_node_nice(tmp));
     avl_tree_node_destroy(tmp);
 
     return;
 }
 
-/*
- * remove one node if given root avl tree
- * @root: the pointer of given tree
- * @nice: the nice value of the node
- * _RETURN_: the removed node.
- *
- */
-struct avl_tree *
-avl_tree_node_remove(struct avl_tree **root, sint64 nice)
+static inline struct avl_tree *
+avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice)
 {
     struct avl_tree *node;
     struct avl_tree *removed;
@@ -609,16 +613,16 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
     if (root && *root) {
         node = *root;
         if (nice < avl_tree_node_nice(node)) {
-            removed = avl_tree_node_remove(&node->b_node.avl_left, nice);
+            removed = avl_tree_node_remove_internal(&node->b_node.avl_left, nice);
             /* The left child-tree */
-            if (!avl_tree_balanced_internal_p(node)) {
+            if (!avl_tree_balanced_on_height_p(node)) {
                 avl_tree_node_remove_rotate_right(root, node);
             }
             avl_tree_height_update(node);
         } else if (nice > avl_tree_node_nice(node)) {
-            removed = avl_tree_node_remove(&node->b_node.avl_right, nice);
+            removed = avl_tree_node_remove_internal(&node->b_node.avl_right, nice);
             /* The right child-tree */
-            if (!avl_tree_balanced_internal_p(node)) {
+            if (!avl_tree_balanced_on_height_p(node)) {
                 avl_tree_node_remove_rotate_left(root, node);
             }
             avl_tree_height_update(node);
@@ -634,7 +638,29 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 
         if (NULL != removed) {
             avl_tree_node_child_clean(removed);
-        } else {
+        }
+
+        return removed;
+    }
+
+    return NULL;
+}
+
+/*
+ * remove one node if given root avl tree
+ * @root: the pointer of given tree
+ * @nice: the nice value of the node
+ * _RETURN_: the removed node.
+ *
+ */
+struct avl_tree *
+avl_tree_node_remove(struct avl_tree **root, sint64 nice)
+{
+    struct avl_tree *removed;
+
+    if (root && *root) {
+        removed = avl_tree_node_remove_internal(root, nice);
+        if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         }
 
@@ -664,7 +690,7 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
             } else {
                 node = avl_tree_node_insert(&(*root)->b_node.avl_left, node);
                 /* The left child-tree */
-                if (!avl_tree_balanced_internal_p(*root)) {
+                if (!avl_tree_balanced_on_height_p(*root)) {
                     avl_tree_node_insert_rotate_left(root, node);
                 }
             }
@@ -674,7 +700,7 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
             } else {
                 node = avl_tree_node_insert(&(*root)->b_node.avl_right, node);
                 /* The right child-tree */
-                if (!avl_tree_balanced_internal_p(*root)) {
+                if (!avl_tree_balanced_on_height_p(*root)) {
                     avl_tree_node_insert_rotate_right(root, node);
                 }
             }
