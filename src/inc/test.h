@@ -2,8 +2,6 @@
 #define HAVE_TEST_H
 
 
-extern struct memory_maps * memory_maps_entry_find(char *name);
-
 static uint32 malloc_cnt = 0;
 static uint32 free_cnt = 0;
 static uint32 realloc_cnt = 0;
@@ -14,7 +12,6 @@ void * realloc_wrap(void *ptr, size_t size);
 void free_wrap(void *ptr);
 void memory_trace_print(void);
 void end_of_report_print(void);
-
 
 static void test_result_print(char *name, bool passed);
 static sint32 * int_array_generate(sint32 size);
