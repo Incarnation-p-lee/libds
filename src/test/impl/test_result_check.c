@@ -32,6 +32,28 @@ test_result_check_uint32_p(uint32 get, uint32 expect, bool *pass)
 }
 
 static inline bool
+test_result_check_less_uint32_p(uint32 get, uint32 limit, bool *pass)
+{
+    bool tmp;
+
+    tmp = (get < limit);
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
+test_result_check_not_less_uint32_p(uint32 get, uint32 limit, bool *pass)
+{
+    bool tmp;
+
+    tmp = (get >= limit);
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
 test_result_check_sint32_p(sint32 get, sint32 expect, bool *pass)
 {
     bool tmp;

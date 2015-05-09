@@ -9,11 +9,12 @@ my @export = ("$incdir/types.h",
               "$incdir/data_structure_types.h",
               "$incdir/data_structure_defines.h",
               "$incdir/log.h",
-              "$incdir/tree.h",
               "$incdir/defines.h",
               "$incdir/linked_list.h",
               "$incdir/queue.h",
-              "$incdir/stack.h");
+              "$incdir/stack.h",
+              "$incdir/tree.h",
+              "$incdir/hash.h",);
 my $out = "$base/src/inc/ds.h";
 
 open OUT, '>', $out or

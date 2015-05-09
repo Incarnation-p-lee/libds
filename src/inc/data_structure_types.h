@@ -153,12 +153,15 @@ struct splay_tree {
 
 /*
  * hashing table with separate chaining
- *     hashing function for .data and .text address
+ *     hashing (void *) to (void *)
  */
-struct linked_hashing {
-    struct doubly_linked_list **base;
-    uint64                    size;
-    uint64                    (*func)(uint64);
+struct separate_chain_hash {
+    /* the base address of struct separate * pointer array. */
+    struct doubly_linked_list **space;
+    uint32                    size;
+    uint32                    load_factor; /* load_factor % */
+    uint32                    (*func)(void *, uint32);
 };
+
 #endif
 

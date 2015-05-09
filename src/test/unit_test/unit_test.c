@@ -5,6 +5,7 @@
 #include "unit_test_stack.c"
 #include "unit_test_queue.c"
 #include "unit_test_tree.c"
+#include "unit_test_hash.c"
 
 #include "impl/unit_test_filter.c"
 #include "impl/unit_test_layer.c"
@@ -82,7 +83,7 @@ unit_test_layer_table_match_p(const struct test_layer_table *category, char *nam
 {
     if (!strncmp("*", name, 1)) {
         return true;
-    } else if (!strncmp(category->name, name, strlen(category->name))) {
+    } else if (!strncmp(category->name, name, strlen(name) + 1)) {
         return true;
     } else {
         return false;

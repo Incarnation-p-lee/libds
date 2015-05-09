@@ -10,6 +10,27 @@ memory_maps_obtain(void)
     return;
 }
 
+struct memory_maps *
+memory_maps_entry_find(char *name)
+{
+    struct memory_maps *iter;
+
+    iter = NULL;
+    if (!name) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        iter = mmaps;
+        while (iter < mmaps + MAP_ENTRY_MAX) {
+            if (!strncmp(name, iter->name, strlen(name))) {
+                break;
+            }
+            iter++;
+        }
+    }
+
+    return iter;
+}
+
 static inline FILE *
 memory_maps_proc_read(void)
 {

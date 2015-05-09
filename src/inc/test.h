@@ -1,6 +1,9 @@
 #ifndef HAVE_TEST_H
 #define HAVE_TEST_H
 
+
+extern struct memory_maps * memory_maps_entry_find(char *name);
+
 static uint32 malloc_cnt = 0;
 static uint32 free_cnt = 0;
 static uint32 realloc_cnt = 0;

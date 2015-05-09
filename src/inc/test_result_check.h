@@ -28,6 +28,20 @@
         }                                                     \
     } while (false)
 
+#define RESULT_CHECK_LESS_uint32(get, limit, pass)                \
+    do {                                                          \
+        if (!test_result_check_less_uint32_p(get, limit, pass)) { \
+            LOCATION_PRINT;                                       \
+        }                                                         \
+    } while (false)
+
+#define RESULT_CHECK_NOT_LESS_uint32(get, limit, pass)                \
+    do {                                                              \
+        if (!test_result_check_not_less_uint32_p(get, limit, pass)) { \
+            LOCATION_PRINT;                                           \
+        }                                                             \
+    } while (false)
+
 #define RESULT_CHECK_sint32(get, expect, pass)                \
     do {                                                      \
         if (!test_result_check_sint32_p(get, expect, pass)) { \

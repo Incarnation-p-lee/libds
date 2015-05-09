@@ -1,14 +1,6 @@
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-extern void libds_log_print(enum log_level lvl, const char *msg);
-
-
 /* doubly linked list, Circular. */
 struct doubly_linked_list * doubly_linked_list_create(void);
 struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);

@@ -55,7 +55,7 @@ unit_test_avl_tree_sample(uint64 range, uint32 node_count)
         i++;
     }
 
-    return (struct avl_tree *)retval;
+    return retval;
 }
 
 static void

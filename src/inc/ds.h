@@ -199,13 +199,16 @@ struct splay_tree {
 
 /*
  * hashing table with separate chaining
- *     hashing function for .data and .text address
+ *     hashing (void *) to (void *)
  */
-struct linked_hashing {
-    struct doubly_linked_list **base;
-    uint64                    size;
-    uint64                    (*func)(uint64);
+struct separate_chain_hash {
+    /* the base address of struct separate * pointer array. */
+    struct doubly_linked_list **space;
+    uint32                    size;
+    uint32                    load_factor; /* load_factor % */
+    uint32                    (*func)(void *, uint32);
 };
+
 #endif
 
 /* END of ./src/inc/data_structure_types.h */
@@ -393,6 +396,14 @@ struct linked_hashing {
 #define avl_tree_ptr_to_avl(tree) \
     ((struct avl_tree *)(tree))
 
+/* SEPARATE CHAIN HASHING */
+#define separate_chain_hash_size(hash) \
+    (assert(hash), (hash)->size)
+#define separate_chain_hash_load_factor(hash) \
+    (assert(hash), (hash)->load_factor)
+#define separate_chain_hash_load_factor_set(hash, factor) \
+    (assert(hash), (hash)->load_factor = (factor))
+
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
@@ -404,65 +415,6 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 
 #endif
 /* END of ./src/inc/log.h */
-
-/* BEGIN of ./src/inc/tree.h */
-#ifndef HAVE_TREE_H
-#define HAVE_TREE_H
-
-enum ITER_ORDER {
-    ORDER_START,
-    ORDER_PRE,
-    ORDER_IN,
-    ORDER_POST,
-    ORDER_END,
-};
-
-#define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
-
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-
-/* BINARY SEARCH TREE */
-extern struct binary_search_tree * binary_search_tree_create(void);
-extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
-extern void binary_search_tree_initial(struct binary_search_tree *root);
-extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
-extern void binary_search_tree_destroy(struct binary_search_tree **root);
-extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice);
-extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *root, struct binary_search_tree *node);
-extern struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
-extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
-extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
-extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-extern sint32 binary_search_tree_height(struct binary_search_tree *root);
-extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-/* END OF BINARY SEARCH TREE */
-
-
-/* AVL TREE */
-extern struct avl_tree * avl_tree_create(void);
-extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
-extern void avl_tree_initial(struct avl_tree *root);
-extern void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
-extern void avl_tree_destroy(struct avl_tree **root);
-extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
-extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
-extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
-extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
-extern bool avl_tree_balanced_p(struct avl_tree *root);
-extern struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nice);
-extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
-extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-
-/* END OF AVL TREE */
-
-#endif
-/* END of ./src/inc/tree.h */
 
 /* BEGIN of ./src/inc/defines.h */
 #ifndef HAVE_DEFINES_H
@@ -510,13 +462,6 @@ extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum
 /* BEGIN of ./src/inc/linked_list.h */
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
-
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-
 
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list * doubly_linked_list_create(void);
@@ -572,14 +517,6 @@ extern struct single_linked_list * single_linked_list_join(struct single_linked_
 
 #define DEFAULT_QUEUE_SPACE_SIZE   128
 #define EXPAND_QUEUE_SPACE_MIN     32
-
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void * realloc_wrap(void *ptr, size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-
 
 
 
@@ -638,13 +575,6 @@ extern void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*hand
 #define DEFAULT_STACK_SPACE_SIZE   128
 #define EXPAND_STACK_SPACE_MIN     32
 
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void * realloc_wrap(void *ptr, size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-
 
 /* ARRAY STACK */
 extern struct array_stack * array_stack_create(void);
@@ -677,4 +607,81 @@ extern uint32 linked_stack_capacity(struct linked_stack *stack);
 
 #endif
 /* END of ./src/inc/stack.h */
+
+/* BEGIN of ./src/inc/tree.h */
+#ifndef HAVE_TREE_H
+#define HAVE_TREE_H
+
+enum ITER_ORDER {
+    ORDER_START,
+    ORDER_PRE,
+    ORDER_IN,
+    ORDER_POST,
+    ORDER_END,
+};
+
+#define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
+
+
+/* BINARY SEARCH TREE */
+extern struct binary_search_tree * binary_search_tree_create(void);
+extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
+extern void binary_search_tree_initial(struct binary_search_tree *root);
+extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
+extern void binary_search_tree_destroy(struct binary_search_tree **root);
+extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *root, struct binary_search_tree *node);
+extern struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
+extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
+extern bool binary_search_tree_node_contain_p(struct binary_search_tree *root, struct binary_search_tree *node);
+extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
+extern sint32 binary_search_tree_height(struct binary_search_tree *root);
+extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
+
+/* END OF BINARY SEARCH TREE */
+
+
+/* AVL TREE */
+extern struct avl_tree * avl_tree_create(void);
+extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
+extern void avl_tree_initial(struct avl_tree *root);
+extern void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
+extern void avl_tree_destroy(struct avl_tree **root);
+extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
+extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
+extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
+extern bool avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node);
+extern bool avl_tree_balanced_p(struct avl_tree *root);
+extern struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nice);
+extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
+extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
+
+
+/* END OF AVL TREE */
+
+#endif
+/* END of ./src/inc/tree.h */
+
+/* BEGIN of ./src/inc/hash.h */
+#ifndef HAVE_HASH_H
+#define HAVE_HASH_H
+
+#define DEFAULT_CHAIN_HASH_SIZE 11u
+#define DEFAULT_LOAD_FACTOR     72u /* Means 0.72 or 72% */
+
+
+/* SEPARATE CHAIN HASH */
+extern struct separate_chain_hash * separate_chain_hash_create(uint32 size);
+extern void separate_chain_hash_destroy(struct separate_chain_hash **hash);
+extern uint32 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash);
+extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *key);
+extern void * separate_chain_hash_remove(struct separate_chain_hash *hash, void *key);
+extern void * separate_chain_hash_find(struct separate_chain_hash *hash, void *key);
+extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
+
+
+/* END OF SEPARATE CHAIN HASH */
+
+#endif
+/* END of ./src/inc/hash.h */
 #endif /* END OF FILE */

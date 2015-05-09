@@ -11,12 +11,6 @@ enum ITER_ORDER {
 
 #define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 
-#ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
-    extern void free_wrap(void *ptr);
-#endif
-
-extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
 extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
