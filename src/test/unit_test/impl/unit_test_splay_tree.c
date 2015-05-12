@@ -253,24 +253,20 @@ unit_test_splay_tree_node_find(void)
         &pass);
 
     RESULT_CHECK_pointer(tree,
-        splay_tree_node_find(&tree, splay_tree_node_nice(tree)),
-        &pass);
+        splay_tree_node_find(&tree, splay_tree_node_nice(tree)), &pass);
 
     RESULT_CHECK_pointer(NULL,
-        splay_tree_node_find(&tree, 0xFFFFFFF),
-        &pass);
+        splay_tree_node_find(&tree, 0xFFFFFFF), &pass);
 
     tmp = splay_tree_node_find_min(&tree);
     RESULT_CHECK_pointer(tmp, tree, &pass);
     RESULT_CHECK_pointer(tmp,
-        splay_tree_node_find(&tree, splay_tree_node_nice(tmp)),
-        &pass);
+        splay_tree_node_find(&tree, splay_tree_node_nice(tmp)), &pass);
 
     tmp = splay_tree_node_find_max(&tree);
     RESULT_CHECK_pointer(tmp, tree, &pass);
     RESULT_CHECK_pointer(tmp,
-        splay_tree_node_find(&tree, splay_tree_node_nice(tmp)),
-        &pass);
+        splay_tree_node_find(&tree, splay_tree_node_nice(tmp)), &pass);
 
     splay_tree_destroy(&tree);
     test_result_print(SYM_2_STR(splay_tree_node_find), pass);

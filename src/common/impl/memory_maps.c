@@ -72,6 +72,7 @@ memory_maps_one_line_process(char *line, uint32 len)
         memory_maps_one_line_map_boundary(line, start);
     }
     start++;
+
     return;
 }
 
@@ -81,8 +82,7 @@ memory_maps_one_line_map_name(char *line)
     char *tmp;
 
     tmp = strchr(line, '/');
-    if (!tmp) {
-        /* For [stack] */
+    if (!tmp) { /* For [stack] */
         tmp = strchr(line, '[');
     }
 

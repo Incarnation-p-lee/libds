@@ -46,9 +46,13 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
 {
     struct doubly_linked_list **iter;
 
-    if (hash && *hash) {
+    if (!hash || !*hash) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
         iter = (*hash)->space;
-        if (iter) {
+        if (!iter) {
+            pr_log_warn("Destroyed data structure.\n");
+        } else {
             while (iter < (*hash)->space + (*hash)->size) {
                 if (*iter) {
                    doubly_linked_list_destroy(iter);
@@ -57,13 +61,9 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
                 iter++;
             }
             free_ds((*hash)->space);
-        } else {
-            pr_log_warn("Destroyed data structure.\n");
         }
         free_ds((*hash));
         *hash = NULL;
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -76,9 +76,13 @@ separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
     struct doubly_linked_list **iter;
 
     retval = 0u;
-    if (hash) {
+    if (!hash) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
         iter = hash->space;
-        if (iter) {
+        if (!iter) {
+            pr_log_warn("Destroyed data structure.\n");
+        } else {
             retval = 0u;
             while (iter < hash->space + hash->size) {
                 if (NULL != *iter) {
@@ -86,15 +90,10 @@ separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
                 }
                 iter++;
             }
-        } else {
-            pr_log_warn("Destroyed data structure.\n");
         }
 
         retval = (retval * 100 / hash->size);
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
-
 
     return retval;
 }
@@ -145,7 +144,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
         retval = NULL;
         head = hash->space[hash->func(key, hash->size)];
         if (!head) {
-            return NULL;
+            retval = NULL;
         } else {
             iter = head;
             do {
@@ -158,9 +157,12 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
             } while (iter != head);
 
             if (iter == head) {
-                /* If last node of head, clean the hash chain pointer */
                 hash->space[hash->func(key, hash->size)] = NULL;
             }
+        }
+
+        if (NULL == retval) {
+            pr_log_info("Not such a key in given hash.\n");
         }
         return retval;
     }
@@ -171,27 +173,32 @@ separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
 {
     struct doubly_linked_list *head;
     struct doubly_linked_list *iter;
+    void *retval;
 
+    retval = NULL;
     if (!hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         head = hash->space[hash->func(key, hash->size)];
         if (!head) {
-            return NULL;
+            retval = NULL;
         } else {
             iter = head;
             do {
                 if (key == doubly_linked_list_node_val(iter)) {
-                    return key;
+                    retval = key;
+                    break;
                 }
                 iter = doubly_linked_list_node_next(iter);
             } while (iter != head);
+        }
 
-            pr_log_warn("Failed to find the key in given hash.\n");
+        if (NULL == retval) {
+            pr_log_info("Not such a key in given hash.\n");
         }
     }
 
-    return NULL;
+    return retval;
 }
 
 static inline void
