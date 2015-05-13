@@ -180,4 +180,33 @@
 #define avl_tree_ptr_to_avl(tree) \
     ((struct avl_tree *)(tree))
 
+/* SPLAY TREE */
+#define splay_tree_node_nice(tree) \
+    (assert(tree), (tree)->b_node.chain.nice)
+
+#define splay_tree_node_nice_set(tree, v) \
+    (assert(tree), (tree)->b_node.chain.nice = (v))
+
+#define splay_tree_child_left(tree) \
+    (assert(tree), (tree)->b_node.splay_left)
+
+#define splay_tree_child_left_set(tree, v) \
+    (assert(tree), (tree)->b_node.splay_left = (v))
+
+#define splay_tree_child_right(tree) \
+    (assert(tree), (tree)->b_node.splay_right)
+
+#define splay_tree_child_right_set(tree, v) \
+    (assert(tree), (tree)->b_node.splay_right = (v))
+
+#define splay_tree_node_link(tree) \
+    (assert(tree), (tree)->b_node.chain.link)
+
+/* NULL tree pointer is vaild here */
+#define splay_tree_ptr_to_bin(tree) \
+    ((struct binary_search_tree *)(tree))
+
+#define splay_tree_ptr_to_splay(tree) \
+    ((struct splay_tree *)(tree))
+
 #endif

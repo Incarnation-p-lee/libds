@@ -79,4 +79,35 @@ static inline sint64 avl_tree_node_child_doubly_strip_from_max(struct avl_tree *
 static inline sint64 avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre, struct avl_tree *node);
 /* END OF AVL TREE */
 
+
+/* SPLAY TREE */
+struct splay_tree * splay_tree_create(void);
+struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
+void splay_tree_initial(struct splay_tree *tree);
+void splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice);
+void splay_tree_destroy(struct splay_tree **tree);
+struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);
+struct splay_tree * splay_tree_node_find_max(struct splay_tree **tree);
+struct splay_tree * splay_tree_node_find_min(struct splay_tree **tree);
+bool splay_tree_node_contain_p(struct splay_tree *tree, struct splay_tree *node);
+sint32 splay_tree_height(struct splay_tree *tree);
+struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, struct splay_tree *node);
+struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
+void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+
+static void inline splay_tree_splaying_root_left(struct splay_tree **tree);
+static void inline splay_tree_splaying_root_right(struct splay_tree **tree);
+static void inline splay_tree_single_splaying_left(struct splay_tree **tree);
+static void inline splay_tree_single_splaying_right(struct splay_tree **tree);
+static void inline splay_tree_doubly_splaying_left(struct splay_tree **tree);
+static void inline splay_tree_doubly_splaying_right(struct splay_tree **tree);
+static void inline splay_tree_node_splaying_left(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
+static void inline splay_tree_node_splaying_right(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
+static inline struct splay_tree * splay_tree_node_find_internal(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
+struct splay_tree * splay_tree_node_find_min_internal(struct splay_tree **tree, struct splay_tree *root);
+struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
+static inline bool splay_tree_child_has_nice_p(struct splay_tree *node, sint64 nice);
+static inline bool splay_tree_node_leaf_p(struct splay_tree *node);
+/* END OF SPLAY TREE */
+
 #endif

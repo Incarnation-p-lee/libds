@@ -393,6 +393,35 @@ struct linked_hashing {
 #define avl_tree_ptr_to_avl(tree) \
     ((struct avl_tree *)(tree))
 
+/* SPLAY TREE */
+#define splay_tree_node_nice(tree) \
+    (assert(tree), (tree)->b_node.chain.nice)
+
+#define splay_tree_node_nice_set(tree, v) \
+    (assert(tree), (tree)->b_node.chain.nice = (v))
+
+#define splay_tree_child_left(tree) \
+    (assert(tree), (tree)->b_node.splay_left)
+
+#define splay_tree_child_left_set(tree, v) \
+    (assert(tree), (tree)->b_node.splay_left = (v))
+
+#define splay_tree_child_right(tree) \
+    (assert(tree), (tree)->b_node.splay_right)
+
+#define splay_tree_child_right_set(tree, v) \
+    (assert(tree), (tree)->b_node.splay_right = (v))
+
+#define splay_tree_node_link(tree) \
+    (assert(tree), (tree)->b_node.chain.link)
+
+/* NULL tree pointer is vaild here */
+#define splay_tree_ptr_to_bin(tree) \
+    ((struct binary_search_tree *)(tree))
+
+#define splay_tree_ptr_to_splay(tree) \
+    ((struct splay_tree *)(tree))
+
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
@@ -459,6 +488,26 @@ extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl
 extern void avl_tree_node_remove(struct avl_tree **root, sint64 nice);
 
 /* END OF AVL TREE */
+
+
+/* SPLAY TREE */
+extern struct splay_tree * splay_tree_create(void);
+extern struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
+extern void splay_tree_initial(struct splay_tree *tree);
+extern void splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice);
+extern void splay_tree_destroy(struct splay_tree **tree);
+extern struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);
+extern struct splay_tree * splay_tree_node_find_max(struct splay_tree **tree);
+extern struct splay_tree * splay_tree_node_find_min(struct splay_tree **tree);
+extern bool splay_tree_node_contain_p(struct splay_tree *tree, struct splay_tree *node);
+extern sint32 splay_tree_height(struct splay_tree *tree);
+extern struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, struct splay_tree *node);
+extern struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
+extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+
+extern struct splay_tree * splay_tree_node_find_min_internal(struct splay_tree **tree, struct splay_tree *root);
+extern struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
+/* END OF SPLAY TREE */
 
 #endif
 /* END of ./src/inc/tree.h */

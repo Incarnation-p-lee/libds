@@ -164,6 +164,24 @@ static const struct test_layer_table avl_tree[] = {
     {"iterate",        {&unit_test_avl_tree_iterate,},},
     {NULL,             {NULL,},},
 };
+
+static const struct test_layer_table splay_tree[] = {
+    {"struct_field",   {&unit_test_splay_tree_struct_field,},},
+    {"create",         {&unit_test_splay_tree_create,},},
+    {"node_create",    {&unit_test_splay_tree_node_create,},},
+    {"initial",        {&unit_test_splay_tree_initial,},},
+    {"node_initial",   {&unit_test_splay_tree_node_initial,},},
+    {"destroy",        {&unit_test_splay_tree_destroy,},},
+    {"node_find",      {&unit_test_splay_tree_node_find,},},
+    {"node_find_min",  {&unit_test_splay_tree_node_find_min,},},
+    {"node_find_max",  {&unit_test_splay_tree_node_find_max,},},
+    {"height",         {&unit_test_splay_tree_height,},},
+    {"node_contain_p", {&unit_test_splay_tree_node_contain_p,},},
+    {"node_insert",    {&unit_test_splay_tree_node_insert,},},
+    {"node_remove",    {&unit_test_splay_tree_node_remove,},},
+    {"iterate",        {&unit_test_splay_tree_iterate,},},
+    {NULL,             {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -196,7 +214,8 @@ static const struct test_layer_table unit_test_queue_implement[] = {
 
 static const struct test_layer_table unit_test_tree_implement[] = {
     {"binary_search", {binary_search_tree,},},
-    {"avl", {avl_tree,},},
+    {"avl",           {avl_tree,},},
+    {"splay",         {splay_tree,},},
     /* END POINT OF IMPLEMENT */
     {NULL,     {NULL,},},
 };

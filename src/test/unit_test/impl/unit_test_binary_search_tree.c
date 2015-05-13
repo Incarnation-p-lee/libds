@@ -282,8 +282,8 @@ unit_test_binary_search_tree_height(void)
 
     RESULT_CHECK_sint32(-1, binary_search_tree_height(NULL), &pass);
 
-    child = MAX_S(binary_search_tree_height(tree->left),
-        binary_search_tree_height(tree->right));
+    child = MAX_S(binary_search_tree_height(binary_search_tree_child_left(tree)),
+        binary_search_tree_height(binary_search_tree_child_right(tree)));
     RESULT_CHECK_sint32(child + 1, binary_search_tree_height(tree), &pass);
 
     binary_search_tree_destroy(&tree);
