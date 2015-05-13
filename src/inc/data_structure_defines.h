@@ -209,4 +209,12 @@
 #define splay_tree_ptr_to_splay(tree) \
     ((struct splay_tree *)(tree))
 
+/* SEPARATE CHAIN HASHING */
+#define separate_chain_hash_size(hash) \
+    (assert(hash), (hash)->size)
+#define separate_chain_hash_load_factor(hash) \
+    (assert(hash), (hash)->load_factor)
+#define separate_chain_hash_load_factor_set(hash, factor) \
+    (assert(hash), (hash)->load_factor = (factor))
+
 #endif

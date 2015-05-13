@@ -182,6 +182,18 @@ static const struct test_layer_table splay_tree[] = {
     {"iterate",        {&unit_test_splay_tree_iterate,},},
     {NULL,             {NULL,},},
 };
+
+static const struct test_layer_table separate_chain_hash[] = {
+    {"struct_field",          {&unit_test_separate_chain_hash_struct_field,},},
+    {"create",                {&unit_test_separate_chain_hash_create,},},
+    {"destroy",               {&unit_test_separate_chain_hash_destroy,},},
+    {"load_factor_calculate", {&unit_test_separate_chain_hash_load_factor_calculate,},},
+    {"insert",                {&unit_test_separate_chain_hash_insert,},},
+    {"remove",                {&unit_test_separate_chain_hash_remove,},},
+    {"find",                  {&unit_test_separate_chain_hash_find,},},
+    {"rehashing",             {&unit_test_separate_chain_hash_rehashing,},},
+    {NULL,                    {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -217,7 +229,13 @@ static const struct test_layer_table unit_test_tree_implement[] = {
     {"avl",           {avl_tree,},},
     {"splay",         {splay_tree,},},
     /* END POINT OF IMPLEMENT */
-    {NULL,     {NULL,},},
+    {NULL,            {NULL,},},
+};
+
+static const struct test_layer_table unit_test_hash_implement[] = {
+    {"separate_chain", {separate_chain_hash,},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,             {NULL,},},
 };
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
@@ -232,6 +250,7 @@ static const struct test_layer_table unit_test_category[] = {
     {"stack",       {unit_test_stack_implement,},},
     {"queue",       {unit_test_queue_implement,},},
     {"tree",        {unit_test_tree_implement,},},
+    {"hash",        {unit_test_hash_implement,},},
     /* END POINT OF CATEGORY */
     {NULL,          {NULL,},}
 };

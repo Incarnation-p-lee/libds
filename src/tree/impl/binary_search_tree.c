@@ -82,7 +82,8 @@ binary_search_tree_destroy(struct binary_search_tree **root)
 }
 
 static inline struct binary_search_tree *
-binary_search_tree_node_find_internal(struct binary_search_tree *root, sint64 nice)
+binary_search_tree_node_find_internal(struct binary_search_tree *root,
+    sint64 nice)
 {
     if (root) {
         if (nice > binary_search_tree_node_nice(root)) {
@@ -106,20 +107,17 @@ binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     }
-
 }
 
-static inline struct binary_search_tree  *
+static inline struct binary_search_tree *
 binary_search_tree_node_find_min_internal(struct binary_search_tree *root)
 {
-    if (root) {
-        if (root->left) {
-            return binary_search_tree_node_find_min_internal(root->left);
-        } else {
-            return root;
-        }
+    assert(NULL != root);
+
+    if (root->left) {
+        return binary_search_tree_node_find_min_internal(root->left);
     } else {
-        return NULL;
+        return root;
     }
 }
 
@@ -127,7 +125,7 @@ struct binary_search_tree  *
 binary_search_tree_node_find_min(struct binary_search_tree *root)
 {
     if (root) {
-        return binary_search_tree_node_find_min_internal(root->left);
+        return binary_search_tree_node_find_min_internal(root);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
@@ -137,14 +135,12 @@ binary_search_tree_node_find_min(struct binary_search_tree *root)
 static inline struct binary_search_tree *
 binary_search_tree_node_find_max_internal(struct binary_search_tree *root)
 {
-    if (root) {
-        if (root->right) {
-            return binary_search_tree_node_find_max_internal(root->right);
-        } else {
-            return root;
-        }
+    assert(NULL != root);
+
+    if (root->right) {
+        return binary_search_tree_node_find_max_internal(root->right);
     } else {
-        return NULL;
+        return root;
     }
 }
 
@@ -152,15 +148,15 @@ struct binary_search_tree *
 binary_search_tree_node_find_max(struct binary_search_tree *root)
 {
     if (root) {
-        return binary_search_tree_node_find_max_internal(root->right);
+        return binary_search_tree_node_find_max_internal(root);
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     }
 }
 
-sint32
-binary_search_tree_height(struct binary_search_tree *root)
+static inline sint32
+binary_search_tree_height_internal(struct binary_search_tree *root)
 {
     sint32 height;
     sint32 left;
@@ -168,12 +164,24 @@ binary_search_tree_height(struct binary_search_tree *root)
 
     height = -1;
     if (root) {
-        left = binary_search_tree_height(root->left);
-        right = binary_search_tree_height(root->right);
+        left = binary_search_tree_height_internal(root->left);
+        right = binary_search_tree_height_internal(root->right);
         height = MAX_S(left, right) + 1;
     }
 
     return height;
+}
+
+sint32
+binary_search_tree_height(struct binary_search_tree *root)
+{
+    if (root) {
+        return binary_search_tree_height_internal(root);
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return -1;
+    }
+
 }
 
 bool
