@@ -21,10 +21,10 @@ splay_tree_initial(struct splay_tree *tree)
 void
 splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice)
 {
-    if (node) {
-        binary_search_tree_node_initial(splay_tree_ptr_to_bin(node), val, nice);
-    } else {
+    if (!node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        binary_search_tree_node_initial(splay_tree_ptr_to_bin(node), val, nice);
     }
 
     return;
@@ -332,15 +332,15 @@ splay_tree_node_find_internal(struct splay_tree **tree, sint64 nice,
 struct splay_tree *
 splay_tree_node_find(struct splay_tree **tree, sint64 nice)
 {
-    if (tree && *tree) {
-        return splay_tree_node_find_internal(tree, nice, *tree);
-    } else {
+    if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else {
+        return splay_tree_node_find_internal(tree, nice, *tree);
     }
 }
 
-struct splay_tree *
+static inline struct splay_tree *
 splay_tree_node_find_min_internal(struct splay_tree **tree,
     struct splay_tree *root)
 {
@@ -360,15 +360,15 @@ splay_tree_node_find_min_internal(struct splay_tree **tree,
 struct splay_tree *
 splay_tree_node_find_min(struct splay_tree **tree)
 {
-    if (tree && *tree) {
-        return splay_tree_node_find_min_internal(tree, *tree);
-    } else {
+    if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else {
+        return splay_tree_node_find_min_internal(tree, *tree);
     }
 }
 
-struct splay_tree *
+static inline struct splay_tree *
 splay_tree_node_find_max_internal(struct splay_tree **tree,
     struct splay_tree *root)
 {
@@ -388,11 +388,11 @@ splay_tree_node_find_max_internal(struct splay_tree **tree,
 struct splay_tree *
 splay_tree_node_find_max(struct splay_tree **tree)
 {
-    if (tree && *tree) {
-        return splay_tree_node_find_max_internal(tree, *tree);
-    } else {
+    if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else {
+        return splay_tree_node_find_max_internal(tree, *tree);
     }
 }
 

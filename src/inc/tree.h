@@ -111,8 +111,8 @@ static void inline splay_tree_doubly_splaying_right(struct splay_tree **tree);
 static void inline splay_tree_node_splaying_left(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
 static void inline splay_tree_node_splaying_right(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
 static inline struct splay_tree * splay_tree_node_find_internal(struct splay_tree **tree, sint64 nice, struct splay_tree *root);
-struct splay_tree * splay_tree_node_find_min_internal(struct splay_tree **tree, struct splay_tree *root);
-struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
+static inline struct splay_tree * splay_tree_node_find_min_internal(struct splay_tree **tree, struct splay_tree *root);
+static inline struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
 static inline bool splay_tree_child_has_nice_p(struct splay_tree *node, sint64 nice);
 static inline bool splay_tree_node_leaf_p(struct splay_tree *node);
 /* END OF SPLAY TREE */

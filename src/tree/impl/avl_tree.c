@@ -26,11 +26,11 @@ avl_tree_initial(struct avl_tree *root)
 void
 avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
 {
-    if (node) {
+    if (!node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
         avl_tree_height_set(node, 0x0);
         binary_search_tree_node_initial(avl_tree_ptr_to_bin(node), val, nice);
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return;
@@ -51,6 +51,7 @@ void
 avl_tree_destroy(struct avl_tree **root)
 {
     binary_search_tree_destroy((struct binary_search_tree **)root);
+
     return;
 }
 
@@ -123,11 +124,11 @@ avl_tree_balanced_internal_p(struct avl_tree *root)
 bool
 avl_tree_balanced_p(struct avl_tree *root)
 {
-    if (root) {
-        return avl_tree_balanced_internal_p(root);
-    } else {
+    if (!root) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return true;
+    } else {
+        return avl_tree_balanced_internal_p(root);
     }
 }
 
@@ -658,15 +659,15 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 {
     struct avl_tree *removed;
 
-    if (root && *root) {
+    if (!root || !*root) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
         removed = avl_tree_node_remove_internal(root, nice);
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         }
 
         return removed;
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;
@@ -683,7 +684,9 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 struct avl_tree *
 avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
 {
-    if (root && node && *root) {
+    if (!root || !node || !*root) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
         if (avl_tree_node_nice(node) < avl_tree_node_nice(*root)) {
             if (!avl_tree_child_left(*root)) {
                 avl_tree_child_left_set(*root, node);
@@ -705,19 +708,17 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
                 }
             }
         } else {
-            if (*root != node) {
+            if (*root == node) {
+                pr_log_info("Insert node exist, nothing will be done.\n");
+            } else {
                 doubly_linked_list_join((*root)->b_node.chain.link,
                     node->b_node.chain.link);
-            } else {
-                pr_log_info("Insert node exist, nothing will be done.\n");
             }
             return *root;
         }
 
         avl_tree_height_update(*root);
         return node;
-    } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
     }
 
     return NULL;

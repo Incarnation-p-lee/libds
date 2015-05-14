@@ -704,8 +704,6 @@ extern struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, stru
 extern struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 
-extern struct splay_tree * splay_tree_node_find_min_internal(struct splay_tree **tree, struct splay_tree *root);
-extern struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
 /* END OF SPLAY TREE */
 
 #endif
