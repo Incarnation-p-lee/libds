@@ -523,13 +523,15 @@ unit_test_doubly_linked_list_node_remove(void)
 
     doubly_linked_list_node_remove(NULL);
 
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(head), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(&head), &pass);
+    RESULT_CHECK_pointer(NULL, head, &pass);
     RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
 
     doubly_linked_list_destroy(&tmp);
 
     tmp = doubly_linked_list_create();
-    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_remove(tmp), &pass);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_remove(&tmp), &pass);
+    RESULT_CHECK_pointer(NULL, tmp, &pass);
 
     test_result_print(SYM_2_STR(doubly_linked_list_node_remove), pass);
 
@@ -550,13 +552,10 @@ unit_test_doubly_linked_list_node_lazy_remove(void)
     tmp = doubly_linked_list_node_next(head);
 
     doubly_linked_list_node_lazy_remove(NULL);
-    /* ->head->tmp->node-> =>
-       ->head->node->
-          tmp->node           */
-    doubly_linked_list_node_lazy_remove(head);
 
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(head), &pass);
-    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_lazy_remove(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(head), &pass);
     RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
     RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(tmp), &pass);
 

@@ -150,15 +150,13 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
             do {
                 if (key == doubly_linked_list_node_val(iter)) {
                     retval = key;
-                    doubly_linked_list_node_remove(iter);
+                    iter = doubly_linked_list_node_remove(&iter);
                     break;
                 }
                 iter = doubly_linked_list_node_next(iter);
             } while (iter != head);
 
-            if (iter == head) {
-                hash->space[hash->func(key, hash->size)] = NULL;
-            }
+            hash->space[hash->func(key, hash->size)] = iter;
         }
 
         if (NULL == retval) {

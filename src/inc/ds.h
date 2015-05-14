@@ -508,8 +508,8 @@ extern struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubl
 extern void doubly_linked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
 extern bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct doubly_linked_list *node);
 extern void doubly_linked_list_serialize(struct doubly_linked_list *head);
-extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list *node);
-extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
+extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
+extern struct doubly_linked_list * doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 extern struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END of doubly linked list, Circular. */
@@ -532,8 +532,8 @@ extern struct single_linked_list * single_linked_list_node_by_index(struct singl
 extern void single_linked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
 extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 extern void single_linked_list_serialize(struct single_linked_list *head);
-extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list *node);
-extern void single_linked_list_node_lazy_remove(struct single_linked_list *node);
+extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
+extern struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
 extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 extern struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 

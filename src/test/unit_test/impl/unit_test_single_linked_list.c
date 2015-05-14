@@ -184,7 +184,7 @@ unit_test_single_linked_list_node_append(void)
     uint32 sid = 0xfadeu;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x1A2E, 0x213D);
+    head = unit_test_single_linked_list_sample(0x81A2E, 0xC213D);
 
     single_linked_list_node_append(NULL, sid);
 
@@ -212,7 +212,7 @@ unit_test_single_linked_list_node_previous(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x19AB, 0x2BF3);
+    head = unit_test_single_linked_list_sample(0xD19AB, 0x72BF3);
     single_linked_list_node_append(head, 0xdeadu);
 
     RESULT_CHECK_pointer(NULL, single_linked_list_node_previous(NULL), &pass);
@@ -244,7 +244,7 @@ unit_test_single_linked_list_node_insert_before(void)
 
     pass = true;
     sid = 0xbedu;
-    head = unit_test_single_linked_list_sample(0x21f26, 0xbef19);
+    head = unit_test_single_linked_list_sample(0x21F26, 0xBEF19);
     single_linked_list_node_append(head, sid);
 
     node = single_linked_list_create();
@@ -285,7 +285,7 @@ unit_test_single_linked_list_node_insert_after(void)
 
     pass = true;
     sid = 0xfadeu;
-    head = unit_test_single_linked_list_sample(0x18ab, 0x2e9c);
+    head = unit_test_single_linked_list_sample(0xF18AB, 0x82E9C);
     single_linked_list_node_append(head, sid);
 
     node = single_linked_list_create();
@@ -333,7 +333,7 @@ unit_test_single_linked_list_destroy(void)
 
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_single_linked_list_sample(0x16FA, len);
+        head = unit_test_single_linked_list_sample(0x816FA, len);
 
         single_linked_list_destroy(&head);
         RESULT_CHECK_pointer(NULL, head, &pass);
@@ -361,7 +361,7 @@ unit_test_single_linked_list_length(void)
     pass = true;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_single_linked_list_sample(0x2ae8, len);
+        head = unit_test_single_linked_list_sample(0xE2AE8, len);
 
         RESULT_CHECK_uint32(len, single_linked_list_length(head), &pass);
 
@@ -387,7 +387,7 @@ unit_test_single_linked_list_node_by_index(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x18fa, 0x23a2);
+    head = unit_test_single_linked_list_sample(0x18FAA, 0xF23A8);
     len = single_linked_list_length(head);
     tmp = single_linked_list_node_by_index(head, 0);
     RESULT_CHECK_pointer(head, tmp, &pass);
@@ -416,7 +416,7 @@ unit_test_single_linked_list_node_exchange(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x14a2, 0x2e1d);
+    head = unit_test_single_linked_list_sample(0x914A2, 0xB2E1D);
     tmp_1 = single_linked_list_node_previous(head);
     tmp_2 = single_linked_list_node_next(head);
 
@@ -456,7 +456,7 @@ unit_test_single_linked_list_contains_p(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x1dd2, 0x28ae);
+    head = unit_test_single_linked_list_sample(0x81DD2, 0x28AE2);
     tmp = single_linked_list_node_next(head);
 
     RESULT_CHECK_bool(true, single_linked_list_contains_p(head, tmp), &pass);
@@ -487,7 +487,7 @@ unit_test_single_linked_list_serialize(void)
     iter = sizes;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_single_linked_list_sample(0x29e2, len);
+        head = unit_test_single_linked_list_sample(0x829E2, len);
 
         single_linked_list_serialize(head);
         tmp = head;
@@ -538,19 +538,21 @@ unit_test_single_linked_list_node_remove(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x31e2, 0x28ed);
+    head = unit_test_single_linked_list_sample(0x431E2, 0x928ED);
     tmp = single_linked_list_node_next(head);
     prev = single_linked_list_node_previous(head);
 
     single_linked_list_node_remove(NULL);
 
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(head), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(&head), &pass);
+    RESULT_CHECK_pointer(NULL, head, &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(prev), &pass);
 
     single_linked_list_destroy(&tmp);
 
     tmp = single_linked_list_create();
-    RESULT_CHECK_pointer(NULL, single_linked_list_node_remove(tmp), &pass);
+    RESULT_CHECK_pointer(NULL, single_linked_list_node_remove(&tmp), &pass);
+    RESULT_CHECK_pointer(NULL, tmp, &pass);
 
     test_result_print(SYM_2_STR(single_linked_list_node_remove), pass);
 
@@ -566,17 +568,14 @@ unit_test_single_linked_list_node_lazy_remove(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0xeb28, 0xa23d);
+    head = unit_test_single_linked_list_sample(0xEEB28, 0x6A23D);
     tmp = single_linked_list_node_next(head);
     prev = single_linked_list_node_previous(head);
 
     single_linked_list_node_lazy_remove(NULL);
-    /* ->head->tmp->node-> =>
-       ->head->node->
-          tmp->node           */
-    single_linked_list_node_lazy_remove(head);
 
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_node_lazy_remove(head), &pass);
+    RESULT_CHECK_pointer(head, single_linked_list_node_next(head), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(prev), &pass);
     RESULT_CHECK_pointer(prev, single_linked_list_node_previous(tmp), &pass);
 
@@ -597,7 +596,7 @@ unit_test_single_linked_list_iterate(void)
     bool pass;
 
     pass = true;
-    head = unit_test_single_linked_list_sample(0x24E2, 0x1F82);
+    head = unit_test_single_linked_list_sample(0x424E2, 0x21F82);
 
     single_linked_list_iterate(head, &linked_list_iterate_handler);
     single_linked_list_iterate(NULL, &linked_list_iterate_handler);

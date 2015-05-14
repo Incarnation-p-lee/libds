@@ -309,15 +309,11 @@ single_linked_list_node_remove(struct single_linked_list **node)
     struct single_linked_list *head;
 
     head = NULL;
-    if (!node) {
+    if (!node || !*node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         head = single_linked_list_node_lazy_remove(*node);
-        if (head == *node) {
-            head = NULL;
-        }
-
-        free_ds(node);
+        free_ds(*node);
         *node = NULL;
     }
 
@@ -327,21 +323,24 @@ single_linked_list_node_remove(struct single_linked_list **node)
 struct single_linked_list *
 single_linked_list_node_lazy_remove(struct single_linked_list *node)
 {
-    struct single_linked_list *tmp;
+    struct single_linked_list *retval;
 
+    retval = NULL;
     if (!node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-        return NULL;
     } else {
-        tmp = single_linked_list_node_previous(node);
-        single_linked_list_node_next_set(tmp, node->next);
+        if (node == single_linked_list_node_next(node)) {
+            retval = NULL;
+        } else {
+            single_linked_list_node_next_set(
+               single_linked_list_node_previous(node), node->next);
 
-        // To-do handle single node in lazy
-        tmp = single_linked_list_node_next(node);
-        single_linked_list_node_next_set(node, NULL);
-
-        return tmp;
+            retval = node->next;
+            single_linked_list_node_next_set(node, node);
+        }
     }
+
+    return retval;
 }
 
 void

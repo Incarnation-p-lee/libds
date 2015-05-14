@@ -17,8 +17,8 @@ struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linke
 void doubly_linked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
 bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct doubly_linked_list *node);
 void doubly_linked_list_serialize(struct doubly_linked_list *head);
-struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list *node);
-void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
+struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
+struct doubly_linked_list * doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END of doubly linked list, Circular. */
@@ -41,8 +41,8 @@ struct single_linked_list * single_linked_list_node_by_index(struct single_linke
 void single_linked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
 bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 void single_linked_list_serialize(struct single_linked_list *head);
-struct single_linked_list * single_linked_list_node_remove(struct single_linked_list *node);
-void single_linked_list_node_lazy_remove(struct single_linked_list *node);
+struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
+struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
 void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 
