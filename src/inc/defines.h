@@ -1,12 +1,14 @@
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-#define true        1
-#define false       0
-#define assert_not_reached()    assert(false)
+#define true                 1
+#define false                0
+#define assert_not_reached() assert(false)
 
-#define SYM_2_STR(symbol)       (#symbol)
-#define array_sizeof(a)         (sizeof(a) / sizeof(a[0]))
+#define SYM_2_STR(symbol)    (#symbol)
+#define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
+
+#define NAME_LEN             128
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);

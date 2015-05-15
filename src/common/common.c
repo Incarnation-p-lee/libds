@@ -8,7 +8,7 @@
 #include "types.h"
 #include "defines.h"
 #include "util.h"
-#include "log.h"
+
 #include "prime.h"
 #include "common.h"
 

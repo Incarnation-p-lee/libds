@@ -1,16 +1,6 @@
 #ifndef HAVE_UTIL_H
 #define HAVE_UTIL_H
 
-#define NAME_LEN      128
-#define MAP_ENTRY_MAX 128
-
-#define M_UKNW      0x1u << 0
-#define M_READ      0x1u << 1
-#define M_WRITE     0x1u << 2
-#define M_EXECUTE   0x1u << 3
-#define M_SHARED    0x1u << 4
-#define M_PRIVATE   0x1u << 5
-
 struct memory_maps {
     char        name[NAME_LEN];
     uint32      authority;
@@ -43,6 +33,5 @@ extern void end_of_report_print(void);
 extern void memory_maps_obtain(void);
 
 /* END OF GLOBAL EXPORTED INTERFACE */
-
 
 #endif

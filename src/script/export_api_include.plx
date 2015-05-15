@@ -4,17 +4,19 @@ use 5.010;
 
 my $base = ".";
 my $incdir = "$base/src/inc";
+my $srcdir = "$base/src";
 
 my @export = ("$incdir/types.h",
               "$incdir/data_structure_types.h",
               "$incdir/data_structure_defines.h",
-              "$incdir/log.h",
               "$incdir/defines.h",
-              "$incdir/linked_list.h",
-              "$incdir/queue.h",
-              "$incdir/stack.h",
-              "$incdir/tree.h",
-              "$incdir/hash.h",);
+              # data structure modual
+              "$srcdir/linked_list/linked_list.h",
+              "$srcdir/queue/queue.h",
+              "$srcdir/stack/stack.h",
+              "$srcdir/tree/tree.h",
+              "$srcdir/hash/hash.h",);
+              "$srcdir/log/log.h",
 my $out = "$base/src/inc/ds.h";
 
 open OUT, '>', $out or
@@ -25,7 +27,7 @@ print OUT "#define HAVE_DATA_STRUCTURE_INCLUDE_H\n";
 
 foreach (@export) {
     open EXPORT, '<', $_ or
-        die "$!";
+        die "$! $_.";
     my $fname = $_;
     print OUT "\n/* BEGIN of $fname */\n";
     while (<EXPORT>) {

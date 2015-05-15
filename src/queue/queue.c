@@ -7,6 +7,7 @@
 #include "util.h"
 #include "data_structure_types.h"
 #include "data_structure_defines.h"
+
 #include "queue.h"
 
 #include "impl/array_queue.c"

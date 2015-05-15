@@ -436,25 +436,18 @@ struct separate_chain_hash {
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
-/* BEGIN of ./src/inc/log.h */
-#ifndef LOG_OF_LIBDS_H
-#define LOG_OF_LIBDS_H
-
-extern void libds_log_print(enum log_level lvl, const char *msg);
-
-#endif
-/* END of ./src/inc/log.h */
-
 /* BEGIN of ./src/inc/defines.h */
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-#define true        1
-#define false       0
-#define assert_not_reached()    assert(false)
+#define true                 1
+#define false                0
+#define assert_not_reached() assert(false)
 
-#define SYM_2_STR(symbol)       (#symbol)
-#define array_sizeof(a)         (sizeof(a) / sizeof(a[0]))
+#define SYM_2_STR(symbol)    (#symbol)
+#define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
+
+#define NAME_LEN             128
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);
@@ -488,7 +481,7 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 #endif
 /* END of ./src/inc/defines.h */
 
-/* BEGIN of ./src/inc/linked_list.h */
+/* BEGIN of ./src/linked_list/linked_list.h */
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
@@ -538,9 +531,9 @@ extern void single_linked_list_iterate(struct single_linked_list *head, void (*h
 extern struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
 
 #endif
-/* END of ./src/inc/linked_list.h */
+/* END of ./src/linked_list/linked_list.h */
 
-/* BEGIN of ./src/inc/queue.h */
+/* BEGIN of ./src/queue/queue.h */
 #ifndef HAVE_QUEUE_H
 #define HAVE_QUEUE_H
 
@@ -595,9 +588,9 @@ extern void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*hand
 
 /* END OF DOUBLY END QUEUE */
 #endif
-/* END of ./src/inc/queue.h */
+/* END of ./src/queue/queue.h */
 
-/* BEGIN of ./src/inc/stack.h */
+/* BEGIN of ./src/stack/stack.h */
 #ifndef HAVE_STACK_H
 #define HAVE_STACK_H
 
@@ -635,9 +628,9 @@ extern uint32 linked_stack_capacity(struct linked_stack *stack);
 /* END OF LINKED STACK */
 
 #endif
-/* END of ./src/inc/stack.h */
+/* END of ./src/stack/stack.h */
 
-/* BEGIN of ./src/inc/tree.h */
+/* BEGIN of ./src/tree/tree.h */
 #ifndef HAVE_TREE_H
 #define HAVE_TREE_H
 
@@ -707,9 +700,9 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 /* END OF SPLAY TREE */
 
 #endif
-/* END of ./src/inc/tree.h */
+/* END of ./src/tree/tree.h */
 
-/* BEGIN of ./src/inc/hash.h */
+/* BEGIN of ./src/hash/hash.h */
 #ifndef HAVE_HASH_H
 #define HAVE_HASH_H
 
@@ -730,5 +723,5 @@ extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separat
 /* END OF SEPARATE CHAIN HASH */
 
 #endif
-/* END of ./src/inc/hash.h */
+/* END of ./src/hash/hash.h */
 #endif /* END OF FILE */
