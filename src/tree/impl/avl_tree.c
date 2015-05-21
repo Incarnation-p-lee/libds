@@ -92,18 +92,44 @@ avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node)
         avl_tree_ptr_to_bin(node));
 }
 
+static inline void
+avl_tree_child_height_sync_with_calculated(struct avl_tree *root,
+    sint32 *left, sint32 *right)
+{
+    struct avl_tree *tmp;
+    sint32 height;
+
+    assert(NULL != root);
+    assert(NULL != left);
+    assert(NULL != right);
+
+    tmp = avl_tree_child_left(root);
+    height = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
+    if (*left != height) {
+        pr_log_debug("Illegal height of avl tree, use re-calculated.\n");
+        *left = height;
+    }
+
+    tmp = avl_tree_child_right(root);
+    height = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
+    if (*right != height) {
+        pr_log_debug("Illegal height of avl tree, use re-calculated.\n");
+        *right = height;
+    }
+
+    return;
+}
+
 static inline bool
 avl_tree_balanced_internal_p(struct avl_tree *root)
 {
     sint32 left;
     sint32 right;
-    struct avl_tree *tmp;
 
     if (root) {
-        tmp = avl_tree_child_left(root);
-        left = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
-        tmp = avl_tree_child_right(root);
-        right = binary_search_tree_height_internal(avl_tree_ptr_to_bin(tmp));
+        avl_tree_height_internal(avl_tree_child_left(root), &left);
+        avl_tree_height_internal(avl_tree_child_right(root), &right);
+        avl_tree_child_height_sync(root, &left, &right);
 
         if (abs(left - right) > 1) {
             return false;

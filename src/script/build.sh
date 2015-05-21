@@ -56,7 +56,7 @@ do
       argv_cfg="$argv_cfg -g -DDEBUG"
     ;;
     "DEBUG=0")
-      argv_cfg="$argv_cfg -o3"
+      argv_cfg="$argv_cfg -o3 -ofast"
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"

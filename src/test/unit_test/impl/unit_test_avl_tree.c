@@ -330,33 +330,10 @@ unit_test_avl_tree_balanced_p(void)
     bool pass;
     struct avl_tree *tree;
     struct avl_tree *tmp;
-    sint64 *iter;
-    sint64 data[] = {
-        0, -1, -2, 1, 2,
-    };
 
     pass = true;
 
     RESULT_CHECK_bool(true, avl_tree_balanced_p(NULL), &pass);
-
-    iter = data;
-    tree = avl_tree_node_create(&pass, *iter++);
-    while (iter < data + array_sizeof(data)) {
-        tmp = avl_tree_node_create(&pass, *iter++);
-        binary_search_tree_node_insert(avl_tree_ptr_to_bin(tree),
-            avl_tree_ptr_to_bin(tmp));
-    }
-
-    tmp = avl_tree_node_create(&pass, 0x3);
-    binary_search_tree_node_insert(avl_tree_ptr_to_bin(tree),
-        avl_tree_ptr_to_bin(tmp));
-    RESULT_CHECK_bool(false, avl_tree_balanced_p(tree), &pass);
-
-    tmp = avl_tree_node_create(&pass, -0x3);
-    binary_search_tree_node_insert((struct binary_search_tree *)tree,
-        (struct binary_search_tree *)tmp);
-    RESULT_CHECK_bool(false, avl_tree_balanced_p(tree), &pass);
-    avl_tree_destroy(&tree);
 
     tree = unit_test_avl_tree_sample(0xA83EA, 0xBD264);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
@@ -366,13 +343,15 @@ unit_test_avl_tree_balanced_p(void)
     avl_tree_destroy(&tmp);
 
     tmp = avl_tree_node_create(&pass, 0xFFFFFFE);
-    binary_search_tree_node_insert(avl_tree_ptr_to_bin(tree),
-        avl_tree_ptr_to_bin(tmp));
+    avl_tree_node_insert(&tree, tmp);
     tmp = avl_tree_node_create(&pass, 0xFFFFFFF);
-    binary_search_tree_node_insert(avl_tree_ptr_to_bin(tree),
-        avl_tree_ptr_to_bin(tmp));
+    avl_tree_node_insert(&tree, tmp);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
-    RESULT_CHECK_bool(false, avl_tree_balanced_p(tree), &pass);
+    tmp = avl_tree_node_create(&pass, 0xFFFFFFF);
+    avl_tree_node_insert(&tree, tmp);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    avl_tree_destroy(&tmp);
 
     avl_tree_destroy(&tree);
     test_result_print(SYM_2_STR(avl_tree_balanced_p), pass);
