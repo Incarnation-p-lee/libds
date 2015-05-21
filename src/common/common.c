@@ -14,3 +14,4 @@
 
 #include "impl/memory_maps.c"
 #include "impl/prime.c"
+#include "impl/option.c"

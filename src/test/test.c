@@ -15,5 +15,18 @@
 #include "impl/utilize.c"
 #include "impl/wrapper.c"
 #include "impl/test_result_check.c"
-
 #include "unit_test/unit_test.c"
+
+void
+test_perform(struct option_set *opts)
+{
+    if (!opts) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (opts->list) {
+        unit_test_list(opts->content);
+    } else {
+        unit_test_perform(opts->content);
+    }
+
+    return;
+}

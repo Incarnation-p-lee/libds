@@ -1,12 +1,10 @@
 static struct unit_test_filter *
 unit_test_filter_obtain(char *arg)
 {
-    char *tmp;
     struct unit_test_filter *filter;
 
-    tmp = arg;
     filter = unit_test_filter_initial();
-    if (!tmp) {
+    if (!arg) {
         unit_test_filter_obtain_internal(filter->category, "*", 1);
         unit_test_filter_obtain_internal(filter->implement, "*", 1);
         unit_test_filter_obtain_internal(filter->interface, "*", 1);
