@@ -9,6 +9,7 @@
 #define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
 
 #define NAME_LEN             128
+#define CONTENT_LEN          NAME_LEN
 
 #ifdef DEBUG
     #define pr_log_info(msg)    libds_log_print(INFO, msg);

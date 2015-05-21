@@ -16,14 +16,26 @@ unit_test_perform(char *arg)
     struct unit_test_filter *filter;
 
     filter = unit_test_filter_obtain(arg);
-    unit_test_layer_table_category(unit_test_category, filter);
+    unit_test_layer_table_category_perform(unit_test_category, filter);
+    unit_test_filter_destroy(&filter);
+
+    return;
+}
+
+void
+unit_test_list(char *arg)
+{
+    struct unit_test_filter *filter;
+
+    filter = unit_test_filter_obtain(arg);
+    unit_test_layer_table_category_list(unit_test_category, filter);
     unit_test_filter_destroy(&filter);
 
     return;
 }
 
 static inline void
-unit_test_layer_table_category(const struct test_layer_table *category,
+unit_test_layer_table_category_perform(const struct test_layer_table *category,
     struct unit_test_filter *filter)
 {
     char *tmp;
@@ -32,8 +44,8 @@ unit_test_layer_table_category(const struct test_layer_table *category,
 
     while (category->name) {
         if (unit_test_layer_table_match_p(category, tmp)) {
-            fprintf(stdout, "\n  == Unit Test [ %s ] ==\n\n", category->name);
-            unit_test_layer_table_implement(category->junior, filter);
+            fprintf(stdout, "\n  == Unit Test [ %s ] ==\n", category->name);
+            unit_test_layer_table_implement_perform(category->junior, filter);
             fprintf(stdout, "  << Test Finished.\n");
         }
         category++;
@@ -43,7 +55,27 @@ unit_test_layer_table_category(const struct test_layer_table *category,
 }
 
 static inline void
-unit_test_layer_table_implement(const struct test_layer_table *implement,
+unit_test_layer_table_category_list(const struct test_layer_table *category,
+    struct unit_test_filter *filter)
+{
+    char *tmp;
+
+    tmp = filter->category;
+
+    while (category->name) {
+        if (unit_test_layer_table_match_p(category, tmp)) {
+            fprintf(stdout, "\n  == Unit Test List [ %s ] ==\n", category->name);
+            unit_test_layer_table_implement_list(category->junior, filter, category->name);
+            fprintf(stdout, "  << Test Cases List Finished.\n");
+        }
+        category++;
+    }
+
+    return;
+}
+
+static inline void
+unit_test_layer_table_implement_perform(const struct test_layer_table *implement,
     struct unit_test_filter *filter)
 {
     char *tmp;
@@ -52,7 +84,7 @@ unit_test_layer_table_implement(const struct test_layer_table *implement,
 
     while (implement->name) {
         if (unit_test_layer_table_match_p(implement, tmp)) {
-            unit_test_layer_table_interface(implement->junior, filter);
+            unit_test_layer_table_interface_perform(implement->junior, filter);
         }
         implement++;
     }
@@ -61,7 +93,26 @@ unit_test_layer_table_implement(const struct test_layer_table *implement,
 }
 
 static inline void
-unit_test_layer_table_interface(const struct test_layer_table *interface,
+unit_test_layer_table_implement_list(const struct test_layer_table *implement,
+    struct unit_test_filter *filter, char *category)
+{
+    char *tmp;
+
+    tmp = filter->implement;
+
+    while (implement->name) {
+        if (unit_test_layer_table_match_p(implement, tmp)) {
+            unit_test_layer_table_interface_list(implement->junior, filter, category, implement->name);
+        }
+        implement++;
+    }
+
+    return;
+}
+
+
+static inline void
+unit_test_layer_table_interface_perform(const struct test_layer_table *interface,
     struct unit_test_filter *filter)
 {
     char *tmp;
@@ -71,6 +122,28 @@ unit_test_layer_table_interface(const struct test_layer_table *interface,
     while (interface->name) {
         if (unit_test_layer_table_match_p(interface, tmp)) {
             interface->func();
+        }
+        interface++;
+    }
+
+    return;
+}
+
+static inline void
+unit_test_layer_table_interface_list(const struct test_layer_table *interface,
+    struct unit_test_filter *filter, char *category, char *implement)
+{
+    char *tmp;
+
+    assert(NULL != filter);
+    assert(NULL != category);
+    assert(NULL != implement);
+
+    tmp = filter->interface;
+
+    while (interface->name) {
+        if (unit_test_layer_table_match_p(interface, tmp)) {
+            fprintf(stdout, "    . [36m%s.%s.%s[0m\n", category, implement, interface->name);
         }
         interface++;
     }

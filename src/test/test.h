@@ -12,6 +12,7 @@ void * realloc_wrap(void *ptr, size_t size);
 void free_wrap(void *ptr);
 void memory_trace_print(void);
 void end_of_report_print(void);
+void test_perform(struct option_set *opts);
 
 static void test_result_print(char *name, bool passed);
 static sint32 * int_array_generate(sint32 size);
