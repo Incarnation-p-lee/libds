@@ -21,20 +21,23 @@
 #endif
 
 #ifdef DEBUG
+    #define DEBUG_CODE(x)  x
     #define malloc_ds      malloc_wrap
     #define realloc_ds     realloc_wrap
     #define free_ds        free_wrap
 #else
+    #define DEBUG_CODE(x)
     #define malloc_ds      malloc
     #define realloc_ds     realloc
     #define free_ds        free
 #endif
 
-#define pr_log_err(msg)     \
-    do {                             \
+#define pr_log_err(msg)             \
+    do {                            \
         libds_log_print(ERRR, msg); \
-        exit(1);                     \
+        exit(1);                    \
     } while (0);
+
 
 #define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))

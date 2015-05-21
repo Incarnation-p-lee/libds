@@ -25,6 +25,7 @@ Build Script Usage:
                            CODE_COVERAGE=0/1
                            X86_64=0/1
                            STATIC=0/1
+                           OPT_HOT=0/1
 EOF
   exit 2
 }
@@ -55,7 +56,7 @@ do
       argv_cfg="$argv_cfg -g -DDEBUG"
     ;;
     "DEBUG=0")
-      argv_cfg="$argv_cfg -o2"
+      argv_cfg="$argv_cfg -o3"
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"
@@ -89,6 +90,9 @@ do
       static=0
       argv_lnk="$argv_lnk -L$lib_dir"
       lib_build=1
+    ;;
+    "OPT_HOT=1")
+      argv_cfg="$argv_cfg -DOPT_HOT"
     ;;
   esac
 done

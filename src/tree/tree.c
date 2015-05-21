@@ -8,6 +8,7 @@
 #include "data_structure_defines.h"
 
 #include "tree.h"
+#include "impl/tree_optimize.h"
 
 #include "impl/binary_search_tree.c"
 #include "impl/avl_tree.c"
