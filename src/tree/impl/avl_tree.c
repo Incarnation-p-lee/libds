@@ -188,7 +188,6 @@ static inline struct avl_tree *
 avl_tree_single_rotate_left(struct avl_tree *k1)
 {
     struct avl_tree *k2;
-    struct avl_tree *k3;
 
     DEBUG_CODE(
         sint32 left;
@@ -196,7 +195,6 @@ avl_tree_single_rotate_left(struct avl_tree *k1)
     );
 
     k2 = avl_tree_child_left(k1);
-    k3 = avl_tree_child_left(k2);
 
     DEBUG_CODE(
         avl_tree_height_internal(avl_tree_child_left(k2), &left);
@@ -206,7 +204,7 @@ avl_tree_single_rotate_left(struct avl_tree *k1)
 
     assert(NULL != k1);
     assert(NULL != k2);
-    assert(NULL != k3);
+    assert(NULL != avl_tree_child_left(k2)); /* k3 */
 
     avl_tree_child_left_set(k1, avl_tree_child_right(k2));
     avl_tree_child_right_set(k2, k1);
@@ -232,7 +230,6 @@ static inline struct avl_tree *
 avl_tree_single_rotate_right(struct avl_tree *k1)
 {
     struct avl_tree *k2;
-    struct avl_tree *k3;
 
     DEBUG_CODE(
         sint32 left;
@@ -240,11 +237,10 @@ avl_tree_single_rotate_right(struct avl_tree *k1)
     );
 
     k2 = avl_tree_child_right(k1);
-    k3 = avl_tree_child_right(k2);
 
     assert(NULL != k1);
     assert(NULL != k2);
-    assert(NULL != k3);
+    assert(NULL != avl_tree_child_right(k2)); /* k3 */
 
     DEBUG_CODE(
         avl_tree_height_internal(avl_tree_child_left(k2), &left);
@@ -357,15 +353,13 @@ avl_tree_doubly_rotate_right(struct avl_tree *k1)
     return k3;
 }
 
-static inline bool
-avl_tree_balanced_on_height_p(struct avl_tree *node)
+static inline void
+avl_tree_balanced_on_height_internal_default(struct avl_tree *node, bool *b)
 {
     struct avl_tree *left;
     struct avl_tree *right;
     sint32 hght_left;
     sint32 hght_right;
-
-    assert(NULL != node);
 
     left = avl_tree_child_left(node);
     right = avl_tree_child_right(node);
@@ -374,10 +368,22 @@ avl_tree_balanced_on_height_p(struct avl_tree *node)
     avl_tree_height_internal(right, &hght_right);
 
     if (0x1u < abs(hght_left - hght_right)) {
-        return false;
+        *b = false;
     } else {
-        return true;
+        *b = true;
     }
+}
+
+static inline bool
+avl_tree_balanced_on_height_p(struct avl_tree *node)
+{
+    bool balanced;
+
+    assert(NULL != node);
+
+    avl_tree_balanced_on_height_internal(node, &balanced);
+
+    return balanced;
 }
 
 static inline bool

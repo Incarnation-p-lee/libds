@@ -84,6 +84,7 @@ static inline struct avl_tree * avl_tree_node_remove_internal(struct avl_tree **
 static inline void avl_tree_height_internal_default(struct avl_tree *node, sint32 *height);
 static inline bool avl_tree_balanced_on_height_p(struct avl_tree *root);
 static inline void avl_tree_child_height_sync_with_calculated(struct avl_tree *root, sint32 *left, sint32 *right);
+static inline void avl_tree_balanced_on_height_internal_default(struct avl_tree *node, bool *b);
 
 /* END OF AVL TREE */
 
