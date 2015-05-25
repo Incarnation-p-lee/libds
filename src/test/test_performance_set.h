@@ -1,17 +1,7 @@
-#ifndef HAVE_UNIT_TEST_PERFORMANCE_H
-#define HAVE_UNIT_TEST_PERFORMANCE_H
+#ifndef HAVE_TEST_PERFORMANCE_SET_H
+#define HAVE_TEST_PERFORMANCE_SET_H
 
-#define UNIT_TEST_NAME_LEN 64
-#define PERORMANCE_ENTRY_MAX 128
-
-struct unit_test_performance {
-    char   *name;
-    /* Ref and Now count in microseconds */
-    uint32 ref;
-    uint32 now;
-};
-
-static struct unit_test_performance unit_test_reference[] = {
+static struct test_performance unit_test_performance[] = {
     {"single_linked_list_struct_field",           0x0u, 0x0u},
     {"single_linked_list_initial",                0x0u, 0x0u},
     {"single_linked_list_create",                 0x0u, 0x0u},

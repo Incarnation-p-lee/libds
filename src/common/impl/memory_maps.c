@@ -48,9 +48,10 @@ memory_maps_filter_process(FILE *maps)
 {
     char line[NAME_LEN];
 
+    memset(line, 0, sizeof(line));
     while (fgets(line, NAME_LEN, maps)) {
-        memset(line, 0, sizeof(line));
         memory_maps_one_line_process(line, strlen(line));
+        memset(line, 0, sizeof(line));
     }
 }
 

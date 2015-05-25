@@ -1,24 +1,24 @@
 static inline void
 test_time_stamp_begin(void)
 {
-    gettimeofday(&chk_pnt_bgn);
+    gettimeofday(&chk_pnt_bgn, NULL);
 }
 
 static inline void
 test_time_stamp_end(void)
 {
-    gettimeofday(&chk_pnt_end);
+    gettimeofday(&chk_pnt_end, NULL);
 }
 
-static inline uint32
+static inline sint64
 test_time_stamp_timeval_unpack(struct timeval *tv)
 {
     assert(NULL != tv);
 
-    return (uint32)(tv->tv_sec * 60 + tv->tv_usec)
+    return (sint64)(tv->tv_sec * 1000000 + tv->tv_usec);
 }
 
-static inline uint32
+static inline sint64
 test_time_stamp_period(void)
 {
     return test_time_stamp_timeval_unpack(&chk_pnt_end) -

@@ -7,6 +7,8 @@ unit_test_avl_tree_struct_field(void)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     pass = true;
     nice = -0xfade;
     tree = avl_tree_create();
@@ -41,6 +43,8 @@ unit_test_avl_tree_sample(uint64 range, uint32 node_count)
     sint64 nice;
     uint32 i;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     retval = avl_tree_create();
     avl_tree_node_initial(retval, &reference, 0);
     i = 1;
@@ -64,6 +68,8 @@ unit_test_avl_tree_create(void)
     bool pass;
     struct avl_tree *tree;
     struct doubly_linked_list *link;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     tree = avl_tree_create();
@@ -89,6 +95,8 @@ unit_test_avl_tree_node_create(void)
     struct avl_tree *tree;
     struct doubly_linked_list *link;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     nice = 0xfade;
     pass = true;
     tree = avl_tree_node_create(&pass, nice);
@@ -113,6 +121,8 @@ unit_test_avl_tree_initial(void)
     sint64 nice;
     struct avl_tree *tree;
     struct doubly_linked_list *link;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     tree = NULL;
@@ -144,6 +154,8 @@ unit_test_avl_tree_node_initial(void)
     struct avl_tree *tree;
     struct doubly_linked_list *link;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     pass = true;
     tree = NULL;
     nice = 0xfade;
@@ -172,6 +184,8 @@ unit_test_avl_tree_destroy(void)
     bool pass;
     struct avl_tree *tree;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     pass = true;
     tree = NULL;
 
@@ -197,6 +211,8 @@ unit_test_avl_tree_node_find(void)
     sint64 nice;
     struct avl_tree *tree;
     struct avl_tree *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     tree = unit_test_avl_tree_sample(0x17F28A, 0x187D21);
@@ -226,6 +242,8 @@ unit_test_avl_tree_node_find_min(void)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     pass = true;
     tree = unit_test_avl_tree_sample(0x139131, 0x1264DC);
 
@@ -246,6 +264,8 @@ unit_test_avl_tree_node_find_max(void)
     bool pass;
     struct avl_tree *tree;
     struct avl_tree *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     tree = unit_test_avl_tree_sample(0x13F1A1, 0x12E494);
@@ -268,6 +288,8 @@ unit_test_avl_tree_node_contain_p(void)
     struct avl_tree *tree;
     struct avl_tree *tmp;
     struct avl_tree *fake;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     tree = unit_test_avl_tree_sample(0x1E28D1, 0x1C251F);
@@ -296,6 +318,8 @@ unit_test_avl_tree_iterate(void)
     bool pass;
     struct avl_tree *tree;
     uint32 cnt;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     cnt = 0x10F3EC;
@@ -331,8 +355,9 @@ unit_test_avl_tree_balanced_p(void)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
-    pass = true;
+    TEST_PERFORMANCE_CHECKPOINT;
 
+    pass = true;
     RESULT_CHECK_bool(true, avl_tree_balanced_p(NULL), &pass);
 
     tree = unit_test_avl_tree_sample(0xA83EA, 0xBD264);
@@ -367,8 +392,9 @@ unit_test_avl_tree_node_insert(void)
     struct avl_tree *tmp;
     struct avl_tree *inserted;
 
-    pass = true;
+    TEST_PERFORMANCE_CHECKPOINT;
 
+    pass = true;
     RESULT_CHECK_pointer(NULL, avl_tree_node_insert(NULL, NULL), &pass);
     tree = NULL;
     RESULT_CHECK_pointer(NULL, avl_tree_node_insert(&tree, tree), &pass);

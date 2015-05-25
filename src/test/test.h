@@ -2,14 +2,17 @@
 #define HAVE_TEST_H
 
 #define TEST_PERFORMANCE_CHECKPOINT test_time_stamp_begin()
-#define VARIANCE_LIMIT              0.021484375f
+#define VARIANCE_LIMIT              2.0f
 
 static uint32 malloc_cnt = 0;
 static uint32 free_cnt = 0;
 static uint32 realloc_cnt = 0;
 static uint32 reference = 0;
+
 static struct timeval chk_pnt_bgn;
 static struct timeval chk_pnt_end;
+
+static FILE *test_performance_file;
 
 void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);
@@ -28,11 +31,6 @@ static inline struct binary_search_tree * unit_test_binary_search_tree_sample(ui
 static inline struct single_linked_list * unit_test_single_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct doubly_linked_list * unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
-
-static inline uint32 test_time_stamp_period(void);
-static inline uint32 test_time_stamp_timeval_unpack(struct timeval *tv);
-static inline void test_time_stamp_end(void);
-static inline void test_time_stamp_begin(void);
-static inline uint32 unit_test_reference_entry_find(char *name);
+static inline void test_result_and_performance_print(double variance, bool passed, char *name);
 
 #endif

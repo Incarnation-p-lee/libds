@@ -14,15 +14,14 @@ void
 unit_test_perform(char *arg)
 {
     struct unit_test_filter *filter;
-    struct unit_test_performance *ref;
 
     filter = unit_test_filter_obtain(arg);
-    ref = unit_test_reference_prepare();
+    test_reference_prepare(UNIT_TEST_REF_GOLDEN, unit_test_performance);
 
-    unit_test_layer_table_category_perform(unit_test_category, filter, ref);
+    unit_test_layer_table_category_perform(unit_test_category, filter);
 
     unit_test_filter_destroy(&filter);
-    unit_test_reference_writeback(ref);
+    test_performance_result_writeback(UNIT_TEST_REF_NEW, unit_test_performance);
 
     return;
 }
@@ -161,7 +160,7 @@ unit_test_layer_table_match_p(const struct test_layer_table *category, char *nam
 {
     if (!strncmp("*", name, 1)) {
         return true;
-    } else if (!strncmp(category->name, name, sizeof(category->name))) { /* compare the last \0 */
+    } else if (!strncmp(category->name, name, strlen(category->name) + 1)) { /* compare the last \0 */
         return true;
     } else {
         return false;
