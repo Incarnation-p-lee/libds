@@ -4,22 +4,28 @@ unit_test_array_queue_struct_field(void)
     bool pass;
     uint32 sid;
     uint32 capacity;
+    uint32 loop;
     struct array_queue *queue;
 
-    pass = true;
-    sid = 0xfadeu;
-    queue = array_queue_create();
+    TEST_PERFORMANCE_CHECKPOINT;
 
-    array_queue_sid_set(queue, sid);
-    RESULT_CHECK_uint32(sid, array_queue_sid(queue), &pass);
+    loop = 0x3a12345u;
+    while (0 != loop--) {
+        pass = true;
+        sid = 0xfadeu;
+        queue = array_queue_create();
 
-    capacity = array_queue_capacity(queue);
-    RESULT_CHECK_uint32(capacity, array_queue_dim(queue), &pass);
-    RESULT_CHECK_uint32(capacity, array_queue_rest(queue), &pass);
+        array_queue_sid_set(queue, sid);
+        RESULT_CHECK_uint32(sid, array_queue_sid(queue), &pass);
 
-    array_queue_destroy(&queue);
+        capacity = array_queue_capacity(queue);
+        RESULT_CHECK_uint32(capacity, array_queue_dim(queue), &pass);
+        RESULT_CHECK_uint32(capacity, array_queue_rest(queue), &pass);
+
+        array_queue_destroy(&queue);
+    }
+
     test_result_print(SYM_2_STR(array_queue_struct_field), pass);
-
     return;
 }
 
@@ -27,17 +33,23 @@ static void
 unit_test_array_queue_create(void)
 {
     bool pass;
+    uint32 loop;
     struct array_queue *queue;
 
-    queue = array_queue_create();
-    pass = true;
+    TEST_PERFORMANCE_CHECKPOINT;
 
-    RESULT_CHECK_uint32(0x0u, array_queue_sid(queue), &pass);
-    RESULT_CHECK_uint32(array_queue_rest(queue), array_queue_dim(queue), &pass);
+    loop = 0x3a12345u;
+    while (0 != loop--) {
+        queue = array_queue_create();
+        pass = true;
 
-    array_queue_destroy(&queue);
+        RESULT_CHECK_uint32(0x0u, array_queue_sid(queue), &pass);
+        RESULT_CHECK_uint32(array_queue_rest(queue), array_queue_dim(queue), &pass);
+
+        array_queue_destroy(&queue);
+    }
+
     test_result_print(SYM_2_STR(array_queue_create), pass);
-
     return;
 }
 
@@ -45,17 +57,22 @@ static void
 unit_test_array_queue_destroy(void)
 {
     bool pass;
+    uint32 loop;
     struct array_queue *queue;
+
+    TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
     queue = NULL;
-
     array_queue_destroy(&queue);
     RESULT_CHECK_pointer(NULL, queue, &pass);
 
-    queue = array_queue_create();
-    array_queue_destroy(&queue);
-    RESULT_CHECK_pointer(NULL, queue, &pass);
+    loop = 0x3112345u;
+    while (0 != loop--) {
+        queue = array_queue_create();
+        array_queue_destroy(&queue);
+        RESULT_CHECK_pointer(NULL, queue, &pass);
+    }
 
     test_result_print(SYM_2_STR(array_queue_destroy), pass);
     return;
