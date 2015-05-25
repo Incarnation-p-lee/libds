@@ -3,11 +3,16 @@
 
 #define FILTER_LEN 32
 
+#define UNIT_TEST_REF_GOLDEN "./obj_out/reference/unit_test.golden.ref"
+#define UNIT_TEST_REF_NEW "./obj_out/reference/unit_test.new.ref"
+
 struct unit_test_filter {
     char category[FILTER_LEN];
     char implement[FILTER_LEN];
     char interface[FILTER_LEN];
 };
+
+static FILE *unit_test_ref_file;
 
 void unit_test_perform(char *arg);
 void unit_test_list(char *arg);
