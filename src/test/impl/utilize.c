@@ -2,13 +2,22 @@ static void
 test_result_print(char *name, bool passed)
 {
     char *msg = "Unknown Test Function";
+    uint32 period;
+    uint32 ref;
+    float variance;
 
     if (name) {
         msg = name;
     }
 
-    if (passed) {
-        fprintf(stdout, "    . [32mPass[0m .. %s\n", msg);
+    period = test_time_stamp_period();
+    ref = unit_test_reference_entry_find(name);
+    variance = (float)(ref - period) / ref;
+
+    if (passed && variance > VARIANCE_LIMIT) {
+        fprintf(stdout, "    . [32mPass[0m .. %f .. %s\n", variance, msg);
+    if (passed && -variance > VARIANCE_LIMIT) {
+        fprintf(stdout, "    . [32mPass[0m .. %f .. %s\n", -variance, msg);
     } else {
         fprintf(stdout, "    . [31mFail[0m .. %s\n", msg);
     }

@@ -424,6 +424,8 @@ unit_test_avl_tree_node_remove(void)
     struct avl_tree *tmp;
     uint32 count;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
     nice = 0x0u;
     pass = true;
     tree = NULL;
