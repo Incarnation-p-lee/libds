@@ -4,9 +4,9 @@
 #define TEST_PERFORMANCE_CHECKPOINT test_time_stamp_begin()
 #define VARIANCE_LIMIT              2.0f
 
-static uint32 malloc_cnt = 0;
-static uint32 free_cnt = 0;
-static uint32 realloc_cnt = 0;
+static uint64 malloc_cnt = 0;
+static uint64 free_cnt = 0;
+static uint64 realloc_cnt = 0;
 static uint32 reference = 0;
 
 static struct timeval chk_pnt_bgn;
