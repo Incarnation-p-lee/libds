@@ -3,18 +3,23 @@ unit_test_doubly_end_queue_struct_field(void)
 {
     bool pass;
     uint32 sid;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x32345678u;
     pass = true;
     sid = 0xfadeu;
     queue = doubly_end_queue_create();
 
-    doubly_end_queue_sid_set(queue, sid);
-    RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
-
+    while (0 != loop--) {
+        doubly_end_queue_sid_set(queue, sid);
+        RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
+    }
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
 
+    test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
     return;
 }
 
@@ -22,17 +27,22 @@ static void
 unit_test_doubly_end_queue_create(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x22345678u;
     pass = true;
     queue = doubly_end_queue_create();
 
-    RESULT_CHECK_uint32(0x0u, doubly_end_queue_sid(queue), &pass);
-    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
-
+    while (0 != loop--) {
+        RESULT_CHECK_uint32(0x0u, doubly_end_queue_sid(queue), &pass);
+        RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+    }
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
 
+    test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
     return;
 }
 
@@ -40,24 +50,28 @@ static void
 unit_test_doubly_end_queue_destroy(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = NULL;
 
     doubly_end_queue_destroy(&queue);
-
     queue = doubly_end_queue_create();
     doubly_end_queue_destroy(&queue);
     RESULT_CHECK_pointer(NULL, queue, &pass);
 
-    queue = doubly_end_queue_create();
-    doubly_end_queue_head_enter(queue, queue);
-    doubly_end_queue_destroy(&queue);
-    RESULT_CHECK_pointer(NULL, queue, &pass);
+    while (0 != loop--) {
+        queue = doubly_end_queue_create();
+        doubly_end_queue_head_enter(queue, queue);
+        doubly_end_queue_destroy(&queue);
+        RESULT_CHECK_pointer(NULL, queue, &pass);
+    }
 
     test_result_print(SYM_2_STR(doubly_end_queue_destroy), pass);
-
     return;
 }
 
@@ -65,20 +79,27 @@ static void
 unit_test_doubly_end_queue_length(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
     RESULT_CHECK_uint32(0x0u, doubly_end_queue_length(NULL), &pass);
     RESULT_CHECK_uint32(0x0u, doubly_end_queue_length(queue), &pass);
-
-    doubly_end_queue_head_enter(queue, queue);
-    RESULT_CHECK_uint32(0x1u, doubly_end_queue_length(queue), &pass);
-
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
 
+    while (0 != loop--) {
+        queue = doubly_end_queue_create();
+        doubly_end_queue_head_enter(queue, queue);
+        RESULT_CHECK_uint32(0x1u, doubly_end_queue_length(queue), &pass);
+        doubly_end_queue_destroy(&queue);
+    }
+
+    test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
     return;
 }
 
@@ -86,18 +107,25 @@ static void
 unit_test_doubly_end_queue_empty_p(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
     RESULT_CHECK_bool(false, doubly_end_queue_empty_p(NULL), &pass);
     RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
-
-    doubly_end_queue_head_enter(queue, queue);
-    RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
-
     doubly_end_queue_destroy(&queue);
+
+    while (0 != loop--) {
+        queue = doubly_end_queue_create();
+        doubly_end_queue_head_enter(queue, queue);
+        RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
+        doubly_end_queue_destroy(&queue);
+    }
     test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
 
     return;
@@ -107,8 +135,12 @@ static void
 unit_test_doubly_end_queue_head_enter(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x2234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
@@ -117,12 +149,14 @@ unit_test_doubly_end_queue_head_enter(void)
     doubly_end_queue_head_enter(queue, queue);
     RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
-    doubly_end_queue_head_enter(queue, queue);
-    RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
+    while (0 != loop--) {
+        doubly_end_queue_head_enter(queue, queue);
+        RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
+        doubly_end_queue_head_leave(queue);
+    }
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_head_enter), pass);
-
     return;
 }
 
@@ -130,8 +164,12 @@ static void
 unit_test_doubly_end_queue_tail_enter(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x3234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
@@ -140,12 +178,14 @@ unit_test_doubly_end_queue_tail_enter(void)
     doubly_end_queue_tail_enter(queue, queue);
     RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
-    doubly_end_queue_tail_enter(queue, queue);
-    RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
+    while (0 != loop--) {
+        doubly_end_queue_tail_enter(queue, queue);
+        RESULT_CHECK_uint32(0x2u, doubly_end_queue_length(queue), &pass);
+        doubly_end_queue_tail_leave(queue);
+    }
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), pass);
-
     return;
 }
 
@@ -153,8 +193,12 @@ static void
 unit_test_doubly_end_queue_head_leave(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
@@ -166,12 +210,14 @@ unit_test_doubly_end_queue_head_leave(void)
 
     RESULT_CHECK_pointer(queue, doubly_end_queue_head_leave(queue), &pass);
 
-    doubly_end_queue_head_leave(queue);
-    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+    while (0 != loop--) {
+        doubly_end_queue_head_leave(queue);
+        RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+        doubly_end_queue_head_enter(queue, queue);
+    }
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_head_leave), pass);
-
     return;
 }
 
@@ -179,8 +225,12 @@ static void
 unit_test_doubly_end_queue_tail_leave(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
@@ -192,8 +242,11 @@ unit_test_doubly_end_queue_tail_leave(void)
 
     RESULT_CHECK_pointer(queue, doubly_end_queue_tail_leave(queue), &pass);
 
-    doubly_end_queue_tail_leave(queue);
-    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+    while (0 != loop--) {
+        doubly_end_queue_tail_leave(queue);
+        RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+        doubly_end_queue_tail_enter(queue, queue);
+    }
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), pass);
@@ -206,17 +259,23 @@ static void
 unit_test_doubly_end_queue_cleanup(void)
 {
     bool pass;
+    uint32 loop;
     struct doubly_end_queue *queue;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x4234567u;
     pass = true;
     queue = doubly_end_queue_create();
 
     doubly_end_queue_cleanup(NULL);
 
-    doubly_end_queue_head_enter(queue, queue);
-    doubly_end_queue_tail_enter(queue, queue);
-    doubly_end_queue_cleanup(queue);
-    RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+    while (0 != loop--) {
+        doubly_end_queue_head_enter(queue, queue);
+        doubly_end_queue_tail_enter(queue, queue);
+        doubly_end_queue_cleanup(queue);
+        RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
+    }
 
     doubly_end_queue_cleanup(queue);
     RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
@@ -234,7 +293,11 @@ unit_test_doubly_end_queue_iterate(void)
     struct doubly_end_queue *queue;
     uint32 tmp;
     uint32 cnt;
+    uint32 loop;
 
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x52345u;
     tmp = 0;
     cnt = 1023;
     pass = true;
@@ -247,8 +310,11 @@ unit_test_doubly_end_queue_iterate(void)
         cnt--;
     }
 
-    doubly_end_queue_iterate(queue, queue_iterate_handler);
-    RESULT_CHECK_uint32(tmp, doubly_end_queue_length(queue), &pass);
+    while (0 != loop--) {
+        tmp = 0;
+        doubly_end_queue_iterate(queue, queue_iterate_handler);
+        RESULT_CHECK_uint32(tmp, doubly_end_queue_length(queue), &pass);
+    }
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_iterate), pass);
