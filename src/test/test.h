@@ -2,7 +2,7 @@
 #define HAVE_TEST_H
 
 #define TEST_PERFORMANCE_CHECKPOINT test_time_stamp_begin()
-#define VARIANCE_LIMIT              2.0f
+#define VARIANCE_LIMIT              3.0f
 
 static uint64 malloc_cnt = 0;
 static uint64 free_cnt = 0;
