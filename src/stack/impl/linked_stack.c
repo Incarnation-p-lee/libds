@@ -159,26 +159,24 @@ linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
         last = linked_stack_space_previous_node(stack->base);
         if (!last) {
             pr_log_err("Destroyed data structure.\n");
+        } else if (0 == dim) {
+            pr_log_warn("Expanding size zero, nothing will be done.\n");
         } else {
-            if (0 == dim) {
-                pr_log_warn("Expanding size zero, nothing will be done.\n");
+            node = malloc_ds(sizeof(*node));
+            if (!node) {
+                pr_log_err("Fail to get memory from system.\n");
             } else {
-                node = malloc_ds(sizeof(*node));
-                if (!node) {
-                    pr_log_err("Fail to get memory from system.\n");
-                } else {
-                    doubly_linked_list_initial(&node->link);
-                }
+                doubly_linked_list_initial(&node->link);
+            }
 
-                node->space.bp = malloc_ds(sizeof(void *) * dim);
-                if (!node->space.bp) {
-                    free_ds(node);
-                    pr_log_err("Fail to get memory from system.\n");
-                } else {
-                    node->space.dim = dim;
-                    node->space.sp = node->space.bp;
-                    doubly_linked_list_node_insert_after(&last->link, &node->link);
-                }
+            node->space.bp = malloc_ds(sizeof(void *) * dim);
+            if (!node->space.bp) {
+                free_ds(node);
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                node->space.dim = dim;
+                node->space.sp = node->space.bp;
+                doubly_linked_list_node_insert_after(&last->link, &node->link);
             }
         }
     }
