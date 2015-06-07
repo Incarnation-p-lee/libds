@@ -44,7 +44,7 @@
             /* compute abs of (left - right) */             \
             "sub %%esi, %%edi\n\t"                          \
             "mov %%edi, %%esi\n\t"                          \
-            "and $0x8000000, %%esi\n\t"                     \
+            "and $0x80000000, %%esi\n\t"                    \
             "cmovz %%ebx, %%ecx\n\t"                        \
             "xor %%ecx, %%edi\n\t"                          \
             "shr $0x1f, %%ecx\n\t"                          \
@@ -101,7 +101,7 @@
             /* compute abs of (left - right) */             \
             "sub %%esi, %%edi\n\t"                          \
             "mov %%edi, %%esi\n\t"                          \
-            "and $0x8000000, %%esi\n\t"                     \
+            "and $0x80000000, %%esi\n\t"                    \
             "cmovz %%ebx, %%ecx\n\t"                        \
             "xor %%ecx, %%edi\n\t"                          \
             "shr $0x1f, %%ecx\n\t"                          \
