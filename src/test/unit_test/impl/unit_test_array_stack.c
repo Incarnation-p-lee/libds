@@ -66,7 +66,7 @@ unit_test_array_stack_destroy(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x3a12345u;
+    loop = 0x2a12345u;
     pass = true;
     stack = NULL;
 
