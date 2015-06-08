@@ -346,7 +346,7 @@ doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void
 }
 
 struct doubly_linked_list *
-doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n)
+doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n)
 {
     register struct doubly_linked_list *iter;
     register struct doubly_linked_list *new;

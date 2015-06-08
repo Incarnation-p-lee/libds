@@ -711,7 +711,7 @@ unit_test_doubly_linked_list_iterate(void)
 }
 
 static void
-unit_test_doubly_linked_list_join(void)
+unit_test_doubly_linked_list_merge(void)
 {
     uint32 raw[] = {0xa, 0xb, 0xc, 0xd, 0xe, 0xf,};
     struct doubly_linked_list *head;
@@ -738,19 +738,19 @@ unit_test_doubly_linked_list_join(void)
     tmp = doubly_linked_list_node_create(raw + 4, 0x0u);
     doubly_linked_list_node_insert_before(head_n, tmp);
 
-    RESULT_CHECK_pointer(NULL, doubly_linked_list_join(NULL, NULL), &pass);
-    RESULT_CHECK_pointer(head, doubly_linked_list_join(head, NULL), &pass);
-    RESULT_CHECK_pointer(head, doubly_linked_list_join(NULL, head), &pass);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_merge(NULL, NULL), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_merge(head, NULL), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_merge(NULL, head), &pass);
 
-    head = doubly_linked_list_join(head, head_n);
+    head = doubly_linked_list_merge(head, head_n);
     RESULT_CHECK_uint32(0x6u, doubly_linked_list_length(head), &pass);
 
     while (0 != loop--) {
-        head = doubly_linked_list_join(head, head_n);
+        head = doubly_linked_list_merge(head, head_n);
     }
     doubly_linked_list_destroy(&head);
     doubly_linked_list_destroy(&head_n);
 
-    test_result_print(SYM_2_STR(doubly_linked_list_join), pass);
+    test_result_print(SYM_2_STR(doubly_linked_list_merge), pass);
     return;
 }

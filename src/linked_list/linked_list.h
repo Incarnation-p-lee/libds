@@ -20,7 +20,7 @@ void doubly_linked_list_serialize(struct doubly_linked_list *head);
 struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
 struct doubly_linked_list * doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
-struct doubly_linked_list * doubly_linked_list_join(struct doubly_linked_list *m, struct doubly_linked_list *n);
+struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END of doubly linked list, Circular. */
 
 
@@ -44,6 +44,6 @@ void single_linked_list_serialize(struct single_linked_list *head);
 struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
 struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
 void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
-struct single_linked_list * single_linked_list_join(struct single_linked_list *m, struct single_linked_list *n);
+struct single_linked_list * single_linked_list_merge(struct single_linked_list *m, struct single_linked_list *n);
 
 #endif
