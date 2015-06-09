@@ -136,6 +136,7 @@ static struct test_performance unit_test_performance[] = {
     {"splay_tree_initial",                        0x0u, 0x0u},
     {"splay_tree_node_initial",                   0x0u, 0x0u},
     {"splay_tree_destroy",                        0x0u, 0x0u},
+    {"splay_tree_node_contain_p",                 0x0u, 0x0u},
     {"splay_tree_node_find",                      0x0u, 0x0u},
     {"splay_tree_node_find_min",                  0x0u, 0x0u},
     {"splay_tree_node_find_max",                  0x0u, 0x0u},

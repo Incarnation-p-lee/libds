@@ -14,6 +14,8 @@ test_result_print(char *name, bool passed)
     }
 
     entry = test_reference_entry_find(name);
+    assert(NULL != entry);
+
     entry->now = period;
     if (0u == entry->ref) {
         entry->ref = period;
