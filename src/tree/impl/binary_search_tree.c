@@ -238,7 +238,7 @@ binary_search_tree_node_insert(struct binary_search_tree *root,
                 if (*iter == node) {
                     pr_log_info("Insert node exist, nothing will be done.\n");
                 } else {
-                    doubly_linked_list_join((*iter)->chain.link, node->chain.link);
+                    doubly_linked_list_merge((*iter)->chain.link, node->chain.link);
                 }
                 return *iter;
             }

@@ -22,7 +22,7 @@ static const struct test_layer_table single_linked_list_interface[] = {
     {"iterate",            {&unit_test_single_linked_list_iterate,},},
     {"destroy",            {&unit_test_single_linked_list_destroy,},},
     {"length",             {&unit_test_single_linked_list_length,},},
-    {"join",               {&unit_test_single_linked_list_join,},},
+    {"join",               {&unit_test_single_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };
 
@@ -46,7 +46,7 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
     {"iterate",            {&unit_test_doubly_linked_list_iterate,},},
     {"destroy",            {&unit_test_doubly_linked_list_destroy,},},
     {"length",             {&unit_test_doubly_linked_list_length,},},
-    {"join",               {&unit_test_doubly_linked_list_join,},},
+    {"join",               {&unit_test_doubly_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };
 

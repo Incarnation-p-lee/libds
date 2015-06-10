@@ -783,7 +783,7 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
             if (*root == node) {
                 pr_log_info("Insert node exist, nothing will be done.\n");
             } else {
-                doubly_linked_list_join((*root)->b_node.chain.link,
+                doubly_linked_list_merge((*root)->b_node.chain.link,
                     node->b_node.chain.link);
             }
             return *root;

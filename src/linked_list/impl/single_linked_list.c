@@ -363,7 +363,7 @@ single_linked_list_iterate(struct single_linked_list *head,
 }
 
 struct single_linked_list *
-single_linked_list_join(struct single_linked_list *m,
+single_linked_list_merge(struct single_linked_list *m,
     struct single_linked_list *n)
 {
     register struct single_linked_list *iter;
