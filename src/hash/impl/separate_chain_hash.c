@@ -1,68 +1,58 @@
 struct separate_chain_hash *
 separate_chain_hash_create(uint32 size)
 {
+    struct hashing_table *table;
     struct separate_chain_hash *hash;
 
     hash = malloc_ds(sizeof(*hash));
     if (!hash) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        if (0 == size) {
-            size = DEFAULT_CHAIN_HASH_SIZE;
-            pr_log_warn("Hash table size not specified, use default size.\n");
-        }
+        table = hashing_table_create(size);
+        hashing_table_load_factor_set(table, DEFAULT_LOAD_FACTOR);
+        hashing_table_hash_function_set(table, hashing_function_polynomial);
 
-        hash->size = size;
-        hash->load_factor = DEFAULT_LOAD_FACTOR;
-        hash->func = hashing_function_polynomial;
-        separate_chain_hash_chain_initial(hash);
+        hash->table = table;
     }
 
     return hash;
 }
 
+static inline struct doubly_linked_list **
+separate_chain_hash_space(struct separate_chain_hash *hash)
+{
+    assert(NULL != hash);
+
+    return (struct doubly_linked_list **)hashing_table_space(hash->table);
+}
+
 static inline void
-separate_chain_hash_chain_initial(struct separate_chain_hash *hash)
+separate_chain_hash_chain_destroy(struct separate_chain_hash *hash)
 {
     struct doubly_linked_list **iter;
 
     assert(NULL != hash);
 
-    hash->space = malloc_ds(sizeof(**hash->space) * hash->size);
-    if (!hash->space) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
-        iter = hash->space;
-        while (iter < hash->space + hash->size) {
-            *iter++ = NULL;
+    iter = separate_chain_hash_space(hash);
+    while (iter < separate_chain_hash_space(hash) +
+        separate_chain_hash_size(hash)) {
+        if (*iter) {
+           doubly_linked_list_destroy(iter);
         }
+        iter++;
     }
-
-    return;
 }
 
 void
 separate_chain_hash_destroy(struct separate_chain_hash **hash)
 {
-    struct doubly_linked_list **iter;
-
     if (!hash || !*hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        iter = (*hash)->space;
-        if (!iter) {
-            pr_log_warn("Destroyed data structure.\n");
-        } else {
-            while (iter < (*hash)->space + (*hash)->size) {
-                if (*iter) {
-                   doubly_linked_list_destroy(iter);
-                   assert(NULL == *iter);
-                }
-                iter++;
-            }
-            free_ds((*hash)->space);
-        }
-        free_ds((*hash));
+        separate_chain_hash_chain_destroy(*hash);
+        hashing_table_destroy(&(*hash)->table);
+
+        free_ds(*hash);
         *hash = NULL;
     }
 
@@ -72,58 +62,81 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
 uint32
 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
 {
-    uint32 retval;
-    struct doubly_linked_list **iter;
-
-    retval = 0u;
     if (!hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return 0u;
     } else {
-        iter = hash->space;
-        if (!iter) {
-            pr_log_warn("Destroyed data structure.\n");
-        } else {
-            retval = 0u;
-            while (iter < hash->space + hash->size) {
-                if (NULL != *iter) {
-                    retval++;
-                }
-                iter++;
-            }
-        }
-
-        retval = (retval * 100 / hash->size);
+        return hashing_table_load_factor_calculate(hash->table);
     }
+}
 
-    return retval;
+static inline struct doubly_linked_list *
+separate_chain_hash_chain_head(struct separate_chain_hash *hash, uint32 index)
+{
+    struct hashing_table *table;
+
+    assert(NULL != hash);
+    assert(NULL != hash->table);
+
+    table = hash->table;
+    assert(index < table->size);
+
+    return table->space[index];
+}
+
+static inline void
+separate_chain_hash_chain_head_set(struct separate_chain_hash *hash,
+    uint32 index, struct doubly_linked_list *val)
+{
+    struct hashing_table *table;
+
+    assert(NULL != hash);
+    assert(NULL != hash->table);
+
+    table = hash->table;
+    assert(index < table->size);
+
+    table->space[index] = val;
+}
+
+static inline uint32
+separate_chain_hash_index_calculate(struct separate_chain_hash *hash, void *key)
+{
+    struct hashing_table *table;
+
+    assert(NULL != hash);
+    assert(NULL != hash->table);
+
+    table = hash->table;
+    return table->separate_chain(key, table->size);
 }
 
 void
 separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
 {
     uint32 factor;
-    struct doubly_linked_list **head;
+    uint32 index;
     struct doubly_linked_list *node;
-    struct separate_chain_hash *tmp;
+    struct doubly_linked_list *head;
 
     if (!hash || !*hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        tmp = *hash;
-        factor = separate_chain_hash_load_factor_calculate(tmp);
-        if (factor > separate_chain_hash_load_factor(tmp)) {
+        factor = separate_chain_hash_load_factor_calculate(*hash);
+        if (factor > separate_chain_hash_load_factor(*hash)) {
             pr_log_info("Reach the load factor limit, will rehashing.\n");
-            tmp = separate_chain_hash_rehashing(&tmp);
-            *hash = tmp;
+            *hash = separate_chain_hash_rehashing(hash);
         }
 
-        head = tmp->space + (ptrdiff_t)tmp->func(key, tmp->size);
-        if (!*head) {
+        index = separate_chain_hash_index_calculate(*hash, key);
+        head = separate_chain_hash_chain_head(*hash, index);
+        if (!head) {
             /* Empty linked list */
-            *head = doubly_linked_list_node_create(key, 0x0u);
+            head = doubly_linked_list_node_create(key, 0x0u);
+            separate_chain_hash_chain_head_set(*hash, index, head);
         } else {
             node = doubly_linked_list_node_create(key, 0x0u);
-            doubly_linked_list_node_insert_after(*head, node);
+            doubly_linked_list_node_insert_after(head, node);
         }
     }
 
@@ -136,13 +149,15 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
     struct doubly_linked_list *head;
     struct doubly_linked_list *iter;
     void *retval;
+    uint32 index;
 
     if (!hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
         retval = NULL;
-        head = hash->space[hash->func(key, hash->size)];
+        index = separate_chain_hash_index_calculate(hash, key);
+        head = separate_chain_hash_chain_head(hash, index);
         if (!head) {
             retval = NULL;
         } else {
@@ -156,7 +171,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
                 iter = doubly_linked_list_node_next(iter);
             } while (iter != head);
 
-            hash->space[hash->func(key, hash->size)] = iter;
+            separate_chain_hash_chain_head_set(hash, index, iter);
         }
 
         if (NULL == retval) {
@@ -172,12 +187,14 @@ separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
     struct doubly_linked_list *head;
     struct doubly_linked_list *iter;
     void *retval;
+    uint32 index;
 
     retval = NULL;
     if (!hash) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        head = hash->space[hash->func(key, hash->size)];
+        index = separate_chain_hash_index_calculate(hash, key);
+        head = separate_chain_hash_chain_head(hash, index);
         if (!head) {
             retval = NULL;
         } else {
@@ -227,10 +244,11 @@ separate_chain_hash_space_rehashing(struct separate_chain_hash *to,
 
     assert(NULL != from);
     assert(NULL != to);
-    assert(NULL != from->space);
+    assert(NULL != separate_chain_hash_space(from));
 
-    iter = from->space;
-    while (iter < from->space + from->size) {
+    iter = separate_chain_hash_space(from);
+    while (iter < separate_chain_hash_space(from) +
+        separate_chain_hash_size(from)) {
         if (*iter) {
             separate_chain_hash_chain_rehashing(*iter, to);
         }

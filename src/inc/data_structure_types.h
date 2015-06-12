@@ -151,16 +151,29 @@ struct splay_tree {
     struct binary_search_tree b_node;
 };
 
+struct hashing_table {
+    void       **space;
+    uint32     size;
+    uint32     load_factor; /* load_factor % */
+    union {
+        void   *func;
+        uint32 (*separate_chain)(void *, uint32);
+        uint32 (*open_addressing)(void *, uint32, uint32);
+    };
+};
+
 /*
  * hashing table with separate chaining
- *     hashing (void *) to (void *)
  */
 struct separate_chain_hash {
-    /* the base address of struct separate * pointer array. */
-    struct doubly_linked_list **space;
-    uint32                    size;
-    uint32                    load_factor; /* load_factor % */
-    uint32                    (*func)(void *, uint32);
+    struct hashing_table *table;
+};
+
+/*
+ * hashing table with open addressing square
+ */
+struct open_addressing_hash {
+    struct hashing_table *table;
 };
 
 #endif

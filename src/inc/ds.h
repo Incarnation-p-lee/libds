@@ -197,16 +197,29 @@ struct splay_tree {
     struct binary_search_tree b_node;
 };
 
+struct hashing_table {
+    void       **space;
+    uint32     size;
+    uint32     load_factor; /* load_factor % */
+    union {
+        void   *func;
+        uint32 (*separate_chain)(void *, uint32);
+        uint32 (*open_addressing)(void *, uint32, uint32);
+    };
+};
+
 /*
  * hashing table with separate chaining
- *     hashing (void *) to (void *)
  */
 struct separate_chain_hash {
-    /* the base address of struct separate * pointer array. */
-    struct doubly_linked_list **space;
-    uint32                    size;
-    uint32                    load_factor; /* load_factor % */
-    uint32                    (*func)(void *, uint32);
+    struct hashing_table *table;
+};
+
+/*
+ * hashing table with open addressing square
+ */
+struct open_addressing_hash {
+    struct hashing_table *table;
 };
 
 #endif
@@ -425,13 +438,21 @@ struct separate_chain_hash {
 #define splay_tree_ptr_to_splay(tree) \
     ((struct splay_tree *)(tree))
 
+/* HASHING TABLE */
+#define hashing_table_size(hash) \
+    (assert(hash), (hash)->size)
+#define hashing_table_load_factor(hash) \
+    (assert(hash), (hash)->load_factor)
+#define hashing_table_load_factor_set(hash, factor) \
+    (assert(hash), (hash)->load_factor = (factor))
+
 /* SEPARATE CHAIN HASHING */
 #define separate_chain_hash_size(hash) \
-    (assert(hash), (hash)->size)
+    (assert(hash), hashing_table_size((hash)->table))
 #define separate_chain_hash_load_factor(hash) \
-    (assert(hash), (hash)->load_factor)
+    (assert(hash), hashing_table_load_factor((hash)->table))
 #define separate_chain_hash_load_factor_set(hash, factor) \
-    (assert(hash), (hash)->load_factor = (factor))
+    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
 #endif
 /* END of ./src/inc/data_structure_defines.h */
@@ -713,6 +734,8 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 #define DEFAULT_CHAIN_HASH_SIZE 11u
 #define DEFAULT_LOAD_FACTOR     72u /* Means 0.72 or 72% */
 
+#define OPEN_ADDRESSING_HASH_LOAD_FACTOR 50u
+
 
 /* SEPARATE CHAIN HASH */
 extern struct separate_chain_hash * separate_chain_hash_create(uint32 size);
@@ -722,7 +745,6 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 extern void * separate_chain_hash_remove(struct separate_chain_hash *hash, void *key);
 extern void * separate_chain_hash_find(struct separate_chain_hash *hash, void *key);
 extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
-
 
 /* END OF SEPARATE CHAIN HASH */
 

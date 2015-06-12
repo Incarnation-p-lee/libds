@@ -209,12 +209,20 @@
 #define splay_tree_ptr_to_splay(tree) \
     ((struct splay_tree *)(tree))
 
+/* HASHING TABLE */
+#define hashing_table_size(hash) \
+    (assert(hash), (hash)->size)
+#define hashing_table_load_factor(hash) \
+    (assert(hash), (hash)->load_factor)
+#define hashing_table_load_factor_set(hash, factor) \
+    (assert(hash), (hash)->load_factor = (factor))
+
 /* SEPARATE CHAIN HASHING */
 #define separate_chain_hash_size(hash) \
-    (assert(hash), (hash)->size)
+    (assert(hash), hashing_table_size((hash)->table))
 #define separate_chain_hash_load_factor(hash) \
-    (assert(hash), (hash)->load_factor)
+    (assert(hash), hashing_table_load_factor((hash)->table))
 #define separate_chain_hash_load_factor_set(hash, factor) \
-    (assert(hash), (hash)->load_factor = (factor))
+    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
 #endif

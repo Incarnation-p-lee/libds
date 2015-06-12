@@ -15,8 +15,8 @@
 #include "test_performance_set.h"
 #include "ds.h"
 
-#include "impl/utilize.c"
-#include "impl/wrapper.c"
+#include "impl/test_utilize.c"
+#include "impl/test_wrapper.c"
 #include "impl/test_result_check.c"
 #include "impl/test_time_stamp.c"
 #include "impl/test_performance.c"

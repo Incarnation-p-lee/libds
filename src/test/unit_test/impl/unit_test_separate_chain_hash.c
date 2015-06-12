@@ -147,13 +147,10 @@ unit_test_separate_chain_hash_load_factor_calculate(void)
 
     tmp = 0x0u;
     hash = unit_test_separate_chain_hash_sample(tmp);
-    free_ds(hash->space);
-    hash->space = NULL;
     separate_chain_hash_load_factor_calculate(hash);
     separate_chain_hash_destroy(&hash);
 
     test_result_print(SYM_2_STR(separate_chain_hash_load_factor_calculate), pass);
-
     return;
 }
 
