@@ -29,4 +29,25 @@ static inline void separate_chain_hash_chain_head_set(struct separate_chain_hash
 static inline uint32 separate_chain_hash_index_calculate(struct separate_chain_hash *hash, void *key);
 /* END OF SEPARATE CHAIN HASH */
 
+
+/* OPEN ADDRESSING HASH */
+struct open_addressing_hash * open_addressing_hash_create(uint32 size);
+void open_addressing_hash_destroy(struct open_addressing_hash **hash);
+uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
+void open_addressing_hash_insert(struct open_addressing_hash **hash, void *key);
+void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
+void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
+struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
+
+static inline uint32 open_addressing_hash_index_calculate(struct open_addressing_hash *hash, void *key, uint32 iter);
+static inline void * open_addressing_hash_node(struct open_addressing_hash *hash, uint32 index);
+static inline void open_addressing_hash_node_set(struct open_addressing_hash *hash, uint32 index, void *val);
+static inline void ** open_addressing_hash_space(struct open_addressing_hash *hash);
+static inline void open_addressing_hash_space_rehashing(struct open_addressing_hash *to, struct open_addressing_hash *from);
+
+#if defined DEBUG
+    static inline uint32 open_addressing_hash_limit(struct open_addressing_hash *hash);
+#endif
+/* END OF OPEN ADDRESSING HASH */
+
 #endif

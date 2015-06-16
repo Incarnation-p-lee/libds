@@ -123,7 +123,7 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         factor = separate_chain_hash_load_factor_calculate(*hash);
-        if (factor > separate_chain_hash_load_factor(*hash)) {
+        if (factor >= separate_chain_hash_load_factor(*hash)) {
             pr_log_info("Reach the load factor limit, will rehashing.\n");
             *hash = separate_chain_hash_rehashing(hash);
         }
@@ -245,6 +245,7 @@ separate_chain_hash_space_rehashing(struct separate_chain_hash *to,
     assert(NULL != from);
     assert(NULL != to);
     assert(NULL != separate_chain_hash_space(from));
+    assert(NULL != separate_chain_hash_space(to));
 
     iter = separate_chain_hash_space(from);
     while (iter < separate_chain_hash_space(from) +
@@ -272,7 +273,6 @@ separate_chain_hash_rehashing(struct separate_chain_hash **hash)
         new = separate_chain_hash_create(resize);
         separate_chain_hash_space_rehashing(new, *hash);
         separate_chain_hash_destroy(hash);
-        *hash = NULL;
     }
 
     return new;

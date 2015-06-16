@@ -225,4 +225,12 @@
 #define separate_chain_hash_load_factor_set(hash, factor) \
     (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
+/* OPEN ADDRESSING HASHING */
+#define open_addressing_hash_size(hash) \
+    (assert(hash), hashing_table_size((hash)->table))
+#define open_addressing_hash_load_factor(hash) \
+    (assert(hash), hashing_table_load_factor((hash)->table))
+#define open_addressing_hash_load_factor_set(hash, factor) \
+    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
+
 #endif

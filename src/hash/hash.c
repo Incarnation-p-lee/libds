@@ -14,3 +14,4 @@
 #include "impl/hashing_table_internal.c"
 #include "impl/hashing_function.c"
 #include "impl/separate_chain_hash.c"
+#include "impl/open_addressing_hash.c"

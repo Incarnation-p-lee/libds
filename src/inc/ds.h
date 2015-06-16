@@ -454,6 +454,14 @@ struct open_addressing_hash {
 #define separate_chain_hash_load_factor_set(hash, factor) \
     (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
+/* OPEN ADDRESSING HASHING */
+#define open_addressing_hash_size(hash) \
+    (assert(hash), hashing_table_size((hash)->table))
+#define open_addressing_hash_load_factor(hash) \
+    (assert(hash), hashing_table_load_factor((hash)->table))
+#define open_addressing_hash_load_factor_set(hash, factor) \
+    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
+
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
@@ -747,6 +755,21 @@ extern void * separate_chain_hash_find(struct separate_chain_hash *hash, void *k
 extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
 
 /* END OF SEPARATE CHAIN HASH */
+
+
+/* OPEN ADDRESSING HASH */
+extern struct open_addressing_hash * open_addressing_hash_create(uint32 size);
+extern void open_addressing_hash_destroy(struct open_addressing_hash **hash);
+extern uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
+extern void open_addressing_hash_insert(struct open_addressing_hash **hash, void *key);
+extern void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
+extern void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
+extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
+
+
+#if defined DEBUG
+#endif
+/* END OF OPEN ADDRESSING HASH */
 
 #endif
 /* END of ./src/hash/hash.h */
