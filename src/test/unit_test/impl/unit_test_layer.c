@@ -194,6 +194,18 @@ static const struct test_layer_table separate_chain_hash[] = {
     {"rehashing",             {&unit_test_separate_chain_hash_rehashing,},},
     {NULL,                    {NULL,},},
 };
+
+static const struct test_layer_table open_addressing_hash[] = {
+    {"struct_field",          {&unit_test_open_addressing_hash_struct_field,},},
+    {"create",                {&unit_test_open_addressing_hash_create,},},
+    {"destroy",               {&unit_test_open_addressing_hash_destroy,},},
+    {"load_factor_calculate", {&unit_test_open_addressing_hash_load_factor_calculate,},},
+    {"insert",                {&unit_test_open_addressing_hash_insert,},},
+    {"remove",                {&unit_test_open_addressing_hash_remove,},},
+    // {"find",                  {&unit_test_open_addressing_hash_find,},},
+    // {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
+    {NULL,                    {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -233,7 +245,8 @@ static const struct test_layer_table unit_test_tree_implement[] = {
 };
 
 static const struct test_layer_table unit_test_hash_implement[] = {
-    {"separate_chain", {separate_chain_hash,},},
+    {"separate_chain",  {separate_chain_hash,},},
+    {"open_addressing", {open_addressing_hash,},},
     /* END POINT OF IMPLEMENT */
     {NULL,             {NULL,},},
 };
