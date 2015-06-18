@@ -202,8 +202,8 @@ static const struct test_layer_table open_addressing_hash[] = {
     {"load_factor_calculate", {&unit_test_open_addressing_hash_load_factor_calculate,},},
     {"insert",                {&unit_test_open_addressing_hash_insert,},},
     {"remove",                {&unit_test_open_addressing_hash_remove,},},
-    // {"find",                  {&unit_test_open_addressing_hash_find,},},
-    // {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
+    {"find",                  {&unit_test_open_addressing_hash_find,},},
+    {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
     {NULL,                    {NULL,},},
 };
 /*-----------------------------------------------------------------*/

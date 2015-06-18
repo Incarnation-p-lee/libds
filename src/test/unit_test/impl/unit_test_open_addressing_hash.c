@@ -232,7 +232,6 @@ unit_test_open_addressing_hash_remove(void)
     return;
 }
 
-/*
 static void
 unit_test_open_addressing_hash_find(void)
 {
@@ -254,7 +253,7 @@ unit_test_open_addressing_hash_find(void)
     RESULT_CHECK_pointer(NULL, open_addressing_hash_find(hash, &pass), &pass);
     open_addressing_hash_destroy(&hash);
 
-    tmp = 0xfadebu;
+    tmp = 0xebu;
     hash = unit_test_open_addressing_hash_sample(tmp);
     RESULT_CHECK_pointer(NULL, open_addressing_hash_find(hash, &pass), &pass);
     open_addressing_hash_insert(&hash, &pass);
@@ -280,7 +279,7 @@ unit_test_open_addressing_hash_rehashing(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x52;
+    loop = 0x32;
     tmp = 0x0u;
     pass = true;
 
@@ -305,4 +304,3 @@ unit_test_open_addressing_hash_rehashing(void)
     test_result_print(SYM_2_STR(open_addressing_hash_rehashing), pass);
     return;
 }
-*/
