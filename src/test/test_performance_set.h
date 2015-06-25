@@ -160,6 +160,8 @@ static struct test_performance unit_test_performance[] = {
     {"open_addressing_hash_remove",                0x0u, 0x0u},
     {"open_addressing_hash_find",                  0x0u, 0x0u},
     {"open_addressing_hash_rehashing",             0x0u, 0x0u},
+    {"minimal_heap_struc_field",                   0x0u, 0x0u},
+    {"minimal_heap_create",                        0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 

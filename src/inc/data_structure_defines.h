@@ -233,4 +233,16 @@
 #define open_addressing_hash_load_factor_set(hash, factor) \
     (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
+/* MINIMAL HEAP */
+#define minimal_heap_size(heap) \
+    (assert(heap), (heap)->bin_heap->size)
+#define minimal_heap_capacity(heap) \
+    (assert(heap), (heap)->bin_heap->capacity)
+#define minimal_heap_nice(heap, index) \
+    (assert(heap), HEAP_NICE(heap->bin_heap, index))
+#define minimal_heap_link(heap, index) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index))
+#define minimal_heap_link_set(heap, index, link) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
+
 #endif

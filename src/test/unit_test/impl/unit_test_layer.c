@@ -206,6 +206,18 @@ static const struct test_layer_table open_addressing_hash[] = {
     {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
     {NULL,                    {NULL,},},
 };
+
+static const struct test_layer_table minimal_heap[] = {
+    {"struct_field",          {&unit_test_minimal_heap_struc_field,},},
+    {"create",                {&unit_test_minimal_heap_create,},},
+    // {"destroy",               {&unit_test_open_addressing_hash_destroy,},},
+    // {"load_factor_calculate", {&unit_test_open_addressing_hash_load_factor_calculate,},},
+    // {"insert",                {&unit_test_open_addressing_hash_insert,},},
+    // {"remove",                {&unit_test_open_addressing_hash_remove,},},
+    // {"find",                  {&unit_test_open_addressing_hash_find,},},
+    // {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
+    {NULL,                    {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -250,6 +262,13 @@ static const struct test_layer_table unit_test_hash_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,             {NULL,},},
 };
+
+static const struct test_layer_table unit_test_heap_implement[] = {
+    {"minimal_heap",  {minimal_heap,},},
+    // {"open_addressing", {open_addressing_hash,},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,             {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -264,6 +283,7 @@ static const struct test_layer_table unit_test_category[] = {
     {"queue",       {unit_test_queue_implement,},},
     {"tree",        {unit_test_tree_implement,},},
     {"hash",        {unit_test_hash_implement,},},
+    {"heap",        {unit_test_heap_implement,},},
     /* END POINT OF CATEGORY */
     {NULL,          {NULL,},}
 };

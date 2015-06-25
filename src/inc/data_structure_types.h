@@ -176,5 +176,21 @@ struct open_addressing_hash {
     struct hashing_table *table;
 };
 
+/*
+ * generate heap
+ */
+struct binary_heap {
+    struct collision_chain **base;
+    uint32 capacity;
+    uint32 size;
+};
+
+/*
+ * min heap
+ */
+struct minimal_heap {
+    struct binary_heap *bin_heap;
+};
+
 #endif
 
