@@ -210,12 +210,11 @@ static const struct test_layer_table open_addressing_hash[] = {
 static const struct test_layer_table minimal_heap[] = {
     {"struct_field",          {&unit_test_minimal_heap_struc_field,},},
     {"create",                {&unit_test_minimal_heap_create,},},
-    // {"destroy",               {&unit_test_open_addressing_hash_destroy,},},
-    // {"load_factor_calculate", {&unit_test_open_addressing_hash_load_factor_calculate,},},
-    // {"insert",                {&unit_test_open_addressing_hash_insert,},},
-    // {"remove",                {&unit_test_open_addressing_hash_remove,},},
-    // {"find",                  {&unit_test_open_addressing_hash_find,},},
-    // {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
+    {"destroy",               {&unit_test_minimal_heap_destroy,},},
+    {"empty_p",               {&unit_test_minimal_heap_empty_p,},},
+    {"full_p",                {&unit_test_minimal_heap_full_p,},},
+    {"cleanup",               {&unit_test_minimal_heap_cleanup,},},
+    {"node_find",             {&unit_test_minimal_heap_node_find,},},
     {NULL,                    {NULL,},},
 };
 /*-----------------------------------------------------------------*/
@@ -264,7 +263,7 @@ static const struct test_layer_table unit_test_hash_implement[] = {
 };
 
 static const struct test_layer_table unit_test_heap_implement[] = {
-    {"minimal_heap",  {minimal_heap,},},
+    {"minimal",  {minimal_heap,},},
     // {"open_addressing", {open_addressing_hash,},},
     /* END POINT OF IMPLEMENT */
     {NULL,             {NULL,},},

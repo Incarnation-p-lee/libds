@@ -12,7 +12,7 @@ binary_heap_create(uint32 capacity)
     if (!heap) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        heap->base = malloc_ds(sizeof(*heap->base) * u_offset(capacity, 1));
+        heap->base = malloc_ds(sizeof(*heap->base[0]) * u_offset(capacity, 1));
         if (!heap->base) {
             pr_log_err("Fail to get memory from system.\n");
         } else {

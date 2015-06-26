@@ -86,3 +86,148 @@ unit_test_minimal_heap_create(void)
     test_result_print(SYM_2_STR(minimal_heap_create), pass);
     return;
 }
+
+static inline void
+unit_test_minimal_heap_destroy(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12345u;
+    heap = NULL;
+
+    minimal_heap_destroy(&heap);
+
+    while (loop--) {
+        heap = minimal_heap_create(loop);
+        minimal_heap_destroy(&heap);
+        RESULT_CHECK_pointer(NULL, heap, &pass);
+    }
+
+    test_result_print(SYM_2_STR(minimal_heap_destroy), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_empty_p(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x1A345u;
+    heap = NULL;
+
+    RESULT_CHECK_bool(false, minimal_heap_empty_p(heap), &pass);
+
+    heap = unit_test_minimal_heap_sample(0x2234, 0x1234);
+    RESULT_CHECK_bool(false, minimal_heap_empty_p(heap), &pass);
+    minimal_heap_destroy(&heap);
+
+    while (loop--) {
+        heap = minimal_heap_create(loop);
+        RESULT_CHECK_bool(true, minimal_heap_empty_p(heap), &pass);
+        minimal_heap_destroy(&heap);
+    }
+
+    test_result_print(SYM_2_STR(minimal_heap_empty_p), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_full_p(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x1A345u;
+    heap = NULL;
+
+    RESULT_CHECK_bool(true, minimal_heap_full_p(heap), &pass);
+
+    heap = unit_test_minimal_heap_sample(0x1, 0x1);
+    RESULT_CHECK_bool(true, minimal_heap_full_p(heap), &pass);
+    minimal_heap_destroy(&heap);
+
+    while (loop--) {
+        heap = minimal_heap_create(loop);
+        RESULT_CHECK_bool(false, minimal_heap_full_p(heap), &pass);
+        minimal_heap_destroy(&heap);
+    }
+
+    test_result_print(SYM_2_STR(minimal_heap_full_p), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_cleanup(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x145u;
+    heap = NULL;
+
+    minimal_heap_cleanup(heap);
+
+    while (loop--) {
+        heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+        minimal_heap_cleanup(heap);
+
+        RESULT_CHECK_bool(false, minimal_heap_full_p(heap), &pass);
+        RESULT_CHECK_bool(true, minimal_heap_empty_p(heap), &pass);
+        minimal_heap_destroy(&heap);
+    }
+
+    test_result_print(SYM_2_STR(minimal_heap_cleanup), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_find(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 index;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12345678u;
+    index = 1u;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, minimal_heap_node_find(heap, index), &pass);
+
+    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    RESULT_CHECK_pointer(minimal_heap_link(heap, index),
+        minimal_heap_node_find(heap, minimal_heap_nice(heap, index)), &pass);
+    index = 0x144Eu;
+    RESULT_CHECK_pointer(NULL, minimal_heap_node_find(heap, (sint64)index), &pass);
+
+    index = 0x2u;
+    while (loop--) {
+        RESULT_CHECK_pointer(minimal_heap_link(heap, index),
+            minimal_heap_node_find(heap, minimal_heap_nice(heap, index)), &pass);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_find), pass);
+    return;
+}
