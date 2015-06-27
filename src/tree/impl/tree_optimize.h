@@ -56,6 +56,30 @@
             :"r"(node), "r"(balanced)                       \
             :"edx", "eax", "rsi", "rdi", "ecx", "ebx")
 
+    /*
+     * 1. node->nice => rbx, *iter => rcx.
+     * 2. compare rbx, and 0x8(rcx).
+     * 3. update iter.
+     * slower than gcc -O3 build, disable this macro for now.
+     */
+    #define binary_search_tree_insert_path_go_through(node, iter) \
+        asm volatile (                                            \
+            "mov $0x18, %%rax\n\t"                                \
+            "mov $0x20, %%rdx\n\t"                                \
+            "loop1:\n\t" \
+            "mov 0x8(%1), %%rbx\n\t"                              \
+            "mov (%0), %%rcx\n\t"                                 \
+            "cmp 0x8(%%rcx), %%rbx\n\t"                           \
+            "jz BREAK\n\t" \
+            "cmovg %%rdx, %%rax\n\t"                              \
+            "lea (%%rcx, %%rax), %0\n\t"                          \
+            "mov (%0), %%rcx\n\t" \
+            "cmp $0x0, %%rcx\n\t"                           \
+            "jnz loop1\n\t" \
+            "BREAK:\n\t" \
+            :"+r"(iter)                                           \
+            :"r"(node)                                            \
+            :"rax", "rbx", "rcx", "rdx")
 #endif
 
 #if defined X86

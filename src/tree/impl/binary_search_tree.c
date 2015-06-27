@@ -234,15 +234,15 @@ binary_search_tree_node_insert(struct binary_search_tree *root,
                 iter = &(*iter)->right;
             } else if (node->chain.nice < (*iter)->chain.nice) {
                 iter = &(*iter)->left;
+            } else if (*iter != node) {
+                doubly_linked_list_merge((*iter)->chain.link, node->chain.link);
+                return *iter;
             } else {
-                if (*iter == node) {
-                    pr_log_info("Insert node exist, nothing will be done.\n");
-                } else {
-                    doubly_linked_list_merge((*iter)->chain.link, node->chain.link);
-                }
+                pr_log_info("Insert node exist, nothing will be done.\n");
                 return *iter;
             }
         }
+
         return *iter = node;
     }
 

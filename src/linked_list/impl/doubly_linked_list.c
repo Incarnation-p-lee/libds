@@ -351,8 +351,9 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
     register struct doubly_linked_list *iter;
     register struct doubly_linked_list *new;
 
-    if (m && n) {
+    if (m && n && m != n) {
         iter = n;
+        // add m == n condition
         do {
             if (!doubly_linked_list_contains_p(m, iter)) {
                 new = doubly_linked_list_node_create(
@@ -363,6 +364,8 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
             }
             iter = doubly_linked_list_node_next(iter);
         } while (iter != n);
+    } else if (m == n && NULL != m) {
+        pr_log_info("Merge same linked list, nothing will be done.\n");
     } else {
         pr_log_warn("Attempt to access NULL pointer.\n");
     }
