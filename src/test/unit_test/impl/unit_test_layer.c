@@ -206,6 +206,17 @@ static const struct test_layer_table open_addressing_hash[] = {
     {"rehashing",             {&unit_test_open_addressing_hash_rehashing,},},
     {NULL,                    {NULL,},},
 };
+
+static const struct test_layer_table minimal_heap[] = {
+    {"struct_field",          {&unit_test_minimal_heap_struc_field,},},
+    {"create",                {&unit_test_minimal_heap_create,},},
+    {"destroy",               {&unit_test_minimal_heap_destroy,},},
+    {"empty_p",               {&unit_test_minimal_heap_empty_p,},},
+    {"full_p",                {&unit_test_minimal_heap_full_p,},},
+    {"cleanup",               {&unit_test_minimal_heap_cleanup,},},
+    {"node_find",             {&unit_test_minimal_heap_node_find,},},
+    {NULL,                    {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -250,6 +261,13 @@ static const struct test_layer_table unit_test_hash_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,             {NULL,},},
 };
+
+static const struct test_layer_table unit_test_heap_implement[] = {
+    {"minimal",  {minimal_heap,},},
+    // {"open_addressing", {open_addressing_hash,},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,             {NULL,},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -264,6 +282,7 @@ static const struct test_layer_table unit_test_category[] = {
     {"queue",       {unit_test_queue_implement,},},
     {"tree",        {unit_test_tree_implement,},},
     {"hash",        {unit_test_hash_implement,},},
+    {"heap",        {unit_test_heap_implement,},},
     /* END POINT OF CATEGORY */
     {NULL,          {NULL,},}
 };

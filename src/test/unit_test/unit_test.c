@@ -6,6 +6,7 @@
 #include "unit_test_queue.c"
 #include "unit_test_tree.c"
 #include "unit_test_hash.c"
+#include "unit_test_heap.c"
 
 #include "impl/unit_test_filter.c"
 #include "impl/unit_test_layer.c"

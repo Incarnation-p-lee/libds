@@ -15,8 +15,9 @@ my @export = ("$incdir/types.h",
               "$srcdir/queue/queue.h",
               "$srcdir/stack/stack.h",
               "$srcdir/tree/tree.h",
-              "$srcdir/hash/hash.h",);
-              "$srcdir/log/log.h",
+              "$srcdir/hash/hash.h",
+              "$srcdir/heap/heap.h",
+              "$srcdir/log/log.h",);
 my $out = "$base/src/inc/ds.h";
 
 open OUT, '>', $out or

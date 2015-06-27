@@ -222,6 +222,22 @@ struct open_addressing_hash {
     struct hashing_table *table;
 };
 
+/*
+ * generate heap
+ */
+struct binary_heap {
+    struct collision_chain **base;
+    uint32 capacity;
+    uint32 size;
+};
+
+/*
+ * min heap
+ */
+struct minimal_heap {
+    struct binary_heap *bin_heap;
+};
+
 #endif
 
 /* END of ./src/inc/data_structure_types.h */
@@ -461,6 +477,18 @@ struct open_addressing_hash {
     (assert(hash), hashing_table_load_factor((hash)->table))
 #define open_addressing_hash_load_factor_set(hash, factor) \
     (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
+
+/* MINIMAL HEAP */
+#define minimal_heap_size(heap) \
+    (assert(heap), (heap)->bin_heap->size)
+#define minimal_heap_capacity(heap) \
+    (assert(heap), (heap)->bin_heap->capacity)
+#define minimal_heap_nice(heap, index) \
+    (assert(heap), HEAP_NICE(heap->bin_heap, index))
+#define minimal_heap_link(heap, index) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index))
+#define minimal_heap_link_set(heap, index, link) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
 
 #endif
 /* END of ./src/inc/data_structure_defines.h */
@@ -773,4 +801,55 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 
 #endif
 /* END of ./src/hash/hash.h */
+
+/* BEGIN of ./src/heap/heap.h */
+#ifndef HAVE_HEAP_H
+#define HAVE_HEAP_H
+
+#define DEFAULT_BINARY_HEAP_SIZE 4097
+
+#define INDEX_LEFT_CHILD(index)  (index) * 2
+#define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
+#define INDEX_PARENT(index)      ((index) / 2)
+
+#define HEAP_PARENT_NICE(heap, index) (heap)->base[INDEX_PARENT(index)]->nice
+#define HEAP_NICE(heap, index) (heap)->base[index]->nice
+#define HEAP_LINK(heap, index) (heap)->base[index]->link
+
+/* array of base will skip index 0, and started at index 1 */
+#define heap_iterate_start(heap)   ((heap)->base + 1)
+#define heap_iterate_limit(heap)   ((heap)->base + (heap)->size + 1)
+
+#define u_offset(n, offset) (n + offset)
+
+
+/* EXTERNAL FUNCTIONS */
+/* END OF EXTERNAL FUNCTIONS */
+
+
+/* BINARY HEAP INTERNAL */
+/* END OF BINARY HEAP INTERNAL */
+
+/* MINIMAL HEAP */
+extern struct minimal_heap * minimal_heap_create(uint32 capacity);
+extern void minimal_heap_destroy(struct minimal_heap **heap);
+extern bool minimal_heap_empty_p(struct minimal_heap *heap);
+extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern void minimal_heap_cleanup(struct minimal_heap *heap);
+extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
+extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
+/* END OF MINIMAL HEAP */
+
+#endif
+/* END of ./src/heap/heap.h */
+
+/* BEGIN of ./src/log/log.h */
+#ifndef LOG_OF_LIBDS_H
+#define LOG_OF_LIBDS_H
+
+extern void libds_log_print(enum log_level lvl, const char *msg);
+
+#endif
+/* END of ./src/log/log.h */
 #endif /* END OF FILE */
