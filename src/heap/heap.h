@@ -1,15 +1,20 @@
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
+#define HEAP_ROOT_INDEX          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
 #define INDEX_LEFT_CHILD(index)  (index) * 2
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
 
-#define HEAP_PARENT_NICE(heap, index) (heap)->base[INDEX_PARENT(index)]->nice
-#define HEAP_NICE(heap, index) (heap)->base[index]->nice
-#define HEAP_LINK(heap, index) (heap)->base[index]->link
+#define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
+#define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
+#define HEAP_RIGHT_CHILD_NICE(heap, index) (heap)->base[INDEX_RIGHT_CHILD(index)]->nice
+#define HEAP_NICE(heap, index)             (heap)->base[index]->nice
+#define HEAP_LINK(heap, index)             (heap)->base[index]->link
+#define HEAP_SIZE(heap)                    (heap)->size
+
 
 /* array of base will skip index 0, and started at index 1 */
 #define heap_iterate_start(heap)   ((heap)->base + 1)
@@ -36,6 +41,8 @@ static inline struct doubly_linked_list * binary_heap_node_root(struct binary_he
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline void binary_heap_percolate_up(struct binary_heap *heap, void *val, sint64 nice);
+static inline uint32 binary_heap_node_child_small(struct binary_heap *heap, uint32 index);
+static inline struct doubly_linked_list * binary_heap_percolate_down(struct binary_heap *heap);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
@@ -47,6 +54,7 @@ void minimal_heap_cleanup(struct minimal_heap *heap);
 struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
+struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 /* END OF MINIMAL HEAP */
 
 #endif

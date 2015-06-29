@@ -231,3 +231,86 @@ unit_test_minimal_heap_node_find(void)
     test_result_print(SYM_2_STR(minimal_heap_node_find), pass);
     return;
 }
+
+static inline void
+unit_test_minimal_heap_node_find_min(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x22345678u;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, minimal_heap_node_find_min(heap), &pass);
+
+    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    RESULT_CHECK_pointer(minimal_heap_link(heap, 1u),
+        minimal_heap_node_find_min(heap), &pass);
+
+    while (loop--) {
+        RESULT_CHECK_pointer(minimal_heap_link(heap, 1u),
+            minimal_heap_node_find_min(heap), &pass);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_find_min), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_insert(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0xA234;
+    heap = NULL;
+
+    minimal_heap_node_insert(heap, &pass, 0u);
+
+    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    while (loop--) {
+        minimal_heap_node_insert(heap, &pass, loop);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_insert), pass);
+    return;
+}
+
+
+static inline void
+unit_test_minimal_heap_node_remove_min(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+    struct doubly_linked_list *minimal;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0xA234;
+    heap = NULL;
+
+    minimal_heap_node_remove_min(heap);
+
+    heap = unit_test_minimal_heap_sample(0x11345, 0x1104E);
+    while (loop--) {
+        minimal = minimal_heap_node_find_min(heap);
+        RESULT_CHECK_pointer(minimal, minimal_heap_node_remove_min(heap), &pass);
+        doubly_linked_list_destroy(&minimal);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_remove_min), pass);
+    return;
+}

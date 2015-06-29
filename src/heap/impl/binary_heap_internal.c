@@ -98,7 +98,7 @@ binary_heap_node_root(struct binary_heap *heap)
 {
     assert(NULL != heap);
 
-    return heap->base[1]->link;
+    return heap->base[HEAP_ROOT_INDEX]->link;
 }
 
 static inline struct doubly_linked_list *
@@ -127,12 +127,17 @@ static inline void
 binary_heap_capacity_extend(struct binary_heap *heap)
 {
     struct collision_chain **new;
+    uint32 size;
 
     assert(NULL != heap);
     assert(NULL != heap->base);
 
-    new = malloc_ds(sizeof(*heap->base[0]) * u_offset(heap->capacity * 2, 1));
-    memcpy(new, heap->base, u_offset(heap->capacity, 1));
+    size = sizeof(*heap->base[0]) * u_offset(heap->capacity * 2, 1);
+    new = malloc_ds(size);
+    memset(new, 0, size);
+
+    size = sizeof(*heap->base[0]) * u_offset(heap->capacity, 1);
+    memcpy(new, heap->base, size);
 
     heap->capacity = heap->capacity * 2;
     free_ds(heap->base);
@@ -153,7 +158,7 @@ binary_heap_percolate_up(struct binary_heap *heap, void *val, sint64 nice)
     }
 
     index = ++heap->size;
-    while (1 != index && HEAP_PARENT_NICE(heap, index) > nice) {
+    while (HEAP_ROOT_INDEX != index && HEAP_PARENT_NICE(heap, index) > nice) {
         heap->base[index] = heap->base[INDEX_PARENT(index)];
         index = INDEX_PARENT(index);
     }
@@ -163,3 +168,43 @@ binary_heap_percolate_up(struct binary_heap *heap, void *val, sint64 nice)
     heap->base[index]->link = doubly_linked_list_node_create(val, 0);
 }
 
+static inline uint32
+binary_heap_node_child_small(struct binary_heap *heap, uint32 index)
+{
+    assert(NULL != heap);
+    assert(index > 0u && index < u_offset(heap->size, 1));
+
+    return HEAP_LEFT_CHILD_NICE(heap, index) < HEAP_RIGHT_CHILD_NICE(heap, index) ?
+        INDEX_LEFT_CHILD(index) : INDEX_RIGHT_CHILD(index);
+}
+
+static inline struct doubly_linked_list *
+binary_heap_percolate_down(struct binary_heap *heap)
+{
+    uint32 index;
+    uint32 small_child;
+    struct doubly_linked_list *retval;
+
+    assert(NULL != heap);
+
+    if (binary_heap_empty_p(heap)) {
+        pr_log_warn("Binary heap is empty, nothing will be done.\n");
+        return NULL;
+    }
+
+    retval = HEAP_LINK(heap, HEAP_ROOT_INDEX);
+    HEAP_LINK(heap, HEAP_ROOT_INDEX) = NULL;
+    free_ds(heap->base[HEAP_ROOT_INDEX]);
+    index = HEAP_ROOT_INDEX;
+
+    small_child = binary_heap_node_child_small(heap, index);
+    while (small_child < u_offset(HEAP_SIZE(heap), 1)) {
+        heap->base[index] = heap->base[small_child];
+        index = small_child;
+        small_child = binary_heap_node_child_small(heap, index);
+    }
+
+    HEAP_LINK(heap, index) = NULL;
+
+    return retval;
+}
