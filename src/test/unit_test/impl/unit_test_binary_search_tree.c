@@ -379,7 +379,7 @@ unit_test_binary_search_tree_node_insert(void)
     TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x3B4321, 0x331A2B);
+    tree = unit_test_binary_search_tree_sample(0x384321, 0x331A2B);
     tmp = binary_search_tree_node_create(&pass, 0xFFFDEA);
 
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_insert(tree, NULL), &pass);
