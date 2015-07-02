@@ -298,12 +298,12 @@ unit_test_minimal_heap_node_remove_min(void)
     TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
-    loop = 0xA234;
+    loop = 0x123;
     heap = NULL;
 
     minimal_heap_node_remove_min(heap);
 
-    heap = unit_test_minimal_heap_sample(0x11345, 0x1104E);
+    heap = unit_test_minimal_heap_sample(0x14235, 0x10D4E);
     while (loop--) {
         minimal = minimal_heap_node_find_min(heap);
         RESULT_CHECK_pointer(minimal, minimal_heap_node_remove_min(heap), &pass);

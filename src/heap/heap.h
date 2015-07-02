@@ -7,6 +7,7 @@
 #define INDEX_LEFT_CHILD(index)  (index) * 2
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
+#define INDEX_LAST(heap)         ((heap)->size)
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -14,6 +15,7 @@
 #define HEAP_NICE(heap, index)             (heap)->base[index]->nice
 #define HEAP_LINK(heap, index)             (heap)->base[index]->link
 #define HEAP_SIZE(heap)                    (heap)->size
+#define HEAP_CHAIN(heap, index)            (heap)->base[index]
 
 
 /* array of base will skip index 0, and started at index 1 */
@@ -40,9 +42,10 @@ static inline void binary_heap_cleanup(struct binary_heap *heap);
 static inline struct doubly_linked_list * binary_heap_node_root(struct binary_heap *heap);
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);
-static inline void binary_heap_percolate_up(struct binary_heap *heap, void *val, sint64 nice);
-static inline uint32 binary_heap_node_child_small(struct binary_heap *heap, uint32 index);
-static inline struct doubly_linked_list * binary_heap_percolate_down(struct binary_heap *heap);
+static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice);
+static inline struct doubly_linked_list * binary_heap_percolate_down(struct binary_heap *heap, uint32 index);
+static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
+static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */

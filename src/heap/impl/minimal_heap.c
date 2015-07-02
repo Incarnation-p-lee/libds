@@ -83,13 +83,16 @@ void
 minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
 {
     struct doubly_linked_list *head;
+    uint32 index;
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         head = minimal_heap_node_find(heap, nice);
         if (!head) {
-            binary_heap_percolate_up(heap->bin_heap, val, nice);
+            index = binary_heap_percolate_up(heap->bin_heap,
+                minimal_heap_size(heap) + 1, nice);
+            binary_heap_node_create_by_index(heap->bin_heap, index, nice, val);
         } else {
             doubly_linked_list_node_insert_after(head,
                 doubly_linked_list_node_create(val, nice));
@@ -104,6 +107,17 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        return binary_heap_percolate_down(heap->bin_heap);
+        return binary_heap_percolate_down(heap->bin_heap, HEAP_ROOT_INDEX);
     }
+}
+
+void
+minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
+
 }
