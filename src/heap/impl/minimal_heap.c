@@ -103,11 +103,15 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
 struct doubly_linked_list *
 minimal_heap_node_remove_min(struct minimal_heap *heap)
 {
+    struct doubly_linked_list *retval;
+
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        return binary_heap_percolate_down(heap->bin_heap, HEAP_ROOT_INDEX);
+        retval = binary_heap_node_destroy_by_index(heap->bin_heap, HEAP_ROOT_INDEX);
+        binary_heap_percolate_down(heap->bin_heap, HEAP_ROOT_INDEX);
+        return retval;
     }
 }
 

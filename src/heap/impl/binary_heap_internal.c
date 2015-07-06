@@ -153,7 +153,24 @@ binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
     assert(NULL == heap->base[index]);
 
     HEAP_CHAIN(heap, index) = binary_heap_collision_chain_create(nice, val);
-    heap->size++;
+}
+
+static inline struct doubly_linked_list *
+binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index)
+{
+    struct doubly_linked_list *retval;
+
+    assert(NULL != heap);
+    assert(0 != index);
+    assert(NULL != heap->base[index]);
+
+    retval = HEAP_LINK(heap, index);
+    HEAP_LINK(heap, index) = NULL;
+
+    free_ds(HEAP_CHAIN(heap, index));
+    HEAP_CHAIN(heap, index) = NULL;
+
+    return retval;
 }
 
 static inline struct collision_chain *
@@ -184,29 +201,26 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
         index = INDEX_PARENT(index);
     }
+    heap->size++;
     HEAP_CHAIN(heap, index) = NULL;
 
     return index;
 
 }
 
-static inline struct doubly_linked_list *
+static inline void
 binary_heap_percolate_down(struct binary_heap *heap, uint32 index)
 {
     uint32 small_child;
-    struct doubly_linked_list *retval;
 
     assert(NULL != heap);
     assert(0 != index);
+    assert(NULL == HEAP_CHAIN(heap, index));
 
     if (binary_heap_empty_p(heap)) {
         pr_log_warn("Binary heap is empty, nothing will be done.\n");
-        return NULL;
+        return;
     }
-
-    retval = HEAP_LINK(heap, index);
-    HEAP_LINK(heap, index) = NULL;
-    free_ds(HEAP_CHAIN(heap, index));
 
     while (INDEX_LEFT_CHILD(index) < u_offset(HEAP_SIZE(heap), 1)) {
         if (INDEX_RIGHT_CHILD(index) <= INDEX_LAST(heap)) {
@@ -218,14 +232,9 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index)
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, small_child);
         index = small_child;
     }
-    HEAP_CHAIN(heap, index) = NULL;
 
-    if (index != INDEX_LAST(heap)) {
-        HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_LAST(heap));
-        HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
-    }
+    HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_LAST(heap));
+    HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
     heap->size--;
-
-    return retval;
 }
 

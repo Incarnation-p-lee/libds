@@ -43,9 +43,10 @@ static inline struct doubly_linked_list * binary_heap_node_root(struct binary_he
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice);
-static inline struct doubly_linked_list * binary_heap_percolate_down(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_percolate_down(struct binary_heap *heap, uint32 index);
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
+static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
