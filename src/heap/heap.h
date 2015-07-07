@@ -47,6 +47,7 @@ static inline void binary_heap_percolate_down(struct binary_heap *heap, uint32 i
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */

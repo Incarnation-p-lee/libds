@@ -117,6 +117,7 @@ binary_heap_node_find(struct binary_heap *heap, sint64 nice)
     }
 
     if (iter == heap_iterate_limit(heap)) {
+        pr_log_warn("Failed to find node of heap with given nice.\n");
         return NULL;
     } else {
         return (*iter)->link;
@@ -183,6 +184,32 @@ binary_heap_collision_chain_create(sint64 nice, void *val)
     retval->link = doubly_linked_list_node_create(val, 0);
 
     return retval;
+}
+
+static inline uint32
+binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice)
+{
+    register struct collision_chain **iter;
+    uint32 index;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+
+    index = 0;
+    iter = heap_iterate_start(heap);
+    while (iter < heap_iterate_limit(heap)) {
+        if ((*iter)->nice == nice) {
+            index = (uint32)(iter - heap->base);
+            break;
+        }
+        iter++;
+    }
+
+    if (0 == index) {
+        pr_log_warn("Failed to find node of heap with given nice.\n");
+    }
+
+    return index;
 }
 
 static inline uint32

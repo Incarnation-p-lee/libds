@@ -118,10 +118,22 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
 void
 minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset)
 {
+    uint32 index;
+    struct collision_chain *tmp;
+
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    }
+        index = binary_heap_index_get_by_nice(heap->bin_heap, nice);
+        if (0 == index) {
+            pr_log_warn("No such the node of heap, nothing will be done.\n");
+        } else {
+            tmp = HEAP_CHAIN(heap->bin_heap, index);
+            tmp->nice = nice - offset;
+            HEAP_CHAIN(heap->bin_heap, index) = NULL;
 
+            index = binary_heap_percolate_up(heap->bin_heap, index, tmp->nice);
+            HEAP_CHAIN(heap->bin_heap, index) = tmp;
+        }
+    }
 }
