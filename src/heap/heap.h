@@ -60,6 +60,7 @@ struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, si
 struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
+void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
 /* END OF MINIMAL HEAP */
 
 #endif

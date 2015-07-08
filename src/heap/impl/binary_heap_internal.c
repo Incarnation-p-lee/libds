@@ -108,19 +108,23 @@ binary_heap_node_find(struct binary_heap *heap, sint64 nice)
 
     assert(NULL != heap);
 
-    iter = heap_iterate_start(heap);
-    while (iter < heap_iterate_limit(heap)) {
-        if ((*iter)->nice == nice) {
-            break;
-        }
-        iter++;
-    }
-
-    if (iter == heap_iterate_limit(heap)) {
-        pr_log_warn("Failed to find node of heap with given nice.\n");
+    if (binary_heap_empty_p(heap)) {
+        pr_log_info("Attempt to find node in empty heap.\n");
         return NULL;
     } else {
-        return (*iter)->link;
+        iter = heap_iterate_start(heap);
+        while (iter < heap_iterate_limit(heap)) {
+            if ((*iter)->nice == nice) {
+                break;
+            }
+            iter++;
+        }
+
+        if (iter == heap_iterate_limit(heap)) {
+            return NULL;
+        } else {
+            return (*iter)->link;
+        }
     }
 }
 
@@ -133,11 +137,11 @@ binary_heap_capacity_extend(struct binary_heap *heap)
     assert(NULL != heap);
     assert(NULL != heap->base);
 
-    size = sizeof(*heap->base[0]) * u_offset(heap->capacity * 2, 1);
+    size = sizeof(heap->base[0]) * u_offset(heap->capacity * 2, 1);
     new = malloc_ds(size);
     memset(new, 0, size);
 
-    size = sizeof(*heap->base[0]) * u_offset(heap->capacity, 1);
+    size = sizeof(heap->base[0]) * u_offset(heap->capacity, 1);
     memcpy(new, heap->base, size);
 
     heap->capacity = heap->capacity * 2;
@@ -217,18 +221,18 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
 {
     assert(0 != index);
     assert(NULL != heap);
-    assert(NULL == binary_heap_node_find(heap, nice));
 
     if (binary_heap_full_p(heap)) {
         pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
         binary_heap_capacity_extend(heap);
     }
 
+    assert(NULL == HEAP_CHAIN(heap, index));
+
     while (HEAP_ROOT_INDEX != index && HEAP_PARENT_NICE(heap, index) > nice) {
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
         index = INDEX_PARENT(index);
     }
-    heap->size++;
     HEAP_CHAIN(heap, index) = NULL;
 
     return index;
@@ -262,6 +266,5 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index)
 
     HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_LAST(heap));
     HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
-    heap->size--;
 }
 

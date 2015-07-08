@@ -93,6 +93,7 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
             index = binary_heap_percolate_up(heap->bin_heap,
                 minimal_heap_size(heap) + 1, nice);
             binary_heap_node_create_by_index(heap->bin_heap, index, nice, val);
+            heap->bin_heap->size++;
         } else {
             doubly_linked_list_node_insert_after(head,
                 doubly_linked_list_node_create(val, nice));
@@ -111,6 +112,7 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
     } else {
         retval = binary_heap_node_destroy_by_index(heap->bin_heap, HEAP_ROOT_INDEX);
         binary_heap_percolate_down(heap->bin_heap, HEAP_ROOT_INDEX);
+        heap->bin_heap->size--;
         return retval;
     }
 }
@@ -123,6 +125,8 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (0 == offset) {
+        pr_log_info("Zero offset of nice, nothing will be done.\n");
     } else {
         index = binary_heap_index_get_by_nice(heap->bin_heap, nice);
         if (0 == index) {

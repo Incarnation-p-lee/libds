@@ -170,6 +170,7 @@ static struct test_performance unit_test_performance[] = {
     {"minimal_heap_node_find_min",                 0x0u, 0x0u},
     {"minimal_heap_node_insert",                   0x0u, 0x0u},
     {"minimal_heap_node_remove_min",               0x0u, 0x0u},
+    {"minimal_heap_node_decrease_nice",            0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 
