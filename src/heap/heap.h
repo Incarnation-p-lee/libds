@@ -8,6 +8,7 @@
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
 #define INDEX_LAST(heap)         ((heap)->size)
+#define INDEX_FIRST              HEAP_ROOT_INDEX
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -17,18 +18,13 @@
 #define HEAP_SIZE(heap)                    (heap)->size
 #define HEAP_CHAIN(heap, index)            (heap)->base[index]
 
-
-/* array of base will skip index 0, and started at index 1 */
-#define heap_iterate_start(heap)   ((heap)->base + 1)
-#define heap_iterate_limit(heap)   ((heap)->base + (heap)->size + 1)
-
 #define u_offset(n, offset) (n + offset)
-
 
 /* EXTERNAL FUNCTIONS */
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END OF EXTERNAL FUNCTIONS */
 
 
@@ -43,11 +39,12 @@ static inline struct doubly_linked_list * binary_heap_node_root(struct binary_he
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice);
-static inline void binary_heap_percolate_down(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice);
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice);
+static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */

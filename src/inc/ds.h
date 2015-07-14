@@ -813,6 +813,7 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
 #define INDEX_LAST(heap)         ((heap)->size)
+#define INDEX_FIRST              HEAP_ROOT_INDEX
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -822,13 +823,7 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 #define HEAP_SIZE(heap)                    (heap)->size
 #define HEAP_CHAIN(heap, index)            (heap)->base[index]
 
-
-/* array of base will skip index 0, and started at index 1 */
-#define heap_iterate_start(heap)   ((heap)->base + 1)
-#define heap_iterate_limit(heap)   ((heap)->base + (heap)->size + 1)
-
 #define u_offset(n, offset) (n + offset)
-
 
 /* EXTERNAL FUNCTIONS */
 /* END OF EXTERNAL FUNCTIONS */
