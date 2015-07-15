@@ -828,6 +828,8 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 /* EXTERNAL FUNCTIONS */
 /* END OF EXTERNAL FUNCTIONS */
 
+/* BINARY HEAP DEBUG */
+/* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */
 /* END OF BINARY HEAP INTERNAL */

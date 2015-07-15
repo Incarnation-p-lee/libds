@@ -11,5 +11,6 @@
 
 #include "heap.h"
 
+#include "impl/binary_heap_debug.c"
 #include "impl/binary_heap_internal.c"
 #include "impl/minimal_heap.c"

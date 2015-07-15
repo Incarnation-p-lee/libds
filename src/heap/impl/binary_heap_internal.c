@@ -231,7 +231,6 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
 /*
  * index -specific the empty hole index of heap.
  * nice  -nice value of percolate up.
- * Todo: should assert nice is not contained by heap
  */
 static inline uint32
 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
@@ -245,6 +244,7 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
     }
 
     assert(NULL == HEAP_CHAIN(heap, index));
+    assert(!binary_heap_node_contains_with_hole_p(heap, nice));
 
     while (HEAP_ROOT_INDEX != index && HEAP_PARENT_NICE(heap, index) > nice) {
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
@@ -253,7 +253,6 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
     HEAP_CHAIN(heap, index) = NULL;
 
     return index;
-
 }
 
 static inline uint32

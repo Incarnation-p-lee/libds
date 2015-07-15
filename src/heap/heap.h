@@ -27,6 +27,9 @@ extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur,
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END OF EXTERNAL FUNCTIONS */
 
+/* BINARY HEAP DEBUG */
+static inline bool binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice);
+/* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */
 static inline struct binary_heap * binary_heap_create(uint32 capacity);
