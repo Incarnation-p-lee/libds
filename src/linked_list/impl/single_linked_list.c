@@ -291,7 +291,7 @@ single_linked_list_node_previous(struct single_linked_list *node)
     previous = NULL;
     if (!node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (node && NULL == single_linked_list_node_next(node)) {
+    } else if (NULL == single_linked_list_node_next(node)) {
         pr_log_warn("Destroyed data structure.\n");
     } else {
         previous = node;
