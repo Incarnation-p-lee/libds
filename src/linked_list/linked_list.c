@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "types.h"
@@ -11,3 +12,4 @@
 
 #include "impl/doubly_linked_list.c"
 #include "impl/single_linked_list.c"
+#include "impl/skip_list.c"

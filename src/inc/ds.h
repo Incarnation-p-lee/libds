@@ -74,6 +74,28 @@ struct doubly_linked_list {
 };
 
 /*
+ * Skip Linked List
+ *     Skip linked list used extra pointer to forward node for quickly find.
+ * the linked list should be sorted.
+ *     Take 3 level skip list layout as below:
+ * ------------------------------------------------------------
+ * | Level 2 head  0 ----------------> 10 -------------> NULL |
+ * | Level 1 head  0 ------> 7 ------> 10 -> 22 -------> NULL |
+ * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
+ * ------------------------------------------------------------
+ */
+#define LEVEL_LIMIT 4
+
+struct skip_linked_list {
+    sint32 key;
+    void   *val;
+    union {
+        struct skip_linked_list *next;
+        struct skip_linked_list *layer[LEVEL_LIMIT];
+    };
+};
+
+/*
  * array stack space
  */
 struct array_stack_space {
@@ -261,25 +283,21 @@ struct minimal_heap {
 
 #define doubly_linked_list_node_val(node) \
     (assert(node), (node)->val)
-
 #define doubly_linked_list_node_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
 #define doubly_linked_list_node_sid(node) \
     (assert(node), (node)->sid)
-
 #define doubly_linked_list_node_sid_set(node, v) \
     (assert(node), (node)->sid = (v))
 
 #define doubly_linked_list_node_next(node) \
     (assert(node), (node)->next)
-
 #define doubly_linked_list_node_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
 #define doubly_linked_list_node_previous(node) \
     (assert(node), (node)->previous)
-
 #define doubly_linked_list_node_previous_set(node, v) \
     (assert(node), (node)->previous = (v))
 
@@ -294,22 +312,35 @@ struct minimal_heap {
 
 #define single_linked_list_node_val(node) \
     (assert(node), (node)->val)
-
 #define single_linked_list_node_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
 #define single_linked_list_node_sid(node) \
     (assert(node), (node)->sid)
-
 #define single_linked_list_node_sid_set(node, v) \
     (assert(node), (node)->sid = (v))
 
 #define single_linked_list_node_next(node) \
     (assert(node), (node)->next)
-
 #define single_linked_list_node_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
+
+/* SKIP LINKED LIST */
+#define skip_linked_list_node_key(node) \
+    (assert(node), (node)->key)
+#define skip_linked_list_node_key_set(node, k) \
+    (assert(node), (node)->key = (k))
+
+#define skip_linked_list_node_val(node) \
+    (assert(node), (node)->val)
+#define skip_linked_list_node_val_set(node, v) \
+    (assert(node), (node)->val = (v))
+
+#define skip_linked_list_node_next(node) \
+    (assert(node), (node)->next)
+#define skip_linked_list_node_next_set(node, n) \
+    (assert(node), (node)->next = (n))
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \
@@ -321,27 +352,23 @@ struct minimal_heap {
 
 #define array_stack_sid(stack) \
     (assert(stack), (stack)->sid)
-
 #define array_stack_sid_set(stack, v) \
     (assert(stack), (stack)->sid = (v))
 
 #define array_stack_space_dim(stack) \
     (assert(stack), (stack)->space.dim)
-
 #define array_stack_space_dim_set(stack, v) \
     (assert(stack), (stack)->space.dim = (v))
 
 /* LINKED STACK */
 #define linked_stack_sid(stack) \
     (assert(stack), (stack)->sid)
-
 #define linked_stack_sid_set(stack, v) \
     (assert(stack), (stack)->sid = (v))
 
 /* ARRAY QUEUE */
 #define array_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define array_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
@@ -354,7 +381,6 @@ struct minimal_heap {
 /* STACKED QUEUE */
 #define stacked_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define stacked_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
@@ -364,26 +390,22 @@ struct minimal_heap {
 /* DOUBLY END QUEUE */
 #define doubly_end_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define doubly_end_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
 /* BINARY SEARCH TREE */
 #define binary_search_tree_node_nice(tree) \
     (assert(tree), (tree)->chain.nice)
-
 #define binary_search_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->chain.nice = (v))
 
 #define binary_search_tree_child_left(tree) \
     (assert(tree), (tree)->left)
-
 #define binary_search_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->left = (v))
 
 #define binary_search_tree_child_right(tree) \
     (assert(tree), (tree)->right)
-
 #define binary_search_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->right = (v))
 
@@ -393,19 +415,16 @@ struct minimal_heap {
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
-
 #define avl_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->b_node.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
     (assert(tree), (tree)->b_node.avl_left)
-
 #define avl_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->b_node.avl_left = (v))
 
 #define avl_tree_child_right(tree) \
     (assert(tree), (tree)->b_node.avl_right)
-
 #define avl_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->b_node.avl_right = (v))
 
@@ -414,7 +433,6 @@ struct minimal_heap {
 
 #define avl_tree_height(tree) \
     (assert(tree), (tree)->b_node.height)
-
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->b_node.height = (v))
 
@@ -428,19 +446,16 @@ struct minimal_heap {
 /* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
-
 #define splay_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->b_node.chain.nice = (v))
 
 #define splay_tree_child_left(tree) \
     (assert(tree), (tree)->b_node.splay_left)
-
 #define splay_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->b_node.splay_left = (v))
 
 #define splay_tree_child_right(tree) \
     (assert(tree), (tree)->b_node.splay_right)
-
 #define splay_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->b_node.splay_right = (v))
 
@@ -457,6 +472,7 @@ struct minimal_heap {
 /* HASHING TABLE */
 #define hashing_table_size(hash) \
     (assert(hash), (hash)->size)
+
 #define hashing_table_load_factor(hash) \
     (assert(hash), (hash)->load_factor)
 #define hashing_table_load_factor_set(hash, factor) \
@@ -465,6 +481,7 @@ struct minimal_heap {
 /* SEPARATE CHAIN HASHING */
 #define separate_chain_hash_size(hash) \
     (assert(hash), hashing_table_size((hash)->table))
+
 #define separate_chain_hash_load_factor(hash) \
     (assert(hash), hashing_table_load_factor((hash)->table))
 #define separate_chain_hash_load_factor_set(hash, factor) \
@@ -473,6 +490,7 @@ struct minimal_heap {
 /* OPEN ADDRESSING HASHING */
 #define open_addressing_hash_size(hash) \
     (assert(hash), hashing_table_size((hash)->table))
+
 #define open_addressing_hash_load_factor(hash) \
     (assert(hash), hashing_table_load_factor((hash)->table))
 #define open_addressing_hash_load_factor_set(hash, factor) \
@@ -481,10 +499,13 @@ struct minimal_heap {
 /* MINIMAL HEAP */
 #define minimal_heap_size(heap) \
     (assert(heap), (heap)->bin_heap->size)
+
 #define minimal_heap_capacity(heap) \
     (assert(heap), (heap)->bin_heap->capacity)
+
 #define minimal_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->bin_heap, index))
+
 #define minimal_heap_link(heap, index) \
     (assert(heap), HEAP_LINK(heap->bin_heap, index))
 #define minimal_heap_link_set(heap, index, link) \
@@ -546,6 +567,11 @@ struct minimal_heap {
 #ifndef HAVE_LINKED_LIST_H
 #define HAVE_LINKED_LIST_H
 
+#define SKIP_LIST_BOTTOM_IDX  0
+#define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
+#define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
+
+
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list * doubly_linked_list_create(void);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
@@ -590,6 +616,22 @@ extern struct single_linked_list * single_linked_list_node_remove(struct single_
 extern struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
 extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 extern struct single_linked_list * single_linked_list_merge(struct single_linked_list *m, struct single_linked_list *n);
+/* END of single linked list, Circular. */
+
+
+/* skip linked list, _NOT_ Circular. */
+extern struct skip_linked_list * skip_linked_list_create(void);
+extern struct skip_linked_list * skip_linked_list_node_create(void *val, sint32 key);
+extern void skip_linked_list_initial(struct skip_linked_list *list);
+extern void skip_linked_list_node_initial(struct skip_linked_list *list, void *val, sint32 key);
+extern void skip_linked_list_destroy(struct skip_linked_list **list);
+extern uint32 skip_linked_list_length(struct skip_linked_list *list);
+extern bool skip_linked_list_contains_p(struct skip_linked_list *list, sint32 key);
+extern void skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
+extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
+extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
+
+/* END of skip linked list, _NOT_ Circular. */
 
 #endif
 /* END of ./src/linked_list/linked_list.h */

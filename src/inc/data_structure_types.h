@@ -28,6 +28,28 @@ struct doubly_linked_list {
 };
 
 /*
+ * Skip Linked List
+ *     Skip linked list used extra pointer to forward node for quickly find.
+ * the linked list should be sorted.
+ *     Take 3 level skip list layout as below:
+ * ------------------------------------------------------------
+ * | Level 2 head  0 ----------------> 10 -------------> NULL |
+ * | Level 1 head  0 ------> 7 ------> 10 -> 22 -------> NULL |
+ * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
+ * ------------------------------------------------------------
+ */
+#define LEVEL_LIMIT 4
+
+struct skip_linked_list {
+    sint32 key;
+    void   *val;
+    union {
+        struct skip_linked_list *next;
+        struct skip_linked_list *layer[LEVEL_LIMIT];
+    };
+};
+
+/*
  * array stack space
  */
 struct array_stack_space {

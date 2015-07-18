@@ -13,6 +13,7 @@
 void memory_maps_obtain(void);
 struct memory_maps * memory_maps_entry_find(char *name);
 struct option_set * option_process(uint32 argc, char **argv);
+uint32 random_uint32_with_limit(uint32 lmt);
 
 static inline FILE * memory_maps_proc_read(void);
 static inline void memory_maps_filter_process(FILE *maps);

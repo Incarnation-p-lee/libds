@@ -16,25 +16,21 @@
 
 #define doubly_linked_list_node_val(node) \
     (assert(node), (node)->val)
-
 #define doubly_linked_list_node_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
 #define doubly_linked_list_node_sid(node) \
     (assert(node), (node)->sid)
-
 #define doubly_linked_list_node_sid_set(node, v) \
     (assert(node), (node)->sid = (v))
 
 #define doubly_linked_list_node_next(node) \
     (assert(node), (node)->next)
-
 #define doubly_linked_list_node_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
 #define doubly_linked_list_node_previous(node) \
     (assert(node), (node)->previous)
-
 #define doubly_linked_list_node_previous_set(node, v) \
     (assert(node), (node)->previous = (v))
 
@@ -49,22 +45,35 @@
 
 #define single_linked_list_node_val(node) \
     (assert(node), (node)->val)
-
 #define single_linked_list_node_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
 #define single_linked_list_node_sid(node) \
     (assert(node), (node)->sid)
-
 #define single_linked_list_node_sid_set(node, v) \
     (assert(node), (node)->sid = (v))
 
 #define single_linked_list_node_next(node) \
     (assert(node), (node)->next)
-
 #define single_linked_list_node_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
+
+/* SKIP LINKED LIST */
+#define skip_linked_list_node_key(node) \
+    (assert(node), (node)->key)
+#define skip_linked_list_node_key_set(node, k) \
+    (assert(node), (node)->key = (k))
+
+#define skip_linked_list_node_val(node) \
+    (assert(node), (node)->val)
+#define skip_linked_list_node_val_set(node, v) \
+    (assert(node), (node)->val = (v))
+
+#define skip_linked_list_node_next(node) \
+    (assert(node), (node)->next)
+#define skip_linked_list_node_next_set(node, n) \
+    (assert(node), (node)->next = (n))
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \
@@ -76,27 +85,23 @@
 
 #define array_stack_sid(stack) \
     (assert(stack), (stack)->sid)
-
 #define array_stack_sid_set(stack, v) \
     (assert(stack), (stack)->sid = (v))
 
 #define array_stack_space_dim(stack) \
     (assert(stack), (stack)->space.dim)
-
 #define array_stack_space_dim_set(stack, v) \
     (assert(stack), (stack)->space.dim = (v))
 
 /* LINKED STACK */
 #define linked_stack_sid(stack) \
     (assert(stack), (stack)->sid)
-
 #define linked_stack_sid_set(stack, v) \
     (assert(stack), (stack)->sid = (v))
 
 /* ARRAY QUEUE */
 #define array_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define array_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
@@ -109,7 +114,6 @@
 /* STACKED QUEUE */
 #define stacked_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define stacked_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
@@ -119,26 +123,22 @@
 /* DOUBLY END QUEUE */
 #define doubly_end_queue_sid(queue) \
     (assert(queue), (queue)->sid)
-
 #define doubly_end_queue_sid_set(queue, v) \
     (assert(queue), (queue)->sid = (v))
 
 /* BINARY SEARCH TREE */
 #define binary_search_tree_node_nice(tree) \
     (assert(tree), (tree)->chain.nice)
-
 #define binary_search_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->chain.nice = (v))
 
 #define binary_search_tree_child_left(tree) \
     (assert(tree), (tree)->left)
-
 #define binary_search_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->left = (v))
 
 #define binary_search_tree_child_right(tree) \
     (assert(tree), (tree)->right)
-
 #define binary_search_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->right = (v))
 
@@ -148,19 +148,16 @@
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
-
 #define avl_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->b_node.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
     (assert(tree), (tree)->b_node.avl_left)
-
 #define avl_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->b_node.avl_left = (v))
 
 #define avl_tree_child_right(tree) \
     (assert(tree), (tree)->b_node.avl_right)
-
 #define avl_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->b_node.avl_right = (v))
 
@@ -169,7 +166,6 @@
 
 #define avl_tree_height(tree) \
     (assert(tree), (tree)->b_node.height)
-
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->b_node.height = (v))
 
@@ -183,19 +179,16 @@
 /* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
-
 #define splay_tree_node_nice_set(tree, v) \
     (assert(tree), (tree)->b_node.chain.nice = (v))
 
 #define splay_tree_child_left(tree) \
     (assert(tree), (tree)->b_node.splay_left)
-
 #define splay_tree_child_left_set(tree, v) \
     (assert(tree), (tree)->b_node.splay_left = (v))
 
 #define splay_tree_child_right(tree) \
     (assert(tree), (tree)->b_node.splay_right)
-
 #define splay_tree_child_right_set(tree, v) \
     (assert(tree), (tree)->b_node.splay_right = (v))
 
@@ -212,6 +205,7 @@
 /* HASHING TABLE */
 #define hashing_table_size(hash) \
     (assert(hash), (hash)->size)
+
 #define hashing_table_load_factor(hash) \
     (assert(hash), (hash)->load_factor)
 #define hashing_table_load_factor_set(hash, factor) \
@@ -220,6 +214,7 @@
 /* SEPARATE CHAIN HASHING */
 #define separate_chain_hash_size(hash) \
     (assert(hash), hashing_table_size((hash)->table))
+
 #define separate_chain_hash_load_factor(hash) \
     (assert(hash), hashing_table_load_factor((hash)->table))
 #define separate_chain_hash_load_factor_set(hash, factor) \
@@ -228,6 +223,7 @@
 /* OPEN ADDRESSING HASHING */
 #define open_addressing_hash_size(hash) \
     (assert(hash), hashing_table_size((hash)->table))
+
 #define open_addressing_hash_load_factor(hash) \
     (assert(hash), hashing_table_load_factor((hash)->table))
 #define open_addressing_hash_load_factor_set(hash, factor) \
@@ -236,10 +232,13 @@
 /* MINIMAL HEAP */
 #define minimal_heap_size(heap) \
     (assert(heap), (heap)->bin_heap->size)
+
 #define minimal_heap_capacity(heap) \
     (assert(heap), (heap)->bin_heap->capacity)
+
 #define minimal_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->bin_heap, index))
+
 #define minimal_heap_link(heap, index) \
     (assert(heap), HEAP_LINK(heap->bin_heap, index))
 #define minimal_heap_link_set(heap, index, link) \
