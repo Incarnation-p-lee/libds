@@ -806,6 +806,9 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
+#define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
+#define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
+
 #define HEAP_ROOT_INDEX          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
@@ -829,6 +832,8 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 /* END OF EXTERNAL FUNCTIONS */
 
 /* BINARY HEAP DEBUG */
+#if defined DEBUG
+#endif
 /* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */

@@ -63,6 +63,9 @@ minimal_heap_node_find(struct minimal_heap *heap, sint64 nice)
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
+        return NULL;
     } else {
         return binary_heap_node_find(heap->bin_heap, nice);
     }
@@ -87,6 +90,8 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
     } else {
         head = minimal_heap_node_find(heap, nice);
         if (!head) {
@@ -108,15 +113,23 @@ struct doubly_linked_list *
 minimal_heap_node_remove_min(struct minimal_heap *heap)
 {
     struct doubly_linked_list *retval;
-    return NULL;
+    uint32 index;
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        retval = binary_heap_node_destroy_by_index(heap->bin_heap, HEAP_ROOT_INDEX);
-        // binary_heap_percolate_down(heap->bin_heap, HEAP_ROOT_INDEX);
-        heap->bin_heap->size--;
+        index = HEAP_ROOT_INDEX;
+        retval = binary_heap_node_destroy_by_index(heap->bin_heap, index);
+
+        index = binary_heap_percolate_down(heap->bin_heap, index,
+            HEAP_NICE_UPPER_LMT);
+
+        /*
+         * binary heap _DO_ not allow NULL hole of array implement.
+         * move the last node to percolated node, and percolate up.
+         */
+        binary_heap_node_remove_fixup(heap->bin_heap, index);
         return retval;
     }
 }
@@ -132,6 +145,8 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
     } else if (0 == offset) {
         pr_log_info("Zero offset of nice, nothing will be done.\n");
     } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
@@ -171,6 +186,8 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
     } else if (0 == offset) {
         pr_log_info("Zero offset of nice, nothing will be done.\n");
     } else {

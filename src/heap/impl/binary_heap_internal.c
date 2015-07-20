@@ -77,6 +77,7 @@ binary_heap_cleanup(struct binary_heap *heap)
     register uint32 index;
 
     assert(NULL != heap);
+    assert(NULL != heap->base);
 
     index = INDEX_FIRST;
 
@@ -97,6 +98,7 @@ static inline struct doubly_linked_list *
 binary_heap_node_root(struct binary_heap *heap)
 {
     assert(NULL != heap);
+    assert(NULL != heap->base);
 
     return HEAP_LINK(heap, HEAP_ROOT_INDEX);
 }
@@ -107,6 +109,7 @@ binary_heap_node_find(struct binary_heap *heap, sint64 nice)
     uint32 index;
 
     assert(NULL != heap);
+    assert(NULL != heap->base);
 
     if (binary_heap_empty_p(heap)) {
         pr_log_info("Attempt to find node in empty heap.\n");
@@ -147,6 +150,7 @@ binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
 {
     assert(NULL != heap);
     assert(0 != index);
+    assert(NULL != heap->base);
     assert(NULL == heap->base[index]);
 
     HEAP_CHAIN(heap, index) = binary_heap_collision_chain_create(nice, val);
@@ -159,6 +163,7 @@ binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index)
 
     assert(NULL != heap);
     assert(0 != index);
+    assert(NULL != heap->base);
     assert(NULL != heap->base[index]);
 
     retval = HEAP_LINK(heap, index);
@@ -175,6 +180,9 @@ binary_heap_collision_chain_create(sint64 nice, void *val)
 {
     struct collision_chain *retval;
 
+    assert(HEAP_NICE_UPPER_LMT > nice);
+    assert(HEAP_NICE_LOWER_LMT < nice);
+
     retval = malloc_ds(sizeof(*retval));
     retval->nice = nice;
     retval->link = doubly_linked_list_node_create(val, 0);
@@ -189,6 +197,8 @@ binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice)
 
     assert(NULL != heap);
     assert(NULL != heap->base);
+    assert(HEAP_NICE_UPPER_LMT > nice);
+    assert(HEAP_NICE_LOWER_LMT < nice);
 
     if (!binary_heap_node_contains_p(heap, nice, &index)) {
         pr_log_warn("Failed to find node of heap with given nice.\n");
@@ -211,6 +221,8 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
 
     assert(NULL != heap);
     assert(NULL != heap->base);
+    assert(HEAP_NICE_UPPER_LMT > nice);
+    assert(HEAP_NICE_LOWER_LMT < nice);
 
     index = INDEX_FIRST;
     ignore = NULL == tgt ? true : false;
@@ -231,12 +243,16 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
 /*
  * index -specific the empty hole index of heap.
  * nice  -nice value of percolate up.
+ * RETURN the percolated index of heap.
  */
 static inline uint32
 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
 {
     assert(0 != index);
     assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(HEAP_NICE_UPPER_LMT > nice);
+    assert(HEAP_NICE_LOWER_LMT < nice);
 
     if (binary_heap_full_p(heap)) {
         pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
@@ -245,6 +261,7 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
 
     assert(NULL == HEAP_CHAIN(heap, index));
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
+    assert(binary_heap_percolate_up_precondition_p(heap, index, nice));
 
     while (HEAP_ROOT_INDEX != index && HEAP_PARENT_NICE(heap, index) > nice) {
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
@@ -255,25 +272,103 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
     return index;
 }
 
+static inline bool
+binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
+{
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+
+    return INDEX_LEFT_CHILD(index) <= INDEX_LAST(heap) ? true : false;
+}
+
+static inline void
+binary_heap_node_remove_fixup(struct binary_heap *heap, uint32 index)
+{
+    sint64 nice;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(0u != index);
+    assert(!binary_heap_node_child_exist_p(heap, index));
+
+    nice = HEAP_NICE(heap, INDEX_LAST(heap));
+    tmp = HEAP_CHAIN(heap, INDEX_LAST(heap));
+    HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
+    heap->size--;
+
+    index = binary_heap_percolate_up(heap, index, nice);
+    HEAP_CHAIN(heap, index) = tmp;
+}
+
+static inline uint32
+binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
+{
+    assert(NULL != heap);
+    assert(0 != index);
+    assert(NULL != heap->base);
+    assert(INDEX_RIGHT_CHILD(index) <= INDEX_LAST(heap));
+
+    if (HEAP_LEFT_CHILD_NICE(heap, index) > HEAP_RIGHT_CHILD_NICE(heap, index)) {
+        return INDEX_RIGHT_CHILD(index);
+    } else {
+        return INDEX_LEFT_CHILD(index);
+    }
+}
+
+/*
+ * index -specific the empty hole index of heap.
+ * nice  -nice value of percolate down.
+ * RETURN the percolated index of heap.
+ */
 static inline uint32
 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice)
 {
-    // uint32 small_child;
+    uint32 small_child;
 
-    // assert(NULL != heap);
-    // assert(0 != index);
-    // assert(NULL == HEAP_CHAIN(heap, index));
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(0 != index);
+    /*
+     * nice HEAP_NICE_UPPER_LMT
+     */
+    assert(HEAP_NICE_LOWER_LMT < nice);
+    assert(NULL == HEAP_CHAIN(heap, index));
+    assert(!binary_heap_node_contains_with_hole_p(heap, nice));
 
-    // if (binary_heap_empty_p(heap)) {
-    //     pr_log_warn("Binary heap is empty, nothing will be done.\n");
-    //     return 0;
-    // }
+    if (binary_heap_empty_p(heap)) {
+        pr_log_warn("Binary heap is empty, nothing will be done.\n");
+        return 0;
+    }
 
-    // while (index != minimal_heap_size(heap)
-    //     && HEAP_NICE(heap->bin_heap, index) < nice) {
-    //     if (HEAP
-    //     && HEAP_NICE(heap->bin_heap, index) 
-    // }
+    while (index <= INDEX_LAST(heap)) {
+        if (INDEX_RIGHT_CHILD(index) <= INDEX_LAST(heap)) {
+            /*
+             * index node has two child here.
+             */
+            small_child = binary_heap_child_small_nice_index(heap, index);
+            if (HEAP_NICE(heap, small_child) > nice) {
+                break;
+            } else {
+                HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, small_child);
+                index = small_child;
+            }
+        } else if (INDEX_LEFT_CHILD(index) <= INDEX_LAST(heap)) {
+            /*
+             * index node has only one child here.
+             */
+            if (HEAP_LEFT_CHILD_NICE(heap, index) < nice) {
+                index = INDEX_LEFT_CHILD(index);
+            }
+            break;
+        } else {
+            /*
+             * index node has no child here.
+             */
+            break;
+        }
+    }
+    HEAP_CHAIN(heap, index) = NULL;
 
     return index;
 }

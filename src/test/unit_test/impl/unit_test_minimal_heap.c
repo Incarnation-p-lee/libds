@@ -294,7 +294,6 @@ unit_test_minimal_heap_node_remove_min(void)
     uint32 loop;
     struct minimal_heap *heap;
     struct doubly_linked_list *minimal;
-    return;
 
     TEST_PERFORMANCE_CHECKPOINT;
 

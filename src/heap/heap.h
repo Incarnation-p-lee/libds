@@ -1,6 +1,9 @@
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
+#define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
+#define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
+
 #define HEAP_ROOT_INDEX          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
@@ -28,7 +31,10 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 /* END OF EXTERNAL FUNCTIONS */
 
 /* BINARY HEAP DEBUG */
+#if defined DEBUG
 static inline bool binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice);
+static inline bool binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice);
+#endif
 /* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */
@@ -48,6 +54,8 @@ static inline void binary_heap_node_create_by_index(struct binary_heap *heap, ui
 static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice);
 static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt);
+static inline bool binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_remove_fixup(struct binary_heap *heap, uint32 index);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
