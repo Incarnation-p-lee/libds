@@ -13,7 +13,7 @@ static const struct test_layer_table single_linked_list_interface[] = {
     {"node_previous",      {&unit_test_single_linked_list_node_previous,},},
     {"node_insert_before", {&unit_test_single_linked_list_node_insert_before,},},
     {"node_insert_after",  {&unit_test_single_linked_list_node_insert_after,},},
-    {"node_by_index",  {&unit_test_single_linked_list_node_by_index,},},
+    {"node_by_index",      {&unit_test_single_linked_list_node_by_index,},},
     {"node_exchange",      {&unit_test_single_linked_list_node_exchange,},},
     {"node_remove",        {&unit_test_single_linked_list_node_remove,},},
     {"node_lazy_remove",   {&unit_test_single_linked_list_node_lazy_remove,},},
@@ -47,6 +47,31 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
     {"destroy",            {&unit_test_doubly_linked_list_destroy,},},
     {"length",             {&unit_test_doubly_linked_list_length,},},
     {"join",               {&unit_test_doubly_linked_list_merge,},},
+    {NULL,                 {NULL,},},
+};
+
+static const struct test_layer_table skip_linked_list_interface[] = {
+    {"struct_field",       {&unit_test_skip_linked_list_struct_field,},},
+    {"create",             {&unit_test_skip_linked_list_create,},},
+    {"initial",            {&unit_test_skip_linked_list_initial,},},
+    {"node_create",        {&unit_test_skip_linked_list_node_create,},},
+    {"node_initial",       {&unit_test_skip_linked_list_node_initial,},},
+    {"destroy",            {&unit_test_skip_linked_list_destroy,},},
+    // {"generate",           {&unit_test_doubly_linked_list_generate,},},
+    // {"node_initial",       {&unit_test_doubly_linked_list_node_initial,},},
+    // {"node_copy",          {&unit_test_doubly_linked_list_node_copy,},},
+    // {"node_append",        {&unit_test_doubly_linked_list_node_append,},},
+    // {"node_insert_before", {&unit_test_doubly_linked_list_node_insert_before,},},
+    // {"node_insert_after",  {&unit_test_doubly_linked_list_node_insert_after,},},
+    // {"node_by_index",  {&unit_test_doubly_linked_list_node_by_index,},},
+    // {"node_exchange",      {&unit_test_doubly_linked_list_node_exchange,},},
+    // {"node_remove",        {&unit_test_doubly_linked_list_node_remove,},},
+    // {"node_lazy_remove",   {&unit_test_doubly_linked_list_node_lazy_remove,},},
+    // {"contains_p",         {&unit_test_doubly_linked_list_contains_p,},},
+    // {"serialize",          {&unit_test_doubly_linked_list_serialize,},},
+    // {"iterate",            {&unit_test_doubly_linked_list_iterate,},},
+    // {"length",             {&unit_test_doubly_linked_list_length,},},
+    // {"join",               {&unit_test_doubly_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };
 
@@ -228,6 +253,7 @@ static const struct test_layer_table minimal_heap[] = {
 static const struct test_layer_table unit_test_linked_list_implement[] = {
     {"single", {single_linked_list_interface,},},
     {"doubly", {doubly_linked_list_interface,},},
+    {"skip",   {skip_linked_list_interface,},},
     /* END POINT OF IMPLEMENT */
     {NULL,     {NULL,},},
 };

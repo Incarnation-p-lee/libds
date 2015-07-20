@@ -627,7 +627,7 @@ extern void skip_linked_list_node_initial(struct skip_linked_list *list, void *v
 extern void skip_linked_list_destroy(struct skip_linked_list **list);
 extern uint32 skip_linked_list_length(struct skip_linked_list *list);
 extern bool skip_linked_list_contains_p(struct skip_linked_list *list, sint32 key);
-extern void skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
+extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
 

@@ -35,7 +35,7 @@ skip_linked_list_node_initial(struct skip_linked_list *list,
     } else {
         skip_linked_list_node_key_set(list, key);
         skip_linked_list_node_val_set(list, val);
-        skip_linked_list_node_next_set(list, list);
+        skip_linked_list_node_next_set(list, NULL);
     }
 }
 
@@ -51,7 +51,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
         node = *list;
 
         while (node) {
-            next = skip_linked_list_node_next(*list);
+            next = skip_linked_list_node_next(node);
             free_ds(node);
             node = next;
         }
@@ -96,11 +96,9 @@ skip_linked_list_node_find(struct skip_linked_list *list,
              * key sorted list.
              */
             return NULL;
-        } else if (!skip_linked_list_node_next(list)
-            && SKIP_LIST_BOTTOM_IDX != lvl) {
-            list = list->layer[--lvl];
-        } else if (!skip_linked_list_node_next(list)
-            && SKIP_LIST_BOTTOM_IDX == lvl) {
+        } else if (!list->layer[lvl] && SKIP_LIST_BOTTOM_IDX != lvl) {
+            lvl--;
+        } else if (!list->layer[lvl]) {
             /*
              * key is great than all keys in skip linked list.
              */
@@ -135,15 +133,17 @@ skip_linked_list_insert_before_head(struct skip_linked_list *list,
 
     lvl = SKIP_LIST_MAX_LVL_IDX;
 
-    while (lvl) {
-        tgt->layer[lvl] = list->layer[lvl];
-        lvl--;
-    }
+    do {
+        tgt->layer[lvl] = list;
+    } while (0 != lvl--);
 
     return tgt;
 }
 
-void
+/*
+ * RETURN the inserted node of linked list, or RETURN NULL.
+ */
+struct skip_linked_list *
 skip_linked_list_node_insert(struct skip_linked_list **list,
     struct skip_linked_list *tgt)
 {
@@ -156,8 +156,10 @@ skip_linked_list_node_insert(struct skip_linked_list **list,
 
     if (!list || !tgt) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
     } else if (NULL != skip_linked_list_node_find(*list, tgt->key, lvl)) {
         pr_log_warn("Insert node alreay exist, nothing will be done.\n");
+        return NULL;
     } else {
         head = list;
         iter = *head;
@@ -169,18 +171,21 @@ skip_linked_list_node_insert(struct skip_linked_list **list,
                 head = &iter->layer[lvl];
 
                 if (!*head || (*head)->key > tgt->key) {
-                    prev_list[lvl] = iter->layer[lvl];
+                    prev_list[lvl] = iter;
                     if (SKIP_LIST_BOTTOM_IDX == lvl) {
                         skip_linked_list_insert_update_with_lvl(tgt, prev_list,
                             random_uint32_with_limit(SKIP_LIST_MAX_LVL));
+                        break;
                     } else {
-                        iter = iter->layer[--lvl];
+                        lvl--;
                     }
                 } else {
                     iter = iter->layer[lvl];
                 }
             }
         }
+
+        return tgt;
     }
 }
 
@@ -195,8 +200,7 @@ skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt,
     do {
         tgt->layer[lvl] = prev_list[lvl]->layer[lvl];
         prev_list[lvl]->layer[lvl] = tgt;
-        lvl--;
-    } while (0 != lvl);
+    } while (0 != lvl--);
 }
 
 struct skip_linked_list *
