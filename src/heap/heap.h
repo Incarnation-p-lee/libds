@@ -34,6 +34,7 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 #if defined DEBUG
 static inline bool binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice);
 static inline bool binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice);
+static inline bool binary_heap_percolate_down_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice);
 #endif
 /* END OF BINARY HEAP DEBUG */
 

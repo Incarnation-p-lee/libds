@@ -317,9 +317,11 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 /*
- * index -specific the empty hole index of heap.
- * nice  -nice value of percolate down.
- * RETURN the percolated index of heap.
+ * index - specific the empty hole index of heap.
+ * nice  - nice value of percolate down.
+ * RETURN  the percolated index of heap.
+ *
+ * HEAP_NICE_UPPER_LMT is allowed to nice for remove one node from heap.
  */
 static inline uint32
 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice)
@@ -329,12 +331,10 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice)
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(0 != index);
-    /*
-     * nice HEAP_NICE_UPPER_LMT
-     */
     assert(HEAP_NICE_LOWER_LMT < nice);
     assert(NULL == HEAP_CHAIN(heap, index));
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
+    assert(binary_heap_percolate_down_precondition_p(heap, index, nice));
 
     if (binary_heap_empty_p(heap)) {
         pr_log_warn("Binary heap is empty, nothing will be done.\n");
@@ -373,3 +373,12 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice)
     return index;
 }
 
+/*
+static inline void
+binary_heap_node_collision_merge(struct binary_heap *heap, uint32 index,
+    uint32 )
+{
+
+
+}
+*/

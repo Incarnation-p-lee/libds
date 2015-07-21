@@ -167,6 +167,7 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         } else {
             /*
              * decreased nice already contained.
+             * will delete node index. FixMe
              */
             head = minimal_heap_link(heap, index);
             minimal_heap_link_set(heap, index, NULL);
@@ -182,6 +183,8 @@ void
 minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset)
 {
     uint32 index;
+    sint64 new_nice;
+    uint32 tgt_index;
     struct collision_chain *tmp;
 
     if (!heap) {
@@ -190,18 +193,25 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         pr_log_warn("Nice specificed reach the limit.\n");
     } else if (0 == offset) {
         pr_log_info("Zero offset of nice, nothing will be done.\n");
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
     } else {
-        index = binary_heap_index_get_by_nice(heap->bin_heap, nice);
-
-        if (0 == index) {
-            pr_log_warn("No such the node of heap, nothing will be done.\n");
-        } else {
+        /*
+         * index of nice has been set already.
+         */
+        new_nice = nice + offset;
+        if (!binary_heap_node_contains_p(heap->bin_heap, nice, &tgt_index)) {
             tmp = HEAP_CHAIN(heap->bin_heap, index);
-            tmp->nice = nice + offset;
             HEAP_CHAIN(heap->bin_heap, index) = NULL;
+            tmp->nice = new_nice;
 
-            index = binary_heap_percolate_down(heap->bin_heap, index, tmp->nice);
+            index = binary_heap_percolate_down(heap->bin_heap, index, new_nice);
+            assert(NULL == HEAP_CHAIN(heap->bin_heap, index));
             HEAP_CHAIN(heap->bin_heap, index) = tmp;
+        } else {
+            /*
+             * decreased nice already contained.
+             */
         }
     }
 }

@@ -180,13 +180,13 @@ unit_test_minimal_heap_cleanup(void)
     TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
-    loop = 0x145u;
+    loop = 0x3u;
     heap = NULL;
 
     minimal_heap_cleanup(heap);
 
     while (loop--) {
-        heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+        heap = unit_test_minimal_heap_sample(0xe345, 0x804E);
         minimal_heap_cleanup(heap);
 
         RESULT_CHECK_bool(false, minimal_heap_full_p(heap), &pass);
