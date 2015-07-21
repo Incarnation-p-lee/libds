@@ -233,14 +233,18 @@ static const struct test_layer_table open_addressing_hash[] = {
 };
 
 static const struct test_layer_table minimal_heap[] = {
-    {"struct_field",          {&unit_test_minimal_heap_struc_field,},},
-    {"create",                {&unit_test_minimal_heap_create,},},
-    {"destroy",               {&unit_test_minimal_heap_destroy,},},
-    {"empty_p",               {&unit_test_minimal_heap_empty_p,},},
-    {"full_p",                {&unit_test_minimal_heap_full_p,},},
-    {"cleanup",               {&unit_test_minimal_heap_cleanup,},},
-    {"node_find",             {&unit_test_minimal_heap_node_find,},},
-    {NULL,                    {NULL,},},
+    {"struct_field",       {&unit_test_minimal_heap_struc_field,},},
+    {"create",             {&unit_test_minimal_heap_create,},},
+    {"destroy",            {&unit_test_minimal_heap_destroy,},},
+    {"empty_p",            {&unit_test_minimal_heap_empty_p,},},
+    {"full_p",             {&unit_test_minimal_heap_full_p,},},
+    {"cleanup",            {&unit_test_minimal_heap_cleanup,},},
+    {"node_find",          {&unit_test_minimal_heap_node_find,},},
+    {"node_find_min",      {&unit_test_minimal_heap_node_find_min,},},
+    {"node_insert",        {&unit_test_minimal_heap_node_insert,},},
+    {"node_remove_min",    {&unit_test_minimal_heap_node_remove_min,},},
+    {"node_decrease_nice", {&unit_test_minimal_heap_node_decrease_nice,},},
+    {NULL,              {NULL,},},
 };
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */

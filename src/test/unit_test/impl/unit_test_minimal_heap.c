@@ -180,13 +180,13 @@ unit_test_minimal_heap_cleanup(void)
     TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
-    loop = 0x145u;
+    loop = 0x3u;
     heap = NULL;
 
     minimal_heap_cleanup(heap);
 
     while (loop--) {
-        heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+        heap = unit_test_minimal_heap_sample(0xe345, 0x804E);
         minimal_heap_cleanup(heap);
 
         RESULT_CHECK_bool(false, minimal_heap_full_p(heap), &pass);
@@ -229,5 +229,125 @@ unit_test_minimal_heap_node_find(void)
     minimal_heap_destroy(&heap);
 
     test_result_print(SYM_2_STR(minimal_heap_node_find), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_find_min(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x22345678u;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, minimal_heap_node_find_min(heap), &pass);
+
+    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    RESULT_CHECK_pointer(minimal_heap_link(heap, 1u),
+        minimal_heap_node_find_min(heap), &pass);
+
+    while (loop--) {
+        RESULT_CHECK_pointer(minimal_heap_link(heap, 1u),
+            minimal_heap_node_find_min(heap), &pass);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_find_min), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_insert(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0xA234;
+    heap = NULL;
+
+    minimal_heap_node_insert(heap, &pass, 0u);
+
+    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    while (loop--) {
+        minimal_heap_node_insert(heap, &pass, loop);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_insert), pass);
+    return;
+}
+
+
+static inline void
+unit_test_minimal_heap_node_remove_min(void)
+{
+    bool pass;
+    uint32 loop;
+    struct minimal_heap *heap;
+    struct doubly_linked_list *minimal;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x123;
+    heap = NULL;
+
+    minimal_heap_node_remove_min(heap);
+
+    heap = unit_test_minimal_heap_sample(0x14235, 0x10D4E);
+    while (loop--) {
+        minimal = minimal_heap_node_find_min(heap);
+        RESULT_CHECK_pointer(minimal, minimal_heap_node_remove_min(heap), &pass);
+        doubly_linked_list_destroy(&minimal);
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_remove_min), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_decrease_nice(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 offset;
+    struct minimal_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x2;
+    heap = NULL;
+    offset = 0;
+
+    minimal_heap_node_decrease_nice(heap, 0, offset);
+
+    heap = unit_test_minimal_heap_sample(0x14345, 0x102E0);
+    minimal_heap_node_decrease_nice(heap, 0, offset);
+    offset = 0x14246;
+
+    while (loop--) {
+        tmp = minimal_heap_node_find(heap, loop);
+        if (tmp) {
+            minimal_heap_node_decrease_nice(heap, loop, offset);
+            RESULT_CHECK_pointer(tmp, minimal_heap_node_find_min(heap), &pass);
+        } else {
+            minimal_heap_node_decrease_nice(heap, loop, offset);
+        }
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_decrease_nice), pass);
     return;
 }

@@ -848,26 +848,35 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
+#define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
+#define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
+
+#define HEAP_ROOT_INDEX          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
 #define INDEX_LEFT_CHILD(index)  (index) * 2
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
+#define INDEX_LAST(heap)         ((heap)->size)
+#define INDEX_FIRST              HEAP_ROOT_INDEX
 
-#define HEAP_PARENT_NICE(heap, index) (heap)->base[INDEX_PARENT(index)]->nice
-#define HEAP_NICE(heap, index) (heap)->base[index]->nice
-#define HEAP_LINK(heap, index) (heap)->base[index]->link
-
-/* array of base will skip index 0, and started at index 1 */
-#define heap_iterate_start(heap)   ((heap)->base + 1)
-#define heap_iterate_limit(heap)   ((heap)->base + (heap)->size + 1)
+#define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
+#define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
+#define HEAP_RIGHT_CHILD_NICE(heap, index) (heap)->base[INDEX_RIGHT_CHILD(index)]->nice
+#define HEAP_NICE(heap, index)             (heap)->base[index]->nice
+#define HEAP_LINK(heap, index)             (heap)->base[index]->link
+#define HEAP_SIZE(heap)                    (heap)->size
+#define HEAP_CHAIN(heap, index)            (heap)->base[index]
 
 #define u_offset(n, offset) (n + offset)
-
 
 /* EXTERNAL FUNCTIONS */
 /* END OF EXTERNAL FUNCTIONS */
 
+/* BINARY HEAP DEBUG */
+#if defined DEBUG
+#endif
+/* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */
 /* END OF BINARY HEAP INTERNAL */
@@ -881,6 +890,8 @@ extern void minimal_heap_cleanup(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
+extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
+extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
 /* END OF MINIMAL HEAP */
 
 #endif
