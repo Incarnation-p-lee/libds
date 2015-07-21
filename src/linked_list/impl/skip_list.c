@@ -82,11 +82,23 @@ skip_linked_list_length(struct skip_linked_list *list)
     }
 }
 
+struct skip_linked_list *
+skip_linked_list_node_find_key(struct skip_linked_list *list, sint32 key)
+{
+    if (!list) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else {
+        return skip_linked_list_node_find(list, key, SKIP_LIST_MAX_LVL_IDX);
+    }
+}
+
 static inline struct skip_linked_list *
 skip_linked_list_node_find(struct skip_linked_list *list,
     sint32 key, uint32 lvl)
 {
     assert(NULL != list);
+    assert(SKIP_LIST_MAX_LVL > lvl);
 
     while (true) {
         if (list->key == key) {
@@ -206,6 +218,7 @@ skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt,
 struct skip_linked_list *
 skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
 {
+    uint32 len;
     register struct skip_linked_list *iter;
 
     if (!list) {
@@ -213,6 +226,12 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
         return NULL;
     } else {
         iter = list;
+        len = skip_linked_list_length(list);
+
+        if (index >= len) {
+            pr_log_warn("Index out of the lenght, rotated to front.\n");
+            index = index % len;
+        }
 
         while (index) {
             iter = skip_linked_list_node_next(iter);
