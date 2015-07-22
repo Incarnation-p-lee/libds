@@ -337,7 +337,7 @@ unit_test_binary_search_tree_height(void)
 }
 
 static void
-unit_test_binary_search_tree_node_contain_p(void)
+unit_test_binary_search_tree_node_contains_p(void)
 {
     bool pass;
     struct binary_search_tree *tree;
@@ -350,20 +350,20 @@ unit_test_binary_search_tree_node_contain_p(void)
     tree = unit_test_binary_search_tree_sample(0x237FD7, 0x3AD31D);
     tmp = binary_search_tree_node_create(&pass, 0x1234);
 
-    RESULT_CHECK_bool(false, binary_search_tree_node_contain_p(tree, NULL), &pass);
-    RESULT_CHECK_bool(false, binary_search_tree_node_contain_p(NULL, NULL), &pass);
-    RESULT_CHECK_bool(false, binary_search_tree_node_contain_p(tree, tmp), &pass);
+    RESULT_CHECK_bool(false, binary_search_tree_node_contains_p(tree, NULL), &pass);
+    RESULT_CHECK_bool(false, binary_search_tree_node_contains_p(NULL, NULL), &pass);
+    RESULT_CHECK_bool(false, binary_search_tree_node_contains_p(tree, tmp), &pass);
     binary_search_tree_destroy(&tmp);
 
     tmp = binary_search_tree_node_find_max(tree);
-    RESULT_CHECK_bool(true, binary_search_tree_node_contain_p(tree, tmp), &pass);
+    RESULT_CHECK_bool(true, binary_search_tree_node_contains_p(tree, tmp), &pass);
 
     fake = binary_search_tree_node_create(tmp, binary_search_tree_node_nice(tmp));
-    RESULT_CHECK_bool(false, binary_search_tree_node_contain_p(tree, fake), &pass);
+    RESULT_CHECK_bool(false, binary_search_tree_node_contains_p(tree, fake), &pass);
 
     binary_search_tree_destroy(&fake);
     binary_search_tree_destroy(&tree);
-    test_result_print(SYM_2_STR(binary_search_tree_node_contain_p), pass);
+    test_result_print(SYM_2_STR(binary_search_tree_node_contains_p), pass);
 
     return;
 }

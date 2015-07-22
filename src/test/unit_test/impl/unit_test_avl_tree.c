@@ -300,7 +300,7 @@ unit_test_avl_tree_node_find_max(void)
 }
 
 static void
-unit_test_avl_tree_node_contain_p(void)
+unit_test_avl_tree_node_contains_p(void)
 {
     bool pass;
     struct avl_tree *tree;
@@ -313,20 +313,20 @@ unit_test_avl_tree_node_contain_p(void)
     tree = unit_test_avl_tree_sample(0x1E28D1, 0x1C251F);
     tmp = avl_tree_node_create(&pass, 0x7FFFFFFF);
 
-    RESULT_CHECK_bool(false, avl_tree_node_contain_p(NULL, tmp), &pass);
-    RESULT_CHECK_bool(false, avl_tree_node_contain_p(tree, NULL), &pass);
-    RESULT_CHECK_bool(false, avl_tree_node_contain_p(tree, tmp), &pass);
+    RESULT_CHECK_bool(false, avl_tree_node_contains_p(NULL, tmp), &pass);
+    RESULT_CHECK_bool(false, avl_tree_node_contains_p(tree, NULL), &pass);
+    RESULT_CHECK_bool(false, avl_tree_node_contains_p(tree, tmp), &pass);
     avl_tree_destroy(&tmp);
 
     tmp = avl_tree_node_find_max(tree);
-    RESULT_CHECK_bool(true, avl_tree_node_contain_p(tree, tmp), &pass);
+    RESULT_CHECK_bool(true, avl_tree_node_contains_p(tree, tmp), &pass);
 
     fake = avl_tree_node_create(tmp, avl_tree_node_nice(tmp));
-    RESULT_CHECK_bool(false, avl_tree_node_contain_p(tree, fake), &pass);
+    RESULT_CHECK_bool(false, avl_tree_node_contains_p(tree, fake), &pass);
 
     avl_tree_destroy(&fake);
     avl_tree_destroy(&tree);
-    test_result_print(SYM_2_STR(avl_tree_node_contain_p), pass);
+    test_result_print(SYM_2_STR(avl_tree_node_contains_p), pass);
     return;
 }
 

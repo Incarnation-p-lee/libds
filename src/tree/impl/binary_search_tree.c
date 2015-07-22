@@ -184,7 +184,7 @@ binary_search_tree_height(struct binary_search_tree *root)
 }
 
 bool
-binary_search_tree_node_contain_p(struct binary_search_tree *root,
+binary_search_tree_node_contains_p(struct binary_search_tree *root,
     struct binary_search_tree *node)
 {
     register struct binary_search_tree **iter;

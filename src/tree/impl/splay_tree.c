@@ -403,9 +403,9 @@ splay_tree_height(struct splay_tree *tree)
 }
 
 bool
-splay_tree_node_contain_p(struct splay_tree *tree, struct splay_tree *node)
+splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node)
 {
-    return binary_search_tree_node_contain_p(splay_tree_ptr_to_bin(tree),
+    return binary_search_tree_node_contains_p(splay_tree_ptr_to_bin(tree),
         splay_tree_ptr_to_bin(node));
 }
 

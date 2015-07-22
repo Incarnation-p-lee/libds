@@ -252,7 +252,7 @@ unit_test_splay_tree_height(void)
 }
 
 static void
-unit_test_splay_tree_node_contain_p(void)
+unit_test_splay_tree_node_contains_p(void)
 {
     bool pass;
     struct splay_tree *tree;
@@ -267,23 +267,23 @@ unit_test_splay_tree_node_contain_p(void)
     tree = unit_test_splay_tree_sample(0x124F0, 0x873BD);
     tmp = splay_tree_node_create(&pass, 0x1234);
 
-    RESULT_CHECK_bool(false, splay_tree_node_contain_p(tree, NULL), &pass);
-    RESULT_CHECK_bool(false, splay_tree_node_contain_p(NULL, NULL), &pass);
-    RESULT_CHECK_bool(false, splay_tree_node_contain_p(tree, tmp), &pass);
+    RESULT_CHECK_bool(false, splay_tree_node_contains_p(tree, NULL), &pass);
+    RESULT_CHECK_bool(false, splay_tree_node_contains_p(NULL, NULL), &pass);
+    RESULT_CHECK_bool(false, splay_tree_node_contains_p(tree, tmp), &pass);
     splay_tree_destroy(&tmp);
 
     tmp = splay_tree_node_find_max(&tree);
     while (0 != loop--) {
-        RESULT_CHECK_bool(true, splay_tree_node_contain_p(tree, tmp), &pass);
+        RESULT_CHECK_bool(true, splay_tree_node_contains_p(tree, tmp), &pass);
     }
 
     fake = splay_tree_node_create(tmp, splay_tree_node_nice(tmp));
-    RESULT_CHECK_bool(false, splay_tree_node_contain_p(tree, fake), &pass);
+    RESULT_CHECK_bool(false, splay_tree_node_contains_p(tree, fake), &pass);
 
     splay_tree_destroy(&fake);
     splay_tree_destroy(&tree);
 
-    test_result_print(SYM_2_STR(splay_tree_node_contain_p), pass);
+    test_result_print(SYM_2_STR(splay_tree_node_contains_p), pass);
     return;
 }
 

@@ -86,9 +86,9 @@ avl_tree_node_find_max(struct avl_tree *root)
 }
 
 bool
-avl_tree_node_contain_p(struct avl_tree *root, struct avl_tree *node)
+avl_tree_node_contains_p(struct avl_tree *root, struct avl_tree *node)
 {
-    return binary_search_tree_node_contain_p(avl_tree_ptr_to_bin(root),
+    return binary_search_tree_node_contains_p(avl_tree_ptr_to_bin(root),
         avl_tree_ptr_to_bin(node));
 }
 
