@@ -401,11 +401,7 @@ unit_test_splay_tree_node_insert(void)
 
     tree = unit_test_splay_tree_sample(0x3B4C29, 0x271F2C);
     tmp = splay_tree_node_create(&pass, 0xFFFDEA);
-
     RESULT_CHECK_pointer(NULL, splay_tree_node_insert(&tree, NULL), &pass);
-
-    tree = unit_test_splay_tree_sample(0x3B4C29, 0x271F2C);
-    tmp = splay_tree_node_create(&pass, 0xFFFDEA);
 
     RESULT_CHECK_pointer(tmp, splay_tree_node_insert(&tree, tmp), &pass);
     RESULT_CHECK_pointer(tmp, tree, &pass);

@@ -44,6 +44,7 @@ unit_test_linked_stack_create(void)
     RESULT_CHECK_uint32(0x0u, stack->sid, &pass);
     RESULT_CHECK_pointer(stack->base, stack->top, &pass);
     RESULT_CHECK_pointer((void *)stack->base->space.sp, stack->base->space.bp, &pass);
+    linked_stack_destroy(&stack);
 
     test_result_print(SYM_2_STR(linked_stack_create), pass);
     return;
