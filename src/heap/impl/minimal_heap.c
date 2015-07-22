@@ -129,7 +129,7 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
          * binary heap _DO_ not allow NULL hole of array implement.
          * move the last node to percolated node, and percolate up.
          */
-        binary_heap_node_remove_fixup(heap->bin_heap, index);
+        binary_heap_node_remove_tail_fixup(heap->bin_heap, index);
         return retval;
     }
 }
@@ -141,7 +141,6 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
     uint32 tgt_index;
     sint64 new_nice;
     struct collision_chain *tmp;
-    struct doubly_linked_list *head;
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
@@ -167,14 +166,10 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         } else {
             /*
              * decreased nice already contained.
-             * will delete node index. FixMe
+             * merge conflict and remove node.
              */
-            head = minimal_heap_link(heap, index);
-            minimal_heap_link_set(heap, index, NULL);
-            doubly_linked_list_merge(minimal_heap_link(heap, tgt_index), head);
-
-            free_ds(HEAP_CHAIN(heap->bin_heap, index));
-            HEAP_CHAIN(heap->bin_heap, index) = NULL;
+            binary_heap_node_collision_merge(heap->bin_heap, tgt_index, index);
+            binary_heap_node_remove(heap->bin_heap, index);
         }
     }
 }

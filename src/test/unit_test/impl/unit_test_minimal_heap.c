@@ -321,27 +321,33 @@ unit_test_minimal_heap_node_decrease_nice(void)
     bool pass;
     uint32 loop;
     uint32 offset;
+    sint64 nice;
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
     pass = true;
-    loop = 0x2;
+    loop = 0x12;
     heap = NULL;
     offset = 0;
 
     minimal_heap_node_decrease_nice(heap, 0, offset);
 
-    heap = unit_test_minimal_heap_sample(0x14345, 0x102E0);
+    heap = unit_test_minimal_heap_sample(0xf345, 0xf2E0);
     minimal_heap_node_decrease_nice(heap, 0, offset);
-    offset = 0x14246;
+    offset = 0x1234;
 
     while (loop--) {
         tmp = minimal_heap_node_find(heap, loop);
         if (tmp) {
-            minimal_heap_node_decrease_nice(heap, loop, offset);
-            RESULT_CHECK_pointer(tmp, minimal_heap_node_find_min(heap), &pass);
+            nice = (sint64)loop - offset;
+            if (!minimal_heap_node_find(heap, nice)) {
+                minimal_heap_node_decrease_nice(heap, loop, offset);
+                RESULT_CHECK_pointer(tmp, minimal_heap_node_find(heap, nice), &pass);
+            } else {
+                minimal_heap_node_decrease_nice(heap, loop, offset);
+            }
         } else {
             minimal_heap_node_decrease_nice(heap, loop, offset);
         }

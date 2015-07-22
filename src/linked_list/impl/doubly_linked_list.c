@@ -353,7 +353,6 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
 
     if (m && n && m != n) {
         iter = n;
-        // add m == n condition
         do {
             if (!doubly_linked_list_contains_p(m, iter)) {
                 new = doubly_linked_list_node_create(

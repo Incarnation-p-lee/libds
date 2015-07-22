@@ -56,7 +56,9 @@ static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(stru
 static inline uint32 binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice);
 static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt);
 static inline bool binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index);
-static inline void binary_heap_node_remove_fixup(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx, uint32 s_idx);
+static inline void binary_heap_node_remove(struct binary_heap *heap, uint32 index);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */

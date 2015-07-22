@@ -282,7 +282,7 @@ binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
 }
 
 static inline void
-binary_heap_node_remove_fixup(struct binary_heap *heap, uint32 index)
+binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index)
 {
     sint64 nice;
     struct collision_chain *tmp;
@@ -374,11 +374,36 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice)
 }
 
 /*
+ * Merge s_idx indexed node to t_idx indexed node, then remove node s_idx.
+ */
 static inline void
-binary_heap_node_collision_merge(struct binary_heap *heap, uint32 index,
-    uint32 )
+binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx,
+    uint32 s_idx)
 {
+    struct doubly_linked_list *head;
 
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(0 != t_idx && t_idx <= INDEX_LAST(heap));
+    assert(0 != s_idx && s_idx <= INDEX_LAST(heap));
 
+    head = HEAP_LINK(heap, t_idx);
+    doubly_linked_list_merge(head, HEAP_LINK(heap, s_idx));
 }
-*/
+
+static inline void
+binary_heap_node_remove(struct binary_heap *heap, uint32 index)
+{
+    struct doubly_linked_list *link;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(0 != index && index <= INDEX_LAST(heap));
+
+    link = binary_heap_node_destroy_by_index(heap, index);
+    index = binary_heap_percolate_down(heap, index, HEAP_NICE_UPPER_LMT);
+    binary_heap_node_remove_tail_fixup(heap, index);
+
+    doubly_linked_list_destroy(&link);
+}
+
