@@ -52,13 +52,13 @@ static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 i
 static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice);
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
-static inline struct doubly_linked_list * binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice);
 static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt);
 static inline bool binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index);
 static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index);
 static inline void binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx, uint32 s_idx);
-static inline void binary_heap_node_remove(struct binary_heap *heap, uint32 index);
+static inline struct doubly_linked_list * binary_heap_node_remove(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_remove_and_destroy(struct binary_heap *heap, uint32 index);
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
@@ -72,6 +72,8 @@ struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap
 void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
+void minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
+struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 /* END OF MINIMAL HEAP */
 
 #endif

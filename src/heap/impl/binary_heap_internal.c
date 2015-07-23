@@ -156,25 +156,6 @@ binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
     HEAP_CHAIN(heap, index) = binary_heap_collision_chain_create(nice, val);
 }
 
-static inline struct doubly_linked_list *
-binary_heap_node_destroy_by_index(struct binary_heap *heap, uint32 index)
-{
-    struct doubly_linked_list *retval;
-
-    assert(NULL != heap);
-    assert(0 != index);
-    assert(NULL != heap->base);
-    assert(NULL != heap->base[index]);
-
-    retval = HEAP_LINK(heap, index);
-    HEAP_LINK(heap, index) = NULL;
-
-    free_ds(HEAP_CHAIN(heap, index));
-    HEAP_CHAIN(heap, index) = NULL;
-
-    return retval;
-}
-
 static inline struct collision_chain *
 binary_heap_collision_chain_create(sint64 nice, void *val)
 {
@@ -392,7 +373,7 @@ binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx,
 }
 
 static inline void
-binary_heap_node_remove(struct binary_heap *heap, uint32 index)
+binary_heap_node_remove_and_destroy(struct binary_heap *heap, uint32 index)
 {
     struct doubly_linked_list *link;
 
@@ -400,10 +381,33 @@ binary_heap_node_remove(struct binary_heap *heap, uint32 index)
     assert(NULL != heap->base);
     assert(0 != index && index <= INDEX_LAST(heap));
 
-    link = binary_heap_node_destroy_by_index(heap, index);
+    link = binary_heap_node_remove(heap, index);
+    doubly_linked_list_destroy(&link);
+}
+
+static inline struct doubly_linked_list *
+binary_heap_node_remove(struct binary_heap *heap, uint32 index)
+{
+    struct doubly_linked_list *link;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(NULL != heap->base[index]);
+    assert(0 != index && index <= INDEX_LAST(heap));
+
+    link = HEAP_LINK(heap, index);
+    HEAP_LINK(heap, index) = NULL;
+
+    free_ds(HEAP_CHAIN(heap, index));
+    HEAP_CHAIN(heap, index) = NULL;
+
     index = binary_heap_percolate_down(heap, index, HEAP_NICE_UPPER_LMT);
+    /*
+     * binary heap _DO_ not allow NULL hole of array implement.
+     * move the last node to percolated node, and percolate up.
+     */
     binary_heap_node_remove_tail_fixup(heap, index);
 
-    doubly_linked_list_destroy(&link);
+    return link;
 }
 

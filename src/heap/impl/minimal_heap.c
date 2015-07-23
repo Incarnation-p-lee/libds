@@ -110,27 +110,29 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
 }
 
 struct doubly_linked_list *
-minimal_heap_node_remove_min(struct minimal_heap *heap)
+minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice)
 {
-    struct doubly_linked_list *retval;
     uint32 index;
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+        return NULL;
     } else {
-        index = HEAP_ROOT_INDEX;
-        retval = binary_heap_node_destroy_by_index(heap->bin_heap, index);
+        return binary_heap_node_remove(heap->bin_heap, index);
+    }
+}
 
-        index = binary_heap_percolate_down(heap->bin_heap, index,
-            HEAP_NICE_UPPER_LMT);
-
-        /*
-         * binary heap _DO_ not allow NULL hole of array implement.
-         * move the last node to percolated node, and percolate up.
-         */
-        binary_heap_node_remove_tail_fixup(heap->bin_heap, index);
-        return retval;
+struct doubly_linked_list *
+minimal_heap_node_remove_min(struct minimal_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_remove(heap->bin_heap, HEAP_ROOT_INDEX);
     }
 }
 
@@ -169,7 +171,7 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
              * merge conflict and remove node.
              */
             binary_heap_node_collision_merge(heap->bin_heap, tgt_index, index);
-            binary_heap_node_remove(heap->bin_heap, index);
+            binary_heap_node_remove_and_destroy(heap->bin_heap, index);
         }
     }
 }
@@ -195,7 +197,7 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
          * index of nice has been set already.
          */
         new_nice = nice + offset;
-        if (!binary_heap_node_contains_p(heap->bin_heap, nice, &tgt_index)) {
+        if (!binary_heap_node_contains_p(heap->bin_heap, new_nice, &tgt_index)) {
             tmp = HEAP_CHAIN(heap->bin_heap, index);
             HEAP_CHAIN(heap->bin_heap, index) = NULL;
             tmp->nice = new_nice;
@@ -206,7 +208,10 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         } else {
             /*
              * decreased nice already contained.
+             * merge conflict and remove node.
              */
+            binary_heap_node_collision_merge(heap->bin_heap, tgt_index, index);
+            binary_heap_node_remove_and_destroy(heap->bin_heap, index);
         }
     }
 }

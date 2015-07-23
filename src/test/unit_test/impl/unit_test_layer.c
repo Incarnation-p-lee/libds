@@ -245,7 +245,9 @@ static const struct test_layer_table minimal_heap[] = {
     {"node_find_min",      {&unit_test_minimal_heap_node_find_min,},},
     {"node_insert",        {&unit_test_minimal_heap_node_insert,},},
     {"node_remove_min",    {&unit_test_minimal_heap_node_remove_min,},},
+    {"node_remove",        {&unit_test_minimal_heap_node_remove,},},
     {"node_decrease_nice", {&unit_test_minimal_heap_node_decrease_nice,},},
+    {"node_increase_nice", {&unit_test_minimal_heap_node_increase_nice,},},
     {NULL,              {NULL,},},
 };
 /*-----------------------------------------------------------------*/
