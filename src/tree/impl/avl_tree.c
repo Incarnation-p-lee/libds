@@ -59,6 +59,8 @@ static inline void
 avl_tree_node_destroy(struct avl_tree *node)
 {
     assert(NULL != node);
+    assert(NULL == avl_tree_child_left(node));
+    assert(NULL == avl_tree_child_right(node));
 
     doubly_linked_list_destroy(&node->b_node.chain.link);
     free_ds(node);
@@ -725,6 +727,10 @@ avl_tree_node_child_doubly_strip_from_min(struct avl_tree *node)
     return min;
 }
 
+/*
+ * Remove a node with given nice has two child, the node may do one
+ * swap operation instead change tree pointers.
+ */
 static inline struct avl_tree *
 avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice)
 {
@@ -776,6 +782,7 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 
     if (!root || !*root) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
     } else {
         removed = avl_tree_node_remove_internal(root, nice);
         if (NULL == removed) {
@@ -784,8 +791,23 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
 
         return removed;
     }
+}
 
-    return NULL;
+void
+avl_tree_node_remove_and_destroy(struct avl_tree **root, sint64 nice)
+{
+    struct avl_tree *removed;
+
+    if (!root || !*root) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        removed = avl_tree_node_remove_internal(root, nice);
+        if (NULL == removed) {
+            pr_log_warn("Failed to find the node in given tree.\n");
+        } else {
+            avl_tree_node_destroy(removed);
+        }
+    }
 }
 
 /*

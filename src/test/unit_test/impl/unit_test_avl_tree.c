@@ -469,7 +469,7 @@ unit_test_avl_tree_node_remove(void)
     tree = unit_test_avl_tree_sample(0x32DFBD, 0x13ABDE);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
-    count = 0x12u;
+    count = 0x8u;
     while (0 != count) {
         tmp = avl_tree_node_find_min(tree);
         nice = avl_tree_node_nice(tmp);
@@ -478,26 +478,34 @@ unit_test_avl_tree_node_remove(void)
         RESULT_CHECK_sint32(nice, avl_tree_node_nice(tmp), &pass);
         RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
         RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
-
         avl_tree_destroy(&tmp);
+
+        tmp = avl_tree_node_find_max(tree);
+        nice = avl_tree_node_nice(tmp);
+        tmp = avl_tree_node_remove(&tree, nice);
+
+        RESULT_CHECK_sint32(nice, avl_tree_node_nice(tmp), &pass);
+        RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
+        RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+        avl_tree_destroy(&tmp);
+
         count--;
     }
     avl_tree_destroy(&tree);
 
-    tree = unit_test_avl_tree_sample(0x2FBD, 0x2BDE);
+    tree = unit_test_avl_tree_sample(0x32FB, 0x22BE);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
-    count = 0x12u;
+    count = 0x1000u;
     while (0 != count) {
-        tmp = avl_tree_child_left(tree);
-        nice = avl_tree_node_nice(tmp);
+        nice = avl_tree_node_nice(tree);
         tmp = avl_tree_node_remove(&tree, nice);
 
         RESULT_CHECK_sint64(nice, avl_tree_node_nice(tmp), &pass);
         RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
         RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
-
         avl_tree_destroy(&tmp);
+
         count--;
     }
 
