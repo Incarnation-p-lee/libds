@@ -72,29 +72,22 @@ hashing_table_destroy(struct hashing_table **hash)
 static inline uint32
 hashing_table_load_factor_calculate(struct hashing_table *hash)
 {
-    uint32 retval;
-    void **iter;
+    register uint32 retval;
+    register void **iter;
+
+    assert(NULL != hash);
+    assert(NULL != hash->space);
 
     retval = 0u;
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
-        iter = hash->space;
-        if (!iter) {
-            pr_log_warn("Destroyed data structure.\n");
-        } else {
-            retval = 0u;
-            while (iter < hash->space + hash->size) {
-                if (NULL != *iter) {
-                    retval++;
-                }
-                iter++;
-            }
-        }
+    iter = hash->space;
 
-        retval = (retval * 100 / hash->size);
+    while (iter < hash->space + hash->size) {
+        if (NULL != *iter) {
+            retval++;
+        }
+        iter++;
     }
 
-    return retval;
+    return (retval * 100 / hash->size);
 }
 

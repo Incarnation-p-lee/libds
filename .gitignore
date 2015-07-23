@@ -36,4 +36,4 @@ tags
 obj_out
 *.gcno
 *tmp*
-*.ref
+performance/unit_test.new.ref
