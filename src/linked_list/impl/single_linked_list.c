@@ -373,7 +373,10 @@ single_linked_list_merge(struct single_linked_list *m,
 
     if (!m || !n) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-        return NULL != m ? m : n;
+        return NULL == m ? n : m;
+    } else if (m == n) {
+        pr_log_info("Merge same linked list, nothing will be done.\n");
+        return m;
     } else {
         iter = n;
 
@@ -392,3 +395,4 @@ single_linked_list_merge(struct single_linked_list *m,
         return m;
     }
 }
+
