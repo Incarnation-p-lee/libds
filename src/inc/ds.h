@@ -430,6 +430,8 @@ struct minimal_heap {
 
 #define avl_tree_node_link(tree) \
     (assert(tree), (tree)->b_node.chain.link)
+#define avl_tree_node_link_set(tree, v) \
+    (assert(tree), (tree)->b_node.chain.link = (v))
 
 #define avl_tree_height(tree) \
     (assert(tree), (tree)->b_node.height)

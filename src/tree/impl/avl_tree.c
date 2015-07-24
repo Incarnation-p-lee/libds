@@ -552,129 +552,177 @@ avl_tree_node_child_lt_doubly_strip(struct avl_tree **pre,
 {
     assert(NULL != node);
     assert(NULL != pre);
+    assert(!avl_tree_node_child_doubly_p(node));
 
-    *pre = avl_tree_child_left(node) ? avl_tree_child_left(node) :
-        avl_tree_child_right(node);
+    if (NULL != avl_tree_child_left(node)) {
+        *pre = avl_tree_child_left(node);
+    } else {
+        *pre = avl_tree_child_right(node);
+    }
+
+    avl_tree_node_child_clean(node);
 }
 
-static inline void
-avl_tree_node_child_doubly_strip(struct avl_tree **pre, struct avl_tree *node)
+static inline struct avl_tree *
+avl_tree_node_child_doubly_strip(struct avl_tree *node)
 {
     sint32 left;
     sint32 right;
 
     assert(NULL != node);
-    assert(NULL != pre);
 
     avl_tree_height_internal(avl_tree_child_left(node), &left);
     avl_tree_height_internal(avl_tree_child_right(node), &right);
 
     if (left > right) {
-        avl_tree_node_child_doubly_strip_from_max(pre, node);
+        /* 
+         * left child max node
+          */
+        return avl_tree_node_child_doubly_strip_from_max(node);
     } else {
-        avl_tree_node_child_doubly_strip_from_min(pre, node);
+        /*
+         * right child min node 
+         */
+        return avl_tree_node_child_doubly_strip_from_min(node);
     }
 }
 
-static inline struct avl_tree *
-avl_tree_node_find_min_parent(struct avl_tree *root)
+static inline struct avl_tree **
+avl_tree_right_child_find_min_with_parent(struct avl_tree *root,
+    struct avl_tree **min)
 {
-    register struct avl_tree *parent;
+    struct avl_tree *right;
+    struct avl_tree **parent;
 
+    right = avl_tree_child_right(root);
+    parent = &root->b_node.avl_right;
+
+    assert(NULL != right);
     assert(NULL != root);
     assert(!avl_tree_node_leaf_p(root));
-    assert(NULL != avl_tree_child_left(root));
 
-    while (NULL != avl_tree_child_left(root)) {
-        parent = root;
-        root = avl_tree_child_left(root);
+    while (NULL != avl_tree_child_left(right)) {
+        parent = &right->b_node.avl_left;
+        right = avl_tree_child_left(right);
     }
 
+    *min = right;
     return parent;
 }
 
-static inline struct avl_tree *
-avl_tree_node_find_max_parent(struct avl_tree *root)
+static inline struct avl_tree **
+avl_tree_left_child_find_max_with_parent(struct avl_tree *root,
+    struct avl_tree **max)
 {
-    struct avl_tree *parent;
+    struct avl_tree *left;
+    struct avl_tree **parent;
 
+    left = avl_tree_child_left(root);
+    parent = &root->b_node.avl_left;
+
+    assert(NULL != left);
     assert(NULL != root);
     assert(!avl_tree_node_leaf_p(root));
-    assert(NULL != avl_tree_child_right(root));
 
-    while (NULL != avl_tree_child_right(root)) {
-        parent = root;
-        root = avl_tree_child_right(root);
+    while (NULL != avl_tree_child_right(left)) {
+        parent = &left->b_node.avl_right;
+        left = avl_tree_child_right(left);
     }
 
+    *max = left;
     return parent;
+}
+
+/*
+ * copy all field from node to tgt, except height value.
+ */
+static inline void
+avl_tree_node_collision_chain_copy(struct collision_chain *tgt,
+    struct collision_chain *node)
+{
+    assert(NULL != tgt);
+    assert(NULL != node);
+    assert(tgt != node);
+
+    tgt->nice = node->nice;
+    tgt->link = node->link;
 }
 
 static inline void
-avl_tree_node_child_doubly_strip_from_max(struct avl_tree **pre,
-    struct avl_tree *node)
+avl_tree_node_collision_chain_swap(struct collision_chain *m_node,
+    struct collision_chain *n_node)
+{
+    struct collision_chain tmp;
+
+    assert(NULL != m_node);
+    assert(NULL != n_node);
+    assert(m_node != n_node);
+
+    avl_tree_node_collision_chain_copy(&tmp, n_node);
+    avl_tree_node_collision_chain_copy(n_node, m_node);
+    avl_tree_node_collision_chain_copy(m_node, &tmp);
+}
+
+static inline struct avl_tree *
+avl_tree_node_child_doubly_strip_from_max(struct avl_tree *node)
 {
     struct avl_tree *max;
-    struct avl_tree *max_parent;
-    struct avl_tree *tmp;
+    struct avl_tree **max_parent;
+    sint64 nice_bk;
 
-    assert(NULL != pre);
     assert(NULL != node);
+    // Fixme, add nice assert for limit
 
-    max_parent = avl_tree_node_find_max_parent(avl_tree_child_left(node));
-    max = avl_tree_child_right(max_parent);
+    max_parent = avl_tree_left_child_find_max_with_parent(node, &max);
+    assert(max == *max_parent);
 
-    /* Fake one placeholder node for keeping balance */
-    tmp = avl_tree_node_create(NULL, avl_tree_node_nice(max) + 1);
-    avl_tree_child_left_set(tmp, avl_tree_child_left(max));
-    avl_tree_child_right_set(max_parent, tmp);
-    avl_tree_height_set(max, avl_tree_height(node));
+    /* 
+     * 1. exchange node and max.
+     * 2. set node nice to max nice + 1.
+     * 3. remove the swapped node.
+     */
+    nice_bk = avl_tree_node_nice(node);
+    avl_tree_node_collision_chain_swap(&node->b_node.chain, &max->b_node.chain);
+    avl_tree_node_nice_set(max, avl_tree_node_nice(node) + 1);
+    avl_tree_node_remove_internal(&node->b_node.avl_left, avl_tree_node_nice(max));
 
-    *pre = max;
-    avl_tree_child_left_set(max, avl_tree_child_left(node));
-    avl_tree_child_right_set(max, avl_tree_child_right(node));
+    /*
+     * resume nice.
+     */
+    avl_tree_node_nice_set(max, nice_bk);
 
-    /* Clear children pointer of node */
-    avl_tree_node_child_clean(node);
-
-    avl_tree_node_remove_internal(&max->b_node.avl_left, avl_tree_node_nice(tmp));
-    avl_tree_node_destroy(tmp);
-
-    return;
+    return max;
 }
 
-static inline void
-avl_tree_node_child_doubly_strip_from_min(struct avl_tree **pre,
-    struct avl_tree *node)
+static inline struct avl_tree *
+avl_tree_node_child_doubly_strip_from_min(struct avl_tree *node)
 {
     struct avl_tree *min;
-    struct avl_tree *min_parent;
-    struct avl_tree *tmp;
+    struct avl_tree **min_parent;
+    sint64 nice_bk;
 
-    assert(NULL != pre);
     assert(NULL != node);
+    // Fixme, add nice assert for limit
 
-    min_parent = avl_tree_node_find_min_parent(avl_tree_child_right(node));
-    min = avl_tree_child_left(min_parent);
+    min_parent = avl_tree_right_child_find_min_with_parent(node, &min);
+    assert(min == *min_parent);
 
-    /* Fake one placeholder node for keeping balance */
-    tmp = avl_tree_node_create(NULL, avl_tree_node_nice(min) - 1);
-    avl_tree_child_right_set(tmp, avl_tree_child_right(min));
-    avl_tree_child_left_set(min_parent, tmp);
+    /* 
+     * 1. exchange node and mix.
+     * 2. set node nice to mix nice - 1.
+     * 3. remove the swapped node.
+     */
+    nice_bk = avl_tree_node_nice(node);
+    avl_tree_node_collision_chain_swap(&node->b_node.chain, &min->b_node.chain);
+    avl_tree_node_nice_set(min, avl_tree_node_nice(node) - 1);
+    avl_tree_node_remove_internal(&node->b_node.avl_right, avl_tree_node_nice(min));
 
-    avl_tree_height_set(min, avl_tree_height(node));
-    *pre = min;
-    avl_tree_child_left_set(min, avl_tree_child_left(node));
-    avl_tree_child_right_set(min, avl_tree_child_right(node));
+    /*
+     * resume nice.
+     */
+    avl_tree_node_nice_set(min, nice_bk);
 
-    /* Clear children pointer of node */
-    avl_tree_node_child_clean(node);
-
-    /* destroy the fake node */
-    avl_tree_node_remove_internal(&min->b_node.avl_right, avl_tree_node_nice(tmp));
-    avl_tree_node_destroy(tmp);
-
-    return;
+    return min;
 }
 
 static inline struct avl_tree *
@@ -700,17 +748,12 @@ avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice)
             }
             avl_tree_height_update(node);
         } else {
-            removed = node;
             if (avl_tree_node_child_doubly_p(node)) {
-                /* Exchange the node, and remove the fake placeholder node */
-                avl_tree_node_child_doubly_strip(root, node);
+                removed = avl_tree_node_child_doubly_strip(node);
             } else {
                 avl_tree_node_child_lt_doubly_strip(root, node);
+                removed = node;
             }
-        }
-
-        if (NULL != removed) {
-            avl_tree_node_child_clean(removed);
         }
 
         return removed;
