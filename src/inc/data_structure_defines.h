@@ -144,8 +144,9 @@
 
 #define binary_search_tree_node_link(tree) \
     (assert(tree), ((tree)->chain).link)
-
-/* AVL TREE */
+#define binary_search_tree_child_link_set(tree, v) \
+    (assert(tree), ((tree)->chain).link = (v))
+/*
 #define avl_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
@@ -171,14 +172,12 @@
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->b_node.height = (v))
 
-/* NULL tree pointer is vaild here */
 #define avl_tree_ptr_to_bin(tree) \
     ((struct binary_search_tree *)(tree))
 
 #define avl_tree_ptr_to_avl(tree) \
     ((struct avl_tree *)(tree))
 
-/* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \
@@ -197,12 +196,12 @@
 #define splay_tree_node_link(tree) \
     (assert(tree), (tree)->b_node.chain.link)
 
-/* NULL tree pointer is vaild here */
 #define splay_tree_ptr_to_bin(tree) \
     ((struct binary_search_tree *)(tree))
 
 #define splay_tree_ptr_to_splay(tree) \
     ((struct splay_tree *)(tree))
+*/
 
 /* HASHING TABLE */
 #define hashing_table_size(hash) \

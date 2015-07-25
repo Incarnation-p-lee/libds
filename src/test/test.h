@@ -22,15 +22,11 @@ void end_of_report_print(void);
 void test_perform(struct option_set *opts);
 
 static void test_result_print(char *name, bool passed);
-static sint32 * int_array_generate(sint32 size);
 static void linked_list_iterate_handler(void *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 static void tree_iterate_handler(void *ptr);
-static inline struct binary_search_tree * unit_test_binary_search_tree_sample(uint64 range, uint32 node_count);
-static inline struct single_linked_list * unit_test_single_linked_list_sample(uint32 range, uint32 node_count);
-static inline struct doubly_linked_list * unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count);
-static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
+static sint32 * int_array_generate(sint32 size);
 static inline void test_result_and_performance_print(double variance, bool passed, char *name);
 
 #endif

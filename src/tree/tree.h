@@ -9,6 +9,9 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
+#define TREE_NICE_PLUS_LMT  0x7fffffffffffffff
+#define TREE_NICE_MINUS_LMT (-TREE_NICE_PLUS_LMT - 1)
+
 #define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
@@ -17,35 +20,49 @@ extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 
 /* BINARY SEARCH TREE */
-struct binary_search_tree * binary_search_tree_create(void);
-struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
+static inline void binary_search_tree_node_initial_internal(struct binary_search_tree *node, void *val, sint64 nice);
+static inline void binary_search_tree_initial_internal(struct binary_search_tree *tree);
+static inline void binary_search_tree_node_destroy(struct binary_search_tree *node);
+static inline void binary_search_tree_destroy_internal(struct binary_search_tree **tree);
+static inline void binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre, struct binary_search_tree *node);
+static inline void binary_search_tree_node_collision_chain_copy(struct collision_chain *tgt, struct collision_chain *node);
+static inline void binary_search_tree_node_collision_chain_swap(struct collision_chain *m_node, struct collision_chain *n_node);
+static inline void binary_search_tree_node_child_clean(struct binary_search_tree *node);
+static inline void binary_search_tree_iterate_internal(struct binary_search_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+static inline bool binary_search_tree_node_contains_p_internal(struct binary_search_tree *tree, struct binary_search_tree *node);
+static inline bool binary_search_tree_node_leaf_p(struct binary_search_tree *node);
+static inline bool binary_search_tree_node_child_doubly_p(struct binary_search_tree *node);
+static inline sint32 binary_search_tree_height_internal(struct binary_search_tree *tree);
+static inline struct binary_search_tree * binary_search_tree_create_internal(void);
+static inline struct binary_search_tree * binary_search_tree_node_create_internal(void *val, sint64 nice);
+static inline struct binary_search_tree * binary_search_tree_node_find_internal(struct binary_search_tree *tree, sint64 nice);
+static inline struct binary_search_tree * binary_search_tree_node_find_min_internal(struct binary_search_tree *tree);
+static inline struct binary_search_tree * binary_search_tree_node_find_max_internal(struct binary_search_tree *tree);
+static inline struct binary_search_tree * binary_search_tree_node_insert_internal(struct binary_search_tree *tree, struct binary_search_tree *node);
+static inline struct binary_search_tree * binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre, struct binary_search_tree *node);
+static inline struct binary_search_tree * binary_search_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice);
+static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_max(struct binary_search_tree **tree);
+static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_min(struct binary_search_tree **tree);
+
+bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
 void binary_search_tree_initial(struct binary_search_tree *root);
 void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
 void binary_search_tree_destroy(struct binary_search_tree **root);
+void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
+void binary_search_tree_node_remove_and_destroy(struct binary_search_tree **tree, sint64 nice);
+sint32 binary_search_tree_height(struct binary_search_tree *root);
 struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice);
 struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *root, struct binary_search_tree *node);
 struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
-bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
+struct binary_search_tree * binary_search_tree_create(void);
+struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
 struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-sint32 binary_search_tree_height(struct binary_search_tree *root);
-void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-static void inline binary_search_tree_node_destroy(struct binary_search_tree *node);
-static inline void binary_search_tree_iterate_internal(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-static inline bool binary_search_tree_node_child_doubly_p(struct binary_search_tree *node);
-static inline void binary_search_tree_destroy_internal(struct binary_search_tree **root);
-static inline struct binary_search_tree * binary_search_tree_node_find_internal(struct binary_search_tree *root, sint64 nice);
-static inline struct binary_search_tree * binary_search_tree_node_find_min_internal(struct binary_search_tree *root);
-static inline struct binary_search_tree * binary_search_tree_node_find_max_internal(struct binary_search_tree *root);
-static inline sint32 binary_search_tree_height_internal(struct binary_search_tree *root);
-static inline void binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre, struct binary_search_tree *node);
-static inline void binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre, struct binary_search_tree *node);
-static inline bool binary_search_tree_node_child_doubly_p(struct binary_search_tree *node);
 /* END OF BINARY SEARCH TREE */
 
 
 /* AVL TREE */
+/*
 struct avl_tree * avl_tree_create(void);
 struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
 void avl_tree_initial(struct avl_tree *root);
@@ -87,11 +104,13 @@ static inline struct avl_tree * avl_tree_node_child_doubly_strip_from_min(struct
 static inline struct avl_tree * avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice);
 static inline struct avl_tree ** avl_tree_left_child_find_max_with_parent(struct avl_tree *root, struct avl_tree **max);
 static inline struct avl_tree ** avl_tree_right_child_find_min_with_parent(struct avl_tree *root, struct avl_tree **min);
+*/
 
 /* END OF AVL TREE */
 
 
 /* SPLAY TREE */
+/*
 struct splay_tree * splay_tree_create(void);
 struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 void splay_tree_initial(struct splay_tree *tree);
@@ -119,6 +138,7 @@ static inline struct splay_tree * splay_tree_node_find_min_internal(struct splay
 static inline struct splay_tree * splay_tree_node_find_max_internal(struct splay_tree **tree, struct splay_tree *root);
 static inline bool splay_tree_child_has_nice_p(struct splay_tree *node, sint64 nice);
 static inline bool splay_tree_node_leaf_p(struct splay_tree *node);
+*/
 /* END OF SPLAY TREE */
 
 #endif

@@ -126,6 +126,7 @@ static struct test_performance unit_test_performance[] = {
     {"binary_search_tree_node_contains_p",         0x0u, 0x0u},
     {"binary_search_tree_node_insert",             0x0u, 0x0u},
     {"binary_search_tree_node_remove",             0x0u, 0x0u},
+    {"binary_search_tree_node_remove_and_destroy", 0x0u, 0x0u},
     {"binary_search_tree_iterate",                 0x0u, 0x0u},
     {"avl_tree_struct_field",                      0x0u, 0x0u},
     {"avl_tree_create",                            0x0u, 0x0u},

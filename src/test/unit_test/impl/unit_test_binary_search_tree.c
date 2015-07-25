@@ -44,7 +44,6 @@ unit_test_binary_search_tree_sample(uint64 range, uint32 node_count)
 
     retval = binary_search_tree_create();
     binary_search_tree_node_initial(retval, &reference, 0);
-    retval->height = 0;
     i = 1;
 
     while (i < node_count) {
@@ -401,7 +400,6 @@ unit_test_binary_search_tree_node_insert(void)
     return;
 }
 
-
 static void
 unit_test_binary_search_tree_node_remove(void)
 {
@@ -418,21 +416,26 @@ unit_test_binary_search_tree_node_remove(void)
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, 0x0), &pass);
 
     tree = unit_test_binary_search_tree_sample(0x2F4321, 0x32ABCD);
-    tmp = tree;
-    nice = binary_search_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
+    nice = binary_search_tree_node_nice(tree);
+    tmp = binary_search_tree_node_remove(&tree, nice);
+
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
     binary_search_tree_destroy(&tmp);
 
     tmp = binary_search_tree_node_find_min(tree);
     nice = binary_search_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
+    tmp = binary_search_tree_node_remove(&tree, nice);
+
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
     binary_search_tree_destroy(&tmp);
 
     tmp = binary_search_tree_node_find_max(tree);
     nice = binary_search_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
+    tmp = binary_search_tree_node_remove(&tree, nice);
+
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
     binary_search_tree_destroy(&tmp);
 
@@ -442,13 +445,49 @@ unit_test_binary_search_tree_node_remove(void)
     binary_search_tree_destroy(&tmp);
     binary_search_tree_destroy(&tree);
 
-    tree = binary_search_tree_node_create(&pass, 0x7FFFFF);
-    tmp = tree;
-    nice = binary_search_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, binary_search_tree_node_remove(&tree, nice), &pass);
-    binary_search_tree_destroy(&tmp);
-
     test_result_print(SYM_2_STR(binary_search_tree_node_remove), pass);
+    return;
+}
+
+static void
+unit_test_binary_search_tree_node_remove_and_destroy(void)
+{
+    bool pass;
+    sint64 nice;
+    struct binary_search_tree *tree;
+    struct binary_search_tree *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    tree = NULL;
+
+    binary_search_tree_node_remove_and_destroy(&tree, 0x0);
+
+    tree = unit_test_binary_search_tree_sample(0x149fe1, 0x10bee2);
+    nice = binary_search_tree_node_nice(tree);
+    binary_search_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+
+    tmp = binary_search_tree_node_find_min(tree);
+    nice = binary_search_tree_node_nice(tmp);
+    binary_search_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+
+    tmp = binary_search_tree_node_find_max(tree);
+    nice = binary_search_tree_node_nice(tmp);
+    binary_search_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
+
+    tmp = binary_search_tree_node_create(&pass, 0x7FFFFF);
+    nice = binary_search_tree_node_nice(tmp);
+    binary_search_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, nice), &pass);
+
+    binary_search_tree_destroy(&tmp);
+    binary_search_tree_destroy(&tree);
+
+    test_result_print(SYM_2_STR(binary_search_tree_node_remove_and_destroy), pass);
     return;
 }
 

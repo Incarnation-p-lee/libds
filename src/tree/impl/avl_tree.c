@@ -19,8 +19,6 @@ void
 avl_tree_initial(struct avl_tree *root)
 {
     avl_tree_node_initial(root, NULL, (sint64)0);
-
-    return;
 }
 
 void
@@ -32,8 +30,6 @@ avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
         avl_tree_height_set(node, 0x0);
         binary_search_tree_node_initial(avl_tree_ptr_to_bin(node), val, nice);
     }
-
-    return;
 }
 
 static inline void
@@ -43,8 +39,6 @@ avl_tree_node_child_clean(struct avl_tree *node)
 
     avl_tree_child_left_set(node, NULL);
     avl_tree_child_right_set(node, NULL);
-
-    return;
 }
 
 void
@@ -741,19 +735,26 @@ avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice)
         node = *root;
         if (nice < avl_tree_node_nice(node)) {
             removed = avl_tree_node_remove_internal(&node->b_node.avl_left, nice);
-            /* The left child-tree */
+            /* 
+             * the left child-tree.
+             */
             if (!avl_tree_balanced_on_height_p(node)) {
                 avl_tree_node_remove_rotate_right(root, node);
             }
             avl_tree_height_update(node);
         } else if (nice > avl_tree_node_nice(node)) {
             removed = avl_tree_node_remove_internal(&node->b_node.avl_right, nice);
-            /* The right child-tree */
+            /* 
+             * the right child-tree.
+             */
             if (!avl_tree_balanced_on_height_p(node)) {
                 avl_tree_node_remove_rotate_left(root, node);
             }
             avl_tree_height_update(node);
         } else {
+            /*
+             * find the target nice, strip the node.
+             */
             if (avl_tree_node_child_doubly_p(node)) {
                 removed = avl_tree_node_child_doubly_strip(node);
             } else {
@@ -785,6 +786,7 @@ avl_tree_node_remove(struct avl_tree **root, sint64 nice)
         return NULL;
     } else {
         removed = avl_tree_node_remove_internal(root, nice);
+
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         }
@@ -802,6 +804,7 @@ avl_tree_node_remove_and_destroy(struct avl_tree **root, sint64 nice)
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         removed = avl_tree_node_remove_internal(root, nice);
+
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         } else {
@@ -829,7 +832,9 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
                 avl_tree_child_left_set(*root, node);
             } else {
                 node = avl_tree_node_insert(&(*root)->b_node.avl_left, node);
-                /* The left child-tree */
+                /* 
+                 * the left child-tree.
+                 */
                 if (!avl_tree_balanced_on_height_p(*root)) {
                     avl_tree_node_insert_rotate_left(root, node);
                 }
@@ -839,12 +844,17 @@ avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node)
                 avl_tree_child_right_set(*root, node);
             } else {
                 node = avl_tree_node_insert(&(*root)->b_node.avl_right, node);
-                /* The right child-tree */
+                /* 
+                 * the right child-tree.
+                 */
                 if (!avl_tree_balanced_on_height_p(*root)) {
                     avl_tree_node_insert_rotate_right(root, node);
                 }
             }
         } else {
+            /*
+             * insert node exist alreay.
+             */
             if (*root == node) {
                 pr_log_info("Insert node exist, nothing will be done.\n");
             } else {

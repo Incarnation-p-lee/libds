@@ -190,33 +190,24 @@ struct collision_chain {
  * binary search tree
  */
 struct binary_search_tree {
-    struct collision_chain chain;
-    sint32                 height;  /* reserved for avl */
-    /* root node has height 0, NULL node has height -1 */
-    union {
-        struct binary_search_tree *left;
-        struct avl_tree           *avl_left;    /* reserved for avl   */
-        struct splay_tree         *splay_left;  /* reserved for splay */
-    };
-    union {
-        struct binary_search_tree *right;
-        struct avl_tree           *avl_right;    /* reserved for avl   */
-        struct splay_tree         *splay_right;  /* reserved for splay */
-    };
+    struct collision_chain    chain;
+    struct binary_search_tree *left;
+    struct binary_search_tree *right;
 };
 
 /*
  * avl tree
  */
 struct avl_tree {
-    struct binary_search_tree b_node;
+    sint32                    height;
+    struct binary_search_tree *b_tree;
 };
 
 /*
  * splay tree
  */
 struct splay_tree {
-    struct binary_search_tree b_node;
+    struct binary_search_tree *b_tree;
 };
 
 struct hashing_table {
@@ -411,8 +402,9 @@ struct minimal_heap {
 
 #define binary_search_tree_node_link(tree) \
     (assert(tree), ((tree)->chain).link)
-
-/* AVL TREE */
+#define binary_search_tree_child_link_set(tree, v) \
+    (assert(tree), ((tree)->chain).link = (v))
+/*
 #define avl_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
@@ -438,14 +430,12 @@ struct minimal_heap {
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->b_node.height = (v))
 
-/* NULL tree pointer is vaild here */
 #define avl_tree_ptr_to_bin(tree) \
     ((struct binary_search_tree *)(tree))
 
 #define avl_tree_ptr_to_avl(tree) \
     ((struct avl_tree *)(tree))
 
-/* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \
@@ -464,12 +454,12 @@ struct minimal_heap {
 #define splay_tree_node_link(tree) \
     (assert(tree), (tree)->b_node.chain.link)
 
-/* NULL tree pointer is vaild here */
 #define splay_tree_ptr_to_bin(tree) \
     ((struct binary_search_tree *)(tree))
 
 #define splay_tree_ptr_to_splay(tree) \
     ((struct splay_tree *)(tree))
+*/
 
 /* HASHING TABLE */
 #define hashing_table_size(hash) \
@@ -748,28 +738,33 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
+#define TREE_NICE_PLUS_LMT  0x7fffffffffffffff
+#define TREE_NICE_MINUS_LMT (-TREE_NICE_PLUS_LMT - 1)
+
 #define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 
 
 /* BINARY SEARCH TREE */
-extern struct binary_search_tree * binary_search_tree_create(void);
-extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
+
+extern bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_initial(struct binary_search_tree *root);
 extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
 extern void binary_search_tree_destroy(struct binary_search_tree **root);
+extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
+extern void binary_search_tree_node_remove_and_destroy(struct binary_search_tree **tree, sint64 nice);
+extern sint32 binary_search_tree_height(struct binary_search_tree *root);
 extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *root, sint64 nice);
 extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *root, struct binary_search_tree *node);
 extern struct binary_search_tree * binary_search_tree_node_find_min(struct binary_search_tree *root);
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *root);
-extern bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
+extern struct binary_search_tree * binary_search_tree_create(void);
+extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
 extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **root, sint64 nice);
-extern sint32 binary_search_tree_height(struct binary_search_tree *root);
-extern void binary_search_tree_iterate(struct binary_search_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
 /* END OF BINARY SEARCH TREE */
 
 
 /* AVL TREE */
+/*
 extern struct avl_tree * avl_tree_create(void);
 extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
 extern void avl_tree_initial(struct avl_tree *root);
@@ -784,11 +779,13 @@ extern struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nic
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
 extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
 
+*/
 
 /* END OF AVL TREE */
 
 
 /* SPLAY TREE */
+/*
 extern struct splay_tree * splay_tree_create(void);
 extern struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 extern void splay_tree_initial(struct splay_tree *tree);
@@ -803,6 +800,7 @@ extern struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, stru
 extern struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 
+*/
 /* END OF SPLAY TREE */
 
 #endif
