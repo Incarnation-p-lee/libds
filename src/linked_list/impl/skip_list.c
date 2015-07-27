@@ -33,9 +33,9 @@ skip_linked_list_node_initial(struct skip_linked_list *list,
     if (!list) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        skip_linked_list_node_key_set(list, key);
-        skip_linked_list_node_val_set(list, val);
-        skip_linked_list_node_next_set(list, NULL);
+        list->key = key;
+        list->val = val;
+        list->next = NULL;
     }
 }
 
@@ -51,7 +51,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
         node = *list;
 
         while (node) {
-            next = skip_linked_list_node_next(node);
+            next = node->next;
             free_ds(node);
             node = next;
         }
@@ -75,7 +75,7 @@ skip_linked_list_length(struct skip_linked_list *list)
 
         while (node) {
             retval++;
-            node = skip_linked_list_node_next(node);
+            node = node->next;
         }
 
         return retval;
@@ -234,12 +234,19 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
         }
 
         while (index) {
-            iter = skip_linked_list_node_next(iter);
+            iter = iter->next;
             index--;
         }
 
         return iter;
     }
+}
+
+struct skip_linked_list *
+skip_linked_list_node_remove(struct skip_linked_list *list,
+    struct skip_linked_list *node)
+{
+    return NULL;
 }
 
 void
@@ -254,8 +261,8 @@ skip_linked_list_iterate(struct skip_linked_list *list,
         iter = list;
 
         while(iter) {
-            (*handler)(skip_linked_list_node_val(iter));
-            iter = skip_linked_list_node_next(iter);
+            (*handler)(iter->val);
+            iter = iter->next;
         }
     }
 }
