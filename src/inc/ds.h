@@ -564,6 +564,10 @@ struct minimal_heap {
 #define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
 #define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
 
+#if defined DEBUG
+
+#endif
+
 
 /* doubly linked list, Circular. */
 extern struct doubly_linked_list * doubly_linked_list_create(void);

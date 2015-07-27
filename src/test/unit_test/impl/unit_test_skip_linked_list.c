@@ -375,8 +375,7 @@ unit_test_skip_linked_list_node_remove(void)
     tmp = NULL;
 
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, tmp), &pass);
-    // list = unit_test_skip_linked_list_sample(0x101f0, 0x403f);
-    list = unit_test_skip_linked_list_sample(0x12f, 0x12f);
+    list = unit_test_skip_linked_list_sample(0x151f0, 0x803f);
     tmp = skip_linked_list_node_create(&pass, skip_linked_list_node_key(list));
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, tmp), &pass);
     skip_linked_list_destroy(&tmp);

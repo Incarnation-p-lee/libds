@@ -10,6 +10,7 @@
 
 #include "linked_list.h"
 
+#include "impl/linked_list_debug.c"
 #include "impl/doubly_linked_list.c"
 #include "impl/single_linked_list.c"
 #include "impl/skip_linked_list.c"

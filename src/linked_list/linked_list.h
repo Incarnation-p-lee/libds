@@ -5,6 +5,11 @@
 #define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
 #define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
 
+#if defined DEBUG
+static inline bool skip_linked_list_ordering_p(struct skip_linked_list *list);
+
+#endif
+
 extern uint32 random_uint32_with_limit(uint32 lmt);
 
 /* doubly linked list, Circular. */
