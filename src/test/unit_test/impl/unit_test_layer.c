@@ -22,7 +22,7 @@ static const struct test_layer_table single_linked_list_interface[] = {
     {"iterate",            {&unit_test_single_linked_list_iterate,},},
     {"destroy",            {&unit_test_single_linked_list_destroy,},},
     {"length",             {&unit_test_single_linked_list_length,},},
-    {"join",               {&unit_test_single_linked_list_merge,},},
+    {"merge",              {&unit_test_single_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };
 
@@ -46,7 +46,7 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
     {"iterate",            {&unit_test_doubly_linked_list_iterate,},},
     {"destroy",            {&unit_test_doubly_linked_list_destroy,},},
     {"length",             {&unit_test_doubly_linked_list_length,},},
-    {"join",               {&unit_test_doubly_linked_list_merge,},},
+    {"merge",              {&unit_test_doubly_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };
 
@@ -62,17 +62,10 @@ static const struct test_layer_table skip_linked_list_interface[] = {
     {"node_insert",        {&unit_test_skip_linked_list_node_insert,},},
     {"node_find_key",      {&unit_test_skip_linked_list_node_find_key,},},
     {"node_by_index",      {&unit_test_skip_linked_list_node_by_index,},},
-    // {"generate",           {&unit_test_doubly_linked_list_generate,},},
-    // {"node_initial",       {&unit_test_doubly_linked_list_node_initial,},},
+    {"iterate",            {&unit_test_skip_linked_list_iterate,},},
     // {"node_copy",          {&unit_test_doubly_linked_list_node_copy,},},
-    // {"node_append",        {&unit_test_doubly_linked_list_node_append,},},
-    // {"node_insert_after",  {&unit_test_doubly_linked_list_node_insert_after,},},
-    // {"node_exchange",      {&unit_test_doubly_linked_list_node_exchange,},},
     // {"node_remove",        {&unit_test_doubly_linked_list_node_remove,},},
     // {"node_lazy_remove",   {&unit_test_doubly_linked_list_node_lazy_remove,},},
-    // {"serialize",          {&unit_test_doubly_linked_list_serialize,},},
-    // {"iterate",            {&unit_test_doubly_linked_list_iterate,},},
-    // {"length",             {&unit_test_doubly_linked_list_length,},},
     // {"join",               {&unit_test_doubly_linked_list_merge,},},
     {NULL,                 {NULL,},},
 };

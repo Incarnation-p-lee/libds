@@ -84,7 +84,7 @@ struct doubly_linked_list {
  * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
  * ------------------------------------------------------------
  */
-#define LEVEL_LIMIT 4
+#define LEVEL_LIMIT 8
 
 struct skip_linked_list {
     sint32 key;
@@ -623,6 +623,7 @@ extern struct skip_linked_list * skip_linked_list_node_find_key(struct skip_link
 extern bool skip_linked_list_contains_p(struct skip_linked_list *list, sint32 key);
 extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
+extern struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list *list, struct skip_linked_list *node);
 extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
 
 /* END of skip linked list, _NOT_ Circular. */

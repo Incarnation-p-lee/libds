@@ -347,7 +347,7 @@ unit_test_skip_linked_list_node_by_index(void)
     RESULT_CHECK_pointer(list, skip_linked_list_node_by_index(list, tmp), &pass);
 
     tgt = list;
-    while (loop < tmp ) {
+    while (loop < tmp) {
         RESULT_CHECK_pointer(tgt, skip_linked_list_node_by_index(list, loop), &pass);
         tgt = skip_linked_list_node_next(tgt);
         loop++;
@@ -355,6 +355,37 @@ unit_test_skip_linked_list_node_by_index(void)
     skip_linked_list_destroy(&list);
 
     test_result_print(SYM_2_STR(skip_linked_list_node_by_index), pass);
+    return;
+}
+
+static void
+unit_test_skip_linked_list_iterate(void)
+{
+    struct skip_linked_list *list;
+    struct skip_linked_list *iter;
+    bool pass;
+    uint32 loop;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x5234;
+    pass = true;
+    list = NULL;
+
+    skip_linked_list_iterate(list, &linked_list_iterate_handler);
+    list = unit_test_skip_linked_list_sample(0x101f0, 0x403f);
+
+    while (loop--) {
+        iter = list;
+        skip_linked_list_iterate(list, &linked_list_iterate_handler);
+        while (iter) {
+            RESULT_CHECK_sint32(0xdead, skip_linked_list_node_key(iter), &pass);
+            iter = skip_linked_list_node_next(iter);
+        }
+    }
+    skip_linked_list_destroy(&list);
+
+    test_result_print(SYM_2_STR(skip_linked_list_iterate), pass);
     return;
 }
 
