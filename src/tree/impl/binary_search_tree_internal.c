@@ -189,6 +189,33 @@ binary_search_tree_node_insert_internal(struct binary_search_tree *tree,
     return *iter = node;
 }
 
+static inline void
+binary_search_tree_node_chain_copy(struct collision_chain *tgt,
+    struct collision_chain *node)
+{
+    assert(NULL != tgt);
+    assert(NULL != node);
+    assert(tgt != node);
+
+    tgt->nice = node->nice;
+    tgt->link = node->link;
+}
+
+static inline void
+binary_search_tree_node_chain_swap(struct collision_chain *m,
+    struct collision_chain *n)
+{
+    struct collision_chain tmp;
+
+    assert(NULL != m);
+    assert(NULL != n);
+    assert(m!= n);
+
+    binary_search_tree_node_chain_copy(&tmp, n);
+    binary_search_tree_node_chain_copy(n, m);
+    binary_search_tree_node_chain_copy(m, &tmp);
+}
+
 static inline bool
 binary_search_tree_node_leaf_p(struct binary_search_tree *node)
 {
@@ -255,7 +282,7 @@ binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre,
 {
     assert(NULL != node);
     assert(NULL != pre);
-    assert(!binary_search_tree_node_child_doubly_p(node));
+    assert(!binary_search_tree_child_doubly_p(node));
 
     if (NULL != node->left) {
         *pre = node->left;
@@ -279,7 +306,7 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
 
     assert(NULL != node);
     assert(NULL != pre);
-    assert(binary_search_tree_node_child_doubly_p(node));
+    assert(binary_search_tree_child_doubly_p(node));
 
     min_ptr = binary_search_tree_node_find_ptr_to_min(&node->right);
     min = *min_ptr;
@@ -328,7 +355,7 @@ binary_search_tree_node_collision_chain_swap(struct collision_chain *m_node,
 }
 
 static inline bool
-binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
+binary_search_tree_child_doubly_p(struct binary_search_tree *node)
 {
     assert(NULL != node);
 
@@ -366,7 +393,7 @@ binary_search_tree_node_remove_internal(struct binary_search_tree **tree,
             pre = &iter->right;
         } else if (nice < iter->chain.nice) {
             pre = &iter->left;
-        } else if (binary_search_tree_node_child_doubly_p(iter)) {
+        } else if (binary_search_tree_child_doubly_p(iter)) {
             return binary_search_tree_node_child_doubly_strip(pre, iter);
         } else {
             binary_search_tree_node_child_lt_doubly_strip(pre, iter);

@@ -190,6 +190,7 @@ struct collision_chain {
  * binary search tree
  */
 struct binary_search_tree {
+    sint32                    height;
     struct collision_chain    chain;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
@@ -199,15 +200,14 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
-    sint32                    height;
-    struct binary_search_tree *b_tree;
+    struct binary_search_tree alias;
 };
 
 /*
  * splay tree
  */
 struct splay_tree {
-    struct binary_search_tree *b_tree;
+    struct binary_search_tree alias;
 };
 
 struct hashing_table {
@@ -404,38 +404,36 @@ struct minimal_heap {
     (assert(tree), ((tree)->chain).link)
 #define binary_search_tree_child_link_set(tree, v) \
     (assert(tree), ((tree)->chain).link = (v))
+
+/* AVL TREE */
 /*
 #define avl_tree_node_nice(tree) \
-    (assert(tree), (tree)->b_node.chain.nice)
+    (assert(tree), (tree)->b_tree.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->b_node.chain.nice = (v))
+    (assert(tree), (tree)->b_tree.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), (tree)->b_node.avl_left)
-#define avl_tree_child_left_set(tree, v) \
-    (assert(tree), (tree)->b_node.avl_left = (v))
+    (assert(tree), avl_tree_container_of((tree)->b_tree.left))
+#define avl_tree_child_left_set(tree, n) \
+    (assert(tree), avl_tree_container_of((tree)->b_tree.left) = &(n)->b_tree)
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), (tree)->b_node.avl_right)
-#define avl_tree_child_right_set(tree, v) \
-    (assert(tree), (tree)->b_node.avl_right = (v))
+    (assert(tree), avl_tree_container_of((tree)->b_tree.right))
+#define avl_tree_child_right_set(tree, n) \
+    (assert(tree), avl_tree_container_of((tree)->b_tree.right) = &(v)->b_tree)
 
 #define avl_tree_node_link(tree) \
-    (assert(tree), (tree)->b_node.chain.link)
+    (assert(tree), (tree)->b_tree.chain.link)
 #define avl_tree_node_link_set(tree, v) \
-    (assert(tree), (tree)->b_node.chain.link = (v))
+    (assert(tree), (tree)->b_tree.chain.link = (v))
 
 #define avl_tree_height(tree) \
-    (assert(tree), (tree)->b_node.height)
+    (assert(tree), (tree)->height)
 #define avl_tree_height_set(tree, v) \
-    (assert(tree), (tree)->b_node.height = (v))
+    (assert(tree), (tree)->height = (v))
+*/
 
-#define avl_tree_ptr_to_bin(tree) \
-    ((struct binary_search_tree *)(tree))
-
-#define avl_tree_ptr_to_avl(tree) \
-    ((struct avl_tree *)(tree))
-
+/*
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \
@@ -541,6 +539,9 @@ struct minimal_heap {
     #define realloc_ds     realloc
     #define free_ds        free
 #endif
+
+#define CONTAINER_OF(ptr, type, member) \
+    (type *)((char *)(ptr) - (char *)(((type *)0)->(member)))
 
 #define pr_log_err(msg)             \
     do {                            \
@@ -745,6 +746,9 @@ enum ITER_ORDER {
 
 
 /* BINARY SEARCH TREE */
+
+/*
+*/
 
 extern bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_initial(struct binary_search_tree *root);
