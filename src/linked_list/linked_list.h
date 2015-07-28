@@ -65,11 +65,17 @@ struct skip_linked_list * skip_linked_list_node_find_key(struct skip_linked_list
 bool skip_linked_list_contains_p(struct skip_linked_list *list, sint32 key);
 struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
+struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list *list, struct skip_linked_list *node);
 void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
 
 static inline struct skip_linked_list * skip_linked_list_node_find(struct skip_linked_list *list, sint32 key, uint32 lvl);
 static inline struct skip_linked_list * skip_linked_list_insert_before_head(struct skip_linked_list *list, struct skip_linked_list *tgt);
 static inline void skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt, struct skip_linked_list **prev_list, uint32 lvl);
+static inline struct skip_linked_list * skip_linked_list_node_remove_with_previous_list(struct skip_linked_list *tgt, struct skip_linked_list **pre_list, uint32 lvl);
+static inline uint32 skip_linked_list_node_level(struct skip_linked_list *list);
+static inline struct skip_linked_list * skip_linked_list_node_remove_head(struct skip_linked_list *list);
+static inline void skip_linked_list_node_clean(struct skip_linked_list *list);
+static inline struct skip_linked_list * skip_linked_list_node_remove_internal(struct skip_linked_list **list, struct skip_linked_list *tgt);
 /* END of skip linked list, _NOT_ Circular. */
 
 #endif

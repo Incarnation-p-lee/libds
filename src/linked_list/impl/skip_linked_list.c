@@ -242,10 +242,141 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
     }
 }
 
+// void
+// skip_linked_list_node_remove_and_destroy(struct skip_linked_list *list,
+//     struct skip_linked_list *node)
+// {
+// 
+// }
+
+static inline void
+skip_linked_list_node_clean(struct skip_linked_list *list)
+{
+    uint32 lvl;
+
+    assert(NULL != list);
+
+    lvl = SKIP_LIST_BOTTOM_IDX;
+
+    while (NULL != list->layer[lvl] && lvl < SKIP_LIST_MAX_LVL) {
+        list->layer[lvl++] = NULL;
+    }
+}
+
+static inline struct skip_linked_list *
+skip_linked_list_node_remove_head(struct skip_linked_list *list)
+{
+    struct skip_linked_list *next;
+    uint32 lvl;
+
+    assert(NULL != list);
+
+    next = list->next;
+
+    if (next) {
+        lvl = SKIP_LIST_MAX_LVL_IDX;
+
+        while (NULL == next->layer[lvl] && lvl > SKIP_LIST_BOTTOM_IDX) {
+            next->layer[lvl] = list->layer[lvl];
+            lvl--;
+        }
+    }
+
+    skip_linked_list_node_clean(list);
+    return list;
+}
+
+static inline struct skip_linked_list *
+skip_linked_list_node_remove_with_previous_list(struct skip_linked_list *tgt,
+    struct skip_linked_list **pre_list, uint32 lvl)
+{
+    assert(NULL != pre_list);
+    assert(NULL != tgt);
+    assert(lvl < SKIP_LIST_MAX_LVL);
+    assert(lvl == skip_linked_list_node_level(tgt));
+
+    do {
+        pre_list[lvl]->layer[lvl] = tgt->layer[lvl];
+    } while (0 != lvl--);
+
+    skip_linked_list_node_clean(tgt);
+
+    return tgt;
+}
+
+static inline uint32
+skip_linked_list_node_level(struct skip_linked_list *list)
+{
+    uint32 level;
+
+    assert(NULL != list);
+
+    level = SKIP_LIST_MAX_LVL_IDX;
+
+    while (NULL == list->layer[level]) {
+        level--;
+    }
+
+    return level;
+}
+
+static inline struct skip_linked_list *
+skip_linked_list_node_remove_internal(struct skip_linked_list **list,
+    struct skip_linked_list *tgt)
+{
+    struct skip_linked_list *node;
+    struct skip_linked_list *prev_list[SKIP_LIST_MAX_LVL];
+    uint32 lvl;
+    uint32 lmt;
+
+    assert(NULL != list);
+    assert(NULL != *list);
+    assert(NULL != node);
+    assert(skip_linked_list_node_find(*list, tgt->key, SKIP_LIST_MAX_LVL_IDX));
+
+    if (*list == tgt) {
+        /*
+         * remove the head.
+         */
+        return skip_linked_list_node_remove_head(*list);
+    } else {
+        node = *list;
+        lmt = skip_linked_list_node_level(tgt);
+        lvl = lmt;
+
+        while (true) {
+            list = &node->layer[lvl];
+
+            if ((*list)->key == tgt->key) {
+                assert(node == tgt);
+                prev_list[lvl] = node;
+
+                if (lvl == SKIP_LIST_BOTTOM_IDX) {
+                    /*
+                     * bottom level.
+                     */
+                    return skip_linked_list_node_remove_with_previous_list(tgt,
+                        prev_list, lmt);
+                } else {
+                    lvl--;
+                }
+            } else {
+                node = node->layer[lvl];
+            }
+        }
+    }
+}
+
 struct skip_linked_list *
 skip_linked_list_node_remove(struct skip_linked_list *list,
     struct skip_linked_list *node)
 {
+
+    if (!list || !node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    // } else if (NULL == skip_linked_list_node_find() {
+    }
     return NULL;
 }
 
