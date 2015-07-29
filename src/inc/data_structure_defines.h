@@ -146,38 +146,36 @@
     (assert(tree), ((tree)->chain).link)
 #define binary_search_tree_child_link_set(tree, v) \
     (assert(tree), ((tree)->chain).link = (v))
+
+/* AVL TREE */
 /*
 #define avl_tree_node_nice(tree) \
-    (assert(tree), (tree)->b_node.chain.nice)
+    (assert(tree), (tree)->b_tree.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->b_node.chain.nice = (v))
+    (assert(tree), (tree)->b_tree.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), (tree)->b_node.avl_left)
-#define avl_tree_child_left_set(tree, v) \
-    (assert(tree), (tree)->b_node.avl_left = (v))
+    (assert(tree), avl_tree_container_of((tree)->b_tree.left))
+#define avl_tree_child_left_set(tree, n) \
+    (assert(tree), avl_tree_container_of((tree)->b_tree.left) = &(n)->b_tree)
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), (tree)->b_node.avl_right)
-#define avl_tree_child_right_set(tree, v) \
-    (assert(tree), (tree)->b_node.avl_right = (v))
+    (assert(tree), avl_tree_container_of((tree)->b_tree.right))
+#define avl_tree_child_right_set(tree, n) \
+    (assert(tree), avl_tree_container_of((tree)->b_tree.right) = &(v)->b_tree)
 
 #define avl_tree_node_link(tree) \
-    (assert(tree), (tree)->b_node.chain.link)
+    (assert(tree), (tree)->b_tree.chain.link)
 #define avl_tree_node_link_set(tree, v) \
-    (assert(tree), (tree)->b_node.chain.link = (v))
+    (assert(tree), (tree)->b_tree.chain.link = (v))
 
 #define avl_tree_height(tree) \
-    (assert(tree), (tree)->b_node.height)
+    (assert(tree), (tree)->height)
 #define avl_tree_height_set(tree, v) \
-    (assert(tree), (tree)->b_node.height = (v))
+    (assert(tree), (tree)->height = (v))
+*/
 
-#define avl_tree_ptr_to_bin(tree) \
-    ((struct binary_search_tree *)(tree))
-
-#define avl_tree_ptr_to_avl(tree) \
-    ((struct avl_tree *)(tree))
-
+/*
 #define splay_tree_node_nice(tree) \
     (assert(tree), (tree)->b_node.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \

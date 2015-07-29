@@ -33,6 +33,9 @@
     #define free_ds        free
 #endif
 
+#define CONTAINER_OF(ptr, type, member) \
+    (type *)((char *)(ptr) - (char *)(((type *)0)->(member)))
+
 #define pr_log_err(msg)             \
     do {                            \
         libds_log_print(ERRR, msg); \
