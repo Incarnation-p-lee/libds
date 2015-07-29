@@ -89,12 +89,13 @@ skip_linked_list_node_find_key(struct skip_linked_list *list, sint32 key)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        return skip_linked_list_node_find(list, key, SKIP_LIST_MAX_LVL_IDX);
+        return skip_linked_list_node_find_key_internal(list, key,
+            SKIP_LIST_MAX_LVL_IDX);
     }
 }
 
 static inline struct skip_linked_list *
-skip_linked_list_node_find(struct skip_linked_list *list,
+skip_linked_list_node_find_key_internal(struct skip_linked_list *list,
     sint32 key, uint32 lvl)
 {
     assert(NULL != list);
@@ -121,15 +122,35 @@ skip_linked_list_node_find(struct skip_linked_list *list,
     }
 }
 
-bool
-skip_linked_list_contains_p(struct skip_linked_list *list, sint32 key)
+static inline bool
+skip_linked_list_contains_p_internal(struct skip_linked_list *list,
+    struct skip_linked_list *tgt)
 {
-    if (!list) {
+    struct skip_linked_list *tmp;
+
+    assert(NULL != list);
+    assert(NULL != tgt);
+
+    tmp = skip_linked_list_node_find_key_internal(list, tgt->key,
+        SKIP_LIST_MAX_LVL_IDX);
+
+    if (NULL == tmp || tgt != tmp) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+bool
+skip_linked_list_contains_p(struct skip_linked_list *list,
+    struct skip_linked_list *tgt)
+{
+    if (!list || !tgt) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return false;
     } else {
-        return NULL != skip_linked_list_node_find(list, key,
-            SKIP_LIST_MAX_LVL_IDX) ? true : false;
+        return skip_linked_list_contains_p_internal(list, tgt);
     }
 }
 
@@ -169,7 +190,11 @@ skip_linked_list_node_insert(struct skip_linked_list **list,
     if (!list || !tgt) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
-    } else if (NULL != skip_linked_list_node_find(*list, tgt->key, lvl)) {
+    } else if (NULL != skip_linked_list_node_find_key_internal(*list,
+        tgt->key, lvl)) {
+        pr_log_warn("The key of insert node alreay exist, nothing will be done.\n");
+        return NULL;
+    } else if (skip_linked_list_contains_p_internal(*list, tgt)) {
         pr_log_warn("Insert node alreay exist, nothing will be done.\n");
         return NULL;
     } else {
@@ -242,13 +267,6 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
     }
 }
 
-// void
-// skip_linked_list_node_remove_and_destroy(struct skip_linked_list *list,
-//     struct skip_linked_list *node)
-// {
-// 
-// }
-
 static inline void
 skip_linked_list_node_clean(struct skip_linked_list *list)
 {
@@ -313,7 +331,7 @@ skip_linked_list_node_level(struct skip_linked_list *list)
 
     level = SKIP_LIST_MAX_LVL_IDX;
 
-    while (NULL == list->layer[level]) {
+    while (NULL == list->layer[level] && SKIP_LIST_BOTTOM_IDX != level) {
         level--;
     }
 
@@ -331,14 +349,16 @@ skip_linked_list_node_remove_internal(struct skip_linked_list **list,
 
     assert(NULL != list);
     assert(NULL != *list);
-    assert(NULL != node);
-    assert(skip_linked_list_node_find(*list, tgt->key, SKIP_LIST_MAX_LVL_IDX));
+    assert(NULL != tgt);
+    assert(skip_linked_list_contains_p_internal(*list, tgt));
 
     if (*list == tgt) {
         /*
          * remove the head.
          */
-        return skip_linked_list_node_remove_head(*list);
+        node = tgt->next;
+        *list = node;
+        return skip_linked_list_node_remove_head(tgt);
     } else {
         node = *list;
         lmt = skip_linked_list_node_level(tgt);
@@ -348,7 +368,7 @@ skip_linked_list_node_remove_internal(struct skip_linked_list **list,
             list = &node->layer[lvl];
 
             if ((*list)->key == tgt->key) {
-                assert(node == tgt);
+                assert((*list) == tgt);
                 prev_list[lvl] = node;
 
                 if (lvl == SKIP_LIST_BOTTOM_IDX) {
@@ -367,17 +387,36 @@ skip_linked_list_node_remove_internal(struct skip_linked_list **list,
     }
 }
 
-struct skip_linked_list *
-skip_linked_list_node_remove(struct skip_linked_list *list,
+void
+skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list,
     struct skip_linked_list *node)
 {
+    struct skip_linked_list *removed;
 
-    if (!list || !node) {
+    if (!list || !node || !*list) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (!skip_linked_list_contains_p_internal(*list, node)) {
+        pr_log_warn("The node to be removed do not exist in given list.\n");
+    } else {
+        removed = skip_linked_list_node_remove_internal(list, node);
+        free_ds(removed);
+    }
+}
+
+
+struct skip_linked_list *
+skip_linked_list_node_remove(struct skip_linked_list **list,
+    struct skip_linked_list *node)
+{
+    if (!list || !node || !*list) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
-    // } else if (NULL == skip_linked_list_node_find() {
+    } else if (!skip_linked_list_contains_p_internal(*list, node)) {
+        pr_log_warn("The node to be removed do not exist in given list.\n");
+        return NULL;
+    } else {
+        return skip_linked_list_node_remove_internal(list, node);
     }
-    return NULL;
 }
 
 void

@@ -38,7 +38,7 @@ struct doubly_linked_list {
  * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
  * ------------------------------------------------------------
  */
-#define LEVEL_LIMIT 8
+#define LEVEL_LIMIT 4
 
 struct skip_linked_list {
     sint32 key;
