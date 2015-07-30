@@ -260,7 +260,7 @@ unit_test_skip_linked_list_contains_p(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x123;
+    loop = 0xfff;
     pass = true;
     list = NULL;
     key = 0xfffff;
@@ -271,8 +271,7 @@ unit_test_skip_linked_list_contains_p(void)
     RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
     skip_linked_list_destroy(&tmp);
 
-    key = 0x1ffff;
-
+    key = 0xfff;
     while (loop--) {
         tmp = skip_linked_list_node_find_key(list, key--);
         if (tmp) {
@@ -310,6 +309,9 @@ unit_test_skip_linked_list_node_insert(void)
             break;
         }
     }
+
+    tmp = skip_linked_list_node_find_key(list, key);
+    RESULT_CHECK_pointer(NULL, skip_linked_list_node_insert(&list, tmp), &pass);
 
     tmp = skip_linked_list_node_create(&pass, key);
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_insert(&list, tmp), &pass);
@@ -374,22 +376,60 @@ unit_test_skip_linked_list_node_remove(void)
     list = NULL;
     tmp = NULL;
 
-    RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, tmp), &pass);
+    RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, 0), &pass);
     list = unit_test_skip_linked_list_sample(0x151f0, 0x803f);
-    tmp = skip_linked_list_node_create(&pass, skip_linked_list_node_key(list));
-    RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, tmp), &pass);
+
+    tmp = list;
+    RESULT_CHECK_pointer(tmp, skip_linked_list_node_remove(&list, list->key), &pass);
     skip_linked_list_destroy(&tmp);
+    RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, 0x151f1), &pass);
 
     while (loop--) {
         tmp = skip_linked_list_node_find_key(list, loop);
         if (NULL != tmp) {
-            RESULT_CHECK_pointer(tmp, skip_linked_list_node_remove(&list, tmp), &pass);
+            RESULT_CHECK_pointer(tmp, skip_linked_list_node_remove(&list, tmp->key), &pass);
             skip_linked_list_destroy(&tmp);
         }
     }
     skip_linked_list_destroy(&list);
 
     test_result_print(SYM_2_STR(skip_linked_list_node_remove), pass);
+    return;
+}
+
+static void
+unit_test_skip_linked_list_node_remove_and_destroy(void)
+{
+    struct skip_linked_list *list;
+    struct skip_linked_list *tmp;
+    bool pass;
+    uint32 loop;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x12;
+    pass = true;
+    list = NULL;
+    tmp = NULL;
+
+    skip_linked_list_node_remove_and_destroy(&list, 0);
+    list = unit_test_skip_linked_list_sample(0x151f0, 0x803f);
+
+    tmp = list;
+    skip_linked_list_node_remove_and_destroy(&list, list->key);
+    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
+    skip_linked_list_node_remove_and_destroy(&list, 0x151f1);
+
+    while (loop--) {
+        tmp = skip_linked_list_node_find_key(list, loop);
+        if (NULL != tmp) {
+            skip_linked_list_node_remove_and_destroy(&list, tmp->key);
+            RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
+        }
+    }
+    skip_linked_list_destroy(&list);
+
+    test_result_print(SYM_2_STR(skip_linked_list_node_remove_and_destroy), pass);
     return;
 }
 

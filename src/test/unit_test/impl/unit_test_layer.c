@@ -51,23 +51,24 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
 };
 
 static const struct test_layer_table skip_linked_list_interface[] = {
-    {"struct_field",       {&unit_test_skip_linked_list_struct_field,},},
-    {"create",             {&unit_test_skip_linked_list_create,},},
-    {"initial",            {&unit_test_skip_linked_list_initial,},},
-    {"node_create",        {&unit_test_skip_linked_list_node_create,},},
-    {"node_initial",       {&unit_test_skip_linked_list_node_initial,},},
-    {"destroy",            {&unit_test_skip_linked_list_destroy,},},
-    {"length",             {&unit_test_skip_linked_list_length,},},
-    {"contains_p",         {&unit_test_skip_linked_list_contains_p,},},
-    {"node_insert",        {&unit_test_skip_linked_list_node_insert,},},
-    {"node_find_key",      {&unit_test_skip_linked_list_node_find_key,},},
-    {"node_by_index",      {&unit_test_skip_linked_list_node_by_index,},},
-    {"node_remove",        {&unit_test_skip_linked_list_node_remove,},},
-    {"iterate",            {&unit_test_skip_linked_list_iterate,},},
+    {"struct_field",            {&unit_test_skip_linked_list_struct_field,},},
+    {"create",                  {&unit_test_skip_linked_list_create,},},
+    {"initial",                 {&unit_test_skip_linked_list_initial,},},
+    {"node_create",             {&unit_test_skip_linked_list_node_create,},},
+    {"node_initial",            {&unit_test_skip_linked_list_node_initial,},},
+    {"destroy",                 {&unit_test_skip_linked_list_destroy,},},
+    {"length",                  {&unit_test_skip_linked_list_length,},},
+    {"contains_p",              {&unit_test_skip_linked_list_contains_p,},},
+    {"node_insert",             {&unit_test_skip_linked_list_node_insert,},},
+    {"node_find_key",           {&unit_test_skip_linked_list_node_find_key,},},
+    {"node_by_index",           {&unit_test_skip_linked_list_node_by_index,},},
+    {"node_remove",             {&unit_test_skip_linked_list_node_remove,},},
+    {"node_remove_and_destroy", {&unit_test_skip_linked_list_node_remove_and_destroy,},},
+    {"iterate",                 {&unit_test_skip_linked_list_iterate,},},
     // {"node_copy",          {&unit_test_doubly_linked_list_node_copy,},},
     // {"node_lazy_remove",   {&unit_test_doubly_linked_list_node_lazy_remove,},},
     // {"join",               {&unit_test_doubly_linked_list_merge,},},
-    {NULL,                 {NULL,},},
+    {NULL,                      {NULL,},},
 };
 
 static const struct test_layer_table array_stack[] = {

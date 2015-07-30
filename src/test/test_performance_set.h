@@ -55,6 +55,7 @@ static struct test_performance unit_test_performance[] = {
     {"skip_linked_list_node_find_key",             0x0u, 0x0u},
     {"skip_linked_list_node_by_index",             0x0u, 0x0u},
     {"skip_linked_list_node_remove",               0x0u, 0x0u},
+    {"skip_linked_list_node_remove_and_destroy",   0x0u, 0x0u},
     {"skip_linked_list_iterate",                   0x0u, 0x0u},
     {"array_stack_struct_field",                   0x0u, 0x0u},
     {"array_stack_create",                         0x0u, 0x0u},
