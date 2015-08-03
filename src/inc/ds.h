@@ -630,6 +630,7 @@ extern struct skip_linked_list * skip_linked_list_node_find_key(struct skip_link
 extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 extern struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list **list, sint32 key);
+extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
 
 /* END of skip linked list, _NOT_ Circular. */
 

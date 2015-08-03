@@ -464,3 +464,42 @@ unit_test_skip_linked_list_iterate(void)
     return;
 }
 
+static void
+unit_test_skip_linked_list_merge(void)
+{
+    struct skip_linked_list *lm;
+    struct skip_linked_list *ln;
+    struct skip_linked_list *iter;
+    struct skip_linked_list *tmp;
+    bool pass;
+    uint32 loop;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    loop = 0x123;
+    pass = true;
+    lm = NULL;
+
+    ln = unit_test_skip_linked_list_sample(0x7f1f0, 0x803f);
+    RESULT_CHECK_pointer(NULL, skip_linked_list_merge(lm, lm), &pass);
+    RESULT_CHECK_pointer(ln, skip_linked_list_merge(lm, ln), &pass);
+    RESULT_CHECK_pointer(ln, skip_linked_list_merge(ln, ln), &pass);
+
+    while (loop--) {
+        lm = skip_linked_list_node_create(NULL, 0x8e290 - loop);
+        ln = skip_linked_list_merge(ln, lm);
+        iter = lm;
+
+        while (iter) {
+            tmp = skip_linked_list_node_find_key(ln, iter->key);
+            RESULT_CHECK_sint32(tmp->key, iter->key, &pass);
+            iter = skip_linked_list_node_next(iter);
+        }
+        skip_linked_list_destroy(&lm);
+    }
+    skip_linked_list_destroy(&ln);
+
+    test_result_print(SYM_2_STR(skip_linked_list_merge), pass);
+    return;
+}
+

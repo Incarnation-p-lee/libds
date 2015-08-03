@@ -73,6 +73,7 @@ struct skip_linked_list * skip_linked_list_node_find_key(struct skip_linked_list
 struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list **list, sint32 key);
+struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
 
 static inline bool skip_linked_list_contains_p_internal(struct skip_linked_list *list, struct skip_linked_list *tgt);
 static inline void skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt, struct skip_linked_list **prev_list, uint32 lvl);

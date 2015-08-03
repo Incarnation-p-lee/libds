@@ -65,9 +65,7 @@ static const struct test_layer_table skip_linked_list_interface[] = {
     {"node_remove",             {&unit_test_skip_linked_list_node_remove,},},
     {"node_remove_and_destroy", {&unit_test_skip_linked_list_node_remove_and_destroy,},},
     {"iterate",                 {&unit_test_skip_linked_list_iterate,},},
-    // {"node_copy",          {&unit_test_doubly_linked_list_node_copy,},},
-    // {"node_lazy_remove",   {&unit_test_doubly_linked_list_node_lazy_remove,},},
-    // {"join",               {&unit_test_doubly_linked_list_merge,},},
+    {"merge",                   {&unit_test_skip_linked_list_merge,},},
     {NULL,                      {NULL,},},
 };
 

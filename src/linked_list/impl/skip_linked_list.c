@@ -453,3 +453,31 @@ skip_linked_list_iterate(struct skip_linked_list *list,
     }
 }
 
+struct skip_linked_list *
+skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
+{
+    struct skip_linked_list *iter;
+    struct skip_linked_list *inserted;
+
+    if (!m || !n) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL == m ? n : m;
+    } else if (m == n) {
+        pr_log_info("Merge same linked list, nothing will be done.\n");
+        return m;
+    } else {
+        iter = n;
+
+        while (iter) {
+            if (!skip_linked_list_contains_p_internal(m, iter)) {
+                inserted = skip_linked_list_node_create(iter->val, iter->key);
+                skip_linked_list_node_insert(&m, inserted);
+            }
+
+            iter = iter->next;
+        }
+
+        return m;
+    }
+}
+
