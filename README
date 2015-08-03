@@ -14,6 +14,7 @@ UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
               obj_out/out/libds.so
 
 [Design]:
+---------
 This project export sorts of API of data structure with libds.so or libds.a.
 Some convention should notify for operation of exported APIs.
    1. remove operation never free the memory allocated of one element, just strip out of data structure.
@@ -23,6 +24,7 @@ Some convention should notify for operation of exported APIs.
    5. To be continue...
 
 [Convention]:
+-------------
 For all data structures, it has nice(priority) of node, or do not has nice.
    For nice data structures. API should be looks like this:
        1. xxx_xx_insert(*head, *node)
@@ -30,13 +32,34 @@ For all data structures, it has nice(priority) of node, or do not has nice.
        3. xxx_xx_remove_and_destroy(*head, nice)
        4. xxx_xx_contains_p(*head, *node)
        5. xxx_xx_find(*head, nice)
-   For no-niced data struct. API should be looked like:
+       6. implemented:
+           a. skip linked list.
+           b. binary search tree
+           c. avl tree
+           d. splay tree
+   For no-niced data structure. API should be looked like:
        1. xxx_xx_insert(*head, *node)
        2. xxx_xx_remove(*head, *node)
        3. xxx_xx_remove_and_destroy(*head, *node)
        4. xxx_xx_contains_p(*head, *node)
- 
-[list];
+       5. implemented:
+           a. single linked list
+           a. doubly linked list
+   For nice or no-niced data structure with out node concept.
+       1. some data sturcture organized without node concept.
+       2. these API has no conventions, case by case.
+       3. implemented:
+           a. minimal heap.
+           b. array stack
+           c. linked stack
+           d. array queue
+           e. stacked queue
+           f. doubly end queue
+           g. separate chain hash
+           h. open addressing hash
+       
+[list]:
+-------
 The following data structure implemented in this project.
    1. linked_list
         a. single linked list
@@ -58,4 +81,5 @@ The following data structure implemented in this project.
         b. open addressing hash
    6. heap
         a. minimal heap
+
 END
