@@ -593,11 +593,11 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 
 
 /* single linked list, Circular. */
+
 extern struct single_linked_list * single_linked_list_create(void);
 extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
 extern void single_linked_list_initial(struct single_linked_list *head);
 extern void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 sid);
-extern struct single_linked_list * single_linked_list_generate(uint32 *sid, uint32 size);
 extern void single_linked_list_node_append(struct single_linked_list *node, uint32 value);
 extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);

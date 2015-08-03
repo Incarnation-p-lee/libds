@@ -167,50 +167,6 @@ unit_test_single_linked_list_initial(void)
 }
 
 static void
-unit_test_single_linked_list_generate(void)
-{
-    struct single_linked_list *head;
-    bool pass;
-    uint32 *data;
-    uint32 *tmp;
-    uint32 *iter;
-    uint32 len;
-    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
-    uint32 loop;
-
-    TEST_PERFORMANCE_CHECKPOINT;
-
-    loop = 0x323u;
-    pass = true;
-    head = single_linked_list_generate(NULL, 0xdeadu);
-    RESULT_CHECK_pointer(NULL, head, &pass);
-
-    while (0 != loop--) {
-        iter = sizes;
-        while (iter < sizes + array_sizeof(sizes)) {
-            len = *iter++;
-            data = (uint32 *)int_array_generate(len);
-            head = single_linked_list_generate(data, len);
-
-            tmp = data;
-            while (tmp < data + len) {
-                RESULT_CHECK_uint32(*tmp, single_linked_list_node_sid(head), &pass);
-                head = single_linked_list_node_next(head);
-                tmp++;
-            }
-
-            RESULT_CHECK_uint32(*data, single_linked_list_node_sid(head), &pass);
-
-            free_ds(data);
-            single_linked_list_destroy(&head);
-        }
-    }
-
-    test_result_print(SYM_2_STR(single_linked_list_generate), pass);
-    return;
-}
-
-static void
 unit_test_single_linked_list_node_append(void)
 {
     struct single_linked_list *head;
