@@ -12,7 +12,8 @@ UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
               obj_out/out/ds.h
               obj_out/out/libds.a
               obj_out/out/libds.so
-              
+
+[Design]:
 This project export sorts of API of data structure with libds.so or libds.a.
 Some convention should notify for operation of exported APIs.
    1. remove operation never free the memory allocated of one element, just strip out of data structure.
@@ -20,7 +21,22 @@ Some convention should notify for operation of exported APIs.
    3. contains operation operates on pointers of element exist in data structure or not.
    4. find operation operates on sorted data structure who has priority of node/element of data structure.
    5. To be continue...
-  
+
+[Convention]:
+For all data structures, it has nice(priority) of node, or do not has nice.
+   For nice data structures. API should be looks like this:
+       1. xxx_xx_insert(*head, *node)
+       2. xxx_xx_remove(*head, nice)
+       3. xxx_xx_remove_and_destroy(*head, nice)
+       4. xxx_xx_contains_p(*head, *node)
+       5. xxx_xx_find(*head, nice)
+   For no-niced data struct. API should be looked like:
+       1. xxx_xx_insert(*head, *node)
+       2. xxx_xx_remove(*head, *node)
+       3. xxx_xx_remove_and_destroy(*head, *node)
+       4. xxx_xx_contains_p(*head, *node)
+ 
+[list];
 The following data structure implemented in this project.
    1. linked_list
         a. single linked list
