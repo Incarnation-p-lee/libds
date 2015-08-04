@@ -6,6 +6,7 @@ argv_lib=
 lib_build=0
 root_dir=`pwd | xargs basename`
 lib_dir="`pwd`/src/lib"
+base=`pwd`
 
 
 if [ "$root_dir" != "libds" ]
@@ -56,7 +57,7 @@ do
       argv_cfg="$argv_cfg -g -DDEBUG"
     ;;
     "DEBUG=0")
-      argv_cfg="$argv_cfg -o3 -ofast -DNDEBUG"
+      argv_cfg="$argv_cfg -o3 -ofast -DNDEBUG -fprofile-use=$base/performance/profile"
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"
@@ -64,7 +65,8 @@ do
     ;;
     "PROFILE=1")
       argv_lnk="$argv_lnk -pg"
-      argv_cfg="$argv_cfg -pg"
+      argv_cfg="$argv_cfg -pg -DNDEBUG -fprofile-generate=$base/performance/profile"
+      argv_lib+=" -lgcov"
     ;;
     "CODE_COVERAGE=0")
     ;;

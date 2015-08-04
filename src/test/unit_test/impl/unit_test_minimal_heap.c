@@ -286,7 +286,6 @@ unit_test_minimal_heap_node_insert(void)
     return;
 }
 
-
 static inline void
 unit_test_minimal_heap_node_remove_min(void)
 {
@@ -313,6 +312,36 @@ unit_test_minimal_heap_node_remove_min(void)
 
     test_result_print(SYM_2_STR(minimal_heap_node_remove_min), pass);
     return;
+}
+
+static inline void
+unit_test_minimal_heap_node_remove_min_and_destroy(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 size;
+    struct minimal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x123;
+    heap = NULL;
+
+    minimal_heap_node_remove_min_and_destroy(heap);
+
+    heap = unit_test_minimal_heap_sample(0x14235, 0x10D4E);
+    size = minimal_heap_size(heap);
+
+    while (loop--) {
+        minimal_heap_node_find_min(heap);
+        minimal_heap_node_remove_min_and_destroy(heap);
+        size--;
+        RESULT_CHECK_uint32(size, minimal_heap_size(heap), &pass);
+    }
+
+    minimal_heap_destroy(&heap);
+    test_result_print(SYM_2_STR(minimal_heap_node_remove_min_and_destroy), pass);
 }
 
 static inline void
@@ -436,6 +465,42 @@ unit_test_minimal_heap_node_remove(void)
     minimal_heap_destroy(&heap);
 
     test_result_print(SYM_2_STR(minimal_heap_node_remove), pass);
+    return;
+}
+
+static inline void
+unit_test_minimal_heap_node_remove_and_destroy(void)
+{
+    bool pass;
+    uint32 loop;
+    sint64 nice;
+    struct minimal_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12;
+    heap = NULL;
+
+    minimal_heap_node_remove(heap, 0);
+
+    heap = unit_test_minimal_heap_sample(0xe942, 0xb73a);
+    nice = 0x12345;
+    minimal_heap_node_remove_and_destroy(heap, nice);
+
+    nice = 0x45;
+    while (loop--) {
+        tmp = minimal_heap_node_find(heap, nice);
+        if (tmp) {
+            minimal_heap_node_remove_and_destroy(heap, nice);
+            RESULT_CHECK_pointer(NULL, minimal_heap_node_find(heap, nice), &pass);
+        }
+        nice--;
+    }
+    minimal_heap_destroy(&heap);
+
+    test_result_print(SYM_2_STR(minimal_heap_node_remove_and_destroy), pass);
     return;
 }
 

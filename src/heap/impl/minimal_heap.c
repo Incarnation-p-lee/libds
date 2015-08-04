@@ -125,6 +125,22 @@ minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice)
     }
 }
 
+void
+minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice)
+{
+    uint32 index;
+    struct doubly_linked_list *removed;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+    } else {
+        removed = binary_heap_node_remove(heap->bin_heap, index);
+        doubly_linked_list_destroy(&removed);
+    }
+}
+
 struct doubly_linked_list *
 minimal_heap_node_remove_min(struct minimal_heap *heap)
 {
@@ -133,6 +149,19 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
         return NULL;
     } else {
         return binary_heap_node_remove(heap->bin_heap, HEAP_ROOT_INDEX);
+    }
+}
+
+void
+minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
+{
+    struct doubly_linked_list *removed;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        removed =  binary_heap_node_remove(heap->bin_heap, HEAP_ROOT_INDEX);
+        doubly_linked_list_destroy(&removed);
     }
 }
 

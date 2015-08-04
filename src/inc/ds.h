@@ -594,24 +594,24 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 
 /* single linked list, Circular. */
 
-extern struct single_linked_list * single_linked_list_create(void);
-extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
 extern void single_linked_list_initial(struct single_linked_list *head);
 extern void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 sid);
 extern void single_linked_list_node_append(struct single_linked_list *node, uint32 value);
-extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
-extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);
 extern void single_linked_list_node_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
 extern void single_linked_list_node_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
 extern void single_linked_list_destroy(struct single_linked_list **head);
-extern uint32 single_linked_list_length(struct single_linked_list *head);
-extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *head, uint32 index);
 extern void single_linked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
-extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 extern void single_linked_list_serialize(struct single_linked_list *head);
+extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
+extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
+extern uint32 single_linked_list_length(struct single_linked_list *head);
+extern struct single_linked_list * single_linked_list_create(void);
+extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
+extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
+extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);
+extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *head, uint32 index);
 extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
 extern struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
-extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
 extern struct single_linked_list * single_linked_list_merge(struct single_linked_list *m, struct single_linked_list *n);
 /* END of single linked list, Circular. */
 
@@ -894,17 +894,19 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
-extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern void minimal_heap_destroy(struct minimal_heap **heap);
-extern bool minimal_heap_empty_p(struct minimal_heap *heap);
-extern bool minimal_heap_full_p(struct minimal_heap *heap);
 extern void minimal_heap_cleanup(struct minimal_heap *heap);
-extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
-extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
-extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
 extern void minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
+extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
+extern void minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice);
+extern bool minimal_heap_empty_p(struct minimal_heap *heap);
+extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern struct minimal_heap * minimal_heap_create(uint32 capacity);
+extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
+extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 /* END OF MINIMAL HEAP */
 

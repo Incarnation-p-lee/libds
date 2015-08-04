@@ -171,24 +171,6 @@ binary_heap_collision_chain_create(sint64 nice, void *val)
     return retval;
 }
 
-static inline uint32
-binary_heap_index_get_by_nice(struct binary_heap *heap, sint64 nice)
-{
-    uint32 index;
-
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(HEAP_NICE_UPPER_LMT > nice);
-    assert(HEAP_NICE_LOWER_LMT < nice);
-
-    if (!binary_heap_node_contains_p(heap, nice, &index)) {
-        pr_log_warn("Failed to find node of heap with given nice.\n");
-        return 0u;
-    } else {
-        return index;
-    }
-}
-
 /*
  * If contains the nice specificed, *tgt will be set to the index with nice.
  * If NOT contains, unchanged to *tgt.
