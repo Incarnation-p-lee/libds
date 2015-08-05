@@ -60,25 +60,33 @@ skip_linked_list_destroy(struct skip_linked_list **list)
     }
 }
 
-uint32
-skip_linked_list_length(struct skip_linked_list *list)
+static inline uint32
+skip_linked_list_length_internal(struct skip_linked_list *list)
 {
     uint32 retval;
     register struct skip_linked_list *node;
 
+    assert(NULL != list);
+
+    retval = 0u;
+    node = list;
+
+    while (node) {
+        retval++;
+        node = node->next;
+    }
+
+    return retval;
+}
+
+uint32
+skip_linked_list_length(struct skip_linked_list *list)
+{
     if (!list) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return 0u;
     } else {
-        retval = 0u;
-        node = list;
-
-        while (node) {
-            retval++;
-            node = node->next;
-        }
-
-        return retval;
+        return skip_linked_list_length_internal(list);
     }
 }
 
@@ -178,11 +186,8 @@ skip_linked_list_insert_before_head(struct skip_linked_list *list,
     return tgt;
 }
 
-/*
- * RETURN the inserted node of linked list, or RETURN NULL.
- */
-struct skip_linked_list *
-skip_linked_list_node_insert(struct skip_linked_list **list,
+static inline struct skip_linked_list *
+skip_linked_list_node_insert_internal(struct skip_linked_list **list,
     struct skip_linked_list *tgt)
 {
     uint32 lvl;
@@ -190,45 +195,62 @@ skip_linked_list_node_insert(struct skip_linked_list **list,
     register struct skip_linked_list **head;
     struct skip_linked_list *prev_list[SKIP_LIST_MAX_LVL];
 
+    assert(NULL != list);
+    assert(NULL != *list);
+    assert(NULL != tgt);
+
     lvl = SKIP_LIST_MAX_LVL_IDX;
+    head = list;
+    iter = *head;
+
+    if (tgt->key < iter->key) {
+        *list = skip_linked_list_insert_before_head(iter, tgt);
+        return tgt;
+    } else {
+        while (true) {
+            head = &iter->layer[lvl];
+
+            if (iter == tgt || iter->key == tgt->key) {
+                return NULL;
+            } else if (!*head || (*head)->key > tgt->key) {
+                prev_list[lvl] = iter;
+
+                if (SKIP_LIST_BOTTOM_IDX == lvl) {
+                    skip_linked_list_insert_update_with_lvl(tgt, prev_list,
+                        random_uint32_with_limit(SKIP_LIST_MAX_LVL));
+
+                    assert(skip_linked_list_ordering_p(*list));
+                    return tgt;
+                } else {
+                    lvl--;
+                }
+            } else {
+                iter = iter->layer[lvl];
+            }
+        }
+    }
+}
+
+/*
+ * RETURN the inserted node of linked list, or RETURN NULL.
+ */
+struct skip_linked_list *
+skip_linked_list_node_insert(struct skip_linked_list **list,
+    struct skip_linked_list *tgt)
+{
+    struct skip_linked_list *inserted;
 
     if (!list || !tgt) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        head = list;
-        iter = *head;
+        inserted = skip_linked_list_node_insert_internal(list, tgt);
 
-        if (tgt->key < iter->key) {
-            *list = skip_linked_list_insert_before_head(iter, tgt);
-            return tgt;
-        } else {
-            while (true) {
-                head = &iter->layer[lvl];
-
-                if (iter == tgt) {
-                    pr_log_warn("Insert node alreay exist, nothing will be done.\n");
-                    return NULL;
-                } else if (iter->key == tgt->key) {
-                    pr_log_warn("The key of insert node already exist, nothing will be done.\n");
-                    return NULL;
-                } else if (!*head || (*head)->key > tgt->key) {
-                    prev_list[lvl] = iter;
-
-                    if (SKIP_LIST_BOTTOM_IDX == lvl) {
-                        skip_linked_list_insert_update_with_lvl(tgt, prev_list,
-                            random_uint32_with_limit(SKIP_LIST_MAX_LVL));
-
-                        assert(skip_linked_list_ordering_p(*list));
-                        return tgt;
-                    } else {
-                        lvl--;
-                    }
-                } else {
-                    iter = iter->layer[lvl];
-                }
-            }
+        if (!inserted) {
+            pr_log_warn("Insert node already existed in linked list.\n");
         }
+
+        return inserted;
     }
 }
 
@@ -471,7 +493,7 @@ skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
         while (iter) {
             if (!skip_linked_list_contains_p_internal(m, iter)) {
                 inserted = skip_linked_list_node_create(iter->val, iter->key);
-                skip_linked_list_node_insert(&m, inserted);
+                skip_linked_list_node_insert_internal(&m, inserted);
             }
 
             iter = iter->next;

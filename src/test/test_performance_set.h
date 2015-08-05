@@ -26,7 +26,6 @@ static struct test_performance unit_test_performance[] = {
     {"doubly_linked_list_struct_field",            0x0u, 0x0u},
     {"doubly_linked_list_initial",                 0x0u, 0x0u},
     {"doubly_linked_list_create",                  0x0u, 0x0u},
-    {"doubly_linked_list_generate",                0x0u, 0x0u},
     {"doubly_linked_list_node_initial",            0x0u, 0x0u},
     {"doubly_linked_list_node_create",             0x0u, 0x0u},
     {"doubly_linked_list_node_copy",               0x0u, 0x0u},

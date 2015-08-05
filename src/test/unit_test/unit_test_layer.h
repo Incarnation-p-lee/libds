@@ -32,7 +32,6 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
     {"struct_field",       {&unit_test_doubly_linked_list_struct_field,},},
     {"initial",            {&unit_test_doubly_linked_list_initial,},},
     {"create",             {&unit_test_doubly_linked_list_create,},},
-    {"generate",           {&unit_test_doubly_linked_list_generate,},},
     {"node_initial",       {&unit_test_doubly_linked_list_node_initial,},},
     {"node_create",        {&unit_test_doubly_linked_list_node_create,},},
     {"node_copy",          {&unit_test_doubly_linked_list_node_copy,},},

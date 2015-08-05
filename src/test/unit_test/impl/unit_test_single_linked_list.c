@@ -46,10 +46,9 @@ unit_test_single_linked_list_struct_field(void)
         single_linked_list_node_next_set(tmp, tmp);
         RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     }
-    single_linked_list_destroy(&tmp);
 
+    single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_struct_field), pass);
-    return;
 }
 
 static void
@@ -72,10 +71,9 @@ unit_test_single_linked_list_create(void)
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
-    single_linked_list_destroy(&tmp);
 
+    single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_create), pass);
-    return;
 }
 
 static void
@@ -101,10 +99,9 @@ unit_test_single_linked_list_node_create(void)
     RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
-    single_linked_list_destroy(&tmp);
 
+    single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_node_create), pass);
-    return;
 }
 
 static void
@@ -134,10 +131,9 @@ unit_test_single_linked_list_node_initial(void)
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
     RESULT_CHECK_pointer(&pass, single_linked_list_node_val(tmp), &pass);
-    single_linked_list_destroy(&tmp);
 
+    single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_node_initial), pass);
-    return;
 }
 
 static void
@@ -162,8 +158,6 @@ unit_test_single_linked_list_initial(void)
 
     single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_initial), pass);
-
-    return;
 }
 
 static void
@@ -193,10 +187,9 @@ unit_test_single_linked_list_node_append(void)
     RESULT_CHECK_pointer(head, single_linked_list_node_previous(append), &pass);
     RESULT_CHECK_pointer(next, single_linked_list_node_next(append), &pass);
     RESULT_CHECK_pointer(append, single_linked_list_node_previous(next), &pass);
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_append), pass);
-    return;
 }
 
 static void
@@ -226,10 +219,9 @@ unit_test_single_linked_list_node_previous(void)
     prev = single_linked_list_node_previous(head);
     RESULT_CHECK_pointer(NULL, prev, &pass);
     single_linked_list_node_next_set(head, tmp);
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_previous), pass);
-    return;
 }
 
 static void
@@ -278,9 +270,7 @@ unit_test_single_linked_list_node_insert_before(void)
     }
 
     single_linked_list_destroy(&head);
-
     test_result_print(SYM_2_STR(single_linked_list_node_insert_before), pass);
-    return;
 }
 
 static void
@@ -327,10 +317,9 @@ unit_test_single_linked_list_node_insert_after(void)
         node = single_linked_list_create();
         single_linked_list_node_insert_after(head, node);
     }
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_insert_after), pass);
-    return;
 }
 
 static void
@@ -368,7 +357,6 @@ unit_test_single_linked_list_destroy(void)
     }
 
     test_result_print(SYM_2_STR(single_linked_list_destroy), pass);
-    return;
 }
 
 static void
@@ -403,7 +391,6 @@ unit_test_single_linked_list_length(void)
     RESULT_CHECK_uint32(0x0u, single_linked_list_length(NULL), &pass);
 
     test_result_print(SYM_2_STR(single_linked_list_length), pass);
-    return;
 }
 
 static void
@@ -434,10 +421,9 @@ unit_test_single_linked_list_node_by_index(void)
 
     tmp = single_linked_list_node_by_index(head, len + 1);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(head), &pass);
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_by_index), pass);
-    return;
 }
 
 static void
@@ -483,8 +469,6 @@ unit_test_single_linked_list_node_exchange(void)
 
     single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_exchange), pass);
-
-    return;
 }
 
 static void
@@ -509,11 +493,10 @@ unit_test_single_linked_list_contains_p(void)
     while (0 != loop--) {
         RESULT_CHECK_bool(false, single_linked_list_contains_p(head, tmp), &pass);
     }
+
     single_linked_list_destroy(&tmp);
     single_linked_list_destroy(&head);
-
     test_result_print(SYM_2_STR(single_linked_list_contains_p), pass);
-    return;
 }
 
 static void
@@ -552,7 +535,6 @@ unit_test_single_linked_list_serialize(void)
     }
 
     test_result_print(SYM_2_STR(single_linked_list_serialize), pass);
-    return;
 }
 
 static void
@@ -579,10 +561,9 @@ unit_test_single_linked_list_node_copy(void)
         single_linked_list_node_initial(tmp, NULL, 0x0u);
         single_linked_list_destroy(&tmp);
     }
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_copy), pass);
-    return;
 }
 
 static void
@@ -617,7 +598,6 @@ unit_test_single_linked_list_node_remove(void)
     }
 
     test_result_print(SYM_2_STR(single_linked_list_node_remove), pass);
-    return;
 }
 
 static void
@@ -652,7 +632,6 @@ unit_test_single_linked_list_node_lazy_remove(void)
     }
 
     test_result_print(SYM_2_STR(single_linked_list_node_lazy_remove), pass);
-    return;
 }
 
 static void
@@ -681,10 +660,9 @@ unit_test_single_linked_list_iterate(void)
     while (0 != loop--) {
         single_linked_list_iterate(head, &linked_list_iterate_handler);
     }
-    single_linked_list_destroy(&head);
 
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_iterate), pass);
-    return;
 }
 
 static void
@@ -725,9 +703,8 @@ unit_test_single_linked_list_merge(void)
     while (0 != loop--) {
         head = single_linked_list_merge(head, head_n);
     }
+
     single_linked_list_destroy(&head);
     single_linked_list_destroy(&head_n);
-
     test_result_print(SYM_2_STR(single_linked_list_merge), pass);
-    return;
 }

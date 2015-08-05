@@ -106,22 +106,3 @@ tree_iterate_handler(void *ptr)
     return;
 }
 
-static sint32 *
-int_array_generate(sint32 size)
-{
-    sint32 *raw;
-    register sint32 *iter;
-
-    raw = NULL;
-    if (size > 0) {
-        raw = (sint32 *)malloc_ds(sizeof(*raw) * size);
-        if (raw) {
-            iter = raw;
-            while (iter < raw + size) {
-                *iter++ = rand();
-            }
-        }
-    }
-
-    return raw;
-}

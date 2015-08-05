@@ -569,27 +569,26 @@ struct maximal_heap {
 
 
 /* doubly linked list, Circular. */
+
+extern bool doubly_linked_list_contains_p(struct doubly_linked_list *list, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid);
+extern void doubly_linked_list_initial(struct doubly_linked_list *list);
+extern void doubly_linked_list_node_initial(struct doubly_linked_list *list, void *val, uint32 sid);
+extern void doubly_linked_list_destroy(struct doubly_linked_list **list);
+extern void doubly_linked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
+extern void doubly_linked_list_serialize(struct doubly_linked_list *list);
+extern void doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void *));
+extern uint32 doubly_linked_list_length(struct doubly_linked_list *list);
+extern struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_create(void);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
-extern void doubly_linked_list_node_initial(struct doubly_linked_list *head, void *val, uint32 sid);
-extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern struct doubly_linked_list * doubly_linked_list_generate(uint32 *sid, uint32 size);
-extern struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
-extern void doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid);
-extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
-extern uint32 doubly_linked_list_length(struct doubly_linked_list *head);
-extern struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *head, uint32 index);
-extern void doubly_linked_list_node_exchange(struct doubly_linked_list *fir, struct doubly_linked_list *sec);
-extern bool doubly_linked_list_contains_p(struct doubly_linked_list *tar, struct doubly_linked_list *node);
-extern void doubly_linked_list_serialize(struct doubly_linked_list *head);
+extern struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *list, uint32 index);
 extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
 extern struct doubly_linked_list * doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
-extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*handler)(void *));
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END of doubly linked list, Circular. */
-
 
 /* single linked list, Circular. */
 
@@ -616,12 +615,13 @@ extern struct single_linked_list * single_linked_list_merge(struct single_linked
 
 
 /* skip linked list, _NOT_ Circular. */
+
+extern bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *tgt);
 extern void skip_linked_list_initial(struct skip_linked_list *list);
 extern void skip_linked_list_node_initial(struct skip_linked_list *list, void *val, sint32 key);
 extern void skip_linked_list_destroy(struct skip_linked_list **list);
 extern void skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list, sint32 key);
 extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
-extern bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *tgt);
 extern uint32 skip_linked_list_length(struct skip_linked_list *list);
 extern struct skip_linked_list * skip_linked_list_create(void);
 extern struct skip_linked_list * skip_linked_list_node_create(void *val, sint32 key);
@@ -630,7 +630,6 @@ extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 extern struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list **list, sint32 key);
 extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
-
 /* END of skip linked list, _NOT_ Circular. */
 
 #endif

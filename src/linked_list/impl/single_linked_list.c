@@ -43,7 +43,6 @@ single_linked_list_node_append(struct single_linked_list *node, uint32 sid)
 {
     struct single_linked_list *next;
 
-    next = NULL;
     if (!node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else if (!node->next) {
@@ -86,7 +85,7 @@ single_linked_list_node_insert_before_internal(struct single_linked_list *cur,
     assert(NULL != node);
 
     prev = single_linked_list_node_previous(cur);
-    assert(prev);
+    assert(NULL != prev);
 
     node->next = prev->next;
     prev->next = node;
@@ -364,6 +363,7 @@ single_linked_list_iterate(struct single_linked_list *list,
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         node = list;
+
         do {
             (*handler)(single_linked_list_node_val(node));
             node = node->next;
