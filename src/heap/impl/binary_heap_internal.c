@@ -38,8 +38,6 @@ binary_heap_initial(struct binary_heap *heap, uint32 capacity)
     while (iter < heap->base + u_offset(heap->capacity, 1)) {
         *iter++ = NULL;
     }
-
-    return;
 }
 
 static inline void
@@ -195,8 +193,10 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
             if (!ignore) {
                 *tgt = index;
             }
+
             return true;
         }
+
         index++;
     }
 
@@ -204,18 +204,27 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
 }
 
 /*
- * index -specific the empty hole index of heap.
- * nice  -nice value of percolate up.
+ * index      - specific the empty hole index of heap.
+ * nice       - nice value of percolate up.
+ * heap_order - function pointer of heap order, should be one of function
+ *              in file binary_heap_order.c.
  * RETURN the percolated index of heap.
  */
-static inline uint32
-binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
+static uint32
+binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice,
+    void *heap_order)
 {
+    bool (*ordered)(struct binary_heap *, uint32, sint64);
+
     assert(0 != index);
     assert(NULL != heap);
     assert(NULL != heap->base);
+    assert(NULL != heap_order);
     assert(HEAP_NICE_UPPER_LMT > nice);
     assert(HEAP_NICE_LOWER_LMT < nice);
+    assert(binary_heap_order_function_pointer_valid_p(heap_order));
+
+    ordered = heap_order;
 
     if (binary_heap_full_p(heap)) {
         pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
@@ -226,7 +235,7 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice)
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
     assert(binary_heap_percolate_up_precondition_p(heap, index, nice));
 
-    while (HEAP_ROOT_INDEX != index && HEAP_PARENT_NICE(heap, index) > nice) {
+    while (HEAP_ROOT_INDEX != index && (*ordered)(heap, index, nice)) {
         HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
         index = INDEX_PARENT(index);
     }
@@ -260,7 +269,7 @@ binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index)
     HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
     heap->size--;
 
-    index = binary_heap_percolate_up(heap, index, nice);
+    index = binary_heap_percolate_up(heap, index, nice, &binary_heap_order_minimal);
     HEAP_CHAIN(heap, index) = tmp;
 }
 

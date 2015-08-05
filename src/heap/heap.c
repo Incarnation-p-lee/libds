@@ -12,5 +12,7 @@
 #include "heap.h"
 
 #include "impl/binary_heap_debug.c"
+#include "impl/binary_heap_order.c"
 #include "impl/binary_heap_internal.c"
 #include "impl/minimal_heap.c"
+#include "impl/maximal_heap.c"

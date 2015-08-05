@@ -30,15 +30,18 @@ foreach (@export) {
     open EXPORT, '<', $_ or
         die "$! $_.";
     my $fname = $_;
+    my $debug = 0;
     print OUT "\n/* BEGIN of $fname */\n";
     while (<EXPORT>) {
         my $line = $_;
-        if (/static/) { # filter static function
+
+        if ("$debug" eq "1") {
+            $debug -= 1 if /endif/;
+            next;
+        } elsif (/static/) { # filter static function
             next if $line =~ /\);$/;
         } elsif (/^struct\s/) {
-            unless (/\{$/) {
-                $line = 'extern ' . $_;
-            }
+            $line = 'extern ' . $_ unless /\{$/;
         } elsif (/^void\s/) {
             $line = 'extern ' . $_;
         } elsif (/^[us]int\d{2}\s/) {
@@ -48,6 +51,9 @@ foreach (@export) {
         } elsif (/^FILE/) {
             next;
         } elsif (/^extern/) {
+            next;
+        } elsif (/DEBUG/ && /def/) {
+            $debug += 1;
             next;
         }
         print OUT $line;

@@ -12,6 +12,14 @@ struct unit_test_filter {
     char interface[FILTER_LEN];
 };
 
+struct test_layer_table {
+    char     *name;
+    union {
+        const void *junior;
+        void (*func)(void);
+    };
+};
+
 void unit_test_perform(char *arg);
 void unit_test_list(char *arg);
 

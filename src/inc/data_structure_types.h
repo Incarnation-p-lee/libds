@@ -205,5 +205,12 @@ struct minimal_heap {
     struct binary_heap *bin_heap;
 };
 
+/*
+ * max heap
+ */
+struct maximal_heap {
+    struct binary_heap *bin_heap;
+};
+
 #endif
 

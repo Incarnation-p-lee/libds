@@ -22,6 +22,7 @@ static struct test_performance unit_test_performance[] = {
     {"single_linked_list_destroy",                 0x0u, 0x0u},
     {"single_linked_list_length",                  0x0u, 0x0u},
     {"single_linked_list_merge",                   0x0u, 0x0u},
+
     {"doubly_linked_list_struct_field",            0x0u, 0x0u},
     {"doubly_linked_list_initial",                 0x0u, 0x0u},
     {"doubly_linked_list_create",                  0x0u, 0x0u},
@@ -42,6 +43,7 @@ static struct test_performance unit_test_performance[] = {
     {"doubly_linked_list_destroy",                 0x0u, 0x0u},
     {"doubly_linked_list_length",                  0x0u, 0x0u},
     {"doubly_linked_list_merge",                   0x0u, 0x0u},
+
     {"skip_linked_list_struct_field",              0x0u, 0x0u},
     {"skip_linked_list_create",                    0x0u, 0x0u},
     {"skip_linked_list_initial",                   0x0u, 0x0u},
@@ -57,6 +59,7 @@ static struct test_performance unit_test_performance[] = {
     {"skip_linked_list_node_remove_and_destroy",   0x0u, 0x0u},
     {"skip_linked_list_iterate",                   0x0u, 0x0u},
     {"skip_linked_list_merge",                     0x0u, 0x0u},
+
     {"array_stack_struct_field",                   0x0u, 0x0u},
     {"array_stack_create",                         0x0u, 0x0u},
     {"array_stack_destroy",                        0x0u, 0x0u},
@@ -69,6 +72,7 @@ static struct test_performance unit_test_performance[] = {
     {"array_stack_empty_p",                        0x0u, 0x0u},
     {"array_stack_cleanup",                        0x0u, 0x0u},
     {"array_stack_iterate",                        0x0u, 0x0u},
+
     {"linked_stack_struct_field",                  0x0u, 0x0u},
     {"linked_stack_create",                        0x0u, 0x0u},
     {"linked_stack_destroy",                       0x0u, 0x0u},
@@ -81,6 +85,7 @@ static struct test_performance unit_test_performance[] = {
     {"linked_stack_empty_p",                       0x0u, 0x0u},
     {"linked_stack_cleanup",                       0x0u, 0x0u},
     {"linked_stack_iterate",                       0x0u, 0x0u},
+
     {"array_queue_struct_field",                   0x0u, 0x0u},
     {"array_queue_create",                         0x0u, 0x0u},
     {"array_queue_destroy",                        0x0u, 0x0u},
@@ -93,6 +98,7 @@ static struct test_performance unit_test_performance[] = {
     {"array_queue_empty_p",                        0x0u, 0x0u},
     {"array_queue_cleanup",                        0x0u, 0x0u},
     {"array_queue_iterate",                        0x0u, 0x0u},
+
     {"stacked_queue_struct_field",                 0x0u, 0x0u},
     {"stacked_queue_create",                       0x0u, 0x0u},
     {"stacked_queue_destroy",                      0x0u, 0x0u},
@@ -105,6 +111,7 @@ static struct test_performance unit_test_performance[] = {
     {"stacked_queue_empty_p",                      0x0u, 0x0u},
     {"stacked_queue_cleanup",                      0x0u, 0x0u},
     {"stacked_queue_iterate",                      0x0u, 0x0u},
+
     {"doubly_end_queue_struct_field",              0x0u, 0x0u},
     {"doubly_end_queue_create",                    0x0u, 0x0u},
     {"doubly_end_queue_destroy",                   0x0u, 0x0u},
@@ -116,6 +123,7 @@ static struct test_performance unit_test_performance[] = {
     {"doubly_end_queue_tail_leave",                0x0u, 0x0u},
     {"doubly_end_queue_cleanup",                   0x0u, 0x0u},
     {"doubly_end_queue_iterate",                   0x0u, 0x0u},
+
     {"binary_search_tree_struct_field",            0x0u, 0x0u},
     {"binary_search_tree_create",                  0x0u, 0x0u},
     {"binary_search_tree_node_create",             0x0u, 0x0u},
@@ -131,6 +139,7 @@ static struct test_performance unit_test_performance[] = {
     {"binary_search_tree_node_remove",             0x0u, 0x0u},
     {"binary_search_tree_node_remove_and_destroy", 0x0u, 0x0u},
     {"binary_search_tree_iterate",                 0x0u, 0x0u},
+
     {"avl_tree_struct_field",                      0x0u, 0x0u},
     {"avl_tree_create",                            0x0u, 0x0u},
     {"avl_tree_node_create",                       0x0u, 0x0u},
@@ -145,6 +154,7 @@ static struct test_performance unit_test_performance[] = {
     {"avl_tree_node_insert",                       0x0u, 0x0u},
     {"avl_tree_node_remove",                       0x0u, 0x0u},
     {"avl_tree_iterate",                           0x0u, 0x0u},
+
     {"splay_tree_struct_field",                    0x0u, 0x0u},
     {"splay_tree_create",                          0x0u, 0x0u},
     {"splay_tree_node_create",                     0x0u, 0x0u},
@@ -159,6 +169,7 @@ static struct test_performance unit_test_performance[] = {
     {"splay_tree_node_insert",                     0x0u, 0x0u},
     {"splay_tree_node_remove",                     0x0u, 0x0u},
     {"splay_tree_iterate",                         0x0u, 0x0u},
+
     {"separate_chain_hash_struct_field",           0x0u, 0x0u},
     {"separate_chain_hash_create",                 0x0u, 0x0u},
     {"separate_chain_hash_destroy",                0x0u, 0x0u},
@@ -167,6 +178,7 @@ static struct test_performance unit_test_performance[] = {
     {"separate_chain_hash_remove",                 0x0u, 0x0u},
     {"separate_chain_hash_find",                   0x0u, 0x0u},
     {"separate_chain_hash_rehashing",              0x0u, 0x0u},
+
     {"open_addressing_hash_struct_field",          0x0u, 0x0u},
     {"open_addressing_hash_create",                0x0u, 0x0u},
     {"open_addressing_hash_destroy",               0x0u, 0x0u},
@@ -175,6 +187,7 @@ static struct test_performance unit_test_performance[] = {
     {"open_addressing_hash_remove",                0x0u, 0x0u},
     {"open_addressing_hash_find",                  0x0u, 0x0u},
     {"open_addressing_hash_rehashing",             0x0u, 0x0u},
+
     {"minimal_heap_struc_field",                   0x0u, 0x0u},
     {"minimal_heap_create",                        0x0u, 0x0u},
     {"minimal_heap_destroy",                       0x0u, 0x0u},
@@ -190,6 +203,15 @@ static struct test_performance unit_test_performance[] = {
     {"minimal_heap_node_remove_and_destroy",       0x0u, 0x0u},
     {"minimal_heap_node_decrease_nice",            0x0u, 0x0u},
     {"minimal_heap_node_increase_nice",            0x0u, 0x0u},
+
+    {"maximal_heap_struc_field",                   0x0u, 0x0u},
+    {"maximal_heap_create",                        0x0u, 0x0u},
+    {"maximal_heap_destroy",                       0x0u, 0x0u},
+    {"maximal_heap_empty_p",                       0x0u, 0x0u},
+    {"maximal_heap_full_p",                        0x0u, 0x0u},
+    {"maximal_heap_cleanup",                       0x0u, 0x0u},
+    {"maximal_heap_node_find",                     0x0u, 0x0u},
+    {"maximal_heap_node_find_max",                 0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 

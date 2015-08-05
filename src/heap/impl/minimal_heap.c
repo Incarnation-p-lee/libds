@@ -94,9 +94,10 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
         head = minimal_heap_node_find(heap, nice);
+
         if (!head) {
             index = binary_heap_percolate_up(heap->bin_heap,
-                minimal_heap_size(heap) + 1, nice);
+                heap->bin_heap->size + 1, nice, &binary_heap_order_minimal);
             binary_heap_node_create_by_index(heap->bin_heap, index, nice, val);
             heap->bin_heap->size++;
         } else {
@@ -191,8 +192,10 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
             HEAP_CHAIN(heap->bin_heap, index) = NULL;
             tmp->nice = new_nice;
 
-            index = binary_heap_percolate_up(heap->bin_heap, index, tmp->nice);
+            index = binary_heap_percolate_up(heap->bin_heap, index,
+                tmp->nice, &binary_heap_order_minimal);
             assert(NULL == HEAP_CHAIN(heap->bin_heap, index));
+
             HEAP_CHAIN(heap->bin_heap, index) = tmp;
         } else {
             /*
@@ -233,6 +236,7 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
 
             index = binary_heap_percolate_down(heap->bin_heap, index, new_nice);
             assert(NULL == HEAP_CHAIN(heap->bin_heap, index));
+
             HEAP_CHAIN(heap->bin_heap, index) = tmp;
         } else {
             /*

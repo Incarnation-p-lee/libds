@@ -1,4 +1,3 @@
-#include "unit_test_layer.h"
 #include "unit_test.h"
 
 #include "unit_test_linked_list.c"
@@ -8,8 +7,8 @@
 #include "unit_test_hash.c"
 #include "unit_test_heap.c"
 
+#include "unit_test_layer.h"
 #include "impl/unit_test_filter.c"
-#include "impl/unit_test_layer.c"
 
 void
 unit_test_perform(char *arg)

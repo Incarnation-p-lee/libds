@@ -78,4 +78,21 @@ binary_heap_percolate_down_precondition_p(struct binary_heap *heap,
     }
 }
 
+static inline bool
+binary_heap_order_function_pointer_valid_p(void *func_ptr)
+{
+    void **iter;
+
+    assert(NULL != func_ptr);
+
+    iter = order_func_list;
+    while (iter < order_func_list + array_sizeof(order_func_list)) {
+        if (*iter++ == func_ptr) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 #endif

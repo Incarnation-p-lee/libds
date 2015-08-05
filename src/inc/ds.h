@@ -251,6 +251,13 @@ struct minimal_heap {
     struct binary_heap *bin_heap;
 };
 
+/*
+ * max heap
+ */
+struct maximal_heap {
+    struct binary_heap *bin_heap;
+};
+
 #endif
 
 /* END of ./src/inc/data_structure_types.h */
@@ -501,6 +508,21 @@ struct minimal_heap {
 #define minimal_heap_link_set(heap, index, link) \
     (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
 
+/* MAXIMAL HEAP */
+#define maximal_heap_size(heap) \
+    (assert(heap), (heap)->bin_heap->size)
+
+#define maximal_heap_capacity(heap) \
+    (assert(heap), (heap)->bin_heap->capacity)
+
+#define maximal_heap_nice(heap, index) \
+    (assert(heap), HEAP_NICE(heap->bin_heap, index))
+
+#define maximal_heap_link(heap, index) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index))
+#define maximal_heap_link_set(heap, index, link) \
+    (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
+
 #endif
 /* END of ./src/inc/data_structure_defines.h */
 
@@ -518,27 +540,7 @@ struct minimal_heap {
 #define NAME_LEN             128
 #define CONTENT_LEN          NAME_LEN
 
-#ifdef DEBUG
-    #define pr_log_info(msg)    libds_log_print(INFO, msg);
-    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
-    #define pr_log_debug(msg)   libds_log_print(DBUG, msg);
-#else
-    #define pr_log_info(msg)
-    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
-    #define pr_log_debug(msg)
-#endif
 
-#ifdef DEBUG
-    #define DEBUG_CODE(x)  x
-    #define malloc_ds      malloc_wrap
-    #define realloc_ds     realloc_wrap
-    #define free_ds        free_wrap
-#else
-    #define DEBUG_CODE(x)
-    #define malloc_ds      malloc
-    #define realloc_ds     realloc
-    #define free_ds        free
-#endif
 
 #define CONTAINER_OF(ptr, type, member) \
     (type *)((char *)(ptr) - (char *)(((type *)0)->(member)))
@@ -564,9 +566,6 @@ struct minimal_heap {
 #define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
 #define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
 
-#if defined DEBUG
-
-#endif
 
 
 /* doubly linked list, Circular. */
@@ -849,8 +848,6 @@ extern void * open_addressing_hash_find(struct open_addressing_hash *hash, void 
 extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
 
 
-#if defined DEBUG
-#endif
 /* END OF OPEN ADDRESSING HASH */
 
 #endif
@@ -885,15 +882,13 @@ extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_
 /* EXTERNAL FUNCTIONS */
 /* END OF EXTERNAL FUNCTIONS */
 
-/* BINARY HEAP DEBUG */
-#if defined DEBUG
-#endif
-/* END OF BINARY HEAP DEBUG */
 
 /* BINARY HEAP INTERNAL */
 /* END OF BINARY HEAP INTERNAL */
 
 /* MINIMAL HEAP */
+extern bool minimal_heap_empty_p(struct minimal_heap *heap);
+extern bool minimal_heap_full_p(struct minimal_heap *heap);
 extern void minimal_heap_destroy(struct minimal_heap **heap);
 extern void minimal_heap_cleanup(struct minimal_heap *heap);
 extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
@@ -901,14 +896,26 @@ extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 ni
 extern void minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
 extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
 extern void minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice);
-extern bool minimal_heap_empty_p(struct minimal_heap *heap);
-extern bool minimal_heap_full_p(struct minimal_heap *heap);
 extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 /* END OF MINIMAL HEAP */
+
+/* MAXIMAL HEAP */
+extern bool maximal_heap_empty_p(struct maximal_heap *heap);
+extern bool maximal_heap_full_p(struct maximal_heap *heap);
+extern void maximal_heap_destroy(struct maximal_heap **heap);
+extern void maximal_heap_cleanup(struct maximal_heap *heap);
+extern void maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice);
+extern struct maximal_heap * maximal_heap_create(uint32 capacity);
+extern struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
+/* END OF MAXIMAL HEAP */
+
+/* BINARY HEAP DEBUG */
+/* END OF BINARY HEAP DEBUG */
 
 #endif
 /* END of ./src/heap/heap.h */
