@@ -170,7 +170,6 @@ unit_test_doubly_linked_list_node_append(void)
     struct doubly_linked_list *next;
     struct doubly_linked_list *append;
     bool pass;
-    uint32 sid = 0xfadeu;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
@@ -179,14 +178,14 @@ unit_test_doubly_linked_list_node_append(void)
     head = unit_test_doubly_linked_list_sample(0x1a2E, 0x213D);
     pass = true;
 
-    doubly_linked_list_node_append(NULL, sid);
+    doubly_linked_list_node_append(NULL, &pass);
 
     while (0 != loop--) {
         next = doubly_linked_list_node_next(head);
-        doubly_linked_list_node_append(head, sid);
+        doubly_linked_list_node_append(head, &pass);
         append = doubly_linked_list_node_next(head);
 
-        RESULT_CHECK_uint32(sid, doubly_linked_list_node_sid(append), &pass);
+        RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(append), &pass);
         RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(append), &pass);
         RESULT_CHECK_pointer(next, doubly_linked_list_node_next(append), &pass);
         RESULT_CHECK_pointer(append, doubly_linked_list_node_previous(next), &pass);
@@ -204,7 +203,6 @@ unit_test_doubly_linked_list_node_insert_before(void)
     struct doubly_linked_list *prev;
     struct doubly_linked_list *copy;
     bool pass;
-    uint32 sid;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
@@ -212,9 +210,8 @@ unit_test_doubly_linked_list_node_insert_before(void)
     // loop = 0x1223456u;
     loop = 0x1;
     pass = true;
-    sid = 0xbeadu;
     head = unit_test_doubly_linked_list_sample(0x21f26, 0xbef19);
-    doubly_linked_list_node_append(head, sid);
+    doubly_linked_list_node_append(head, &pass);
 
     node = doubly_linked_list_create();
     copy = doubly_linked_list_node_copy(node);
@@ -253,16 +250,14 @@ unit_test_doubly_linked_list_node_insert_after(void)
     struct doubly_linked_list *next;
     struct doubly_linked_list *copy;
     bool pass;
-    uint32 sid;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
     loop = 0x1223456u;
     pass = true;
-    sid = 0xbedu;
     head = unit_test_doubly_linked_list_sample(0x18ab, 0x2e9c);
-    doubly_linked_list_node_append(head, sid);
+    doubly_linked_list_node_append(head, &pass);
 
     node = doubly_linked_list_create();
     copy = doubly_linked_list_node_copy(node);
@@ -398,51 +393,6 @@ unit_test_doubly_linked_list_node_by_index(void)
 }
 
 static void
-unit_test_doubly_linked_list_node_exchange(void)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *tmp_1;
-    struct doubly_linked_list *tmp_2;
-    bool pass;
-    uint32 loop;
-
-    TEST_PERFORMANCE_CHECKPOINT;
-
-    pass = true;
-    head = unit_test_doubly_linked_list_sample(0x14a2, 0x2e1d);
-
-    loop = 0x5234567u;
-    while (0 != loop--) {
-        tmp_1 = doubly_linked_list_node_previous(head);
-        tmp_2 = doubly_linked_list_node_next(head);
-        doubly_linked_list_node_exchange(tmp_1, tmp_2);
-        /* ->tmp_1->head->tmp_2-> =>
-           ->tmp_2->head->tmp_1->    */
-        RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
-        RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
-    }
-
-    tmp_1 = doubly_linked_list_node_next(head);
-    tmp_2 = doubly_linked_list_node_previous(head);
-    doubly_linked_list_node_exchange(head, head);
-    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
-
-    doubly_linked_list_node_exchange(head, NULL);
-    RESULT_CHECK_pointer(tmp_2, doubly_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, doubly_linked_list_node_next(head), &pass);
-
-    tmp_1 = doubly_linked_list_node_copy(head);
-    doubly_linked_list_node_exchange(head, head);
-    RESULT_CHECK_doubly_linked_list_node(tmp_1, head, &pass);
-    doubly_linked_list_node_initial(tmp_1, NULL, 0x0u);
-    doubly_linked_list_destroy(&tmp_1);
-
-    doubly_linked_list_destroy(&head);
-    test_result_print(SYM_2_STR(doubly_linked_list_node_exchange), pass);
-}
-
-static void
 unit_test_doubly_linked_list_contains_p(void)
 {
     struct doubly_linked_list *head;
@@ -549,68 +499,65 @@ static void
 unit_test_doubly_linked_list_node_remove(void)
 {
     struct doubly_linked_list *head;
-    struct doubly_linked_list *prev;
+    struct doubly_linked_list *next;
     struct doubly_linked_list *tmp;
     bool pass;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
+    doubly_linked_list_node_remove(NULL);
+
     loop = 0x5234567u;
     pass = true;
     head = unit_test_doubly_linked_list_sample(0x31e2, 0x28ed);
-    tmp = doubly_linked_list_node_next(head);
-    prev = doubly_linked_list_node_previous(head);
-
-    doubly_linked_list_node_remove(NULL);
+    tmp = head;
+    next = head->next;
 
     RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(&head), &pass);
-    RESULT_CHECK_pointer(NULL, head, &pass);
-    RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
-
+    RESULT_CHECK_pointer(next, head, &pass);
     doubly_linked_list_destroy(&tmp);
+    doubly_linked_list_destroy(&head);
 
     while (0 != loop--) {
-        tmp = doubly_linked_list_create();
-        RESULT_CHECK_pointer(NULL, doubly_linked_list_node_remove(&tmp), &pass);
-        RESULT_CHECK_pointer(NULL, tmp, &pass);
+        head = doubly_linked_list_create();
+        tmp = head;
+        RESULT_CHECK_pointer(tmp, doubly_linked_list_node_remove(&head), &pass);
+        RESULT_CHECK_pointer(NULL, head, &pass);
+        doubly_linked_list_destroy(&tmp);
     }
 
     test_result_print(SYM_2_STR(doubly_linked_list_node_remove), pass);
 }
 
 static void
-unit_test_doubly_linked_list_node_lazy_remove(void)
+unit_test_doubly_linked_list_node_remove_and_destroy(void)
 {
     struct doubly_linked_list *head;
-    struct doubly_linked_list *prev;
-    struct doubly_linked_list *tmp;
+    struct doubly_linked_list *next;
     bool pass;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x967u;
+    doubly_linked_list_node_remove(NULL);
+
+    loop = 0x5234567u;
     pass = true;
-    doubly_linked_list_node_lazy_remove(NULL);
+    head = unit_test_doubly_linked_list_sample(0x31e2, 0x28ed);
+    next = head->next;
+
+    doubly_linked_list_node_remove_and_destroy(&head);
+    RESULT_CHECK_pointer(next, head, &pass);
+    doubly_linked_list_destroy(&head);
 
     while (0 != loop--) {
-        head = unit_test_doubly_linked_list_sample(0xeb28, 0xa23d);
-        prev = doubly_linked_list_node_previous(head);
-        tmp = doubly_linked_list_node_next(head);
-
-        RESULT_CHECK_pointer(tmp, doubly_linked_list_node_lazy_remove(head), &pass);
-        RESULT_CHECK_pointer(head, doubly_linked_list_node_next(head), &pass);
-        RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(head), &pass);
-        RESULT_CHECK_pointer(tmp, doubly_linked_list_node_next(prev), &pass);
-        RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(tmp), &pass);
-
-        /* Need to free the lazy node independently. */
-        free_ds(head);
-        doubly_linked_list_destroy(&tmp);
+        head = doubly_linked_list_create();
+        doubly_linked_list_node_remove_and_destroy(&head);
+        RESULT_CHECK_pointer(NULL, head, &pass);
     }
 
-    test_result_print(SYM_2_STR(doubly_linked_list_node_lazy_remove), pass);
+    test_result_print(SYM_2_STR(doubly_linked_list_node_remove_and_destroy), pass);
 }
 
 static void

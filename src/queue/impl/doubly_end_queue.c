@@ -169,7 +169,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
             if (next == queue->head) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                doubly_linked_list_node_lazy_remove(&queue->head->link);
+                // FixMe doubly_linked_list_node_lazy_remove(&queue->head->link);
                 free_ds(queue->head);
                 queue->head = next;
             }
@@ -198,7 +198,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             if (previous == queue->tail) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                doubly_linked_list_node_lazy_remove(&queue->tail->link);
+                // FixMe doubly_linked_list_node_lazy_remove(&queue->tail->link);
                 free_ds(queue->tail);
                 queue->tail = previous;
             }
@@ -236,7 +236,7 @@ doubly_end_queue_cleanup(struct doubly_end_queue *queue)
         } else {
             while (tmp != queue->tail) {
                 next = doubly_end_queue_list_next(tmp);
-                doubly_linked_list_node_lazy_remove(&tmp->link);
+                // Fixme doubly_linked_list_node_lazy_remove(&tmp->link);
                 free_ds(tmp);
                 tmp = next;
             }

@@ -128,7 +128,8 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 
     assert(NULL != node);
 
-    link = doubly_linked_list_node_lazy_remove(&node->link);
+    link = NULL;
+    // Fix Me link = doubly_linked_list_node_lazy_remove(&node->link);
 
     /* If only one node */
     if (NULL == link) {

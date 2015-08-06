@@ -40,7 +40,7 @@ doubly_linked_list_initial(struct doubly_linked_list *list)
 }
 
 void
-doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid)
+doubly_linked_list_node_append(struct doubly_linked_list *node, void *val)
 {
     struct doubly_linked_list *next;
 
@@ -50,7 +50,7 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, uint32 sid)
         if (NULL == node->next || NULL == node->previous) {
             pr_log_warn("Destroyed data structure.\n");
         } else {
-            next = doubly_linked_list_node_create(NULL, sid);
+            next = doubly_linked_list_node_create(val, 0u);
             doubly_linked_list_node_insert_after(node, next);
         }
     }
@@ -205,29 +205,6 @@ doubly_linked_list_node_by_index(struct doubly_linked_list *list,
     }
 }
 
-void
-doubly_linked_list_node_exchange(struct doubly_linked_list *fir,
-    struct doubly_linked_list *sec)
-{
-    struct doubly_linked_list *prev_fir;
-    struct doubly_linked_list *prev_sec;
-
-    if (!fir || !sec) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (!doubly_linked_list_contains_p_internal(fir, sec)
-        || (fir == sec)) {
-        pr_log_warn("Exchange itself or exchange in different list.\n");
-    } else {
-        prev_fir = fir->previous;
-        prev_sec = sec->previous;
-
-        doubly_linked_list_node_lazy_remove_internal(fir);
-        doubly_linked_list_node_lazy_remove_internal(sec);
-        doubly_linked_list_node_insert_after_internal(prev_fir, sec);
-        doubly_linked_list_node_insert_after_internal(prev_sec, fir);
-    }
-}
-
 static inline bool
 doubly_linked_list_contains_p_internal(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
@@ -280,54 +257,53 @@ doubly_linked_list_serialize(struct doubly_linked_list *list)
     }
 }
 
+static inline struct doubly_linked_list *
+doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
+{
+    struct doubly_linked_list *removed;
+
+    assert(NULL != node);
+    assert(NULL != *node);
+
+    removed = *node;
+    if (*node == (*node)->next) {
+        *node = NULL;
+        return removed;
+    } else {
+        removed->previous->next = removed->next;
+        removed->next->previous = removed->previous;
+        *node = removed->next;
+        removed->next = removed;
+        removed->previous = removed;
+
+        return removed;
+    }
+}
+
 struct doubly_linked_list *
 doubly_linked_list_node_remove(struct doubly_linked_list **node)
 {
-    struct doubly_linked_list *list;
-
     if (!node || !*node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        list = doubly_linked_list_node_lazy_remove(*node);
-        free_ds(*node);
-        *node = NULL;
-
-        return list;
+        return doubly_linked_list_node_remove_internal(node);
     }
 }
 
-static inline struct doubly_linked_list *
-doubly_linked_list_node_lazy_remove_internal(struct doubly_linked_list *node)
+void
+doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node)
 {
-    struct doubly_linked_list *retval;
+    struct doubly_linked_list *removed;
 
-    assert(NULL != node);
-    assert(NULL != node->next);
-    assert(NULL != node->previous);
-
-    node->previous->next = node->next;
-    node->next->previous = node->previous;
-
-    retval = node->next;
-    node->next = node;
-    node->previous = node;
-
-    return retval;
-}
-
-struct doubly_linked_list *
-doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node)
-{
-    if (!node) {
+    if (!node || !*node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-        return NULL;
-    } else if (node == node->next) {
-        return NULL;
     } else {
-        return doubly_linked_list_node_lazy_remove_internal(node);
+        removed = doubly_linked_list_node_remove_internal(node);
+        free_ds(removed);
     }
 }
+
 
 void
 doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void *))
