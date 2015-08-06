@@ -85,28 +85,13 @@ maximal_heap_node_find_max(struct maximal_heap *heap)
 void
 maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
 {
-    struct doubly_linked_list *head;
-    uint32 index;
-
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
-        head = maximal_heap_node_find(heap, nice);
-
-        if (!head) {
-            index = binary_heap_percolate_up(heap->bin_heap,
-                heap->bin_heap->size + 1, nice, &binary_heap_order_maximal);
-            binary_heap_node_create_by_index(heap->bin_heap, index, nice, val);
-            heap->bin_heap->size++;
-        } else {
-            /*
-             * conflict nice.
-             */
-            doubly_linked_list_node_insert_after(head,
-                doubly_linked_list_node_create(val, nice));
-        }
+        binary_heap_node_insert(heap->bin_heap, val, nice,
+            &binary_heap_order_maximal);
     }
 }
 

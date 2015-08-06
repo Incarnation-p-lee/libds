@@ -253,31 +253,37 @@ unit_test_maximal_heap_node_find_max(void)
     test_result_print(SYM_2_STR(maximal_heap_node_find_max), pass);
 }
 
-// static inline void
-// unit_test_minimal_heap_node_insert(void)
-// {
-//     bool pass;
-//     uint32 loop;
-//     struct minimal_heap *heap;
-// 
-//     TEST_PERFORMANCE_CHECKPOINT;
-// 
-//     pass = true;
-//     loop = 0xA234;
-//     heap = NULL;
-// 
-//     minimal_heap_node_insert(heap, &pass, 0u);
-// 
-//     heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
-//     while (loop--) {
-//         minimal_heap_node_insert(heap, &pass, loop);
-//     }
-//     minimal_heap_destroy(&heap);
-// 
-//     test_result_print(SYM_2_STR(minimal_heap_node_insert), pass);
-//     return;
-// }
-// 
+static inline void
+unit_test_maximal_heap_node_insert(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 size;
+    struct maximal_heap *heap;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0xA234;
+    heap = NULL;
+
+    maximal_heap_node_insert(heap, &pass, 0u);
+
+    heap = unit_test_maximal_heap_sample(0x1345, 0x104E);
+    while (loop--) {
+        if (maximal_heap_node_find(heap, loop)) {
+            maximal_heap_node_insert(heap, &pass, loop);
+        } else {
+            size = maximal_heap_size(heap);
+            maximal_heap_node_insert(heap, &pass, loop);
+            RESULT_CHECK_uint32(size + 1, maximal_heap_size(heap), &pass);
+        }
+    }
+
+    maximal_heap_destroy(&heap);
+    test_result_print(SYM_2_STR(maximal_heap_node_insert), pass);
+}
+
 // static inline void
 // unit_test_minimal_heap_node_remove_min(void)
 // {

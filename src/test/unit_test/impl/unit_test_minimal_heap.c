@@ -266,6 +266,7 @@ unit_test_minimal_heap_node_insert(void)
 {
     bool pass;
     uint32 loop;
+    uint32 size;
     struct minimal_heap *heap;
 
     TEST_PERFORMANCE_CHECKPOINT;
@@ -278,7 +279,13 @@ unit_test_minimal_heap_node_insert(void)
 
     heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
     while (loop--) {
-        minimal_heap_node_insert(heap, &pass, loop);
+        if (minimal_heap_node_find(heap, loop)) {
+            minimal_heap_node_insert(heap, &pass, loop);
+        } else {
+            size = minimal_heap_size(heap);
+            minimal_heap_node_insert(heap, &pass, loop);
+            RESULT_CHECK_uint32(size + 1, minimal_heap_size(heap), &pass);
+        }
     }
     minimal_heap_destroy(&heap);
 

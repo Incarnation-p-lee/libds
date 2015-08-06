@@ -32,26 +32,27 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 
 
 /* BINARY HEAP INTERNAL */
-static inline void binary_heap_initial(struct binary_heap *heap, uint32 capacity);
-static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index);
-static inline void binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx, uint32 s_idx);
-static inline void binary_heap_node_remove_and_destroy(struct binary_heap *heap, uint32 index);
-static inline void binary_heap_destroy(struct binary_heap **heap);
-static inline void binary_heap_cleanup(struct binary_heap *heap);
-static inline void binary_heap_capacity_extend(struct binary_heap *heap);
-static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt);
 static inline bool binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index);
 static inline bool binary_heap_empty_p(struct binary_heap *heap);
 static inline bool binary_heap_full_p(struct binary_heap *heap);
 static inline bool binary_heap_order_minimal(struct binary_heap *heap, uint32 index, sint64 nice);
 static inline bool binary_heap_order_maximal(struct binary_heap *heap, uint32 index, sint64 nice);
-static uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice, void *heap_order);
-static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice);
+static inline void binary_heap_initial(struct binary_heap *heap, uint32 capacity);
+static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx, uint32 s_idx);
+static inline void binary_heap_node_remove_and_destroy(struct binary_heap *heap, uint32 index, void *ordering);
+static inline void binary_heap_destroy(struct binary_heap **heap);
+static inline void binary_heap_cleanup(struct binary_heap *heap);
+static inline void binary_heap_capacity_extend(struct binary_heap *heap);
+static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
+static inline void binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice, void *ordering);
+static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
+static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
 static inline struct doubly_linked_list * binary_heap_node_root(struct binary_heap *heap);
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
-static inline struct doubly_linked_list * binary_heap_node_remove(struct binary_heap *heap, uint32 index);
+static inline struct doubly_linked_list * binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering);
 static inline struct binary_heap * binary_heap_create(uint32 capacity);
 /* END OF BINARY HEAP INTERNAL */
 

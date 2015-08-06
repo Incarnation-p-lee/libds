@@ -212,6 +212,7 @@ static struct test_performance unit_test_performance[] = {
     {"maximal_heap_cleanup",                       0x0u, 0x0u},
     {"maximal_heap_node_find",                     0x0u, 0x0u},
     {"maximal_heap_node_find_max",                 0x0u, 0x0u},
+    {"maximal_heap_node_insert",                   0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 
