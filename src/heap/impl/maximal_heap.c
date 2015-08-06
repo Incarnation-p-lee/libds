@@ -95,3 +95,19 @@ maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
     }
 }
 
+struct doubly_linked_list *
+maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice)
+{
+    uint32 index;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_remove(heap->bin_heap, index,
+            &binary_heap_order_maximal);
+    }
+}

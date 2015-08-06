@@ -260,7 +260,7 @@ static const struct test_layer_table maximal_heap[] = {
     {"node_insert",                 {&unit_test_maximal_heap_node_insert,},},
 //    {"node_remove_min",             {&unit_test_minimal_heap_node_remove_min,},},
 //    {"node_remove_min_and_destroy", {&unit_test_minimal_heap_node_remove_min_and_destroy,},},
-//    {"node_remove",                 {&unit_test_minimal_heap_node_remove,},},
+    {"node_remove",                 {&unit_test_maximal_heap_node_remove,},},
 //    {"node_remove_and_destroy",     {&unit_test_minimal_heap_node_remove_and_destroy,},},
 //    {"node_decrease_nice",          {&unit_test_minimal_heap_node_decrease_nice,},},
 //    {"node_increase_nice",          {&unit_test_minimal_heap_node_increase_nice,},},

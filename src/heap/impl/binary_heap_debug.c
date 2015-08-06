@@ -20,21 +20,28 @@ binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice)
 
 static inline bool
 binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index,
-    sint64 nice)
+    sint64 nice, void *ordering)
 {
+    bool (*order)(struct binary_heap *, uint32, sint64);
+
     assert(0 != index);
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(HEAP_NICE_UPPER_LMT > nice);
     assert(HEAP_NICE_LOWER_LMT < nice);
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
+
+    order = ordering;
 
     if (INDEX_RIGHT_CHILD(index) <= INDEX_LAST(heap)) {
         /*
          * index node has child here.
+         * minimal, nice[index] < nice
+         * maximal, nice[index] > nice
          */
-        if (HEAP_NICE(heap, INDEX_LEFT_CHILD(index)) < nice
-            || HEAP_NICE(heap, INDEX_RIGHT_CHILD(index)) < nice) {
+        if (!(*order)(heap, INDEX_LEFT_CHILD(index), nice)
+            || !(*order)(heap, INDEX_RIGHT_CHILD(index), nice)) {
             return false;
         } else {
             return true;
@@ -43,7 +50,7 @@ binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index,
         /*
          * index node has one child here.
          */
-        if (HEAP_NICE(heap, INDEX_LEFT_CHILD(index)) < nice) {
+        if (!(*order)(heap, INDEX_LEFT_CHILD(index), nice)) {
             return false;
         } else {
             return true;
@@ -57,21 +64,30 @@ binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index,
 }
 
 /*
- * HEAP_NICE_UPPER_LMT is allowed to nice for remove one node from heap.
+ * HEAP_NICE_UPPER_LMT/HEAP_NICE_LOWER_LMT is allowed to nice
+ * for remove one node from heap.
  */
 static inline bool
 binary_heap_percolate_down_precondition_p(struct binary_heap *heap,
-    uint32 index, sint64 nice)
+    uint32 index, sint64 nice, void *ordering)
 {
+    bool (*order)(struct binary_heap *, uint32, sint64);
+
     assert(0 != index);
     assert(NULL != heap);
     assert(NULL != heap->base);
-    assert(HEAP_NICE_LOWER_LMT < nice);
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
+
+    order = ordering;
 
     if (HEAP_ROOT_INDEX == index) {
         return true;
-    } else if (HEAP_NICE(heap, INDEX_PARENT(index)) < nice) {
+    } else if (!(*order)(heap, INDEX_PARENT(index), nice)) {
+        /*
+         * minimal, nice[index] > nice
+         * maximal, nice[index] < nice
+         */
         return true;
     } else {
         return false;

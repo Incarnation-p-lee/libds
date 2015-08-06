@@ -233,7 +233,7 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice,
 
     assert(NULL == HEAP_CHAIN(heap, index));
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
-    assert(binary_heap_percolate_up_precondition_p(heap, index, nice));
+    assert(binary_heap_percolate_up_precondition_p(heap, index, nice, ordering));
 
     while (HEAP_ROOT_INDEX != index
         && (*order)(heap, INDEX_PARENT(index), nice)) {
@@ -255,7 +255,8 @@ binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
 }
 
 static inline void
-binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index)
+binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index,
+    void *ordering)
 {
     sint64 nice;
     struct collision_chain *tmp;
@@ -264,13 +265,14 @@ binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index)
     assert(NULL != heap->base);
     assert(0u != index);
     assert(!binary_heap_node_child_exist_p(heap, index));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
 
     nice = HEAP_NICE(heap, INDEX_LAST(heap));
     tmp = HEAP_CHAIN(heap, INDEX_LAST(heap));
     HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
     heap->size--;
 
-    index = binary_heap_percolate_up(heap, index, nice, &binary_heap_order_minimal);
+    index = binary_heap_percolate_up(heap, index, nice, ordering);
     HEAP_CHAIN(heap, index) = tmp;
 }
 
@@ -294,7 +296,8 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
  * nice  - nice value of percolate down.
  * RETURN  the percolated index of heap.
  *
- * HEAP_NICE_UPPER_LMT is allowed to nice for remove one node from heap.
+ * HEAP_NICE_UPPER_LMT/HEAP_NICE_LOWER_LMT is allowed to nice
+ * for remove one node from heap.
  */
 static inline uint32
 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice,
@@ -306,10 +309,9 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice,
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(0 != index);
-    assert(HEAP_NICE_LOWER_LMT < nice);
     assert(NULL == HEAP_CHAIN(heap, index));
     assert(!binary_heap_node_contains_with_hole_p(heap, nice));
-    assert(binary_heap_percolate_down_precondition_p(heap, index, nice));
+    assert(binary_heap_percolate_down_precondition_p(heap, index, nice, ordering));
     assert(binary_heap_order_function_pointer_valid_p(ordering));
 
     order = ordering;
@@ -412,6 +414,28 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
     }
 }
 
+static inline void
+binary_heap_percolate_down_to_tail(struct binary_heap *heap, uint32 index,
+    void *ordering)
+{
+    sint64 limit;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(NULL == heap->base[index]);
+    assert(0 != index && index <= INDEX_LAST(heap));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
+
+    limit = binary_heap_order_percolate_down_nice_limit(ordering);
+    index = binary_heap_percolate_down(heap, index, limit, ordering);
+    /*
+     * binary heap _DO_ not allow NULL hole of array implement.
+     * move the last node to percolated node, and percolate up.
+     */
+    binary_heap_node_remove_tail_fixup(heap, index, ordering);
+}
+
+
 static inline struct doubly_linked_list *
 binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering)
 {
@@ -429,12 +453,7 @@ binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering)
     free_ds(HEAP_CHAIN(heap, index));
     HEAP_CHAIN(heap, index) = NULL;
 
-    index = binary_heap_percolate_down(heap, index, HEAP_NICE_UPPER_LMT, ordering);
-    /*
-     * binary heap _DO_ not allow NULL hole of array implement.
-     * move the last node to percolated node, and percolate up.
-     */
-    binary_heap_node_remove_tail_fixup(heap, index);
+    binary_heap_percolate_down_to_tail(heap, index, ordering);
 
     return link;
 }

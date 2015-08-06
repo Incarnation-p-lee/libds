@@ -428,44 +428,43 @@ unit_test_maximal_heap_node_insert(void)
 //     return;
 // }
 // 
-// static inline void
-// unit_test_minimal_heap_node_remove(void)
-// {
-//     bool pass;
-//     uint32 loop;
-//     sint64 nice;
-//     struct minimal_heap *heap;
-//     struct doubly_linked_list *tmp;
-// 
-//     TEST_PERFORMANCE_CHECKPOINT;
-// 
-//     pass = true;
-//     loop = 0x12;
-//     heap = NULL;
-// 
-//     minimal_heap_node_remove(heap, 0);
-// 
-//     heap = unit_test_minimal_heap_sample(0xe942, 0xb73a);
-//     nice = 0x12345;
-//     RESULT_CHECK_pointer(NULL, minimal_heap_node_remove(heap, nice), &pass);
-// 
-//     nice = 0x45;
-//     while (loop--) {
-//         tmp = minimal_heap_node_find(heap, nice);
-//         if (tmp) {
-//             RESULT_CHECK_pointer(tmp, minimal_heap_node_remove(heap, nice), &pass);
-//             doubly_linked_list_destroy(&tmp);
-//         } else {
-//             RESULT_CHECK_pointer(NULL, minimal_heap_node_remove(heap, nice), &pass);
-//         }
-//         nice--;
-//     }
-//     minimal_heap_destroy(&heap);
-// 
-//     test_result_print(SYM_2_STR(minimal_heap_node_remove), pass);
-//     return;
-// }
-// 
+static inline void
+unit_test_maximal_heap_node_remove(void)
+{
+    bool pass;
+    uint32 loop;
+    sint64 nice;
+    struct maximal_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12;
+    heap = NULL;
+
+    maximal_heap_node_remove(heap, 0);
+
+    heap = unit_test_maximal_heap_sample(0xe942, 0xb73a);
+    // heap = unit_test_maximal_heap_sample(0x42, 0x3a);
+    nice = 0x12345;
+    RESULT_CHECK_pointer(NULL, maximal_heap_node_remove(heap, nice), &pass);
+
+    nice = 0x45;
+    while (loop--) {
+        tmp = maximal_heap_node_find(heap, nice);
+        if (tmp) {
+            RESULT_CHECK_pointer(tmp, maximal_heap_node_remove(heap, nice), &pass);
+            doubly_linked_list_destroy(&tmp);
+        } else {
+            RESULT_CHECK_pointer(NULL, maximal_heap_node_remove(heap, nice), &pass);
+        }
+        nice--;
+    }
+    maximal_heap_destroy(&heap);
+    test_result_print(SYM_2_STR(maximal_heap_node_remove), pass);
+}
+
 // static inline void
 // unit_test_minimal_heap_node_remove_and_destroy(void)
 // {

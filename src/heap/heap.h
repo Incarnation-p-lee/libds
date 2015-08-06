@@ -39,7 +39,7 @@ static inline bool binary_heap_full_p(struct binary_heap *heap);
 static inline bool binary_heap_order_minimal(struct binary_heap *heap, uint32 index, sint64 nice);
 static inline bool binary_heap_order_maximal(struct binary_heap *heap, uint32 index, sint64 nice);
 static inline void binary_heap_initial(struct binary_heap *heap, uint32 capacity);
-static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index);
+static inline void binary_heap_node_remove_tail_fixup(struct binary_heap *heap, uint32 index, void *ordering);
 static inline void binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx, uint32 s_idx);
 static inline void binary_heap_node_remove_and_destroy(struct binary_heap *heap, uint32 index, void *ordering);
 static inline void binary_heap_destroy(struct binary_heap **heap);
@@ -47,8 +47,10 @@ static inline void binary_heap_cleanup(struct binary_heap *heap);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline void binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice, void *ordering);
+static inline void binary_heap_percolate_down_to_tail(struct binary_heap *heap, uint32 index, void *ordering);
 static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
 static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
+static inline sint64 binary_heap_order_percolate_down_nice_limit(void *ordering);
 static inline struct doubly_linked_list * binary_heap_node_root(struct binary_heap *heap);
 static inline struct doubly_linked_list * binary_heap_node_find(struct binary_heap *heap, sint64 nice);
 static inline struct collision_chain * binary_heap_collision_chain_create(sint64 nice, void *val);
@@ -82,6 +84,7 @@ void maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
 struct maximal_heap * maximal_heap_create(uint32 capacity);
 struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
 struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
+struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
 /* END OF MAXIMAL HEAP */
 
 /* BINARY HEAP DEBUG */
@@ -92,8 +95,8 @@ static void *order_func_list[] = {
 };
 
 static inline bool binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice);
-static inline bool binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice);
-static inline bool binary_heap_percolate_down_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice);
+static inline bool binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
+static inline bool binary_heap_percolate_down_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
 static inline bool binary_heap_order_function_pointer_valid_p(void *func_ptr);
 #endif
 /* END OF BINARY HEAP DEBUG */
