@@ -111,4 +111,22 @@ binary_heap_order_function_pointer_valid_p(void *func_ptr)
     return false;
 }
 
+static inline bool
+binary_heap_percolate_direction_consistent_with_ordering_p(struct binary_heap *heap,
+    uint32 index, sint64 new_nice, void *ordering)
+{
+    bool (*order)(struct binary_heap *, uint32, sint64);
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(NULL != heap->base[index]);
+    assert(0 != index && index <= INDEX_LAST(heap));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
+    assert(HEAP_NICE_LOWER_LMT < new_nice && HEAP_NICE_UPPER_LMT > new_nice);
+
+    order = ordering;
+
+    return (*order)(heap, index, new_nice);
+}
+
 #endif

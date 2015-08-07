@@ -185,6 +185,7 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
     assert(HEAP_NICE_UPPER_LMT > nice);
     assert(HEAP_NICE_LOWER_LMT < nice);
 
+    // optimization linear loop here.
     index = INDEX_FIRST;
     ignore = NULL == tgt ? true : false;
 
@@ -456,5 +457,43 @@ binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering)
     binary_heap_percolate_down_to_tail(heap, index, ordering);
 
     return link;
+}
+
+/*
+ * index - altered node index of binary heap
+ */
+static inline void
+binary_heap_nice_alter_percolate_up(struct binary_heap *heap, uint32 index,
+    sint64 new_nice, void *ordering)
+{
+    uint32 tgt_index;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(NULL != heap->base[index]);
+    assert(0 != index && index <= INDEX_LAST(heap));
+    assert(binary_heap_order_function_pointer_valid_p(ordering));
+    assert(HEAP_NICE_LOWER_LMT < new_nice && HEAP_NICE_UPPER_LMT > new_nice);
+    assert(binary_heap_percolate_direction_consistent_with_ordering_p(heap,
+        index, new_nice, ordering));
+
+    if (!binary_heap_node_contains_p(heap, new_nice, &tgt_index)) {
+        tmp = HEAP_CHAIN(heap, index);
+        HEAP_CHAIN(heap, index) = NULL;
+        tmp->nice = new_nice;
+
+        index = binary_heap_percolate_up(heap, index, tmp->nice, ordering);
+        assert(NULL == HEAP_CHAIN(heap, index));
+
+        HEAP_CHAIN(heap, index) = tmp;
+    } else {
+        /*
+         * decreased nice already contained.
+         * merge conflict and remove node.
+         */
+        binary_heap_node_collision_merge(heap, tgt_index, index);
+        binary_heap_node_remove_and_destroy(heap, index, ordering);
+    }
 }
 
