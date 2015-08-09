@@ -85,28 +85,68 @@ maximal_heap_node_find_max(struct maximal_heap *heap)
 void
 maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
 {
-    struct doubly_linked_list *head;
-    uint32 index;
-
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
-        head = maximal_heap_node_find(heap, nice);
+        binary_heap_node_insert(heap->bin_heap, val, nice,
+            &binary_heap_order_maximal);
+    }
+}
 
-        if (!head) {
-            index = binary_heap_percolate_up(heap->bin_heap,
-                heap->bin_heap->size + 1, nice, &binary_heap_order_maximal);
-            binary_heap_node_create_by_index(heap->bin_heap, index, nice, val);
-            heap->bin_heap->size++;
-        } else {
-            /*
-             * conflict nice.
-             */
-            doubly_linked_list_node_insert_after(head,
-                doubly_linked_list_node_create(val, nice));
-        }
+struct doubly_linked_list *
+maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice)
+{
+    uint32 index;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_remove(heap->bin_heap, index,
+            &binary_heap_order_maximal);
+    }
+}
+
+void
+maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice)
+{
+    uint32 index;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (!binary_heap_node_contains_p(heap->bin_heap, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+    } else {
+        binary_heap_node_remove_and_destroy(heap->bin_heap, index,
+            &binary_heap_order_maximal);
+    }
+}
+
+struct doubly_linked_list *
+maximal_heap_node_remove_max(struct maximal_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_remove(heap->bin_heap, HEAP_ROOT_INDEX,
+            &binary_heap_order_maximal);
+    }
+}
+
+void
+maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        binary_heap_node_remove_and_destroy(heap->bin_heap, HEAP_ROOT_INDEX,
+            &binary_heap_order_maximal);
     }
 }
 
