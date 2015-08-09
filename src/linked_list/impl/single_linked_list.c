@@ -14,9 +14,8 @@ single_linked_list_node_create(void *val, uint32 sid)
         pr_log_err("Fail to get memory from system.\n");
     } else {
         single_linked_list_node_initial(list, val, sid);
+        return list;
     }
-
-    return list;
 }
 
 void
@@ -39,7 +38,7 @@ single_linked_list_node_initial(struct single_linked_list *list,
 }
 
 void
-single_linked_list_node_append(struct single_linked_list *node, uint32 sid)
+single_linked_list_node_append(struct single_linked_list *node, void *val)
 {
     struct single_linked_list *next;
 
@@ -48,7 +47,7 @@ single_linked_list_node_append(struct single_linked_list *node, uint32 sid)
     } else if (!node->next) {
         pr_log_warn("Destroyed data structure.\n");
     } else {
-        next = single_linked_list_node_create(NULL, sid);
+        next = single_linked_list_node_create(val, 0u);
         single_linked_list_node_insert_after_internal(node, next);
     }
 }
@@ -200,29 +199,6 @@ single_linked_list_node_by_index(struct single_linked_list *list, uint32 index)
     }
 }
 
-void
-single_linked_list_node_exchange(struct single_linked_list *fir,
-    struct single_linked_list *sec)
-{
-    struct single_linked_list *prev_fir;
-    struct single_linked_list *prev_sec;
-
-    if (!fir || !sec) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (!single_linked_list_contains_p_internal(fir, sec)
-        || (fir == sec)) {
-        pr_log_warn("Exchange itself or exchange in different list.\n");
-    } else {
-        prev_fir = single_linked_list_node_previous_internal(fir);
-        prev_sec = single_linked_list_node_previous_internal(sec);
-
-        single_linked_list_node_lazy_remove_internal(fir);
-        single_linked_list_node_lazy_remove_internal(sec);
-        single_linked_list_node_insert_after_internal(prev_fir, sec);
-        single_linked_list_node_insert_after_internal(prev_sec, fir);
-    }
-}
-
 static inline bool
 single_linked_list_contains_p_internal(struct single_linked_list *list,
     struct single_linked_list *node)
@@ -305,53 +281,54 @@ single_linked_list_node_previous(struct single_linked_list *node)
     }
 }
 
+static inline struct single_linked_list *
+single_linked_list_node_remove_internal(struct single_linked_list **node)
+{
+    struct single_linked_list *removed;
+    struct single_linked_list *prev;
+
+    assert(NULL != node);
+    assert(NULL != *node);
+
+    removed = *node;
+
+    if (*node == removed->next) {
+        *node = NULL;
+        return removed;
+    } else {
+        prev = single_linked_list_node_previous_internal(removed);
+        prev->next = removed->next;
+        *node = removed->next;
+        removed->next = removed;
+
+        return removed;
+    }
+}
+
 struct single_linked_list *
 single_linked_list_node_remove(struct single_linked_list **node)
 {
-    struct single_linked_list *list;
-
     if (!node || !*node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        list = single_linked_list_node_lazy_remove(*node);
-        free_ds(*node);
-        *node = NULL;
-
-        return list;
+        return single_linked_list_node_remove_internal(node);
     }
 }
 
-static inline struct single_linked_list *
-single_linked_list_node_lazy_remove_internal(struct single_linked_list *node)
+void
+single_linked_list_node_remove_and_destroy(struct single_linked_list **node)
 {
-    struct single_linked_list *retval;
-    struct single_linked_list *prev;
+    struct single_linked_list *removed;
 
-    assert(NULL != node);
-    assert(NULL != node->next);
-
-    prev = single_linked_list_node_previous_internal(node);
-
-    prev->next = node->next;
-    retval = node->next;
-    node->next = node;
-
-    return retval;
-}
-
-struct single_linked_list *
-single_linked_list_node_lazy_remove(struct single_linked_list *node)
-{
-    if (!node) {
+    if (!node || !*node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-        return NULL;
-    } else if (node == node->next) {
-        return NULL;
     } else {
-        return single_linked_list_node_lazy_remove_internal(node);
+        removed = single_linked_list_node_remove_internal(node);
+        free_ds(removed);
     }
 }
+
 
 void
 single_linked_list_iterate(struct single_linked_list *list,

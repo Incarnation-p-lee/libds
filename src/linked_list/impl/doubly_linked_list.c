@@ -46,13 +46,11 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, void *val)
 
     if (!node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (NULL == node->next || NULL == node->previous) {
+        pr_log_warn("Destroyed data structure.\n");
     } else {
-        if (NULL == node->next || NULL == node->previous) {
-            pr_log_warn("Destroyed data structure.\n");
-        } else {
-            next = doubly_linked_list_node_create(val, 0u);
-            doubly_linked_list_node_insert_after(node, next);
-        }
+        next = doubly_linked_list_node_create(val, 0u);
+        doubly_linked_list_node_insert_after(node, next);
     }
 }
 
@@ -266,7 +264,8 @@ doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
     assert(NULL != *node);
 
     removed = *node;
-    if (*node == (*node)->next) {
+
+    if (*node == removed->next) {
         *node = NULL;
         return removed;
     } else {

@@ -167,7 +167,6 @@ unit_test_single_linked_list_node_append(void)
     struct single_linked_list *next;
     struct single_linked_list *append;
     bool pass;
-    uint32 sid = 0xfadeu;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
@@ -175,15 +174,15 @@ unit_test_single_linked_list_node_append(void)
     loop = 0x1234567u;
     pass = true;
     head = unit_test_single_linked_list_sample(0x1A2E, 0x213D);
-    single_linked_list_node_append(NULL, sid);
+    single_linked_list_node_append(NULL, &pass);
 
     while (0 != loop--) {
         next = single_linked_list_node_next(head);
-        single_linked_list_node_append(head, sid);
+        single_linked_list_node_append(head, &pass);
         append = single_linked_list_node_next(head);
     }
 
-    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(append), &pass);
+    RESULT_CHECK_pointer(&pass, single_linked_list_node_val(append), &pass);
     RESULT_CHECK_pointer(head, single_linked_list_node_previous(append), &pass);
     RESULT_CHECK_pointer(next, single_linked_list_node_next(append), &pass);
     RESULT_CHECK_pointer(append, single_linked_list_node_previous(next), &pass);
@@ -206,7 +205,7 @@ unit_test_single_linked_list_node_previous(void)
     loop = 0x1234u;
     pass = true;
     head = unit_test_single_linked_list_sample(0xD19AB, 0x72BF3);
-    single_linked_list_node_append(head, 0xdeadu);
+    single_linked_list_node_append(head, &pass);
     RESULT_CHECK_pointer(NULL, single_linked_list_node_previous(NULL), &pass);
 
     while (0 != loop--) {
@@ -232,16 +231,14 @@ unit_test_single_linked_list_node_insert_before(void)
     struct single_linked_list *prev;
     struct single_linked_list *copy;
     bool pass;
-    uint32 sid;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
     loop = 0x1234u;
     pass = true;
-    sid = 0xbedu;
     head = unit_test_single_linked_list_sample(0x21F26, 0xBEF19);
-    single_linked_list_node_append(head, sid);
+    single_linked_list_node_append(head, &pass);
 
     node = single_linked_list_create();
     copy = single_linked_list_node_copy(node);
@@ -281,16 +278,14 @@ unit_test_single_linked_list_node_insert_after(void)
     struct single_linked_list *next;
     struct single_linked_list *copy;
     bool pass;
-    uint32 sid;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
     loop = 0x1234567u;
     pass = true;
-    sid = 0xfadeu;
     head = unit_test_single_linked_list_sample(0xF18AB, 0x82E9C);
-    single_linked_list_node_append(head, sid);
+    single_linked_list_node_append(head, &pass);
 
     node = single_linked_list_create();
     copy = single_linked_list_node_copy(node);
@@ -427,51 +422,6 @@ unit_test_single_linked_list_node_by_index(void)
 }
 
 static void
-unit_test_single_linked_list_node_exchange(void)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *tmp_1;
-    struct single_linked_list *tmp_2;
-    bool pass;
-    uint32 loop;
-
-    TEST_PERFORMANCE_CHECKPOINT;
-
-    loop = 0x123u;
-    pass = true;
-    head = unit_test_single_linked_list_sample(0x914A2, 0xB2E1D);
-    tmp_1 = single_linked_list_node_previous(head);
-    tmp_2 = single_linked_list_node_next(head);
-
-    while (0 != loop--) {
-        single_linked_list_node_exchange(tmp_1, tmp_2);
-    }
-    /* ->tmp_1->head->tmp_2-> =>
-       ->tmp_2->head->tmp_1->    */
-    RESULT_CHECK_pointer(tmp_2, single_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, single_linked_list_node_next(head), &pass);
-
-    tmp_1 = single_linked_list_node_next(head);
-    tmp_2 = single_linked_list_node_previous(head);
-    single_linked_list_node_exchange(head, head);
-    RESULT_CHECK_pointer(tmp_2, single_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, single_linked_list_node_next(head), &pass);
-
-    single_linked_list_node_exchange(head, NULL);
-    RESULT_CHECK_pointer(tmp_2, single_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(tmp_1, single_linked_list_node_next(head), &pass);
-
-    tmp_1 = single_linked_list_node_copy(head);
-    single_linked_list_node_exchange(head, head);
-    RESULT_CHECK_single_linked_list_node(tmp_1, head, &pass);
-    single_linked_list_node_initial(tmp_1, NULL, 0x0u);
-    single_linked_list_destroy(&tmp_1);
-
-    single_linked_list_destroy(&head);
-    test_result_print(SYM_2_STR(single_linked_list_node_exchange), pass);
-}
-
-static void
 unit_test_single_linked_list_contains_p(void)
 {
     struct single_linked_list *head;
@@ -570,68 +520,65 @@ static void
 unit_test_single_linked_list_node_remove(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *prev;
+    struct single_linked_list *next;
     struct single_linked_list *tmp;
     bool pass;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
+    single_linked_list_node_remove(NULL);
+
     loop = 0x3234567u;
     pass = true;
     head = unit_test_single_linked_list_sample(0x431E2, 0x928ED);
-    tmp = single_linked_list_node_next(head);
-    prev = single_linked_list_node_previous(head);
-
-    single_linked_list_node_remove(NULL);
+    tmp = head;
+    next = head->next;
 
     RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(&head), &pass);
-    RESULT_CHECK_pointer(NULL, head, &pass);
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_next(prev), &pass);
-
+    RESULT_CHECK_pointer(next, head, &pass);
     single_linked_list_destroy(&tmp);
+    single_linked_list_destroy(&head);
 
     while (0 != loop--) {
-        tmp = single_linked_list_create();
-        RESULT_CHECK_pointer(NULL, single_linked_list_node_remove(&tmp), &pass);
-        RESULT_CHECK_pointer(NULL, tmp, &pass);
+        head = single_linked_list_create();
+        tmp = head;
+        RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(&head), &pass);
+        RESULT_CHECK_pointer(NULL, head, &pass);
+        single_linked_list_destroy(&tmp);
     }
 
     test_result_print(SYM_2_STR(single_linked_list_node_remove), pass);
 }
 
 static void
-unit_test_single_linked_list_node_lazy_remove(void)
+unit_test_single_linked_list_node_remove_and_destroy(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *prev;
-    struct single_linked_list *tmp;
+    struct single_linked_list *next;
     bool pass;
     uint32 loop;
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    single_linked_list_node_lazy_remove(NULL);
+    single_linked_list_node_remove(NULL);
 
-    loop = 0x123u;
+    loop = 0x5234567u;
     pass = true;
+    head = unit_test_single_linked_list_sample(0x31e2, 0x28ed);
+    next = head->next;
+
+    single_linked_list_node_remove_and_destroy(&head);
+    RESULT_CHECK_pointer(next, head, &pass);
+    single_linked_list_destroy(&head);
+
     while (0 != loop--) {
-        head = unit_test_single_linked_list_sample(0xEEB28, 0x6A23D);
-        tmp = single_linked_list_node_next(head);
-        prev = single_linked_list_node_previous(head);
-
-        RESULT_CHECK_pointer(tmp, single_linked_list_node_lazy_remove(head), &pass);
-        RESULT_CHECK_pointer(head, single_linked_list_node_next(head), &pass);
-        RESULT_CHECK_pointer(tmp, single_linked_list_node_next(prev), &pass);
-        RESULT_CHECK_pointer(prev, single_linked_list_node_previous(tmp), &pass);
-
-        /* Need to free the lazy node independently. */
-        free_ds(head);
-
-        single_linked_list_destroy(&tmp);
+        head = single_linked_list_create();
+        single_linked_list_node_remove_and_destroy(&head);
+        RESULT_CHECK_pointer(NULL, head, &pass);
     }
 
-    test_result_print(SYM_2_STR(single_linked_list_node_lazy_remove), pass);
+    test_result_print(SYM_2_STR(single_linked_list_node_remove_and_destroy), pass);
 }
 
 static void
@@ -708,3 +655,4 @@ unit_test_single_linked_list_merge(void)
     single_linked_list_destroy(&head_n);
     test_result_print(SYM_2_STR(single_linked_list_merge), pass);
 }
+

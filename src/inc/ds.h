@@ -591,16 +591,16 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 
 /* single linked list, Circular. */
 
+extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
 extern void single_linked_list_initial(struct single_linked_list *head);
 extern void single_linked_list_node_initial(struct single_linked_list *head, void *val, uint32 sid);
-extern void single_linked_list_node_append(struct single_linked_list *node, uint32 value);
+extern void single_linked_list_node_append(struct single_linked_list *node, void *val);
 extern void single_linked_list_node_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
 extern void single_linked_list_node_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
 extern void single_linked_list_destroy(struct single_linked_list **head);
-extern void single_linked_list_node_exchange(struct single_linked_list *fir, struct single_linked_list *sec);
 extern void single_linked_list_serialize(struct single_linked_list *head);
 extern void single_linked_list_iterate(struct single_linked_list *head, void (*handler)(void *));
-extern bool single_linked_list_contains_p(struct single_linked_list *tar, struct single_linked_list *node);
+extern void single_linked_list_node_remove_and_destroy(struct single_linked_list **node);
 extern uint32 single_linked_list_length(struct single_linked_list *head);
 extern struct single_linked_list * single_linked_list_create(void);
 extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
@@ -608,7 +608,6 @@ extern struct single_linked_list * single_linked_list_node_copy(struct single_li
 extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *head, uint32 index);
 extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
-extern struct single_linked_list * single_linked_list_node_lazy_remove(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_merge(struct single_linked_list *m, struct single_linked_list *n);
 /* END of single linked list, Circular. */
 

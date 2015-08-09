@@ -634,3 +634,4 @@ unit_test_doubly_linked_list_merge(void)
 
     test_result_print(SYM_2_STR(doubly_linked_list_merge), pass);
 }
+
