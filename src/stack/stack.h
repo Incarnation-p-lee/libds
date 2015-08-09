@@ -9,17 +9,22 @@ extern struct doubly_linked_list * doubly_linked_list_node_lazy_remove(struct do
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 
 /* ARRAY STACK */
-struct array_stack * array_stack_create(void);
+static inline bool array_stack_full_p_internal(struct array_stack *stack);
+static inline bool array_stack_empty_p_internal(struct array_stack *stack);
+static inline void array_stack_space_expand_internal(struct array_stack *stack, uint32 increment);
+static inline uint32 array_stack_space_rest_internal(struct array_stack *stack);
+
+bool array_stack_full_p(struct array_stack *stack);
+bool array_stack_empty_p(struct array_stack *stack);
 void array_stack_destroy(struct array_stack **stack);
 void array_stack_space_expand(struct array_stack *stack, uint32 extra);
-bool array_stack_full_p(struct array_stack *stack);
-uint32 array_stack_capacity(struct array_stack *stack);
-uint32 array_stack_space_rest(struct array_stack *stack);
 void array_stack_push(struct array_stack *stack, void *member);
 void * array_stack_pop(struct array_stack *stack);
-bool array_stack_empty_p(struct array_stack *stack);
 void array_stack_cleanup(struct array_stack *stack);
 void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+uint32 array_stack_capacity(struct array_stack *stack);
+uint32 array_stack_space_rest(struct array_stack *stack);
+struct array_stack * array_stack_create(void);
 /* END OF ARRAY STACK */
 
 /* LINKED STACK */

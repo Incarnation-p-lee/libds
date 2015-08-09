@@ -29,7 +29,6 @@ unit_test_array_stack_struct_field(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_struct_field), pass);
-    return;
 }
 
 static void
@@ -52,9 +51,8 @@ unit_test_array_stack_create(void)
 
         array_stack_destroy(&stack);
     }
-    test_result_print(SYM_2_STR(array_stack_create), pass);
 
-    return;
+    test_result_print(SYM_2_STR(array_stack_create), pass);
 }
 
 static void
@@ -80,8 +78,6 @@ unit_test_array_stack_destroy(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_destroy), pass);
-
-    return;
 }
 
 static void
@@ -116,8 +112,6 @@ unit_test_array_stack_space_expand(void)
 
     array_stack_destroy(&stack);
     test_result_print(SYM_2_STR(array_stack_space_expand), pass);
-
-    return;
 }
 
 static void
@@ -151,7 +145,6 @@ unit_test_array_stack_full_p(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_full_p), pass);
-    return;
 }
 
 
@@ -184,7 +177,6 @@ unit_test_array_stack_capacity(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_capacity), pass);
-    return;
 }
 
 static void
@@ -213,7 +205,6 @@ unit_test_array_stack_space_rest(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_space_rest), pass);
-    return;
 }
 
 static void
@@ -252,8 +243,6 @@ unit_test_array_stack_push(void)
 
     array_stack_destroy(&stack);
     test_result_print(SYM_2_STR(array_stack_push), pass);
-
-    return;
 }
 
 static void
@@ -282,8 +271,6 @@ unit_test_array_stack_pop(void)
 
     array_stack_destroy(&stack);
     test_result_print(SYM_2_STR(array_stack_pop), pass);
-
-    return;
 }
 
 static void
@@ -311,7 +298,6 @@ unit_test_array_stack_empty_p(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_empty_p), pass);
-    return;
 }
 
 static void
@@ -338,7 +324,6 @@ unit_test_array_stack_cleanup(void)
     }
 
     test_result_print(SYM_2_STR(array_stack_cleanup), pass);
-    return;
 }
 
 static void
@@ -380,6 +365,5 @@ unit_test_array_stack_iterate(void)
 
     array_stack_destroy(&stack);
     test_result_print(SYM_2_STR(array_stack_iterate), pass);
-
-    return;
 }
+

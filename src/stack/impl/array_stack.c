@@ -4,25 +4,25 @@
 struct array_stack *
 array_stack_create(void)
 {
-    struct array_stack *ptr;
+    struct array_stack *stack;
 
-    ptr = malloc_ds(sizeof(*ptr));
-    if (!ptr) {
+    stack = malloc_ds(sizeof(*stack));
+    if (!stack) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        array_stack_sid_set(ptr, 0x0u);
+        stack->sid = 0u;
     }
 
-    ptr->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
-    if (!ptr->space.bp) {
-        free_ds(ptr);
+    stack->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
+    if (!stack->space.bp) {
+        free_ds(stack);
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        ptr->space.sp = ptr->space.bp;
-        array_stack_space_dim_set(ptr, DEFAULT_STACK_SPACE_SIZE);
+        stack->space.sp = stack->space.bp;
+        stack->space.dim = DEFAULT_STACK_SPACE_SIZE;
     }
 
-    return ptr;
+    return stack;
 }
 
 /*
@@ -39,8 +39,30 @@ array_stack_destroy(struct array_stack **stack)
         free_ds(*stack);
         *stack = NULL;
     }
+}
 
-    return;
+static inline void
+array_stack_space_expand_internal(struct array_stack *stack, uint32 increment)
+{
+    ptrdiff_t offset;
+    void **new_addr;
+    uint32 new_size;
+
+    assert(NULL != stack);
+    assert(0 != increment);
+
+    offset = (ptrdiff_t)(stack->space.sp - stack->space.bp);
+    new_size = stack->space.dim + increment;
+    new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
+    assert(new_size > stack->space.dim);
+
+    if (!new_addr) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        stack->space.bp = new_addr;
+        stack->space.sp = stack->space.bp + offset;
+        stack->space.dim = new_size;
+    }
 }
 
 /*
@@ -51,37 +73,30 @@ array_stack_destroy(struct array_stack **stack)
 void
 array_stack_space_expand(struct array_stack *stack, uint32 extra)
 {
-    uint32 new_size;
-    ptrdiff_t offset;
-    void **new_addr;
+    uint32 increment;
 
-    new_size = 0;
-    new_addr = NULL;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-        return;
-    } else if (!extra) {
-        new_size = stack->space.dim * 2 + EXPAND_STACK_SPACE_MIN;
-        pr_log_info("Expanding size not specified, use default.\n");
-    } else {
-        new_size = stack->space.dim + extra;
-    }
-
-    if (!new_size) {
+    } else if (extra + stack->space.dim < stack->space.dim) {
         pr_log_warn("Expanding size overflow, nothing will be done.\n");
     } else {
-        offset = (ptrdiff_t)(stack->space.sp - stack->space.bp);
-        new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
-        if (!new_addr) {
-            pr_log_err("Fail to get memory from system.\n");
+        if (!extra) {
+            increment = stack->space.dim + EXPAND_STACK_SPACE_MIN;
+            pr_log_info("Expanding size not specified, use default.\n");
         } else {
-            stack->space.bp = new_addr;
-            stack->space.sp = stack->space.bp + offset;
-            array_stack_space_dim_set(stack, new_size);
+            increment = extra;
         }
-    }
 
-    return;
+        array_stack_space_expand_internal(stack, increment);
+    }
+}
+
+static inline bool
+array_stack_full_p_internal(struct array_stack *stack)
+{
+    assert(NULL != stack);
+
+    return 0u == array_stack_space_rest_internal(stack) ? true : false;
 }
 
 /*
@@ -91,7 +106,12 @@ array_stack_space_expand(struct array_stack *stack, uint32 extra)
 bool
 array_stack_full_p(struct array_stack *stack)
 {
-    return 0u == array_stack_space_rest(stack) ? true : false;
+    if (!stack) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return true;
+    } else {
+        return array_stack_full_p_internal(stack);
+    }
 }
 
 /*
@@ -105,7 +125,25 @@ array_stack_capacity(struct array_stack *stack)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return 0u;
     } else {
-        return array_stack_space_dim(stack);
+        return stack->space.dim;
+    }
+}
+
+static inline uint32
+array_stack_space_rest_internal(struct array_stack *stack)
+{
+    void **limit;
+    void **tmp;
+
+    assert(NULL != stack);
+
+    tmp = stack->space.sp;
+    limit = stack->space.bp + stack->space.dim;
+
+    if ((sint32)(tmp - limit) > 0) {
+        pr_log_err("Array stack overflow.\n");
+    } else {
+        return (uint32)(limit - tmp);
     }
 }
 
@@ -116,24 +154,12 @@ array_stack_capacity(struct array_stack *stack)
 uint32
 array_stack_space_rest(struct array_stack *stack)
 {
-    void **limit;
-    void **tmp;
-    uint32 rest;
-
-    rest = 0;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return 0;
     } else {
-        tmp = stack->space.sp;
-        limit = stack->space.bp + stack->space.dim;
-        if ((sint32)(tmp - limit) > 0) {
-            pr_log_err("Array stack overflow.\n");
-        } else {
-            rest = (uint32)(limit - tmp);
-        }
+        return array_stack_space_rest_internal(stack);
     }
-
-    return rest;
 }
 
 /*
@@ -146,14 +172,13 @@ array_stack_push(struct array_stack *stack, void *member)
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        if (array_stack_full_p(stack)) {
+        if (array_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            array_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
+            array_stack_space_expand_internal(stack, EXPAND_STACK_SPACE_MIN);
         }
+
         *stack->space.sp++ = member;
     }
-
-    return;
 }
 
 /*
@@ -163,18 +188,24 @@ array_stack_push(struct array_stack *stack, void *member)
 void *
 array_stack_pop(struct array_stack *stack)
 {
-    void *data;
-
-    data = NULL;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (array_stack_empty_p(stack)) {
+        return NULL;
+    } else if (array_stack_empty_p_internal(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
+        return NULL;
     } else {
-        data = *(--stack->space.sp);
+        return *(--stack->space.sp);
     }
+}
 
-    return data;
+static inline bool
+array_stack_empty_p_internal(struct array_stack *stack)
+{
+    assert(NULL != stack);
+    assert((sint32)(stack->space.sp - stack->space.bp) >= 0);
+
+    return stack->space.bp == stack->space.sp ? true : false;
 }
 
 /*
@@ -184,20 +215,14 @@ array_stack_pop(struct array_stack *stack)
 bool
 array_stack_empty_p(struct array_stack *stack)
 {
-    bool is_empty;
-
-    is_empty = false;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return false;
+    } else if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
+        pr_log_err("Array stack overflow.");
     } else {
-        if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
-            pr_log_err("Array stack overflow.");
-        } else {
-            is_empty = stack->space.bp == stack->space.sp ? true : false;
-        }
+        return array_stack_empty_p_internal(stack);
     }
-
-    return is_empty;
 }
 
 /*
@@ -213,8 +238,6 @@ array_stack_cleanup(struct array_stack *stack)
         memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = stack->space.bp;
     }
-
-    return;
 }
 
 /*
@@ -235,6 +258,5 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
             handler(*(--iter));
         }
     }
-
-    return;
 }
+

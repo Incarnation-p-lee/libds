@@ -699,17 +699,18 @@ extern void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*hand
 
 
 /* ARRAY STACK */
-extern struct array_stack * array_stack_create(void);
+
+extern bool array_stack_full_p(struct array_stack *stack);
+extern bool array_stack_empty_p(struct array_stack *stack);
 extern void array_stack_destroy(struct array_stack **stack);
 extern void array_stack_space_expand(struct array_stack *stack, uint32 extra);
-extern bool array_stack_full_p(struct array_stack *stack);
-extern uint32 array_stack_capacity(struct array_stack *stack);
-extern uint32 array_stack_space_rest(struct array_stack *stack);
 extern void array_stack_push(struct array_stack *stack, void *member);
 extern void * array_stack_pop(struct array_stack *stack);
-extern bool array_stack_empty_p(struct array_stack *stack);
 extern void array_stack_cleanup(struct array_stack *stack);
 extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern uint32 array_stack_capacity(struct array_stack *stack);
+extern uint32 array_stack_space_rest(struct array_stack *stack);
+extern struct array_stack * array_stack_create(void);
 /* END OF ARRAY STACK */
 
 /* LINKED STACK */

@@ -586,8 +586,8 @@ unit_test_doubly_linked_list_iterate(void)
     while (0 != loop--) {
         doubly_linked_list_iterate(head, &linked_list_iterate_handler);
     }
-    doubly_linked_list_destroy(&head);
 
+    doubly_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(doubly_linked_list_iterate), pass);
 }
 
@@ -629,9 +629,9 @@ unit_test_doubly_linked_list_merge(void)
     while (0 != loop--) {
         head = doubly_linked_list_merge(head, head_n);
     }
+
     doubly_linked_list_destroy(&head);
     doubly_linked_list_destroy(&head_n);
-
     test_result_print(SYM_2_STR(doubly_linked_list_merge), pass);
 }
 
