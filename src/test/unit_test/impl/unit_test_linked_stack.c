@@ -20,7 +20,6 @@ unit_test_linked_stack_struct_field(void)
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_struct_field), pass);
-    return;
 }
 
 static void
@@ -44,10 +43,9 @@ unit_test_linked_stack_create(void)
     RESULT_CHECK_uint32(0x0u, stack->sid, &pass);
     RESULT_CHECK_pointer(stack->base, stack->top, &pass);
     RESULT_CHECK_pointer((void *)stack->base->space.sp, stack->base->space.bp, &pass);
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_create), pass);
-    return;
 }
 
 static void
@@ -70,10 +68,9 @@ unit_test_linked_stack_destroy(void)
         stack = linked_stack_create();
         linked_stack_destroy(&stack);
     }
-    RESULT_CHECK_pointer(NULL, stack, &pass);
 
+    RESULT_CHECK_pointer(NULL, stack, &pass);
     test_result_print(SYM_2_STR(linked_stack_destroy), pass);
-    return;
 }
 
 static void
@@ -110,8 +107,6 @@ unit_test_linked_stack_space_expand(void)
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_space_expand), pass);
-
-    return;
 }
 
 static void
@@ -142,10 +137,9 @@ unit_test_linked_stack_full_p(void)
     while (0 != loop--) {
         RESULT_CHECK_bool(true, linked_stack_full_p(stack), &pass);
     }
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_full_p), pass);
-    return;
 }
 
 static void
@@ -185,8 +179,6 @@ unit_test_linked_stack_space_rest(void)
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_space_rest), pass);
-
-    return;
 }
 
 static void
@@ -215,9 +207,7 @@ unit_test_linked_stack_capacity(void)
     }
 
     linked_stack_destroy(&stack);
-
     test_result_print(SYM_2_STR(linked_stack_capacity), pass);
-    return;
 }
 
 static void
@@ -253,10 +243,9 @@ unit_test_linked_stack_push(void)
     while (0 != loop--) {
         linked_stack_push(stack, mem);
     }
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_push), pass);
-    return;
 }
 
 static void
@@ -290,10 +279,9 @@ unit_test_linked_stack_pop(void)
         linked_stack_push(stack, stack);
         linked_stack_pop(stack);
     }
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_pop), pass);
-    return;
 }
 
 static void
@@ -322,8 +310,6 @@ unit_test_linked_stack_empty_p(void)
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_empty_p), pass);
-
-    return;
 }
 
 
@@ -348,10 +334,9 @@ unit_test_linked_stack_cleanup(void)
     }
 
     RESULT_CHECK_bool(true, linked_stack_empty_p(stack), &pass);
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_cleanup), pass);
-    return;
 }
 
 static void
@@ -390,9 +375,8 @@ unit_test_linked_stack_iterate(void)
     while (0 != loop--) {
         linked_stack_iterate(stack, &stack_iterate_handler);
     }
-    linked_stack_destroy(&stack);
 
+    linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_iterate), pass);
-    return;
 }
 

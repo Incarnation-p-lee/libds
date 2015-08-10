@@ -714,17 +714,17 @@ extern struct array_stack * array_stack_create(void);
 /* END OF ARRAY STACK */
 
 /* LINKED STACK */
-extern struct linked_stack * linked_stack_create(void);
+extern bool linked_stack_full_p(struct linked_stack *stack);
+extern bool linked_stack_empty_p(struct linked_stack *stack);
 extern void linked_stack_destroy(struct linked_stack **stack);
 extern void linked_stack_space_expand(struct linked_stack *stack, uint32 dim);
-extern bool linked_stack_full_p(struct linked_stack *stack);
-extern uint32 linked_stack_space_rest(struct linked_stack *stack);
 extern void linked_stack_push(struct linked_stack *stack, void *member);
-extern void * linked_stack_pop(struct linked_stack *stack);
-extern bool linked_stack_empty_p(struct linked_stack *stack);
 extern void linked_stack_cleanup(struct linked_stack *stack);
 extern void linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
+extern void * linked_stack_pop(struct linked_stack *stack);
 extern uint32 linked_stack_capacity(struct linked_stack *stack);
+extern uint32 linked_stack_space_rest(struct linked_stack *stack);
+extern struct linked_stack * linked_stack_create(void);
 
 /* END OF LINKED STACK */
 

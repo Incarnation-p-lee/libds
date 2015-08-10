@@ -7,24 +7,27 @@ linked_stack_create(void)
 {
     struct linked_stack *stack;
 
-    /* struct linked_stack */
     stack = malloc_ds(sizeof(*stack));
     if (!stack) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        linked_stack_sid_set(stack, 0x0u);
-        /* struct linked_space */
+        stack->sid = 0u;
         stack->base = malloc_ds(sizeof(*stack->base));
+        /*
+         * struct linked_space
+         */
         if (!stack->base) {
             free_ds(stack);
             pr_log_err("Fail to get memory from system.\n");
         } else {
-            doubly_linked_list_initial(&stack->base->link);
             stack->top = stack->base;
-
-            /* struct array_stack_space */
+            doubly_linked_list_initial(&stack->base->link);
+            /*
+             * struct array_stack_space
+             */
             stack->base->space.bp = malloc_ds(sizeof(void *) *
                 DEFAULT_STACK_SPACE_SIZE);
+
             if (!stack->base->space.bp) {
                 free_ds(stack->base);
                 free_ds(stack);
@@ -52,6 +55,7 @@ linked_stack_destroy(struct linked_stack **stack)
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         node = (*stack)->base;
+
         while (node) {
             node = linked_stack_space_remove_node(node);
         }
@@ -59,17 +63,18 @@ linked_stack_destroy(struct linked_stack **stack)
         free_ds(*stack);
         *stack = NULL;
     }
-
-    return;
 }
 
 static inline struct linked_stack_space *
 linked_stack_space_offset_reflect(struct doubly_linked_list *link)
 {
+    void *offset;
+
     assert(NULL != link);
 
-    return (void *)((void *)link
-        - (void *)(&((struct linked_stack_space *)0)->link));
+    offset = &((struct linked_stack_space *)0)->link;
+
+    return (void *)((void *)link - offset);
 }
 
 /*
@@ -82,14 +87,10 @@ linked_stack_space_next_node(struct linked_stack_space *node)
     struct doubly_linked_list *tmp;
 
     assert(NULL != node);
+    assert(NULL != doubly_linked_list_node_next(&node->link));
 
-    next = NULL;
     tmp = doubly_linked_list_node_next(&node->link);
-    if (!tmp) {
-        pr_log_err("Destroyed data structure.\n");
-    } else {
-        next = linked_stack_space_offset_reflect(tmp);
-    }
+    next = linked_stack_space_offset_reflect(tmp);
 
     return next;
 }
@@ -103,15 +104,12 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
 
-    assert(NULL != node);
-
-    previous = NULL;
     tmp = doubly_linked_list_node_previous(&node->link);
-    if (!tmp) {
-        pr_log_err("Destroyed data structure.\n");
-    } else {
-        previous = linked_stack_space_offset_reflect(tmp);
-    }
+
+    assert(NULL != node);
+    assert(NULL != tmp);
+
+    previous = linked_stack_space_offset_reflect(tmp);
 
     return previous;
 }
@@ -123,25 +121,55 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
 static inline struct linked_stack_space *
 linked_stack_space_remove_node(struct linked_stack_space *node)
 {
-    struct linked_stack_space *next;
     struct doubly_linked_list *link;
 
     assert(NULL != node);
 
-    link = NULL;
-    // Fix Me link = doubly_linked_list_node_lazy_remove(&node->link);
+    link = &node->link;
 
-    /* If only one node */
-    if (NULL == link) {
-        next = NULL;
-    } else {
-        next = linked_stack_space_offset_reflect(link);
-    }
-
+    doubly_linked_list_node_remove(&link);
     free_ds(node->space.bp);
     free_ds(node);
 
-    return next;
+    if (NULL == link) {
+        /*
+         * last node of linked stack
+         */
+        return NULL;
+    } else {
+        return linked_stack_space_offset_reflect(link);
+    }
+}
+
+static inline void
+linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
+{
+    struct linked_stack_space *node;
+    struct linked_stack_space *last;
+
+    last = linked_stack_space_previous_node(stack->base);
+
+    assert(0 != dim);
+    assert(NULL != last);
+    assert(NULL != stack);
+
+    node = malloc_ds(sizeof(*node));
+
+    if (!node) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        doubly_linked_list_initial(&node->link);
+        node->space.bp = malloc_ds(sizeof(void *) * dim);
+
+        if (!node->space.bp) {
+            free_ds(node);
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            node->space.dim = dim;
+            node->space.sp = node->space.bp;
+            doubly_linked_list_node_insert_after(&last->link, &node->link);
+        }
+    }
 }
 
 /*
@@ -151,38 +179,24 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 void
 linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
 {
-    struct linked_stack_space *node;
-    struct linked_stack_space *last;
-
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        last = linked_stack_space_previous_node(stack->base);
-        if (!last) {
-            pr_log_err("Destroyed data structure.\n");
-        } else if (0 == dim) {
+
+        if (0 == dim) {
             pr_log_warn("Expanding size zero, nothing will be done.\n");
         } else {
-            node = malloc_ds(sizeof(*node));
-            if (!node) {
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
-                doubly_linked_list_initial(&node->link);
-            }
-
-            node->space.bp = malloc_ds(sizeof(void *) * dim);
-            if (!node->space.bp) {
-                free_ds(node);
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
-                node->space.dim = dim;
-                node->space.sp = node->space.bp;
-                doubly_linked_list_node_insert_after(&last->link, &node->link);
-            }
+            linked_stack_space_expand_internal(stack, dim);
         }
     }
+}
 
-    return;
+static inline bool
+linked_stack_full_p_internal(struct linked_stack *stack)
+{
+    assert(NULL != stack);
+
+    return 0u == linked_stack_space_rest_internal(stack) ? true : false;
 }
 
 /*
@@ -196,8 +210,27 @@ linked_stack_full_p(struct linked_stack *stack)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return true;
     } else {
-        return 0u == linked_stack_space_rest(stack) ? true : false;
+        return linked_stack_full_p_internal(stack);
     }
+}
+
+static inline uint32
+linked_stack_space_rest_internal(struct linked_stack *stack)
+{
+    uint32 rest;
+    struct linked_stack_space *next;
+
+    assert(NULL != stack);
+
+    rest = linked_stack_space_node_space_rest(stack->top);
+    next = linked_stack_space_next_node(stack->top);
+
+    while (stack->base != next) {
+        rest += next->space.dim;
+        next = linked_stack_space_next_node(next);
+    }
+
+    return rest;
 }
 
 /*
@@ -207,22 +240,12 @@ linked_stack_full_p(struct linked_stack *stack)
 uint32
 linked_stack_space_rest(struct linked_stack *stack)
 {
-    uint32 rest;
-    struct linked_stack_space *st;
-
-    rest = 0u;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return 0u;
     } else {
-        rest = linked_stack_space_node_space_rest(stack->top);
-        st = linked_stack_space_next_node(stack->top);
-        while (stack->base != st) {
-            rest += st->space.dim;
-            st = linked_stack_space_next_node(st);
-        }
+        return linked_stack_space_rest_internal(stack);
     }
-
-    return rest;
 }
 
 /*
@@ -313,9 +336,9 @@ linked_stack_push(struct linked_stack *stack, void *member)
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        if (linked_stack_full_p(stack)) {
+        if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            linked_stack_space_expand(stack, EXPAND_STACK_SPACE_MIN);
+            linked_stack_space_expand_internal(stack, EXPAND_STACK_SPACE_MIN);
         }
 
         if (linked_stack_space_node_full_p(stack->top)) {
@@ -341,17 +364,33 @@ linked_stack_pop(struct linked_stack *stack)
     data = NULL;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (linked_stack_empty_p(stack)) {
+    } else if (linked_stack_empty_p_internal(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
     } else {
         if (linked_stack_space_node_empty_p(stack->top)) {
             pr_log_info("Stack node is empty, will move to previous node.\n");
             stack->top = linked_stack_space_previous_node(stack->top);
         }
+
         data = *(--stack->top->space.sp);
     }
 
     return data;
+}
+
+static inline bool
+linked_stack_empty_p_internal(struct linked_stack *stack)
+{
+    assert(NULL != stack);
+
+    if (stack->base != stack->top) {
+        return false;
+    } else if (stack->top->space.dim
+        == linked_stack_space_node_space_rest(stack->top)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /*
@@ -361,21 +400,12 @@ linked_stack_pop(struct linked_stack *stack)
 bool
 linked_stack_empty_p(struct linked_stack *stack)
 {
-    bool is_empty;
-
-    is_empty = false;
     if (!stack) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return false;
     } else {
-        if (stack->base != stack->top) {
-            is_empty = false;
-        } else if (stack->top->space.dim
-            == linked_stack_space_node_space_rest(stack->top)) {
-            is_empty = true;
-        }
+        return linked_stack_empty_p_internal(stack);
     }
-
-    return is_empty;
 }
 
 /*
@@ -392,14 +422,13 @@ linked_stack_cleanup(struct linked_stack *stack)
     } else {
         stack->top = stack->base;
         iter = stack->base;
+
         do {
             memset(iter->space.bp, 0, sizeof(void *) * iter->space.dim);
             iter->space.sp = iter->space.bp;
             iter = linked_stack_space_next_node(iter);
         } while (iter != stack->base);
     }
-
-    return;
 }
 
 /*
@@ -417,13 +446,12 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
     } else {
         node = stack->top;
         limit = linked_stack_space_previous_node(stack->base);
+
         do {
             linked_stack_space_iterate_node(node, handler);
             node = linked_stack_space_next_node(node);
         } while (node != limit);
     }
-
-    return;
 }
 
 /*
@@ -439,11 +467,12 @@ linked_stack_space_iterate_node(struct linked_stack_space *node,
     assert(NULL != node);
     assert(NULL != handler);
 
-    /* iterate from sp to bp */
     iter = node->space.sp;
+    /*
+     * iterate from sp to bp
+     */
     while(iter != node->space.bp) {
         handler(*(--iter));
     }
-
-    return;
 }
+
