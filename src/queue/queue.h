@@ -4,39 +4,42 @@
 #define DEFAULT_QUEUE_SPACE_SIZE   128
 #define EXPAND_QUEUE_SPACE_MIN     32
 
-extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
-extern void array_stack_cleanup(struct array_stack *stack);
 extern bool array_stack_full_p(struct array_stack *stack);
 extern bool array_stack_empty_p(struct array_stack *stack);
-extern struct array_stack * array_stack_create(void);
-extern uint32 array_stack_capacity(struct array_stack *stack);
+extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern void array_stack_cleanup(struct array_stack *stack);
 extern void array_stack_destroy(struct array_stack **stack);
 extern void array_stack_space_expand(struct array_stack *stack, uint32 extra);
-extern uint32 array_stack_space_rest(struct array_stack *stack);
 extern void array_stack_push(struct array_stack *stack, void *member);
-extern void * array_stack_pop(struct array_stack *stack);
-
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
 extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
+extern void * array_stack_pop(struct array_stack *stack);
+extern uint32 array_stack_capacity(struct array_stack *stack);
+extern uint32 array_stack_space_rest(struct array_stack *stack);
+extern struct array_stack * array_stack_create(void);
 
 
 /* ARRAY STACK */
-struct array_queue * array_queue_create(void);
-void array_queue_destroy(struct array_queue **queue);
-void array_queue_space_expand(struct array_queue *queue, uint32 extra);
-uint32 array_queue_capacity(struct array_queue *queue);
-uint32 array_queue_space_rest(struct array_queue *queue);
 bool array_queue_full_p(struct array_queue *queue);
 bool array_queue_empty_p(struct array_queue *queue);
+void array_queue_destroy(struct array_queue **queue);
+void array_queue_space_expand(struct array_queue *queue, uint32 extra);
 void array_queue_enter(struct array_queue *queue, void *member);
-void * array_queue_leave(struct array_queue *queue);
 void array_queue_cleanup(struct array_queue *queue);
 void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+void * array_queue_leave(struct array_queue *queue);
+uint32 array_queue_capacity(struct array_queue *queue);
+uint32 array_queue_space_rest(struct array_queue *queue);
+struct array_queue * array_queue_create(void);
 
-static inline void array_queue_space_expand_attr_update(struct array_queue *queue, uint32 old_size, void **new_addr, uint32 new_size);
-static inline void array_queue_space_expand_chunk_fixup(struct array_queue *queue, uint32 old_size, uint32 new_size);
+static inline bool array_queue_full_p_internal(struct array_queue *queue);
+static inline bool array_queue_empty_p_internal(struct array_queue *queue);
+static inline void array_queue_space_expand_attr_update(struct array_queue *queue, uint32 increment, void **new_addr);
+static inline void array_queue_space_expand_chunk_fixup(struct array_queue *queue, uint32 increment);
+static inline uint32 array_queue_capacity_internal(struct array_queue *queue);
+static inline uint32 array_queue_space_rest_internal(struct array_queue *queue);
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */

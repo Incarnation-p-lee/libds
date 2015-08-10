@@ -642,19 +642,18 @@ extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list 
 
 
 
-
 /* ARRAY STACK */
-extern struct array_queue * array_queue_create(void);
-extern void array_queue_destroy(struct array_queue **queue);
-extern void array_queue_space_expand(struct array_queue *queue, uint32 extra);
-extern uint32 array_queue_capacity(struct array_queue *queue);
-extern uint32 array_queue_space_rest(struct array_queue *queue);
 extern bool array_queue_full_p(struct array_queue *queue);
 extern bool array_queue_empty_p(struct array_queue *queue);
+extern void array_queue_destroy(struct array_queue **queue);
+extern void array_queue_space_expand(struct array_queue *queue, uint32 extra);
 extern void array_queue_enter(struct array_queue *queue, void *member);
-extern void * array_queue_leave(struct array_queue *queue);
 extern void array_queue_cleanup(struct array_queue *queue);
 extern void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
+extern void * array_queue_leave(struct array_queue *queue);
+extern uint32 array_queue_capacity(struct array_queue *queue);
+extern uint32 array_queue_space_rest(struct array_queue *queue);
+extern struct array_queue * array_queue_create(void);
 
 /* END OF ARRAY STACK */
 

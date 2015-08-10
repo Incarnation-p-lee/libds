@@ -34,38 +34,35 @@ array_queue_destroy(struct array_queue **queue)
         free_ds(*queue);
         *queue = NULL;
     }
-
-    return;
 }
 
 static inline void
-array_queue_space_expand_chunk_fixup(struct array_queue *queue,
-    uint32 old_size, uint32 new_size)
+array_queue_space_expand_chunk_fixup(struct array_queue *queue, uint32 increment)
 {
     void **to;
     void **from;
     void **lmt;
 
     assert(NULL != queue);
+    assert(0 != increment);
+    assert(queue->space.dim > increment);
 
     lmt = queue->space.front;
-    to = queue->space.base + new_size;
-    from = queue->space.base + old_size;
+    to = queue->space.base + queue->space.dim;
+    from = queue->space.base + (queue->space.dim - increment);
 
     while ((sint32)(lmt - from) < 0) {
         *(--to) = *(--from);
     }
-
-    return;
 }
 
 static inline void
-array_queue_space_expand_attr_update(struct array_queue *queue, uint32 old_size,
-    void **new_addr, uint32 new_size)
+array_queue_space_expand_attr_update(struct array_queue *queue, uint32 increment,
+    void **new_addr)
 {
     assert(NULL != queue);
     assert(NULL != new_addr);
-    assert(new_size >= old_size);
+    assert(0 != increment);
 
     if (new_addr != queue->space.base) {
         queue->space.front = new_addr + (queue->space.front - queue->space.base);
@@ -73,47 +70,64 @@ array_queue_space_expand_attr_update(struct array_queue *queue, uint32 old_size,
     }
 
     queue->space.base = new_addr;
-    queue->space.dim = new_size;
-    queue->space.rest += new_size - old_size;
+    queue->space.dim += increment;
+    queue->space.rest += increment;
+}
 
-    return;
+static inline void
+array_queue_space_expand_internal(struct array_queue *queue, uint32 increment)
+{
+    uint32 new_size;
+    void **new_addr;
+
+    assert(NULL != queue);
+    assert(0 != increment);
+
+    new_size = array_queue_capacity_internal(queue) + increment;
+    new_addr = realloc_ds(queue->space.base, sizeof(void *) * new_size);
+
+    if (!new_addr) {
+        pr_log_err("Fail to get memory from system.\n");
+    } else {
+        /*
+         * realloc may return a address different from queue->space.base 
+         */
+        array_queue_space_expand_attr_update(queue, increment, new_addr);
+        /*
+         * No need to do if (queue->space.front < queue->space.rear)
+         */
+        if ((queue->space.front == queue->space.rear && array_queue_full_p_internal(queue))
+            || queue->space.front > queue->space.rear) {
+            array_queue_space_expand_chunk_fixup(queue, increment);
+        }
+    }
 }
 
 void
 array_queue_space_expand(struct array_queue *queue, uint32 extra)
 {
-    uint32 old_size;
-    uint32 new_size;
-    void **new_addr;
+    uint32 increment;
 
-    new_size = 0;
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        old_size = array_queue_capacity(queue);
         if (!extra) {
-            new_size = old_size * 2 + EXPAND_QUEUE_SPACE_MIN;
+            increment = array_queue_capacity_internal(queue) + EXPAND_QUEUE_SPACE_MIN;
             pr_log_info("Expanding size not specified, use default.\n");
         } else {
-            new_size = old_size + extra;
+            increment = extra;
         }
 
-        new_addr = realloc_ds(queue->space.base, sizeof(void *) * new_size);
-        if (!new_addr) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
-            /* realloc may return a address different from queue->space.base */
-            array_queue_space_expand_attr_update(queue, old_size, new_addr, new_size);
-        }
-
-        /* No need to do if (queue->space.front < queue->space.rear) */
-        if ((queue->space.front == queue->space.rear && array_queue_full_p(queue))
-            || queue->space.front > queue->space.rear) {
-            array_queue_space_expand_chunk_fixup(queue, old_size, new_size);
-        }
+        array_queue_space_expand_internal(queue, increment);
     }
+}
 
-    return;
+static inline uint32
+array_queue_capacity_internal(struct array_queue *queue)
+{
+    assert(NULL != queue);
+
+    return queue->space.dim;
 }
 
 uint32
@@ -123,8 +137,16 @@ array_queue_capacity(struct array_queue *queue)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return 0x0u;
     } else {
-        return array_queue_dim(queue);
+        return array_queue_capacity_internal(queue);
     }
+}
+
+static inline uint32
+array_queue_space_rest_internal(struct array_queue *queue)
+{
+    assert(NULL != queue);
+
+    return queue->space.rest;
 }
 
 /*
@@ -137,8 +159,16 @@ array_queue_space_rest(struct array_queue *queue)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return 0x0u;
     } else {
-        return array_queue_rest(queue);
+        return array_queue_space_rest_internal(queue);
     }
+}
+
+static inline bool
+array_queue_full_p_internal(struct array_queue *queue)
+{
+    assert(NULL != queue);
+
+    return 0u == array_queue_space_rest_internal(queue) ? true : false;
 }
 
 /*
@@ -151,8 +181,22 @@ array_queue_full_p(struct array_queue *queue)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return true;
     } else {
-        return 0u == array_queue_space_rest(queue);
+        return array_queue_full_p_internal(queue);
     }
+}
+
+static inline bool
+array_queue_empty_p_internal(struct array_queue *queue)
+{
+    uint32 capacity;
+    uint32 rest;
+
+    assert(NULL != queue);
+
+    capacity = array_queue_capacity_internal(queue);
+    rest = array_queue_space_rest_internal(queue);
+
+    return capacity == rest ? true : false;
 }
 
 /*
@@ -161,17 +205,12 @@ array_queue_full_p(struct array_queue *queue)
 bool
 array_queue_empty_p(struct array_queue *queue)
 {
-    bool is_empty;
-
-    is_empty = false;
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return false;
     } else {
-        is_empty = array_queue_capacity(queue)
-            == array_queue_space_rest(queue) ? true : false;
+        return array_queue_empty_p_internal(queue);
     }
-
-    return is_empty;
 }
 
 void
@@ -180,18 +219,20 @@ array_queue_enter(struct array_queue *queue, void *member)
     if (!queue || !member) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        if (array_queue_full_p(queue)) {
+        if (array_queue_full_p_internal(queue)) {
             array_queue_space_expand(queue, 0u);
         }
 
         *queue->space.rear++ = member;
-        if (queue->space.rear == queue->space.base + array_queue_capacity(queue)) {
-            queue->space.rear = queue->space.base;
+
+        if (queue->space.rear
+            == queue->space.base + array_queue_capacity_internal(queue)) {
             pr_log_info("Reach the limitation of array, will rotate.\n");
+            queue->space.rear = queue->space.base;
         }
+
         queue->space.rest--;
     }
-    return;
 }
 
 void *
@@ -199,22 +240,25 @@ array_queue_leave(struct array_queue *queue)
 {
     void *retval;
 
-    retval = NULL;
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (array_queue_empty_p_internal(queue)) {
+        pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
+        return NULL;
     } else {
-        if (array_queue_empty_p(queue)) {
-            pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
-        } else {
-            retval = *queue->space.front++;
-            if (queue->space.front == queue->space.base + array_queue_capacity(queue)) {
-                queue->space.front = queue->space.base;
-                pr_log_info("Reach the limitation of array, will rotate.\n");
-            }
-            queue->space.rest++;
+        retval = *queue->space.front++;
+
+        if (queue->space.front
+            == queue->space.base + array_queue_capacity_internal(queue)) {
+            pr_log_info("Reach the limitation of array, will rotate.\n");
+            queue->space.front = queue->space.base;
         }
+
+        queue->space.rest++;
+
+        return retval;
     }
-    return retval;
 }
 
 void
@@ -225,14 +269,13 @@ array_queue_cleanup(struct array_queue *queue)
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        capacity = array_queue_capacity(queue);
+        capacity = array_queue_capacity_internal(queue);
         memset(queue->space.base, 0, sizeof(void *) * capacity);
+
         queue->space.rest = capacity;
         queue->space.front = queue->space.base;
         queue->space.rear = queue->space.base;
     }
-
-    return;
 }
 
 void
@@ -244,11 +287,12 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
     if (!queue || !handler) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        if (array_queue_empty_p(queue)) {
+        if (array_queue_empty_p_internal(queue)) {
             pr_log_info("Iterate on _EMPTY_ queue, nothing will be done.\n");
         } else {
-            lmt = queue->space.base + array_queue_capacity(queue);
+            lmt = queue->space.base + array_queue_capacity_internal(queue);
             iter = queue->space.front;
+
             do {
                 (*handler)(*iter++);
                 if (iter == lmt) {
@@ -257,6 +301,5 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
             } while (iter != queue->space.rear);
         }
     }
-
-    return;
 }
+

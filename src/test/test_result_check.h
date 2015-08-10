@@ -11,6 +11,7 @@
     do {                                                       \
         if (!test_result_check_pointer_p(get, expect, pass)) { \
             LOCATION_PRINT;                                    \
+            assert(false);                                     \
         }                                                      \
     } while (false)
 
@@ -18,6 +19,7 @@
     do {                                                    \
         if (!test_result_check_bool_p(get, expect, pass)) { \
             LOCATION_PRINT;                                 \
+            assert(false);                                  \
         }                                                   \
     } while (false)
 
@@ -25,6 +27,7 @@
     do {                                                      \
         if (!test_result_check_uint32_p(get, expect, pass)) { \
             LOCATION_PRINT;                                   \
+            assert(false);                                    \
         }                                                     \
     } while (false)
 
@@ -32,6 +35,7 @@
     do {                                                          \
         if (!test_result_check_less_uint32_p(get, limit, pass)) { \
             LOCATION_PRINT;                                       \
+            assert(false);                                        \
         }                                                         \
     } while (false)
 
@@ -39,6 +43,7 @@
     do {                                                              \
         if (!test_result_check_not_less_uint32_p(get, limit, pass)) { \
             LOCATION_PRINT;                                           \
+            assert(false);                                            \
         }                                                             \
     } while (false)
 
@@ -46,6 +51,7 @@
     do {                                                      \
         if (!test_result_check_sint32_p(get, expect, pass)) { \
             LOCATION_PRINT;                                   \
+            assert(false);                                    \
         }                                                     \
     } while (false)
 
@@ -53,6 +59,7 @@
     do {                                                      \
         if (!test_result_check_uint64_p(get, expect, pass)) { \
             LOCATION_PRINT;                                   \
+            assert(false);                                    \
         }                                                     \
     } while (false)
 
@@ -60,6 +67,7 @@
     do {                                                      \
         if (!test_result_check_sint64_p(get, expect, pass)) { \
             LOCATION_PRINT;                                   \
+            assert(false);                                    \
         }                                                     \
     } while (false)
 
@@ -67,6 +75,7 @@
     do {                                                     \
         if (!test_result_check_float_p(get, expect, pass)) { \
             LOCATION_PRINT;                                  \
+            assert(false);                                   \
         }                                                    \
     } while (false)
 
@@ -74,6 +83,7 @@
     do {                                                      \
         if (!test_result_check_double_p(get, expect, pass)) { \
             LOCATION_PRINT;                                   \
+            assert(false);                                    \
         }                                                     \
     } while (false)
 
