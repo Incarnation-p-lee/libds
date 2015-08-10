@@ -460,30 +460,36 @@ binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering)
 }
 
 /*
- * index - altered node index of binary heap
+ * index     - altered node index of binary heap
+ * ordering  - heap ordering function
+ * percolate - percolate down or up function
  */
 static inline void
-binary_heap_nice_alter_percolate_up(struct binary_heap *heap, uint32 index,
-    sint64 new_nice, void *ordering)
+binary_heap_nice_alter_percolate(struct binary_heap *heap, uint32 index,
+    sint64 new_nice, void *ordering, void *percolate)
 {
     uint32 tgt_index;
     struct collision_chain *tmp;
+    uint32 (*direct)(struct binary_heap *, uint32, sint64, void *);
 
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(NULL != heap->base[index]);
     assert(0 != index && index <= INDEX_LAST(heap));
     assert(binary_heap_order_function_pointer_valid_p(ordering));
+    assert(binary_heap_percolate_function_pointer_valid_p(percolate));
     assert(HEAP_NICE_LOWER_LMT < new_nice && HEAP_NICE_UPPER_LMT > new_nice);
     assert(binary_heap_percolate_direction_consistent_with_ordering_p(heap,
-        index, new_nice, ordering));
+        index, new_nice, ordering, percolate));
+
+    direct = percolate;
 
     if (!binary_heap_node_contains_p(heap, new_nice, &tgt_index)) {
         tmp = HEAP_CHAIN(heap, index);
         HEAP_CHAIN(heap, index) = NULL;
         tmp->nice = new_nice;
 
-        index = binary_heap_percolate_up(heap, index, tmp->nice, ordering);
+        index = (*direct)(heap, index, tmp->nice, ordering);
         assert(NULL == HEAP_CHAIN(heap, index));
 
         HEAP_CHAIN(heap, index) = tmp;

@@ -214,6 +214,8 @@ static struct test_performance unit_test_performance[] = {
     {"maximal_heap_node_remove_and_destroy",       0x0u, 0x0u},
     {"maximal_heap_node_remove_max",               0x0u, 0x0u},
     {"maximal_heap_node_remove_max_and_destroy",   0x0u, 0x0u},
+    {"maximal_heap_node_decrease_nice",            0x0u, 0x0u},
+    {"maximal_heap_node_increase_nice",            0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 
