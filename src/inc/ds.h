@@ -909,6 +909,8 @@ extern void maximal_heap_cleanup(struct maximal_heap *heap);
 extern void maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice);
 extern void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice);
 extern void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
+extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
+extern void maximal_heap_node_increase_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);

@@ -341,92 +341,90 @@ unit_test_maximal_heap_node_remove_max_and_destroy(void)
     test_result_print(SYM_2_STR(maximal_heap_node_remove_max_and_destroy), pass);
 }
 
-// static inline void
-// unit_test_minimal_heap_node_decrease_nice(void)
-// {
-//     bool pass;
-//     uint32 loop;
-//     uint32 offset;
-//     sint64 nice;
-//     struct minimal_heap *heap;
-//     struct doubly_linked_list *tmp;
-// 
-//     TEST_PERFORMANCE_CHECKPOINT;
-// 
-//     pass = true;
-//     loop = 0x12;
-//     heap = NULL;
-//     offset = 0;
-// 
-//     minimal_heap_node_decrease_nice(heap, 0, offset);
-// 
-//     heap = unit_test_minimal_heap_sample(0xf345, 0xf2E0);
-//     minimal_heap_node_decrease_nice(heap, 0, offset);
-//     offset = 0x1234;
-// 
-//     while (loop--) {
-//         tmp = minimal_heap_node_find(heap, loop);
-//         if (tmp) {
-//             nice = (sint64)loop - offset;
-//             if (!minimal_heap_node_find(heap, nice)) {
-//                 minimal_heap_node_decrease_nice(heap, loop, offset);
-//                 RESULT_CHECK_pointer(tmp, minimal_heap_node_find(heap, nice), &pass);
-//             } else {
-//                 minimal_heap_node_decrease_nice(heap, loop, offset);
-//             }
-//         } else {
-//             minimal_heap_node_decrease_nice(heap, loop, offset);
-//         }
-//     }
-//     minimal_heap_destroy(&heap);
-// 
-//     test_result_print(SYM_2_STR(minimal_heap_node_decrease_nice), pass);
-//     return;
-// }
-// 
-// static inline void
-// unit_test_minimal_heap_node_increase_nice(void)
-// {
-//     bool pass;
-//     uint32 loop;
-//     uint32 offset;
-//     sint64 nice;
-//     struct minimal_heap *heap;
-//     struct doubly_linked_list *tmp;
-// 
-//     TEST_PERFORMANCE_CHECKPOINT;
-// 
-//     pass = true;
-//     loop = 0x12;
-//     heap = NULL;
-//     offset = 0;
-// 
-//     minimal_heap_node_increase_nice(heap, 0, offset);
-// 
-//     heap = unit_test_minimal_heap_sample(0xe942, 0xb73a);
-//     minimal_heap_node_increase_nice(heap, 0, offset);
-//     offset = 0x1234;
-// 
-//     while (loop--) {
-//         tmp = minimal_heap_node_find(heap, loop);
-//         if (tmp) {
-//             nice = (sint64)loop + offset;
-//             if (!minimal_heap_node_find(heap, nice)) {
-//                 minimal_heap_node_increase_nice(heap, loop, offset);
-//                 RESULT_CHECK_pointer(tmp, minimal_heap_node_find(heap, nice), &pass);
-//             } else {
-//                 minimal_heap_node_increase_nice(heap, loop, offset);
-//             }
-//         } else {
-//             minimal_heap_node_increase_nice(heap, loop, offset);
-//         }
-//     }
-//     minimal_heap_destroy(&heap);
-// 
-//     test_result_print(SYM_2_STR(minimal_heap_node_increase_nice), pass);
-//     return;
-// }
-// 
+static inline void
+unit_test_maximal_heap_node_decrease_nice(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 offset;
+    sint64 nice;
+    struct maximal_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12;
+    heap = NULL;
+    offset = 0;
+
+    maximal_heap_node_decrease_nice(heap, 0, offset);
+
+    heap = unit_test_maximal_heap_sample(0xf345, 0xf2E0);
+    maximal_heap_node_decrease_nice(heap, 0, offset);
+    offset = 0x1234;
+
+    while (loop--) {
+        tmp = maximal_heap_node_find(heap, loop);
+        if (tmp) {
+            nice = (sint64)loop - offset;
+            if (!maximal_heap_node_find(heap, nice)) {
+                maximal_heap_node_decrease_nice(heap, loop, offset);
+                RESULT_CHECK_pointer(tmp, maximal_heap_node_find(heap, nice), &pass);
+            } else {
+                maximal_heap_node_decrease_nice(heap, loop, offset);
+            }
+        } else {
+            maximal_heap_node_decrease_nice(heap, loop, offset);
+        }
+    }
+
+    maximal_heap_destroy(&heap);
+    test_result_print(SYM_2_STR(maximal_heap_node_decrease_nice), pass);
+}
+
+static inline void
+unit_test_maximal_heap_node_increase_nice(void)
+{
+    bool pass;
+    uint32 loop;
+    uint32 offset;
+    sint64 nice;
+    struct maximal_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    loop = 0x12;
+    heap = NULL;
+    offset = 0;
+
+    maximal_heap_node_increase_nice(heap, 0, offset);
+
+    heap = unit_test_maximal_heap_sample(0xe942, 0xb73a);
+    maximal_heap_node_increase_nice(heap, 0, offset);
+    offset = 0x1234;
+
+    while (loop--) {
+        tmp = maximal_heap_node_find(heap, loop);
+        if (tmp) {
+            nice = (sint64)loop + offset;
+            if (!maximal_heap_node_find(heap, nice)) {
+                maximal_heap_node_increase_nice(heap, loop, offset);
+                RESULT_CHECK_pointer(tmp, maximal_heap_node_find(heap, nice), &pass);
+            } else {
+                maximal_heap_node_increase_nice(heap, loop, offset);
+            }
+        } else {
+            maximal_heap_node_increase_nice(heap, loop, offset);
+        }
+    }
+
+    maximal_heap_destroy(&heap);
+    test_result_print(SYM_2_STR(maximal_heap_node_increase_nice), pass);
+}
+
 static inline void
 unit_test_maximal_heap_node_remove(void)
 {
