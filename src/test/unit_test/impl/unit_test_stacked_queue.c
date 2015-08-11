@@ -21,10 +21,9 @@ unit_test_stacked_queue_struct_field(void)
         capacity = stacked_queue_capacity(queue);
         RESULT_CHECK_uint32(capacity, stacked_queue_dim(queue), &pass);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_struct_field), pass);
-    return;
 }
 
 static void
@@ -45,10 +44,9 @@ unit_test_stacked_queue_create(void)
     pass = true;
     queue = stacked_queue_create();
     RESULT_CHECK_uint32(0x0u, stacked_queue_sid(queue), &pass);
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_create), pass);
-    return;
 }
 
 static void
@@ -69,10 +67,9 @@ unit_test_stacked_queue_destroy(void)
         queue = stacked_queue_create();
         stacked_queue_destroy(&queue);
     }
-    RESULT_CHECK_pointer(NULL, queue, &pass);
 
+    RESULT_CHECK_pointer(NULL, queue, &pass);
     test_result_print(SYM_2_STR(stacked_queue_destroy), pass);
-    return;
 }
 
 static void
@@ -99,8 +96,7 @@ unit_test_stacked_queue_space_expand(void)
     extra = 0;
     capacity = stacked_queue_capacity(queue);
     stacked_queue_space_expand(queue, extra);
-    RESULT_CHECK_uint32(capacity * 2 + EXPAND_STACK_SPACE_MIN,
-        stacked_queue_capacity(queue), &pass);
+    RESULT_CHECK_uint32(capacity * 2, stacked_queue_capacity(queue), &pass);
 
     extra = 1;
     while (0 != loop--) {
@@ -109,8 +105,6 @@ unit_test_stacked_queue_space_expand(void)
 
     stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_space_expand), pass);
-
-    return;
 }
 
 static void
@@ -135,10 +129,9 @@ unit_test_stacked_queue_capacity(void)
         RESULT_CHECK_uint32(stacked_queue_dim(queue),
             stacked_queue_capacity(queue), &pass);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_capacity), pass);
-    return;
 }
 
 static void
@@ -163,10 +156,9 @@ unit_test_stacked_queue_space_rest(void)
     while (0 != loop--) {
         RESULT_CHECK_uint32(capacity * 2, stacked_queue_space_rest(queue) + 1, &pass);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_space_rest), pass);
-    return;
 }
 
 static void
@@ -198,10 +190,9 @@ unit_test_stacked_queue_full_p(void)
     while (0 != loop--) {
         RESULT_CHECK_bool(true, stacked_queue_full_p(queue), &pass);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_full_p), pass);
-    return;
 }
 
 static void
@@ -224,10 +215,9 @@ unit_test_stacked_queue_empty_p(void)
     while (0 != loop--) {
         RESULT_CHECK_bool(false, stacked_queue_empty_p(queue), &pass);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_empty_p), pass);
-    return;
 }
 
 static void
@@ -256,17 +246,15 @@ unit_test_stacked_queue_enter(void)
 
     capacity = stacked_queue_capacity(queue);
     stacked_queue_enter(queue, queue);
-    RESULT_CHECK_uint32(capacity * 2 + EXPAND_STACK_SPACE_MIN,
-        stacked_queue_capacity(queue), &pass);
+    RESULT_CHECK_uint32(capacity * 2, stacked_queue_capacity(queue), &pass);
 
     while (0 != loop--) {
         stacked_queue_space_expand(queue, 1);
         stacked_queue_enter(queue, queue);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_enter), pass);
-    return;
 }
 
 static void
@@ -293,10 +281,9 @@ unit_test_stacked_queue_leave(void)
         RESULT_CHECK_pointer(queue, stacked_queue_leave(queue), &pass);
     } while (!stacked_queue_empty_p(queue));
     RESULT_CHECK_pointer(NULL, stacked_queue_leave(queue), &pass);
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_leave), pass);
-    return;
 }
 
 static void
@@ -322,10 +309,9 @@ unit_test_stacked_queue_cleanup(void)
         stacked_queue_cleanup(queue);
     }
     RESULT_CHECK_bool(true, stacked_queue_empty_p(queue), &pass);
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_cleanup), pass);
-    return;
 }
 
 static void
@@ -353,9 +339,8 @@ unit_test_stacked_queue_iterate(void)
     while (0 != loop--) {
         stacked_queue_iterate(queue, queue_iterate_handler);
     }
-    stacked_queue_destroy(&queue);
 
+    stacked_queue_destroy(&queue);
     test_result_print(SYM_2_STR(stacked_queue_iterate), pass);
-    return;
 }
 

@@ -4,15 +4,15 @@ stacked_queue_create(void)
     struct stacked_queue *queue;
 
     queue = malloc_ds(sizeof(*queue));
+
     if (!queue) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        stacked_queue_sid_set(queue, 0x0u);
+        queue->sid = 0x0u;
+        queue->enter = array_stack_create();
+        queue->leave = array_stack_create();
+        queue->dim = array_stack_capacity(queue->enter);
     }
-
-    queue->enter = array_stack_create();
-    queue->leave = array_stack_create();
-    queue->dim = array_stack_capacity(queue->enter);
 
     return queue;
 }
@@ -25,25 +25,40 @@ stacked_queue_destroy(struct stacked_queue **queue)
     } else {
         array_stack_destroy(&(*queue)->enter);
         array_stack_destroy(&(*queue)->leave);
+
         free_ds(*queue);
         *queue = NULL;
     }
+}
 
-    return;
+static inline void
+stacked_queue_space_expand_internal(struct stacked_queue *queue, uint32 increment)
+{
+    assert(NULL != queue);
+    assert(0 != increment);
+
+    array_stack_space_expand(queue->enter, increment);
+    array_stack_space_expand(queue->leave, increment);
+    queue->dim = array_stack_capacity(queue->enter);
 }
 
 void
 stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
 {
+    uint32 increment;
+
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        array_stack_space_expand(queue->enter, extra);
-        array_stack_space_expand(queue->leave, extra);
-        queue->dim = array_stack_capacity(queue->enter);
-    }
+        if (!extra) {
+            increment = queue->dim;
+            pr_log_info("Expanding size not specified, use default.\n");
+        } else {
+            increment = extra;
+        }
 
-    return;
+        stacked_queue_space_expand_internal(queue, increment);
+    }
 }
 
 /*
@@ -63,25 +78,34 @@ stacked_queue_capacity(struct stacked_queue *queue)
     }
 }
 
+static inline uint32
+stacked_queue_space_rest_internal(struct stacked_queue *queue)
+{
+    uint32 rest;
+
+    assert(NULL != queue);
+
+    rest = array_stack_space_rest(queue->enter);
+
+    if (array_stack_empty_p(queue->leave)) {
+        rest += array_stack_capacity(queue->leave);
+    }
+
+    return rest;
+}
+
 /*
  * NULL stacked queue will _RETURN_ 0.
  */
 uint32
 stacked_queue_space_rest(struct stacked_queue *queue)
 {
-    uint32 rest;
-
-    rest = 0u;
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return 0u;
     } else {
-        rest = array_stack_space_rest(queue->enter);
-        if (array_stack_empty_p(queue->leave)) {
-            rest += array_stack_capacity(queue->leave);
-        }
+        return stacked_queue_space_rest_internal(queue);
     }
-
-    return rest;
 }
 
 /*
@@ -94,8 +118,17 @@ stacked_queue_full_p(struct stacked_queue *queue)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return true;
     } else {
-        return 0u == stacked_queue_space_rest(queue) ? true : false;
+        return 0u == stacked_queue_space_rest_internal(queue) ? true : false;
     }
+}
+
+
+static inline bool
+stacked_queue_empty_p_internal(struct stacked_queue *queue)
+{
+    assert(NULL != queue);
+
+    return array_stack_empty_p(queue->enter) && array_stack_empty_p(queue->leave);
 }
 
 /*
@@ -108,8 +141,7 @@ stacked_queue_empty_p(struct stacked_queue *queue)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return false;
     } else {
-        return array_stack_empty_p(queue->enter)
-            && array_stack_empty_p(queue->leave);
+        return stacked_queue_empty_p_internal(queue);
     }
 }
 
@@ -121,16 +153,15 @@ stacked_queue_enter(struct stacked_queue *queue, void *member)
     } else {
         if (array_stack_full_p(queue->enter)
             && array_stack_empty_p(queue->leave)) {
-            stacked_queue_stack_dump(queue->enter, queue->leave);
             pr_log_info("Empty leave stack, will dump enter stack to leave.\n");
+            stacked_queue_stack_dump(queue->enter, queue->leave);
         } else if (array_stack_full_p(queue->enter)) {
-            stacked_queue_space_expand(queue, 0u);
             pr_log_info("Fail to dump enter stack, will expand enter space.\n");
+            stacked_queue_space_expand_internal(queue, queue->dim);
         }
+
         array_stack_push(queue->enter, member);
     }
-
-    return;
 }
 
 static inline void
@@ -144,6 +175,7 @@ stacked_queue_stack_dump(struct array_stack *from,
     assert(array_stack_capacity(from) >= array_stack_space_rest(from));
 
     count = array_stack_capacity(from) - array_stack_space_rest(from);
+
     if (count > array_stack_space_rest(to)) {
         pr_log_err("Operation may result in array stack overflow.\n");
     } else {
@@ -151,31 +183,27 @@ stacked_queue_stack_dump(struct array_stack *from,
             array_stack_push(to, array_stack_pop(from));
         }
     }
-
-    return;
 }
 
 void *
 stacked_queue_leave(struct stacked_queue *queue)
 {
-    void *retval;
-
-    retval = NULL;
     if (!queue) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
     } else {
-        if (stacked_queue_empty_p(queue)) {
+        if (stacked_queue_empty_p_internal(queue)) {
             pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
+            return NULL;
         } else {
             if (array_stack_empty_p(queue->leave)) {
-                stacked_queue_stack_dump(queue->enter, queue->leave);
                 pr_log_info("Empty leave stack, will dump enter stack to leave.\n");
+                stacked_queue_stack_dump(queue->enter, queue->leave);
             }
-            retval = array_stack_pop(queue->leave);
+
+            return array_stack_pop(queue->leave);
         }
     }
-
-    return retval;
 }
 
 void
@@ -187,8 +215,6 @@ stacked_queue_cleanup(struct stacked_queue *queue)
         array_stack_cleanup(queue->enter);
         array_stack_cleanup(queue->leave);
     }
-
-    return;
 }
 
 void
@@ -200,6 +226,5 @@ stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *))
         array_stack_iterate(queue->leave, handler);
         array_stack_iterate(queue->enter, handler);
     }
-
-    return;
 }
+

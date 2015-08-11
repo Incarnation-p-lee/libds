@@ -26,7 +26,6 @@ unit_test_array_queue_struct_field(void)
     }
 
     test_result_print(SYM_2_STR(array_queue_struct_field), pass);
-    return;
 }
 
 static void
@@ -50,7 +49,6 @@ unit_test_array_queue_create(void)
     }
 
     test_result_print(SYM_2_STR(array_queue_create), pass);
-    return;
 }
 
 static void
@@ -75,7 +73,6 @@ unit_test_array_queue_destroy(void)
     }
 
     test_result_print(SYM_2_STR(array_queue_destroy), pass);
-    return;
 }
 
 static void
@@ -125,7 +122,6 @@ unit_test_array_queue_space_expand(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_space_expand), pass);
-    return;
 }
 
 static void
@@ -153,8 +149,6 @@ unit_test_array_queue_capacity(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_capacity), pass);
-
-    return;
 }
 
 static void
@@ -189,8 +183,6 @@ unit_test_array_queue_space_rest(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_space_rest), pass);
-
-    return;
 }
 
 static void
@@ -228,8 +220,6 @@ unit_test_array_queue_full_p(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_full_p), pass);
-
-    return;
 }
 
 static void
@@ -256,8 +246,6 @@ unit_test_array_queue_empty_p(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_empty_p), pass);
-
-    return;
 }
 
 
@@ -296,8 +284,6 @@ unit_test_array_queue_enter(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_enter), pass);
-
-    return;
 }
 
 static void
@@ -342,8 +328,6 @@ unit_test_array_queue_leave(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_leave), pass);
-
-    return;
 }
 
 static void
@@ -372,8 +356,6 @@ unit_test_array_queue_cleanup(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_cleanup), pass);
-
-    return;
 }
 
 static void
@@ -410,6 +392,5 @@ unit_test_array_queue_iterate(void)
 
     array_queue_destroy(&queue);
     test_result_print(SYM_2_STR(array_queue_iterate), pass);
-
-    return;
 }
+

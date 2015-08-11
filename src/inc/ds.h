@@ -658,17 +658,17 @@ extern struct array_queue * array_queue_create(void);
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */
-extern struct stacked_queue * stacked_queue_create(void);
-extern void stacked_queue_destroy(struct stacked_queue **queue);
-extern void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra);
-extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
-extern uint32 stacked_queue_space_rest(struct stacked_queue *queue);
 extern bool stacked_queue_full_p(struct stacked_queue *queue);
 extern bool stacked_queue_empty_p(struct stacked_queue *queue);
+extern void stacked_queue_destroy(struct stacked_queue **queue);
+extern void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra);
 extern void stacked_queue_enter(struct stacked_queue *queue, void *member);
-extern void * stacked_queue_leave(struct stacked_queue *queue);
 extern void stacked_queue_cleanup(struct stacked_queue *queue);
 extern void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
+extern void * stacked_queue_leave(struct stacked_queue *queue);
+extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
+extern uint32 stacked_queue_space_rest(struct stacked_queue *queue);
+extern struct stacked_queue * stacked_queue_create(void);
 
 /* END OF STACKED QUEUE */
 

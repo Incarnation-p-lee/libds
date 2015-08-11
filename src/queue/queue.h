@@ -43,19 +43,22 @@ static inline uint32 array_queue_space_rest_internal(struct array_queue *queue);
 /* END OF ARRAY STACK */
 
 /* STACKED QUEUE */
-struct stacked_queue * stacked_queue_create(void);
-void stacked_queue_destroy(struct stacked_queue **queue);
-void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra);
-uint32 stacked_queue_capacity(struct stacked_queue *queue);
-uint32 stacked_queue_space_rest(struct stacked_queue *queue);
 bool stacked_queue_full_p(struct stacked_queue *queue);
 bool stacked_queue_empty_p(struct stacked_queue *queue);
+void stacked_queue_destroy(struct stacked_queue **queue);
+void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra);
 void stacked_queue_enter(struct stacked_queue *queue, void *member);
-void * stacked_queue_leave(struct stacked_queue *queue);
 void stacked_queue_cleanup(struct stacked_queue *queue);
 void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
+void * stacked_queue_leave(struct stacked_queue *queue);
+uint32 stacked_queue_capacity(struct stacked_queue *queue);
+uint32 stacked_queue_space_rest(struct stacked_queue *queue);
+struct stacked_queue * stacked_queue_create(void);
 
+static inline bool stacked_queue_empty_p_internal(struct stacked_queue *queue);
 static inline void stacked_queue_stack_dump(struct array_stack *from, struct array_stack *to);
+static inline void stacked_queue_space_expand_internal(struct stacked_queue *queue, uint32 increment);
+static inline uint32 stacked_queue_space_rest_internal(struct stacked_queue *queue);
 /* END OF STACKED QUEUE */
 
 
