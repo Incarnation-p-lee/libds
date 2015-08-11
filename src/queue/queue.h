@@ -14,11 +14,11 @@ extern void array_stack_push(struct array_stack *stack, void *member);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
 extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_lazy_remove(struct doubly_linked_list *node);
 extern void * array_stack_pop(struct array_stack *stack);
 extern uint32 array_stack_capacity(struct array_stack *stack);
 extern uint32 array_stack_space_rest(struct array_stack *stack);
 extern struct array_stack * array_stack_create(void);
+extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
 
 
 /* ARRAY STACK */
@@ -63,18 +63,20 @@ static inline uint32 stacked_queue_space_rest_internal(struct stacked_queue *que
 
 
 /* DOUBLY END QUEUE */
-struct doubly_end_queue * doubly_end_queue_create(void);
-void doubly_end_queue_destroy(struct doubly_end_queue **queue);
-uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 bool doubly_end_queue_empty_p(struct doubly_end_queue *queue);
+void doubly_end_queue_destroy(struct doubly_end_queue **queue);
 void doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
 void doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
-void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
-void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
 void doubly_end_queue_cleanup(struct doubly_end_queue *queue);
 void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
+void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
+uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
+struct doubly_end_queue * doubly_end_queue_create(void);
 
+static inline bool doubly_end_queue_empty_p_internal(struct doubly_end_queue *queue);
 static inline void doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
+static inline void doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_next(struct doubly_end_queue_list *node);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_previous(struct doubly_end_queue_list *node);
 static inline struct doubly_end_queue_list * doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link);

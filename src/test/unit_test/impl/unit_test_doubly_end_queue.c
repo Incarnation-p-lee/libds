@@ -17,10 +17,9 @@ unit_test_doubly_end_queue_struct_field(void)
         doubly_end_queue_sid_set(queue, sid);
         RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
     }
-    doubly_end_queue_destroy(&queue);
 
+    doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
-    return;
 }
 
 static void
@@ -40,10 +39,9 @@ unit_test_doubly_end_queue_create(void)
         RESULT_CHECK_uint32(0x0u, doubly_end_queue_sid(queue), &pass);
         RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
     }
-    doubly_end_queue_destroy(&queue);
 
+    doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
-    return;
 }
 
 static void
@@ -72,7 +70,6 @@ unit_test_doubly_end_queue_destroy(void)
     }
 
     test_result_print(SYM_2_STR(doubly_end_queue_destroy), pass);
-    return;
 }
 
 static void
@@ -100,7 +97,6 @@ unit_test_doubly_end_queue_length(void)
     }
 
     test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
-    return;
 }
 
 static void
@@ -126,9 +122,8 @@ unit_test_doubly_end_queue_empty_p(void)
         RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
         doubly_end_queue_destroy(&queue);
     }
-    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
 
-    return;
+    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
 }
 
 static void
@@ -157,7 +152,6 @@ unit_test_doubly_end_queue_head_enter(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_head_enter), pass);
-    return;
 }
 
 static void
@@ -186,7 +180,6 @@ unit_test_doubly_end_queue_tail_enter(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), pass);
-    return;
 }
 
 static void
@@ -218,7 +211,6 @@ unit_test_doubly_end_queue_head_leave(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_head_leave), pass);
-    return;
 }
 
 static void
@@ -250,8 +242,6 @@ unit_test_doubly_end_queue_tail_leave(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), pass);
-
-    return;
 }
 
 
@@ -282,8 +272,6 @@ unit_test_doubly_end_queue_cleanup(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_cleanup), pass);
-
-    return;
 }
 
 static void
@@ -318,7 +306,5 @@ unit_test_doubly_end_queue_iterate(void)
 
     doubly_end_queue_destroy(&queue);
     test_result_print(SYM_2_STR(doubly_end_queue_iterate), pass);
-
-    return;
 }
 

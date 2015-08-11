@@ -674,16 +674,16 @@ extern struct stacked_queue * stacked_queue_create(void);
 
 
 /* DOUBLY END QUEUE */
-extern struct doubly_end_queue * doubly_end_queue_create(void);
-extern void doubly_end_queue_destroy(struct doubly_end_queue **queue);
-extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 extern bool doubly_end_queue_empty_p(struct doubly_end_queue *queue);
+extern void doubly_end_queue_destroy(struct doubly_end_queue **queue);
 extern void doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
 extern void doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
-extern void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
-extern void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
 extern void doubly_end_queue_cleanup(struct doubly_end_queue *queue);
 extern void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
+extern void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
+extern void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
+extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
+extern struct doubly_end_queue * doubly_end_queue_create(void);
 
 /* END OF DOUBLY END QUEUE */
 #endif
