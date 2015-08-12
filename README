@@ -49,7 +49,8 @@ For all data structures, it has nice(priority) of node, or do not has nice.
        1. some data sturcture organized without node concept.
        2. these API has no conventions, case by case.
        3. implemented:
-           a. minimal heap.
+           a. minimal heap
+           b. maximal heap
            b. array stack
            c. linked stack
            d. array queue
@@ -81,5 +82,6 @@ The following data structure implemented in this project.
         b. open addressing hash
    6. heap
         a. minimal heap
+        b. maximal heap
 
 END
