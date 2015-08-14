@@ -118,6 +118,8 @@ mkdir -p $objdir/out/
 # update head file ds.h
 perl src/script/export_api_include.plx
 cp src/inc/ds.h $objdir/out/
+# update module declaration head file
+perl src/script/declaration_generate.plx
 
 function compile_obj() {
   make "ARGV_CFG=$argv_cfg" -f $1Makefile

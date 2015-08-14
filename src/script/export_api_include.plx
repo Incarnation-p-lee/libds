@@ -12,6 +12,7 @@ my @export = ("$incdir/types.h",
               "$incdir/defines.h",
               # data structure modual
               "$srcdir/linked_list/linked_list.h",
+              "$srcdir/linked_list/linked_list_declaration.h",
               "$srcdir/queue/queue.h",
               "$srcdir/stack/stack.h",
               "$srcdir/tree/tree.h",

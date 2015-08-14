@@ -83,7 +83,7 @@ single_linked_list_node_insert_before_internal(struct single_linked_list *cur,
     assert(NULL != cur);
     assert(NULL != node);
 
-    prev = single_linked_list_node_previous(cur);
+    prev = single_linked_list_node_previous_internal(cur);
     assert(NULL != prev);
 
     node->next = prev->next;

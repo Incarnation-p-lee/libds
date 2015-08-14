@@ -9,6 +9,7 @@
 #include "data_structure_defines.h"
 
 #include "linked_list.h"
+#include "linked_list_declaration.h"
 
 #include "impl/linked_list_debug.c"
 #include "impl/doubly_linked_list.c"
