@@ -10,6 +10,7 @@
 #include "data_structure_defines.h"
 
 #include "stack.h"
+#include "stack_declaration.h"
 
 #include "impl/array_stack.c"
 #include "impl/linked_stack.c"

@@ -9,6 +9,7 @@
 #include "data_structure_defines.h"
 
 #include "hash.h"
+#include "hash_declaration.h"
 #include "impl/hashing_table_internal.h"
 
 #include "impl/hashing_table_internal.c"

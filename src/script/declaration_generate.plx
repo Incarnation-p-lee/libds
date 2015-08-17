@@ -7,7 +7,11 @@ my $srcdir = "$base/src";
 my @declarnations;
 
 my @modules = ("$srcdir/linked_list",
-               # "$srcdir/heap",
+               "$srcdir/hash",
+               "$srcdir/queue",
+               "$srcdir/stack",
+               "$srcdir/heap",
+               # "$srcdir/tree",
            );
 
 foreach (@modules) {

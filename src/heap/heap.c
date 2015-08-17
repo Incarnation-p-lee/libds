@@ -10,6 +10,7 @@
 #include "data_structure_defines.h"
 
 #include "heap.h"
+#include "heap_declaration.h"
 
 #include "impl/binary_heap_debug.c"
 #include "impl/binary_heap_order.c"
