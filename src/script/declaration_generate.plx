@@ -11,6 +11,8 @@ my @modules = ("$srcdir/linked_list",
                "$srcdir/queue",
                "$srcdir/stack",
                "$srcdir/heap",
+               "$srcdir/test",
+               # "$srcdir/test/unit_test",
                # "$srcdir/tree",
            );
 
@@ -73,6 +75,7 @@ sub file_scan() {
     while (<IMP>) {
         chomp;
         next if /^$/;
+        next if /:$/;
         if (/^\w/) {
             $body = 0;
         } elsif (/^{/) {

@@ -10,6 +10,7 @@
 #include "data_structure_defines.h"
 
 #include "test.h"
+#include "test_declaration.h"
 #include "test_result_check.h"
 #include "test_performance.h"
 #include "test_performance_set.h"

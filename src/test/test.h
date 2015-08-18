@@ -14,18 +14,4 @@ static struct timeval chk_pnt_end;
 
 static FILE *test_performance_file;
 
-void * malloc_wrap(size_t size);
-void * realloc_wrap(void *ptr, size_t size);
-void free_wrap(void *ptr);
-void memory_trace_print(void);
-void end_of_report_print(void);
-void test_perform(struct option_set *opts);
-
-static void test_result_print(char *name, bool passed);
-static void linked_list_iterate_handler(void *node);
-static void stack_iterate_handler(void *ptr);
-static void queue_iterate_handler(void *ptr);
-static void tree_iterate_handler(void *ptr);
-static inline void test_result_and_performance_print(double variance, bool passed, char *name);
-
 #endif
