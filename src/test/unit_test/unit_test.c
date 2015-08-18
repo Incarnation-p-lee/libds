@@ -22,8 +22,6 @@ unit_test_perform(char *arg)
 
     unit_test_filter_destroy(&filter);
     test_performance_result_writeback(UNIT_TEST_REF_NEW, unit_test_performance);
-
-    return;
 }
 
 void
@@ -34,8 +32,17 @@ unit_test_list(char *arg)
     filter = unit_test_filter_obtain(arg);
     unit_test_layer_table_category_list(unit_test_category, filter);
     unit_test_filter_destroy(&filter);
+}
 
-    return;
+void
+unit_test_iterater_cnt_set(uint32 count)
+{
+    if (!count) {
+        pr_log_info("Invalid iteration count, use default.\n");
+        iteration = DEFAULT_ITERATION_CNT;
+    } else {
+        iteration = count;
+    }
 }
 
 static inline void

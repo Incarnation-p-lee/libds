@@ -558,19 +558,6 @@ struct maximal_heap {
 #endif
 /* END of ./src/inc/defines.h */
 
-/* BEGIN of ./src/linked_list/linked_list.h */
-#ifndef HAVE_LINKED_LIST_H
-#define HAVE_LINKED_LIST_H
-
-#define SKIP_LIST_BOTTOM_IDX  0
-#define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
-#define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
-
-
-
-#endif
-/* END of ./src/linked_list/linked_list.h */
-
 /* BEGIN of ./src/linked_list/linked_list_declaration.h */
 #ifndef LINKED_LIST_DECLARATION_H
 #define LINKED_LIST_DECLARATION_H
@@ -629,17 +616,6 @@ extern void skip_linked_list_node_remove_and_destroy(struct skip_linked_list **l
 #endif
 /* END of ./src/linked_list/linked_list_declaration.h */
 
-/* BEGIN of ./src/queue/queue.h */
-#ifndef HAVE_QUEUE_H
-#define HAVE_QUEUE_H
-
-#define DEFAULT_QUEUE_SPACE_SIZE   128
-#define EXPAND_QUEUE_SPACE_MIN     32
-
-
-#endif
-/* END of ./src/queue/queue.h */
-
 /* BEGIN of ./src/queue/queue_declaration.h */
 #ifndef QUEUE_DECLARATION_H
 #define QUEUE_DECLARATION_H
@@ -681,6 +657,123 @@ extern void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra
 #endif
 /* END of ./src/queue/queue_declaration.h */
 
+/* BEGIN of ./src/stack/stack_declaration.h */
+#ifndef STACK_DECLARATION_H
+#define STACK_DECLARATION_H
+
+
+extern bool array_stack_empty_p(struct array_stack *stack);
+extern bool array_stack_full_p(struct array_stack *stack);
+extern bool linked_stack_empty_p(struct linked_stack *stack);
+extern bool linked_stack_full_p(struct linked_stack *stack);
+extern struct array_stack * array_stack_create(void);
+extern struct linked_stack * linked_stack_create(void);
+extern uint32 array_stack_capacity(struct array_stack *stack);
+extern uint32 array_stack_space_rest(struct array_stack *stack);
+extern uint32 linked_stack_capacity(struct linked_stack *stack);
+extern uint32 linked_stack_space_rest(struct linked_stack *stack);
+extern void * array_stack_pop(struct array_stack *stack);
+extern void * linked_stack_pop(struct linked_stack *stack);
+extern void array_stack_cleanup(struct array_stack *stack);
+extern void array_stack_destroy(struct array_stack **stack);
+extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
+extern void array_stack_push(struct array_stack *stack, void *member);
+extern void array_stack_space_expand(struct array_stack *stack, uint32 extra);
+extern void linked_stack_cleanup(struct linked_stack *stack);
+extern void linked_stack_destroy(struct linked_stack **stack);
+extern void linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
+extern void linked_stack_push(struct linked_stack *stack, void *member);
+extern void linked_stack_space_expand(struct linked_stack *stack, uint32 dim);
+
+#endif
+/* END of ./src/stack/stack_declaration.h */
+
+/* BEGIN of ./src/hash/hash_declaration.h */
+#ifndef HASH_DECLARATION_H
+#define HASH_DECLARATION_H
+
+
+extern struct open_addressing_hash * open_addressing_hash_create(uint32 size);
+extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
+extern struct separate_chain_hash * separate_chain_hash_create(uint32 size);
+extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
+extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 iter);
+extern uint32 hashing_function_polynomial(void *key, uint32 size);
+extern uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
+extern uint32 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash);
+extern void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
+extern void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
+extern void * separate_chain_hash_find(struct separate_chain_hash *hash, void *key);
+extern void * separate_chain_hash_remove(struct separate_chain_hash *hash, void *key);
+extern void open_addressing_hash_destroy(struct open_addressing_hash **hash);
+extern void open_addressing_hash_insert(struct open_addressing_hash **hash, void *key);
+extern void separate_chain_hash_destroy(struct separate_chain_hash **hash);
+extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *key);
+
+#endif
+/* END of ./src/hash/hash_declaration.h */
+
+/* BEGIN of ./src/heap/heap_declaration.h */
+#ifndef HEAP_DECLARATION_H
+#define HEAP_DECLARATION_H
+
+
+extern bool maximal_heap_empty_p(struct maximal_heap *heap);
+extern bool maximal_heap_full_p(struct maximal_heap *heap);
+extern bool minimal_heap_empty_p(struct minimal_heap *heap);
+extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
+extern struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * maximal_heap_node_remove_max(struct maximal_heap *heap);
+extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
+extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
+extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
+extern struct maximal_heap * maximal_heap_create(uint32 capacity);
+extern struct minimal_heap * minimal_heap_create(uint32 capacity);
+extern void maximal_heap_cleanup(struct maximal_heap *heap);
+extern void maximal_heap_destroy(struct maximal_heap **heap);
+extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
+extern void maximal_heap_node_increase_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
+extern void maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice);
+extern void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice);
+extern void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
+extern void minimal_heap_cleanup(struct minimal_heap *heap);
+extern void minimal_heap_destroy(struct minimal_heap **heap);
+extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
+extern void minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
+extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
+extern void minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice);
+extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
+
+#endif
+/* END of ./src/heap/heap_declaration.h */
+
+/* BEGIN of ./src/linked_list/linked_list.h */
+#ifndef HAVE_LINKED_LIST_H
+#define HAVE_LINKED_LIST_H
+
+#define SKIP_LIST_BOTTOM_IDX  0
+#define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
+#define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
+
+
+
+#endif
+/* END of ./src/linked_list/linked_list.h */
+
+/* BEGIN of ./src/queue/queue.h */
+#ifndef HAVE_QUEUE_H
+#define HAVE_QUEUE_H
+
+#define DEFAULT_QUEUE_SPACE_SIZE   128
+#define EXPAND_QUEUE_SPACE_MIN     32
+
+
+#endif
+/* END of ./src/queue/queue.h */
+
 /* BEGIN of ./src/stack/stack.h */
 #ifndef HAVE_STACK_H
 #define HAVE_STACK_H
@@ -721,37 +814,6 @@ extern struct linked_stack * linked_stack_create(void);
 
 #endif
 /* END of ./src/stack/stack.h */
-
-/* BEGIN of ./src/stack/stack_declaration.h */
-#ifndef STACK_DECLARATION_H
-#define STACK_DECLARATION_H
-
-
-extern bool array_stack_empty_p(struct array_stack *stack);
-extern bool array_stack_full_p(struct array_stack *stack);
-extern bool linked_stack_empty_p(struct linked_stack *stack);
-extern bool linked_stack_full_p(struct linked_stack *stack);
-extern struct array_stack * array_stack_create(void);
-extern struct linked_stack * linked_stack_create(void);
-extern uint32 array_stack_capacity(struct array_stack *stack);
-extern uint32 array_stack_space_rest(struct array_stack *stack);
-extern uint32 linked_stack_capacity(struct linked_stack *stack);
-extern uint32 linked_stack_space_rest(struct linked_stack *stack);
-extern void * array_stack_pop(struct array_stack *stack);
-extern void * linked_stack_pop(struct linked_stack *stack);
-extern void array_stack_cleanup(struct array_stack *stack);
-extern void array_stack_destroy(struct array_stack **stack);
-extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
-extern void array_stack_push(struct array_stack *stack, void *member);
-extern void array_stack_space_expand(struct array_stack *stack, uint32 extra);
-extern void linked_stack_cleanup(struct linked_stack *stack);
-extern void linked_stack_destroy(struct linked_stack **stack);
-extern void linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
-extern void linked_stack_push(struct linked_stack *stack, void *member);
-extern void linked_stack_space_expand(struct linked_stack *stack, uint32 dim);
-
-#endif
-/* END of ./src/stack/stack_declaration.h */
 
 /* BEGIN of ./src/tree/tree.h */
 #ifndef HAVE_TREE_H
@@ -849,31 +911,6 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 #endif
 /* END of ./src/hash/hash.h */
 
-/* BEGIN of ./src/hash/hash_declaration.h */
-#ifndef HASH_DECLARATION_H
-#define HASH_DECLARATION_H
-
-
-extern struct open_addressing_hash * open_addressing_hash_create(uint32 size);
-extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
-extern struct separate_chain_hash * separate_chain_hash_create(uint32 size);
-extern struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
-extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 iter);
-extern uint32 hashing_function_polynomial(void *key, uint32 size);
-extern uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
-extern uint32 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash);
-extern void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
-extern void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
-extern void * separate_chain_hash_find(struct separate_chain_hash *hash, void *key);
-extern void * separate_chain_hash_remove(struct separate_chain_hash *hash, void *key);
-extern void open_addressing_hash_destroy(struct open_addressing_hash **hash);
-extern void open_addressing_hash_insert(struct open_addressing_hash **hash, void *key);
-extern void separate_chain_hash_destroy(struct separate_chain_hash **hash);
-extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *key);
-
-#endif
-/* END of ./src/hash/hash_declaration.h */
-
 /* BEGIN of ./src/heap/heap.h */
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
@@ -908,43 +945,6 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 
 #endif
 /* END of ./src/heap/heap.h */
-
-/* BEGIN of ./src/heap/heap_declaration.h */
-#ifndef HEAP_DECLARATION_H
-#define HEAP_DECLARATION_H
-
-
-extern bool maximal_heap_empty_p(struct maximal_heap *heap);
-extern bool maximal_heap_full_p(struct maximal_heap *heap);
-extern bool minimal_heap_empty_p(struct minimal_heap *heap);
-extern bool minimal_heap_full_p(struct minimal_heap *heap);
-extern struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
-extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
-extern struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
-extern struct doubly_linked_list * maximal_heap_node_remove_max(struct maximal_heap *heap);
-extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
-extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
-extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
-extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
-extern struct maximal_heap * maximal_heap_create(uint32 capacity);
-extern struct minimal_heap * minimal_heap_create(uint32 capacity);
-extern void maximal_heap_cleanup(struct maximal_heap *heap);
-extern void maximal_heap_destroy(struct maximal_heap **heap);
-extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
-extern void maximal_heap_node_increase_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
-extern void maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice);
-extern void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice);
-extern void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
-extern void minimal_heap_cleanup(struct minimal_heap *heap);
-extern void minimal_heap_destroy(struct minimal_heap **heap);
-extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
-extern void minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
-extern void minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice);
-extern void minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice);
-extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
-
-#endif
-/* END of ./src/heap/heap_declaration.h */
 
 /* BEGIN of ./src/log/log.h */
 #ifndef LOG_OF_LIBDS_H

@@ -1,6 +1,8 @@
 #ifndef HAVE_UTIL_H
 #define HAVE_UTIL_H
 
+#define DEFAULT_ITERATION_CNT          1024u
+
 struct memory_maps {
     char        name[NAME_LEN];
     uint32      authority;
@@ -16,6 +18,7 @@ struct memory_maps {
 
 struct option_set {
     bool list;
+    uint32 iteration;
     char content[CONTENT_LEN];
 };
 
