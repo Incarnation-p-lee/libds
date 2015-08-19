@@ -22,6 +22,17 @@ unit_test_list(char *arg)
     unit_test_filter_destroy(&filter);
 }
 
+void
+unit_test_iterater_cnt_set(uint32 count)
+{
+    if (!count) {
+        pr_log_info("Invalid iteration count, use default.\n");
+        iteration = DEFAULT_ITERATION_CNT;
+    } else {
+        iteration = count;
+    }
+}
+
 static inline void
 unit_test_layer_table_category_perform(const struct test_layer_table *category,
     struct unit_test_filter *filter)

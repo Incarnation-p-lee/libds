@@ -31,8 +31,8 @@ test_perform(struct option_set *opts)
     } else if (opts->list) {
         unit_test_list(opts->content);
     } else {
+        unit_test_iterater_cnt_set(opts->iteration);
         unit_test_perform(opts->content);
     }
-
-    return;
 }
+

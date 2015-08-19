@@ -22,6 +22,7 @@ struct test_layer_table {
 
 void unit_test_perform(char *arg);
 void unit_test_list(char *arg);
+void unit_test_iterater_cnt_set(uint32 count);
 
 static inline void unit_test_layer_table_category_perform(const struct test_layer_table *category, struct unit_test_filter *filter);
 static inline void unit_test_layer_table_implement_perform(const struct test_layer_table *implement, struct unit_test_filter *filter);

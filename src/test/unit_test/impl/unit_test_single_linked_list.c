@@ -31,7 +31,7 @@ unit_test_single_linked_list_struct_field(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0xf23456fu;
+    loop = test_utilize_iteration();
     sid = 0xfade;
     pass = true;
     tmp = single_linked_list_create();
@@ -60,7 +60,7 @@ unit_test_single_linked_list_create(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0xf23456fu;
+    loop = test_utilize_iteration();
     pass = true;
     while (0 != loop--) {
         tmp = single_linked_list_create();
@@ -86,7 +86,7 @@ unit_test_single_linked_list_node_create(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0xf23456fu;
+    loop = test_utilize_iteration();
     pass = true;
     sid = 0xdeadu;
     while (0 != loop--) {
@@ -114,7 +114,7 @@ unit_test_single_linked_list_node_initial(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x62345678u;
+    loop = test_utilize_iteration();
     pass = true;
     sid = 0xfadeu;
 
@@ -145,7 +145,7 @@ unit_test_single_linked_list_initial(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x22345678u;
+    loop = test_utilize_iteration();
     pass = true;
     tmp = malloc_ds(sizeof(*tmp));
     while (0 != loop--) {
@@ -171,9 +171,9 @@ unit_test_single_linked_list_node_append(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234567u;
+    loop = test_utilize_iteration();
     pass = true;
-    head = unit_test_single_linked_list_sample(0x1A2E, 0x213D);
+    head = unit_test_single_linked_list_sample(0xa1A2E, 0x9213D);
     single_linked_list_node_append(NULL, &pass);
 
     while (0 != loop--) {
@@ -202,9 +202,9 @@ unit_test_single_linked_list_node_previous(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234u;
+    loop = test_utilize_iteration();
     pass = true;
-    head = unit_test_single_linked_list_sample(0xD19AB, 0x72BF3);
+    head = unit_test_single_linked_list_sample(0x9AB, 0xBF3);
     single_linked_list_node_append(head, &pass);
     RESULT_CHECK_pointer(NULL, single_linked_list_node_previous(NULL), &pass);
 
@@ -235,9 +235,10 @@ unit_test_single_linked_list_node_insert_before(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234u;
+    loop = test_utilize_iteration();
+    loop = loop >> 4;
     pass = true;
-    head = unit_test_single_linked_list_sample(0x21F26, 0xBEF19);
+    head = unit_test_single_linked_list_sample(0xa26, 0x239);
     single_linked_list_node_append(head, &pass);
 
     node = single_linked_list_create();
@@ -282,7 +283,8 @@ unit_test_single_linked_list_node_insert_after(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234567u;
+    loop = test_utilize_iteration();
+    loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0xF18AB, 0x82E9C);
     single_linked_list_node_append(head, &pass);
@@ -329,7 +331,7 @@ unit_test_single_linked_list_destroy(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x7234567u;
+    loop = test_utilize_iteration();
     iter = sizes;
     pass = true;
     head = NULL;
@@ -366,15 +368,16 @@ unit_test_single_linked_list_length(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x22345678u;
+    loop = test_utilize_iteration();
+    loop = loop << 7;
     iter = sizes;
     pass = true;
+
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
         head = unit_test_single_linked_list_sample(0xE2AE8, len);
 
         RESULT_CHECK_uint32(len, single_linked_list_length(head), &pass);
-
         single_linked_list_destroy(&head);
     }
 
@@ -399,9 +402,9 @@ unit_test_single_linked_list_node_by_index(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x423u;
+    loop = test_utilize_iteration();
     pass = true;
-    head = unit_test_single_linked_list_sample(0x18FAA, 0xF23A8);
+    head = unit_test_single_linked_list_sample(0xFAA, 0x9A8);
     len = single_linked_list_length(head);
     while (0 != loop--) {
         tmp = single_linked_list_node_by_index(head, 0);
@@ -431,9 +434,10 @@ unit_test_single_linked_list_contains_p(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234u;
+    loop = test_utilize_iteration();
+    loop = loop >> 2;
     pass = true;
-    head = unit_test_single_linked_list_sample(0x81DD2, 0x28AE2);
+    head = unit_test_single_linked_list_sample(0x1DD2, 0x2AE2);
     tmp = single_linked_list_node_next(head);
 
     RESULT_CHECK_bool(true, single_linked_list_contains_p(head, tmp), &pass);
@@ -455,7 +459,7 @@ unit_test_single_linked_list_serialize(void)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 sizes[] = {1, 10, 100, 1000,};
     uint32 *iter;
     uint32 len;
     uint32 index;
@@ -467,9 +471,9 @@ unit_test_single_linked_list_serialize(void)
     iter = sizes;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_single_linked_list_sample(0x829E2, len);
+        head = unit_test_single_linked_list_sample(0x9E2, len);
 
-        loop = 0x3234u;
+        loop = test_utilize_iteration();
         while (0 != loop--) {
             single_linked_list_serialize(head);
         }
@@ -498,7 +502,7 @@ unit_test_single_linked_list_node_copy(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x3234567u;
+    loop = test_utilize_iteration();
     sid = 0xbedu;
     pass = true;
     head = single_linked_list_node_create(&pass, sid);
@@ -529,7 +533,8 @@ unit_test_single_linked_list_node_remove(void)
 
     single_linked_list_node_remove(NULL);
 
-    loop = 0x3234567u;
+    loop = test_utilize_iteration();
+    loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0x431E2, 0x928ED);
     tmp = head;
@@ -563,7 +568,8 @@ unit_test_single_linked_list_node_remove_and_destroy(void)
 
     single_linked_list_node_remove(NULL);
 
-    loop = 0x5234567u;
+    loop = test_utilize_iteration();
+    loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0x31e2, 0x28ed);
     next = head->next;
@@ -591,9 +597,9 @@ unit_test_single_linked_list_iterate(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x1234u;
+    loop = test_utilize_iteration();
     pass = true;
-    head = unit_test_single_linked_list_sample(0x424E2, 0x21F82);
+    head = unit_test_single_linked_list_sample(0x1E2, 0x282);
 
     single_linked_list_iterate(head, &linked_list_iterate_handler);
     single_linked_list_iterate(NULL, &linked_list_iterate_handler);
@@ -624,9 +630,10 @@ unit_test_single_linked_list_merge(void)
 
     TEST_PERFORMANCE_CHECKPOINT;
 
-    loop = 0x4234u;
     pass = true;
+    loop = test_utilize_iteration();
     head = single_linked_list_create();
+
     single_linked_list_node_initial(head, raw, 0x0u);
     tmp = single_linked_list_node_create(raw + 1, 0x0u);
     single_linked_list_node_insert_before(head, tmp);
@@ -647,6 +654,7 @@ unit_test_single_linked_list_merge(void)
     head = single_linked_list_merge(head, head_n);
     RESULT_CHECK_uint32(0x6u, single_linked_list_length(head), &pass);
 
+    loop = loop >> 6;
     while (0 != loop--) {
         head = single_linked_list_merge(head, head_n);
     }
