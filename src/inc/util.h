@@ -1,7 +1,7 @@
 #ifndef HAVE_UTIL_H
 #define HAVE_UTIL_H
 
-#define DEFAULT_ITERATION_CNT          1024u
+#define DEFAULT_ITERATION_CNT          1000000u
 
 struct memory_maps {
     char        name[NAME_LEN];

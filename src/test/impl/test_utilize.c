@@ -23,8 +23,6 @@ test_result_print(char *name, bool passed)
 
     variance = (double)(entry->ref - period) / entry->ref;
     test_result_and_performance_print(variance, passed, name);
-
-    return;
 }
 
 static inline void
@@ -41,8 +39,6 @@ test_result_and_performance_print(double variance, bool passed, char *name)
     } else {
         fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
     }
-
-    return;
 }
 
 void
@@ -53,8 +49,6 @@ memory_trace_print(void)
     printf("    . Realloc %10lu\n", realloc_cnt);
     printf("    . Free    %10lu\n", free_cnt);
     printf("  >> Memory End.\n");
-
-    return;
 }
 
 void
@@ -69,8 +63,6 @@ linked_list_iterate_handler(void *node)
     if (node) {
         *(uint32 *)node = 0xDEADu;
     }
-
-    return;
 }
 
 static void
@@ -79,8 +71,6 @@ stack_iterate_handler(void *ptr)
     if (ptr) {
         *(sint32 *)ptr += 1;
     }
-
-    return;
 }
 
 static void
@@ -89,8 +79,6 @@ queue_iterate_handler(void *ptr)
     if (ptr) {
         *(uint32 *)ptr += 1;
     }
-
-    return;
 }
 
 static void
@@ -102,7 +90,13 @@ tree_iterate_handler(void *ptr)
         tmp = ptr;
         *tmp += 1;
     }
+}
 
-    return;
+static uint32
+test_utilize_iteration(void)
+{
+    assert(0 != iteration);
+
+    return iteration;
 }
 

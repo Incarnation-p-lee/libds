@@ -367,6 +367,7 @@ single_linked_list_merge(struct single_linked_list *m,
         do {
             if (!single_linked_list_contains_p_internal(m, iter)) {
                 new = single_linked_list_node_create(iter->val, iter->sid);
+                // optimization
                 single_linked_list_node_insert_before_internal(m, new);
             }
 

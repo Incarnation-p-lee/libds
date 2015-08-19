@@ -10,7 +10,6 @@
 
 #include "hash.h"
 #include "hash_declaration.h"
-#include "impl/hashing_table_internal.h"
 
 #include "impl/hashing_table_internal.c"
 #include "impl/hashing_table_debug.c"

@@ -27,6 +27,7 @@ static void linked_list_iterate_handler(void *node);
 static void stack_iterate_handler(void *ptr);
 static void queue_iterate_handler(void *ptr);
 static void tree_iterate_handler(void *ptr);
+static uint32 test_utilize_iteration(void);
 static inline void test_result_and_performance_print(double variance, bool passed, char *name);
 
 #endif
