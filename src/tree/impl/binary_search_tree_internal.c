@@ -217,6 +217,18 @@ binary_search_tree_node_chain_swap(struct collision_chain *m,
 }
 
 static inline bool
+binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
+{
+    assert(NULL != node);
+
+    if (node->left && node->right) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline bool
 binary_search_tree_node_leaf_p(struct binary_search_tree *node)
 {
     assert(NULL != node);
@@ -430,3 +442,36 @@ binary_search_tree_iterate_internal(struct binary_search_tree *tree,
     }
 }
 
+static inline struct binary_search_tree *
+binary_search_tree_left_child_find_max(struct binary_search_tree *tree)
+{
+    struct binary_search_tree *left;
+
+    assert(NULL != tree);
+    assert(NULL != tree->left);
+
+    left = tree->left;
+
+    while (NULL != left->right) {
+        left = left->right;
+    }
+
+    return left;
+}
+
+static inline struct binary_search_tree *
+binary_search_tree_right_child_find_min(struct binary_search_tree *tree)
+{
+    struct binary_search_tree *right;
+
+    assert(NULL != tree);
+    assert(NULL != tree->right);
+
+    right = tree->right;
+
+    while (NULL != right->left) {
+        right = right->left;
+    }
+
+    return right;
+}

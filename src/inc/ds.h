@@ -190,7 +190,6 @@ struct collision_chain {
  * binary search tree
  */
 struct binary_search_tree {
-    sint32                    height;
     struct collision_chain    chain;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
@@ -200,6 +199,7 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
+    sint32                    height;
     struct binary_search_tree alias;
 };
 
@@ -413,32 +413,30 @@ struct maximal_heap {
     (assert(tree), ((tree)->chain).link = (v))
 
 /* AVL TREE */
-/*
 #define avl_tree_node_nice(tree) \
-    (assert(tree), (tree)->b_tree.chain.nice)
+    (assert(tree), (tree)->alias.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->b_tree.chain.nice = (v))
+    (assert(tree), (tree)->alias.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_container_of((tree)->b_tree.left))
+    (assert(tree), avl_tree_ptr_container_of(tree->alias.left))
 #define avl_tree_child_left_set(tree, n) \
-    (assert(tree), avl_tree_container_of((tree)->b_tree.left) = &(n)->b_tree)
+    (assert(tree), (tree)->alias.left = (n))
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_container_of((tree)->b_tree.right))
+    (assert(tree), avl_tree_ptr_container_of(tree->alias.right))
 #define avl_tree_child_right_set(tree, n) \
-    (assert(tree), avl_tree_container_of((tree)->b_tree.right) = &(v)->b_tree)
+    (assert(tree), (tree)->alias.right = (n))
 
 #define avl_tree_node_link(tree) \
-    (assert(tree), (tree)->b_tree.chain.link)
+    (assert(tree), (tree)->alias.chain.link)
 #define avl_tree_node_link_set(tree, v) \
-    (assert(tree), (tree)->b_tree.chain.link = (v))
+    (assert(tree), (tree)->alias.chain.link = (v))
 
 #define avl_tree_height(tree) \
     (assert(tree), (tree)->height)
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->height = (v))
-*/
 
 /*
 #define splay_tree_node_nice(tree) \
@@ -543,7 +541,7 @@ struct maximal_heap {
 
 
 #define CONTAINER_OF(ptr, type, member) \
-    (type *)((char *)(ptr) - (char *)(((type *)0)->(member)))
+    (assert(ptr), (type *)((void *)(ptr) - (void *)(&((type *)0)->member)))
 
 #define pr_log_err(msg)             \
     do {                            \
@@ -835,8 +833,6 @@ enum ITER_ORDER {
 
 /* BINARY SEARCH TREE */
 
-/*
-*/
 
 extern bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
 extern void binary_search_tree_initial(struct binary_search_tree *root);
@@ -856,23 +852,21 @@ extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_
 
 
 /* AVL TREE */
-/*
 extern struct avl_tree * avl_tree_create(void);
 extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
-extern void avl_tree_initial(struct avl_tree *root);
+extern void avl_tree_initial(struct avl_tree *tree);
 extern void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
-extern void avl_tree_destroy(struct avl_tree **root);
-extern struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
-extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
-extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
-extern bool avl_tree_node_contains_p(struct avl_tree *root, struct avl_tree *node);
-extern bool avl_tree_balanced_p(struct avl_tree *root);
-extern struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nice);
-extern struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
-extern void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-*/
-
+extern void avl_tree_destroy(struct avl_tree **tree);
+extern struct avl_tree * avl_tree_ptr_container_of(struct binary_search_tree *node);
+extern struct avl_tree * avl_tree_node_find(struct avl_tree *tree, sint64 nice);
+extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
+extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *tree);
+extern bool avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node);
+extern bool avl_tree_balanced_p(struct avl_tree *tree);
+extern struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
+extern void avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice);
+extern struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
+extern void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 /* END OF AVL TREE */
 
 

@@ -9,11 +9,10 @@
 
 #include "tree.h"
 // #include "tree_declaration.h"
-#include "impl/tree_optimize.h"
+#include "tree_optimize.h"
 
 #include "impl/tree_debug.c"
 #include "impl/binary_search_tree_internal.c"
-// #include "impl/binary_search_tree_balance.c"
 #include "impl/binary_search_tree.c"
-// #include "impl/avl_tree.c"
-// #include "impl/splay_tree.c"
+#include "impl/avl_tree.c"
+#include "impl/splay_tree.c"

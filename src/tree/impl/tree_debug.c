@@ -1,23 +1,16 @@
-// #if defined DEBUG
-#if 0
+#if defined DEBUG
 static inline bool
-avl_tree_child_height_sync_with_calculated_p(struct avl_tree *node,
-    sint32 *left, sint32 *right)
+avl_tree_height_sync_with_calculated_p(struct avl_tree *node,
+    sint32 left, sint32 right)
 {
-    struct avl_tree *tmp;
-
     assert(NULL != node);
-    assert(NULL != left);
-    assert(NULL != right);
 
-    tmp = avl_tree_child_left(node);
-    if (*left != binary_search_tree_height_internal(&tmp->b_tree)) {
-        goto MISS_MATCH:
+    if (left != binary_search_tree_height_internal(node->alias.left)) {
+        goto MISS_MATCH;
     }
 
-    tmp = avl_tree_child_right(node);
-    if (*right != binary_search_tree_height_internal(&tmp->b_tree)) {
-        goto MISS_MATCH:
+    if (right != binary_search_tree_height_internal(node->alias.right)) {
+        goto MISS_MATCH;
     }
 
     return true;
@@ -28,19 +21,19 @@ MISS_MATCH:
 }
 
 static inline bool
-avl_tree_single_rotate_left_precondition_p(struct avl_tree *k1)
+avl_tree_single_rotate_left_precondition_p(struct binary_search_tree *k1)
 {
     sint32 left;
     sint32 right;
-    struct avl_tree *k2;
+    struct binary_search_tree *k2;
 
-    k2 = avl_tree_child_left(k1);
+    k2 = k1->left;
 
     assert(NULL != k1);
     assert(NULL != k2);
 
-    avl_tree_height_internal(avl_tree_child_left(k2), &left);
-    avl_tree_height_internal(avl_tree_child_right(k2), &right);
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
 
     if (left < right) {
         return false;
@@ -50,19 +43,19 @@ avl_tree_single_rotate_left_precondition_p(struct avl_tree *k1)
 }
 
 static inline bool
-avl_tree_single_rotate_right_precondition_p(struct avl_tree *k1)
+avl_tree_single_rotate_right_precondition_p(struct binary_search_tree *k1)
 {
     sint32 left;
     sint32 right;
-    struct avl_tree *k2;
-
-    k2 = avl_tree_child_right(k1);
+    struct binary_search_tree *k2;
 
     assert(NULL != k1);
-    assert(NULL != k2);
+    assert(NULL != k1->right);
 
-    avl_tree_height_internal(avl_tree_child_left(k2), &left);
-    avl_tree_height_internal(avl_tree_child_right(k2), &right);
+    k2 = k1->right;
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
 
     if (right < left) {
         return false;
@@ -72,19 +65,19 @@ avl_tree_single_rotate_right_precondition_p(struct avl_tree *k1)
 }
 
 static inline bool
-avl_tree_doubly_rotate_left_precondition_p(struct avl_tree *k1)
+avl_tree_doubly_rotate_left_precondition_p(struct binary_search_tree *k1)
 {
     sint32 left;
     sint32 right;
-    struct avl_tree *k2;
-
-    k2 = avl_tree_child_left(k1);
+    struct binary_search_tree *k2;
 
     assert(NULL != k1);
-    assert(NULL != k2);
+    assert(NULL != k1->left);
 
-    avl_tree_height_internal(avl_tree_child_left(k2), &left);
-    avl_tree_height_internal(avl_tree_child_right(k2), &right);
+    k2 = k1->left;
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
 
     if (left < right) {
         return true;
@@ -94,19 +87,19 @@ avl_tree_doubly_rotate_left_precondition_p(struct avl_tree *k1)
 }
 
 static inline bool
-avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *k1)
+avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
 {
     sint32 left;
     sint32 right;
-    struct avl_tree *k2;
-
-    k2 = avl_tree_child_right(k1);
+    struct binary_search_tree *k2;
 
     assert(NULL != k1);
-    assert(NULL != k2);
+    assert(NULL != k1->right);
 
-    avl_tree_height_internal(avl_tree_child_left(k2), &left);
-    avl_tree_height_internal(avl_tree_child_right(k2), &right);
+    k2 = k1->right;
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
 
     if (left > right) {
         return true;
@@ -116,3 +109,4 @@ avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *k1)
 }
 
 #endif
+

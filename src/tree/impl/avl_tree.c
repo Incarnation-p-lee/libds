@@ -7,8 +7,14 @@ avl_tree_create(void)
     if (!tree) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        tree->alias.height = 0;
-        binary_search_tree_initial_internal(&tree->b_tree);
+        tree->height = 0;
+        tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
+
+        if (!tree->alias.chain.link) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            binary_search_tree_initial_internal(&tree->alias);
+        }
     }
 
     return tree;
@@ -17,17 +23,23 @@ avl_tree_create(void)
 struct avl_tree *
 avl_tree_node_create(void *val, sint64 nice)
 {
-    struct avl_tree *node;
+    struct avl_tree *tree;
 
-    node = malloc_ds(sizeof(*node));
-    if (!node) {
+    tree = malloc_ds(sizeof(*tree));
+    if (!tree) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        node->height = 0;
-        binary_search_tree_node_initial_internal(&node->b_tree, val, nice);
+        tree->height = 0;
+        tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
+
+        if (!tree->alias.chain.link) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            binary_search_tree_node_initial_internal(&tree->alias, val, nice);
+        }
     }
 
-    return node;
+    return tree;
 }
 
 void
@@ -35,9 +47,9 @@ avl_tree_initial(struct avl_tree *tree)
 {
     if (!tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
-    } eles {
-        node->height = 0;
-        binary_search_tree_initial_internal(&node->b_tree);
+    } else {
+        tree->height = 0;
+        binary_search_tree_initial_internal(&tree->alias);
     }
 }
 
@@ -48,7 +60,7 @@ avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
         node->height = 0;
-        binary_search_tree_node_initial_internal(node->b_tree, val, nice);
+        binary_search_tree_node_initial_internal(&node->alias, val, nice);
     }
 }
 
@@ -59,21 +71,22 @@ avl_tree_node_destroy(struct avl_tree *node)
     assert(NULL == avl_tree_child_left(node));
     assert(NULL == avl_tree_child_right(node));
 
-    doubly_linked_list_destroy(&node->b_tree.chain.link);
+    doubly_linked_list_destroy(&node->alias.chain.link);
     free_ds(node);
 }
 
 static inline void
-avl_tree_destroy_internal(struct avl_tree **tree)
+avl_tree_destroy_internal(struct avl_tree *tree)
 {
-    if (*tree && tree) {
+    if (tree) {
         /*
          * destroy node in post iterater order.
          */
-        avl_tree_destroy_internal(&(*tree)->b_tree.left);
-        avl_tree_destroy_internal(&(*tree)->b_tree.right);
-        avl_tree_node_destroy(*tree);
-        *tree = NULL;
+        avl_tree_destroy_internal(avl_tree_child_left(tree));
+        avl_tree_destroy_internal(avl_tree_child_right(tree));
+        avl_tree_child_left_set(tree, NULL);
+        avl_tree_child_right_set(tree, NULL);
+        avl_tree_node_destroy(tree);
     }
 }
 
@@ -83,17 +96,18 @@ avl_tree_destroy(struct avl_tree **tree)
     if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        avl_tree_destroy_internal(tree);
+        avl_tree_destroy_internal(*tree);
+        *tree = NULL;
     }
 }
 
-static inline struct avl_tree *
-avl_tree_container_of(struct binary_search_tree *node)
+struct avl_tree *
+avl_tree_ptr_container_of(struct binary_search_tree *node)
 {
-    if (NULL == node) {
+    if (!node) {
         return NULL;
     } else {
-        return CONTAINER_OF(node, struct avl_tree, b_tree);
+        return CONTAINER_OF(node, struct avl_tree, alias);
     }
 }
 
@@ -106,8 +120,8 @@ avl_tree_node_find(struct avl_tree *tree, sint64 nice)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        found = binary_search_tree_node_find_internal(tree->b_tree, nice);
-        return avl_tree_container_of(found);
+        found = binary_search_tree_node_find_internal(&tree->alias, nice);
+        return avl_tree_ptr_container_of(found);
     }
 }
 
@@ -120,8 +134,8 @@ avl_tree_node_find_min(struct avl_tree *tree)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        found = binary_search_tree_node_find_min_internal(tree->b_tree);
-        return avl_tree_container_of(found);
+        found = binary_search_tree_node_find_min_internal(&tree->alias);
+        return avl_tree_ptr_container_of(found);
     }
 }
 
@@ -134,8 +148,8 @@ avl_tree_node_find_max(struct avl_tree *tree)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        found = binary_search_tree_node_find_max_internal(tree->b_tree);
-        return avl_tree_container_of(found);
+        found = binary_search_tree_node_find_max_internal(&tree->alias);
+        return avl_tree_ptr_container_of(found);
     }
 }
 
@@ -146,8 +160,8 @@ avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return false;
     } else {
-        return binary_search_tree_node_contains_p_internal(&tree->b_tree,
-            &node->b_tree);
+        return binary_search_tree_node_contains_p_internal(&tree->alias,
+            &node->alias);
     }
 }
 
@@ -158,19 +172,17 @@ avl_tree_balanced_internal_p(struct avl_tree *tree)
     sint32 right;
 
     if (tree) {
-        avl_tree_height_internal(&tree->b_tree, &left);
-        avl_tree_height_internal(&tree->b_tree, &right);
+        avl_tree_height_internal(avl_tree_child_left(tree), &left);
+        avl_tree_height_internal(avl_tree_child_right(tree), &right);
 
-        assert(avl_tree_child_height_sync_with_calculated_p(tree, left, right));
+        assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
 
         if (abs(left - right) > 1) {
             return false;
         } else {
-            if (!avl_tree_balanced_internal_p(
-                avl_tree_node_container_of(tree->b_tree.left))) {
+            if (!avl_tree_balanced_internal_p(avl_tree_child_left(tree))) {
                 return false;
-            } else if (!avl_tree_balanced_internal_p(
-                avl_tree_node_container_of(tree->b_tree.right))) {
+            } else if (!avl_tree_balanced_internal_p(avl_tree_child_right(tree))) {
                 return false;
             } else {
                 return true;
@@ -217,26 +229,24 @@ avl_tree_height_update(struct avl_tree *tree)
  *  a1 <-- [inserted node]
  * perform the singe rotation, with left hand.
  */
-static inline struct avl_tree *
-avl_tree_single_rotate_left(struct avl_tree *k1)
+static inline struct binary_search_tree *
+avl_tree_balance_single_rotate_left(struct binary_search_tree *k1)
 {
-    struct avl_tree *k2;
+    struct binary_search_tree *k2;
 
-    k2 = avl_tree_child_left(k1);
-
-    /*
-     * k3 here.
-     */
-    assert(NULL != avl_tree_child_left(k2));
     assert(NULL != k1);
+
+    k2 = k1->left;
+
     assert(NULL != k2);
+    assert(NULL != k2->left);
     assert(avl_tree_single_rotate_left_precondition_p(k1));
 
-    avl_tree_child_left_set(k1, avl_tree_child_right(k2));
-    avl_tree_child_right_set(k2, k1);
+    k1->left = k2->right;
+    k2->right = k1;
 
-    avl_tree_height_update(k1);
-    avl_tree_height_update(k2);
+    avl_tree_height_update(avl_tree_ptr_container_of(k1));
+    avl_tree_height_update(avl_tree_ptr_container_of(k2));
 
     return k2;
 }
@@ -252,26 +262,24 @@ avl_tree_single_rotate_left(struct avl_tree *k1)
  *                a1 <-- [inserted node]
  * perform the singe rotation, with right hand.
  */
-static inline struct avl_tree *
-avl_tree_single_rotate_right(struct avl_tree *k1)
+static inline struct binary_search_tree *
+avl_tree_balance_single_rotate_right(struct binary_search_tree *k1)
 {
-    struct avl_tree *k2;
+    struct binary_search_tree *k2;
 
-    k2 = avl_tree_child_right(k1);
-
-    /*
-     * k3 here.
-     */
-    assert(NULL != avl_tree_child_right(k2));
     assert(NULL != k1);
+
+    k2 = k1->right;
+
     assert(NULL != k2);
+    assert(NULL != k2->right);
     assert(avl_tree_single_rotate_right_precondition_p(k1));
 
-    avl_tree_child_right_set(k1, avl_tree_child_left(k2));
-    avl_tree_child_left_set(k2, k1);
+    k1->right = k2->left;
+    k2->left = k1;
 
-    avl_tree_height_update(k1);
-    avl_tree_height_update(k2);
+    avl_tree_height_update(avl_tree_ptr_container_of(k1));
+    avl_tree_height_update(avl_tree_ptr_container_of(k2));
 
     return k2;
 }
@@ -287,29 +295,30 @@ avl_tree_single_rotate_right(struct avl_tree *k1)
  *       a1 <-- [inserted node]
  * perform the doubly rotation, with left hand.
  */
-static inline struct avl_tree *
-avl_tree_doubly_rotate_left(struct avl_tree *k1)
+static inline struct binary_search_tree *
+avl_tree_balance_doubly_rotate_left(struct binary_search_tree *k1)
 {
-    struct avl_tree *k2;
-    struct avl_tree *k3;
-
-    k2 = avl_tree_child_left(k1);
-    k3 = avl_tree_child_right(k2);
+    struct binary_search_tree *k2;
+    struct binary_search_tree *k3;
 
     assert(NULL != k1);
+
+    k2 = k1->left;
+    k3 = k2->right;
+
     assert(NULL != k2);
     assert(NULL != k3);
     assert(avl_tree_doubly_rotate_left_precondition_p(k1));
 
-    avl_tree_child_right_set(k2, avl_tree_child_left(k3));
-    avl_tree_child_left_set(k1, avl_tree_child_right(k3));
+    k2->right = k3->left;
+    k1->left = k3->right;
 
-    avl_tree_child_left_set(k3, k2);
-    avl_tree_child_right_set(k3, k1);
+    k3->left = k2;
+    k3->right = k1;
 
-    avl_tree_height_update(k1);
-    avl_tree_height_update(k2);
-    avl_tree_height_update(k3);
+    avl_tree_height_update(avl_tree_ptr_container_of(k1));
+    avl_tree_height_update(avl_tree_ptr_container_of(k2));
+    avl_tree_height_update(avl_tree_ptr_container_of(k3));
 
     return k3;
 }
@@ -325,29 +334,30 @@ avl_tree_doubly_rotate_left(struct avl_tree *k1)
  *       a1 <-- [inserted node]
  * perform the doubly rotation, with right hand.
  */
-static inline struct avl_tree *
-avl_tree_doubly_rotate_right(struct avl_tree *k1)
+static inline struct binary_search_tree *
+avl_tree_balance_doubly_rotate_right(struct binary_search_tree *k1)
 {
-    struct avl_tree *k2;
-    struct avl_tree *k3;
-
-    k2 = avl_tree_child_right(k1);
-    k3 = avl_tree_child_left(k2);
+    struct binary_search_tree *k2;
+    struct binary_search_tree *k3;
 
     assert(NULL != k1);
+
+    k2 = k1->right;
+    k3 = k2->left;
+
     assert(NULL != k2);
     assert(NULL != k3);
     assert(avl_tree_doubly_rotate_right_precondition_p(k1));
 
-    avl_tree_child_left_set(k2, avl_tree_child_right(k3));
-    avl_tree_child_right_set(k1, avl_tree_child_left(k3));
+    k2->left = k3->right;
+    k1->right = k3->left;
 
-    avl_tree_child_right_set(k3, k2);
-    avl_tree_child_left_set(k3, k1);
+    k3->right = k2;
+    k3->left = k1;
 
-    avl_tree_height_update(k1);
-    avl_tree_height_update(k2);
-    avl_tree_height_update(k3);
+    avl_tree_height_update(avl_tree_ptr_container_of(k1));
+    avl_tree_height_update(avl_tree_ptr_container_of(k2));
+    avl_tree_height_update(avl_tree_ptr_container_of(k3));
 
     return k3;
 }
@@ -385,45 +395,85 @@ avl_tree_balanced_on_height_p(struct avl_tree *tree)
     return balanced;
 }
 
+static inline void
+avl_tree_balance_remove_rotate_right(struct binary_search_tree **tree,
+    struct binary_search_tree *node)
+{
+    sint32 left;
+    sint32 right;
+    struct binary_search_tree *tmp;
+
+    assert(NULL != tree);
+    assert(NULL != node);
+    assert(!binary_search_tree_node_leaf_p(node->right));
+
+    tmp = node->right;
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->right), &right);
+
+    if (left <= right) {
+        /*
+         * k1
+         *   \
+         *    k2
+         *     \
+         *      k3
+         * Include k2->left == k2->right
+         */
+        *tree = avl_tree_balance_single_rotate_right(*tree);
+    } else {
+        /*
+         * k1
+         *   \
+         *    k2
+         *   /
+         * k3
+         * Only if k2->left > k2->right
+         */
+        *tree = avl_tree_balance_doubly_rotate_right(*tree);
+    }
+}
+
 /*
  * Remove a node with given nice has two child, the node may do one
  * swap operation instead change tree pointers.
  */
-static inline struct avl_tree *
+static inline struct binary_search_tree *
 avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice)
 {
     struct binary_search_tree *node;
     struct binary_search_tree *removed;
-    struct avl_tree *avl_node;
 
-    if (tree && *tree) {
+    if (!tree || !*tree) {
+        return NULL;
+    } else {
         node = *tree;
-        avl_node = avl_tree_container_of(node);
-
         if (nice < node->chain.nice) {
             removed = avl_tree_node_remove_internal(&node->left, nice);
             /* 
              * the left child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_node)) {
-                avl_tree_node_remove_rotate_right(tree, node);
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(node))) {
+                avl_tree_balance_remove_rotate_right(tree, node);
             }
-            avl_tree_height_update(avl_node);
+
+            avl_tree_height_update(avl_tree_ptr_container_of(node));
         } else if (nice > node->chain.nice) {
             removed = avl_tree_node_remove_internal(&node->right, nice);
             /* 
              * the right child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_node)) {
-                avl_tree_node_remove_rotate_left(tree, node);
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(node))) {
+                avl_tree_balance_remove_rotate_left(tree, node);
             }
-            avl_tree_height_update(avl_node);
+            avl_tree_height_update(avl_tree_ptr_container_of(node));
         } else {
             /*
              * find the target nice, strip the node.
              */
             if (binary_search_tree_node_child_doubly_p(node)) {
-                removed = avl_tree_node_child_doubly_strip(node);
+                removed = avl_tree_balance_child_doubly_strip(node);
             } else {
                 binary_search_tree_node_child_lt_doubly_strip(tree, node);
                 removed = node;
@@ -432,8 +482,6 @@ avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice)
 
         return removed;
     }
-
-    return NULL;
 }
 
 /*
@@ -446,38 +494,93 @@ avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice)
 struct avl_tree *
 avl_tree_node_remove(struct avl_tree **tree, sint64 nice)
 {
-    struct avl_tree *removed;
+    struct binary_search_tree *tmp;
+    struct binary_search_tree *removed;
 
     if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        removed = avl_tree_node_remove_internal(tree, nice);
+        tmp = &(*tree)->alias;
+        removed = avl_tree_node_remove_internal(&tmp, nice);
+        *tree = avl_tree_ptr_container_of(tmp);
 
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         }
 
-        return removed;
+        return avl_tree_ptr_container_of(removed);
     }
 }
 
 void
 avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice)
 {
-    struct avl_tree *removed;
+    struct binary_search_tree *tmp;
+    struct binary_search_tree *removed;
 
     if (!tree || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
     } else {
-        removed = avl_tree_node_remove_internal(tree, nice);
+        tmp = &(*tree)->alias;
+        removed = avl_tree_node_remove_internal(&tmp, nice);
+        *tree = avl_tree_ptr_container_of(tmp);
 
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         } else {
-            avl_tree_node_destroy(removed);
+            avl_tree_node_destroy(avl_tree_ptr_container_of(removed));
         }
     }
+}
+
+static inline struct binary_search_tree *
+avl_tree_node_insert_internal(struct binary_search_tree **tree,
+    struct binary_search_tree *node)
+{
+    assert(NULL != tree);
+    assert(NULL != node);
+
+    if (node->chain.nice < (*tree)->chain.nice) {
+        if (!(*tree)->left) {
+            (*tree)->left = node;
+        } else {
+            node = avl_tree_node_insert_internal(&(*tree)->left, node);
+            /* 
+             * the left child-tree.
+             */
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(*tree))) {
+                avl_tree_balance_insert_rotate_left(tree, node);
+            }
+        }
+    } else if (node->chain.nice > (*tree)->chain.nice) {
+        if (!(*tree)->right) {
+            (*tree)->right = node;
+        } else {
+            node = avl_tree_node_insert_internal(&(*tree)->right, node);
+            /* 
+             * the right child-tree.
+             */
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(*tree))) {
+                avl_tree_balance_insert_rotate_right(tree, node);
+            }
+        }
+    } else {
+        /*
+         * insert node exist already.
+         */
+        if (*tree == node) {
+            pr_log_info("Insert node exist, nothing will be done.\n");
+        } else {
+            doubly_linked_list_merge((*tree)->chain.link, node->chain.link);
+        }
+
+        return *tree;
+    }
+
+    avl_tree_height_update(avl_tree_ptr_container_of(*tree));
+
+    return node;
 }
 
 /*
@@ -491,59 +594,30 @@ avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice)
 struct avl_tree *
 avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node)
 {
+    struct binary_search_tree *tmp;
+    struct binary_search_tree *inserted;
+
     if (!tree || !node || !*tree) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
     } else {
-        if (avl_tree_node_nice(node) < avl_tree_node_nice(*tree)) {
-            if (!avl_tree_child_left(*tree)) {
-                avl_tree_child_left_set(*tree, node);
-            } else {
-                node = avl_tree_node_insert(&(*tree)->b_node.avl_left, node);
-                /* 
-                 * the left child-tree.
-                 */
-                if (!avl_tree_balanced_on_height_p(*tree)) {
-                    avl_tree_node_insert_rotate_left(tree, node);
-                }
-            }
-        } else if (avl_tree_node_nice(node) > avl_tree_node_nice(*tree)) {
-            if (!avl_tree_child_right(*tree)) {
-                avl_tree_child_right_set(*tree, node);
-            } else {
-                node = avl_tree_node_insert(&(*tree)->b_node.avl_right, node);
-                /* 
-                 * the right child-tree.
-                 */
-                if (!avl_tree_balanced_on_height_p(*tree)) {
-                    avl_tree_node_insert_rotate_right(tree, node);
-                }
-            }
-        } else {
-            /*
-             * insert node exist alreay.
-             */
-            if (*tree == node) {
-                pr_log_info("Insert node exist, nothing will be done.\n");
-            } else {
-                doubly_linked_list_merge((*tree)->b_node.chain.link,
-                    node->b_node.chain.link);
-            }
-            return *tree;
-        }
+        tmp = &(*tree)->alias;
+        inserted = avl_tree_node_insert_internal(&tmp, &node->alias);
+        *tree = avl_tree_ptr_container_of(tmp);
 
-        avl_tree_height_update(*tree);
-        return node;
+        return avl_tree_ptr_container_of(inserted);
     }
-
-    return NULL;
 }
 
 void
 avl_tree_iterate(struct avl_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    binary_search_tree_iterate(avl_tree_ptr_to_bin(tree), handle, order);
-    return;
+    if (!tree) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        binary_search_tree_iterate(&tree->alias, handle, order);
+    }
 }
 
 static inline void
@@ -554,9 +628,189 @@ avl_tree_height_internal_default(struct avl_tree *node, sint32 *height)
     if (!node) {
         *height = -1;
     } else {
-        *height = node->b_node.height;
+        *height = node->height;
     }
+}
 
-    return;
+static inline void
+avl_tree_balance_remove_rotate_left(struct binary_search_tree **tree,
+    struct binary_search_tree *node)
+{
+    struct binary_search_tree *tmp;
+    sint32 left;
+    sint32 right;
+
+    assert(NULL != tree);
+    assert(NULL != node->left);
+    assert(!binary_search_tree_node_leaf_p(node->left));
+
+    tmp = node->left;
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->right), &right);
+
+    if (left >= right) {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *  /
+         * k3
+         * Include k2->left == k2->right
+         */
+        *tree = avl_tree_balance_single_rotate_left(*tree);
+    } else {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *    \
+         *     k3
+         * Only if k2->left < k2->right
+        */
+        *tree = avl_tree_balance_doubly_rotate_left(*tree);
+    }
+}
+
+
+static inline void
+avl_tree_balance_insert_rotate_left(struct binary_search_tree **tree,
+    struct binary_search_tree *node)
+{
+    assert(NULL != tree);
+    assert(NULL != node);
+
+    if (node->chain.nice < (*tree)->left->chain.nice) {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *  /
+         * k3
+         */
+        *tree = avl_tree_balance_single_rotate_left(*tree);
+    } else {
+        /*
+         *     k1
+         *    /
+         *   k2
+         *    \
+         *     k3
+        */
+        *tree =  avl_tree_balance_doubly_rotate_left(*tree);
+    }
+}
+
+static inline void
+avl_tree_balance_insert_rotate_right(struct binary_search_tree **tree,
+    struct binary_search_tree *node)
+{
+    assert(NULL != tree);
+    assert(NULL != node);
+
+    if (node->chain.nice > (*tree)->right->chain.nice) {
+        /*
+         * k1
+         *   \
+         *    k2
+         *     \
+         *      k3
+         */
+        *tree = avl_tree_balance_single_rotate_right(*tree);
+    } else {
+        /*
+         * k1
+         *   \
+         *    k2
+         *   /
+         * k3
+         */
+        *tree = avl_tree_balance_doubly_rotate_right(*tree);
+    }
+}
+
+static inline struct binary_search_tree *
+avl_tree_balance_child_doubly_strip(struct binary_search_tree *node)
+{
+    sint32 left;
+    sint32 right;
+
+    assert(NULL != node);
+
+    avl_tree_height_internal(avl_tree_ptr_container_of(node->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_container_of(node->right), &right);
+
+    if (left > right) {
+        /* 
+         * left child max node
+          */
+        return avl_tree_balance_child_doubly_strip_from_max(node);
+    } else {
+        /*
+         * right child min node
+         */
+        return avl_tree_balance_child_doubly_strip_from_min(node);
+    }
+}
+
+static inline struct binary_search_tree *
+avl_tree_balance_child_doubly_strip_from_max(struct binary_search_tree *node)
+{
+    struct binary_search_tree *max;
+
+    assert(NULL != node);
+
+    max = binary_search_tree_left_child_find_max(node);
+
+    /* 
+     * 1. exchange node and max.
+     * 2. remove the swapped node from node->left sub-tree.
+     */
+    binary_search_tree_node_collision_chain_swap(&node->chain, &max->chain);
+    avl_tree_node_remove_internal(&node->left, max->chain.nice);
+
+    return max;
+}
+
+static inline struct binary_search_tree *
+avl_tree_balance_child_doubly_strip_from_min(struct binary_search_tree *node)
+{
+    struct binary_search_tree *min;
+
+    assert(NULL != node);
+
+    min = binary_search_tree_right_child_find_min(node);
+
+    /* 
+     * 1. exchange node and mix.
+     * 2. remove the swapped node from node->right sub-tree.
+     */
+    binary_search_tree_node_collision_chain_swap(&node->chain, &min->chain);
+    avl_tree_node_remove_internal(&node->right, min->chain.nice);
+
+    return min;
+}
+
+static inline bool
+avl_tree_balanced_on_height_p_default(struct avl_tree *tree)
+{
+    struct avl_tree *left;
+    struct avl_tree *right;
+    sint32 hght_left;
+    sint32 hght_right;
+
+    assert(NULL != tree);
+
+    left = avl_tree_child_left(tree);
+    right = avl_tree_child_right(tree);
+
+    avl_tree_height_internal(left, &hght_left);
+    avl_tree_height_internal(right, &hght_right);
+
+    if (0x1 < abs(hght_left - hght_right)) {
+        return false;
+    } else {
+        return true;
+    }
 }
 

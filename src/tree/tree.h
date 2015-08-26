@@ -46,22 +46,7 @@ static inline struct binary_search_tree * binary_search_tree_node_remove_interna
 static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_max(struct binary_search_tree **tree);
 static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_min(struct binary_search_tree **tree);
 
-/*
-static inline void binary_search_tree_balanced_node_height(struct binary_search_tree *tree, sint32 *height);
-static inline void binary_search_tree_balanced_remove_rotate_left(struct binary_search_tree **tree, struct binary_search_tree *node);
-static inline void binary_search_tree_balanced_remove_rotate_right(struct binary_search_tree **tree, struct binary_search_tree *node);
-static inline void binary_search_tree_balanced_insert_rotate_left(struct binary_search_tree **tree, struct binary_search_tree *node);
-static inline void binary_search_tree_balanced_insert_rotate_right(struct binary_search_tree **tree, struct binary_search_tree *node);
-static inline void binary_search_tree_balanced_child_lt_doubly_strip(struct binary_search_tree **pre, struct binary_search_tree *node);
-static inline void binary_search_tree_balanced_height_update(struct avl_tree *tree);
-static inline bool binary_search_tree_balanced_on_height_p(struct binary_search_tree *tree);
-static inline bool binary_search_tree_balanced_on_height_p_default(struct avl_tree *tree);
-static inline struct binary_search_tree * binary_search_tree_balanced_child_doubly_strip_from_max( struct binary_search_tree *node);
-static inline struct binary_search_tree * binary_search_tree_node_child_doubly_strip_from_min( struct binary_search_tree *node);
-static inline struct binary_search_tree * binary_search_tree_balanced_remove(struct binary_search_tree **tree, sint64 nice);
-static inline struct binary_search_tree ** binary_search_tree_balanced_right_child_find_min_with_parent( struct binary_search_tree *tree, struct binary_search_tree **min);
-static inline struct binary_search_tree ** binary_search_tree_balanced_left_child_find_max_with_parent( struct binary_search_tree *tree, struct binary_search_tree **max);
-*/
+static inline bool avl_tree_height_sync_with_calculated_p(struct avl_tree *node, sint32 left, sint32 right);
 
 bool binary_search_tree_node_contains_p(struct binary_search_tree *root, struct binary_search_tree *node);
 void binary_search_tree_initial(struct binary_search_tree *root);
@@ -81,50 +66,43 @@ struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_
 
 
 /* AVL TREE */
-/*
 struct avl_tree * avl_tree_create(void);
 struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
-void avl_tree_initial(struct avl_tree *root);
+void avl_tree_initial(struct avl_tree *tree);
 void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
-void avl_tree_destroy(struct avl_tree **root);
-struct avl_tree * avl_tree_node_find(struct avl_tree *root, sint64 nice);
-struct avl_tree * avl_tree_node_find_min(struct avl_tree *root);
-struct avl_tree * avl_tree_node_find_max(struct avl_tree *root);
-bool avl_tree_node_contains_p(struct avl_tree *root, struct avl_tree *node);
-bool avl_tree_balanced_p(struct avl_tree *root);
-struct avl_tree * avl_tree_node_remove(struct avl_tree **root, sint64 nice);
-struct avl_tree * avl_tree_node_insert(struct avl_tree **root, struct avl_tree *node);
-void avl_tree_iterate(struct avl_tree *root, void (*handle)(void *), enum ITER_ORDER order);
-
-static inline bool avl_tree_balanced_internal_p(struct avl_tree *node);
-static inline bool avl_tree_node_leaf_p(struct avl_tree *node);
-static inline bool avl_tree_node_child_doubly_p(struct avl_tree *node);
-static inline bool avl_tree_balanced_on_height_p(struct avl_tree *root);
-static inline void avl_tree_node_collision_chain_swap(struct collision_chain *m_node, struct collision_chain *n_node);
-static inline void avl_tree_node_collision_chain_copy(struct collision_chain *tgt, struct collision_chain *node);
-static inline void avl_tree_height_internal_default(struct avl_tree *node, sint32 *height);
-static inline void avl_tree_child_height_sync_with_calculated(struct avl_tree *root, sint32 *left, sint32 *right);
-static inline void avl_tree_balanced_on_height_internal_default(struct avl_tree *node, bool *b);
-static inline void avl_tree_node_child_clean(struct avl_tree *node);
 static inline void avl_tree_node_destroy(struct avl_tree *node);
-static inline void avl_tree_height_update(struct avl_tree *node);
-static inline void avl_tree_node_remove_rotate_left(struct avl_tree **root, struct avl_tree *node);
-static inline void avl_tree_node_remove_rotate_right(struct avl_tree **root, struct avl_tree *node);
-static inline void avl_tree_node_insert_rotate_left(struct avl_tree **root, struct avl_tree *node);
-static inline void avl_tree_node_insert_rotate_right(struct avl_tree **root, struct avl_tree *node);
-static inline void avl_tree_node_child_lt_doubly_strip(struct avl_tree **pre, struct avl_tree *node);
-static inline struct avl_tree * avl_tree_single_rotate_left(struct avl_tree *k1);
-static inline struct avl_tree * avl_tree_single_rotate_right(struct avl_tree *k1);
-static inline struct avl_tree * avl_tree_doubly_rotate_left(struct avl_tree *k1);
-static inline struct avl_tree * avl_tree_doubly_rotate_right(struct avl_tree *k1);
-static inline struct avl_tree * avl_tree_node_child_doubly_strip(struct avl_tree *node);
-static inline struct avl_tree * avl_tree_node_child_doubly_strip_from_max(struct avl_tree *node);
-static inline struct avl_tree * avl_tree_node_child_doubly_strip_from_min(struct avl_tree *node);
-static inline struct avl_tree * avl_tree_node_remove_internal(struct avl_tree **root, sint64 nice);
-static inline struct avl_tree ** avl_tree_left_child_find_max_with_parent(struct avl_tree *root, struct avl_tree **max);
-static inline struct avl_tree ** avl_tree_right_child_find_min_with_parent(struct avl_tree *root, struct avl_tree **min);
-*/
-
+static inline void avl_tree_destroy_internal(struct avl_tree *tree);
+void avl_tree_destroy(struct avl_tree **tree);
+struct avl_tree * avl_tree_ptr_container_of(struct binary_search_tree *node);
+struct avl_tree * avl_tree_node_find(struct avl_tree *tree, sint64 nice);
+struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
+struct avl_tree * avl_tree_node_find_max(struct avl_tree *tree);
+bool avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node);
+static inline bool avl_tree_balanced_internal_p(struct avl_tree *tree);
+bool avl_tree_balanced_p(struct avl_tree *tree);
+static inline void avl_tree_height_update(struct avl_tree *tree);
+static inline struct binary_search_tree * avl_tree_balance_single_rotate_left(struct binary_search_tree *k1);
+static inline struct binary_search_tree * avl_tree_balance_single_rotate_right(struct binary_search_tree *k1);
+static inline struct binary_search_tree * avl_tree_balance_doubly_rotate_left(struct binary_search_tree *k1);
+static inline struct binary_search_tree * avl_tree_balance_doubly_rotate_right(struct binary_search_tree *k1);
+static inline void avl_tree_balanced_on_height_internal_default(struct avl_tree *tree, bool *b);
+static inline bool avl_tree_balanced_on_height_p(struct avl_tree *tree);
+static inline void avl_tree_balance_remove_rotate_right(struct binary_search_tree **tree, struct binary_search_tree *node);
+static inline struct binary_search_tree * avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice);
+struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
+void avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice);
+static inline struct binary_search_tree * avl_tree_node_insert_internal(struct binary_search_tree **tree, struct binary_search_tree *node);
+struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
+void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+static inline void avl_tree_height_internal_default(struct avl_tree *node, sint32 *height);
+static inline void avl_tree_balance_remove_rotate_left(struct binary_search_tree **tree, struct binary_search_tree *node);
+static inline void avl_tree_balance_insert_rotate_left(struct binary_search_tree **tree, struct binary_search_tree *node);
+static inline void avl_tree_balance_insert_rotate_right(struct binary_search_tree **tree, struct binary_search_tree *node);
+static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip(struct binary_search_tree *node);
+static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip_from_max(struct binary_search_tree *node);
+static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip_from_min(struct binary_search_tree *node);
+static inline bool avl_tree_balanced_on_height_p_default(struct avl_tree *tree);
+static inline void avl_tree_height_update(struct avl_tree *tree);
 /* END OF AVL TREE */
 
 

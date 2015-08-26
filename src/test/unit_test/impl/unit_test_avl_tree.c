@@ -20,12 +20,12 @@ unit_test_avl_tree_struct_field(void)
         avl_tree_node_nice_set(tmp, nice);
         RESULT_CHECK_sint64(nice, avl_tree_node_nice(tmp), &pass);
 
-        avl_tree_child_left_set(tree, tmp);
+        avl_tree_child_left_set(tree, &tmp->alias);
         RESULT_CHECK_pointer(tmp, avl_tree_child_left(tree), &pass);
 
         nice = 0xfade;
         tmp = avl_tree_node_create(NULL, nice);
-        avl_tree_child_right_set(tree, tmp);
+        avl_tree_child_right_set(tree, &tmp->alias);
         RESULT_CHECK_pointer(tmp, avl_tree_child_right(tree), &pass);
 
         height = 0xbed;

@@ -144,7 +144,6 @@ struct collision_chain {
  * binary search tree
  */
 struct binary_search_tree {
-    sint32                    height;
     struct collision_chain    chain;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
@@ -154,6 +153,7 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
+    sint32                    height;
     struct binary_search_tree alias;
 };
 
