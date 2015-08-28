@@ -10,18 +10,19 @@
 #define M_SHARED      0x1u << 4
 #define M_PRIVATE     0x1u << 5
 
-void memory_maps_obtain(void);
-struct memory_maps * memory_maps_entry_find(char *name);
-struct option_set * option_process(uint32 argc, char **argv);
-uint32 random_uint32_with_limit(uint32 lmt);
+const uint32 fixed_prime[] = {
+    3,             7,      11,      17,      23,      29,      37,      47,
+    59,           71,      89,     107,     131,     163,     197,     239,
+    293,         353,     431,     521,     631,     761,     919,    1103,
+    1327,       1597,    1931,    2333,    2801,    3371,    4049,    4861,
+    5839,       7013,    8419,   10103,   12143,   14591,   17519,   21023,
+    25229,     30293,   36353,   43627,   52361,   62851,   75431,   90523,
+    108631,   130363,  156437,  187751,  225307,  270371,  324449,  389357,
+    467237,   560689,  672827,  807403,  968897, 1162687, 1395263, 1674319,
+    2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369,
+};
 
-static inline FILE * memory_maps_proc_read(void);
-static inline void memory_maps_filter_process(FILE *maps);
-static inline void memory_maps_one_line_process(char *line, uint32 len);
-static inline char * memory_maps_one_line_map_name(char *line);
-static inline uint32 memory_maps_one_line_map_authority(char *line);
-static inline void memory_maps_one_line_map_boundary(char *line, struct memory_maps *map);
-static inline void option_one_parameter_process(struct option_set *opt, char *arg);
+#define FIXED_PRIME_MAX fixed_prime[array_sizeof(fixed_prime) - 1]
 
 /*
  * section info of binary

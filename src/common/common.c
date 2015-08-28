@@ -9,8 +9,8 @@
 #include "defines.h"
 #include "util.h"
 
-#include "prime.h"
 #include "common.h"
+#include "common_declaration.h"
 
 #include "impl/memory_maps.c"
 #include "impl/prime.c"

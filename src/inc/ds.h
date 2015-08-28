@@ -926,8 +926,6 @@ extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
 #ifndef LOG_OF_LIBDS_H
 #define LOG_OF_LIBDS_H
 
-extern void libds_log_print(enum log_level lvl, const char *msg);
-
 #endif
 /* END of ./src/log/log.h */
 #endif /* END OF FILE */
