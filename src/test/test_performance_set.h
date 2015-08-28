@@ -150,6 +150,7 @@ static struct test_performance unit_test_performance[] = {
     {"avl_tree_balanced_p",                        0x0u, 0x0u},
     {"avl_tree_node_insert",                       0x0u, 0x0u},
     {"avl_tree_node_remove",                       0x0u, 0x0u},
+    {"avl_tree_node_remove_and_destroy",           0x0u, 0x0u},
     {"avl_tree_iterate",                           0x0u, 0x0u},
 
     {"splay_tree_struct_field",                    0x0u, 0x0u},
@@ -165,6 +166,7 @@ static struct test_performance unit_test_performance[] = {
     {"splay_tree_height",                          0x0u, 0x0u},
     {"splay_tree_node_insert",                     0x0u, 0x0u},
     {"splay_tree_node_remove",                     0x0u, 0x0u},
+    {"splay_tree_node_remove_and_destroy",         0x0u, 0x0u},
     {"splay_tree_iterate",                         0x0u, 0x0u},
 
     {"separate_chain_hash_struct_field",           0x0u, 0x0u},

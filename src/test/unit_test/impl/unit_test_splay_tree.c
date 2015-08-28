@@ -19,13 +19,13 @@ unit_test_splay_tree_struct_field(void)
         splay_tree_node_nice_set(tmp, nice);
         RESULT_CHECK_sint64(nice, splay_tree_node_nice(tmp), &pass);
 
-        splay_tree_child_left_set(tree, tmp);
+        tree->alias.left = &tmp->alias;
         RESULT_CHECK_pointer(tmp, splay_tree_child_left(tree), &pass);
     }
 
     nice = 0xfade;
     tmp = splay_tree_node_create(NULL, nice);
-    splay_tree_child_right_set(tree, tmp);
+    tree->alias.right = &tmp->alias;
     RESULT_CHECK_pointer(tmp, splay_tree_child_right(tree), &pass);
     splay_tree_destroy(&tree);
 
@@ -438,19 +438,22 @@ unit_test_splay_tree_node_remove(void)
     tree = unit_test_splay_tree_sample(0x2F4321, 0x32ABCD);
     tmp = tree;
     nice = splay_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, splay_tree_node_remove(&tree, nice), &pass);
+    tmp = splay_tree_node_remove(&tree, nice);
+    RESULT_CHECK_sint64(nice, splay_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
     splay_tree_destroy(&tmp);
 
     tmp = splay_tree_node_find_min(&tree);
     nice = splay_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, splay_tree_node_remove(&tree, nice), &pass);
+    tmp = splay_tree_node_remove(&tree, nice);
+    RESULT_CHECK_sint64(nice, splay_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
     splay_tree_destroy(&tmp);
 
     tmp = splay_tree_node_find_max(&tree);
     nice = splay_tree_node_nice(tmp);
-    RESULT_CHECK_pointer(tmp, splay_tree_node_remove(&tree, nice), &pass);
+    tmp = splay_tree_node_remove(&tree, nice);
+    RESULT_CHECK_sint64(nice, splay_tree_node_nice(tmp), &pass);
     RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
     splay_tree_destroy(&tmp);
 
@@ -467,7 +470,46 @@ unit_test_splay_tree_node_remove(void)
     splay_tree_destroy(&tmp);
 
     test_result_print(SYM_2_STR(splay_tree_node_remove), pass);
-    return;
+}
+
+static void
+unit_test_splay_tree_node_remove_and_destroy(void)
+{
+    bool pass;
+    sint64 nice;
+    struct splay_tree *tree;
+    struct splay_tree *tmp;
+
+    TEST_PERFORMANCE_CHECKPOINT;
+
+    pass = true;
+    tree = NULL;
+
+    splay_tree_node_remove_and_destroy(&tree, 0x0);
+
+    tree = unit_test_splay_tree_sample(0x2F4321, 0x32ABCD);
+    tmp = tree;
+    nice = splay_tree_node_nice(tmp);
+    splay_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
+
+    tmp = splay_tree_node_find_min(&tree);
+    nice = splay_tree_node_nice(tmp);
+    splay_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
+
+    tmp = splay_tree_node_find_max(&tree);
+    nice = splay_tree_node_nice(tmp);
+    splay_tree_node_remove_and_destroy(&tree, nice);
+    RESULT_CHECK_pointer(NULL, splay_tree_node_find(&tree, nice), &pass);
+
+    tmp = splay_tree_node_create(&pass, 0x7FFFFF);
+    nice = splay_tree_node_nice(tmp);
+    splay_tree_node_remove_and_destroy(&tree, nice);
+    splay_tree_destroy(&tree);
+    splay_tree_destroy(&tmp);
+
+    test_result_print(SYM_2_STR(splay_tree_node_remove_and_destroy), pass);
 }
 
 static void

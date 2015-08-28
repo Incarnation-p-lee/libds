@@ -84,8 +84,8 @@ avl_tree_destroy_internal(struct avl_tree *tree)
          */
         avl_tree_destroy_internal(avl_tree_child_left(tree));
         avl_tree_destroy_internal(avl_tree_child_right(tree));
-        avl_tree_child_left_set(tree, NULL);
-        avl_tree_child_right_set(tree, NULL);
+        tree->alias.left = NULL;
+        tree->alias.right = NULL;
         avl_tree_node_destroy(tree);
     }
 }

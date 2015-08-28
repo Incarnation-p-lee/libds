@@ -7,12 +7,12 @@
     #define LOCATION_PRINT
 #endif
 
-#define RESULT_CHECK_pointer(get, expect, pass)                \
-    do {                                                       \
-        if (!test_result_check_pointer_p(get, expect, pass)) { \
-            LOCATION_PRINT;                                    \
-            assert(false);                                     \
-        }                                                      \
+#define RESULT_CHECK_pointer(get, expect, pass)                   \
+    do {                                                          \
+        if (!test_result_check_pointer_p(get, expect, pass)) {    \
+            LOCATION_PRINT;                                       \
+            assert(false);                                        \
+        }                                                         \
     } while (false)
 
 #define RESULT_CHECK_bool(get, expect, pass)                \

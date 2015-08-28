@@ -3,7 +3,15 @@ test_result_check_pointer_p(void *get, void *expect, bool *pass)
 {
     bool tmp;
 
+    assert(NULL != pass);
+
     tmp = (get == expect);
+
+    if (!tmp) {
+        fprintf(stdout, "[32mexpected[0m: %p\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", get);
+    }
+
     *pass = *pass && tmp;
 
     return tmp;

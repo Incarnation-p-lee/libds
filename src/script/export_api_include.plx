@@ -11,17 +11,18 @@ my @export = ("$incdir/types.h",
               "$incdir/data_structure_defines.h",
               "$incdir/defines.h",
               # data structure modual
-              "$srcdir/linked_list/linked_list_declaration.h",
-              "$srcdir/queue/queue_declaration.h",
-              "$srcdir/stack/stack_declaration.h",
-              "$srcdir/hash/hash_declaration.h",
-              "$srcdir/heap/heap_declaration.h",
               "$srcdir/linked_list/linked_list.h",
+              "$srcdir/linked_list/linked_list_declaration.h",
               "$srcdir/queue/queue.h",
+              "$srcdir/queue/queue_declaration.h",
               "$srcdir/stack/stack.h",
+              "$srcdir/stack/stack_declaration.h",
               "$srcdir/tree/tree.h",
+              "$srcdir/tree/tree_declaration.h",
               "$srcdir/hash/hash.h",
+              "$srcdir/hash/hash_declaration.h",
               "$srcdir/heap/heap.h",
+              "$srcdir/heap/heap_declaration.h",
               "$srcdir/log/log.h",);
 my $out = "$base/src/inc/ds.h";
 

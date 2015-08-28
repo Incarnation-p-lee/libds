@@ -141,7 +141,9 @@ binary_search_tree_node_remove_and_destroy(struct binary_search_tree **tree,
     } else {
         removed = binary_search_tree_node_remove_internal(tree, nice);
 
-        if (removed) {
+        if (NULL == removed) {
+            pr_log_warn("Failed to find the node in given tree.\n");
+        } else {
             binary_search_tree_node_destroy(removed);
         }
     }

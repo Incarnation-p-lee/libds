@@ -155,13 +155,9 @@
 
 #define avl_tree_child_left(tree) \
     (assert(tree), avl_tree_ptr_container_of(tree->alias.left))
-#define avl_tree_child_left_set(tree, n) \
-    (assert(tree), (tree)->alias.left = (n))
 
 #define avl_tree_child_right(tree) \
     (assert(tree), avl_tree_ptr_container_of(tree->alias.right))
-#define avl_tree_child_right_set(tree, n) \
-    (assert(tree), (tree)->alias.right = (n))
 
 #define avl_tree_node_link(tree) \
     (assert(tree), (tree)->alias.chain.link)
@@ -173,31 +169,20 @@
 #define avl_tree_height_set(tree, v) \
     (assert(tree), (tree)->height = (v))
 
-/*
+/* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
-    (assert(tree), (tree)->b_node.chain.nice)
+    (assert(tree), (tree)->alias.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->b_node.chain.nice = (v))
+    (assert(tree), (tree)->alias.chain.nice = (v))
 
 #define splay_tree_child_left(tree) \
-    (assert(tree), (tree)->b_node.splay_left)
-#define splay_tree_child_left_set(tree, v) \
-    (assert(tree), (tree)->b_node.splay_left = (v))
+    (assert(tree), splay_tree_ptr_container_of(tree->alias.left))
 
 #define splay_tree_child_right(tree) \
-    (assert(tree), (tree)->b_node.splay_right)
-#define splay_tree_child_right_set(tree, v) \
-    (assert(tree), (tree)->b_node.splay_right = (v))
+    (assert(tree), splay_tree_ptr_container_of(tree->alias.right))
 
 #define splay_tree_node_link(tree) \
-    (assert(tree), (tree)->b_node.chain.link)
-
-#define splay_tree_ptr_to_bin(tree) \
-    ((struct binary_search_tree *)(tree))
-
-#define splay_tree_ptr_to_splay(tree) \
-    ((struct splay_tree *)(tree))
-*/
+    (assert(tree), (tree)->alias.chain.link)
 
 /* HASHING TABLE */
 #define hashing_table_size(hash) \

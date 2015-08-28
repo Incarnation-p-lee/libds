@@ -12,8 +12,8 @@ my @modules = ("$srcdir/linked_list",
                "$srcdir/stack",
                "$srcdir/heap",
                "$srcdir/test",
-               # "$srcdir/test/unit_test",
-               # "$srcdir/tree",
+               "$srcdir/tree",
+               "$srcdir/test/unit_test",
            );
 
 foreach (@modules) {
