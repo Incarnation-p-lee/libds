@@ -36,5 +36,5 @@ tags
 obj_out
 *.gcno
 *tmp*
-performance/profile/*
+performance/profile/
 *.log
