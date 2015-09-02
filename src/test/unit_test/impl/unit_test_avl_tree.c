@@ -589,6 +589,7 @@ unit_test_avl_tree_node_remove_and_destroy(void)
 
     RESULT_CHECK_pointer(NULL, avl_tree_node_find(tree, nice), &pass);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    avl_tree_destroy(&tmp);
     avl_tree_destroy(&tree);
 
     test_result_print(SYM_2_STR(avl_tree_node_remove_and_destroy), pass);
