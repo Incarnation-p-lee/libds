@@ -30,13 +30,13 @@
             "mov 0x18(%0), %%rdi\n\t"                       \
             "cmp $0x0, %%rdi\n\t"                           \
             "cmove %1, %%rdi\n\t"                           \
-            "cmovne 0x10(%%rdi), %%edi\n\t"                 \
+            "cmovne -0x8(%%rdi), %%edi\n\t"                 \
             "cmove %%ecx, %%edi\n\t"                        \
             /* left node height */                          \
             "mov 0x20(%0), %%rsi\n\t"                       \
             "cmp $0x0, %%rsi\n\t"                           \
             "cmove %1, %%rsi\n\t"                           \
-            "cmovne 0x10(%%rsi), %%esi\n\t"                 \
+            "cmovne -0x8(%%rsi), %%esi\n\t"                 \
             "cmove %%ecx, %%esi\n\t"                        \
             /* initial const variable */                    \
             "mov $0x0, %%ebx\n\t"                           \
@@ -146,8 +146,7 @@
     #define avl_tree_child_height_sync(root, left, right)
 
     #define avl_tree_balanced_on_height_internal(node, b) \
-        avl_tree_balanced_on_height_internal_default(node, b)
-        // avl_tree_balanced_on_height_internal_optimize(node, b)
+        avl_tree_balanced_on_height_internal_optimize(node, b)
 #else
     #define avl_tree_height_internal(node, height) \
         avl_tree_height_internal_default(node, height)
