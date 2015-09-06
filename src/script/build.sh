@@ -7,6 +7,7 @@ lib_build=0
 root_dir=`pwd | xargs basename`
 lib_dir="`pwd`/src/lib"
 base=`pwd`
+debug=1
 
 
 if [ "$root_dir" != "libds" ]
@@ -54,9 +55,11 @@ do
       platform="1"
     ;;
     "DEBUG=1")
+      debug=1
       argv_cfg="$argv_cfg -g -DDEBUG"
     ;;
     "DEBUG=0")
+      debug=0
       argv_cfg="$argv_cfg -o3 -ofast -DNDEBUG -fprofile-use=$base/performance/profile"
     ;;
     "CODE_COVERAGE=1")
@@ -119,7 +122,8 @@ mkdir -p $objdir/out/
 perl src/script/export_api_include.plx
 cp src/inc/ds.h $objdir/out/
 # update module declaration head file
-perl src/script/declaration_generate.plx
+echo "$debug version = $debug"
+perl src/script/declaration_generate.plx $debug
 
 function compile_obj() {
   make "ARGV_CFG=$argv_cfg" -f $1Makefile

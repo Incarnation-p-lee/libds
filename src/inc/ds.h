@@ -515,14 +515,12 @@ struct maximal_heap {
 
 #define true                 1
 #define false                0
-#define assert_not_reached() assert(false)
 
 #define SYM_2_STR(symbol)    (#symbol)
 #define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
 
 #define NAME_LEN             128
 #define CONTENT_LEN          NAME_LEN
-
 
 
 #define CONTAINER_OF(ptr, type, member) \

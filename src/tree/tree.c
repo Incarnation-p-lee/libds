@@ -11,7 +11,10 @@
 #include "tree_declaration.h"
 #include "tree_optimize.h"
 
+#if defined DEBUG
 #include "impl/tree_debug.c"
+#endif
+
 #include "impl/binary_search_tree_internal.c"
 #include "impl/binary_search_tree.c"
 #include "impl/avl_tree.c"

@@ -1,5 +1,3 @@
-#if defined(DEBUG)
-
 static inline bool
 binary_heap_node_contains_with_hole_p(struct binary_heap *heap, sint64 nice)
 {
@@ -151,4 +149,3 @@ binary_heap_percolate_direction_consistent_with_ordering_p(struct binary_heap *h
     }
 }
 
-#endif

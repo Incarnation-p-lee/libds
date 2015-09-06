@@ -1,4 +1,3 @@
-#if defined DEBUG
 static inline bool
 avl_tree_height_sync_with_calculated_p(struct avl_tree *node,
     sint32 left, sint32 right)
@@ -107,6 +106,4 @@ avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
         return false;
     }
 }
-
-#endif
 

@@ -3,7 +3,6 @@
 
 #define true                 1
 #define false                0
-#define assert_not_reached() assert(false)
 
 #define SYM_2_STR(symbol)    (#symbol)
 #define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
@@ -12,25 +11,21 @@
 #define CONTENT_LEN          NAME_LEN
 
 #ifdef DEBUG
-    #define pr_log_info(msg)    libds_log_print(INFO, msg);
-    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
-    #define pr_log_debug(msg)   libds_log_print(DBUG, msg);
+    #define malloc_ds            malloc_wrap
+    #define realloc_ds           realloc_wrap
+    #define free_ds              free_wrap
+    #define pr_log_info(msg)     libds_log_print(INFO, msg);
+    #define pr_log_warn(msg)     libds_log_print(WARN, msg);
+    #define pr_log_debug(msg)    libds_log_print(DBUG, msg);
+    #define assert_not_reached() assert(false)
 #else
+    #define malloc_ds            malloc
+    #define realloc_ds           realloc
+    #define free_ds              free
     #define pr_log_info(msg)
-    #define pr_log_warn(msg)    libds_log_print(WARN, msg);
+    #define pr_log_warn(msg)     libds_log_print(WARN, msg);
     #define pr_log_debug(msg)
-#endif
-
-#ifdef DEBUG
-    #define DEBUG_CODE(x)  x
-    #define malloc_ds      malloc_wrap
-    #define realloc_ds     realloc_wrap
-    #define free_ds        free_wrap
-#else
-    #define DEBUG_CODE(x)
-    #define malloc_ds      malloc
-    #define realloc_ds     realloc
-    #define free_ds        free
+    #define assert_not_reached() ((*(uint32 *)0) = 0xdeadu)
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \

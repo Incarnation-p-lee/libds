@@ -38,6 +38,7 @@ binary_heap_order_percolate_down_nice_limit(void *ordering)
         return HEAP_NICE_LOWER_LMT;
     } else {
         assert_not_reached();
+        return 0;
     }
 }
 

@@ -12,7 +12,10 @@
 #include "heap.h"
 #include "heap_declaration.h"
 
+#if defined DEBUG
 #include "impl/binary_heap_debug.c"
+#endif
+
 #include "impl/binary_heap_order.c"
 #include "impl/binary_heap_internal.c"
 #include "impl/minimal_heap.c"

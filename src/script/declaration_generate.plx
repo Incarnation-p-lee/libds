@@ -5,7 +5,7 @@ use 5.010;
 my $base = ".";
 my $srcdir = "$base/src";
 my @declarnations;
-
+my $debug_version;
 my @modules = ("$srcdir/linked_list",
                "$srcdir/hash",
                "$srcdir/queue",
@@ -17,6 +17,8 @@ my @modules = ("$srcdir/linked_list",
                "$srcdir/log",
                "$srcdir/common",
            );
+
+$debug_version = shift @ARGV;
 
 foreach (@modules) {
     my $entry = $_;
@@ -58,6 +60,7 @@ sub module_traversal() {
             &module_traversal("$basedir/$_") if /impl/;
         } else {
             my $fname = "$basedir/$_";
+            next if "$debug_version" eq "0" and /debug/;
             &file_scan($fname) if $fname =~ /impl/;
         }
     }   
@@ -78,6 +81,7 @@ sub file_scan() {
         chomp;
         next if /^$/;
         next if /:$/;
+
         if (/^\w/) {
             $body = 0;
         } elsif (/^{/) {

@@ -1,4 +1,3 @@
-#if defined DEBUG
 static inline uint32
 open_addressing_hash_limit(struct open_addressing_hash *hash)
 {
@@ -11,5 +10,4 @@ open_addressing_hash_limit(struct open_addressing_hash *hash)
 
     return limit;
 }
-#endif
 
