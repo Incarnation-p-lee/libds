@@ -60,7 +60,7 @@ do
     ;;
     "DEBUG=0")
       debug=0
-      argv_cfg="$argv_cfg -o3 -ofast -DNDEBUG -fprofile-use=$base/performance/profile"
+      argv_cfg="$argv_cfg -o3 -ofast -DNDEBUG" # -fprofile-use=$base/performance/profile"
     ;;
     "CODE_COVERAGE=1")
       argv_cfg="$argv_cfg -fprofile-arcs -ftest-coverage"

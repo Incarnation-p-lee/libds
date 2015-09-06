@@ -12,7 +12,7 @@
             "mov $0xffffffff, %%edx\n\t"                    \
             "cmp $0x0, %0\n\t"                              \
             "cmovz %1, %0\n\t"                              \
-            "cmovne 0x10(%0), %%edx\n\t"                    \
+            "cmovne 0x0(%0), %%edx\n\t"                     \
             "mov %%edx, (%1)\n\t"                           \
             :                                               \
             :"r"(node), "r"(height)                         \
@@ -146,7 +146,8 @@
     #define avl_tree_child_height_sync(root, left, right)
 
     #define avl_tree_balanced_on_height_internal(node, b) \
-        avl_tree_balanced_on_height_internal_optimize(node, b)
+        avl_tree_balanced_on_height_internal_default(node, b)
+        // avl_tree_balanced_on_height_internal_optimize(node, b)
 #else
     #define avl_tree_height_internal(node, height) \
         avl_tree_height_internal_default(node, height)
