@@ -9,7 +9,8 @@ static inline bool single_linked_list_contains_p_internal(struct single_linked_l
 static inline bool skip_linked_list_contains_p_internal(struct skip_linked_list *list, struct skip_linked_list *tgt);
 static inline struct doubly_linked_list * doubly_linked_list_node_remove_internal(struct doubly_linked_list **node);
 static inline struct single_linked_list * single_linked_list_node_previous_internal(struct single_linked_list *node);
-static inline struct single_linked_list * single_linked_list_node_remove_internal(struct single_linked_list **node);
+static inline struct single_linked_list * single_linked_list_node_remove_internal_default(struct single_linked_list **node);
+static inline struct single_linked_list * single_linked_list_node_remove_internal_optimize( struct single_linked_list **node);
 static inline struct skip_linked_list * skip_linked_list_insert_before_head(struct skip_linked_list *list, struct skip_linked_list *tgt);
 static inline struct skip_linked_list * skip_linked_list_node_find_key_internal(struct skip_linked_list *list, sint32 key, uint32 lvl);
 static inline struct skip_linked_list * skip_linked_list_node_insert_internal(struct skip_linked_list **list, struct skip_linked_list *tgt);

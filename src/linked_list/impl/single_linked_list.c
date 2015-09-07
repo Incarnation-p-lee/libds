@@ -282,7 +282,7 @@ single_linked_list_node_previous(struct single_linked_list *node)
 }
 
 static inline struct single_linked_list *
-single_linked_list_node_remove_internal(struct single_linked_list **node)
+single_linked_list_node_remove_internal_default(struct single_linked_list **node)
 {
     struct single_linked_list *removed;
     struct single_linked_list *prev;

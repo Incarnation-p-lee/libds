@@ -141,7 +141,7 @@
 
 #if defined OPT_HOT
     #define avl_tree_height_internal(node, height) \
-         avl_tree_height_internal_optimize(node, height)
+        avl_tree_height_internal_optimize(node, height)
 
     #define avl_tree_child_height_sync(root, left, right)
 

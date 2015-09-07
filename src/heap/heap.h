@@ -33,8 +33,8 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 /* BINARY HEAP DEBUG */
 #if defined DEBUG
 static void *order_func_list[] = {
-    // &binary_heap_order_minimal,
-    // &binary_heap_order_maximal,
+    &binary_heap_order_minimal,
+    &binary_heap_order_maximal,
 };
 #endif
 /* END OF BINARY HEAP DEBUG */

@@ -9,8 +9,8 @@
 #include "data_structure_types.h"
 #include "data_structure_defines.h"
 
-#include "heap.h"
 #include "heap_declaration.h"
+#include "heap.h"
 
 #if defined DEBUG
 #include "impl/binary_heap_debug.c"

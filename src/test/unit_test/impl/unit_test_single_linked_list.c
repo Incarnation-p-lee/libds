@@ -524,8 +524,8 @@ static void
 unit_test_single_linked_list_node_remove(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *next;
     struct single_linked_list *tmp;
+    struct single_linked_list ref;
     bool pass;
     uint32 loop;
 
@@ -536,21 +536,27 @@ unit_test_single_linked_list_node_remove(void)
     loop = test_utilize_iteration();
     loop = loop << 5;
     pass = true;
-    head = unit_test_single_linked_list_sample(0x431E2, 0x928ED);
-    tmp = head;
-    next = head->next;
+    head = single_linked_list_create();
+    ref.sid = head->sid;
+    ref.val = head->val;
 
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(&head), &pass);
-    RESULT_CHECK_pointer(next, head, &pass);
+    tmp = single_linked_list_node_remove(&head);
+    RESULT_CHECK_pointer(NULL, head, &pass);
+    RESULT_CHECK_uint32(ref.sid, tmp->sid, &pass);
+    RESULT_CHECK_pointer(ref.val, tmp->val, &pass);
     single_linked_list_destroy(&tmp);
-    single_linked_list_destroy(&head);
 
     while (0 != loop--) {
-        head = single_linked_list_create();
-        tmp = head;
-        RESULT_CHECK_pointer(tmp, single_linked_list_node_remove(&head), &pass);
-        RESULT_CHECK_pointer(NULL, head, &pass);
+        head = unit_test_single_linked_list_sample(0x32, 0xF);
+
+        ref.sid = head->sid;
+        ref.val = head->val;
+        tmp = single_linked_list_node_remove(&head);
+        RESULT_CHECK_uint32(ref.sid, tmp->sid, &pass);
+        RESULT_CHECK_pointer(ref.val, tmp->val, &pass);
+
         single_linked_list_destroy(&tmp);
+        single_linked_list_destroy(&head);
     }
 
     test_result_print(SYM_2_STR(single_linked_list_node_remove), pass);
@@ -560,7 +566,6 @@ static void
 unit_test_single_linked_list_node_remove_and_destroy(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *next;
     bool pass;
     uint32 loop;
 
@@ -572,10 +577,8 @@ unit_test_single_linked_list_node_remove_and_destroy(void)
     loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0x31e2, 0x28ed);
-    next = head->next;
 
     single_linked_list_node_remove_and_destroy(&head);
-    RESULT_CHECK_pointer(next, head, &pass);
     single_linked_list_destroy(&head);
 
     while (0 != loop--) {

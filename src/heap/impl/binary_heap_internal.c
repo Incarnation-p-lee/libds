@@ -436,7 +436,6 @@ binary_heap_percolate_down_to_tail(struct binary_heap *heap, uint32 index,
     binary_heap_node_remove_tail_fixup(heap, index, ordering);
 }
 
-
 static inline struct doubly_linked_list *
 binary_heap_node_remove(struct binary_heap *heap, uint32 index, void *ordering)
 {
