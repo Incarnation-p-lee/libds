@@ -12,6 +12,7 @@
 #define INDEX_PARENT(index)      ((index) / 2)
 #define INDEX_LAST(heap)         ((heap)->size)
 #define INDEX_FIRST              HEAP_ROOT_INDEX
+#define INDEX_INVALID            0u
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -32,9 +33,14 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 
 /* BINARY HEAP DEBUG */
 #if defined DEBUG
-static void *order_func_list[] = {
-    &binary_heap_order_minimal,
-    &binary_heap_order_maximal,
+static void *up_order_func[] = {
+    &binary_heap_minimal_percolate_up_ordered_p,
+    &binary_heap_maximal_percolate_up_ordered_p,
+};
+
+static void *down_order_func[] = {
+    &binary_heap_minimal_percolate_down_ordered_p,
+    &binary_heap_maximal_percolate_down_ordered_p,
 };
 #endif
 /* END OF BINARY HEAP DEBUG */

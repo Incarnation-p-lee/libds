@@ -248,14 +248,14 @@ struct binary_heap {
  * min heap
  */
 struct minimal_heap {
-    struct binary_heap *bin_heap;
+    struct binary_heap *alias;
 };
 
 /*
  * max heap
  */
 struct maximal_heap {
-    struct binary_heap *bin_heap;
+    struct binary_heap *alias;
 };
 
 #endif
@@ -478,33 +478,33 @@ struct maximal_heap {
 
 /* MINIMAL HEAP */
 #define minimal_heap_size(heap) \
-    (assert(heap), (heap)->bin_heap->size)
+    (assert(heap), (heap)->alias->size)
 
 #define minimal_heap_capacity(heap) \
-    (assert(heap), (heap)->bin_heap->capacity)
+    (assert(heap), (heap)->alias->capacity)
 
 #define minimal_heap_nice(heap, index) \
-    (assert(heap), HEAP_NICE(heap->bin_heap, index))
+    (assert(heap), HEAP_NICE(heap->alias, index))
 
 #define minimal_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->bin_heap, index))
+    (assert(heap), HEAP_LINK(heap->alias, index))
 #define minimal_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
+    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
 /* MAXIMAL HEAP */
 #define maximal_heap_size(heap) \
-    (assert(heap), (heap)->bin_heap->size)
+    (assert(heap), (heap)->alias->size)
 
 #define maximal_heap_capacity(heap) \
-    (assert(heap), (heap)->bin_heap->capacity)
+    (assert(heap), (heap)->alias->capacity)
 
 #define maximal_heap_nice(heap, index) \
-    (assert(heap), HEAP_NICE(heap->bin_heap, index))
+    (assert(heap), HEAP_NICE(heap->alias, index))
 
 #define maximal_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->bin_heap, index))
+    (assert(heap), HEAP_LINK(heap->alias, index))
 #define maximal_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->bin_heap, index) = (link))
+    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
 #endif
 /* END of ./src/inc/data_structure_defines.h */
@@ -862,6 +862,7 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #define INDEX_PARENT(index)      ((index) / 2)
 #define INDEX_LAST(heap)         ((heap)->size)
 #define INDEX_FIRST              HEAP_ROOT_INDEX
+#define INDEX_INVALID            0u
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice

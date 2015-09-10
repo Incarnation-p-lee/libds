@@ -202,14 +202,14 @@ struct binary_heap {
  * min heap
  */
 struct minimal_heap {
-    struct binary_heap *bin_heap;
+    struct binary_heap *alias;
 };
 
 /*
  * max heap
  */
 struct maximal_heap {
-    struct binary_heap *bin_heap;
+    struct binary_heap *alias;
 };
 
 #endif

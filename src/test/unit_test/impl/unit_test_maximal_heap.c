@@ -35,11 +35,11 @@ unit_test_maximal_heap_struc_field(void)
     heap = unit_test_maximal_heap_sample(0x3DA2, 0x2F23);
 
     while (loop--) {
-        RESULT_CHECK_uint32(heap->bin_heap->size, maximal_heap_size(heap), &pass);
-        RESULT_CHECK_uint32(heap->bin_heap->capacity, maximal_heap_capacity(heap), &pass);
-        RESULT_CHECK_sint64(heap->bin_heap->base[index]->nice,
+        RESULT_CHECK_uint32(heap->alias->size, maximal_heap_size(heap), &pass);
+        RESULT_CHECK_uint32(heap->alias->capacity, maximal_heap_capacity(heap), &pass);
+        RESULT_CHECK_sint64(heap->alias->base[index]->nice,
             maximal_heap_nice(heap, index), &pass);
-        RESULT_CHECK_pointer(heap->bin_heap->base[index]->link,
+        RESULT_CHECK_pointer(heap->alias->base[index]->link,
             maximal_heap_link(heap, index), &pass);
         tmp = maximal_heap_link(heap, index);
         RESULT_CHECK_pointer(NULL, maximal_heap_link_set(heap, index, NULL), &pass);
@@ -73,8 +73,8 @@ unit_test_maximal_heap_create(void)
         RESULT_CHECK_uint32(capacity, maximal_heap_capacity(heap), &pass);
         RESULT_CHECK_uint32(0u, maximal_heap_size(heap), &pass);
 
-        iter = heap->bin_heap->base;
-        while (iter < heap->bin_heap->base + u_offset(heap->bin_heap->capacity, 1)) {
+        iter = heap->alias->base;
+        while (iter < heap->alias->base + u_offset(heap->alias->capacity, 1)) {
             RESULT_CHECK_pointer(NULL, *iter++, &pass);
         }
 
