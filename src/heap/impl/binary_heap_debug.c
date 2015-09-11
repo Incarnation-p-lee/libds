@@ -2,9 +2,8 @@ static inline bool
 binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index,
     sint64 nice, void *ordering)
 {
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_up_ordered_p(ordering));
 
     if (!binary_heap_node_child_exist_p(heap, index)) {
@@ -50,9 +49,8 @@ static inline bool
 binary_heap_percolate_down_precondition_p(struct binary_heap *heap,
     uint32 index, sint64 nice, void *ordering)
 {
-    assert(INDEX_INVALID != index);
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
 
     if (HEAP_ROOT_INDEX == index) {
         return true;
@@ -101,12 +99,51 @@ binary_heap_down_ordered_p(void *func_ptr)
 }
 
 static inline bool
-binary_heap_percolate_function_pointer_valid_p(void *func_ptr)
+binary_heap_node_contains_with_null_p(struct binary_heap *heap, sint64 nice)
 {
-    assert(NULL != func_ptr);
+    register uint32 index;
 
-    if (func_ptr == &binary_heap_percolate_up
-        || func_ptr == &binary_heap_percolate_down) {
+    assert(binary_heap_structure_legal_p(heap));
+
+    index = INDEX_FIRST;
+
+    while (index <= INDEX_LAST(heap)) {
+        if (HEAP_CHAIN(heap, index) && nice == HEAP_NICE(heap, index)) {
+            return true;
+        }
+
+        index++;
+    }
+
+    return false;
+}
+
+static inline bool
+binary_heap_nice_legal_p(sint64 nice)
+{
+    if (nice > HEAP_NICE_LOWER_LMT && nice < HEAP_NICE_UPPER_LMT) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline bool
+binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
+{
+    assert(binary_heap_structure_legal_p(heap));
+
+    if (INDEX_INVALID == index && index > INDEX_LAST(heap)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+binary_heap_structure_legal_p(struct binary_heap *heap)
+{
+    if (NULL != heap && NULL != heap->base) {
         return true;
     } else {
         return false;

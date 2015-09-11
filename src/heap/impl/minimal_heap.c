@@ -149,7 +149,6 @@ minimal_heap_node_remove_and_destroy_internal(struct binary_heap *heap,
     doubly_linked_list_destroy(&removed);
 }
 
-
 void
 minimal_heap_node_remove_and_destroy(struct minimal_heap *heap, sint64 nice)
 {
@@ -265,7 +264,6 @@ minimal_heap_node_increase_nice_internal(struct binary_heap *heap, uint32 index,
         minimal_heap_node_remove_and_destroy_internal(heap, index);
     }
 }
-
 
 void
 minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 offset)

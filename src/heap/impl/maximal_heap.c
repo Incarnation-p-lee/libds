@@ -116,7 +116,7 @@ maximal_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
 
     HEAP_CHAIN(heap, HEAP_ROOT_INDEX) = tmp;
     return binary_heap_node_remove_root(heap,
-        &binary_heap_maximal_percolate_up_ordered_p);
+        &binary_heap_maximal_percolate_down_ordered_p);
 }
 
 struct doubly_linked_list *
