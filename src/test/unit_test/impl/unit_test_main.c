@@ -6,6 +6,8 @@ unit_test_execution_start(struct test_extra_info *entry, char *content)
     assert(NULL != content);
 
     filter = test_case_filter_obtain(content);
+
+    fprintf(stdout, "\n  >> UNIT LIST << \n");
     unit_test_execution_category(test_category, filter);
     test_case_filter_destroy(&filter);
 }
@@ -40,6 +42,8 @@ unit_test_execution_implement(const struct test_layer_table *implement,
         }
         implement++;
     }
+
+    fprintf(stdout, "\n");
 }
 
 static inline void
