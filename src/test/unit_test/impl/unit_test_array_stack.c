@@ -8,7 +8,7 @@ unit_test_array_stack_struct_field(void)
     uint32 loop;
     struct array_stack *stack;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3a12345u;
     while (0 != loop--) {
@@ -38,7 +38,7 @@ unit_test_array_stack_create(void)
     uint32 loop;
     struct array_stack *stack;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3a12345u;
     while (0 != loop--) {
@@ -62,7 +62,7 @@ unit_test_array_stack_destroy(void)
     uint32 loop;
     struct array_stack *stack;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2a12345u;
     pass = true;
@@ -88,7 +88,7 @@ unit_test_array_stack_space_expand(void)
     struct array_stack *stack;
     uint32 stk_size;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567fu;
     stack = array_stack_create();
@@ -123,7 +123,7 @@ unit_test_array_stack_full_p(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x42345fu;
     RESULT_CHECK_bool(true, array_stack_full_p(NULL), &pass);
@@ -157,7 +157,7 @@ unit_test_array_stack_capacity(void)
     uint32 extra;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x323456fu;
     RESULT_CHECK_uint32(0x0u, array_stack_capacity(NULL), &pass);
@@ -187,7 +187,7 @@ unit_test_array_stack_space_rest(void)
     uint32 stk_size;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     RESULT_CHECK_uint32(0x0u, array_stack_capacity(NULL), &pass);
     loop = 0x323456fu;
@@ -216,7 +216,7 @@ unit_test_array_stack_push(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567fu;
     mem = &tmp;
@@ -252,7 +252,7 @@ unit_test_array_stack_pop(void)
     struct array_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567fu;
     stack = array_stack_create();
@@ -280,7 +280,7 @@ unit_test_array_stack_empty_p(void)
     struct array_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x223456fu;
     RESULT_CHECK_bool(false, array_stack_empty_p(NULL), &pass);
@@ -307,7 +307,7 @@ unit_test_array_stack_cleanup(void)
     struct array_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x223456fu;
     array_stack_cleanup(NULL);
@@ -338,7 +338,7 @@ unit_test_array_stack_iterate(void)
     register sint32 *e1;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x6223456fu;
     stack = array_stack_create();

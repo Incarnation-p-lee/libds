@@ -34,7 +34,7 @@ unit_test_skip_linked_list_struct_field(void)
     uint32 loop;
     sint32 key;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xa234567u;
     pass = true;
@@ -63,7 +63,7 @@ unit_test_skip_linked_list_create(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3234567;
     pass = true;
@@ -85,7 +85,7 @@ unit_test_skip_linked_list_initial(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xf234567;
     pass = true;
@@ -111,7 +111,7 @@ unit_test_skip_linked_list_node_create(void)
     uint32 loop;
     sint32 key;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3234567;
     pass = true;
@@ -134,7 +134,7 @@ unit_test_skip_linked_list_node_initial(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xf234567;
     pass = true;
@@ -159,7 +159,7 @@ unit_test_skip_linked_list_destroy(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12;
     pass = true;
@@ -185,7 +185,7 @@ unit_test_skip_linked_list_length(void)
     uint32 loop;
     uint32 len;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xa234;
     pass = true;
@@ -219,7 +219,7 @@ unit_test_skip_linked_list_node_find_key(void)
     uint32 loop;
     sint32 key;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x32345;
     pass = true;
@@ -251,7 +251,7 @@ unit_test_skip_linked_list_contains_p(void)
     uint32 loop;
     sint32 key;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xfff;
     pass = true;
@@ -285,7 +285,7 @@ unit_test_skip_linked_list_node_insert(void)
     uint32 loop;
     sint32 key;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x123;
     pass = true;
@@ -328,7 +328,7 @@ unit_test_skip_linked_list_node_by_index(void)
     uint32 loop;
     uint32 tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x0;
     pass = true;
@@ -359,7 +359,7 @@ unit_test_skip_linked_list_node_remove(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12;
     pass = true;
@@ -394,7 +394,7 @@ unit_test_skip_linked_list_node_remove_and_destroy(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12;
     pass = true;
@@ -429,7 +429,7 @@ unit_test_skip_linked_list_iterate(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x5234;
     pass = true;
@@ -461,7 +461,7 @@ unit_test_skip_linked_list_merge(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x123;
     pass = true;

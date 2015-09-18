@@ -29,7 +29,7 @@ unit_test_single_linked_list_struct_field(void)
     struct single_linked_list *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     sid = 0xfade;
@@ -58,7 +58,7 @@ unit_test_single_linked_list_create(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -84,7 +84,7 @@ unit_test_single_linked_list_node_create(void)
     struct single_linked_list *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -112,7 +112,7 @@ unit_test_single_linked_list_node_initial(void)
     struct single_linked_list *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -143,7 +143,7 @@ unit_test_single_linked_list_initial(void)
     struct single_linked_list *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -169,7 +169,7 @@ unit_test_single_linked_list_node_append(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -200,7 +200,7 @@ unit_test_single_linked_list_node_previous(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -233,7 +233,7 @@ unit_test_single_linked_list_node_insert_before(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     loop = loop >> 4;
@@ -281,7 +281,7 @@ unit_test_single_linked_list_node_insert_after(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     loop = loop << 5;
@@ -329,7 +329,7 @@ unit_test_single_linked_list_destroy(void)
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     iter = sizes;
@@ -366,7 +366,7 @@ unit_test_single_linked_list_length(void)
     uint32 sizes[] = {1, 10, 100, 1000, 2000, 3000, 4000, 5000, 6000,};
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     loop = loop << 7;
@@ -400,7 +400,7 @@ unit_test_single_linked_list_node_by_index(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -432,7 +432,7 @@ unit_test_single_linked_list_contains_p(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     loop = loop >> 2;
@@ -465,7 +465,7 @@ unit_test_single_linked_list_serialize(void)
     uint32 index;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     iter = sizes;
@@ -500,7 +500,7 @@ unit_test_single_linked_list_node_copy(void)
     struct single_linked_list *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     sid = 0xbedu;
@@ -529,7 +529,7 @@ unit_test_single_linked_list_node_remove(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     single_linked_list_node_remove(NULL);
 
@@ -569,7 +569,7 @@ unit_test_single_linked_list_node_remove_and_destroy(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     single_linked_list_node_remove(NULL);
 
@@ -598,7 +598,7 @@ unit_test_single_linked_list_iterate(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = test_utilize_iteration();
     pass = true;
@@ -631,7 +631,7 @@ unit_test_single_linked_list_merge(void)
     bool pass;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = test_utilize_iteration();

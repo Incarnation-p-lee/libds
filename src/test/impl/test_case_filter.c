@@ -1,22 +1,22 @@
-static struct unit_test_filter *
-unit_test_filter_obtain(char *arg)
+static struct test_case_filter *
+test_case_filter_obtain(char *arg)
 {
-    struct unit_test_filter *filter;
+    struct test_case_filter *filter;
 
-    filter = unit_test_filter_initial();
+    filter = test_case_filter_initial();
     if (!arg) {
-        unit_test_filter_obtain_internal(filter->category, "*", 1);
-        unit_test_filter_obtain_internal(filter->implement, "*", 1);
-        unit_test_filter_obtain_internal(filter->interface, "*", 1);
+        test_case_filter_obtain_internal(filter->category, "*", 1);
+        test_case_filter_obtain_internal(filter->implement, "*", 1);
+        test_case_filter_obtain_internal(filter->interface, "*", 1);
     } else {
-        unit_test_filter_parser(filter, arg);
+        test_case_filter_parser(filter, arg);
     }
 
     return filter;
 }
 
 static void
-unit_test_filter_parser(struct unit_test_filter *filter, char *arg)
+test_case_filter_parser(struct test_case_filter *filter, char *arg)
 {
     char *tmp;
     uint32 dist;
@@ -26,7 +26,7 @@ unit_test_filter_parser(struct unit_test_filter *filter, char *arg)
         goto INVFMT;
     } else {
         dist = (uint32)(tmp - arg);
-        unit_test_filter_obtain_internal(filter->category, arg, dist);
+        test_case_filter_obtain_internal(filter->category, arg, dist);
 
         arg = ++tmp;
         tmp = strchr(arg, '.');
@@ -34,14 +34,14 @@ unit_test_filter_parser(struct unit_test_filter *filter, char *arg)
             goto INVFMT;
         } else {
             dist = (uint32)(tmp - arg);
-            unit_test_filter_obtain_internal(filter->implement, arg, dist);
+            test_case_filter_obtain_internal(filter->implement, arg, dist);
 
             arg = ++tmp;
             dist = (uint32)strlen(arg);
             if (!dist) {
                 goto INVFMT;
             } else {
-                unit_test_filter_obtain_internal(filter->interface, arg, dist);
+                test_case_filter_obtain_internal(filter->interface, arg, dist);
             }
         }
         return;
@@ -53,7 +53,7 @@ INVFMT:
 }
 
 static inline void
-unit_test_filter_obtain_internal(char *dest, char *arg, uint32 len)
+test_case_filter_obtain_internal(char *dest, char *arg, uint32 len)
 {
     assert(NULL != arg);
     assert(NULL != dest);
@@ -61,10 +61,10 @@ unit_test_filter_obtain_internal(char *dest, char *arg, uint32 len)
     memcpy(dest, arg, len);
 }
 
-static inline struct unit_test_filter *
-unit_test_filter_initial(void)
+static inline struct test_case_filter *
+test_case_filter_initial(void)
 {
-    struct unit_test_filter *filter;
+    struct test_case_filter *filter;
 
     filter = malloc_ds(sizeof(*filter));
     if (!filter) {
@@ -77,10 +77,11 @@ unit_test_filter_initial(void)
 }
 
 static void
-unit_test_filter_destroy(struct unit_test_filter **filter)
+test_case_filter_destroy(struct test_case_filter **filter)
 {
     assert(NULL != filter);
 
     free_ds(*filter);
     *filter = NULL;
 }
+

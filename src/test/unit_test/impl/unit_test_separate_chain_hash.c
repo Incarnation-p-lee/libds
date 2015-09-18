@@ -6,7 +6,7 @@ unit_test_separate_chain_hash_struct_field(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xa23456;
     tmp = 0x3u;
@@ -58,7 +58,7 @@ unit_test_separate_chain_hash_create(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567;
     tmp = 0;
@@ -95,7 +95,7 @@ unit_test_separate_chain_hash_destroy(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567;
     pass = true;
@@ -127,7 +127,7 @@ unit_test_separate_chain_hash_load_factor_calculate(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567;
     tmp = 0xfadeu;
@@ -162,7 +162,7 @@ unit_test_separate_chain_hash_insert(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x623456;
     tmp = 0xdeadu;
@@ -196,7 +196,7 @@ unit_test_separate_chain_hash_remove(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x623456;
     tmp = 0x0u;
@@ -240,7 +240,7 @@ unit_test_separate_chain_hash_find(void)
     struct separate_chain_hash *hash;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567;
     pass = true;
@@ -277,7 +277,7 @@ unit_test_separate_chain_hash_rehashing(void)
     struct separate_chain_hash *new;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x52;
     tmp = 0x0u;

@@ -31,8 +31,5 @@ static struct memory_maps mmaps[MAP_ENTRY_MAX] = {
     {},
 };
 
-static struct option_set opt_set = {
-};
-
 
 #endif

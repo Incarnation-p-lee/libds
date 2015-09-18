@@ -7,7 +7,7 @@ unit_test_array_queue_struct_field(void)
     uint32 loop;
     struct array_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3a12345u;
     while (0 != loop--) {
@@ -35,7 +35,7 @@ unit_test_array_queue_create(void)
     uint32 loop;
     struct array_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3a12345u;
     while (0 != loop--) {
@@ -58,7 +58,7 @@ unit_test_array_queue_destroy(void)
     uint32 loop;
     struct array_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     queue = NULL;
@@ -85,7 +85,7 @@ unit_test_array_queue_space_expand(void)
     uint32 extra;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     queue = array_queue_create();
     pass = true;
@@ -132,7 +132,7 @@ unit_test_array_queue_capacity(void)
     uint32 extra;
     struct array_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567;
     extra = 0x1;
@@ -160,7 +160,7 @@ unit_test_array_queue_space_rest(void)
     uint32 loop;
     uint32 extra;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678;
     extra = 0x1;
@@ -193,7 +193,7 @@ unit_test_array_queue_full_p(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x5234567;
     queue = array_queue_create();
@@ -229,7 +229,7 @@ unit_test_array_queue_empty_p(void)
     uint32 loop;
     struct array_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567;
     queue = array_queue_create();
@@ -257,7 +257,7 @@ unit_test_array_queue_enter(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x5234567;
     queue = array_queue_create();
@@ -293,7 +293,7 @@ unit_test_array_queue_leave(void)
     struct array_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x5234567;
     queue = array_queue_create();
@@ -337,7 +337,7 @@ unit_test_array_queue_cleanup(void)
     struct array_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567;
     queue = array_queue_create();
@@ -367,7 +367,7 @@ unit_test_array_queue_iterate(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567;
     queue = array_queue_create();

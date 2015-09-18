@@ -8,7 +8,5 @@
 #include "unit_test_hash.c"
 #include "unit_test_heap.c"
 
-#include "unit_test_layer.h"
-#include "impl/unit_test_entry.c"
-#include "impl/unit_test_filter.c"
+#include "impl/unit_test_main.c"
 

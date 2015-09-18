@@ -6,7 +6,7 @@ unit_test_linked_stack_struct_field(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x32345678u;
     pass = true;
@@ -29,7 +29,7 @@ unit_test_linked_stack_create(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567u;
     pass = true;
@@ -55,7 +55,7 @@ unit_test_linked_stack_destroy(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567u;
     pass = true;
@@ -82,7 +82,7 @@ unit_test_linked_stack_space_expand(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x5234u;
     pass = true;
@@ -118,7 +118,7 @@ unit_test_linked_stack_full_p(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xe234567u;
     stack = linked_stack_create();
@@ -150,7 +150,7 @@ unit_test_linked_stack_space_rest(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     RESULT_CHECK_uint32(0x0u, linked_stack_space_rest(NULL), &pass);
 
@@ -190,7 +190,7 @@ unit_test_linked_stack_capacity(void)
     uint32 extra;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xe234567u;
     pass = true;
@@ -219,7 +219,7 @@ unit_test_linked_stack_push(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567u;
     mem = &tmp;
@@ -255,7 +255,7 @@ unit_test_linked_stack_pop(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567u;
     stack = linked_stack_create();
@@ -291,7 +291,7 @@ unit_test_linked_stack_empty_p(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     stack = linked_stack_create();
@@ -320,7 +320,7 @@ unit_test_linked_stack_cleanup(void)
     struct linked_stack *stack;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     stack = linked_stack_create();
@@ -351,7 +351,7 @@ unit_test_linked_stack_iterate(void)
     register sint32 *e1;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     stack = linked_stack_create();

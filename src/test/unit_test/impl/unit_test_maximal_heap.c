@@ -27,7 +27,7 @@ unit_test_maximal_heap_struc_field(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1234567;
@@ -59,7 +59,7 @@ unit_test_maximal_heap_create(void)
     struct maximal_heap *heap;
     struct collision_chain **iter;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0xA234u;
@@ -92,7 +92,7 @@ unit_test_maximal_heap_destroy(void)
     uint32 loop;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12345u;
@@ -116,7 +116,7 @@ unit_test_maximal_heap_empty_p(void)
     uint32 loop;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1A345u;
@@ -144,7 +144,7 @@ unit_test_maximal_heap_full_p(void)
     uint32 loop;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1A345u;
@@ -172,7 +172,7 @@ unit_test_maximal_heap_cleanup(void)
     uint32 loop;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x3u;
@@ -200,7 +200,7 @@ unit_test_maximal_heap_node_find(void)
     uint32 index;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12345678u;
@@ -232,7 +232,7 @@ unit_test_maximal_heap_node_find_max(void)
     uint32 loop;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x22345678u;
@@ -261,7 +261,7 @@ unit_test_maximal_heap_node_insert(void)
     uint32 size;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0xA234;
@@ -292,7 +292,7 @@ unit_test_maximal_heap_node_remove_max(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *maximal;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x123;
@@ -319,7 +319,7 @@ unit_test_maximal_heap_node_remove_max_and_destroy(void)
     uint32 size;
     struct maximal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x123;
@@ -351,7 +351,7 @@ unit_test_maximal_heap_node_decrease_nice(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -393,7 +393,7 @@ unit_test_maximal_heap_node_increase_nice(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -434,7 +434,7 @@ unit_test_maximal_heap_node_remove(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -470,7 +470,7 @@ unit_test_maximal_heap_node_remove_and_destroy(void)
     struct maximal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;

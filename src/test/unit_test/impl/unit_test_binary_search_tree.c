@@ -7,7 +7,7 @@ unit_test_binary_search_tree_struct_field(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xf12345u;
     while (0 != loop--) {
@@ -67,7 +67,7 @@ unit_test_binary_search_tree_create(void)
     uint32 loop;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x28345afu;
     while (0 != loop--) {
@@ -94,7 +94,7 @@ unit_test_binary_search_tree_node_create(void)
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x25345afu;
     while (0 != loop--) {
@@ -125,7 +125,7 @@ unit_test_binary_search_tree_initial(void)
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     binary_search_tree_initial(NULL);
 
@@ -165,7 +165,7 @@ unit_test_binary_search_tree_node_initial(void)
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     nice = 0xfade;
     pass = true;
@@ -202,7 +202,7 @@ unit_test_binary_search_tree_destroy(void)
     bool pass;
     struct binary_search_tree *tree;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -230,7 +230,7 @@ unit_test_binary_search_tree_node_find(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x221234, 0x3BCDEF);
@@ -271,7 +271,7 @@ unit_test_binary_search_tree_node_find_min(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x231234, 0x29ABCD);
@@ -295,7 +295,7 @@ unit_test_binary_search_tree_node_find_max(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x231234, 0x29ABCD);
@@ -318,7 +318,7 @@ unit_test_binary_search_tree_height(void)
     struct binary_search_tree *tree;
     sint32 child;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x3183F1, 0x31820C);
@@ -343,7 +343,7 @@ unit_test_binary_search_tree_node_contains_p(void)
     struct binary_search_tree *tmp;
     struct binary_search_tree *fake;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x237FD7, 0x3AD31D);
@@ -375,7 +375,7 @@ unit_test_binary_search_tree_node_insert(void)
     struct binary_search_tree *tmp;
     struct binary_search_tree *inserted;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = unit_test_binary_search_tree_sample(0x384321, 0x331A2B);
@@ -408,7 +408,7 @@ unit_test_binary_search_tree_node_remove(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -457,7 +457,7 @@ unit_test_binary_search_tree_node_remove_and_destroy(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -498,7 +498,7 @@ unit_test_binary_search_tree_iterate(void)
     struct binary_search_tree *tree;
     uint32 cnt;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     cnt = 0x2C872D;

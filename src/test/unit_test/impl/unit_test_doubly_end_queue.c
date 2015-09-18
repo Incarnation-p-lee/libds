@@ -6,7 +6,7 @@ unit_test_doubly_end_queue_struct_field(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x32345678u;
     pass = true;
@@ -29,7 +29,7 @@ unit_test_doubly_end_queue_create(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x22345678u;
     pass = true;
@@ -51,7 +51,7 @@ unit_test_doubly_end_queue_destroy(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -79,7 +79,7 @@ unit_test_doubly_end_queue_length(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -106,7 +106,7 @@ unit_test_doubly_end_queue_empty_p(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -133,7 +133,7 @@ unit_test_doubly_end_queue_head_enter(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567u;
     pass = true;
@@ -161,7 +161,7 @@ unit_test_doubly_end_queue_tail_enter(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3234567u;
     pass = true;
@@ -189,7 +189,7 @@ unit_test_doubly_end_queue_head_leave(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -220,7 +220,7 @@ unit_test_doubly_end_queue_tail_leave(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -252,7 +252,7 @@ unit_test_doubly_end_queue_cleanup(void)
     uint32 loop;
     struct doubly_end_queue *queue;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x4234567u;
     pass = true;
@@ -283,7 +283,7 @@ unit_test_doubly_end_queue_iterate(void)
     uint32 cnt;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x52345u;
     tmp = 0;

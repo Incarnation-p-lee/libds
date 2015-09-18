@@ -2,7 +2,6 @@
 #define UNIT_TEST_DECLARATION_H
 
 
-static inline bool unit_test_layer_table_match_p(const struct test_layer_table *category, char *name);
 static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
 static inline struct binary_search_tree * unit_test_binary_search_tree_sample(uint64 range, uint32 node_count);
 static inline struct doubly_linked_list * unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count);
@@ -13,14 +12,10 @@ static inline struct separate_chain_hash * unit_test_separate_chain_hash_sample(
 static inline struct single_linked_list * unit_test_single_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct skip_linked_list * unit_test_skip_linked_list_sample(uint32 range, uint32 count);
 static inline struct splay_tree * unit_test_splay_tree_sample(uint64 range, uint32 node_count);
-static inline struct unit_test_filter * unit_test_filter_initial(void);
-static inline void unit_test_filter_obtain_internal(char *dest, char *arg, uint32 len);
-static inline void unit_test_layer_table_category_list(const struct test_layer_table *category, struct unit_test_filter *filter);
-static inline void unit_test_layer_table_category_perform(const struct test_layer_table *category, struct unit_test_filter *filter);
-static inline void unit_test_layer_table_implement_list(const struct test_layer_table *implement, struct unit_test_filter *filter, char *category);
-static inline void unit_test_layer_table_implement_perform(const struct test_layer_table *implement, struct unit_test_filter *filter);
-static inline void unit_test_layer_table_interface_list(const struct test_layer_table *interface, struct unit_test_filter *filter, char *category, char *implement);
-static inline void unit_test_layer_table_interface_perform(const struct test_layer_table *interface, struct unit_test_filter *filter);
+static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
+static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
+static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);
+static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
 static inline void unit_test_maximal_heap_cleanup(void);
 static inline void unit_test_maximal_heap_create(void);
 static inline void unit_test_maximal_heap_destroy(void);
@@ -51,7 +46,6 @@ static inline void unit_test_minimal_heap_node_remove_and_destroy(void);
 static inline void unit_test_minimal_heap_node_remove_min(void);
 static inline void unit_test_minimal_heap_node_remove_min_and_destroy(void);
 static inline void unit_test_minimal_heap_struc_field(void);
-static struct unit_test_filter * unit_test_filter_obtain(char *arg);
 static void unit_test_array_queue_capacity(void);
 static void unit_test_array_queue_cleanup(void);
 static void unit_test_array_queue_create(void);
@@ -135,8 +129,6 @@ static void unit_test_doubly_linked_list_node_remove(void);
 static void unit_test_doubly_linked_list_node_remove_and_destroy(void);
 static void unit_test_doubly_linked_list_serialize(void);
 static void unit_test_doubly_linked_list_struct_field(void);
-static void unit_test_filter_destroy(struct unit_test_filter **filter);
-static void unit_test_filter_parser(struct unit_test_filter *filter, char *arg);
 static void unit_test_linked_stack_capacity(void);
 static void unit_test_linked_stack_cleanup(void);
 static void unit_test_linked_stack_create(void);
@@ -226,8 +218,5 @@ static void unit_test_stacked_queue_leave(void);
 static void unit_test_stacked_queue_space_expand(void);
 static void unit_test_stacked_queue_space_rest(void);
 static void unit_test_stacked_queue_struct_field(void);
-void unit_test_iterater_cnt_set(uint32 count);
-void unit_test_list(char *arg);
-void unit_test_perform(char *arg);
 
 #endif

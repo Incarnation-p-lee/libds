@@ -27,7 +27,7 @@ unit_test_minimal_heap_struc_field(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1234567;
@@ -60,7 +60,7 @@ unit_test_minimal_heap_create(void)
     struct minimal_heap *heap;
     struct collision_chain **iter;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0xA234u;
@@ -94,7 +94,7 @@ unit_test_minimal_heap_destroy(void)
     uint32 loop;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12345u;
@@ -119,7 +119,7 @@ unit_test_minimal_heap_empty_p(void)
     uint32 loop;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1A345u;
@@ -148,7 +148,7 @@ unit_test_minimal_heap_full_p(void)
     uint32 loop;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x1A345u;
@@ -177,7 +177,7 @@ unit_test_minimal_heap_cleanup(void)
     uint32 loop;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x3u;
@@ -206,7 +206,7 @@ unit_test_minimal_heap_node_find(void)
     uint32 index;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12345678u;
@@ -239,7 +239,7 @@ unit_test_minimal_heap_node_find_min(void)
     uint32 loop;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x22345678u;
@@ -269,7 +269,7 @@ unit_test_minimal_heap_node_insert(void)
     uint32 size;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0xA234;
@@ -301,7 +301,7 @@ unit_test_minimal_heap_node_remove_min(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *minimal;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x123;
@@ -329,7 +329,7 @@ unit_test_minimal_heap_node_remove_min_and_destroy(void)
     uint32 size;
     struct minimal_heap *heap;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x123;
@@ -361,7 +361,7 @@ unit_test_minimal_heap_node_decrease_nice(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -404,7 +404,7 @@ unit_test_minimal_heap_node_increase_nice(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -446,7 +446,7 @@ unit_test_minimal_heap_node_remove(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;
@@ -484,7 +484,7 @@ unit_test_minimal_heap_node_remove_and_destroy(void)
     struct minimal_heap *heap;
     struct doubly_linked_list *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     loop = 0x12;

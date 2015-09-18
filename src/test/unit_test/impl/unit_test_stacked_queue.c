@@ -7,7 +7,7 @@ unit_test_stacked_queue_struct_field(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     pass = true;
@@ -33,7 +33,7 @@ unit_test_stacked_queue_create(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567u;
     while (0 != loop--) {
@@ -56,7 +56,7 @@ unit_test_stacked_queue_destroy(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567u;
     pass = true;
@@ -81,7 +81,7 @@ unit_test_stacked_queue_space_expand(void)
     uint32 extra;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xa234567u;
     pass = true;
@@ -114,7 +114,7 @@ unit_test_stacked_queue_capacity(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x32345678u;
     queue = stacked_queue_create();
@@ -142,7 +142,7 @@ unit_test_stacked_queue_space_rest(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x22345678u;
     pass = true;
@@ -170,7 +170,7 @@ unit_test_stacked_queue_full_p(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     cnt = 0;
@@ -202,7 +202,7 @@ unit_test_stacked_queue_empty_p(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x32345678u;
     queue = stacked_queue_create();
@@ -228,7 +228,7 @@ unit_test_stacked_queue_enter(void)
     uint32 capacity;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x6234567u;
     queue = stacked_queue_create();
@@ -264,7 +264,7 @@ unit_test_stacked_queue_leave(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x1234567u;
     queue = stacked_queue_create();
@@ -293,7 +293,7 @@ unit_test_stacked_queue_cleanup(void)
     struct stacked_queue *queue;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x7234567u;
     queue = stacked_queue_create();
@@ -322,7 +322,7 @@ unit_test_stacked_queue_iterate(void)
     uint32 tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x523456;
     tmp = 0;

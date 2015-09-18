@@ -7,7 +7,7 @@ unit_test_splay_tree_struct_field(void)
     struct splay_tree *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x22345678u;
     pass = true;
@@ -65,7 +65,7 @@ unit_test_splay_tree_create(void)
     struct splay_tree *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3234567u;
     pass = true;
@@ -95,7 +95,7 @@ unit_test_splay_tree_node_create(void)
     struct doubly_linked_list *link;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3234567u;
     pass = true;
@@ -128,7 +128,7 @@ unit_test_splay_tree_initial(void)
     struct doubly_linked_list *link;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0xf234567u;
     pass = true;
@@ -166,7 +166,7 @@ unit_test_splay_tree_node_initial(void)
     struct doubly_linked_list *link;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     nice = 0xfade;
@@ -200,7 +200,7 @@ unit_test_splay_tree_destroy(void)
     struct splay_tree *tree;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x2234567u;
     pass = true;
@@ -231,7 +231,7 @@ unit_test_splay_tree_height(void)
     sint32 child;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x534u;
     pass = true;
@@ -260,7 +260,7 @@ unit_test_splay_tree_node_contains_p(void)
     struct splay_tree *fake;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     pass = true;
@@ -295,7 +295,7 @@ unit_test_splay_tree_node_find(void)
     struct splay_tree *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     pass = true;
@@ -337,7 +337,7 @@ unit_test_splay_tree_node_find_min(void)
     struct splay_tree *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     pass = true;
@@ -364,7 +364,7 @@ unit_test_splay_tree_node_find_max(void)
     struct splay_tree *tmp;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x12345678u;
     pass = true;
@@ -391,7 +391,7 @@ unit_test_splay_tree_node_insert(void)
     struct splay_tree *tmp;
     struct splay_tree *inserted;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -428,7 +428,7 @@ unit_test_splay_tree_node_remove(void)
     struct splay_tree *tree;
     struct splay_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -480,7 +480,7 @@ unit_test_splay_tree_node_remove_and_destroy(void)
     struct splay_tree *tree;
     struct splay_tree *tmp;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     pass = true;
     tree = NULL;
@@ -520,7 +520,7 @@ unit_test_splay_tree_iterate(void)
     uint32 cnt;
     uint32 loop;
 
-    TEST_PERFORMANCE_CHECKPOINT;
+    
 
     loop = 0x3u;
     pass = true;
