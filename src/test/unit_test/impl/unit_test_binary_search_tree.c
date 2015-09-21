@@ -3,35 +3,27 @@ unit_test_binary_search_tree_struct_field(void)
 {
     bool pass;
     sint64 nice;
-    uint32 loop;
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
+    pass = true;
+    nice = -0xfade;
+    tree = binary_search_tree_create();
+    tmp = binary_search_tree_node_create(NULL, nice);
 
-    loop = 0xf12345u;
-    while (0 != loop--) {
-        pass = true;
-        nice = -0xfade;
-        tree = binary_search_tree_create();
-        tmp = binary_search_tree_node_create(NULL, nice);
+    binary_search_tree_node_nice_set(tmp, nice);
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tmp), &pass);
 
-        binary_search_tree_node_nice_set(tmp, nice);
-        RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tmp), &pass);
+    binary_search_tree_child_left_set(tree, tmp);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_child_left(tree), &pass);
 
-        binary_search_tree_child_left_set(tree, tmp);
-        RESULT_CHECK_pointer(tmp, binary_search_tree_child_left(tree), &pass);
+    nice = 0xfade;
+    tmp = binary_search_tree_node_create(NULL, nice);
+    binary_search_tree_child_right_set(tree, tmp);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_child_right(tree), &pass);
 
-        nice = 0xfade;
-        tmp = binary_search_tree_node_create(NULL, nice);
-        binary_search_tree_child_right_set(tree, tmp);
-        RESULT_CHECK_pointer(tmp, binary_search_tree_child_right(tree), &pass);
-
-        binary_search_tree_destroy(&tree);
-    }
+    binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_struct_field), pass);
-
-    return;
 }
 
 static inline struct binary_search_tree *
@@ -64,25 +56,17 @@ static void
 unit_test_binary_search_tree_create(void)
 {
     bool pass;
-    uint32 loop;
     struct binary_search_tree *tmp;
 
-    
+    pass = true;
+    tmp = binary_search_tree_create();
 
-    loop = 0x28345afu;
-    while (0 != loop--) {
-        pass = true;
-        tmp = binary_search_tree_create();
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tmp), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tmp), &pass);
+    RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tmp), &pass);
 
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tmp), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tmp), &pass);
-        RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tmp), &pass);
-
-        binary_search_tree_destroy(&tmp);
-    }
-
+    binary_search_tree_destroy(&tmp);
     test_result_print(SYM_2_STR(binary_search_tree_create), pass);
-    return;
 }
 
 static void
@@ -90,30 +74,22 @@ unit_test_binary_search_tree_node_create(void)
 {
     bool pass;
     sint64 nice;
-    uint32 loop;
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
 
-    
+    pass = true;
+    nice = 0xfade;
+    tree = binary_search_tree_node_create(&pass, nice);
 
-    loop = 0x25345afu;
-    while (0 != loop--) {
-        pass = true;
-        nice = 0xfade;
-        tree = binary_search_tree_node_create(&pass, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
 
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
-        RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
+    link = binary_search_tree_node_link(tree);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
 
-        link = binary_search_tree_node_link(tree);
-        RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
-
-        binary_search_tree_destroy(&tree);
-    }
-
+    binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_create), pass);
-    return;
 }
 
 static void
@@ -121,38 +97,31 @@ unit_test_binary_search_tree_initial(void)
 {
     bool pass;
     sint64 nice;
-    uint32 loop;
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
 
-    
-
     binary_search_tree_initial(NULL);
 
-    loop = 0x22345afu;
-    while (0 != loop--) {
-        pass = true;
-        nice = 0xbed;
-        tree = binary_search_tree_node_create(&pass, nice);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
-        RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
+    pass = true;
+    nice = 0xbed;
+    tree = binary_search_tree_node_create(&pass, nice);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
 
-        link = binary_search_tree_node_link(tree);
-        RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    link = binary_search_tree_node_link(tree);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
 
-        binary_search_tree_initial(tree);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
-        RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tree), &pass);
+    binary_search_tree_initial(tree);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
+    RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tree), &pass);
 
-        link = binary_search_tree_node_link(tree);
-        RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
-        binary_search_tree_destroy(&tree);
-    }
+    link = binary_search_tree_node_link(tree);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
 
+    binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_initial), pass);
-    return;
 }
 
 
@@ -161,39 +130,31 @@ unit_test_binary_search_tree_node_initial(void)
 {
     bool pass;
     sint64 nice;
-    uint32 loop;
     struct binary_search_tree *tree;
     struct doubly_linked_list *link;
-
-    
 
     nice = 0xfade;
     pass = true;
     binary_search_tree_node_initial(NULL, &pass, nice);
 
-    loop = 0x22345afu;
-    while (0 != loop--) {
-        nice = 0xfade;
-        pass = true;
+    nice = 0xfade;
+    pass = true;
 
-        tree = binary_search_tree_create();
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
-        RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tree), &pass);
+    tree = binary_search_tree_create();
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
+    RESULT_CHECK_sint64(0x0, binary_search_tree_node_nice(tree), &pass);
 
-        binary_search_tree_node_initial(tree, &pass, nice);
-        link = binary_search_tree_node_link(tree);
+    binary_search_tree_node_initial(tree, &pass, nice);
+    link = binary_search_tree_node_link(tree);
 
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
-        RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
-        RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
-        RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_child_right(tree), &pass);
+    RESULT_CHECK_sint64(nice, binary_search_tree_node_nice(tree), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
 
-        binary_search_tree_destroy(&tree);
-    }
-
+    binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_initial), pass);
-    return;
 }
 
 static void
@@ -201,8 +162,6 @@ unit_test_binary_search_tree_destroy(void)
 {
     bool pass;
     struct binary_search_tree *tree;
-
-    
 
     pass = true;
     tree = NULL;
@@ -214,13 +173,11 @@ unit_test_binary_search_tree_destroy(void)
     binary_search_tree_destroy(&tree);
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
-    tree = unit_test_binary_search_tree_sample(0x212345, 0x3ABCDE);
+    tree = unit_test_binary_search_tree_sample(0x2345, 0x3BDE);
     binary_search_tree_destroy(&tree);
+
     RESULT_CHECK_pointer(NULL, tree, &pass);
-
     test_result_print(SYM_2_STR(binary_search_tree_destroy), pass);
-
-    return;
 }
 
 static void
@@ -230,10 +187,8 @@ unit_test_binary_search_tree_node_find(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x221234, 0x3BCDEF);
+    tree = unit_test_binary_search_tree_sample(0x2234, 0x3DEF);
 
     RESULT_CHECK_pointer(NULL,
         binary_search_tree_node_find(NULL, binary_search_tree_node_nice(tree)),
@@ -259,8 +214,6 @@ unit_test_binary_search_tree_node_find(void)
 
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_find), pass);
-
-    return;
 }
 
 
@@ -271,10 +224,8 @@ unit_test_binary_search_tree_node_find_min(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x231234, 0x29ABCD);
+    tree = unit_test_binary_search_tree_sample(0x3134, 0x2ABD);
 
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find_min(NULL), &pass);
 
@@ -283,8 +234,6 @@ unit_test_binary_search_tree_node_find_min(void)
 
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_find_min), pass);
-
-    return;
 }
 
 
@@ -295,10 +244,8 @@ unit_test_binary_search_tree_node_find_max(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x231234, 0x29ABCD);
+    tree = unit_test_binary_search_tree_sample(0x2134, 0x29AD);
 
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find_max(NULL), &pass);
 
@@ -307,8 +254,6 @@ unit_test_binary_search_tree_node_find_max(void)
 
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_find_max), pass);
-
-    return;
 }
 
 static void
@@ -318,10 +263,8 @@ unit_test_binary_search_tree_height(void)
     struct binary_search_tree *tree;
     sint32 child;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x3183F1, 0x31820C);
+    tree = unit_test_binary_search_tree_sample(0x38F1, 0x310C);
 
     RESULT_CHECK_sint32(-1, binary_search_tree_height(NULL), &pass);
 
@@ -331,8 +274,6 @@ unit_test_binary_search_tree_height(void)
 
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_height), pass);
-
-    return;
 }
 
 static void
@@ -343,10 +284,8 @@ unit_test_binary_search_tree_node_contains_p(void)
     struct binary_search_tree *tmp;
     struct binary_search_tree *fake;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x237FD7, 0x3AD31D);
+    tree = unit_test_binary_search_tree_sample(0x2FD7, 0x3A1D);
     tmp = binary_search_tree_node_create(&pass, 0x1234);
 
     RESULT_CHECK_bool(false, binary_search_tree_node_contains_p(tree, NULL), &pass);
@@ -363,8 +302,6 @@ unit_test_binary_search_tree_node_contains_p(void)
     binary_search_tree_destroy(&fake);
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_contains_p), pass);
-
-    return;
 }
 
 static void
@@ -375,10 +312,8 @@ unit_test_binary_search_tree_node_insert(void)
     struct binary_search_tree *tmp;
     struct binary_search_tree *inserted;
 
-    
-
     pass = true;
-    tree = unit_test_binary_search_tree_sample(0x384321, 0x331A2B);
+    tree = unit_test_binary_search_tree_sample(0x3321, 0x3A2B);
     tmp = binary_search_tree_node_create(&pass, 0xFFFDEA);
 
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_insert(tree, NULL), &pass);
@@ -396,8 +331,6 @@ unit_test_binary_search_tree_node_insert(void)
     binary_search_tree_destroy(&tmp);
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_node_insert), pass);
-
-    return;
 }
 
 static void
@@ -408,14 +341,12 @@ unit_test_binary_search_tree_node_remove(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
-
     pass = true;
     tree = NULL;
 
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, 0x0), &pass);
 
-    tree = unit_test_binary_search_tree_sample(0x2F4321, 0x32ABCD);
+    tree = unit_test_binary_search_tree_sample(0x2F41, 0x32AD);
     nice = binary_search_tree_node_nice(tree);
     tmp = binary_search_tree_node_remove(&tree, nice);
 
@@ -442,11 +373,10 @@ unit_test_binary_search_tree_node_remove(void)
     tmp = binary_search_tree_node_create(&pass, 0x7FFFFF);
     nice = binary_search_tree_node_nice(tmp);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_remove(&tree, nice), &pass);
+
     binary_search_tree_destroy(&tmp);
     binary_search_tree_destroy(&tree);
-
     test_result_print(SYM_2_STR(binary_search_tree_node_remove), pass);
-    return;
 }
 
 static void
@@ -457,14 +387,12 @@ unit_test_binary_search_tree_node_remove_and_destroy(void)
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
 
-    
-
     pass = true;
     tree = NULL;
 
     binary_search_tree_node_remove_and_destroy(&tree, 0x0);
 
-    tree = unit_test_binary_search_tree_sample(0x149fe1, 0x10bee2);
+    tree = unit_test_binary_search_tree_sample(0x1491, 0x10be);
     nice = binary_search_tree_node_nice(tree);
     binary_search_tree_node_remove_and_destroy(&tree, nice);
     RESULT_CHECK_pointer(NULL, binary_search_tree_node_find(tree, nice), &pass);
@@ -486,9 +414,7 @@ unit_test_binary_search_tree_node_remove_and_destroy(void)
 
     binary_search_tree_destroy(&tmp);
     binary_search_tree_destroy(&tree);
-
     test_result_print(SYM_2_STR(binary_search_tree_node_remove_and_destroy), pass);
-    return;
 }
 
 static void
@@ -498,14 +424,12 @@ unit_test_binary_search_tree_iterate(void)
     struct binary_search_tree *tree;
     uint32 cnt;
 
-    
-
     pass = true;
-    cnt = 0x2C872D;
+    cnt = 0x2C7D;
     binary_search_tree_iterate(NULL, &tree_iterate_handler, ORDER_PRE);
 
     reference = 0;
-    tree = unit_test_binary_search_tree_sample(0x2AE328, cnt);
+    tree = unit_test_binary_search_tree_sample(0x2A28, cnt);
     binary_search_tree_iterate(tree, &tree_iterate_handler, ORDER_PRE);
     RESULT_CHECK_uint32(reference, cnt, &pass);
 
@@ -522,6 +446,5 @@ unit_test_binary_search_tree_iterate(void)
 
     binary_search_tree_destroy(&tree);
     test_result_print(SYM_2_STR(binary_search_tree_iterate), pass);
-
-    return;
 }
+
