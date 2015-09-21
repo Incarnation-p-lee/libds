@@ -1,41 +1,13 @@
 static void
 test_result_print(char *name, bool passed)
 {
-    sint64 period;
-    double variance;
-    struct test_performance *entry;
-
-    test_time_stamp_end();
-    period = test_time_stamp_period();
-
     if (!name) {
         pr_log_warn("Unknow Test Function Name, nothing will be done.\n");
         return;
     }
 
-    entry = test_reference_entry_find(name);
-    assert(NULL != entry);
-
-    entry->now = period;
-    if (0u == entry->ref) {
-        entry->ref = period;
-    }
-
-    variance = (double)(entry->ref - period) / entry->ref;
-    test_result_and_performance_print(variance, passed, name);
-}
-
-static inline void
-test_result_and_performance_print(double variance, bool passed, char *name)
-{
-    variance = variance * 100.0;
-
-    if (passed && (-VARIANCE_LIMIT < variance && variance < VARIANCE_LIMIT)) {
-        fprintf(stdout, "    . [32mPass[0m .. %06.2f%% .. %s\n", variance, name);
-    } else if (passed && variance > VARIANCE_LIMIT) {
-        fprintf(stdout, "    . [32mPass[0m .. [36m%06.2f%%[0m .. %s\n", variance, name);
-    } else if (passed && variance < -VARIANCE_LIMIT) {
-        fprintf(stdout, "    . [32mPass[0m .. [31m%06.2f%%[0m .. %s\n", -variance, name);
+    if (passed) {
+        fprintf(stdout, "    . [32mPass[0m .. %s\n", name);
     } else {
         fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
     }

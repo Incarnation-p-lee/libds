@@ -6,7 +6,7 @@ test_execution_start(void)
 
     list = suite.list;
 
-    fprintf(stdout, "\n  >> TEST EXECUTION OF LIBDS  << \n");
+    fprintf(stdout, "\n  >> TEST EXECUTION OF DATA STRUCTURE LIBRARY  << \n");
     while (NULL != list->name) {
         if (list->enabled) {
             entrance = list->entrance;

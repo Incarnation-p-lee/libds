@@ -19,7 +19,29 @@ test_parameter_parser(uint32 argc, char **argv)
         if ('\0' == task->content[0]) {
             strcpy(task->content, "*.*.*");
         }
+
+        test_parameter_default_entry_set(task);
     }
+}
+
+static inline void
+test_parameter_default_entry_set(struct test_suite *suite)
+{
+    struct test_entry_list *list;
+
+    assert(NULL != suite);
+    assert(NULL != suite->list);
+
+    list = suite->list;
+
+    while (list->name) {
+        if (list->enabled) {
+            return;
+        }
+        list++;
+    }
+
+    suite->list[UNIT_TEST].enabled = true;
 }
 
 static inline void
