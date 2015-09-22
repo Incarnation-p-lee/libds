@@ -4,19 +4,13 @@ unit_test_linked_stack_struct_field(void)
     bool pass;
     uint32 sid;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x32345678u;
     pass = true;
     sid = 0xfadeu;
     stack = linked_stack_create();
 
-    while (0 != loop--) {
-        linked_stack_sid_set(stack, sid);
-        RESULT_CHECK_uint32(sid, linked_stack_sid(stack), &pass);
-    }
+    linked_stack_sid_set(stack, sid);
+    RESULT_CHECK_uint32(sid, linked_stack_sid(stack), &pass);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_struct_field), pass);
@@ -27,18 +21,12 @@ unit_test_linked_stack_create(void)
 {
     bool pass;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x2234567u;
     pass = true;
 
     stack = linked_stack_create();
-    while (0 != loop--) {
-        linked_stack_destroy(&stack);
-        stack = linked_stack_create();
-    }
+    linked_stack_destroy(&stack);
+    stack = linked_stack_create();
 
     RESULT_CHECK_uint32(0x0u, stack->sid, &pass);
     RESULT_CHECK_pointer(stack->base, stack->top, &pass);
@@ -53,21 +41,15 @@ unit_test_linked_stack_destroy(void)
 {
     bool pass;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x2234567u;
     pass = true;
     stack = NULL;
 
     linked_stack_destroy(&stack);
     RESULT_CHECK_pointer(NULL, stack, &pass);
 
-    while (0 != loop--) {
-        stack = linked_stack_create();
-        linked_stack_destroy(&stack);
-    }
+    stack = linked_stack_create();
+    linked_stack_destroy(&stack);
 
     RESULT_CHECK_pointer(NULL, stack, &pass);
     test_result_print(SYM_2_STR(linked_stack_destroy), pass);
@@ -80,11 +62,7 @@ unit_test_linked_stack_space_expand(void)
     struct linked_stack *stack;
     uint32 extra;
     uint32 capacity;
-    uint32 loop;
 
-    
-
-    loop = 0x5234u;
     pass = true;
     extra = 1024u;
     stack = NULL;
@@ -96,11 +74,9 @@ unit_test_linked_stack_space_expand(void)
     capacity = linked_stack_capacity(stack);
 
     extra = 1u;
-    while (0 != loop--) {
-        linked_stack_space_expand(stack, extra);
-        RESULT_CHECK_uint32(capacity + extra, linked_stack_capacity(stack), &pass);
-        capacity = linked_stack_capacity(stack);
-    }
+    linked_stack_space_expand(stack, extra);
+    RESULT_CHECK_uint32(capacity + extra, linked_stack_capacity(stack), &pass);
+    capacity = linked_stack_capacity(stack);
 
     linked_stack_space_expand(stack, 0x0u);
     RESULT_CHECK_uint32(capacity, linked_stack_capacity(stack), &pass);
@@ -116,11 +92,7 @@ unit_test_linked_stack_full_p(void)
     struct linked_stack *stack;
     void *mem;
     uint32 tmp;
-    uint32 loop;
 
-    
-
-    loop = 0xe234567u;
     stack = linked_stack_create();
     pass = true;
     tmp = linked_stack_capacity(stack);
@@ -134,9 +106,7 @@ unit_test_linked_stack_full_p(void)
         tmp--;
     }
 
-    while (0 != loop--) {
-        RESULT_CHECK_bool(true, linked_stack_full_p(stack), &pass);
-    }
+    RESULT_CHECK_bool(true, linked_stack_full_p(stack), &pass);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_full_p), pass);
@@ -148,13 +118,9 @@ unit_test_linked_stack_space_rest(void)
     bool pass;
     struct linked_stack *stack;
     uint32 capacity;
-    uint32 loop;
-
-    
 
     RESULT_CHECK_uint32(0x0u, linked_stack_space_rest(NULL), &pass);
 
-    loop = 0xe234567u;
     stack = linked_stack_create();
     pass = true;
 
@@ -172,10 +138,8 @@ unit_test_linked_stack_space_rest(void)
     linked_stack_pop(stack);
     linked_stack_pop(stack);
 
-    while (0 != loop--) {
-        RESULT_CHECK_uint32(EXPAND_STACK_SPACE_MIN + 1,
-            linked_stack_space_rest(stack), &pass);
-    }
+    RESULT_CHECK_uint32(EXPAND_STACK_SPACE_MIN + 1,
+        linked_stack_space_rest(stack), &pass);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_space_rest), pass);
@@ -188,11 +152,7 @@ unit_test_linked_stack_capacity(void)
     struct linked_stack *stack;
     uint32 stk_size;
     uint32 extra;
-    uint32 loop;
 
-    
-
-    loop = 0xe234567u;
     pass = true;
     stack = linked_stack_create();
     stk_size = linked_stack_capacity(stack);
@@ -202,9 +162,7 @@ unit_test_linked_stack_capacity(void)
 
     extra = 1024u;
     linked_stack_space_expand(stack, extra);
-    while (0 != loop--) {
-        RESULT_CHECK_uint32(stk_size + extra, linked_stack_capacity(stack), &pass);
-    }
+    RESULT_CHECK_uint32(stk_size + extra, linked_stack_capacity(stack), &pass);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_capacity), pass);
@@ -217,11 +175,7 @@ unit_test_linked_stack_push(void)
     struct linked_stack *stack;
     void *mem;
     uint32 tmp;
-    uint32 loop;
 
-    
-
-    loop = 0x7234567u;
     mem = &tmp;
     pass = true;
     stack = linked_stack_create();
@@ -239,10 +193,8 @@ unit_test_linked_stack_push(void)
     linked_stack_push(stack, mem);
     RESULT_CHECK_uint32(tmp + 32u, linked_stack_capacity(stack), &pass);
 
-    linked_stack_space_expand(stack, loop);
-    while (0 != loop--) {
-        linked_stack_push(stack, mem);
-    }
+    linked_stack_space_expand(stack, 0u);
+    linked_stack_push(stack, mem);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_push), pass);
@@ -253,11 +205,7 @@ unit_test_linked_stack_pop(void)
 {
     bool pass;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x7234567u;
     stack = linked_stack_create();
     pass = true;
 
@@ -275,10 +223,8 @@ unit_test_linked_stack_pop(void)
     RESULT_CHECK_pointer(stack, linked_stack_pop(stack), &pass);
     RESULT_CHECK_pointer(stack, linked_stack_pop(stack), &pass);
 
-    while (0 != loop--) {
-        linked_stack_push(stack, stack);
-        linked_stack_pop(stack);
-    }
+    linked_stack_push(stack, stack);
+    linked_stack_pop(stack);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_pop), pass);
@@ -289,11 +235,7 @@ unit_test_linked_stack_empty_p(void)
 {
     bool pass;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x12345678u;
     stack = linked_stack_create();
     pass = true;
 
@@ -304,34 +246,25 @@ unit_test_linked_stack_empty_p(void)
         linked_stack_push(stack, &pass);
     }
 
-    while (0 != loop--) {
-        RESULT_CHECK_bool(false, linked_stack_empty_p(stack), &pass);
-    }
+    RESULT_CHECK_bool(false, linked_stack_empty_p(stack), &pass);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_empty_p), pass);
 }
-
 
 static void
 unit_test_linked_stack_cleanup(void)
 {
     bool pass;
     struct linked_stack *stack;
-    uint32 loop;
 
-    
-
-    loop = 0x4234567u;
     stack = linked_stack_create();
     pass = true;
 
     linked_stack_cleanup(NULL);
 
-    while (0 != loop--) {
-        linked_stack_push(stack, stack);
-        linked_stack_cleanup(stack);
-    }
+    linked_stack_push(stack, stack);
+    linked_stack_cleanup(stack);
 
     RESULT_CHECK_bool(true, linked_stack_empty_p(stack), &pass);
 
@@ -349,11 +282,7 @@ unit_test_linked_stack_iterate(void)
     sint32 expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, };
     register sint32 *d1;
     register sint32 *e1;
-    uint32 loop;
 
-    
-
-    loop = 0x12345678u;
     stack = linked_stack_create();
     pass = true;
 
@@ -372,9 +301,7 @@ unit_test_linked_stack_iterate(void)
         e1++;
     }
 
-    while (0 != loop--) {
-        linked_stack_iterate(stack, &stack_iterate_handler);
-    }
+    linked_stack_iterate(stack, &stack_iterate_handler);
 
     linked_stack_destroy(&stack);
     test_result_print(SYM_2_STR(linked_stack_iterate), pass);
