@@ -1,5 +1,5 @@
 static inline bool
-test_result_check_pointer_p(void *get, void *expect, bool *pass)
+test_result_check_pointer_p(void *expect, void *get, bool *pass)
 {
     bool tmp;
 

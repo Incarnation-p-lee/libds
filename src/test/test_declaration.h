@@ -8,7 +8,7 @@ static inline bool test_result_check_double_p(double get, double expect, bool *p
 static inline bool test_result_check_float_p(float get, float expect, bool *pass);
 static inline bool test_result_check_less_uint32_p(uint32 get, uint32 limit, bool *pass);
 static inline bool test_result_check_not_less_uint32_p(uint32 get, uint32 limit, bool *pass);
-static inline bool test_result_check_pointer_p(void *get, void *expect, bool *pass);
+static inline bool test_result_check_pointer_p(void *expect, void *get, bool *pass);
 static inline bool test_result_check_sint32_p(sint32 get, sint32 expect, bool *pass);
 static inline bool test_result_check_sint64_p(sint64 get, sint64 expect, bool *pass);
 static inline bool test_result_check_uint32_p(uint32 get, uint32 expect, bool *pass);

@@ -165,7 +165,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
             do {
                 if (key == doubly_linked_list_node_val(iter)) {
                     retval = key;
-                    iter = doubly_linked_list_node_remove(&iter);
+                    doubly_linked_list_node_remove_and_destroy(&iter);
                     break;
                 }
                 iter = doubly_linked_list_node_next(iter);
