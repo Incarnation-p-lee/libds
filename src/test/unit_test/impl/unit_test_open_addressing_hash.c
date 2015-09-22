@@ -4,26 +4,19 @@ unit_test_open_addressing_hash_struct_field(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0xa23456;
     tmp = 0x3u;
     pass = true;
 
-    while (0 != loop--) {
-        hash = open_addressing_hash_create(tmp);
-        RESULT_CHECK_uint32(tmp, open_addressing_hash_size(hash), &pass);
+    hash = open_addressing_hash_create(tmp);
+    RESULT_CHECK_uint32(tmp, open_addressing_hash_size(hash), &pass);
 
-        tmp = 100u;
-        open_addressing_hash_load_factor_set(hash, tmp);
-        RESULT_CHECK_uint32(tmp, open_addressing_hash_load_factor(hash), &pass);
-        open_addressing_hash_destroy(&hash);
-    }
+    tmp = 100u;
+    open_addressing_hash_load_factor_set(hash, tmp);
+    RESULT_CHECK_uint32(tmp, open_addressing_hash_load_factor(hash), &pass);
 
+    open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_struct_field), pass);
-    return;
 }
 
 static inline struct open_addressing_hash *
@@ -56,11 +49,7 @@ unit_test_open_addressing_hash_create(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x2234567;
     tmp = 0;
     pass = true;
 
@@ -72,19 +61,16 @@ unit_test_open_addressing_hash_create(void)
     open_addressing_hash_destroy(&hash);
 
     tmp = 11u;
-    while (0 != loop--) {
-        hash = open_addressing_hash_create(tmp);
-        open_addressing_hash_destroy(&hash);
-    }
+    hash = open_addressing_hash_create(tmp);
+    open_addressing_hash_destroy(&hash);
 
     hash = open_addressing_hash_create(tmp);
     RESULT_CHECK_uint32(tmp, open_addressing_hash_size(hash), &pass);
     tmp = OPEN_ADDRESSING_HASH_LOAD_FACTOR;
     RESULT_CHECK_uint32(tmp, open_addressing_hash_load_factor(hash), &pass);
-    open_addressing_hash_destroy(&hash);
 
+    open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_create), pass);
-    return;
 }
 
 static void
@@ -93,22 +79,16 @@ unit_test_open_addressing_hash_destroy(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x2234567;
     pass = true;
     hash = NULL;
     open_addressing_hash_destroy(&hash);
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
-    while (0 != loop--) {
-        tmp = 0xfu;
-        hash = open_addressing_hash_create(tmp);
-        open_addressing_hash_destroy(&hash);
-        RESULT_CHECK_pointer(NULL, hash, &pass);
-    }
+    tmp = 0xfu;
+    hash = open_addressing_hash_create(tmp);
+    open_addressing_hash_destroy(&hash);
+    RESULT_CHECK_pointer(NULL, hash, &pass);
 
     tmp = 0xafu;
     hash = unit_test_open_addressing_hash_sample(tmp);
@@ -116,7 +96,6 @@ unit_test_open_addressing_hash_destroy(void)
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
     test_result_print(SYM_2_STR(open_addressing_hash_destroy), pass);
-    return;
 }
 
 static void
@@ -125,11 +104,7 @@ unit_test_open_addressing_hash_load_factor_calculate(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x62345;
     tmp = 0xbedu;
     pass = true;
 
@@ -139,19 +114,16 @@ unit_test_open_addressing_hash_load_factor_calculate(void)
 
     hash = unit_test_open_addressing_hash_sample(tmp);
     tmp = OPEN_ADDRESSING_HASH_LOAD_FACTOR;
-    while (0 != loop--) {
-        RESULT_CHECK_NOT_LESS_uint32(tmp,
-            open_addressing_hash_load_factor_calculate(hash), &pass);
-    }
+    RESULT_CHECK_NOT_LESS_uint32(tmp,
+        open_addressing_hash_load_factor_calculate(hash), &pass);
     open_addressing_hash_destroy(&hash);
 
     tmp = 0x0u;
     hash = unit_test_open_addressing_hash_sample(tmp);
     open_addressing_hash_load_factor_calculate(hash);
-    open_addressing_hash_destroy(&hash);
 
+    open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_load_factor_calculate), pass);
-    return;
 }
 
 static void
@@ -160,11 +132,7 @@ unit_test_open_addressing_hash_insert(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x623456;
     tmp = 0x29u;
     pass = true;
 
@@ -172,10 +140,8 @@ unit_test_open_addressing_hash_insert(void)
     open_addressing_hash_insert(&hash, &pass);
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
-    while (0 != loop--) {
-        hash = unit_test_open_addressing_hash_sample(0x7);
-        open_addressing_hash_destroy(&hash);
-    }
+    hash = unit_test_open_addressing_hash_sample(0x7);
+    open_addressing_hash_destroy(&hash);
 
     RESULT_CHECK_pointer(NULL, open_addressing_hash_find(hash, &pass), &pass);
     hash = unit_test_open_addressing_hash_sample(tmp);
@@ -184,8 +150,6 @@ unit_test_open_addressing_hash_insert(void)
 
     open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_insert), pass);
-
-    return;
 }
 
 static void
@@ -194,11 +158,7 @@ unit_test_open_addressing_hash_remove(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x623456;
     tmp = 0x0u;
     pass = true;
     hash = NULL;
@@ -211,11 +171,9 @@ unit_test_open_addressing_hash_remove(void)
     RESULT_CHECK_pointer(&pass, open_addressing_hash_remove(hash, &pass), &pass);
     open_addressing_hash_destroy(&hash);
 
-    while (0 != loop--) {
-        hash = unit_test_open_addressing_hash_sample(0x7);
-        open_addressing_hash_insert(&hash, &pass);
-        open_addressing_hash_destroy(&hash);
-    }
+    hash = unit_test_open_addressing_hash_sample(0x7);
+    open_addressing_hash_insert(&hash, &pass);
+    open_addressing_hash_destroy(&hash);
 
     tmp = 0x32u;
     hash = unit_test_open_addressing_hash_sample(tmp);
@@ -228,8 +186,6 @@ unit_test_open_addressing_hash_remove(void)
 
     open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_remove), pass);
-
-    return;
 }
 
 static void
@@ -238,11 +194,7 @@ unit_test_open_addressing_hash_find(void)
     bool pass;
     uint32 tmp;
     struct open_addressing_hash *hash;
-    uint32 loop;
 
-    
-
-    loop = 0x7234567;
     pass = true;
     hash = NULL;
 
@@ -258,14 +210,10 @@ unit_test_open_addressing_hash_find(void)
     RESULT_CHECK_pointer(NULL, open_addressing_hash_find(hash, &pass), &pass);
     open_addressing_hash_insert(&hash, &pass);
 
-    while (0 != loop--) {
-        RESULT_CHECK_pointer(&pass, open_addressing_hash_find(hash, &pass), &pass);
-    }
+    RESULT_CHECK_pointer(&pass, open_addressing_hash_find(hash, &pass), &pass);
 
     open_addressing_hash_destroy(&hash);
     test_result_print(SYM_2_STR(open_addressing_hash_find), pass);
-
-    return;
 }
 
 static void
@@ -275,11 +223,7 @@ unit_test_open_addressing_hash_rehashing(void)
     uint32 tmp;
     struct open_addressing_hash *hash;
     struct open_addressing_hash *new;
-    uint32 loop;
 
-    
-
-    loop = 0x32;
     tmp = 0x0u;
     pass = true;
 
@@ -293,14 +237,12 @@ unit_test_open_addressing_hash_rehashing(void)
     RESULT_CHECK_uint32(prime_numeral_next(tmp),
         open_addressing_hash_size(new), &pass);
 
-    while (0 != loop--) {
-        hash = open_addressing_hash_rehashing(&new);
-        RESULT_CHECK_pointer(NULL, new, &pass);
-        new = open_addressing_hash_rehashing(&hash);
-        RESULT_CHECK_pointer(NULL, hash, &pass);
-    }
-    open_addressing_hash_destroy(&new);
+    hash = open_addressing_hash_rehashing(&new);
+    RESULT_CHECK_pointer(NULL, new, &pass);
+    new = open_addressing_hash_rehashing(&hash);
+    RESULT_CHECK_pointer(NULL, hash, &pass);
 
+    open_addressing_hash_destroy(&new);
     test_result_print(SYM_2_STR(open_addressing_hash_rehashing), pass);
-    return;
 }
+
