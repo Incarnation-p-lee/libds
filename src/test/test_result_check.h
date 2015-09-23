@@ -15,17 +15,17 @@
         }                                                         \
     } while (false)
 
-#define RESULT_CHECK_bool(get, expect, pass)                \
+#define RESULT_CHECK_bool(expect, get, pass)                \
     do {                                                    \
-        if (!test_result_check_bool_p(get, expect, pass)) { \
+        if (!test_result_check_bool_p(expect, get, pass)) { \
             LOCATION_PRINT;                                 \
             assert(false);                                  \
         }                                                   \
     } while (false)
 
-#define RESULT_CHECK_uint32(get, expect, pass)                \
+#define RESULT_CHECK_uint32(expect, get, pass)                \
     do {                                                      \
-        if (!test_result_check_uint32_p(get, expect, pass)) { \
+        if (!test_result_check_uint32_p(expect, get, pass)) { \
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \
@@ -47,41 +47,41 @@
         }                                                             \
     } while (false)
 
-#define RESULT_CHECK_sint32(get, expect, pass)                \
+#define RESULT_CHECK_sint32(expect, get, pass)                \
     do {                                                      \
-        if (!test_result_check_sint32_p(get, expect, pass)) { \
+        if (!test_result_check_sint32_p(expect, get, pass)) { \
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \
     } while (false)
 
-#define RESULT_CHECK_uint64(get, expect, pass)                \
+#define RESULT_CHECK_uint64(expect, get, pass)                \
     do {                                                      \
-        if (!test_result_check_uint64_p(get, expect, pass)) { \
+        if (!test_result_check_uint64_p(expect, get, pass)) { \
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \
     } while (false)
 
-#define RESULT_CHECK_sint64(get, expect, pass)                \
+#define RESULT_CHECK_sint64(expect, get, pass)                \
     do {                                                      \
-        if (!test_result_check_sint64_p(get, expect, pass)) { \
+        if (!test_result_check_sint64_p(expect, get, pass)) { \
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \
     } while (false)
 
-#define RESULT_CHECK_float(get, expect, pass)                \
+#define RESULT_CHECK_float(expect, get, pass)                \
     do {                                                     \
-        if (!test_result_check_float_p(get, expect, pass)) { \
+        if (!test_result_check_float_p(expect, get, pass)) { \
             LOCATION_PRINT;                                  \
             assert(false);                                   \
         }                                                    \
     } while (false)
 
-#define RESULT_CHECK_double(get, expect, pass)                \
+#define RESULT_CHECK_double(expect, get, pass)                \
     do {                                                      \
-        if (!test_result_check_double_p(get, expect, pass)) { \
+        if (!test_result_check_double_p(expect, get, pass)) { \
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \

@@ -476,24 +476,3 @@ binary_search_tree_right_child_find_min(struct binary_search_tree *tree)
     return right;
 }
 
-static inline bool
-binary_search_tree_child_has_nice_p(struct binary_search_tree *node, sint64 nice)
-{
-    struct binary_search_tree *left;
-    struct binary_search_tree *right;
-
-    assert(NULL != node);
-    assert(!binary_search_tree_node_leaf_p(node));
-
-    left = node->left;
-    right = node->right;
-
-    if (NULL != left && nice == left->chain.nice) {
-        return true;
-    } else if (NULL != right && nice == right->chain.nice) {
-        return true;
-    } else {
-        return false;
-    }
-}
-

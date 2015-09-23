@@ -3,16 +3,16 @@
 
 
 static inline bool test_case_filter_match_p(const struct test_layer_table *category, char *name);
-static inline bool test_result_check_bool_p(bool get, bool expect, bool *pass);
-static inline bool test_result_check_double_p(double get, double expect, bool *pass);
-static inline bool test_result_check_float_p(float get, float expect, bool *pass);
-static inline bool test_result_check_less_uint32_p(uint32 get, uint32 limit, bool *pass);
-static inline bool test_result_check_not_less_uint32_p(uint32 get, uint32 limit, bool *pass);
-static inline bool test_result_check_pointer_p(void *expect, void *get, bool *pass);
-static inline bool test_result_check_sint32_p(sint32 get, sint32 expect, bool *pass);
-static inline bool test_result_check_sint64_p(sint64 get, sint64 expect, bool *pass);
-static inline bool test_result_check_uint32_p(uint32 get, uint32 expect, bool *pass);
-static inline bool test_result_check_uint64_p(uint64 get, uint64 expect, bool *pass);
+static inline bool test_result_check_bool_p(bool expect, bool get, bool *pass);
+static inline bool test_result_check_double_p(double expect, double get, bool *pass);
+static inline bool test_result_check_float_p(float expect, float get, bool *pass);
+static inline bool test_result_check_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
+static inline bool test_result_check_not_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
+static inline bool test_result_check_pointer_p(void *get, void *expect, bool *pass);
+static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *pass);
+static inline bool test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass);
+static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *pass);
+static inline bool test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass);
 static inline sint64 test_time_stamp_period(void);
 static inline sint64 test_time_stamp_timeval_unpack(struct timeval *tv);
 static inline struct test_case_filter * test_case_filter_initial(void);
