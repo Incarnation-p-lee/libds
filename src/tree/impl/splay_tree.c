@@ -655,6 +655,8 @@ splay_tree_iterate(struct splay_tree *tree,
 {
     if (NULL == tree || NULL == handle) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (!LEGAL_ORDER_P(order)) {
+        pr_log_warn("illegal oder type of iterate.\n");
     } else {
         binary_search_tree_iterate_internal(&tree->alias, handle, order);
     }
