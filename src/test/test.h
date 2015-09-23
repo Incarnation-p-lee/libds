@@ -68,7 +68,6 @@ static uint64 malloc_cnt = 0;
 static uint64 free_cnt = 0;
 static uint64 realloc_cnt = 0;
 static uint32 reference = 0;
-static uint32 iteration = 0;
 
 static struct timeval chk_pnt_bgn;
 static struct timeval chk_pnt_end;

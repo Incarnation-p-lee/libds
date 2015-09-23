@@ -27,25 +27,19 @@ unit_test_single_linked_list_struct_field(void)
     uint32 sid;
     bool pass;
     struct single_linked_list *tmp;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     sid = 0xfade;
     pass = true;
     tmp = single_linked_list_create();
 
-    while (0 != loop--) {
-        single_linked_list_node_sid_set(tmp, sid);
-        RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
+    single_linked_list_node_sid_set(tmp, sid);
+    RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
 
-        single_linked_list_node_val_set(tmp, &sid);
-        RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
+    single_linked_list_node_val_set(tmp, &sid);
+    RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
 
-        single_linked_list_node_next_set(tmp, tmp);
-        RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
-    }
+    single_linked_list_node_next_set(tmp, tmp);
+    RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
 
     single_linked_list_destroy(&tmp);
     test_result_print(SYM_2_STR(single_linked_list_struct_field), pass);
@@ -56,16 +50,11 @@ unit_test_single_linked_list_create(void)
 {
     struct single_linked_list *tmp;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
-    while (0 != loop--) {
-        tmp = single_linked_list_create();
-        single_linked_list_destroy(&tmp);
-    }
+    tmp = single_linked_list_create();
+
+    single_linked_list_destroy(&tmp);
 
     tmp = single_linked_list_create();
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
@@ -82,17 +71,12 @@ unit_test_single_linked_list_node_create(void)
     bool pass;
     uint32 sid;
     struct single_linked_list *tmp;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     sid = 0xdeadu;
-    while (0 != loop--) {
-        tmp = single_linked_list_node_create(&sid, sid);
-        single_linked_list_destroy(&tmp);
-    }
+
+    tmp = single_linked_list_node_create(&sid, sid);
+    single_linked_list_destroy(&tmp);
 
     tmp = single_linked_list_node_create(&sid, sid);
     RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
@@ -110,11 +94,7 @@ unit_test_single_linked_list_node_initial(void)
     bool pass;
     uint32 sid;
     struct single_linked_list *tmp;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     sid = 0xfadeu;
 
@@ -123,9 +103,7 @@ unit_test_single_linked_list_node_initial(void)
     RESULT_CHECK_pointer(tmp, NULL, &pass);
 
     tmp = malloc_ds(sizeof(*tmp));
-    while (0 != loop--) {
-        single_linked_list_node_initial(tmp, &pass, sid);
-    }
+    single_linked_list_node_initial(tmp, &pass, sid);
 
     RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
@@ -141,16 +119,10 @@ unit_test_single_linked_list_initial(void)
 {
     bool pass;
     struct single_linked_list *tmp;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     tmp = malloc_ds(sizeof(*tmp));
-    while (0 != loop--) {
-        single_linked_list_initial(tmp);
-    }
+    single_linked_list_initial(tmp);
 
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
@@ -167,20 +139,14 @@ unit_test_single_linked_list_node_append(void)
     struct single_linked_list *next;
     struct single_linked_list *append;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     head = unit_test_single_linked_list_sample(0xa1A2E, 0x9213D);
     single_linked_list_node_append(NULL, &pass);
 
-    while (0 != loop--) {
-        next = single_linked_list_node_next(head);
-        single_linked_list_node_append(head, &pass);
-        append = single_linked_list_node_next(head);
-    }
+    next = single_linked_list_node_next(head);
+    single_linked_list_node_append(head, &pass);
+    append = single_linked_list_node_next(head);
 
     RESULT_CHECK_pointer(&pass, single_linked_list_node_val(append), &pass);
     RESULT_CHECK_pointer(head, single_linked_list_node_previous(append), &pass);
@@ -198,19 +164,13 @@ unit_test_single_linked_list_node_previous(void)
     struct single_linked_list *prev;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     head = unit_test_single_linked_list_sample(0x9AB, 0xBF3);
     single_linked_list_node_append(head, &pass);
     RESULT_CHECK_pointer(NULL, single_linked_list_node_previous(NULL), &pass);
 
-    while (0 != loop--) {
-        prev = single_linked_list_node_previous(head);
-    }
+    prev = single_linked_list_node_previous(head);
     RESULT_CHECK_pointer(prev, single_linked_list_node_previous(head), &pass);
 
     tmp = single_linked_list_node_next(head);
@@ -231,12 +191,7 @@ unit_test_single_linked_list_node_insert_before(void)
     struct single_linked_list *prev;
     struct single_linked_list *copy;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
-    loop = loop >> 4;
     pass = true;
     head = unit_test_single_linked_list_sample(0xa26, 0x239);
     single_linked_list_node_append(head, &pass);
@@ -262,10 +217,8 @@ unit_test_single_linked_list_node_insert_before(void)
     RESULT_CHECK_pointer(prev, single_linked_list_node_previous(node), &pass);
     RESULT_CHECK_pointer(node, single_linked_list_node_next(prev), &pass);
 
-    while (0 != loop--) {
-        node = single_linked_list_create();
-        single_linked_list_node_insert_before(head, node);
-    }
+    node = single_linked_list_create();
+    single_linked_list_node_insert_before(head, node);
 
     single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_insert_before), pass);
@@ -279,12 +232,7 @@ unit_test_single_linked_list_node_insert_after(void)
     struct single_linked_list *next;
     struct single_linked_list *copy;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
-    loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0xF18AB, 0x82E9C);
     single_linked_list_node_append(head, &pass);
@@ -310,10 +258,8 @@ unit_test_single_linked_list_node_insert_after(void)
     RESULT_CHECK_pointer(next, single_linked_list_node_next(node), &pass);
     RESULT_CHECK_pointer(node, single_linked_list_node_previous(next), &pass);
 
-    while (0 != loop--) {
-        node = single_linked_list_create();
-        single_linked_list_node_insert_after(head, node);
-    }
+    node = single_linked_list_create();
+    single_linked_list_node_insert_after(head, node);
 
     single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_insert_after), pass);
@@ -327,11 +273,7 @@ unit_test_single_linked_list_destroy(void)
     uint32 *iter;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     iter = sizes;
     pass = true;
     head = NULL;
@@ -347,11 +289,9 @@ unit_test_single_linked_list_destroy(void)
         RESULT_CHECK_pointer(NULL, head, &pass);
     }
 
-    while (0 != loop--) {
-        head = single_linked_list_create();
-        single_linked_list_destroy(&head);
-        RESULT_CHECK_pointer(NULL, head, &pass);
-    }
+    head = single_linked_list_create();
+    single_linked_list_destroy(&head);
+    RESULT_CHECK_pointer(NULL, head, &pass);
 
     test_result_print(SYM_2_STR(single_linked_list_destroy), pass);
 }
@@ -364,12 +304,7 @@ unit_test_single_linked_list_length(void)
     uint32 *iter;
     uint32 len;
     uint32 sizes[] = {1, 10, 100, 1000, 2000, 3000, 4000, 5000, 6000,};
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
-    loop = loop << 7;
     iter = sizes;
     pass = true;
 
@@ -382,9 +317,7 @@ unit_test_single_linked_list_length(void)
     }
 
     head = single_linked_list_create();
-    while (0 != loop--) {
-        RESULT_CHECK_uint32(0x1u, single_linked_list_length(head), &pass);
-    }
+    RESULT_CHECK_uint32(0x1u, single_linked_list_length(head), &pass);
     single_linked_list_destroy(&head);
     RESULT_CHECK_uint32(0x0u, single_linked_list_length(NULL), &pass);
 
@@ -398,17 +331,11 @@ unit_test_single_linked_list_node_by_index(void)
     struct single_linked_list *tmp;
     uint32 len;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     head = unit_test_single_linked_list_sample(0xFAA, 0x9A8);
     len = single_linked_list_length(head);
-    while (0 != loop--) {
-        tmp = single_linked_list_node_by_index(head, 0);
-    }
+    tmp = single_linked_list_node_by_index(head, 0);
     RESULT_CHECK_pointer(head, tmp, &pass);
 
     tmp = single_linked_list_node_by_index(head, len);
@@ -430,12 +357,7 @@ unit_test_single_linked_list_contains_p(void)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
-    loop = loop >> 2;
     pass = true;
     head = unit_test_single_linked_list_sample(0x1DD2, 0x2AE2);
     tmp = single_linked_list_node_next(head);
@@ -444,9 +366,7 @@ unit_test_single_linked_list_contains_p(void)
     RESULT_CHECK_bool(false, single_linked_list_contains_p(NULL, tmp), &pass);
 
     tmp = single_linked_list_create();
-    while (0 != loop--) {
-        RESULT_CHECK_bool(false, single_linked_list_contains_p(head, tmp), &pass);
-    }
+    RESULT_CHECK_bool(false, single_linked_list_contains_p(head, tmp), &pass);
 
     single_linked_list_destroy(&tmp);
     single_linked_list_destroy(&head);
@@ -459,24 +379,18 @@ unit_test_single_linked_list_serialize(void)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 sizes[] = {1, 10, 100, 1000,};
+    uint32 sizes[] = {1, 10, 100, 1000, 10000,};
     uint32 *iter;
     uint32 len;
     uint32 index;
-    uint32 loop;
-
-    
 
     pass = true;
     iter = sizes;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
         head = unit_test_single_linked_list_sample(0x9E2, len);
+        single_linked_list_serialize(head);
 
-        loop = test_utilize_iteration();
-        while (0 != loop--) {
-            single_linked_list_serialize(head);
-        }
         tmp = head;
         index = 0u;
         do {
@@ -498,24 +412,18 @@ unit_test_single_linked_list_node_copy(void)
     bool pass;
     struct single_linked_list *head;
     struct single_linked_list *tmp;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     sid = 0xbedu;
     pass = true;
     head = single_linked_list_node_create(&pass, sid);
 
     single_linked_list_node_copy(NULL);
 
-    while (0 != loop--) {
-        tmp = single_linked_list_node_copy(head);
-        RESULT_CHECK_single_linked_list_node(tmp, head, &pass);
-        single_linked_list_node_initial(tmp, NULL, 0x0u);
-        single_linked_list_destroy(&tmp);
-    }
+    tmp = single_linked_list_node_copy(head);
+    RESULT_CHECK_single_linked_list_node(tmp, head, &pass);
+    single_linked_list_node_initial(tmp, NULL, 0x0u);
 
+    single_linked_list_destroy(&tmp);
     single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_copy), pass);
 }
@@ -527,14 +435,9 @@ unit_test_single_linked_list_node_remove(void)
     struct single_linked_list *tmp;
     struct single_linked_list ref;
     bool pass;
-    uint32 loop;
-
-    
 
     single_linked_list_node_remove(NULL);
 
-    loop = test_utilize_iteration();
-    loop = loop << 5;
     pass = true;
     head = single_linked_list_create();
     ref.sid = head->sid;
@@ -546,19 +449,16 @@ unit_test_single_linked_list_node_remove(void)
     RESULT_CHECK_pointer(ref.val, tmp->val, &pass);
     single_linked_list_destroy(&tmp);
 
-    while (0 != loop--) {
-        head = unit_test_single_linked_list_sample(0x32, 0xF);
+    head = unit_test_single_linked_list_sample(0x32, 0xF);
 
-        ref.sid = head->sid;
-        ref.val = head->val;
-        tmp = single_linked_list_node_remove(&head);
-        RESULT_CHECK_uint32(ref.sid, tmp->sid, &pass);
-        RESULT_CHECK_pointer(ref.val, tmp->val, &pass);
+    ref.sid = head->sid;
+    ref.val = head->val;
+    tmp = single_linked_list_node_remove(&head);
+    RESULT_CHECK_uint32(ref.sid, tmp->sid, &pass);
+    RESULT_CHECK_pointer(ref.val, tmp->val, &pass);
 
-        single_linked_list_destroy(&tmp);
-        single_linked_list_destroy(&head);
-    }
-
+    single_linked_list_destroy(&tmp);
+    single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_node_remove), pass);
 }
 
@@ -567,25 +467,18 @@ unit_test_single_linked_list_node_remove_and_destroy(void)
 {
     struct single_linked_list *head;
     bool pass;
-    uint32 loop;
-
-    
 
     single_linked_list_node_remove(NULL);
 
-    loop = test_utilize_iteration();
-    loop = loop << 5;
     pass = true;
     head = unit_test_single_linked_list_sample(0x31e2, 0x28ed);
 
     single_linked_list_node_remove_and_destroy(&head);
     single_linked_list_destroy(&head);
 
-    while (0 != loop--) {
-        head = single_linked_list_create();
-        single_linked_list_node_remove_and_destroy(&head);
-        RESULT_CHECK_pointer(NULL, head, &pass);
-    }
+    head = single_linked_list_create();
+    single_linked_list_node_remove_and_destroy(&head);
+    RESULT_CHECK_pointer(NULL, head, &pass);
 
     test_result_print(SYM_2_STR(single_linked_list_node_remove_and_destroy), pass);
 }
@@ -596,11 +489,7 @@ unit_test_single_linked_list_iterate(void)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 loop;
 
-    
-
-    loop = test_utilize_iteration();
     pass = true;
     head = unit_test_single_linked_list_sample(0x1E2, 0x282);
 
@@ -613,9 +502,7 @@ unit_test_single_linked_list_iterate(void)
         tmp = single_linked_list_node_next(tmp);
     } while (tmp != head);
 
-    while (0 != loop--) {
-        single_linked_list_iterate(head, &linked_list_iterate_handler);
-    }
+    single_linked_list_iterate(head, &linked_list_iterate_handler);
 
     single_linked_list_destroy(&head);
     test_result_print(SYM_2_STR(single_linked_list_iterate), pass);
@@ -629,12 +516,8 @@ unit_test_single_linked_list_merge(void)
     struct single_linked_list *head_n;
     struct single_linked_list *tmp;
     bool pass;
-    uint32 loop;
-
-    
 
     pass = true;
-    loop = test_utilize_iteration();
     head = single_linked_list_create();
 
     single_linked_list_node_initial(head, raw, 0x0u);
@@ -657,10 +540,7 @@ unit_test_single_linked_list_merge(void)
     head = single_linked_list_merge(head, head_n);
     RESULT_CHECK_uint32(0x6u, single_linked_list_length(head), &pass);
 
-    loop = loop >> 6;
-    while (0 != loop--) {
-        head = single_linked_list_merge(head, head_n);
-    }
+    head = single_linked_list_merge(head, head_n);
 
     single_linked_list_destroy(&head);
     single_linked_list_destroy(&head_n);

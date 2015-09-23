@@ -64,11 +64,3 @@ tree_iterate_handler(void *ptr)
     }
 }
 
-static uint32
-test_utilize_iteration(void)
-{
-    assert(0 != iteration);
-
-    return iteration;
-}
-

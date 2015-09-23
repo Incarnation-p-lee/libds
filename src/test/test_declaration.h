@@ -30,7 +30,6 @@ static inline void test_reference_update(char *raw, struct test_performance *ref
 static inline void test_time_stamp_begin(void);
 static inline void test_time_stamp_end(void);
 static struct test_case_filter * test_case_filter_obtain(char *arg);
-static uint32 test_utilize_iteration(void);
 static void linked_list_iterate_handler(void *node);
 static void queue_iterate_handler(void *ptr);
 static void stack_iterate_handler(void *ptr);
