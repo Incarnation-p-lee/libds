@@ -49,7 +49,6 @@ test_parameter_parser_internal(struct test_suite *suite, char *arg)
 {
     char *tmp;
     uint32 len;
-    uint32 iter;
     struct test_entry_list *list;
 
     assert(NULL != arg);
@@ -62,23 +61,21 @@ test_parameter_parser_internal(struct test_suite *suite, char *arg)
         if (!strcmp("-l", arg) || !strcmp("-list", arg)
             || !strcmp("--list", arg)) {
             list[TEST_CASE_LIST].enabled = true;
-        } else if (!strncmp("-p=", arg, strlen("-p="))
-            || !strncmp("-perf=", arg, strlen("-perf="))
-            || !strncmp("-perf=", arg, strlen("--perf="))) {
+        } else if (!strncmp("-p", arg, strlen("-p"))
+            || !strncmp("-perf", arg, strlen("-perf"))
+            || !strncmp("-perf", arg, strlen("--perf"))) {
             list[PERFORMANCE_TEST].enabled = true;
             tmp = strchr(arg, '=');
-            tmp++;
-            iter = atoi(tmp);
 
-            if (!iter) {
-                pr_log_warn("Invalid iteration count, use default.\n");
+            if (!tmp) {
                 list[PERFORMANCE_TEST].info->count = DEFAULT_ITERATION_CNT;
             } else {
-                list[PERFORMANCE_TEST].info->count = iter;
+                tmp++;
+                list[PERFORMANCE_TEST].info->count = atoi(tmp);
             }
         } else if (!strncmp("-u", arg, strlen("-u"))
             || !strncmp("-unit", arg, strlen("-uint"))
-            || !strncmp("-unit=", arg, strlen("--unit"))) {
+            || !strncmp("-unit", arg, strlen("--unit"))) {
             list[UNIT_TEST].enabled = true;
         } else {
             list[UNIT_TEST].enabled = true;

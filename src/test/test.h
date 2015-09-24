@@ -1,8 +1,6 @@
 #ifndef HAVE_TEST_H
 #define HAVE_TEST_H
 
-#define TEST_PERFORMANCE_CHECKPOINT test_time_stamp_begin()
-#define VARIANCE_LIMIT              3.0f
 #define FILTER_LEN                  32
 
 struct test_case_filter {
@@ -13,7 +11,7 @@ struct test_case_filter {
 
 struct test_layer_entity {
     void (*unit)(void);
-    void (*performance)(void);
+    void (*performance)(uint32);
 };
 
 struct test_layer_table {
@@ -50,12 +48,13 @@ struct test_extra_info performance_attr = {
 
 static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
+static inline void performance_test_execution_start(struct test_extra_info *entry, char *content);
 
 static struct test_entry_list entry_list[] = {
-    {"test_case_list",   false, &test_case_list,            NULL},
-    {"unit_test",        false, &unit_test_execution_start, NULL},
-    {"performance_test", false, NULL,                       &performance_attr},
-    {NULL,               false, NULL,                       NULL},
+    {"test_case_list",   false, &test_case_list,                   NULL},
+    {"unit_test",        false, &unit_test_execution_start,        NULL},
+    {"performance_test", false, &performance_test_execution_start, &performance_attr},
+    {NULL,               false, NULL,                              NULL},
 };
 
 static struct test_suite suite = {
@@ -69,9 +68,5 @@ static uint64 free_cnt = 0;
 static uint64 realloc_cnt = 0;
 static uint32 reference = 0;
 
-static struct timeval chk_pnt_bgn;
-static struct timeval chk_pnt_end;
-
-static FILE *test_performance_file;
-
 #endif
+

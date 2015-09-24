@@ -9,6 +9,7 @@ unit_test_execution_start(struct test_extra_info *entry, char *content)
 
     fprintf(stdout, "\n  >> UNIT LIST << \n");
     unit_test_execution_category(test_category, filter);
+
     test_case_filter_destroy(&filter);
 }
 
@@ -59,6 +60,21 @@ unit_test_execution_interface(const struct test_layer_table *interface,
             interface->entity.unit();
         }
         interface++;
+    }
+}
+
+static inline void
+unit_test_result_print(char *name, bool passed)
+{
+    if (!name) {
+        pr_log_warn("Unknow Test Function Name, nothing will be done.\n");
+        return;
+    }
+
+    if (passed) {
+        fprintf(stdout, "    . [32mPass[0m .. %s\n", name);
+    } else {
+        fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
     }
 }
 

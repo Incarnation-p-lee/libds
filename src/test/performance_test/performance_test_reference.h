@@ -1,7 +1,7 @@
 #ifndef HAVE_TEST_PERFORMANCE_SET_H
 #define HAVE_TEST_PERFORMANCE_SET_H
 
-static struct test_performance unit_test_performance[] = {
+static struct performance_test_reference performance_reference[] = {
     {"single_linked_list_struct_field",            0x0u, 0x0u},
     {"single_linked_list_initial",                 0x0u, 0x0u},
     {"single_linked_list_create",                  0x0u, 0x0u},

@@ -1,18 +1,3 @@
-static void
-test_result_print(char *name, bool passed)
-{
-    if (!name) {
-        pr_log_warn("Unknow Test Function Name, nothing will be done.\n");
-        return;
-    }
-
-    if (passed) {
-        fprintf(stdout, "    . [32mPass[0m .. %s\n", name);
-    } else {
-        fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
-    }
-}
-
 void
 memory_trace_print(void)
 {

@@ -2,7 +2,8 @@
 #define TEST_LAYER_H
 
 static const struct test_layer_table single_linked_list_interface[] = {
-    {"struct_field",            NULL, {&unit_test_single_linked_list_struct_field, NULL},},
+    {"struct_field",            NULL, {&unit_test_single_linked_list_struct_field,
+                                       &performance_test_single_linked_list_struct_field},},
     {"initial",                 NULL, {&unit_test_single_linked_list_initial, NULL},},
     {"create",                  NULL, {&unit_test_single_linked_list_create, NULL},},
     {"node_initial",            NULL, {&unit_test_single_linked_list_node_initial, NULL},},

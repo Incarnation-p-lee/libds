@@ -46,6 +46,7 @@ static inline void unit_test_minimal_heap_node_remove_and_destroy(void);
 static inline void unit_test_minimal_heap_node_remove_min(void);
 static inline void unit_test_minimal_heap_node_remove_min_and_destroy(void);
 static inline void unit_test_minimal_heap_struc_field(void);
+static inline void unit_test_result_print(char *name, bool passed);
 static void unit_test_array_queue_capacity(void);
 static void unit_test_array_queue_cleanup(void);
 static void unit_test_array_queue_create(void);

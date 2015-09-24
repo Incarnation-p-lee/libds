@@ -21,7 +21,7 @@ unit_test_array_stack_struct_field(void)
     array_stack_space_dim_set(stack, tmp);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_struct_field), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_struct_field), pass);
 }
 
 static void
@@ -38,7 +38,7 @@ unit_test_array_stack_create(void)
         array_stack_space_dim(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_create), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_create), pass);
 }
 
 static void
@@ -57,7 +57,7 @@ unit_test_array_stack_destroy(void)
     array_stack_destroy(&stack);
     RESULT_CHECK_pointer(NULL, stack, &pass);
 
-    test_result_print(SYM_2_STR(array_stack_destroy), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_destroy), pass);
 }
 
 static void
@@ -85,7 +85,7 @@ unit_test_array_stack_space_expand(void)
     RESULT_CHECK_uint32(stk_size, array_stack_space_dim(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_space_expand), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_space_expand), pass);
 }
 
 static void
@@ -112,7 +112,7 @@ unit_test_array_stack_full_p(void)
     RESULT_CHECK_bool(true, array_stack_full_p(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_full_p), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_full_p), pass);
 }
 
 
@@ -137,7 +137,7 @@ unit_test_array_stack_capacity(void)
     RESULT_CHECK_uint32(stk_size + extra, array_stack_capacity(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_capacity), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_capacity), pass);
 }
 
 static void
@@ -159,7 +159,7 @@ unit_test_array_stack_space_rest(void)
     RESULT_CHECK_uint32(stk_size, array_stack_space_rest(stack) + 1u, &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_space_rest), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_space_rest), pass);
 }
 
 static void
@@ -191,7 +191,7 @@ unit_test_array_stack_push(void)
     array_stack_pop(stack);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_push), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_push), pass);
 }
 
 static void
@@ -213,7 +213,7 @@ unit_test_array_stack_pop(void)
     array_stack_pop(stack);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_pop), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_pop), pass);
 }
 
 static void
@@ -233,7 +233,7 @@ unit_test_array_stack_empty_p(void)
     RESULT_CHECK_bool(false, array_stack_empty_p(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_empty_p), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_empty_p), pass);
 }
 
 static void
@@ -252,7 +252,7 @@ unit_test_array_stack_cleanup(void)
     RESULT_CHECK_bool(true, array_stack_empty_p(stack), &pass);
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_cleanup), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_cleanup), pass);
 }
 
 static void
@@ -285,6 +285,6 @@ unit_test_array_stack_iterate(void)
     }
 
     array_stack_destroy(&stack);
-    test_result_print(SYM_2_STR(array_stack_iterate), pass);
+    unit_test_result_print(SYM_2_STR(array_stack_iterate), pass);
 }
 

@@ -11,11 +11,10 @@
 
 #include "ds.h"
 #include "test.h"
-#include "test_performance.h"
-#include "test_performance_set.h"
 #include "test_result_check.h"
 #include "test_declaration.h"
 #include "unit_test/unit_test.c"
+#include "performance_test/performance_test.c"
 #include "test_layer.h"
 
 #include "impl/test_case_list.c"
@@ -23,8 +22,6 @@
 #include "impl/test_utilize.c"
 #include "impl/test_wrapper.c"
 #include "impl/test_result_check.c"
-#include "impl/test_time_stamp.c"
-#include "impl/test_performance.c"
 #include "impl/test_parameter.c"
 #include "impl/test_case_filter.c"
 

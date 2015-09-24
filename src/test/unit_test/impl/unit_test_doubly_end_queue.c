@@ -13,7 +13,7 @@ unit_test_doubly_end_queue_struct_field(void)
     RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_struct_field), pass);
 }
 
 static void
@@ -29,7 +29,7 @@ unit_test_doubly_end_queue_create(void)
     RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_create), pass);
 }
 
 static void
@@ -51,7 +51,7 @@ unit_test_doubly_end_queue_destroy(void)
     doubly_end_queue_destroy(&queue);
     RESULT_CHECK_pointer(NULL, queue, &pass);
 
-    test_result_print(SYM_2_STR(doubly_end_queue_destroy), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_destroy), pass);
 }
 
 static void
@@ -72,7 +72,7 @@ unit_test_doubly_end_queue_length(void)
     RESULT_CHECK_uint32(0x1u, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_length), pass);
 }
 
 static void
@@ -93,7 +93,7 @@ unit_test_doubly_end_queue_empty_p(void)
     RESULT_CHECK_bool(false, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_empty_p), pass);
 }
 
 static void
@@ -115,7 +115,7 @@ unit_test_doubly_end_queue_head_enter(void)
     doubly_end_queue_head_leave(queue);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_head_enter), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_head_enter), pass);
 }
 
 static void
@@ -137,7 +137,7 @@ unit_test_doubly_end_queue_tail_enter(void)
     doubly_end_queue_tail_leave(queue);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_tail_enter), pass);
 }
 
 static void
@@ -161,7 +161,7 @@ unit_test_doubly_end_queue_head_leave(void)
     doubly_end_queue_head_enter(queue, queue);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_head_leave), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_head_leave), pass);
 }
 
 static void
@@ -186,7 +186,7 @@ unit_test_doubly_end_queue_tail_leave(void)
     doubly_end_queue_tail_enter(queue, queue);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_tail_leave), pass);
 }
 
 
@@ -210,7 +210,7 @@ unit_test_doubly_end_queue_cleanup(void)
     RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_cleanup), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_cleanup), pass);
 }
 
 static void
@@ -238,6 +238,6 @@ unit_test_doubly_end_queue_iterate(void)
     RESULT_CHECK_uint32(tmp, doubly_end_queue_length(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
-    test_result_print(SYM_2_STR(doubly_end_queue_iterate), pass);
+    unit_test_result_print(SYM_2_STR(doubly_end_queue_iterate), pass);
 }
 
