@@ -2,17 +2,77 @@
 #define TEST_LAYER_H
 
 static const struct test_layer_table single_linked_list_interface[] = {
-    {"struct_field",            NULL, {&unit_test_single_linked_list_struct_field,
-                                       &performance_test_single_linked_list_struct_field},},
-    {"initial",                 NULL, {&unit_test_single_linked_list_initial, NULL},},
-    {"create",                  NULL, {&unit_test_single_linked_list_create, NULL},},
-    {"node_initial",            NULL, {&unit_test_single_linked_list_node_initial, NULL},},
-    {"node_create",             NULL, {&unit_test_single_linked_list_node_create, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_single_linked_list_struct_field,
+            &performance_test_single_linked_list_struct_field,
+        },
+    },
+    {   "initial",
+        NULL,
+        {
+            &unit_test_single_linked_list_initial,
+            &performance_test_single_linked_list_initial,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_single_linked_list_create,
+            &performance_test_single_linked_list_create,
+        },
+    },
+    {
+        "node_initial",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_initial,
+            &performance_test_single_linked_list_node_initial,
+        },
+    },
+    {
+        "node_create",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_create,
+            &performance_test_single_linked_list_node_create,
+        },
+    },
+    {
+        "node_append",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_append,
+            &performance_test_single_linked_list_node_append,
+        },
+    },
+    {
+        "node_previous",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_previous,
+            &performance_test_single_linked_list_node_previous,
+        },
+    },
+    {
+        "node_insert_before",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_insert_before,
+            &performance_test_single_linked_list_node_insert_before,
+        },
+    },
+    {   "node_insert_after",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_insert_after,
+            &performance_test_single_linked_list_node_insert_after,
+        },
+    },
     {"node_copy",               NULL, {&unit_test_single_linked_list_node_copy, NULL},},
-    {"node_append",             NULL, {&unit_test_single_linked_list_node_append, NULL},},
-    {"node_previous",           NULL, {&unit_test_single_linked_list_node_previous, NULL},},
-    {"node_insert_before",      NULL, {&unit_test_single_linked_list_node_insert_before, NULL},},
-    {"node_insert_after",       NULL, {&unit_test_single_linked_list_node_insert_after, NULL},},
     {"node_by_index",           NULL, {&unit_test_single_linked_list_node_by_index, NULL},},
     {"node_remove",             NULL, {&unit_test_single_linked_list_node_remove, NULL},},
     {"node_remove_and_destroy", NULL, {&unit_test_single_linked_list_node_remove_and_destroy, NULL},},

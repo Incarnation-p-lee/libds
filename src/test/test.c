@@ -19,6 +19,7 @@
 
 #include "impl/test_case_list.c"
 #include "impl/test_main.c"
+#include "impl/test_sample.c"
 #include "impl/test_utilize.c"
 #include "impl/test_wrapper.c"
 #include "impl/test_result_check.c"

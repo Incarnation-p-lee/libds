@@ -14,7 +14,7 @@ struct performance_test_reference {
 #define PERORMANCE_ENTRY_MAX_SIZE   128
 #define PERFORMANCE_TEST_CHECKPOINT performance_test_time_stamp_begin()
 #define PERFORMANCE_TEST_ENDPOINT   performance_test_time_stamp_end()
-#define VARIANCE_LIMIT              3.0f
+#define VARIANCE_LIMIT              5.0f
 
 static struct timeval chk_pnt_bgn;
 static struct timeval chk_pnt_end;

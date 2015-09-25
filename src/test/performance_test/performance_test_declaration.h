@@ -16,6 +16,14 @@ static inline void performance_test_reference_update(char *raw, struct performan
 static inline void performance_test_result_print(char *name, sint64 period);
 static inline void performance_test_time_stamp_begin(void);
 static inline void performance_test_time_stamp_end(void);
+static void performance_test_single_linked_list_create(uint32 count);
+static void performance_test_single_linked_list_initial(uint32 count);
+static void performance_test_single_linked_list_node_append(uint32 count);
+static void performance_test_single_linked_list_node_create(uint32 count);
+static void performance_test_single_linked_list_node_initial(uint32 count);
+static void performance_test_single_linked_list_node_insert_after(uint32 count);
+static void performance_test_single_linked_list_node_insert_before(uint32 count);
+static void performance_test_single_linked_list_node_previous(uint32 count);
 static void performance_test_single_linked_list_struct_field(uint32 count);
 
 #endif

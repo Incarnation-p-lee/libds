@@ -59,7 +59,10 @@ performance_test_execution_interface(const struct test_layer_table *interface,
 
     while (interface->name) {
         if (test_case_filter_match_p(interface, tmp)) {
-            interface->entity.performance(info->count);
+            // Fixme: remove if after all done
+            if (interface->entity.performance) {
+                interface->entity.performance(info->count);
+            }
         }
         interface++;
     }
@@ -80,11 +83,11 @@ performance_test_result_print(char *name, sint64 period)
     variance = variance * 100.0;
 
     if (-VARIANCE_LIMIT < variance && variance < VARIANCE_LIMIT) {
-        fprintf(stdout, "    . %06.3f%% .. %#08lXms .. %s\n", variance, period, name);
+        fprintf(stdout, "    . %08.3f%% .. %#012lx ms .. %s\n", variance, period, name);
     } else if (-VARIANCE_LIMIT > variance) {
-        fprintf(stdout, "    . [35m%06.3f%%[0m .. %#08lXms .. %s\n", -variance, period, name);
+        fprintf(stdout, "    . [35m%08.3f%%[0m .. %#012lx ms .. %s\n", -variance, period, name);
     } else {
-        fprintf(stdout, "    . [36m%06.3f%%[0m .. %#08lXms .. %s\n", variance, period, name);
+        fprintf(stdout, "    . [36m%08.3f%%[0m .. %#012lx ms .. %s\n", variance, period, name);
     }
 }
 
