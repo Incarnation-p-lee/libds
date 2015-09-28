@@ -96,13 +96,59 @@ static const struct test_layer_table single_linked_list_interface[] = {
             &performance_test_single_linked_list_node_by_index,
         },
     },
-    {"node_copy",               NULL, {&unit_test_single_linked_list_node_copy, NULL},},
-    {"node_remove",             NULL, {&unit_test_single_linked_list_node_remove, NULL},},
-    {"node_remove_and_destroy", NULL, {&unit_test_single_linked_list_node_remove_and_destroy, NULL},},
-    {"contains_p",              NULL, {&unit_test_single_linked_list_contains_p, NULL},},
-    {"serialize",               NULL, {&unit_test_single_linked_list_serialize, NULL},},
-    {"iterate",                 NULL, {&unit_test_single_linked_list_iterate, NULL},},
-    {"merge",                   NULL, {&unit_test_single_linked_list_merge, NULL},},
+    {
+        "contains_p",
+        NULL,
+        {
+            &unit_test_single_linked_list_contains_p,
+            &performance_test_single_linked_list_contains_p,
+        },
+    },
+    {   "serialize",
+        NULL,
+        {
+            &unit_test_single_linked_list_serialize,
+            &performance_test_single_linked_list_serialize,
+        },
+    },
+    {
+        "node_copy",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_copy,
+            &performance_test_single_linked_list_node_copy,
+        },
+    },
+    {   "node_remove",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_remove,
+            &performance_test_single_linked_list_node_remove,
+        },
+    },
+    {
+        "node_remove_and_destroy",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_remove_and_destroy,
+            &performance_test_single_linked_list_node_remove_and_destroy,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_single_linked_list_iterate,
+            &performance_test_single_linked_list_iterate,
+        },
+    },
+    {   "merge",
+        NULL,
+        {
+            &unit_test_single_linked_list_merge,
+            &performance_test_single_linked_list_merge,
+        },
+    },
     {NULL,                      NULL, {NULL, NULL},},
 };
 
