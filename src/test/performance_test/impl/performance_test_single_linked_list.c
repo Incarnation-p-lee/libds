@@ -185,3 +185,63 @@ performance_test_single_linked_list_node_insert_after(uint32 count)
         performance_test_time_stamp_period());
 }
 
+static void
+performance_test_single_linked_list_destroy(uint32 count)
+{
+    struct single_linked_list *head;
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        head = test_single_linked_list_sample(0x22, 0x9);
+        single_linked_list_destroy(&head);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    performance_test_result_print(SYM_2_STR(single_linked_list_destroy),
+        performance_test_time_stamp_period());
+}
+
+static void
+performance_test_single_linked_list_length(uint32 count)
+{
+    struct single_linked_list *head;
+
+    head = test_single_linked_list_sample(0xe3e, 0x9a7);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        single_linked_list_length(head);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    single_linked_list_destroy(&head);
+    performance_test_result_print(SYM_2_STR(single_linked_list_length),
+        performance_test_time_stamp_period());
+}
+
+static void
+performance_test_single_linked_list_node_by_index(uint32 count)
+{
+    struct single_linked_list *head;
+    uint32 length;
+
+    head = test_single_linked_list_sample(0xfde, 0x4af);
+    length = single_linked_list_length(head);
+    length /= 2;
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        single_linked_list_node_by_index(head, length);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    single_linked_list_destroy(&head);
+    performance_test_result_print(SYM_2_STR(single_linked_list_node_by_index),
+        performance_test_time_stamp_period());
+}

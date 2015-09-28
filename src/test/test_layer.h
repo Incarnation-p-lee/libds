@@ -72,15 +72,36 @@ static const struct test_layer_table single_linked_list_interface[] = {
             &performance_test_single_linked_list_node_insert_after,
         },
     },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_single_linked_list_destroy,
+            &performance_test_single_linked_list_destroy,
+        },
+    },
+    {
+        "length",
+        NULL,
+        {
+            &unit_test_single_linked_list_length,
+            &performance_test_single_linked_list_length,
+        },
+    },
+    {
+        "node_by_index",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_by_index,
+            &performance_test_single_linked_list_node_by_index,
+        },
+    },
     {"node_copy",               NULL, {&unit_test_single_linked_list_node_copy, NULL},},
-    {"node_by_index",           NULL, {&unit_test_single_linked_list_node_by_index, NULL},},
     {"node_remove",             NULL, {&unit_test_single_linked_list_node_remove, NULL},},
     {"node_remove_and_destroy", NULL, {&unit_test_single_linked_list_node_remove_and_destroy, NULL},},
     {"contains_p",              NULL, {&unit_test_single_linked_list_contains_p, NULL},},
     {"serialize",               NULL, {&unit_test_single_linked_list_serialize, NULL},},
     {"iterate",                 NULL, {&unit_test_single_linked_list_iterate, NULL},},
-    {"destroy",                 NULL, {&unit_test_single_linked_list_destroy, NULL},},
-    {"length",                  NULL, {&unit_test_single_linked_list_length, NULL},},
     {"merge",                   NULL, {&unit_test_single_linked_list_merge, NULL},},
     {NULL,                      NULL, {NULL, NULL},},
 };
