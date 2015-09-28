@@ -383,8 +383,6 @@ performance_test_single_linked_list_merge(uint32 count)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
 
-
-
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {

@@ -153,24 +153,145 @@ static const struct test_layer_table single_linked_list_interface[] = {
 };
 
 static const struct test_layer_table doubly_linked_list_interface[] = {
-    {"struct_field",            NULL, {&unit_test_doubly_linked_list_struct_field, NULL},},
-    {"initial",                 NULL, {&unit_test_doubly_linked_list_initial, NULL},},
-    {"create",                  NULL, {&unit_test_doubly_linked_list_create, NULL},},
-    {"node_initial",            NULL, {&unit_test_doubly_linked_list_node_initial, NULL},},
-    {"node_create",             NULL, {&unit_test_doubly_linked_list_node_create, NULL},},
-    {"node_copy",               NULL, {&unit_test_doubly_linked_list_node_copy, NULL},},
-    {"node_append",             NULL, {&unit_test_doubly_linked_list_node_append, NULL},},
-    {"node_insert_before",      NULL, {&unit_test_doubly_linked_list_node_insert_before, NULL},},
-    {"node_insert_after",       NULL, {&unit_test_doubly_linked_list_node_insert_after, NULL},},
-    {"node_by_index",           NULL, {&unit_test_doubly_linked_list_node_by_index, NULL},},
-    {"node_remove",             NULL, {&unit_test_doubly_linked_list_node_remove, NULL},},
-    {"node_remove_and_destroy", NULL, {&unit_test_doubly_linked_list_node_remove_and_destroy, NULL},},
-    {"contains_p",              NULL, {&unit_test_doubly_linked_list_contains_p, NULL},},
-    {"serialize",               NULL, {&unit_test_doubly_linked_list_serialize, NULL},},
-    {"iterate",                 NULL, {&unit_test_doubly_linked_list_iterate, NULL},},
-    {"destroy",                 NULL, {&unit_test_doubly_linked_list_destroy, NULL},},
-    {"length",                  NULL, {&unit_test_doubly_linked_list_length, NULL},},
-    {"merge",                   NULL, {&unit_test_doubly_linked_list_merge, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_struct_field,
+            &performance_test_doubly_linked_list_struct_field,
+        },
+    },
+    {   "initial",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_initial,
+            &performance_test_doubly_linked_list_initial,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_create,
+            &performance_test_doubly_linked_list_create,
+        },
+    },
+    {
+        "node_initial",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_initial,
+            &performance_test_doubly_linked_list_node_initial,
+        },
+    },
+    {
+        "node_create",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_create,
+            &performance_test_doubly_linked_list_node_create,
+        },
+    },
+    {
+        "node_append",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_append,
+            &performance_test_doubly_linked_list_node_append,
+        },
+    },
+    {
+        "node_insert_before",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_insert_before,
+            &performance_test_doubly_linked_list_node_insert_before,
+        },
+    },
+    {   "node_insert_after",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_insert_after,
+            &performance_test_doubly_linked_list_node_insert_after,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_destroy,
+            &performance_test_doubly_linked_list_destroy,
+        },
+    },
+    {
+        "length",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_length,
+            &performance_test_doubly_linked_list_length,
+        },
+    },
+    {
+        "node_by_index",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_by_index,
+            &performance_test_doubly_linked_list_node_by_index,
+        },
+    },
+    {
+        "contains_p",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_contains_p,
+            &performance_test_doubly_linked_list_contains_p,
+        },
+    },
+    {   "serialize",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_serialize,
+            &performance_test_doubly_linked_list_serialize,
+        },
+    },
+    {
+        "node_copy",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_copy,
+            &performance_test_doubly_linked_list_node_copy,
+        },
+    },
+    {   "node_remove",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_remove,
+            &performance_test_doubly_linked_list_node_remove,
+        },
+    },
+    {
+        "node_remove_and_destroy",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_node_remove_and_destroy,
+            &performance_test_doubly_linked_list_node_remove_and_destroy,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_iterate,
+            &performance_test_doubly_linked_list_iterate,
+        },
+    },
+    {   "merge",
+        NULL,
+        {
+            &unit_test_doubly_linked_list_merge,
+            &performance_test_doubly_linked_list_merge,
+        },
+    },
     {NULL,                      NULL, {NULL, NULL},},
 };
 

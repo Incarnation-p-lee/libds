@@ -1,26 +1,3 @@
-static inline struct doubly_linked_list *
-unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count)
-{
-    struct doubly_linked_list *retval;
-    struct doubly_linked_list *tmp;
-    uint32 sid;
-    uint32 i;
-
-    retval = doubly_linked_list_create();
-    doubly_linked_list_node_initial(retval, retval, range);
-
-    i = 1;
-    while (i < node_count) {
-        sid = (uint32)(rand() % range);
-        tmp = doubly_linked_list_create();
-        doubly_linked_list_node_initial(tmp, tmp, sid);
-        doubly_linked_list_node_insert_before(retval, tmp);
-        i++;
-    }
-
-    return retval;
-}
-
 static void
 unit_test_doubly_linked_list_struct_field(void)
 {
@@ -141,7 +118,7 @@ unit_test_doubly_linked_list_node_append(void)
     bool pass;
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x1a2E, 0x213D);
+    head = test_doubly_linked_list_sample(0x1a2E, 0x213D);
     doubly_linked_list_node_append(NULL, &pass);
 
     next = doubly_linked_list_node_next(head);
@@ -167,7 +144,7 @@ unit_test_doubly_linked_list_node_insert_before(void)
     bool pass;
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x21f26, 0xbef19);
+    head = test_doubly_linked_list_sample(0x21f26, 0xbef19);
     doubly_linked_list_node_append(head, &pass);
 
     node = doubly_linked_list_create();
@@ -207,7 +184,7 @@ unit_test_doubly_linked_list_node_insert_after(void)
     bool pass;
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x18ab, 0x2e9c);
+    head = test_doubly_linked_list_sample(0x18ab, 0x2e9c);
     doubly_linked_list_node_append(head, &pass);
 
     node = doubly_linked_list_create();
@@ -255,7 +232,7 @@ unit_test_doubly_linked_list_destroy(void)
     iter = sizes;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_doubly_linked_list_sample(0x316FA, len);
+        head = test_doubly_linked_list_sample(0x316FA, len);
 
         doubly_linked_list_destroy(&head);
         RESULT_CHECK_pointer(NULL, head, &pass);
@@ -282,7 +259,7 @@ unit_test_doubly_linked_list_length(void)
 
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_doubly_linked_list_sample(0x2e8, len);
+        head = test_doubly_linked_list_sample(0x2e8, len);
         RESULT_CHECK_uint32(len, doubly_linked_list_length(head), &pass);
 
         doubly_linked_list_destroy(&head);
@@ -308,7 +285,7 @@ unit_test_doubly_linked_list_node_by_index(void)
     RESULT_CHECK_pointer(NULL, tmp, &pass);
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x8fa, 0x3a2);
+    head = test_doubly_linked_list_sample(0x8fa, 0x3a2);
     len = doubly_linked_list_length(head);
 
     tmp = doubly_linked_list_node_by_index(head, 0);
@@ -331,7 +308,7 @@ unit_test_doubly_linked_list_contains_p(void)
     bool pass;
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x1dd2, 0x28ae);
+    head = test_doubly_linked_list_sample(0x1dd2, 0x28ae);
     tmp = doubly_linked_list_node_next(head);
 
     RESULT_CHECK_bool(false, doubly_linked_list_contains_p(NULL, tmp), &pass);
@@ -364,7 +341,7 @@ unit_test_doubly_linked_list_serialize(void)
     iter = sizes;
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = unit_test_doubly_linked_list_sample(0x29e2, len);
+        head = test_doubly_linked_list_sample(0x29e2, len);
         doubly_linked_list_serialize(head);
 
         tmp = head;
@@ -419,7 +396,7 @@ unit_test_doubly_linked_list_node_remove(void)
     doubly_linked_list_node_remove(NULL);
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x31e2, 0x28ed);
+    head = test_doubly_linked_list_sample(0x31e2, 0x28ed);
     tmp = head;
     next = head->next;
 
@@ -447,7 +424,7 @@ unit_test_doubly_linked_list_node_remove_and_destroy(void)
     doubly_linked_list_node_remove(NULL);
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x31e2, 0x28ed);
+    head = test_doubly_linked_list_sample(0x31e2, 0x28ed);
     next = head->next;
 
     doubly_linked_list_node_remove_and_destroy(&head);
@@ -469,7 +446,7 @@ unit_test_doubly_linked_list_iterate(void)
     bool pass;
 
     pass = true;
-    head = unit_test_doubly_linked_list_sample(0x1F2, 0x381);
+    head = test_doubly_linked_list_sample(0x1F2, 0x381);
 
     doubly_linked_list_iterate(NULL, &linked_list_iterate_handler);
     doubly_linked_list_iterate(head, &linked_list_iterate_handler);

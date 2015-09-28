@@ -4,7 +4,6 @@
 
 static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
 static inline struct binary_search_tree * unit_test_binary_search_tree_sample(uint64 range, uint32 node_count);
-static inline struct doubly_linked_list * unit_test_doubly_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct maximal_heap * unit_test_maximal_heap_sample(uint64 range, uint32 size);
 static inline struct minimal_heap * unit_test_minimal_heap_sample(uint64 range, uint32 size);
 static inline struct open_addressing_hash * unit_test_open_addressing_hash_sample(uint32 count);

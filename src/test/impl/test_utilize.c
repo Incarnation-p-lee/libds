@@ -1,7 +1,7 @@
 void
 memory_trace_print(void)
 {
-    printf("\n  >> Memory Usage Summary <<\n");
+    printf("  >> Memory Usage Summary <<\n");
     printf("    . Malloc  %10lu\n", malloc_cnt);
     printf("    . Realloc %10lu\n", realloc_cnt);
     printf("    . Free    %10lu\n", free_cnt);

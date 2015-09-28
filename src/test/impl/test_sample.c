@@ -21,4 +21,26 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
     return retval;
 }
 
+static inline struct doubly_linked_list *
+test_doubly_linked_list_sample(uint32 range, uint32 node_count)
+{
+    struct doubly_linked_list *retval;
+    struct doubly_linked_list *tmp;
+    uint32 sid;
+    uint32 i;
+
+    retval = doubly_linked_list_create();
+    doubly_linked_list_node_initial(retval, retval, range);
+
+    i = 1;
+    while (i < node_count) {
+        sid = (uint32)(rand() % range);
+        tmp = doubly_linked_list_create();
+        doubly_linked_list_node_initial(tmp, tmp, sid);
+        doubly_linked_list_node_insert_before(retval, tmp);
+        i++;
+    }
+
+    return retval;
+}
 
