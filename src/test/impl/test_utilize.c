@@ -11,7 +11,7 @@ memory_trace_print(void)
 void
 end_of_report_print(void)
 {
-    printf("\n  >> End of Data Structure Library <<\n\n");
+    printf("  >> End of Data Structure Library <<\n\n");
 }
 
 static void

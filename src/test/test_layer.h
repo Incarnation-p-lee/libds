@@ -296,21 +296,125 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
 };
 
 static const struct test_layer_table skip_linked_list_interface[] = {
-    {"struct_field",            NULL, {&unit_test_skip_linked_list_struct_field, NULL},},
-    {"create",                  NULL, {&unit_test_skip_linked_list_create, NULL},},
-    {"initial",                 NULL, {&unit_test_skip_linked_list_initial, NULL},},
-    {"node_create",             NULL, {&unit_test_skip_linked_list_node_create, NULL},},
-    {"node_initial",            NULL, {&unit_test_skip_linked_list_node_initial, NULL},},
-    {"destroy",                 NULL, {&unit_test_skip_linked_list_destroy, NULL},},
-    {"length",                  NULL, {&unit_test_skip_linked_list_length, NULL},},
-    {"contains_p",              NULL, {&unit_test_skip_linked_list_contains_p, NULL},},
-    {"node_insert",             NULL, {&unit_test_skip_linked_list_node_insert, NULL},},
-    {"node_find_key",           NULL, {&unit_test_skip_linked_list_node_find_key, NULL},},
-    {"node_by_index",           NULL, {&unit_test_skip_linked_list_node_by_index, NULL},},
-    {"node_remove",             NULL, {&unit_test_skip_linked_list_node_remove, NULL},},
-    {"node_remove_and_destroy", NULL, {&unit_test_skip_linked_list_node_remove_and_destroy, NULL},},
-    {"iterate",                 NULL, {&unit_test_skip_linked_list_iterate, NULL},},
-    {"merge",                   NULL, {&unit_test_skip_linked_list_merge, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_skip_linked_list_struct_field,
+            &performance_test_skip_linked_list_struct_field,
+        },
+    },
+    {   "create",
+        NULL,
+        {
+            &unit_test_skip_linked_list_create,
+            &performance_test_skip_linked_list_create,
+        },
+    },
+    {
+        "initial",
+        NULL,
+        {
+            &unit_test_skip_linked_list_initial,
+            &performance_test_skip_linked_list_initial,
+        },
+    },
+    {
+        "node_create",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_create,
+            &performance_test_skip_linked_list_node_create,
+        },
+    },
+    {
+        "node_initial",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_initial,
+            &performance_test_skip_linked_list_node_initial,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_skip_linked_list_destroy,
+            &performance_test_skip_linked_list_destroy,
+        },
+    },
+    {
+        "length",
+        NULL,
+        {
+            &unit_test_skip_linked_list_length,
+            &performance_test_skip_linked_list_length,
+        },
+    },
+    {
+        "node_find_key",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_find_key,
+            &performance_test_skip_linked_list_node_find_key,
+        },
+    },
+    {
+        "key_contains_p",
+        NULL,
+        {
+            &unit_test_skip_linked_list_key_contains_p,
+            &performance_test_skip_linked_list_key_contains_p,
+        },
+    },
+    {
+        "node_insert",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_insert,
+            &performance_test_skip_linked_list_node_insert,
+        },
+    },
+    {
+        "node_by_index",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_by_index,
+            &performance_test_skip_linked_list_node_by_index,
+        },
+    },
+    {
+        "node_remove",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_remove,
+            &performance_test_skip_linked_list_node_remove,
+        },
+    },
+    {
+        "node_remove_and_destroy",
+        NULL,
+        {
+            &unit_test_skip_linked_list_node_remove_and_destroy,
+            &performance_test_skip_linked_list_node_remove_and_destroy,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_skip_linked_list_iterate,
+            &performance_test_skip_linked_list_iterate,
+        },
+    },
+    {
+        "merge",
+        NULL,
+        {
+            &unit_test_skip_linked_list_merge,
+            &performance_test_skip_linked_list_merge,
+        },
+    },
     {NULL,                      NULL, {NULL, NULL},},
 };
 

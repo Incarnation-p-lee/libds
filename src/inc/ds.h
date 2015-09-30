@@ -84,7 +84,7 @@ struct doubly_linked_list {
  * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
  * ------------------------------------------------------------
  */
-#define LEVEL_LIMIT 8
+#define LEVEL_LIMIT 2
 
 struct skip_linked_list {
     sint32 key;
@@ -557,7 +557,7 @@ struct maximal_heap {
 
 extern bool doubly_linked_list_contains_p(struct doubly_linked_list *list, struct doubly_linked_list *node);
 extern bool single_linked_list_contains_p(struct single_linked_list *list, struct single_linked_list *node);
-extern bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *tgt);
+extern bool skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key);
 extern struct doubly_linked_list * doubly_linked_list_create(void);
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 extern struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *list, uint32 index);

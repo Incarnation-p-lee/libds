@@ -1,31 +1,3 @@
-static inline struct skip_linked_list *
-unit_test_skip_linked_list_sample(uint32 range, uint32 count)
-{
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
-    sint32 key;
-    uint32 i;
-
-    assert(0 != range);
-    assert(0 != count);
-
-    list = skip_linked_list_create();
-    skip_linked_list_node_initial(list, list, 0);
-
-    i = 1;
-    while (i < count) {
-        key = (sint32)(rand() % range) - (sint32)range / 2;
-        if (!skip_linked_list_node_find_key(list, key)) {
-            tmp = skip_linked_list_node_create(NULL, key);
-            skip_linked_list_node_val_set(tmp, tmp);
-            skip_linked_list_node_insert(&list, tmp);
-        }
-        i++;
-    }
-
-    return list;
-}
-
 static void
 unit_test_skip_linked_list_struct_field(void)
 {
@@ -133,7 +105,7 @@ unit_test_skip_linked_list_destroy(void)
 
     skip_linked_list_destroy(&list);
 
-    list = unit_test_skip_linked_list_sample(0x6245, 0x1034);
+    list = test_skip_linked_list_sample(0x6245, 0x1034);
     skip_linked_list_destroy(&list);
     RESULT_CHECK_pointer(NULL, list, &pass);
 
@@ -152,7 +124,7 @@ unit_test_skip_linked_list_length(void)
     list = NULL;
 
     RESULT_CHECK_uint32(0, skip_linked_list_length(list), &pass);
-    list = unit_test_skip_linked_list_sample(0x6245, 0x1034);
+    list = test_skip_linked_list_sample(0x6245, 0x1034);
 
     len = 0;
     iter = list;
@@ -179,7 +151,7 @@ unit_test_skip_linked_list_node_find_key(void)
     key = 0xfffff;
 
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_find_key(list, key), &pass);
-    list = unit_test_skip_linked_list_sample(0xedbf, 0x103f);
+    list = test_skip_linked_list_sample(0xedbf, 0x103f);
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_find_key(list, key), &pass);
 
     key = 0x1ffff;
@@ -193,7 +165,7 @@ unit_test_skip_linked_list_node_find_key(void)
 }
 
 static void
-unit_test_skip_linked_list_contains_p(void)
+unit_test_skip_linked_list_key_contains_p(void)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -204,20 +176,20 @@ unit_test_skip_linked_list_contains_p(void)
     list = NULL;
     key = 0xfffff;
 
-    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, NULL), &pass);
-    list = unit_test_skip_linked_list_sample(0xedbf, 0x103f);
+    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, 0), &pass);
+    list = test_skip_linked_list_sample(0xedbf, 0x103f);
     tmp = skip_linked_list_node_create(&pass, key);
-    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
+    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
     skip_linked_list_destroy(&tmp);
 
     key = 0xfff;
     tmp = skip_linked_list_node_find_key(list, key--);
     if (tmp) {
-        RESULT_CHECK_bool(true, skip_linked_list_contains_p(list, tmp), &pass);
+        RESULT_CHECK_bool(true, skip_linked_list_key_contains_p(list, tmp->key), &pass);
     }
 
     skip_linked_list_destroy(&list);
-    unit_test_result_print(SYM_2_STR(skip_linked_list_contains_p), pass);
+    unit_test_result_print(SYM_2_STR(skip_linked_list_key_contains_p), pass);
 }
 
 static void
@@ -232,7 +204,7 @@ unit_test_skip_linked_list_node_insert(void)
     list = NULL;
 
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_insert(&list, NULL), &pass);
-    list = unit_test_skip_linked_list_sample(0x101f0, 0x103f);
+    list = test_skip_linked_list_sample(0x101f0, 0x103f);
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_insert(&list, NULL), &pass);
 
     key = 0x1ffff;
@@ -270,7 +242,7 @@ unit_test_skip_linked_list_node_by_index(void)
     tmp = 0u;
 
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_by_index(list, tmp), &pass);
-    list = unit_test_skip_linked_list_sample(0x101f0, 0x103f);
+    list = test_skip_linked_list_sample(0x101f0, 0x103f);
     tmp = skip_linked_list_length(list);
     RESULT_CHECK_pointer(list, skip_linked_list_node_by_index(list, tmp), &pass);
 
@@ -295,7 +267,7 @@ unit_test_skip_linked_list_node_remove(void)
     count = 0x24;
 
     RESULT_CHECK_pointer(NULL, skip_linked_list_node_remove(&list, 0), &pass);
-    list = unit_test_skip_linked_list_sample(0x11f0, 0x103f);
+    list = test_skip_linked_list_sample(0x11f0, 0x103f);
 
     tmp = list;
     RESULT_CHECK_pointer(tmp, skip_linked_list_node_remove(&list, list->key), &pass);
@@ -328,18 +300,18 @@ unit_test_skip_linked_list_node_remove_and_destroy(void)
     tmp = NULL;
 
     skip_linked_list_node_remove_and_destroy(&list, 0);
-    list = unit_test_skip_linked_list_sample(0x15f0, 0x103f);
+    list = test_skip_linked_list_sample(0x15f0, 0x103f);
 
     tmp = list;
     skip_linked_list_node_remove_and_destroy(&list, list->key);
-    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
+    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
     skip_linked_list_node_remove_and_destroy(&list, 0x151f1);
 
     while (count--) {
         tmp = skip_linked_list_node_find_key(list, count);
         if (NULL != tmp) {
             skip_linked_list_node_remove_and_destroy(&list, tmp->key);
-            RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
+            RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
         }
     }
 
@@ -358,7 +330,7 @@ unit_test_skip_linked_list_iterate(void)
     list = NULL;
 
     skip_linked_list_iterate(list, &linked_list_iterate_handler);
-    list = unit_test_skip_linked_list_sample(0x61f0, 0x103f);
+    list = test_skip_linked_list_sample(0x61f0, 0x103f);
 
     iter = list;
     skip_linked_list_iterate(list, &linked_list_iterate_handler);
@@ -383,7 +355,7 @@ unit_test_skip_linked_list_merge(void)
     pass = true;
     lm = NULL;
 
-    ln = unit_test_skip_linked_list_sample(0x71f0, 0x103f);
+    ln = test_skip_linked_list_sample(0x71f0, 0x103f);
     RESULT_CHECK_pointer(NULL, skip_linked_list_merge(lm, lm), &pass);
     RESULT_CHECK_pointer(ln, skip_linked_list_merge(lm, ln), &pass);
     RESULT_CHECK_pointer(ln, skip_linked_list_merge(ln, ln), &pass);

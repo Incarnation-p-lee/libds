@@ -53,5 +53,20 @@ static void performance_test_single_linked_list_node_remove(uint32 count);
 static void performance_test_single_linked_list_node_remove_and_destroy(uint32 count);
 static void performance_test_single_linked_list_serialize(uint32 count);
 static void performance_test_single_linked_list_struct_field(uint32 count);
+static void performance_test_skip_linked_list_create(uint32 count);
+static void performance_test_skip_linked_list_destroy(uint32 count);
+static void performance_test_skip_linked_list_initial(uint32 count);
+static void performance_test_skip_linked_list_iterate(uint32 count);
+static void performance_test_skip_linked_list_key_contains_p(uint32 count);
+static void performance_test_skip_linked_list_length(uint32 count);
+static void performance_test_skip_linked_list_merge(uint32 count);
+static void performance_test_skip_linked_list_node_by_index(uint32 count);
+static void performance_test_skip_linked_list_node_create(uint32 count);
+static void performance_test_skip_linked_list_node_find_key(uint32 count);
+static void performance_test_skip_linked_list_node_initial(uint32 count);
+static void performance_test_skip_linked_list_node_insert(uint32 count);
+static void performance_test_skip_linked_list_node_remove(uint32 count);
+static void performance_test_skip_linked_list_node_remove_and_destroy(uint32 count);
+static void performance_test_skip_linked_list_struct_field(uint32 count);
 
 #endif

@@ -61,6 +61,8 @@ unit_test_execution_interface(const struct test_layer_table *interface,
         }
         interface++;
     }
+
+    fprintf(stdout, "\n");
 }
 
 static inline void

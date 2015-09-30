@@ -3,10 +3,11 @@
 
 bool doubly_linked_list_contains_p(struct doubly_linked_list *list, struct doubly_linked_list *node);
 bool single_linked_list_contains_p(struct single_linked_list *list, struct single_linked_list *node);
-bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *tgt);
+bool skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key);
 static inline bool doubly_linked_list_contains_p_internal(struct doubly_linked_list *list, struct doubly_linked_list *node);
 static inline bool single_linked_list_contains_p_internal(struct single_linked_list *list, struct single_linked_list *node);
-static inline bool skip_linked_list_contains_p_internal(struct skip_linked_list *list, struct skip_linked_list *tgt);
+static inline bool skip_linked_list_key_contains_p_internal(struct skip_linked_list *list, sint32 key);
+static inline bool skip_linked_list_node_exist_on_level(struct skip_linked_list *list, struct skip_linked_list *node, uint32 level);
 static inline bool skip_linked_list_ordering_p(struct skip_linked_list *list);
 static inline struct doubly_linked_list * doubly_linked_list_node_remove_internal(struct doubly_linked_list **node);
 static inline struct single_linked_list * single_linked_list_node_previous_internal(struct single_linked_list *node);
@@ -21,12 +22,12 @@ static inline struct skip_linked_list * skip_linked_list_node_remove_with_previo
 static inline uint32 doubly_linked_list_length_internal(struct doubly_linked_list *list);
 static inline uint32 single_linked_list_length_internal(struct single_linked_list *list);
 static inline uint32 skip_linked_list_length_internal(struct skip_linked_list *list);
-static inline uint32 skip_linked_list_node_level(struct skip_linked_list *list);
 static inline void doubly_linked_list_node_insert_after_internal(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 static inline void doubly_linked_list_node_insert_before_internal(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 static inline void single_linked_list_node_insert_after_internal(struct single_linked_list *cur, struct single_linked_list *node);
 static inline void skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt, struct skip_linked_list **prev_list, uint32 lvl);
 static inline void skip_linked_list_node_clean(struct skip_linked_list *list);
+static inline void skip_linked_list_node_remove_on_level(struct skip_linked_list *list, struct skip_linked_list *removed, uint32 level);
 struct doubly_linked_list * doubly_linked_list_create(void);
 struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *list, uint32 index);

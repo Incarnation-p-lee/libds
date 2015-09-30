@@ -25,8 +25,8 @@ test_result_check_bool_p(bool expect, bool get, bool *pass)
     tmp = (expect == get);
 
     if (!tmp) {
-        fprintf(stdout, "[32mexpected[0m: %s\n", get ? "true" : "false");
-        fprintf(stdout, "[31mcomputed[0m: %s\n", expect ? "true" : "false");
+        fprintf(stdout, "[32mexpected[0m: %s\n", expect ? "true" : "false");
+        fprintf(stdout, "[31mcomputed[0m: %s\n", get ? "true" : "false");
     }
 
     *pass = *pass && tmp;

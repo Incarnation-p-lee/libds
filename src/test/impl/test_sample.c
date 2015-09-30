@@ -44,3 +44,31 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
     return retval;
 }
 
+static inline struct skip_linked_list *
+test_skip_linked_list_sample(uint32 range, uint32 count)
+{
+    struct skip_linked_list *list;
+    struct skip_linked_list *tmp;
+    sint32 key;
+    uint32 i;
+
+    assert(0 != range);
+    assert(0 != count);
+
+    list = skip_linked_list_create();
+    skip_linked_list_node_initial(list, list, 0);
+
+    i = 1;
+    while (i < count) {
+        key = (sint32)(rand() % range) - (sint32)range / 2;
+        if (!skip_linked_list_node_find_key(list, key)) {
+            tmp = skip_linked_list_node_create(NULL, key);
+            skip_linked_list_node_val_set(tmp, tmp);
+            skip_linked_list_node_insert(&list, tmp);
+        }
+        i++;
+    }
+
+    return list;
+}
+

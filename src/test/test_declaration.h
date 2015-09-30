@@ -15,6 +15,7 @@ static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *p
 static inline bool test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass);
 static inline struct doubly_linked_list * test_doubly_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct single_linked_list * test_single_linked_list_sample(uint32 range, uint32 node_count);
+static inline struct skip_linked_list * test_skip_linked_list_sample(uint32 range, uint32 count);
 static inline struct test_case_filter * test_case_filter_initial(void);
 static inline void test_case_filter_obtain_internal(char *dest, char *arg, uint32 len);
 static inline void test_case_list(struct test_extra_info *info, char *content);

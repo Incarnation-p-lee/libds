@@ -48,7 +48,7 @@ static struct performance_test_reference performance_reference[] = {
     {"skip_linked_list_node_initial",              0x0u, 0x0u},
     {"skip_linked_list_destroy",                   0x0u, 0x0u},
     {"skip_linked_list_length",                    0x0u, 0x0u},
-    {"skip_linked_list_contains_p",                0x0u, 0x0u},
+    {"skip_linked_list_key_contains_p",            0x0u, 0x0u},
     {"skip_linked_list_node_insert",               0x0u, 0x0u},
     {"skip_linked_list_node_find_key",             0x0u, 0x0u},
     {"skip_linked_list_node_by_index",             0x0u, 0x0u},
