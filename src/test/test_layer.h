@@ -419,18 +419,102 @@ static const struct test_layer_table skip_linked_list_interface[] = {
 };
 
 static const struct test_layer_table array_stack[] = {
-    {"struct_field", NULL, {&unit_test_array_stack_struct_field, NULL},},
-    {"create",       NULL, {&unit_test_array_stack_create, NULL},},
-    {"destroy",      NULL, {&unit_test_array_stack_destroy, NULL},},
-    {"space_expand", NULL, {&unit_test_array_stack_space_expand, NULL},},
-    {"space_rest",   NULL, {&unit_test_array_stack_space_rest, NULL},},
-    {"full_p",       NULL, {&unit_test_array_stack_full_p, NULL},},
-    {"capacity",     NULL, {&unit_test_array_stack_capacity, NULL},},
-    {"push",         NULL, {&unit_test_array_stack_push, NULL},},
-    {"pop",          NULL, {&unit_test_array_stack_pop, NULL},},
-    {"empty_p",      NULL, {&unit_test_array_stack_empty_p, NULL},},
-    {"cleanup",      NULL, {&unit_test_array_stack_cleanup, NULL},},
-    {"iterate",      NULL, {&unit_test_array_stack_iterate, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_array_stack_struct_field,
+            &performance_test_array_stack_struct_field,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_array_stack_create,
+            &performance_test_array_stack_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_array_stack_destroy,
+            &performance_test_array_stack_destroy,
+        },
+    },
+    {
+        "space_expand",
+        NULL,
+        {
+            &unit_test_array_stack_space_expand,
+            &performance_test_array_stack_space_expand,
+        },
+    },
+    {
+        "full_p",
+        NULL,
+        {
+            &unit_test_array_stack_full_p,
+            &performance_test_array_stack_full_p,
+        },
+    },
+    {
+        "capacity",
+        NULL,
+        {
+            &unit_test_array_stack_capacity,
+            &performance_test_array_stack_capacity,
+        },
+    },
+    {
+        "space_rest",
+        NULL,
+        {
+            &unit_test_array_stack_space_rest,
+            &performance_test_array_stack_space_rest,
+        },
+    },
+    {
+        "push",
+        NULL,
+        {
+            &unit_test_array_stack_push,
+            &performance_test_array_stack_push,
+        },
+    },
+    {
+        "pop",
+        NULL,
+        {
+            &unit_test_array_stack_pop,
+            &performance_test_array_stack_pop,
+        },
+    },
+    {
+        "empty_p",
+        NULL,
+        {
+            &unit_test_array_stack_empty_p,
+            &performance_test_array_stack_empty_p,
+        },
+    },
+    {
+        "cleanup",
+        NULL,
+        {
+            &unit_test_array_stack_cleanup,
+            &performance_test_array_stack_cleanup,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_array_stack_iterate,
+            &performance_test_array_stack_iterate,
+        },
+    },
     {NULL,           NULL, {NULL, NULL},},
 };
 
