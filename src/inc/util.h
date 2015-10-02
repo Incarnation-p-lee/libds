@@ -21,9 +21,8 @@ struct memory_maps {
     extern void * realloc_wrap(void *ptr, size_t size);
     extern void free_wrap(void *ptr);
     extern void memory_trace_print(void);
-    #define MEMORY_STAT memory_trace_print()
-#else
-    #define MEMORY_STAT
+    extern void libds_log_file_create(void);
+    extern void libds_log_file_close(void);
 #endif
 
 /* GLOBAL EXPORTED INTERFACE */

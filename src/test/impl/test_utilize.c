@@ -5,7 +5,7 @@ memory_trace_print(void)
     printf("    . Malloc  %10lu\n", malloc_cnt);
     printf("    . Realloc %10lu\n", realloc_cnt);
     printf("    . Free    %10lu\n", free_cnt);
-    printf("  >> Memory End <<\n");
+    printf("  >> Memory End <<\n\n");
 }
 
 void

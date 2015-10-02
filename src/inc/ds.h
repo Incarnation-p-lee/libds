@@ -537,6 +537,7 @@ struct maximal_heap {
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #endif
+
 /* END of ./src/inc/defines.h */
 
 /* BEGIN of ./src/linked_list/linked_list.h */
@@ -923,6 +924,7 @@ extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
 /* BEGIN of ./src/log/log.h */
 #ifndef LOG_OF_LIBDS_H
 #define LOG_OF_LIBDS_H
+
 
 #endif
 /* END of ./src/log/log.h */

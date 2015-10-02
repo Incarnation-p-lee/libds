@@ -14,10 +14,13 @@
     #define malloc_ds            malloc_wrap
     #define realloc_ds           realloc_wrap
     #define free_ds              free_wrap
-    #define pr_log_info(msg)     libds_log_print(INFO, msg);
-    #define pr_log_warn(msg)     libds_log_print(WARN, msg);
-    #define pr_log_debug(msg)    libds_log_print(DBUG, msg);
+    #define pr_log_info(msg)     libds_log_print(INFO, msg)
+    #define pr_log_warn(msg)     libds_log_print(WARN, msg)
+    #define pr_log_debug(msg)    libds_log_print(DBUG, msg)
     #define assert_not_reached() assert(false)
+    #define LIBDS_LOGFILE_CREATE libds_log_file_create()
+    #define LIBDS_LOGFILE_CLOSE  libds_log_file_close()
+    #define MEMORY_STAT          memory_trace_print()
 #else
     #define malloc_ds            malloc
     #define realloc_ds           realloc
@@ -26,6 +29,9 @@
     #define pr_log_warn(msg)     libds_log_print(WARN, msg);
     #define pr_log_debug(msg)
     #define assert_not_reached() ((*(uint32 *)0) = 0xdeadu)
+    #define LIBDS_LOGFILE_CREATE
+    #define LIBDS_LOGFILE_CLOSE
+    #define MEMORY_STAT
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \
@@ -42,3 +48,4 @@
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #endif
+

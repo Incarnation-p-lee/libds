@@ -8,8 +8,8 @@ performance_test_array_stack_struct_field(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-       array_stack_sid_set(stack, 0x32);
-       array_stack_space_dim_set(stack, 0x43);
+        array_stack_sid_set(stack, 0x32);
+        array_stack_space_dim_set(stack, 0x43);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -27,8 +27,8 @@ performance_test_array_stack_create(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-       stack = array_stack_create();
-       array_stack_destroy(&stack);
+        stack = array_stack_create();
+        array_stack_destroy(&stack);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -45,8 +45,8 @@ performance_test_array_stack_destroy(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-       stack = array_stack_create();
-       array_stack_destroy(&stack);
+        stack = array_stack_create();
+        array_stack_destroy(&stack);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -60,16 +60,17 @@ performance_test_array_stack_space_expand(uint32 count)
 {
     struct array_stack *stack;
 
+    stack = array_stack_create();
+
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        stack = array_stack_create();
         array_stack_space_expand(stack, 1u);
-        array_stack_destroy(&stack);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
+    array_stack_destroy(&stack);
     performance_test_result_print(SYM_2_STR(array_stack_space_expand),
         performance_test_time_stamp_period());
 }
@@ -145,9 +146,6 @@ performance_test_array_stack_push(uint32 count)
 
     while (count--) {
         array_stack_push(stack, stack);
-        if (array_stack_full_p(stack)) {
-            array_stack_cleanup(stack);
-        }
     }
 
     PERFORMANCE_TEST_ENDPOINT;

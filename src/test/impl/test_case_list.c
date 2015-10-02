@@ -7,7 +7,7 @@ test_case_list(struct test_extra_info *info, char *content)
 
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "\n  >> TEST CASE LIST << \n");
+    fprintf(stdout, "  >> TEST CASE LIST << \n");
     test_case_list_category(test_category, filter);
     test_case_filter_destroy(&filter);
 }
@@ -64,6 +64,8 @@ test_case_list_interface(const struct test_layer_table *interface,
         }
         interface++;
     }
+
+    fprintf(stdout, "\n");
 }
 
 static inline bool
