@@ -16,6 +16,18 @@ static inline void performance_test_reference_update(char *raw, struct performan
 static inline void performance_test_result_print(char *name, sint64 period);
 static inline void performance_test_time_stamp_begin(void);
 static inline void performance_test_time_stamp_end(void);
+static void performance_test_array_queue_capacity(uint32 count);
+static void performance_test_array_queue_cleanup(uint32 count);
+static void performance_test_array_queue_create(uint32 count);
+static void performance_test_array_queue_destroy(uint32 count);
+static void performance_test_array_queue_empty_p(uint32 count);
+static void performance_test_array_queue_enter(uint32 count);
+static void performance_test_array_queue_full_p(uint32 count);
+static void performance_test_array_queue_iterate(uint32 count);
+static void performance_test_array_queue_leave(uint32 count);
+static void performance_test_array_queue_space_expand(uint32 count);
+static void performance_test_array_queue_space_rest(uint32 count);
+static void performance_test_array_queue_struct_field(uint32 count);
 static void performance_test_array_stack_capacity(uint32 count);
 static void performance_test_array_stack_cleanup(uint32 count);
 static void performance_test_array_stack_create(uint32 count);

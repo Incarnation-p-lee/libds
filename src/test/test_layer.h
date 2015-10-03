@@ -618,18 +618,99 @@ static const struct test_layer_table linked_stack[] = {
 };
 
 static const struct test_layer_table array_queue[] = {
-    {"struct_field", NULL, {&unit_test_array_queue_struct_field, NULL},},
-    {"create",       NULL, {&unit_test_array_queue_create, NULL},},
-    {"destroy",      NULL, {&unit_test_array_queue_destroy, NULL},},
-    {"space_expand", NULL, {&unit_test_array_queue_space_expand, NULL},},
-    {"space_rest",   NULL, {&unit_test_array_queue_space_rest, NULL},},
-    {"full_p",       NULL, {&unit_test_array_queue_full_p, NULL},},
-    {"capacity",     NULL, {&unit_test_array_queue_capacity, NULL},},
-    {"enter",        NULL, {&unit_test_array_queue_enter, NULL},},
-    {"leave",        NULL, {&unit_test_array_queue_leave, NULL},},
-    {"empty_p",      NULL, {&unit_test_array_queue_empty_p, NULL},},
-    {"cleanup",      NULL, {&unit_test_array_queue_cleanup, NULL},},
-    {"iterate",      NULL, {&unit_test_array_queue_iterate, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_array_queue_struct_field,
+            &performance_test_array_queue_struct_field,
+        },
+    },
+    {   "create",
+        NULL,
+        {
+            &unit_test_array_queue_create,
+            &performance_test_array_queue_create,
+        },
+    },
+    {   "destroy",
+        NULL,
+        {
+            &unit_test_array_queue_destroy,
+            &performance_test_array_queue_destroy,
+        },
+    },
+    {
+        "space_expand",
+        NULL,
+        {
+            &unit_test_array_queue_space_expand,
+            &performance_test_array_queue_space_expand,
+        },
+    },
+    {
+        "capacity",
+        NULL,
+        {
+            &unit_test_array_queue_capacity,
+            &performance_test_array_queue_capacity,
+        },
+    },
+    {
+        "space_rest",
+        NULL,
+        {
+            &unit_test_array_queue_space_rest,
+            &performance_test_array_queue_space_rest,
+        },
+    },
+    {
+        "full_p",
+        NULL,
+        {
+            &unit_test_array_queue_full_p,
+            &performance_test_array_queue_full_p,
+        },
+    },
+    {
+        "enter",
+        NULL,
+        {
+            &unit_test_array_queue_enter,
+            &performance_test_array_queue_enter,
+        },
+    },
+    {   "leave",
+        NULL,
+        {
+            &unit_test_array_queue_leave,
+            &performance_test_array_queue_leave,
+        },
+    },
+    {
+        "empty_p",
+        NULL,
+        {
+            &unit_test_array_queue_empty_p,
+            &performance_test_array_queue_empty_p,
+        },
+    },
+    {
+        "cleanup",
+        NULL,
+        {
+            &unit_test_array_queue_cleanup,
+            &performance_test_array_queue_cleanup,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_array_queue_iterate,
+            &performance_test_array_queue_iterate,
+        },
+    },
     {NULL,           NULL, {NULL, NULL},},
 };
 
