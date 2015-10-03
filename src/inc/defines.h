@@ -26,7 +26,7 @@
     #define realloc_ds           realloc
     #define free_ds              free
     #define pr_log_info(msg)
-    #define pr_log_warn(msg)     libds_log_print(WARN, msg);
+    #define pr_log_warn(msg)
     #define pr_log_debug(msg)
     #define assert_not_reached() ((*(uint32 *)0) = 0xdeadu)
     #define LIBDS_LOGFILE_CREATE

@@ -614,7 +614,7 @@ extern void skip_linked_list_node_remove_and_destroy(struct skip_linked_list **l
 #ifndef HAVE_QUEUE_H
 #define HAVE_QUEUE_H
 
-#define DEFAULT_QUEUE_SPACE_SIZE   128
+#define DEFAULT_QUEUE_SPACE_SIZE   1024
 #define EXPAND_QUEUE_SPACE_MIN     32
 
 
@@ -666,7 +666,7 @@ extern void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra
 #ifndef HAVE_STACK_H
 #define HAVE_STACK_H
 
-#define DEFAULT_STACK_SPACE_SIZE   128
+#define DEFAULT_STACK_SPACE_SIZE   1024
 #define EXPAND_STACK_SPACE_MIN     32
 
 
@@ -925,6 +925,7 @@ extern void minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap);
 #ifndef LOG_OF_LIBDS_H
 #define LOG_OF_LIBDS_H
 
+#define LOG_FNAME "libds.log"
 
 #endif
 /* END of ./src/log/log.h */

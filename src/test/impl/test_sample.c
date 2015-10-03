@@ -72,3 +72,18 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     return list;
 }
 
+static inline struct doubly_end_queue *
+test_doubly_end_queue_sample(uint32 count)
+{
+    struct doubly_end_queue *queue;
+
+    assert(0 != count);
+
+    queue = doubly_end_queue_create();
+
+    while (count--) {
+        doubly_end_queue_head_enter(queue, queue);
+    }
+
+    return queue;
+}

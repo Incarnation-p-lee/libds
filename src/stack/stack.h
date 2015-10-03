@@ -1,7 +1,7 @@
 #ifndef HAVE_STACK_H
 #define HAVE_STACK_H
 
-#define DEFAULT_STACK_SPACE_SIZE   128
+#define DEFAULT_STACK_SPACE_SIZE   1024
 #define EXPAND_STACK_SPACE_MIN     32
 
 extern void doubly_linked_list_initial(struct doubly_linked_list *);

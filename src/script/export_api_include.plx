@@ -44,6 +44,8 @@ foreach (@export) {
         if ("$debug" eq "1") {
             $debug -= 1 if /endif/;
             next;
+        } elsif (/FILE/) {
+            next;
         } elsif (/static/) { # filter static function
             next if $line =~ /\);$/;
         } elsif (/^struct\s/) {
@@ -54,8 +56,6 @@ foreach (@export) {
             $line = 'extern ' . $_;
         } elsif (/^bool\s/) {
             $line = 'extern ' . $_;
-        } elsif (/^FILE/) {
-            next;
         } elsif (/^extern/) {
             next;
         } elsif (/DEBUG/ && /def/) {

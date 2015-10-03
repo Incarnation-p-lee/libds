@@ -219,7 +219,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             if (tmp == queue->tail) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                link = &queue->head->link;
+                link = &queue->tail->link;
                 doubly_linked_list_node_remove(&link);
                 free_ds(queue->tail);
                 queue->tail = tmp;

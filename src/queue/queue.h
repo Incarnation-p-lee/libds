@@ -1,7 +1,7 @@
 #ifndef HAVE_QUEUE_H
 #define HAVE_QUEUE_H
 
-#define DEFAULT_QUEUE_SPACE_SIZE   128
+#define DEFAULT_QUEUE_SPACE_SIZE   1024
 #define EXPAND_QUEUE_SPACE_MIN     32
 
 extern bool array_stack_full_p(struct array_stack *stack);
