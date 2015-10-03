@@ -197,3 +197,4 @@ fi
 make "ARGV_LNK=$argv_lnk" "ARGV_LIB=$argv_lib"
 
 cd - > /dev/null
+ctags -R src

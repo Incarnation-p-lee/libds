@@ -28,6 +28,7 @@ static void performance_test_array_queue_leave(uint32 count);
 static void performance_test_array_queue_space_expand(uint32 count);
 static void performance_test_array_queue_space_rest(uint32 count);
 static void performance_test_array_queue_struct_field(uint32 count);
+static void performance_test_array_queue_struct_field(uint32 count);
 static void performance_test_array_stack_capacity(uint32 count);
 static void performance_test_array_stack_cleanup(uint32 count);
 static void performance_test_array_stack_create(uint32 count);
@@ -104,5 +105,17 @@ static void performance_test_skip_linked_list_node_insert(uint32 count);
 static void performance_test_skip_linked_list_node_remove(uint32 count);
 static void performance_test_skip_linked_list_node_remove_and_destroy(uint32 count);
 static void performance_test_skip_linked_list_struct_field(uint32 count);
+static void performance_test_stacked_queue_capacity(uint32 count);
+static void performance_test_stacked_queue_cleanup(uint32 count);
+static void performance_test_stacked_queue_create(uint32 count);
+static void performance_test_stacked_queue_destroy(uint32 count);
+static void performance_test_stacked_queue_empty_p(uint32 count);
+static void performance_test_stacked_queue_enter(uint32 count);
+static void performance_test_stacked_queue_full_p(uint32 count);
+static void performance_test_stacked_queue_iterate(uint32 count);
+static void performance_test_stacked_queue_leave(uint32 count);
+static void performance_test_stacked_queue_space_expand(uint32 count);
+static void performance_test_stacked_queue_space_rest(uint32 count);
+static void performance_test_stacked_queue_struct_field(uint32 count);
 
 #endif
