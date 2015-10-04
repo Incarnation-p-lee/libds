@@ -2,7 +2,6 @@
 #define UNIT_TEST_DECLARATION_H
 
 
-static inline struct avl_tree * unit_test_avl_tree_sample(uint64 range, uint32 node_count);
 static inline struct maximal_heap * unit_test_maximal_heap_sample(uint64 range, uint32 size);
 static inline struct minimal_heap * unit_test_minimal_heap_sample(uint64 range, uint32 size);
 static inline struct open_addressing_hash * unit_test_open_addressing_hash_sample(uint32 count);
