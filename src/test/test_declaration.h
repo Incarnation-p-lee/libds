@@ -13,6 +13,7 @@ static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *p
 static inline bool test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *pass);
 static inline bool test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass);
+static inline struct binary_search_tree * test_binary_search_tree_sample(uint64 range, uint32 count);
 static inline struct doubly_end_queue * test_doubly_end_queue_sample(uint32 count);
 static inline struct doubly_linked_list * test_doubly_linked_list_sample(uint32 range, uint32 node_count);
 static inline struct single_linked_list * test_single_linked_list_sample(uint32 range, uint32 node_count);
