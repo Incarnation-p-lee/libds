@@ -83,6 +83,9 @@ splay_tree_destroy_internal(struct splay_tree *tree)
     if (tree) {
         /*
          * destroy node in post iterater order.
+         * Warning: sometime if nested function call is too deepth,
+         *     it may reach the default limitation of elf stack size, 8192KB.
+         *     use ulimit -s unlimited or refine this function without nested.
          */
         splay_tree_destroy_internal(splay_tree_child_left(tree));
         splay_tree_destroy_internal(splay_tree_child_right(tree));
@@ -101,6 +104,7 @@ splay_tree_destroy(struct splay_tree **tree)
         splay_tree_destroy_internal(*tree);
         *tree = NULL;
     }
+
 }
 
 static inline struct binary_search_tree *

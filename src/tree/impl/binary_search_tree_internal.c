@@ -60,6 +60,9 @@ binary_search_tree_destroy_internal(struct binary_search_tree **tree)
     if (*tree && tree) {
         /*
          * destroy node in post iterater order.
+         * Warning: sometime if nested function call is too deepth,
+         *     it may reach the default limitation of elf stack size, 8192KB.
+         *     use ulimit -s unlimited or refine this function without nested.
          */
         binary_search_tree_destroy_internal(&(*tree)->left);
         binary_search_tree_destroy_internal(&(*tree)->right);

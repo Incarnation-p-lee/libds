@@ -138,3 +138,28 @@ test_avl_tree_sample(uint64 range, uint32 count)
     return tree;
 }
 
+static inline struct splay_tree *
+test_splay_tree_sample(uint64 range, uint32 node_count)
+{
+    struct splay_tree *tree;
+    struct splay_tree *tmp;
+    sint64 nice;
+    uint32 i;
+
+    tree = splay_tree_create();
+    splay_tree_node_initial(tree, &reference, 0);
+    i = 1;
+
+    while (i < node_count) {
+        nice = (sint64)((rand() % range) - (range / 2));
+        tmp = splay_tree_node_create(NULL, 0x0);
+        splay_tree_node_initial(tmp, &reference, nice);
+        if (tmp != splay_tree_node_insert(&tree, tmp)) {
+            splay_tree_destroy(&tmp);
+        }
+        i++;
+    }
+
+    return tree;
+}
+

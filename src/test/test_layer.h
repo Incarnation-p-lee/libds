@@ -1150,21 +1150,126 @@ static const struct test_layer_table avl_tree[] = {
 };
 
 static const struct test_layer_table splay_tree[] = {
-    {"struct_field",            NULL, {&unit_test_splay_tree_struct_field, NULL},},
-    {"create",                  NULL, {&unit_test_splay_tree_create, NULL},},
-    {"node_create",             NULL, {&unit_test_splay_tree_node_create, NULL},},
-    {"initial",                 NULL, {&unit_test_splay_tree_initial, NULL},},
-    {"node_initial",            NULL, {&unit_test_splay_tree_node_initial, NULL},},
-    {"destroy",                 NULL, {&unit_test_splay_tree_destroy, NULL},},
-    {"node_find",               NULL, {&unit_test_splay_tree_node_find, NULL},},
-    {"node_find_min",           NULL, {&unit_test_splay_tree_node_find_min, NULL},},
-    {"node_find_max",           NULL, {&unit_test_splay_tree_node_find_max, NULL},},
-    {"height",                  NULL, {&unit_test_splay_tree_height, NULL},},
-    {"node_contains_p",         NULL, {&unit_test_splay_tree_node_contains_p, NULL},},
-    {"node_insert",             NULL, {&unit_test_splay_tree_node_insert, NULL},},
-    {"node_remove",             NULL, {&unit_test_splay_tree_node_remove, NULL},},
-    {"node_remove_and_destroy", NULL, {&unit_test_splay_tree_node_remove_and_destroy, NULL},},
-    {"iterate",                 NULL, {&unit_test_splay_tree_iterate, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_splay_tree_struct_field,
+            &performance_test_splay_tree_struct_field,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_splay_tree_create,
+            &performance_test_splay_tree_create,
+        },
+    },
+    {
+        "node_create",
+        NULL,
+        {
+            &unit_test_splay_tree_node_create,
+            &performance_test_splay_tree_node_create,
+        },
+    },
+    {
+        "initial",
+        NULL,
+        {
+            &unit_test_splay_tree_initial,
+            &performance_test_splay_tree_initial,
+        },
+    },
+    {
+        "node_initial",
+        NULL,
+        {
+            &unit_test_splay_tree_node_initial,
+            &performance_test_splay_tree_node_initial,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_splay_tree_destroy,
+            &performance_test_splay_tree_destroy,
+        },
+    },
+    {
+        "node_find",
+        NULL,
+        {
+            &unit_test_splay_tree_node_find,
+            &performance_test_splay_tree_node_find,
+        },
+    },
+    {
+        "node_find_min",
+        NULL,
+        {
+            &unit_test_splay_tree_node_find_min,
+            &performance_test_splay_tree_node_find_min,
+        },
+    },
+    {
+        "node_find_max",
+        NULL,
+        {
+            &unit_test_splay_tree_node_find_max,
+            &performance_test_splay_tree_node_find_max,
+        },
+    },
+    {
+        "height",
+        NULL,
+        {
+            &unit_test_splay_tree_height,
+            &performance_test_splay_tree_height,
+        },
+    },
+    {
+        "node_contains_p",
+        NULL,
+        {
+            &unit_test_splay_tree_node_contains_p,
+            &performance_test_splay_tree_node_contains_p,
+        },
+    },
+    {
+        "node_insert",
+        NULL,
+        {
+            &unit_test_splay_tree_node_insert,
+            &performance_test_splay_tree_node_insert,
+        },
+    },
+    {
+        "node_remove",
+        NULL,
+        {
+            &unit_test_splay_tree_node_remove,
+            &performance_test_splay_tree_node_remove,
+        },
+    },
+    {
+        "node_remove_and_destroy",
+        NULL,
+        {
+            &unit_test_splay_tree_node_remove_and_destroy,
+            &performance_test_splay_tree_node_remove_and_destroy,
+        },
+    },
+    {
+        "iterate",
+        NULL,
+        {
+            &unit_test_splay_tree_iterate,
+            &performance_test_splay_tree_iterate,
+        },
+    },
     {NULL,                      NULL, {NULL,},},
 };
 

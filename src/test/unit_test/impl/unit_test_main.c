@@ -7,7 +7,7 @@ unit_test_execution_start(struct test_extra_info *entry, char *content)
 
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "  >> UNIT LIST << \n");
+    fprintf(stdout, "  >> UNIT TEST << \n");
     unit_test_execution_category(test_category, filter);
 
     test_case_filter_destroy(&filter);

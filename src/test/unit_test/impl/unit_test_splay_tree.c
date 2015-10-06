@@ -26,30 +26,6 @@ unit_test_splay_tree_struct_field(void)
     unit_test_result_print(SYM_2_STR(splay_tree_struct_field), pass);
 }
 
-static inline struct splay_tree *
-unit_test_splay_tree_sample(uint64 range, uint32 node_count)
-{
-    struct splay_tree *retval;
-    struct splay_tree *tmp;
-    sint64 nice;
-    uint32 i;
-
-    retval = splay_tree_create();
-    splay_tree_node_initial(retval, &reference, 0);
-    i = 1;
-
-    while (i < node_count) {
-        nice = (sint64)((rand() % range) - (range / 2));
-        tmp = splay_tree_node_create(NULL, 0x0);
-        splay_tree_node_initial(tmp, &reference, nice);
-        if (tmp != splay_tree_node_insert(&retval, tmp)) {
-            splay_tree_destroy(&tmp);
-        }
-        i++;
-    }
-
-    return retval;
-}
 
 static void
 unit_test_splay_tree_create(void)
@@ -175,7 +151,7 @@ unit_test_splay_tree_destroy(void)
 
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
-    tree = unit_test_splay_tree_sample(0xE2A4, 0xAC23);
+    tree = test_splay_tree_sample(0xE2A4, 0xAC23);
     splay_tree_destroy(&tree);
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
@@ -190,7 +166,7 @@ unit_test_splay_tree_height(void)
     sint32 child;
 
     pass = true;
-    tree = unit_test_splay_tree_sample(0x372F, 0x3E24);
+    tree = test_splay_tree_sample(0x372F, 0x3E24);
 
     RESULT_CHECK_sint32(-1, splay_tree_height(NULL), &pass);
 
@@ -211,7 +187,7 @@ unit_test_splay_tree_node_contains_p(void)
     struct splay_tree *fake;
 
     pass = true;
-    tree = unit_test_splay_tree_sample(0x14F0, 0x73BD);
+    tree = test_splay_tree_sample(0x14F0, 0x73BD);
     tmp = splay_tree_node_create(&pass, 0x1234);
 
     RESULT_CHECK_bool(false, splay_tree_node_contains_p(tree, NULL), &pass);
@@ -238,7 +214,7 @@ unit_test_splay_tree_node_find(void)
     struct splay_tree *tmp;
 
     pass = true;
-    tree = unit_test_splay_tree_sample(0x13FA, 0x143A);
+    tree = test_splay_tree_sample(0x13FA, 0x143A);
 
     RESULT_CHECK_pointer(NULL,
         splay_tree_node_find(NULL, splay_tree_node_nice(tree)),
@@ -272,7 +248,7 @@ unit_test_splay_tree_node_find_min(void)
     struct splay_tree *tmp;
 
     pass = true;
-    tree = unit_test_splay_tree_sample(0xF1C2, 0xD482);
+    tree = test_splay_tree_sample(0xF1C2, 0xD482);
 
     RESULT_CHECK_pointer(NULL, splay_tree_node_find_min(NULL), &pass);
     tmp = splay_tree_node_find_min(&tree);
@@ -292,7 +268,7 @@ unit_test_splay_tree_node_find_max(void)
     struct splay_tree *tmp;
 
     pass = true;
-    tree = unit_test_splay_tree_sample(0xF2E4, 0x9B2A);
+    tree = test_splay_tree_sample(0xF2E4, 0x9B2A);
 
     RESULT_CHECK_pointer(NULL, splay_tree_node_find_max(NULL), &pass);
     tmp = splay_tree_node_find_min(&tree);
@@ -318,7 +294,7 @@ unit_test_splay_tree_node_insert(void)
     RESULT_CHECK_pointer(NULL, splay_tree_node_insert(&tree, NULL), &pass);
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
-    tree = unit_test_splay_tree_sample(0x3B49, 0x2F2C);
+    tree = test_splay_tree_sample(0x3B49, 0x2F2C);
     tmp = splay_tree_node_create(&pass, 0xFFFDEA);
     RESULT_CHECK_pointer(NULL, splay_tree_node_insert(&tree, NULL), &pass);
 
@@ -350,7 +326,7 @@ unit_test_splay_tree_node_remove(void)
 
     RESULT_CHECK_pointer(NULL, splay_tree_node_remove(&tree, 0x0), &pass);
 
-    tree = unit_test_splay_tree_sample(0x2421, 0x32CD);
+    tree = test_splay_tree_sample(0x2421, 0x32CD);
     tmp = tree;
     nice = splay_tree_node_nice(tmp);
     tmp = splay_tree_node_remove(&tree, nice);
@@ -400,7 +376,7 @@ unit_test_splay_tree_node_remove_and_destroy(void)
 
     splay_tree_node_remove_and_destroy(&tree, 0x0);
 
-    tree = unit_test_splay_tree_sample(0x2321, 0x32CD);
+    tree = test_splay_tree_sample(0x2321, 0x32CD);
     tmp = tree;
     nice = splay_tree_node_nice(tmp);
     splay_tree_node_remove_and_destroy(&tree, nice);
@@ -443,7 +419,7 @@ unit_test_splay_tree_iterate(void)
 
     pass = true;
     cnt = 0xC72D;
-    tree = unit_test_splay_tree_sample(0x2328, cnt);
+    tree = test_splay_tree_sample(0x2328, cnt);
 
     reference = 0;
     splay_tree_iterate(tree, &tree_iterate_handler, ORDER_PRE);

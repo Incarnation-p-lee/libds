@@ -8,7 +8,7 @@ performance_test_execution_start(struct test_extra_info *info, char *content)
     performance_test_reference_golden_prepare(PERFORMANCE_TEST_GOLDEN);
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "  >> PERFORMANCE LIST << \n");
+    fprintf(stdout, "  >> PERFORMANCE TEST << \n");
     performance_test_execution_category(test_category, filter, info);
 
     test_case_filter_destroy(&filter);

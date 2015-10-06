@@ -225,7 +225,7 @@ performance_test_binary_search_tree_node_insert(uint32 count)
     struct binary_search_tree *tmp;
 
     count = count >> 6;
-    count = 0 == count ? 1 : count;
+    count = 0 == count ? 1000 : count;
     tree = binary_search_tree_create();
     binary_search_tree_node_initial(tree, NULL, -0xfade);
 
