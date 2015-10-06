@@ -1274,7 +1274,14 @@ static const struct test_layer_table splay_tree[] = {
 };
 
 static const struct test_layer_table separate_chain_hash[] = {
-    {"struct_field",          NULL, {&unit_test_separate_chain_hash_struct_field, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_struct_field,
+            NULL,// &performance_test_separate_chain_hash_struct_field,
+        },
+    },
     {"create",                NULL, {&unit_test_separate_chain_hash_create, NULL},},
     {"destroy",               NULL, {&unit_test_separate_chain_hash_destroy, NULL},},
     {"load_factor_calculate", NULL, {&unit_test_separate_chain_hash_load_factor_calculate, NULL},},
@@ -1286,14 +1293,69 @@ static const struct test_layer_table separate_chain_hash[] = {
 };
 
 static const struct test_layer_table open_addressing_hash[] = {
-    {"struct_field",          NULL, {&unit_test_open_addressing_hash_struct_field, NULL},},
-    {"create",                NULL, {&unit_test_open_addressing_hash_create, NULL},},
-    {"destroy",               NULL, {&unit_test_open_addressing_hash_destroy, NULL},},
-    {"load_factor_calculate", NULL, {&unit_test_open_addressing_hash_load_factor_calculate, NULL},},
-    {"insert",                NULL, {&unit_test_open_addressing_hash_insert, NULL},},
-    {"remove",                NULL, {&unit_test_open_addressing_hash_remove, NULL},},
-    {"find",                  NULL, {&unit_test_open_addressing_hash_find, NULL},},
-    {"rehashing",             NULL, {&unit_test_open_addressing_hash_rehashing, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_struct_field,
+            &performance_test_open_addressing_hash_struct_field,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_create,
+            &performance_test_open_addressing_hash_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_destroy,
+            &performance_test_open_addressing_hash_destroy,
+        },
+    },
+    {
+        "load_factor_calculate",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_load_factor_calculate,
+            &performance_test_open_addressing_hash_load_factor_calculate,
+        },
+    },
+    {
+        "insert",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_insert,
+            &performance_test_open_addressing_hash_insert,
+        },},
+    {
+        "remove",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_remove,
+            &performance_test_open_addressing_hash_remove,
+        },
+    },
+    {
+        "find",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_find,
+            &performance_test_open_addressing_hash_find,
+        },
+    },
+    {
+        "rehashing",
+        NULL,
+        {
+            &unit_test_open_addressing_hash_rehashing,
+            &performance_test_open_addressing_hash_rehashing,
+        },
+    },
     {NULL,                    NULL, {NULL, NULL},},
 };
 
