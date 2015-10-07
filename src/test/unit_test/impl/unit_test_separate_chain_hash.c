@@ -19,30 +19,6 @@ unit_test_separate_chain_hash_struct_field(void)
     unit_test_result_print(SYM_2_STR(separate_chain_hash_struct_field), pass);
 }
 
-static inline struct separate_chain_hash *
-unit_test_separate_chain_hash_sample(uint32 count)
-{
-    struct separate_chain_hash *hash;
-    struct memory_maps *heap;
-    uint64 iter;
-    uint64 limit;
-
-    hash = separate_chain_hash_create(0x11u);
-    heap = memory_maps_entry_find("[heap]");
-
-    assert(NULL != hash);
-    assert(NULL != heap);
-
-    iter = (uint64)heap->begin;
-    limit = (uint64)heap->end;
-    while (0 != count-- && iter < limit) {
-        separate_chain_hash_insert(&hash, (void *)iter);
-        iter += 4;
-    }
-
-    return hash;
-}
-
 static void
 unit_test_separate_chain_hash_create(void)
 {
@@ -91,7 +67,7 @@ unit_test_separate_chain_hash_destroy(void)
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
     tmp = 0xafu;
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     separate_chain_hash_destroy(&hash);
 
     RESULT_CHECK_pointer(NULL, hash, &pass);
@@ -112,14 +88,14 @@ unit_test_separate_chain_hash_load_factor_calculate(void)
     RESULT_CHECK_NOT_LESS_uint32(0x0u,
         separate_chain_hash_load_factor_calculate(hash), &pass);
 
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     tmp = DEFAULT_LOAD_FACTOR;
     RESULT_CHECK_NOT_LESS_uint32(tmp,
         separate_chain_hash_load_factor_calculate(hash), &pass);
     separate_chain_hash_destroy(&hash);
 
     tmp = 0x0u;
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     separate_chain_hash_load_factor_calculate(hash);
 
     separate_chain_hash_destroy(&hash);
@@ -140,11 +116,11 @@ unit_test_separate_chain_hash_insert(void)
     separate_chain_hash_insert(&hash, &pass);
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
-    hash = unit_test_separate_chain_hash_sample(0x7);
+    hash = test_separate_chain_hash_sample(0x7);
     separate_chain_hash_destroy(&hash);
 
     RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     separate_chain_hash_insert(&hash, &pass);
     RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
 
@@ -171,12 +147,12 @@ unit_test_separate_chain_hash_remove(void)
     RESULT_CHECK_pointer(&pass, separate_chain_hash_remove(hash, &pass), &pass);
     separate_chain_hash_destroy(&hash);
 
-    hash = unit_test_separate_chain_hash_sample(0x7);
+    hash = test_separate_chain_hash_sample(0x7);
     separate_chain_hash_insert(&hash, &pass);
     separate_chain_hash_destroy(&hash);
 
     tmp = 0xfu;
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     separate_chain_hash_insert(&hash, &pass);
     RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
     RESULT_CHECK_pointer(NULL, separate_chain_hash_remove(hash, NULL), &pass);
@@ -206,7 +182,7 @@ unit_test_separate_chain_hash_find(void)
     separate_chain_hash_destroy(&hash);
 
     tmp = 0xfadebu;
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
     separate_chain_hash_insert(&hash, &pass);
 
@@ -230,7 +206,7 @@ unit_test_separate_chain_hash_rehashing(void)
     hash = NULL;
     RESULT_CHECK_pointer(NULL, separate_chain_hash_rehashing(&hash), &pass);
 
-    hash = unit_test_separate_chain_hash_sample(tmp);
+    hash = test_separate_chain_hash_sample(tmp);
     tmp = separate_chain_hash_size(hash);
     new = separate_chain_hash_rehashing(&hash);
     RESULT_CHECK_pointer(NULL, hash, &pass);

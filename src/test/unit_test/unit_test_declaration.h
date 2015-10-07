@@ -4,7 +4,6 @@
 
 static inline struct maximal_heap * unit_test_maximal_heap_sample(uint64 range, uint32 size);
 static inline struct minimal_heap * unit_test_minimal_heap_sample(uint64 range, uint32 size);
-static inline struct separate_chain_hash * unit_test_separate_chain_hash_sample(uint32 count);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);

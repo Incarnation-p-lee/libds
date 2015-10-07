@@ -1279,16 +1279,65 @@ static const struct test_layer_table separate_chain_hash[] = {
         NULL,
         {
             &unit_test_separate_chain_hash_struct_field,
-            NULL,// &performance_test_separate_chain_hash_struct_field,
+            &performance_test_separate_chain_hash_struct_field,
         },
     },
-    {"create",                NULL, {&unit_test_separate_chain_hash_create, NULL},},
-    {"destroy",               NULL, {&unit_test_separate_chain_hash_destroy, NULL},},
-    {"load_factor_calculate", NULL, {&unit_test_separate_chain_hash_load_factor_calculate, NULL},},
-    {"insert",                NULL, {&unit_test_separate_chain_hash_insert, NULL},},
-    {"remove",                NULL, {&unit_test_separate_chain_hash_remove, NULL},},
-    {"find",                  NULL, {&unit_test_separate_chain_hash_find, NULL},},
-    {"rehashing",             NULL, {&unit_test_separate_chain_hash_rehashing, NULL},},
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_create,
+            &performance_test_separate_chain_hash_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_destroy,
+            &performance_test_separate_chain_hash_destroy,
+        },
+    },
+    {
+        "load_factor_calculate",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_load_factor_calculate,
+            &performance_test_separate_chain_hash_load_factor_calculate,
+        },
+    },
+    {
+        "insert",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_insert,
+            &performance_test_separate_chain_hash_insert,
+        },
+    },
+    {
+        "remove",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_remove,
+            &performance_test_separate_chain_hash_remove,
+        },
+    },
+    {
+        "find",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_find,
+            &performance_test_separate_chain_hash_find,
+        },
+    },
+    {
+        "rehashing",
+        NULL,
+        {
+            &unit_test_separate_chain_hash_rehashing,
+            &performance_test_separate_chain_hash_rehashing,
+        },
+    },
     {NULL,                    NULL, {NULL, NULL},},
 };
 

@@ -187,3 +187,27 @@ test_open_addressing_hash_sample(uint32 count)
     return hash;
 }
 
+static inline struct separate_chain_hash *
+test_separate_chain_hash_sample(uint32 count)
+{
+    struct separate_chain_hash *hash;
+    struct memory_maps *heap;
+    uint64 iter;
+    uint64 limit;
+
+    hash = separate_chain_hash_create(0x11u);
+    heap = memory_maps_entry_find("[heap]");
+
+    assert(NULL != hash);
+    assert(NULL != heap);
+
+    iter = (uint64)heap->begin;
+    limit = (uint64)heap->end;
+    while (0 != count-- && iter < limit) {
+        separate_chain_hash_insert(&hash, (void *)iter);
+        iter += 4;
+    }
+
+    return hash;
+}
+

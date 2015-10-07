@@ -119,6 +119,14 @@ static void performance_test_open_addressing_hash_load_factor_calculate(uint32 c
 static void performance_test_open_addressing_hash_rehashing(uint32 count);
 static void performance_test_open_addressing_hash_remove(uint32 count);
 static void performance_test_open_addressing_hash_struct_field(uint32 count);
+static void performance_test_separate_chain_hash_create(uint32 count);
+static void performance_test_separate_chain_hash_destroy(uint32 count);
+static void performance_test_separate_chain_hash_find(uint32 count);
+static void performance_test_separate_chain_hash_insert(uint32 count);
+static void performance_test_separate_chain_hash_load_factor_calculate(uint32 count);
+static void performance_test_separate_chain_hash_rehashing(uint32 count);
+static void performance_test_separate_chain_hash_remove(uint32 count);
+static void performance_test_separate_chain_hash_struct_field(uint32 count);
 static void performance_test_single_linked_list_contains_p(uint32 count);
 static void performance_test_single_linked_list_create(uint32 count);
 static void performance_test_single_linked_list_destroy(uint32 count);
