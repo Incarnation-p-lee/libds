@@ -1,23 +1,3 @@
-static inline struct minimal_heap *
-unit_test_minimal_heap_sample(uint64 range, uint32 size)
-{
-    struct minimal_heap *heap;
-    sint64 nice;
-    uint32 i;
-
-    assert(0 != size);
-
-    heap = minimal_heap_create(size);
-    i = 0;
-    while (i < size) {
-        nice = (sint64)((rand() % range) - (range / 2));
-        minimal_heap_node_insert(heap, &heap, nice);
-        i++;
-    }
-
-    return heap;
-}
-
 static inline void
 unit_test_minimal_heap_struc_field(void)
 {
@@ -28,7 +8,7 @@ unit_test_minimal_heap_struc_field(void)
 
     pass = true;
     index = 1;
-    heap = unit_test_minimal_heap_sample(0x3DA2, 0x2F23);
+    heap = test_minimal_heap_sample(0x3DA2, 0x2F23);
 
     RESULT_CHECK_uint32(heap->alias->size, minimal_heap_size(heap), &pass);
     RESULT_CHECK_uint32(heap->alias->capacity, minimal_heap_capacity(heap), &pass);
@@ -99,7 +79,7 @@ unit_test_minimal_heap_empty_p(void)
 
     RESULT_CHECK_bool(false, minimal_heap_empty_p(heap), &pass);
 
-    heap = unit_test_minimal_heap_sample(0x2234, 0x1234);
+    heap = test_minimal_heap_sample(0x2234, 0x1234);
     RESULT_CHECK_bool(false, minimal_heap_empty_p(heap), &pass);
     minimal_heap_destroy(&heap);
 
@@ -121,7 +101,7 @@ unit_test_minimal_heap_full_p(void)
 
     RESULT_CHECK_bool(true, minimal_heap_full_p(heap), &pass);
 
-    heap = unit_test_minimal_heap_sample(0x1, 0x1);
+    heap = test_minimal_heap_sample(0x1, 0x1);
     RESULT_CHECK_bool(true, minimal_heap_full_p(heap), &pass);
     minimal_heap_destroy(&heap);
 
@@ -143,7 +123,7 @@ unit_test_minimal_heap_cleanup(void)
 
     minimal_heap_cleanup(heap);
 
-    heap = unit_test_minimal_heap_sample(0x3345, 0x204E);
+    heap = test_minimal_heap_sample(0x3345, 0x204E);
     minimal_heap_cleanup(heap);
 
     RESULT_CHECK_bool(false, minimal_heap_full_p(heap), &pass);
@@ -166,7 +146,7 @@ unit_test_minimal_heap_node_find(void)
 
     RESULT_CHECK_pointer(NULL, minimal_heap_node_find(heap, index), &pass);
 
-    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    heap = test_minimal_heap_sample(0x1345, 0x104E);
     RESULT_CHECK_pointer(minimal_heap_link(heap, index),
         minimal_heap_node_find(heap, minimal_heap_nice(heap, index)), &pass);
     index = 0x144Eu;
@@ -191,7 +171,7 @@ unit_test_minimal_heap_node_find_min(void)
 
     RESULT_CHECK_pointer(NULL, minimal_heap_node_find_min(heap), &pass);
 
-    heap = unit_test_minimal_heap_sample(0x1345, 0x104E);
+    heap = test_minimal_heap_sample(0x1345, 0x104E);
     RESULT_CHECK_pointer(minimal_heap_link(heap, 1u),
         minimal_heap_node_find_min(heap), &pass);
 
@@ -216,7 +196,7 @@ unit_test_minimal_heap_node_insert(void)
 
     minimal_heap_node_insert(heap, &pass, 0u);
 
-    heap = unit_test_minimal_heap_sample(0x345, 0x44E);
+    heap = test_minimal_heap_sample(0x345, 0x44E);
 
     while (count--) {
         size = minimal_heap_size(heap);
@@ -245,7 +225,7 @@ unit_test_minimal_heap_node_remove_min(void)
 
     minimal_heap_node_remove_min(heap);
 
-    heap = unit_test_minimal_heap_sample(0x1435, 0x1D4E);
+    heap = test_minimal_heap_sample(0x1435, 0x1D4E);
     minimal = minimal_heap_node_find_min(heap);
     RESULT_CHECK_pointer(minimal, minimal_heap_node_remove_min(heap), &pass);
 
@@ -266,7 +246,7 @@ unit_test_minimal_heap_node_remove_min_and_destroy(void)
 
     minimal_heap_node_remove_min_and_destroy(heap);
 
-    heap = unit_test_minimal_heap_sample(0x1425, 0x10DE);
+    heap = test_minimal_heap_sample(0x1425, 0x10DE);
     size = minimal_heap_size(heap);
 
     minimal_heap_node_find_min(heap);
@@ -295,7 +275,7 @@ unit_test_minimal_heap_node_decrease_nice(void)
 
     minimal_heap_node_decrease_nice(heap, 0, offset);
 
-    heap = unit_test_minimal_heap_sample(0x345, 0x2E0);
+    heap = test_minimal_heap_sample(0x345, 0x2E0);
     minimal_heap_node_decrease_nice(heap, 0, offset);
     offset = 0xa;
 
@@ -335,7 +315,7 @@ unit_test_minimal_heap_node_increase_nice(void)
 
     minimal_heap_node_increase_nice(heap, 0, offset);
 
-    heap = unit_test_minimal_heap_sample(0x342, 0x423a);
+    heap = test_minimal_heap_sample(0x342, 0x423a);
     minimal_heap_node_increase_nice(heap, 0, offset);
     offset = 0x14;
 
@@ -373,7 +353,7 @@ unit_test_minimal_heap_node_remove(void)
 
     minimal_heap_node_remove(heap, 0);
 
-    heap = unit_test_minimal_heap_sample(0x942, 0x73a);
+    heap = test_minimal_heap_sample(0x942, 0x73a);
     nice = 0x12345;
     RESULT_CHECK_pointer(NULL, minimal_heap_node_remove(heap, nice), &pass);
 
@@ -408,7 +388,7 @@ unit_test_minimal_heap_node_remove_and_destroy(void)
 
     minimal_heap_node_remove(heap, 0);
 
-    heap = unit_test_minimal_heap_sample(0x742, 0x23a);
+    heap = test_minimal_heap_sample(0x742, 0x23a);
     nice = 0x12345;
     minimal_heap_node_remove_and_destroy(heap, nice);
 

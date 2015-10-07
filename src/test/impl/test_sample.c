@@ -211,3 +211,23 @@ test_separate_chain_hash_sample(uint32 count)
     return hash;
 }
 
+static inline struct minimal_heap *
+test_minimal_heap_sample(uint64 range, uint32 size)
+{
+    struct minimal_heap *heap;
+    sint64 nice;
+    uint32 i;
+
+    assert(0 != size);
+
+    heap = minimal_heap_create(size);
+    i = 0;
+    while (i < size) {
+        nice = (sint64)((rand() % range) - (range / 2));
+        minimal_heap_node_insert(heap, &heap, nice);
+        i++;
+    }
+
+    return heap;
+}
+

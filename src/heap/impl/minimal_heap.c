@@ -170,6 +170,8 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
+        assert(!binary_heap_empty_p(heap->alias));
+
         return binary_heap_node_remove_root(heap->alias,
             &binary_heap_minimal_percolate_down_ordered_p);
     }
