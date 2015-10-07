@@ -2,7 +2,6 @@
 #define UNIT_TEST_DECLARATION_H
 
 
-static inline struct maximal_heap * unit_test_maximal_heap_sample(uint64 range, uint32 size);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);

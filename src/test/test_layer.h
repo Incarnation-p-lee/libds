@@ -1533,21 +1533,126 @@ static const struct test_layer_table minimal_heap[] = {
 };
 
 static const struct test_layer_table maximal_heap[] = {
-    {"struct_field",                NULL, {&unit_test_maximal_heap_struc_field, NULL},},
-    {"create",                      NULL, {&unit_test_maximal_heap_create, NULL},},
-    {"destroy",                     NULL, {&unit_test_maximal_heap_destroy, NULL},},
-    {"empty_p",                     NULL, {&unit_test_maximal_heap_empty_p, NULL},},
-    {"full_p",                      NULL, {&unit_test_maximal_heap_full_p, NULL},},
-    {"cleanup",                     NULL, {&unit_test_maximal_heap_cleanup, NULL},},
-    {"node_find",                   NULL, {&unit_test_maximal_heap_node_find, NULL},},
-    {"node_find_max",               NULL, {&unit_test_maximal_heap_node_find_max, NULL},},
-    {"node_insert",                 NULL, {&unit_test_maximal_heap_node_insert, NULL},},
-    {"node_remove_max",             NULL, {&unit_test_maximal_heap_node_remove_max, NULL},},
-    {"node_remove_max_and_destroy", NULL, {&unit_test_maximal_heap_node_remove_max_and_destroy, NULL},},
-    {"node_remove",                 NULL, {&unit_test_maximal_heap_node_remove, NULL},},
-    {"node_remove_and_destroy",     NULL, {&unit_test_maximal_heap_node_remove_and_destroy, NULL},},
-    {"node_decrease_nice",          NULL, {&unit_test_maximal_heap_node_decrease_nice, NULL},},
-    {"node_increase_nice",          NULL, {&unit_test_maximal_heap_node_increase_nice, NULL},},
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_maximal_heap_struc_field,
+            &performance_test_maximal_heap_struc_field,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_maximal_heap_create,
+            &performance_test_maximal_heap_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_maximal_heap_destroy,
+            &performance_test_maximal_heap_destroy,
+        },
+    },
+    {
+        "empty_p",
+        NULL,
+        {
+            &unit_test_maximal_heap_empty_p,
+            &performance_test_maximal_heap_empty_p,
+        },
+    },
+    {
+        "full_p",
+        NULL,
+        {
+            &unit_test_maximal_heap_full_p,
+            &performance_test_maximal_heap_full_p,
+        },
+    },
+    {
+        "cleanup",
+        NULL,
+        {
+            &unit_test_maximal_heap_cleanup,
+            &performance_test_maximal_heap_cleanup,
+        },
+    },
+    {
+        "node_find",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_find,
+            &performance_test_maximal_heap_node_find,
+        },
+    },
+    {
+        "node_find_max",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_find_max,
+            &performance_test_maximal_heap_node_find_max,
+        },
+    },
+    {
+        "node_insert",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_insert,
+            &performance_test_maximal_heap_node_insert,
+        },
+    },
+    {
+        "node_remove_max",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_remove_max,
+            &performance_test_maximal_heap_node_remove_max,
+        },
+    },
+    {
+        "node_remove_max_and_destroy",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_remove_max_and_destroy,
+            &performance_test_maximal_heap_node_remove_max_and_destroy,
+        },
+    },
+    {
+        "node_remove",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_remove,
+            &performance_test_maximal_heap_node_remove,
+        },
+    },
+    {
+        "node_remove_and_destroy",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_remove_and_destroy,
+            &performance_test_maximal_heap_node_remove_and_destroy,
+        },
+    },
+    {
+        "node_decrease_nice",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_decrease_nice,
+            &performance_test_maximal_heap_node_decrease_nice,
+        },
+    },
+    {
+        "node_increase_nice",
+        NULL,
+        {
+            &unit_test_maximal_heap_node_increase_nice,
+            &performance_test_maximal_heap_node_increase_nice,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/

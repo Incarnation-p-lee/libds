@@ -231,3 +231,23 @@ test_minimal_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
+static inline struct maximal_heap *
+test_maximal_heap_sample(uint64 range, uint32 size)
+{
+    struct maximal_heap *heap;
+    sint64 nice;
+    uint32 i;
+
+    assert(0 != size);
+
+    heap = maximal_heap_create(size);
+    i = 0;
+    while (i < size) {
+        nice = (sint64)((rand() % range) - (range / 2));
+        maximal_heap_node_insert(heap, &heap, nice);
+        i++;
+    }
+
+    return heap;
+}
+
