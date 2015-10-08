@@ -37,4 +37,5 @@ obj_out
 *.gcno
 *tmp*
 performance/profile/
+performance/performance.new.ref
 *.log

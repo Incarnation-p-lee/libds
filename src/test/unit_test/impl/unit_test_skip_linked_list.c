@@ -293,6 +293,7 @@ unit_test_skip_linked_list_node_remove_and_destroy(void)
     struct skip_linked_list *tmp;
     bool pass;
     uint32 count;
+    sint32 key;
 
     count = 0x12;
     pass = true;
@@ -302,16 +303,17 @@ unit_test_skip_linked_list_node_remove_and_destroy(void)
     skip_linked_list_node_remove_and_destroy(&list, 0);
     list = test_skip_linked_list_sample(0x15f0, 0x103f);
 
-    tmp = list;
-    skip_linked_list_node_remove_and_destroy(&list, list->key);
-    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
+    key = list->key;
+    skip_linked_list_node_remove_and_destroy(&list, key);
+    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, key), &pass);
     skip_linked_list_node_remove_and_destroy(&list, 0x151f1);
 
     while (count--) {
         tmp = skip_linked_list_node_find_key(list, count);
         if (NULL != tmp) {
-            skip_linked_list_node_remove_and_destroy(&list, tmp->key);
-            RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
+            key = tmp->key;
+            skip_linked_list_node_remove_and_destroy(&list, key);
+            RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, key), &pass);
         }
     }
 

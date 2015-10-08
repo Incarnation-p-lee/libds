@@ -362,7 +362,7 @@ skip_linked_list_node_remove_on_level(struct skip_linked_list *list,
 
         iter->layer[level] = removed->layer[level];
         level--;
-    } while (SKIP_LIST_BOTTOM_IDX == level);
+    } while (SKIP_LIST_MAX_LVL > level);
 
     skip_linked_list_node_clean(removed);
 }
