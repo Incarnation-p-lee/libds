@@ -189,6 +189,69 @@ minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
 }
 
 static inline void
+minimal_heap_build_internal(struct minimal_heap *heap)
+{
+    uint32 index;
+    uint32 down_idx;
+    sint64 nice;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(NULL != heap->alias->base);
+    assert(minimal_heap_full_p(heap));
+
+    index = minimal_heap_size(heap) / 2;
+
+    while (index != INDEX_INVALID) {
+        tmp = HEAP_CHAIN(heap->alias, index);
+        nice = tmp->nice;
+        HEAP_CHAIN(heap->alias, index) = NULL;
+
+        down_idx = binary_heap_percolate_down(heap->alias, index, nice,
+            &binary_heap_minimal_percolate_down_ordered_p);
+        HEAP_CHAIN(heap->alias, down_idx) = tmp;
+        index--;
+    }
+}
+
+struct minimal_heap *
+minimal_heap_build(struct collision_chain **chain_array, uint32 size)
+{
+    struct minimal_heap *heap;
+
+    if (!chain_array) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (0 == size) {
+        pr_log_warn("Zero size of chain array, nothing will be done.\n");
+        return NULL;
+    } else if (NULL != chain_array[0]) {
+        pr_log_warn("First node of chain array should be NULL for heap-ordered.\n");
+        return NULL;
+    } else {
+        heap = malloc_ds(sizeof(*heap));
+
+        if (!heap) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            heap->alias = malloc_ds(sizeof(*heap->alias));
+
+            if (!heap->alias) {
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                heap->alias->base = chain_array;
+                heap->alias->capacity = size;
+                heap->alias->size = size;
+
+                minimal_heap_build_internal(heap);
+
+                return heap;
+            }
+        }
+    }
+}
+
+static inline void
 minimal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index,
     sint64 new_nice)
 {

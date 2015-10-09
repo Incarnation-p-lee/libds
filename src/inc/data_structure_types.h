@@ -212,5 +212,14 @@ struct maximal_heap {
     struct binary_heap *alias;
 };
 
+/*
+ * min-max heap
+ *     for even depth node, < fater, > grandfater
+ *     for odd  depth node, > fater, < grandfater
+ */
+struct min_max_heap {
+    struct binary_heap *alias;
+};
+
 #endif
 

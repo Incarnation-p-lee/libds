@@ -44,6 +44,7 @@ static inline void binary_heap_node_remove_root_and_destroy(struct binary_heap *
 static inline void maximal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index, sint64 new_nice);
 static inline void maximal_heap_node_increase_nice_internal(struct binary_heap *heap, uint32 index, sint64 new_nice);
 static inline void maximal_heap_node_remove_and_destroy_internal(struct binary_heap *heap, uint32 index);
+static inline void minimal_heap_build_internal(struct minimal_heap *heap);
 static inline void minimal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index, sint64 new_nice);
 static inline void minimal_heap_node_increase_nice_internal(struct binary_heap *heap, uint32 index, sint64 new_nice);
 static inline void minimal_heap_node_remove_and_destroy_internal(struct binary_heap *heap, uint32 index);
@@ -56,6 +57,7 @@ struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap
 struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 struct maximal_heap * maximal_heap_create(uint32 capacity);
+struct minimal_heap * minimal_heap_build(struct collision_chain **chain_array, uint32 size);
 struct minimal_heap * minimal_heap_create(uint32 capacity);
 void maximal_heap_cleanup(struct maximal_heap *heap);
 void maximal_heap_destroy(struct maximal_heap **heap);
