@@ -1529,6 +1529,14 @@ static const struct test_layer_table minimal_heap[] = {
             &performance_test_minimal_heap_node_increase_nice,
         },
     },
+    {
+        "build",
+        NULL,
+        {
+            &unit_test_minimal_heap_build,
+            NULL,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 

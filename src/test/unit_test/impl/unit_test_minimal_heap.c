@@ -406,3 +406,73 @@ unit_test_minimal_heap_node_remove_and_destroy(void)
     unit_test_result_print(SYM_2_STR(minimal_heap_node_remove_and_destroy), pass);
 }
 
+static inline void
+unit_test_minimal_heap_build(void)
+{
+    bool pass;
+    uint32 idx;
+    uint32 rand_idx;
+    uint32 chain_size;
+    struct minimal_heap *heap;
+    struct minimal_heap *build;
+    struct collision_chain **chain_array;
+    struct collision_chain *chain_bk;
+
+    pass = true;
+    heap = NULL;
+    chain_array = NULL;
+
+    RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 2), &pass);
+    heap = test_minimal_heap_sample(0x2f, 0x1a);
+    RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 0), &pass);
+
+    chain_size = minimal_heap_size(heap) + 1;
+    chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
+
+    chain_array[0] = HEAP_CHAIN(heap->alias, HEAP_ROOT_INDEX);
+    RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 2), &pass);
+
+    chain_array[0] = NULL;
+    memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
+
+    idx = HEAP_ROOT_INDEX;
+    while (idx <= INDEX_LAST(heap->alias)) {
+        rand_idx = rand() % idx;
+        rand_idx = INDEX_INVALID == rand_idx ? HEAP_ROOT_INDEX : rand_idx;
+
+        chain_bk = chain_array[rand_idx];
+        chain_array[rand_idx] = chain_array[idx];
+        chain_array[idx++] = chain_bk;
+    }
+
+    build = minimal_heap_build(chain_array, chain_size);
+
+    idx = INDEX_LAST(heap->alias);
+    while (idx > HEAP_ROOT_INDEX) {
+        RESULT_CHECK_LESS_sint64(HEAP_NICE(heap->alias, INDEX_PARENT(idx)),
+            HEAP_NICE(heap->alias, idx), &pass);
+        idx--;
+    }
+
+    build->alias->base = NULL;
+    unit_test_minimal_heap_structure_fixup(build);
+
+    free_ds(chain_array);
+    minimal_heap_destroy(&build);
+    minimal_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(minimal_heap_build), pass);
+}
+
+static inline void
+unit_test_minimal_heap_structure_fixup(struct minimal_heap *heap)
+{
+    assert(NULL != heap);
+    assert(NULL != heap->alias);
+    assert(NULL == heap->alias->base);
+
+    heap->alias->base = malloc_ds(sizeof(heap->alias->base[0]) * 2);
+    heap->alias->base[HEAP_ROOT_INDEX] = malloc_ds(sizeof(struct collision_chain));
+
+    heap->alias->capacity = 1u;
+    heap->alias->size = 1u;
+}

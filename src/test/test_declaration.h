@@ -6,6 +6,7 @@ static inline bool test_case_filter_match_p(const struct test_layer_table *categ
 static inline bool test_result_check_bool_p(bool expect, bool get, bool *pass);
 static inline bool test_result_check_double_p(double expect, double get, bool *pass);
 static inline bool test_result_check_float_p(float expect, float get, bool *pass);
+static inline bool test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
 static inline bool test_result_check_not_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
 static inline bool test_result_check_pointer_p(void *get, void *expect, bool *pass);

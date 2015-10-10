@@ -240,8 +240,8 @@ minimal_heap_build(struct collision_chain **chain_array, uint32 size)
                 pr_log_err("Fail to get memory from system.\n");
             } else {
                 heap->alias->base = chain_array;
-                heap->alias->capacity = size;
-                heap->alias->size = size;
+                heap->alias->capacity = size - 1;
+                heap->alias->size = size - 1;
 
                 minimal_heap_build_internal(heap);
 

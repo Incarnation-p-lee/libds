@@ -137,6 +137,23 @@ test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass)
 }
 
 static inline bool
+test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass)
+{
+    bool tmp;
+
+    tmp = (expect < get);
+
+    if (!tmp) {
+        fprintf(stdout, "[32mexpected[0m: %#lx\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %#lx\n", get);
+    }
+
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
 test_result_check_float_p(float expect, float get, bool *pass)
 {
     bool tmp;
