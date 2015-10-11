@@ -191,9 +191,9 @@ minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
 static inline void
 minimal_heap_build_internal(struct minimal_heap *heap)
 {
+    uint32 idx;
     uint32 index;
-    uint32 down_idx;
-    sint64 nice;
+    uint32 child_idx;
     struct collision_chain *tmp;
 
     assert(NULL != heap);
@@ -203,13 +203,25 @@ minimal_heap_build_internal(struct minimal_heap *heap)
     index = minimal_heap_size(heap) / 2;
 
     while (index != INDEX_INVALID) {
-        tmp = HEAP_CHAIN(heap->alias, index);
-        nice = tmp->nice;
-        HEAP_CHAIN(heap->alias, index) = NULL;
+        idx = index;
+        tmp = HEAP_CHAIN(heap->alias, idx);
+        /*
+         * Perform binary_heap_percolate_down here, but the build input
+         * array is out of heap-order, which may hit the assert
+         * binary_heap_percolate_down_precondition_p. So implement one
+         * less condition check percolate down for heap build.
+         */
+        while (INDEX_LEFT_CHILD(idx) <= INDEX_LAST(heap->alias)) {
+            if (!binary_heap_minimal_percolate_down_ordered_p(heap->alias,
+                idx, HEAP_NICE(heap->alias, idx), &child_idx)) {
+                HEAP_CHAIN(heap->alias, idx) = HEAP_CHAIN(heap->alias, child_idx);
+                idx = child_idx;
+            } else {
+                break;
+            }
+        }
 
-        down_idx = binary_heap_percolate_down(heap->alias, index, nice,
-            &binary_heap_minimal_percolate_down_ordered_p);
-        HEAP_CHAIN(heap->alias, down_idx) = tmp;
+        HEAP_CHAIN(heap->alias, idx) = tmp;
         index--;
     }
 }

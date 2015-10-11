@@ -423,7 +423,7 @@ unit_test_minimal_heap_build(void)
     chain_array = NULL;
 
     RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 2), &pass);
-    heap = test_minimal_heap_sample(0x2f, 0x1a);
+    heap = test_minimal_heap_sample(0xe32f, 0x211a);
     RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 0), &pass);
 
     chain_size = minimal_heap_size(heap) + 1;
@@ -436,6 +436,9 @@ unit_test_minimal_heap_build(void)
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
 
     idx = HEAP_ROOT_INDEX;
+    /*
+     * Generate one random sequenced chain array
+     */
     while (idx <= INDEX_LAST(heap->alias)) {
         rand_idx = rand() % idx;
         rand_idx = INDEX_INVALID == rand_idx ? HEAP_ROOT_INDEX : rand_idx;
@@ -454,25 +457,10 @@ unit_test_minimal_heap_build(void)
         idx--;
     }
 
-    build->alias->base = NULL;
-    unit_test_minimal_heap_structure_fixup(build);
-
+    free_ds(build->alias);
+    free_ds(build);
     free_ds(chain_array);
-    minimal_heap_destroy(&build);
     minimal_heap_destroy(&heap);
     unit_test_result_print(SYM_2_STR(minimal_heap_build), pass);
 }
 
-static inline void
-unit_test_minimal_heap_structure_fixup(struct minimal_heap *heap)
-{
-    assert(NULL != heap);
-    assert(NULL != heap->alias);
-    assert(NULL == heap->alias->base);
-
-    heap->alias->base = malloc_ds(sizeof(heap->alias->base[0]) * 2);
-    heap->alias->base[HEAP_ROOT_INDEX] = malloc_ds(sizeof(struct collision_chain));
-
-    heap->alias->capacity = 1u;
-    heap->alias->size = 1u;
-}
