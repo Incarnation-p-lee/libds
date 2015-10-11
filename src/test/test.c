@@ -25,4 +25,5 @@
 #include "impl/test_result_check.c"
 #include "impl/test_parameter.c"
 #include "impl/test_case_filter.c"
+#include "impl/test_common.c"
 

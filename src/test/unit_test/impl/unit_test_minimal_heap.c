@@ -411,12 +411,10 @@ unit_test_minimal_heap_build(void)
 {
     bool pass;
     uint32 idx;
-    uint32 rand_idx;
     uint32 chain_size;
     struct minimal_heap *heap;
     struct minimal_heap *build;
     struct collision_chain **chain_array;
-    struct collision_chain *chain_bk;
 
     pass = true;
     heap = NULL;
@@ -435,19 +433,7 @@ unit_test_minimal_heap_build(void)
     chain_array[0] = NULL;
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
 
-    idx = HEAP_ROOT_INDEX;
-    /*
-     * Generate one random sequenced chain array
-     */
-    while (idx <= INDEX_LAST(heap->alias)) {
-        rand_idx = rand() % idx;
-        rand_idx = INDEX_INVALID == rand_idx ? HEAP_ROOT_INDEX : rand_idx;
-
-        chain_bk = chain_array[rand_idx];
-        chain_array[rand_idx] = chain_array[idx];
-        chain_array[idx++] = chain_bk;
-    }
-
+    test_minimal_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
     build = minimal_heap_build(chain_array, chain_size);
 
     idx = INDEX_LAST(heap->alias);

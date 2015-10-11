@@ -31,6 +31,7 @@ static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void test_case_list_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void test_case_list_implement(const struct test_layer_table *implement, struct test_case_filter *filter, char *category);
 static inline void test_case_list_interface(const struct test_layer_table *interface, struct test_case_filter *filter, char *category, char *implement);
+static inline void test_minimal_heap_collision_chain_randomization(struct collision_chain **chain_array, uint32 last);
 static inline void test_parameter_default_entry_set(struct test_suite *suite);
 static inline void test_parameter_parser_internal(struct test_suite *suite, char *arg);
 static struct test_case_filter * test_case_filter_obtain(char *arg);
