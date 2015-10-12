@@ -202,6 +202,7 @@ static struct performance_test_reference performance_reference[] = {
     {"minimal_heap_node_remove_and_destroy",       0x0u, 0x0u},
     {"minimal_heap_node_decrease_nice",            0x0u, 0x0u},
     {"minimal_heap_node_increase_nice",            0x0u, 0x0u},
+    {"minimal_heap_build",                         0x0u, 0x0u},
 
     {"maximal_heap_struc_field",                   0x0u, 0x0u},
     {"maximal_heap_create",                        0x0u, 0x0u},

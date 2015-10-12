@@ -1534,7 +1534,7 @@ static const struct test_layer_table minimal_heap[] = {
         NULL,
         {
             &unit_test_minimal_heap_build,
-            NULL,
+            &performance_test_minimal_heap_build,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},
