@@ -1,5 +1,5 @@
 static inline void
-test_minimal_heap_collision_chain_randomization(struct collision_chain **chain_array,
+test_binary_heap_collision_chain_randomization(struct collision_chain **chain_array,
     uint32 last)
 {
     uint32 idx;

@@ -322,3 +322,36 @@ performance_test_maximal_heap_node_increase_nice(uint32 count)
         performance_test_time_stamp_period());
 }
 
+static inline void
+performance_test_maximal_heap_build(uint32 count)
+{
+    uint32 chain_size;
+    struct maximal_heap *heap;
+    struct maximal_heap *build;
+    struct collision_chain **chain_array;
+
+    heap = test_maximal_heap_sample(0x12f, 0xa1);
+    chain_size = maximal_heap_size(heap) + 1;
+    chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
+
+    chain_array[0] = NULL;
+    memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
+        build = maximal_heap_build(chain_array, chain_size);
+
+        free_ds(build->alias);
+        free_ds(build);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    free_ds(chain_array);
+    maximal_heap_destroy(&heap);
+    performance_test_result_print(SYM_2_STR(maximal_heap_build),
+        performance_test_time_stamp_period());
+}
+

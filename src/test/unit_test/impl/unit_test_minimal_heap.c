@@ -433,7 +433,7 @@ unit_test_minimal_heap_build(void)
     chain_array[0] = NULL;
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
 
-    test_minimal_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
+    test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
     build = minimal_heap_build(chain_array, chain_size);
 
     idx = INDEX_LAST(heap->alias);

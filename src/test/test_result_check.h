@@ -71,6 +71,14 @@
         }                                                          \
     } while (false)
 
+#define RESULT_CHECK_MORE_sint64(expect, get, pass)                \
+    do {                                                           \
+        if (!test_result_check_more_sint64_p(expect, get, pass)) { \
+            LOCATION_PRINT;                                        \
+            assert(false);                                         \
+        }                                                          \
+    } while (false)
+
 #define RESULT_CHECK_sint64(expect, get, pass)                \
     do {                                                      \
         if (!test_result_check_sint64_p(expect, get, pass)) { \

@@ -256,7 +256,6 @@ minimal_heap_build(struct collision_chain **chain_array, uint32 size)
                 heap->alias->size = size - 1;
 
                 minimal_heap_build_internal(heap);
-
                 return heap;
             }
         }

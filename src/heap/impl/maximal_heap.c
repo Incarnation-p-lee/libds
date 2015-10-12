@@ -187,6 +187,80 @@ maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap)
 }
 
 static inline void
+maximal_heap_build_internal(struct maximal_heap *heap)
+{
+    uint32 idx;
+    uint32 index;
+    uint32 child_idx;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(NULL != heap->alias->base);
+    assert(maximal_heap_full_p(heap));
+
+    index = maximal_heap_size(heap) / 2;
+
+    while (index != INDEX_INVALID) {
+        idx = index;
+        tmp = HEAP_CHAIN(heap->alias, idx);
+        /*
+         * Perform binary_heap_percolate_down here, but the build input
+         * array is out of heap-order, which may hit the assert
+         * binary_heap_percolate_down_precondition_p. So implement one
+         * less condition check percolate down for heap build.
+         */
+        while (INDEX_LEFT_CHILD(idx) <= INDEX_LAST(heap->alias)) {
+            if (!binary_heap_maximal_percolate_down_ordered_p(heap->alias,
+                idx, HEAP_NICE(heap->alias, idx), &child_idx)) {
+                HEAP_CHAIN(heap->alias, idx) = HEAP_CHAIN(heap->alias, child_idx);
+                idx = child_idx;
+            } else {
+                break;
+            }
+        }
+
+        HEAP_CHAIN(heap->alias, idx) = tmp;
+        index--;
+    }
+}
+
+struct maximal_heap *
+maximal_heap_build(struct collision_chain **chain_array, uint32 size)
+{
+    struct maximal_heap *heap;
+
+    if (!chain_array) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (0 == size) {
+        pr_log_warn("Zero size of chain array, nothing will be done.\n");
+        return NULL;
+    } else if (NULL != chain_array[0]) {
+        pr_log_warn("First node of chain array should be NULL for heap-ordered.\n");
+        return NULL;
+    } else {
+        heap = malloc_ds(sizeof(*heap));
+
+        if (!heap) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            heap->alias = malloc_ds(sizeof(*heap->alias));
+
+            if (!heap->alias) {
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                heap->alias->base = chain_array;
+                heap->alias->capacity = size - 1;
+                heap->alias->size = size - 1;
+
+                maximal_heap_build_internal(heap);
+                return heap;
+            }
+        }
+    }
+}
+
+static inline void
 maximal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index,
     sint64 new_nice)
 {

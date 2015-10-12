@@ -1661,6 +1661,14 @@ static const struct test_layer_table maximal_heap[] = {
             &performance_test_maximal_heap_node_increase_nice,
         },
     },
+    {
+        "build",
+        NULL,
+        {
+            &unit_test_maximal_heap_build,
+            &performance_test_maximal_heap_build,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/

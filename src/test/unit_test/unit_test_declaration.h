@@ -6,6 +6,7 @@ static inline void unit_test_execution_category(const struct test_layer_table *c
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);
 static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
+static inline void unit_test_maximal_heap_build(void);
 static inline void unit_test_maximal_heap_cleanup(void);
 static inline void unit_test_maximal_heap_create(void);
 static inline void unit_test_maximal_heap_destroy(void);

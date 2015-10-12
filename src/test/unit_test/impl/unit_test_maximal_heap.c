@@ -407,3 +407,47 @@ unit_test_maximal_heap_node_remove_and_destroy(void)
     unit_test_result_print(SYM_2_STR(maximal_heap_node_remove_and_destroy), pass);
 }
 
+static inline void
+unit_test_maximal_heap_build(void)
+{
+    bool pass;
+    uint32 idx;
+    uint32 chain_size;
+    struct maximal_heap *heap;
+    struct maximal_heap *build;
+    struct collision_chain **chain_array;
+
+    pass = true;
+    heap = NULL;
+    chain_array = NULL;
+
+    RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 2), &pass);
+    heap = test_maximal_heap_sample(0xe32f, 0x211a);
+    RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 0), &pass);
+
+    chain_size = maximal_heap_size(heap) + 1;
+    chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
+
+    chain_array[0] = HEAP_CHAIN(heap->alias, HEAP_ROOT_INDEX);
+    RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 2), &pass);
+
+    chain_array[0] = NULL;
+    memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
+
+    test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
+    build = maximal_heap_build(chain_array, chain_size);
+
+    idx = INDEX_LAST(heap->alias);
+    while (idx > HEAP_ROOT_INDEX) {
+        RESULT_CHECK_MORE_sint64(HEAP_NICE(heap->alias, INDEX_PARENT(idx)),
+            HEAP_NICE(heap->alias, idx), &pass);
+        idx--;
+    }
+
+    free_ds(build->alias);
+    free_ds(build);
+    free_ds(chain_array);
+    maximal_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(maximal_heap_build), pass);
+}
+

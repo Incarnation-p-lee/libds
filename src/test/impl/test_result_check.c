@@ -144,8 +144,27 @@ test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass)
     tmp = (expect < get);
 
     if (!tmp) {
-        fprintf(stdout, "[32mexpected[0m: %#lx\n", expect);
-        fprintf(stdout, "[31mcomputed[0m: %#lx\n", get);
+        fprintf(stdout, "[expect < computed]\n");
+        fprintf(stdout, "[32mexpected[0m: %ld\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %ld\n", get);
+    }
+
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
+test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass)
+{
+    bool tmp;
+
+    tmp = (expect > get);
+
+    if (!tmp) {
+        fprintf(stdout, "[expect > computed]\n");
+        fprintf(stdout, "[32mexpected[0m: %ld\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %ld\n", get);
     }
 
     *pass = *pass && tmp;

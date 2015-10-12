@@ -340,7 +340,7 @@ performance_test_minimal_heap_build(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        test_minimal_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
+        test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
         build = minimal_heap_build(chain_array, chain_size);
 
         free_ds(build->alias);

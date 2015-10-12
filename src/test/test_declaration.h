@@ -8,6 +8,7 @@ static inline bool test_result_check_double_p(double expect, double get, bool *p
 static inline bool test_result_check_float_p(float expect, float get, bool *pass);
 static inline bool test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
+static inline bool test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_not_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
 static inline bool test_result_check_pointer_p(void *get, void *expect, bool *pass);
 static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *pass);
@@ -26,12 +27,12 @@ static inline struct single_linked_list * test_single_linked_list_sample(uint32 
 static inline struct skip_linked_list * test_skip_linked_list_sample(uint32 range, uint32 count);
 static inline struct splay_tree * test_splay_tree_sample(uint64 range, uint32 node_count);
 static inline struct test_case_filter * test_case_filter_initial(void);
+static inline void test_binary_heap_collision_chain_randomization(struct collision_chain **chain_array, uint32 last);
 static inline void test_case_filter_obtain_internal(char *dest, char *arg, uint32 len);
 static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void test_case_list_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void test_case_list_implement(const struct test_layer_table *implement, struct test_case_filter *filter, char *category);
 static inline void test_case_list_interface(const struct test_layer_table *interface, struct test_case_filter *filter, char *category, char *implement);
-static inline void test_minimal_heap_collision_chain_randomization(struct collision_chain **chain_array, uint32 last);
 static inline void test_parameter_default_entry_set(struct test_suite *suite);
 static inline void test_parameter_parser_internal(struct test_suite *suite, char *arg);
 static struct test_case_filter * test_case_filter_obtain(char *arg);
