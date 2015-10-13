@@ -20,3 +20,5 @@
 #include "impl/binary_heap_internal.c"
 #include "impl/minimal_heap.c"
 #include "impl/maximal_heap.c"
+#include "impl/min_max_heap.c"
+

@@ -22,6 +22,7 @@ static inline void unit_test_maximal_heap_node_remove_and_destroy(void);
 static inline void unit_test_maximal_heap_node_remove_max(void);
 static inline void unit_test_maximal_heap_node_remove_max_and_destroy(void);
 static inline void unit_test_maximal_heap_struc_field(void);
+static inline void unit_test_min_max_heap_create(void);
 static inline void unit_test_minimal_heap_build(void);
 static inline void unit_test_minimal_heap_cleanup(void);
 static inline void unit_test_minimal_heap_create(void);

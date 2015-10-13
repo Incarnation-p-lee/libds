@@ -26,6 +26,7 @@ static inline void performance_test_maximal_heap_node_remove_and_destroy(uint32 
 static inline void performance_test_maximal_heap_node_remove_max(uint32 count);
 static inline void performance_test_maximal_heap_node_remove_max_and_destroy(uint32 count);
 static inline void performance_test_maximal_heap_struc_field(uint32 count);
+static inline void performance_test_min_max_heap_create(uint32 count);
 static inline void performance_test_minimal_heap_build(uint32 count);
 static inline void performance_test_minimal_heap_cleanup(uint32 count);
 static inline void performance_test_minimal_heap_create(uint32 count);

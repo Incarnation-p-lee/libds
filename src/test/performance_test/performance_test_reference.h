@@ -220,6 +220,8 @@ static struct performance_test_reference performance_reference[] = {
     {"maximal_heap_node_decrease_nice",            0x0u, 0x0u},
     {"maximal_heap_node_increase_nice",            0x0u, 0x0u},
     {"maximal_heap_build",                         0x0u, 0x0u},
+
+    {"min_max_heap_create",                        0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 

@@ -1671,6 +1671,25 @@ static const struct test_layer_table maximal_heap[] = {
     },
     {NULL,                          NULL, {NULL, NULL},},
 };
+
+static const struct test_layer_table min_max_heap[] = {
+    // {
+    //     "struct_field",
+    //     NULL,
+    //     {
+    //         NULL, NULL,
+    //     },
+    // },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_min_max_heap_create,
+            &performance_test_min_max_heap_create,
+        },
+    },
+    {NULL,                          NULL, {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1720,6 +1739,7 @@ static const struct test_layer_table test_hash_implement[] = {
 static const struct test_layer_table test_heap_implement[] = {
     {"minimal", minimal_heap, {NULL, NULL},},
     {"maximal", maximal_heap, {NULL, NULL},},
+    {"min_max", min_max_heap, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,      NULL,         {NULL, NULL},},
 };

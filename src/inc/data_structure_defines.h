@@ -241,4 +241,19 @@
 #define maximal_heap_link_set(heap, index, link) \
     (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
+/* MIN_MAX HEAP */
+#define min_max_heap_size(heap) \
+    (assert(heap), (heap)->alias->size)
+
+#define min_max_heap_capacity(heap) \
+    (assert(heap), (heap)->alias->capacity)
+
+#define min_max_heap_nice(heap, index) \
+    (assert(heap), HEAP_NICE(heap->alias, index))
+
+#define min_max_heap_link(heap, index) \
+    (assert(heap), HEAP_LINK(heap->alias, index))
+#define min_max_heap_link_set(heap, index, link) \
+    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+
 #endif
