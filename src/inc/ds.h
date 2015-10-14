@@ -924,6 +924,8 @@ extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_hea
 extern struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * maximal_heap_node_remove_max(struct maximal_heap *heap);
 extern struct doubly_linked_list * min_max_heap_node_find(struct min_max_heap *heap, sint64 nice);
+extern struct doubly_linked_list * min_max_heap_node_find_max(struct min_max_heap *heap);
+extern struct doubly_linked_list * min_max_heap_node_find_min(struct min_max_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
@@ -942,6 +944,7 @@ extern void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint
 extern void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
 extern void min_max_heap_cleanup(struct min_max_heap *heap);
 extern void min_max_heap_destroy(struct min_max_heap **heap);
+extern void min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice);
 extern void minimal_heap_cleanup(struct minimal_heap *heap);
 extern void minimal_heap_destroy(struct minimal_heap **heap);
 extern void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);

@@ -205,7 +205,8 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 up_index, sint64 nice,
     void *ordering)
 {
     uint32 index;
-    bool (*order)(struct binary_heap *, uint32, sint64);
+    uint32 idx_next;
+    bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
 
     assert(NULL != ordering);
     assert(binary_heap_up_ordered_p(ordering));
@@ -220,11 +221,11 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 up_index, sint64 nice,
     assert(binary_heap_percolate_up_precondition_p(heap, index, nice, ordering));
 
     while (HEAP_ROOT_INDEX != index) {
-        if ((*order)(heap, index, nice)) {
+        if ((*order)(heap, index, nice, &idx_next)) {
             break;
         } else {
-            HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, INDEX_PARENT(index));
-            index = INDEX_PARENT(index);
+            HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, idx_next);
+            index = idx_next;
         }
     }
     HEAP_CHAIN(heap, index) = NULL;
