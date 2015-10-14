@@ -71,3 +71,51 @@ min_max_heap_node_find(struct min_max_heap *heap, sint64 nice)
     }
 }
 
+/*
+ * minimal node is root node
+ * foreach node in heap, if
+ *     even, > grandfater > ... > depth 2 node > root
+ *     odd,  > father > grandfater > ... > depth 2 node > root
+ */
+struct doubly_linked_list *
+min_max_heap_node_find_min(struct min_max_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_root(heap->alias);
+    }
+}
+
+/*
+ * minimal node is either left or right child of root
+ * foreach node in heap, if
+ *     even, < fater < grandfater < ... < depth 1 node > root
+ *     odd,  < grandfather < ... < depth 1 node > root
+ */
+struct doubly_linked_list *
+min_max_heap_node_find_max(struct min_max_heap *heap)
+{
+    uint32 idx;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else {
+        idx = binary_heap_child_big_nice_index(heap->alias, HEAP_ROOT_INDEX);
+        return HEAP_LINK(heap->alias, idx);
+    }
+}
+
+void
+min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
+    } else {
+
+    }
+}

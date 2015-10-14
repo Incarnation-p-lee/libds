@@ -213,7 +213,7 @@ struct maximal_heap {
 };
 
 /*
- * min-max heap
+ * min-max heap, root have 0 depth
  *     for even depth node, < fater, > grandfater
  *     for odd  depth node, > fater, < grandfater
  */
