@@ -119,3 +119,4 @@ min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
 
     }
 }
+

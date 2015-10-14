@@ -14,6 +14,8 @@ static inline bool binary_heap_full_p(struct binary_heap *heap);
 static inline bool binary_heap_index_legal_p(struct binary_heap *heap, uint32 index);
 static inline bool binary_heap_maximal_percolate_down_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
 static inline bool binary_heap_maximal_percolate_up_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
+static inline bool binary_heap_min_max_percolate_down_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
+static inline bool binary_heap_min_max_percolate_up_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
 static inline bool binary_heap_minimal_percolate_down_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
 static inline bool binary_heap_minimal_percolate_up_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *next);
 static inline bool binary_heap_nice_legal_p(sint64 nice);
@@ -33,6 +35,7 @@ static inline struct doubly_linked_list * maximal_heap_node_remove_internal(stru
 static inline struct doubly_linked_list * minimal_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_node_depth(uint32 index);
 static inline uint32 binary_heap_percolate_down(struct binary_heap *heap, uint32 down_index, sint64 nice, void *ordering);
 static inline uint32 binary_heap_percolate_up(struct binary_heap *heap, uint32 up_index, sint64 nice, void *ordering);
 static inline void binary_heap_capacity_extend(struct binary_heap *heap);

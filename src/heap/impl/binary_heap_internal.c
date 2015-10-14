@@ -403,3 +403,18 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *ordering)
     return link;
 }
 
+static inline uint32
+binary_heap_node_depth(uint32 index)
+{
+    uint32 depth;
+
+    assert(INDEX_INVALID != index);
+
+    depth = 0;
+
+    while (index >= (1 << (depth + 1))) {
+        depth++;
+    }
+
+    return depth;
+}
