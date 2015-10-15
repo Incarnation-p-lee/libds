@@ -125,6 +125,8 @@ performance_test_doubly_linked_list_node_insert_before(uint32 count)
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
 
+    count = count >> 6;
+    count = 0u == count ? 1000 : count;
     head = test_doubly_linked_list_sample(0x722, 0x342);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -148,6 +150,8 @@ performance_test_doubly_linked_list_node_insert_after(uint32 count)
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
 
+    count = count >> 6;
+    count = 0u == count ? 1000 : count;
     head = test_doubly_linked_list_sample(0x722, 0x342);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -303,7 +307,7 @@ performance_test_doubly_linked_list_node_remove(uint32 count)
 
     while (count--) {
         removed = doubly_linked_list_node_remove(&head);
-        doubly_linked_list_node_insert_before(head, removed);
+        doubly_linked_list_node_insert_before_risky(head, removed);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -326,7 +330,7 @@ performance_test_doubly_linked_list_node_remove_and_destroy(uint32 count)
     while (count--) {
         tmp = doubly_linked_list_create();
         doubly_linked_list_node_remove_and_destroy(&head);
-        doubly_linked_list_node_insert_after(head, tmp);
+        doubly_linked_list_node_insert_after_risky(head, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

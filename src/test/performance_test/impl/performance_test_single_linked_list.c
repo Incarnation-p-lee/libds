@@ -103,6 +103,8 @@ performance_test_single_linked_list_node_append(uint32 count)
 {
     struct single_linked_list *tmp;
 
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
     tmp = single_linked_list_create();
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -169,6 +171,8 @@ performance_test_single_linked_list_node_insert_after(uint32 count)
     struct single_linked_list *head;
     struct single_linked_list *tmp;
 
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
     head = test_single_linked_list_sample(0x722, 0x342);
 
     PERFORMANCE_TEST_CHECKPOINT;

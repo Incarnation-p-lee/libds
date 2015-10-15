@@ -28,6 +28,7 @@ static inline void single_linked_list_node_insert_after_internal(struct single_l
 static inline void skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt, struct skip_linked_list **prev_list, uint32 lvl);
 static inline void skip_linked_list_node_clean(struct skip_linked_list *list);
 static inline void skip_linked_list_node_remove_on_level(struct skip_linked_list *list, struct skip_linked_list *removed, uint32 level);
+static void single_linked_list_node_insert_before_internal(struct single_linked_list *cur, struct single_linked_list *node);
 struct doubly_linked_list * doubly_linked_list_create(void);
 struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *list, uint32 index);
@@ -57,7 +58,9 @@ void doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)
 void doubly_linked_list_node_append(struct doubly_linked_list *node, void *val);
 void doubly_linked_list_node_initial(struct doubly_linked_list *list, void *val, uint32 sid);
 void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+void doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 void doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node);
 void doubly_linked_list_serialize(struct doubly_linked_list *list);
 void single_linked_list_destroy(struct single_linked_list **list);
@@ -67,7 +70,6 @@ void single_linked_list_node_append(struct single_linked_list *node, void *val);
 void single_linked_list_node_initial(struct single_linked_list *list, void *val, uint32 sid);
 void single_linked_list_node_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
 void single_linked_list_node_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
-void single_linked_list_node_insert_before_internal(struct single_linked_list *cur, struct single_linked_list *node);
 void single_linked_list_node_remove_and_destroy(struct single_linked_list **node);
 void single_linked_list_serialize(struct single_linked_list *list);
 void skip_linked_list_destroy(struct skip_linked_list **list);

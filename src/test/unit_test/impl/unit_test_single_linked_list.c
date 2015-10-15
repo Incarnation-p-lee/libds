@@ -118,7 +118,7 @@ unit_test_single_linked_list_node_append(void)
     bool pass;
 
     pass = true;
-    head = test_single_linked_list_sample(0xa1A2E, 0x9213D);
+    head = test_single_linked_list_sample(0xA2E, 0x53D);
     single_linked_list_node_append(NULL, &pass);
 
     next = single_linked_list_node_next(head);
@@ -211,7 +211,7 @@ unit_test_single_linked_list_node_insert_after(void)
     bool pass;
 
     pass = true;
-    head = test_single_linked_list_sample(0xF18AB, 0x82E9C);
+    head = test_single_linked_list_sample(0x28AB, 0x1E9C);
     single_linked_list_node_append(head, &pass);
 
     node = single_linked_list_create();
@@ -249,7 +249,7 @@ unit_test_single_linked_list_destroy(void)
     bool pass;
     uint32 *iter;
     uint32 len;
-    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 sizes[] = {1, 10, 100, 1000, 10000,};
 
     iter = sizes;
     pass = true;
@@ -260,7 +260,7 @@ unit_test_single_linked_list_destroy(void)
 
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = test_single_linked_list_sample(0x816FA, len);
+        head = test_single_linked_list_sample(0x16FA, len);
 
         single_linked_list_destroy(&head);
         RESULT_CHECK_pointer(NULL, head, &pass);
@@ -287,7 +287,7 @@ unit_test_single_linked_list_length(void)
 
     while (iter < sizes + array_sizeof(sizes)) {
         len = *iter++;
-        head = test_single_linked_list_sample(0xE2AE8, len);
+        head = test_single_linked_list_sample(0x2AE8, len);
 
         RESULT_CHECK_uint32(len, single_linked_list_length(head), &pass);
         single_linked_list_destroy(&head);

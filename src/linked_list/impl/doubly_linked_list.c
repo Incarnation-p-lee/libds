@@ -50,7 +50,7 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, void *val)
         pr_log_warn("Destroyed data structure.\n");
     } else {
         next = doubly_linked_list_node_create(val, 0u);
-        doubly_linked_list_node_insert_after(node, next);
+        doubly_linked_list_node_insert_after_internal(node, next);
     }
 }
 
@@ -60,6 +60,7 @@ doubly_linked_list_node_insert_after_internal(struct doubly_linked_list *cur,
 {
     assert(NULL != cur);
     assert(NULL != node);
+    assert(!doubly_linked_list_contains_p_internal(cur, node));
 
     cur->next->previous = node;
     node->next = cur->next;
@@ -73,6 +74,8 @@ doubly_linked_list_node_insert_after(struct doubly_linked_list *cur,
 {
     if (!cur || !node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (doubly_linked_list_contains_p_internal(cur, node)) {
+        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
         doubly_linked_list_node_insert_after_internal(cur, node);
     }
@@ -86,6 +89,7 @@ doubly_linked_list_node_insert_before_internal(struct doubly_linked_list *cur,
 
     assert(NULL != cur);
     assert(NULL != node);
+    assert(!doubly_linked_list_contains_p_internal(cur, node));
 
     prev = doubly_linked_list_node_previous(cur);
     assert(NULL != prev);
@@ -99,8 +103,32 @@ doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
 {
     if (!cur || !node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (doubly_linked_list_contains_p_internal(cur, node)) {
+        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
         doubly_linked_list_node_insert_before_internal(cur, node);
+    }
+}
+
+void
+doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node)
+{
+    if (!cur || !node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        doubly_linked_list_node_insert_before_internal(cur, node);
+    }
+}
+
+void
+doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur,
+    struct doubly_linked_list *node)
+{
+    if (!cur || !node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        doubly_linked_list_node_insert_after_internal(cur, node);
     }
 }
 

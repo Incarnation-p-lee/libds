@@ -37,7 +37,7 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
         sid = (uint32)(rand() % range);
         tmp = doubly_linked_list_create();
         doubly_linked_list_node_initial(tmp, tmp, sid);
-        doubly_linked_list_node_insert_before(list, tmp);
+        doubly_linked_list_node_insert_before_risky(list, tmp);
         i++;
     }
 

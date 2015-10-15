@@ -144,7 +144,7 @@ unit_test_doubly_linked_list_node_insert_before(void)
     bool pass;
 
     pass = true;
-    head = test_doubly_linked_list_sample(0x21f26, 0xbef19);
+    head = test_doubly_linked_list_sample(0x3f26, 0x1f19);
     doubly_linked_list_node_append(head, &pass);
 
     node = doubly_linked_list_create();
@@ -476,16 +476,16 @@ unit_test_doubly_linked_list_merge(void)
     head = doubly_linked_list_create();
     doubly_linked_list_node_initial(head, raw, 0x0u);
     tmp = doubly_linked_list_node_create(raw + 1, 0x0u);
-    doubly_linked_list_node_insert_before(head, tmp);
+    doubly_linked_list_node_insert_before_risky(head, tmp);
     tmp = doubly_linked_list_node_create(raw + 2, 0x0u);
-    doubly_linked_list_node_insert_before(head, tmp);
+    doubly_linked_list_node_insert_before_risky(head, tmp);
 
     head_n = doubly_linked_list_create();
     doubly_linked_list_node_initial(head_n, raw + 2, 0x0u);
     tmp = doubly_linked_list_node_create(raw + 3, 0x0u);
-    doubly_linked_list_node_insert_before(head_n, tmp);
+    doubly_linked_list_node_insert_before_risky(head_n, tmp);
     tmp = doubly_linked_list_node_create(raw + 4, 0x0u);
-    doubly_linked_list_node_insert_before(head_n, tmp);
+    doubly_linked_list_node_insert_before_risky(head_n, tmp);
 
     RESULT_CHECK_pointer(NULL, doubly_linked_list_merge(NULL, NULL), &pass);
     RESULT_CHECK_pointer(head, doubly_linked_list_merge(head, NULL), &pass);

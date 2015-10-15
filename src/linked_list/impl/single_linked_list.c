@@ -58,6 +58,7 @@ single_linked_list_node_insert_after_internal(struct single_linked_list *cur,
 {
     assert(NULL != cur);
     assert(NULL != node);
+    assert(!single_linked_list_contains_p_internal(cur, node));
 
     node->next = cur->next;
     cur->next = node;
@@ -69,12 +70,14 @@ single_linked_list_node_insert_after(struct single_linked_list *cur,
 {
     if (!cur || !node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (single_linked_list_contains_p_internal(cur, node)){
+        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
         single_linked_list_node_insert_after_internal(cur, node);
     }
 }
 
-void
+static void
 single_linked_list_node_insert_before_internal(struct single_linked_list *cur,
     struct single_linked_list *node)
 {
@@ -82,6 +85,7 @@ single_linked_list_node_insert_before_internal(struct single_linked_list *cur,
 
     assert(NULL != cur);
     assert(NULL != node);
+    assert(!single_linked_list_contains_p_internal(cur, node));
 
     //FixMe: add check for inserted node already exist
     prev = single_linked_list_node_previous_internal(cur);
@@ -97,6 +101,8 @@ single_linked_list_node_insert_before(struct single_linked_list *cur,
 {
     if (!cur || !node) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (single_linked_list_contains_p_internal(cur, node)){
+        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
         single_linked_list_node_insert_before_internal(cur, node);
     }
