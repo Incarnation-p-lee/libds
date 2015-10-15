@@ -1413,8 +1413,8 @@ static const struct test_layer_table minimal_heap[] = {
         "struct_field",
         NULL,
         {
-            &unit_test_minimal_heap_struc_field,
-            &performance_test_minimal_heap_struc_field,
+            &unit_test_minimal_heap_struct_field,
+            &performance_test_minimal_heap_struct_field,
         },
     },
     {
@@ -1545,8 +1545,8 @@ static const struct test_layer_table maximal_heap[] = {
         "struct_field",
         NULL,
         {
-            &unit_test_maximal_heap_struc_field,
-            &performance_test_maximal_heap_struc_field,
+            &unit_test_maximal_heap_struct_field,
+            &performance_test_maximal_heap_struct_field,
         },
     },
     {
@@ -1673,19 +1673,52 @@ static const struct test_layer_table maximal_heap[] = {
 };
 
 static const struct test_layer_table min_max_heap[] = {
-    // {
-    //     "struct_field",
-    //     NULL,
-    //     {
-    //         NULL, NULL,
-    //     },
-    // },
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_min_max_heap_struct_field,
+            &performance_test_min_max_heap_struct_field,
+        },
+    },
     {
         "create",
         NULL,
         {
             &unit_test_min_max_heap_create,
             &performance_test_min_max_heap_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_min_max_heap_destroy,
+            &performance_test_min_max_heap_destroy,
+        },
+    },
+    {
+        "empty_p",
+        NULL,
+        {
+            &unit_test_min_max_heap_empty_p,
+            &performance_test_min_max_heap_empty_p,
+        },
+    },
+    {
+        "full_p",
+        NULL,
+        {
+            &unit_test_min_max_heap_full_p,
+            &performance_test_min_max_heap_full_p,
+        },
+    },
+    {
+        "cleanup",
+        NULL,
+        {
+            &unit_test_min_max_heap_cleanup,
+            &performance_test_min_max_heap_cleanup,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},

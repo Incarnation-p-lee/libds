@@ -1,5 +1,5 @@
 static inline void
-unit_test_minimal_heap_struc_field(void)
+unit_test_minimal_heap_struct_field(void)
 {
     bool pass;
     uint32 index;
@@ -21,7 +21,7 @@ unit_test_minimal_heap_struc_field(void)
     RESULT_CHECK_pointer(tmp, minimal_heap_link_set(heap, index, tmp), &pass);
 
     minimal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(minimal_heap_struc_field), pass);
+    unit_test_result_print(SYM_2_STR(minimal_heap_struct_field), pass);
 }
 
 static inline void

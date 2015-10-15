@@ -1,5 +1,5 @@
 static inline void
-performance_test_maximal_heap_struc_field(uint32 count)
+performance_test_maximal_heap_struct_field(uint32 count)
 {
     uint32 index;
     struct maximal_heap *heap;
@@ -16,7 +16,7 @@ performance_test_maximal_heap_struc_field(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     maximal_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(maximal_heap_struc_field),
+    performance_test_result_print(SYM_2_STR(maximal_heap_struct_field),
         performance_test_time_stamp_period());
 }
 

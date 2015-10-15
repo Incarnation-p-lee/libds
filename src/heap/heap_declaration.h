@@ -24,6 +24,7 @@ static inline bool binary_heap_node_contains_p(struct binary_heap *heap, sint64 
 static inline bool binary_heap_node_contains_with_null_p(struct binary_heap *heap, sint64 nice);
 static inline bool binary_heap_percolate_down_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
 static inline bool binary_heap_percolate_up_precondition_p(struct binary_heap *heap, uint32 index, sint64 nice, void *ordering);
+static inline bool binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_idx, uint32 down_idx, sint64 nice, uint32 *next);
 static inline bool binary_heap_structure_legal_p(struct binary_heap *heap);
 static inline bool binary_heap_up_ordered_p(void *func_ptr);
 static inline struct binary_heap * binary_heap_create(uint32 capacity);

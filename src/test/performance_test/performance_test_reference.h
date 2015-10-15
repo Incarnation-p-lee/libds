@@ -187,7 +187,7 @@ static struct performance_test_reference performance_reference[] = {
     {"open_addressing_hash_find",                  0x0u, 0x0u},
     {"open_addressing_hash_rehashing",             0x0u, 0x0u},
 
-    {"minimal_heap_struc_field",                   0x0u, 0x0u},
+    {"minimal_heap_struct_field",                  0x0u, 0x0u},
     {"minimal_heap_create",                        0x0u, 0x0u},
     {"minimal_heap_destroy",                       0x0u, 0x0u},
     {"minimal_heap_empty_p",                       0x0u, 0x0u},
@@ -204,7 +204,7 @@ static struct performance_test_reference performance_reference[] = {
     {"minimal_heap_node_increase_nice",            0x0u, 0x0u},
     {"minimal_heap_build",                         0x0u, 0x0u},
 
-    {"maximal_heap_struc_field",                   0x0u, 0x0u},
+    {"maximal_heap_struct_field",                  0x0u, 0x0u},
     {"maximal_heap_create",                        0x0u, 0x0u},
     {"maximal_heap_destroy",                       0x0u, 0x0u},
     {"maximal_heap_empty_p",                       0x0u, 0x0u},
@@ -221,7 +221,12 @@ static struct performance_test_reference performance_reference[] = {
     {"maximal_heap_node_increase_nice",            0x0u, 0x0u},
     {"maximal_heap_build",                         0x0u, 0x0u},
 
+    {"min_max_heap_struct_field",                  0x0u, 0x0u},
     {"min_max_heap_create",                        0x0u, 0x0u},
+    {"min_max_heap_destroy",                       0x0u, 0x0u},
+    {"min_max_heap_empty_p",                       0x0u, 0x0u},
+    {"min_max_heap_full_p",                        0x0u, 0x0u},
+    {"min_max_heap_cleanup",                       0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 

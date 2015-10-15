@@ -1,5 +1,5 @@
 static inline void
-unit_test_maximal_heap_struc_field(void)
+unit_test_maximal_heap_struct_field(void)
 {
     bool pass;
     uint32 index;
@@ -21,7 +21,7 @@ unit_test_maximal_heap_struc_field(void)
     RESULT_CHECK_pointer(tmp, maximal_heap_link_set(heap, index, tmp), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_struc_field), pass);
+    unit_test_result_print(SYM_2_STR(maximal_heap_struct_field), pass);
 }
 
 static inline void

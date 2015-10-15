@@ -116,7 +116,8 @@ min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
-
+        binary_heap_node_insert(heap->alias, val, nice,
+            &binary_heap_min_max_percolate_up_ordered_p);
     }
 }
 

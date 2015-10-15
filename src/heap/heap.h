@@ -36,11 +36,13 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 static void *up_order_func[] = {
     &binary_heap_minimal_percolate_up_ordered_p,
     &binary_heap_maximal_percolate_up_ordered_p,
+    &binary_heap_min_max_percolate_up_ordered_p,
 };
 
 static void *down_order_func[] = {
     &binary_heap_minimal_percolate_down_ordered_p,
     &binary_heap_maximal_percolate_down_ordered_p,
+    &binary_heap_min_max_percolate_down_ordered_p,
 };
 #endif
 /* END OF BINARY HEAP DEBUG */
