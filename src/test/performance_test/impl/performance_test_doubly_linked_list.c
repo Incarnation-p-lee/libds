@@ -145,6 +145,31 @@ performance_test_doubly_linked_list_node_insert_before(uint32 count)
 }
 
 static void
+performance_test_doubly_linked_list_node_insert_before_risky(uint32 count)
+{
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *tmp;
+
+    count = count >> 6;
+    count = 0u == count ? 1000 : count;
+    head = test_doubly_linked_list_sample(0x722, 0x342);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        tmp = doubly_linked_list_create();
+        doubly_linked_list_node_insert_before_risky(head, tmp);
+        doubly_linked_list_node_remove_and_destroy(&head);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    doubly_linked_list_destroy(&head);
+    performance_test_result_print(SYM_2_STR(doubly_linked_list_node_insert_before_risky),
+        performance_test_time_stamp_period());
+}
+
+static void
 performance_test_doubly_linked_list_node_insert_after(uint32 count)
 {
     struct doubly_linked_list *head;
@@ -159,12 +184,38 @@ performance_test_doubly_linked_list_node_insert_after(uint32 count)
     while (count--) {
         tmp = doubly_linked_list_create();
         doubly_linked_list_node_insert_after(head, tmp);
+        doubly_linked_list_node_remove_and_destroy(&head);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     doubly_linked_list_destroy(&head);
     performance_test_result_print(SYM_2_STR(doubly_linked_list_node_insert_after),
+        performance_test_time_stamp_period());
+}
+
+static void
+performance_test_doubly_linked_list_node_insert_after_risky(uint32 count)
+{
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *tmp;
+
+    count = count >> 6;
+    count = 0u == count ? 1000 : count;
+    head = test_doubly_linked_list_sample(0x722, 0x342);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        tmp = doubly_linked_list_create();
+        doubly_linked_list_node_insert_after_risky(head, tmp);
+        doubly_linked_list_node_remove_and_destroy(&head);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    doubly_linked_list_destroy(&head);
+    performance_test_result_print(SYM_2_STR(doubly_linked_list_node_insert_after_risky),
         performance_test_time_stamp_period());
 }
 

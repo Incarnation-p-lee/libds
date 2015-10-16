@@ -175,6 +175,46 @@ unit_test_doubly_linked_list_node_insert_before(void)
 }
 
 static void
+unit_test_doubly_linked_list_node_insert_before_risky(void)
+{
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *node;
+    struct doubly_linked_list *prev;
+    struct doubly_linked_list *copy;
+    bool pass;
+
+    pass = true;
+    head = test_doubly_linked_list_sample(0x3f26, 0x1f19);
+    doubly_linked_list_node_append(head, &pass);
+
+    node = doubly_linked_list_create();
+    copy = doubly_linked_list_node_copy(node);
+
+    doubly_linked_list_node_insert_before_risky(NULL, node);
+    RESULT_CHECK_doubly_linked_list_node(copy, node, &pass);
+    doubly_linked_list_node_initial(copy, NULL, 0x0u);
+    doubly_linked_list_destroy(&copy);
+    doubly_linked_list_destroy(&node);
+
+    copy = doubly_linked_list_node_copy(head);
+    doubly_linked_list_node_insert_before_risky(head, NULL);
+    RESULT_CHECK_doubly_linked_list_node(copy, head, &pass);
+    doubly_linked_list_node_initial(copy, NULL, 0x0u);
+    doubly_linked_list_destroy(&copy);
+
+    node = doubly_linked_list_create();
+    prev = doubly_linked_list_node_previous(head);
+    doubly_linked_list_node_insert_before_risky(head, node);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_next(node), &pass);
+    RESULT_CHECK_pointer(prev, doubly_linked_list_node_previous(node), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_next(prev), &pass);
+
+    doubly_linked_list_destroy(&head);
+    unit_test_result_print(SYM_2_STR(doubly_linked_list_node_insert_before_risky), pass);
+}
+
+static void
 unit_test_doubly_linked_list_node_insert_after(void)
 {
     struct doubly_linked_list *head;
@@ -215,13 +255,53 @@ unit_test_doubly_linked_list_node_insert_after(void)
 }
 
 static void
+unit_test_doubly_linked_list_node_insert_after_risky(void)
+{
+    struct doubly_linked_list *head;
+    struct doubly_linked_list *node;
+    struct doubly_linked_list *next;
+    struct doubly_linked_list *copy;
+    bool pass;
+
+    pass = true;
+    head = test_doubly_linked_list_sample(0x18ab, 0x2e9c);
+    doubly_linked_list_node_append(head, &pass);
+
+    node = doubly_linked_list_create();
+    copy = doubly_linked_list_node_copy(node);
+
+    doubly_linked_list_node_insert_after_risky(NULL, node);
+    RESULT_CHECK_doubly_linked_list_node(copy, node, &pass);
+    doubly_linked_list_node_initial(copy, NULL, 0x0u);
+    doubly_linked_list_destroy(&copy);
+    doubly_linked_list_destroy(&node);
+
+    copy = doubly_linked_list_node_copy(head);
+    doubly_linked_list_node_insert_after_risky(head, NULL);
+    RESULT_CHECK_doubly_linked_list_node(copy, head, &pass);
+    doubly_linked_list_node_initial(copy, NULL, 0x0u);
+    doubly_linked_list_destroy(&copy);
+
+    node = doubly_linked_list_create();
+    next = doubly_linked_list_node_next(head);
+    doubly_linked_list_node_insert_after_risky(head, node);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(head, doubly_linked_list_node_previous(node), &pass);
+    RESULT_CHECK_pointer(next, doubly_linked_list_node_next(node), &pass);
+    RESULT_CHECK_pointer(node, doubly_linked_list_node_previous(next), &pass);
+
+    doubly_linked_list_destroy(&head);
+    unit_test_result_print(SYM_2_STR(doubly_linked_list_node_insert_after_risky), pass);
+}
+
+static void
 unit_test_doubly_linked_list_destroy(void)
 {
     struct doubly_linked_list *head;
     bool pass;
     uint32 *iter;
     uint32 len;
-    uint32 sizes[] = {1, 10, 100, 1000, 10000, 100000,};
+    uint32 sizes[] = {1, 10, 100, 1000, 10000,};
 
     iter = sizes;
     pass = true;
