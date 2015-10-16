@@ -14,7 +14,7 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
         sid = (uint32)(rand() % range);
         tmp = single_linked_list_create();
         single_linked_list_node_initial(tmp, tmp, sid);
-        single_linked_list_node_insert_after(list, tmp);
+        single_linked_list_node_insert_after_risky(list, tmp);
         i++;
     }
 

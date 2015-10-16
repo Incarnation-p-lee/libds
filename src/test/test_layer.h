@@ -65,11 +65,27 @@ static const struct test_layer_table single_linked_list_interface[] = {
             &performance_test_single_linked_list_node_insert_before,
         },
     },
+    {
+        "node_insert_before_risky",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_insert_before_risky,
+            &performance_test_single_linked_list_node_insert_before_risky,
+        },
+    },
     {   "node_insert_after",
         NULL,
         {
             &unit_test_single_linked_list_node_insert_after,
             &performance_test_single_linked_list_node_insert_after,
+        },
+    },
+    {
+        "node_insert_after_risky",
+        NULL,
+        {
+            &unit_test_single_linked_list_node_insert_after_risky,
+            &performance_test_single_linked_list_node_insert_after_risky,
         },
     },
     {

@@ -104,6 +104,8 @@ performance_test_doubly_linked_list_node_append(uint32 count)
 {
     struct doubly_linked_list *tmp;
 
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
     tmp = doubly_linked_list_create();
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -150,8 +152,6 @@ performance_test_doubly_linked_list_node_insert_before_risky(uint32 count)
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
 
-    count = count >> 6;
-    count = 0u == count ? 1000 : count;
     head = test_doubly_linked_list_sample(0x722, 0x342);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -200,8 +200,6 @@ performance_test_doubly_linked_list_node_insert_after_risky(uint32 count)
     struct doubly_linked_list *head;
     struct doubly_linked_list *tmp;
 
-    count = count >> 6;
-    count = 0u == count ? 1000 : count;
     head = test_doubly_linked_list_sample(0x722, 0x342);
 
     PERFORMANCE_TEST_CHECKPOINT;

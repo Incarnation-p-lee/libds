@@ -13,6 +13,7 @@ static struct performance_test_reference performance_reference[] = {
     {"single_linked_list_node_insert_before",            0x0u, 0x0u},
     {"single_linked_list_node_insert_before_risky",      0x0u, 0x0u},
     {"single_linked_list_node_insert_after",             0x0u, 0x0u},
+    {"single_linked_list_node_insert_after_risky",       0x0u, 0x0u},
     {"single_linked_list_node_by_index",                 0x0u, 0x0u},
     {"single_linked_list_node_remove",                   0x0u, 0x0u},
     {"single_linked_list_node_remove_and_destroy",       0x0u, 0x0u},

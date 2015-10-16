@@ -108,6 +108,28 @@ single_linked_list_node_insert_before(struct single_linked_list *cur,
     }
 }
 
+void
+single_linked_list_node_insert_before_risky(struct single_linked_list *cur,
+    struct single_linked_list *node)
+{
+    if (!cur || !node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        single_linked_list_node_insert_before_internal(cur, node);
+    }
+}
+
+void
+single_linked_list_node_insert_after_risky(struct single_linked_list *cur,
+    struct single_linked_list *node)
+{
+    if (!cur || !node) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else {
+        single_linked_list_node_insert_after_internal(cur, node);
+    }
+}
+
 struct single_linked_list *
 single_linked_list_node_copy(struct single_linked_list *node)
 {
