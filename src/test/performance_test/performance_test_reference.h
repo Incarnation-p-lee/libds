@@ -227,6 +227,10 @@ static struct performance_test_reference performance_reference[] = {
     {"min_max_heap_empty_p",                       0x0u, 0x0u},
     {"min_max_heap_full_p",                        0x0u, 0x0u},
     {"min_max_heap_cleanup",                       0x0u, 0x0u},
+    {"min_max_heap_node_find",                     0x0u, 0x0u},
+    {"min_max_heap_node_find_min",                 0x0u, 0x0u},
+    {"min_max_heap_node_find_max",                 0x0u, 0x0u},
+    {"min_max_heap_node_insert",                   0x0u, 0x0u},
     {NULL,                                         0x0u, 0x0u},
 };
 

@@ -1721,6 +1721,38 @@ static const struct test_layer_table min_max_heap[] = {
             &performance_test_min_max_heap_cleanup,
         },
     },
+    {
+        "node_find",
+        NULL,
+        {
+            &unit_test_min_max_heap_node_find,
+            &performance_test_min_max_heap_node_find,
+        },
+    },
+    {
+        "node_find_min",
+        NULL,
+        {
+            &unit_test_min_max_heap_node_find_min,
+            &performance_test_min_max_heap_node_find_min,
+        },
+    },
+    {
+        "node_find_max",
+        NULL,
+        {
+            &unit_test_min_max_heap_node_find_max,
+            &performance_test_min_max_heap_node_find_max,
+        },
+    },
+    {
+        "node_insert",
+        NULL,
+        {
+            &unit_test_min_max_heap_node_insert,
+            &performance_test_min_max_heap_node_insert,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/

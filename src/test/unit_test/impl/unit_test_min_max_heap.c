@@ -133,3 +133,112 @@ unit_test_min_max_heap_cleanup(void)
     unit_test_result_print(SYM_2_STR(min_max_heap_cleanup), pass);
 }
 
+static inline void
+unit_test_min_max_heap_node_find(void)
+{
+    bool pass;
+    uint32 index;
+    struct min_max_heap *heap;
+
+    pass = true;
+    index = 1u;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, min_max_heap_node_find(heap, index), &pass);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+    RESULT_CHECK_pointer(min_max_heap_link(heap, index),
+        min_max_heap_node_find(heap, min_max_heap_nice(heap, index)), &pass);
+    index = 0x144Eu;
+    RESULT_CHECK_pointer(NULL, min_max_heap_node_find(heap, (sint64)index), &pass);
+
+    index = 0x2u;
+    RESULT_CHECK_pointer(min_max_heap_link(heap, index),
+        min_max_heap_node_find(heap, min_max_heap_nice(heap, index)), &pass);
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_find), pass);
+}
+
+static inline void
+unit_test_min_max_heap_node_find_min(void)
+{
+    bool pass;
+    struct min_max_heap *heap;
+
+    pass = true;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, min_max_heap_node_find_min(heap), &pass);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+    RESULT_CHECK_pointer(min_max_heap_link(heap, 1u),
+        min_max_heap_node_find_min(heap), &pass);
+
+    RESULT_CHECK_pointer(min_max_heap_link(heap, 1u),
+        min_max_heap_node_find_min(heap), &pass);
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_find_min), pass);
+}
+
+static inline void
+unit_test_min_max_heap_node_find_max(void)
+{
+    bool pass;
+    uint32 index;
+    struct min_max_heap *heap;
+
+    pass = true;
+    heap = NULL;
+
+    RESULT_CHECK_pointer(NULL, min_max_heap_node_find_min(heap), &pass);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+
+    index = HEAP_ROOT_INDEX;
+    if (min_max_heap_nice(heap, INDEX_LEFT_CHILD(index)) >
+        min_max_heap_nice(heap, INDEX_RIGHT_CHILD(index))) {
+        index = INDEX_LEFT_CHILD(index);
+    } else {
+        index = INDEX_RIGHT_CHILD(index);
+    }
+
+    RESULT_CHECK_pointer(min_max_heap_link(heap, index),
+        min_max_heap_node_find_max(heap), &pass);
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_find_min), pass);
+}
+
+static inline void
+unit_test_min_max_heap_node_insert(void)
+{
+    bool pass;
+    uint32 count;
+    uint32 size;
+    struct min_max_heap *heap;
+
+    pass = true;
+    heap = NULL;
+    count = 0x82;
+
+    min_max_heap_node_insert(heap, &pass, 0u);
+
+    heap = test_min_max_heap_sample(0x345, 0x44E);
+
+    while (count--) {
+        size = min_max_heap_size(heap);
+        if (min_max_heap_node_find(heap, count)) {
+            min_max_heap_node_insert(heap, &pass, count);
+            RESULT_CHECK_uint32(size, min_max_heap_size(heap), &pass);
+        } else {
+            min_max_heap_node_insert(heap, &pass, count);
+            RESULT_CHECK_uint32(size + 1, min_max_heap_size(heap), &pass);
+        }
+    }
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_insert), pass);
+}
+
