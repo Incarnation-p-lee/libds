@@ -359,7 +359,7 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
          * nice collision occurs.
          */
         inserted = doubly_linked_list_node_create(val, nice);
-        doubly_linked_list_node_insert_after(head, inserted);
+        doubly_linked_list_node_insert_after_risky(head, inserted);
     }
 }
 

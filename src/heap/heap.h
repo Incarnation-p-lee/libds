@@ -26,7 +26,7 @@
 
 /* EXTERNAL FUNCTIONS */
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
-extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 /* END OF EXTERNAL FUNCTIONS */

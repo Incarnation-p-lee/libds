@@ -167,7 +167,7 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
         } else {
             node->space.dim = dim;
             node->space.sp = node->space.bp;
-            doubly_linked_list_node_insert_after(&last->link, &node->link);
+            doubly_linked_list_node_insert_after_risky(&last->link, &node->link);
         }
     }
 }

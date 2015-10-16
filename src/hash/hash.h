@@ -8,7 +8,7 @@
 
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
-extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node);
 
 #endif

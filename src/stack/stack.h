@@ -5,7 +5,7 @@
 #define EXPAND_STACK_SPACE_MIN     32
 
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
 
 /* ARRAY STACK */

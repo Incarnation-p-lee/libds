@@ -136,7 +136,7 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
             separate_chain_hash_chain_head_set(*hash, index, head);
         } else {
             node = doubly_linked_list_node_create(key, 0x0u);
-            doubly_linked_list_node_insert_after(head, node);
+            doubly_linked_list_node_insert_after_risky(head, node);
         }
     }
 
