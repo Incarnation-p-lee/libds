@@ -82,11 +82,11 @@ performance_test_result_print(char *name, sint64 period)
     variance = variance * 100.0;
 
     if (-VARIANCE_LIMIT < variance && variance < VARIANCE_LIMIT) {
-        fprintf(stdout, "    . %08.3f%% .. %#012lx ms .. %s\n", variance, period, name);
+        fprintf(stdout, "    . %08.3f%% .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
     } else if (-VARIANCE_LIMIT > variance) {
-        fprintf(stdout, "    . [35m%08.3f%%[0m .. %#012lx ms .. %s\n", -variance, period, name);
+        fprintf(stdout, "    . [35m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", -variance, period, name);
     } else {
-        fprintf(stdout, "    . [36m%08.3f%%[0m .. %#012lx ms .. %s\n", variance, period, name);
+        fprintf(stdout, "    . [36m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
     }
 }
 

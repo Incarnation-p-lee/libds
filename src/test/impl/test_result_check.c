@@ -110,8 +110,8 @@ test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass)
     tmp = (expect == get);
 
     if (!tmp) {
-        fprintf(stdout, "[32mexpected[0m: %#lx\n", expect);
-        fprintf(stdout, "[31mcomputed[0m: %#lx\n", get);
+        fprintf(stdout, "[32mexpected[0m: %#"U64_MDF_X"\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %#"U64_MDF_X"\n", get);
     }
 
     *pass = *pass && tmp;
@@ -127,8 +127,8 @@ test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass)
     tmp = (expect == get);
 
     if (!tmp) {
-        fprintf(stdout, "[32mexpected[0m: %#lx\n", expect);
-        fprintf(stdout, "[31mcomputed[0m: %#lx\n", get);
+        fprintf(stdout, "[32mexpected[0m: %#"S64_MDF_X"\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %#"S64_MDF_X"\n", get);
     }
 
     *pass = *pass && tmp;
@@ -145,8 +145,8 @@ test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass)
 
     if (!tmp) {
         fprintf(stdout, "[expect < computed]\n");
-        fprintf(stdout, "[32mexpected[0m: %ld\n", expect);
-        fprintf(stdout, "[31mcomputed[0m: %ld\n", get);
+        fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
     }
 
     *pass = *pass && tmp;
@@ -163,8 +163,8 @@ test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass)
 
     if (!tmp) {
         fprintf(stdout, "[expect > computed]\n");
-        fprintf(stdout, "[32mexpected[0m: %ld\n", expect);
-        fprintf(stdout, "[31mcomputed[0m: %ld\n", get);
+        fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
     }
 
     *pass = *pass && tmp;

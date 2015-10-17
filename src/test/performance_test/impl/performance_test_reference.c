@@ -111,7 +111,7 @@ performance_test_reference_new_writeback(const char *fname)
         iter = performance_reference;
         while (iter->name) {
             memset(line, 0, sizeof(line));
-            sprintf(line, "%016ld=%s\n", iter->now, iter->name);
+            sprintf(line, "%016"U64_MDF_U"=%s\n", iter->now, iter->name);
             fwrite(line, strlen(line), 1, golden);
             iter++;
         }

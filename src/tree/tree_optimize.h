@@ -82,7 +82,7 @@
             :"rax", "rbx", "rcx", "rdx")
 #endif
 
-#if defined X86
+#if defined X86_32
     /*
      * If node == NULL, fake a valid address for cmovne with edx unchanged
      * If node != NULL, %0 unchanged, will load correct value tp edx

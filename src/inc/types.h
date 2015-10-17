@@ -11,7 +11,7 @@ enum log_level {
 typedef signed char   sint8;
 typedef unsigned char uint8;
 
-#if defined X86
+#if defined X86_32
     typedef signed short       sint16;
     typedef unsigned short     uint16;
     typedef signed int         sint32;

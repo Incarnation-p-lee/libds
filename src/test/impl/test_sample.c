@@ -177,10 +177,11 @@ test_open_addressing_hash_sample(uint32 count)
     assert(NULL != hash);
     assert(NULL != heap);
 
-    iter = (uint64)heap->begin;
-    limit = (uint64)heap->end;
+    iter = PTR_TO_UNSIGNED(heap->begin);
+    limit = PTR_TO_UNSIGNED(heap->end);
+
     while (0 != count-- && iter < limit) {
-        open_addressing_hash_insert(&hash, (void *)iter);
+        open_addressing_hash_insert(&hash, UNSIGNED_TO_PTR(iter));
         iter += 4;
     }
 
@@ -201,10 +202,10 @@ test_separate_chain_hash_sample(uint32 count)
     assert(NULL != hash);
     assert(NULL != heap);
 
-    iter = (uint64)heap->begin;
-    limit = (uint64)heap->end;
+    iter = PTR_TO_UNSIGNED(heap->begin);
+    limit = PTR_TO_UNSIGNED(heap->end);
     while (0 != count-- && iter < limit) {
-        separate_chain_hash_insert(&hash, (void *)iter);
+        separate_chain_hash_insert(&hash, UNSIGNED_TO_PTR(iter));
         iter += 4;
     }
 

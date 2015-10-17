@@ -45,7 +45,7 @@ for argv in "$@"
 do
   case $argv in
     "X86_64=0")
-      argv_cfg="$argv_cfg -m32 -DX86"
+      argv_cfg="$argv_cfg -m32 -DX86_32"
       argv_lnk="$argv_lnk -m32"
       platform="1"
     ;;

@@ -104,6 +104,7 @@ open_addressing_hash_insert(struct open_addressing_hash **hash, void *key)
 
         iter = 0;
         do {
+            // FixMe -p=100000 
             assert(iter < open_addressing_hash_limit(*hash));
 
             index = open_addressing_hash_index_calculate(*hash, key, iter++);

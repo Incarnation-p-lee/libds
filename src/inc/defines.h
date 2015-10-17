@@ -49,5 +49,24 @@
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 
+#if defined X86_64
+    #define PTR_TO_UNSIGNED(ptr) (uint64)(ptr)
+    #define UNSIGNED_TO_PTR(usd) (void *)(usd)
+    #define U64_MDF_X            "lx"
+    #define U64_MDF_U            "lu"
+    #define S64_MDF_D            "ld"
+    #define S64_MDF_X            "lx"
+#endif
+
+#if defined X86_32
+    #define PTR_TO_UNSIGNED(ptr) (uint32)(ptr)
+    #define UNSIGNED_TO_PTR(usd) (void *)((uint32)usd)
+    #define U64_MDF_X            "llx"
+    #define U64_MDF_U            "llu"
+    #define S64_MDF_D            "lld"
+    #define S64_MDF_X            "llx"
+#endif
+
+
 #endif
 

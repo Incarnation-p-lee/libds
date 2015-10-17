@@ -2,9 +2,9 @@ void
 memory_trace_print(void)
 {
     printf("  >> Memory Usage Summary <<\n");
-    printf("    . Malloc  %10lu\n", malloc_cnt);
-    printf("    . Realloc %10lu\n", realloc_cnt);
-    printf("    . Free    %10lu\n", free_cnt);
+    printf("    . Malloc  %10"U64_MDF_U"\n", malloc_cnt);
+    printf("    . Realloc %10"U64_MDF_U"\n", realloc_cnt);
+    printf("    . Free    %10"U64_MDF_U"\n", free_cnt);
     printf("  >> Memory End <<\n\n");
 }
 

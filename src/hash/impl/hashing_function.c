@@ -11,7 +11,7 @@ hashing_function_polynomial(void *key, uint32 size)
     if (0 == size) {
         pr_log_err("Hash table should not have zero table size.\n");
     } else {
-        raw = (uint64)key;
+        raw = PTR_TO_UNSIGNED(key);
 
         retval = 0x0ull;
         while (0ull != raw) {
@@ -41,3 +41,4 @@ hashing_function_open_addressing(void *key, uint32 size, uint32 iter)
 
     return (uint32)retval;
 }
+
