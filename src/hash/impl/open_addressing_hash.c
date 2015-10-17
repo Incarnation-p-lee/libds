@@ -8,7 +8,10 @@ open_addressing_hash_create(uint32 size)
     if (!hash) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        table = hashing_table_create(size);
+        /*
+         * open addressing requires prime table size.
+         */
+        table = hashing_table_create(prime_numeral_next(size));
         hashing_table_load_factor_set(table, OPEN_ADDRESSING_HASH_LOAD_FACTOR);
         hashing_table_hash_function_set(table, hashing_function_open_addressing);
 
