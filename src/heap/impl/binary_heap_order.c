@@ -40,6 +40,7 @@ binary_heap_minimal_percolate_up_ordered_p(struct binary_heap *heap,
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(INDEX_INVALID != index);
+    assert(HEAP_ROOT_INDEX != index);
 
     parent = INDEX_PARENT(index);
     assert(nice != HEAP_NICE(heap, parent));
@@ -97,6 +98,7 @@ binary_heap_maximal_percolate_up_ordered_p(struct binary_heap *heap,
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(INDEX_INVALID != index);
+    assert(HEAP_ROOT_INDEX != index);
 
     parent = INDEX_PARENT(index);
     assert(nice != HEAP_NICE(heap, parent));
@@ -148,51 +150,25 @@ static inline bool
 binary_heap_min_max_percolate_down_ordered_p(struct binary_heap *heap,
     uint32 index, sint64 nice, uint32 *next)
 {
-    return true;
-    uint32 depth;
-    uint32 parent;
-    uint32 grandparent;
-    uint32 up_idx;
-    uint32 down_idx;
+    uint32 child;
+    uint32 grandson;
 
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(INDEX_INVALID != index);
+    assert(binary_heap_node_child_exist_p(heap, index));
 
-    parent = INDEX_PARENT(index);
-    assert(nice != HEAP_NICE(heap, parent));
+    child = INDEX_LEFT_CHILD(index);
+    grandson = INDEX_LEFT_CHILD(child);
+    assert(nice != HEAP_NICE(heap, child));
 
-    if (HEAP_ROOT_INDEX == parent && HEAP_NICE(heap, parent) < nice) {
-        return true;
-    } else if (HEAP_ROOT_INDEX == parent) {
-        if (next) {
-            *next = HEAP_ROOT_INDEX;
-        }
 
-        return false;
+    if (grandson > INDEX_LAST(heap)) {
     } else {
-        grandparent = INDEX_PARENT(parent);
-        assert(nice != HEAP_NICE(heap, grandparent));
-        depth = binary_heap_node_depth(index);
 
-        if (0x1u == UINT32_IDX_BIT(depth, 0)) {
-            /*
-             * index located at odd depth
-             *     heap-ordered should be: parent < index < grandparent
-             */
-            up_idx = grandparent;
-            down_idx = parent;
-        } else {
-            /*
-             * index located at even depth
-             *     heap-ordered should be: grandparent < index < parent
-             */
-            up_idx = parent;
-            down_idx = grandparent;
-        }
-
-        return binary_heap_range_ordered_p(heap, up_idx, down_idx, nice, next);
     }
+
+    return false;
 }
 
 /*
@@ -212,6 +188,7 @@ binary_heap_min_max_percolate_up_ordered_p(struct binary_heap *heap,
     assert(NULL != heap);
     assert(NULL != heap->base);
     assert(INDEX_INVALID != index);
+    assert(HEAP_ROOT_INDEX != index);
 
     parent = INDEX_PARENT(index);
     assert(nice != HEAP_NICE(heap, parent));

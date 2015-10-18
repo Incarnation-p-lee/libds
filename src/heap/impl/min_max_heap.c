@@ -121,3 +121,15 @@ min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
     }
 }
 
+uint32
+min_max_heap_node_depth(struct min_max_heap *heap, uint32 index)
+{
+    if (INDEX_INVALID == index || index > INDEX_LAST(heap->alias)) {
+        pr_log_warn("Illegal index value of heap.\n");
+        return DEPTH_INVALID;
+    } else if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    }
+
+    return binary_heap_node_depth(index);
+}

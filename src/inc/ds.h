@@ -912,6 +912,7 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #define INDEX_LAST(heap)         ((heap)->size)
 #define INDEX_FIRST              HEAP_ROOT_INDEX
 #define INDEX_INVALID            0u
+#define DEPTH_INVALID            0xffffffffu
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -959,6 +960,7 @@ extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);
 extern struct minimal_heap * minimal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct minimal_heap * minimal_heap_create(uint32 capacity);
+extern uint32 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index);
 extern void maximal_heap_cleanup(struct maximal_heap *heap);
 extern void maximal_heap_destroy(struct maximal_heap **heap);
 extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);

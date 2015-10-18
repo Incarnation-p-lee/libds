@@ -13,6 +13,7 @@
 #define INDEX_LAST(heap)         ((heap)->size)
 #define INDEX_FIRST              HEAP_ROOT_INDEX
 #define INDEX_INVALID            0u
+#define DEPTH_INVALID            0xffffffffu
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice

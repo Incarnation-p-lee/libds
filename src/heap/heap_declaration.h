@@ -71,6 +71,7 @@ struct maximal_heap * maximal_heap_create(uint32 capacity);
 struct min_max_heap * min_max_heap_create(uint32 capacity);
 struct minimal_heap * minimal_heap_build(struct collision_chain **chain_array, uint32 size);
 struct minimal_heap * minimal_heap_create(uint32 capacity);
+uint32 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index);
 void maximal_heap_cleanup(struct maximal_heap *heap);
 void maximal_heap_destroy(struct maximal_heap **heap);
 void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
