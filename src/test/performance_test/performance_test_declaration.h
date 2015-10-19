@@ -31,6 +31,7 @@ static inline void performance_test_min_max_heap_create(uint32 count);
 static inline void performance_test_min_max_heap_destroy(uint32 count);
 static inline void performance_test_min_max_heap_empty_p(uint32 count);
 static inline void performance_test_min_max_heap_full_p(uint32 count);
+static inline void performance_test_min_max_heap_node_depth(uint32 count);
 static inline void performance_test_min_max_heap_node_find(uint32 count);
 static inline void performance_test_min_max_heap_node_find_max(uint32 count);
 static inline void performance_test_min_max_heap_node_find_min(uint32 count);

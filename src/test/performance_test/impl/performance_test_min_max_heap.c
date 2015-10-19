@@ -198,3 +198,23 @@ performance_test_min_max_heap_node_insert(uint32 count)
         performance_test_time_stamp_period());
 }
 
+static inline void
+performance_test_min_max_heap_node_depth(uint32 count)
+{
+    struct min_max_heap *heap;
+
+    heap = test_min_max_heap_sample(0x334a, 0x1fd8);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        min_max_heap_node_depth(heap, count);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    min_max_heap_destroy(&heap);
+    performance_test_result_print(SYM_2_STR(min_max_heap_node_depth),
+        performance_test_time_stamp_period());
+}
+

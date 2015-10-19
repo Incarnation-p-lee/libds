@@ -212,6 +212,33 @@ unit_test_min_max_heap_node_find_max(void)
 }
 
 static inline void
+unit_test_min_max_heap_node_depth(void)
+{
+    bool pass;
+    uint32 index;
+    struct min_max_heap *heap;
+
+    index = 3u;
+    pass = true;
+    heap = NULL;
+
+    RESULT_CHECK_uint32(1, min_max_heap_node_depth(heap, index), &pass);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+    index = INDEX_INVALID;
+    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_node_depth(heap, index), &pass);
+
+    index = INDEX_LAST(heap->alias) + 1;
+    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_node_depth(heap, index), &pass);
+
+    index = 1 << 7;
+    RESULT_CHECK_uint32(7, min_max_heap_node_depth(heap, index), &pass);
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_depth), pass);
+}
+
+static inline void
 unit_test_min_max_heap_node_insert(void)
 {
     bool pass;
