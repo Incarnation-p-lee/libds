@@ -245,7 +245,7 @@ binary_heap_percolate_up(struct binary_heap *heap, uint32 up_index, sint64 nice,
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, up_index));
     assert(!binary_heap_node_contains_with_null_p(heap, nice));
-    assert(binary_heap_percolate_up_precondition_p(heap, up_index, nice, ordering));
+    // assert(binary_heap_percolate_up_precondition_p(heap, up_index, nice, ordering));
 
     order = ordering;
     index = up_index;
@@ -284,7 +284,7 @@ binary_heap_percolate_down(struct binary_heap *heap, uint32 down_index,
     assert(binary_heap_down_ordered_p(ordering));
     assert(binary_heap_nice_legal_p(nice));
     assert(!binary_heap_node_contains_with_null_p(heap, nice));
-    assert(binary_heap_percolate_down_precondition_p(heap, down_index, nice, ordering));
+    // assert(binary_heap_percolate_down_precondition_p(heap, down_index, nice, ordering));
 
     index = down_index;
     order = ordering;
@@ -371,7 +371,7 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
 
     assert(binary_heap_nice_legal_p(nice));
     assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_up_ordered_p(ordering));
+    assert(binary_heap_valid_ordered_func_ptr_p(ordering));
 
     head = binary_heap_node_find(heap, nice);
 
@@ -382,7 +382,7 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
         }
         HEAP_CHAIN(heap, heap->size + 1) = NULL;
 
-        index = binary_heap_percolate_up(heap, heap->size + 1, nice, ordering);
+        index = binary_heap_node_reorder(heap, heap->size + 1, nice, ordering);
         binary_heap_node_create_by_index(heap, index, nice, val);
         heap->size++;
     } else {
@@ -401,14 +401,14 @@ binary_heap_node_remove_root_and_destroy(struct binary_heap *heap,
     struct doubly_linked_list *removed;
 
     assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_down_ordered_p(ordering));
+    assert(binary_heap_valid_ordered_func_ptr_p(ordering));
 
     removed = binary_heap_node_remove_root(heap, ordering);
     doubly_linked_list_destroy(&removed);
 }
 
 static inline struct doubly_linked_list *
-binary_heap_node_remove_root(struct binary_heap *heap, void *ordering)
+binary_heap_node_remove_root(struct binary_heap *heap, void *order)
 {
     struct doubly_linked_list *link;
     struct collision_chain *last;
@@ -416,7 +416,7 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *ordering)
     sint64 nice;
 
     assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_down_ordered_p(ordering));
+    assert(binary_heap_valid_ordered_func_ptr_p(order));
 
     link = HEAP_LINK(heap, HEAP_ROOT_INDEX);
     HEAP_LINK(heap, HEAP_ROOT_INDEX) = NULL;
@@ -428,7 +428,11 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *ordering)
     HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
     heap->size--;
 
-    index = binary_heap_percolate_down(heap, HEAP_ROOT_INDEX, nice, ordering);
+    /*
+     * percolate down last node from root.
+     */
+    index = binary_heap_node_reorder(heap, HEAP_ROOT_INDEX, nice, order);
+    assert(NULL == HEAP_CHAIN(heap, index));
     HEAP_CHAIN(heap, index) = last;
 
     return link;

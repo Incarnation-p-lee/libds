@@ -26,8 +26,7 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
         next = small_child;
         goto HEAP_UNORDERED;
     } else {
-        assert(nice != HEAP_NICE(heap, parent));
-        assert(nice != HEAP_NICE(heap, small_child));
+        assert(!binary_heap_nice_repeated_p(heap, parent, small_child, nice));
 
         return true;
     }

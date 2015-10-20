@@ -91,7 +91,7 @@ minimal_heap_node_insert(struct minimal_heap *heap, void *val, sint64 nice)
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
         binary_heap_node_insert(heap->alias, val, nice,
-            &binary_heap_minimal_percolate_up_ordered_p);
+            &binary_heap_minimal_ordered_p);
     }
 }
 
@@ -110,13 +110,12 @@ minimal_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
     /*
      * percolate current index node to root, then remove the root.
      */
-    index = binary_heap_percolate_up(heap, index, HEAP_NICE_LOWER_LMT,
-        &binary_heap_minimal_percolate_up_ordered_p);
+    index = binary_heap_node_reorder(heap, index, HEAP_NICE_LOWER_LMT,
+        &binary_heap_minimal_ordered_p);
     assert(HEAP_ROOT_INDEX == index);
 
     HEAP_CHAIN(heap, HEAP_ROOT_INDEX) = tmp;
-    return binary_heap_node_remove_root(heap,
-        &binary_heap_minimal_percolate_down_ordered_p);
+    return binary_heap_node_remove_root(heap, &binary_heap_minimal_ordered_p);
 }
 
 struct doubly_linked_list *
@@ -169,11 +168,12 @@ minimal_heap_node_remove_min(struct minimal_heap *heap)
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else if (binary_heap_empty_p(heap->alias)) {
+        pr_log_warn("Attempt to remove node in empty heap.\n");
+        return NULL;
     } else {
-        assert(!binary_heap_empty_p(heap->alias));
-
         return binary_heap_node_remove_root(heap->alias,
-            &binary_heap_minimal_percolate_down_ordered_p);
+            &binary_heap_minimal_ordered_p);
     }
 }
 
@@ -182,83 +182,11 @@ minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
 {
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (binary_heap_empty_p(heap->alias)) {
+        pr_log_warn("Attempt to remove node in empty heap.\n");
     } else {
         binary_heap_node_remove_root_and_destroy(heap->alias,
-            &binary_heap_minimal_percolate_down_ordered_p);
-    }
-}
-
-static inline void
-minimal_heap_build_internal(struct minimal_heap *heap)
-{
-    uint32 idx;
-    uint32 index;
-    uint32 child_idx;
-    struct collision_chain *tmp;
-
-    assert(NULL != heap);
-    assert(NULL != heap->alias->base);
-    assert(minimal_heap_full_p(heap));
-
-    index = minimal_heap_size(heap) / 2;
-
-    while (index != INDEX_INVALID) {
-        idx = index;
-        tmp = HEAP_CHAIN(heap->alias, idx);
-        /*
-         * Perform binary_heap_percolate_down here, but the build input
-         * array is out of heap-order, which may hit the assert
-         * binary_heap_percolate_down_precondition_p. So implement one
-         * less condition check percolate down for heap build.
-         */
-        while (INDEX_LEFT_CHILD(idx) <= INDEX_LAST(heap->alias)) {
-            if (!binary_heap_minimal_percolate_down_ordered_p(heap->alias,
-                idx, HEAP_NICE(heap->alias, idx), &child_idx)) {
-                HEAP_CHAIN(heap->alias, idx) = HEAP_CHAIN(heap->alias, child_idx);
-                idx = child_idx;
-            } else {
-                break;
-            }
-        }
-
-        HEAP_CHAIN(heap->alias, idx) = tmp;
-        index--;
-    }
-}
-
-struct minimal_heap *
-minimal_heap_build(struct collision_chain **chain_array, uint32 size)
-{
-    struct minimal_heap *heap;
-
-    if (!chain_array) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-        return NULL;
-    } else if (0 == size) {
-        pr_log_warn("Zero size of chain array, nothing will be done.\n");
-        return NULL;
-    } else if (NULL != chain_array[0]) {
-        pr_log_warn("First node of chain array should be NULL for heap-ordered.\n");
-        return NULL;
-    } else {
-        heap = malloc_ds(sizeof(*heap));
-
-        if (!heap) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
-            heap->alias = malloc_ds(sizeof(*heap->alias));
-
-            if (!heap->alias) {
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
-                heap->alias->base = chain_array;
-                heap->alias->capacity = size - 1;
-                heap->alias->size = size - 1;
-
-                minimal_heap_build_internal(heap);
-                return heap;
-            }
-        }
+            &binary_heap_minimal_ordered_p);
     }
 }
 
@@ -277,8 +205,8 @@ minimal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index,
         tmp = HEAP_CHAIN(heap, index);
         HEAP_CHAIN(heap, index) = NULL;
 
-        index = binary_heap_percolate_up(heap, index, new_nice,
-            &binary_heap_minimal_percolate_up_ordered_p);
+        index = binary_heap_node_reorder(heap, index, new_nice,
+            &binary_heap_minimal_ordered_p);
         assert(NULL == HEAP_CHAIN(heap, index));
 
         tmp->nice = new_nice;
@@ -329,8 +257,8 @@ minimal_heap_node_increase_nice_internal(struct binary_heap *heap, uint32 index,
         tmp = HEAP_CHAIN(heap, index);
         HEAP_CHAIN(heap, index) = NULL;
 
-        index = binary_heap_percolate_down(heap, index, new_nice,
-            &binary_heap_minimal_percolate_down_ordered_p);
+        index = binary_heap_node_reorder(heap, index, new_nice,
+            &binary_heap_minimal_ordered_p);
         assert(NULL == HEAP_CHAIN(heap, index));
 
         tmp->nice = new_nice;
@@ -363,6 +291,81 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
          * index of nice has been set already.
          */
         minimal_heap_node_increase_nice_internal(heap->alias, index, new_nice);
+    }
+}
+
+static inline void
+minimal_heap_build_internal(struct minimal_heap *heap)
+{
+    uint32 start;
+    uint32 index;
+    uint32 next_index;
+    sint64 nice;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(NULL != heap->alias->base);
+    assert(minimal_heap_full_p(heap));
+
+    start = minimal_heap_size(heap) / 2;
+
+    while (index != INDEX_INVALID) {
+        index;
+        tmp = HEAP_CHAIN(heap->alias, index);
+        // nice = HEAP_NICE(heap-
+        /*
+         * Perform binary_heap_node_reorder here, but the build input
+         * array is out of heap-order, which may hit the assert
+         * binary_heap_percolate_down_precondition_p. So implement one
+         * less condition check percolate down for heap build.
+         */
+        while (!binary_heap_node_reorder(heap->alias, idx,
+            HEAP_NICE(heap->alias, idx), &child_idx)) {
+                idx, HEAP_NICE(heap->alias, idx), &child_idx)) {
+                HEAP_CHAIN(heap->alias, idx) = HEAP_CHAIN(heap->alias, child_idx);
+            } else {
+                break;
+            }
+        }
+
+        HEAP_CHAIN(heap->alias, idx) = tmp;
+        index--;
+    }
+}
+
+struct minimal_heap *
+minimal_heap_build(struct collision_chain **chain_array, uint32 size)
+{
+    struct minimal_heap *heap;
+
+    if (!chain_array) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (0 == size) {
+        pr_log_warn("Zero size of chain array, nothing will be done.\n");
+        return NULL;
+    } else if (NULL != chain_array[0]) {
+        pr_log_warn("First node of chain array should be NULL for heap-ordered.\n");
+        return NULL;
+    } else {
+        heap = malloc_ds(sizeof(*heap));
+
+        if (!heap) {
+            pr_log_err("Fail to get memory from system.\n");
+        } else {
+            heap->alias = malloc_ds(sizeof(*heap->alias));
+
+            if (!heap->alias) {
+                pr_log_err("Fail to get memory from system.\n");
+            } else {
+                heap->alias->base = chain_array;
+                heap->alias->capacity = size - 1;
+                heap->alias->size = size - 1;
+
+                minimal_heap_build_internal(heap);
+                return heap;
+            }
+        }
     }
 }
 
