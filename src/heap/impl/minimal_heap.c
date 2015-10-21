@@ -191,7 +191,7 @@ minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
 }
 
 static inline void
-minimal_heap_node_decrease_nice_internal(struct binary_heap *heap, uint32 index,
+minimal_heap_node_nice_alter_internal(struct binary_heap *heap, uint32 index,
     sint64 new_nice)
 {
     uint32 hit_idx;
@@ -238,34 +238,7 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         /*
          * index of nice has been set already.
          */
-        minimal_heap_node_decrease_nice_internal(heap->alias, index, new_nice);
-    }
-}
-
-static inline void
-minimal_heap_node_increase_nice_internal(struct binary_heap *heap, uint32 index,
-    sint64 new_nice)
-{
-    uint32 hit_idx;
-    struct collision_chain *tmp;
-
-    assert(NULL != heap);
-    assert(INDEX_INVALID != index);
-    assert(index <= INDEX_LAST(heap));
-
-    if (!binary_heap_node_contains_p(heap, new_nice, &hit_idx)) {
-        tmp = HEAP_CHAIN(heap, index);
-        HEAP_CHAIN(heap, index) = NULL;
-
-        index = binary_heap_node_reorder(heap, index, new_nice,
-            &binary_heap_minimal_ordered_p);
-        assert(NULL == HEAP_CHAIN(heap, index));
-
-        tmp->nice = new_nice;
-        HEAP_CHAIN(heap, index) = tmp;
-    } else {
-        binary_heap_node_collision_merge(heap, hit_idx, index);
-        minimal_heap_node_remove_and_destroy_internal(heap, index);
+        minimal_heap_node_nice_alter_internal(heap->alias, index, new_nice);
     }
 }
 
@@ -290,46 +263,37 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         /*
          * index of nice has been set already.
          */
-        minimal_heap_node_increase_nice_internal(heap->alias, index, new_nice);
+        minimal_heap_node_nice_alter_internal(heap->alias, index, new_nice);
     }
 }
 
 static inline void
-minimal_heap_build_internal(struct minimal_heap *heap)
+minimal_heap_build_internal(struct binary_heap *heap)
 {
-    uint32 start;
+    uint32 iter;
     uint32 index;
-    uint32 next_index;
     sint64 nice;
     struct collision_chain *tmp;
 
     assert(NULL != heap);
-    assert(NULL != heap->alias->base);
-    assert(minimal_heap_full_p(heap));
+    assert(NULL != heap->base);
+    assert(binary_heap_full_p(heap));
 
-    start = minimal_heap_size(heap) / 2;
+    iter = HEAP_SIZE(heap) / 2;
 
-    while (index != INDEX_INVALID) {
-        index;
-        tmp = HEAP_CHAIN(heap->alias, index);
-        // nice = HEAP_NICE(heap-
-        /*
-         * Perform binary_heap_node_reorder here, but the build input
-         * array is out of heap-order, which may hit the assert
-         * binary_heap_percolate_down_precondition_p. So implement one
-         * less condition check percolate down for heap build.
-         */
-        while (!binary_heap_node_reorder(heap->alias, idx,
-            HEAP_NICE(heap->alias, idx), &child_idx)) {
-                idx, HEAP_NICE(heap->alias, idx), &child_idx)) {
-                HEAP_CHAIN(heap->alias, idx) = HEAP_CHAIN(heap->alias, child_idx);
-            } else {
-                break;
-            }
-        }
+    while (iter != INDEX_INVALID) {
+        index = iter;
+        tmp = HEAP_CHAIN(heap, index);
+        nice = HEAP_NICE(heap, index);
 
-        HEAP_CHAIN(heap->alias, idx) = tmp;
-        index--;
+        HEAP_CHAIN(heap, index) = NULL;
+        index = binary_heap_node_reorder(heap, index, nice,
+            &binary_heap_minimal_ordered_p);
+
+        assert(NULL == HEAP_CHAIN(heap, index));
+        HEAP_CHAIN(heap, index) = tmp;
+
+        iter--;
     }
 }
 
@@ -362,7 +326,7 @@ minimal_heap_build(struct collision_chain **chain_array, uint32 size)
                 heap->alias->capacity = size - 1;
                 heap->alias->size = size - 1;
 
-                minimal_heap_build_internal(heap);
+                minimal_heap_build_internal(heap->alias);
                 return heap;
             }
         }
