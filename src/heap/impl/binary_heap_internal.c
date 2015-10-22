@@ -276,6 +276,7 @@ binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx,
 {
     struct doubly_linked_list *head;
 
+    assert(t_idx != s_idx);
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, t_idx));
     assert(binary_heap_index_legal_p(heap, s_idx));

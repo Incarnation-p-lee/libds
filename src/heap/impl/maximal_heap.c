@@ -200,6 +200,7 @@ maximal_heap_node_nice_alter(struct binary_heap *heap, uint32 index,
     assert(NULL != heap);
     assert(INDEX_INVALID != index);
     assert(index <= INDEX_LAST(heap));
+    assert(new_nice != HEAP_NICE(heap, index));
 
     if (!binary_heap_node_contains_p(heap, new_nice, &hit_idx)) {
         tmp = HEAP_CHAIN(heap, index);
