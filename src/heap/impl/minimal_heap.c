@@ -191,7 +191,7 @@ minimal_heap_node_remove_min_and_destroy(struct minimal_heap *heap)
 }
 
 static inline void
-minimal_heap_node_nice_alter_internal(struct binary_heap *heap, uint32 index,
+minimal_heap_node_nice_alter(struct binary_heap *heap, uint32 index,
     sint64 new_nice)
 {
     uint32 hit_idx;
@@ -238,7 +238,7 @@ minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         /*
          * index of nice has been set already.
          */
-        minimal_heap_node_nice_alter_internal(heap->alias, index, new_nice);
+        minimal_heap_node_nice_alter(heap->alias, index, new_nice);
     }
 }
 
@@ -263,7 +263,7 @@ minimal_heap_node_increase_nice(struct minimal_heap *heap, sint64 nice, uint32 o
         /*
          * index of nice has been set already.
          */
-        minimal_heap_node_nice_alter_internal(heap->alias, index, new_nice);
+        minimal_heap_node_nice_alter(heap->alias, index, new_nice);
     }
 }
 

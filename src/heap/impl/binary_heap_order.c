@@ -40,6 +40,47 @@ HEAP_UNORDERED:
 }
 
 /*
+ * Heap-order, maximal heap
+ * If nice put into index position ordered
+ *     Return true, or false.
+ */
+static inline bool
+binary_heap_maximal_ordered_p(struct binary_heap *heap,
+    uint32 index, sint64 nice, uint32 *tgt_index)
+{
+    uint32 big_child;
+    uint32 parent;
+    uint32 next;
+
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(INDEX_INVALID != index);
+
+    parent = INDEX_PARENT(index);
+    big_child = binary_heap_child_big_nice_index(heap, index);
+
+    if (INDEX_INVALID != parent && HEAP_NICE(heap, parent) < nice) {
+        next = parent;
+        goto HEAP_UNORDERED;
+    } else if (INDEX_INVALID != big_child
+        && HEAP_NICE(heap, big_child) > nice) {
+        next = big_child;
+        goto HEAP_UNORDERED;
+    } else {
+        assert(!binary_heap_nice_repeated_p(heap, parent, big_child, nice));
+
+        return true;
+    }
+
+HEAP_UNORDERED:
+    if (tgt_index) {
+        *tgt_index = next;
+    }
+
+    return false;
+}
+
+/*
  * If nice put into index position ordered.
  *     Return true, or false.
  */
