@@ -80,64 +80,6 @@ HEAP_UNORDERED:
     return false;
 }
 
-/*
- * If nice put into index position ordered.
- *     Return true, or false.
- */
-static inline bool
-binary_heap_maximal_percolate_down_ordered_p(struct binary_heap *heap,
-    uint32 index, sint64 nice, uint32 *next)
-{
-    uint32 big_child;
-
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
-    assert(binary_heap_node_child_exist_p(heap, index));
-
-    big_child = binary_heap_child_big_nice_index(heap, index);
-    assert(nice != HEAP_NICE(heap, big_child));
-
-    if (HEAP_NICE(heap, big_child) < nice) {
-        return true;
-    } else {
-        if (next) {
-            *next = big_child;
-        }
-
-        return false;
-    }
-}
-
-/*
- * If nice put into index position ordered.
- *     Return true, or false.
- */
-static inline bool
-binary_heap_maximal_percolate_up_ordered_p(struct binary_heap *heap,
-    uint32 index, sint64 nice, uint32 *next)
-{
-    uint32 parent;
-
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
-    assert(HEAP_ROOT_INDEX != index);
-
-    parent = INDEX_PARENT(index);
-    assert(nice != HEAP_NICE(heap, parent));
-
-    if (HEAP_NICE(heap, parent) > nice) {
-        return true;
-    } else {
-        if (next) {
-            *next = parent;
-        }
-
-        return false;
-    }
-}
-
 static inline bool
 binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_idx,
     uint32 down_idx, sint64 nice, uint32 *next)
@@ -250,5 +192,4 @@ binary_heap_min_max_percolate_up_ordered_p(struct binary_heap *heap,
         return binary_heap_range_ordered_p(heap, up_idx, down_idx, nice, next);
     }
 }
-
 
