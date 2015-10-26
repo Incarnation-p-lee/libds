@@ -86,3 +86,29 @@ binary_heap_nice_repeated_p(struct binary_heap *heap,
     }
 }
 
+static inline bool
+binary_heap_node_depth_even_p(struct binary_heap *heap, uint32 index)
+{
+    uint32 depth;
+
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    depth = binary_heap_node_depth(index);
+
+    return 0u == (depth & 0x1u) ? true : false;
+}
+
+static inline bool
+binary_heap_node_depth_odd_p(struct binary_heap *heap, uint32 index)
+{
+    uint32 depth;
+
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    depth = binary_heap_node_depth(index);
+
+    return 1u == (depth & 0x1u) ? true : false;
+}
+

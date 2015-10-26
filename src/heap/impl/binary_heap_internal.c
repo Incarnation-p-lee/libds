@@ -267,6 +267,88 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
     }
 }
 
+static inline uint32
+binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
+{
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+    assert(binary_heap_node_depth_even_p(heap, index));
+
+    if (!binary_heap_node_child_exist_p(heap, index)) {
+        return INDEX_INVALID;
+    } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
+        return binary_heap_child_small_nice_index(heap, index);
+    } else {
+        return binary_heap_serial_node_small_nice_index(heap, index, 4);
+    }
+}
+
+static inline uint32
+binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
+{
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+    assert(binary_heap_node_depth_odd_p(heap, index));
+
+    if (!binary_heap_node_child_exist_p(heap, index)) {
+        return INDEX_INVALID;
+    } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
+        return binary_heap_child_big_nice_index(heap, index);
+    } else {
+        return binary_heap_serial_node_big_nice_index(heap, index, 4);
+    }
+}
+
+static inline uint32
+binary_heap_serial_node_small_nice_index(struct binary_heap *heap,
+    uint32 index, uint32 count)
+{
+    uint32 small_index;
+    uint32 rest;
+
+    assert(0 != count);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    small_index = index;
+    rest = INDEX_LAST(heap) - index + 1;
+    count = count > rest ? rest : count;
+
+    while (count--) {
+        if (HEAP_NICE(heap, index) < HEAP_NICE(heap, small_index)) {
+            small_index = index;
+        }
+        index++;
+    }
+
+    return index;
+}
+
+static inline uint32
+binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
+    uint32 index, uint32 count)
+{
+    uint32 big_index;
+    uint32 rest;
+
+    assert(0 != count);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    big_index = index;
+    rest = INDEX_LAST(heap) - index + 1;
+    count = count > rest ? rest : count;
+
+    while (count--) {
+        if (HEAP_NICE(heap, index) > HEAP_NICE(heap, big_index)) {
+            big_index = index;
+        }
+        index++;
+    }
+
+    return index;
+}
+
 /*
  * Merge s_idx indexed node to t_idx indexed node, then remove node s_idx.
  */
