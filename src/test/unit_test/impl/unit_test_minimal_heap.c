@@ -427,7 +427,7 @@ unit_test_minimal_heap_build(void)
     chain_size = minimal_heap_size(heap) + 1;
     chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
 
-    chain_array[0] = HEAP_CHAIN(heap->alias, HEAP_ROOT_INDEX);
+    chain_array[0] = HEAP_CHAIN(heap->alias, INDEX_ROOT);
     RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 2), &pass);
 
     chain_array[0] = NULL;
@@ -437,7 +437,7 @@ unit_test_minimal_heap_build(void)
     build = minimal_heap_build(chain_array, chain_size);
 
     idx = INDEX_LAST(heap->alias);
-    while (idx > HEAP_ROOT_INDEX) {
+    while (idx > INDEX_ROOT) {
         RESULT_CHECK_LESS_sint64(HEAP_NICE(heap->alias, INDEX_PARENT(idx)),
             HEAP_NICE(heap->alias, idx), &pass);
         idx--;

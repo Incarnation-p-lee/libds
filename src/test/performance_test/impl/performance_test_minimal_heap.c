@@ -4,7 +4,7 @@ performance_test_minimal_heap_struct_field(uint32 count)
     uint32 index;
     struct minimal_heap *heap;
 
-    index = HEAP_ROOT_INDEX;
+    index = INDEX_ROOT;
     heap = test_minimal_heap_sample(0x231, 0x123);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -280,7 +280,7 @@ performance_test_minimal_heap_node_decrease_nice(uint32 count)
     uint32 index;
     struct minimal_heap *heap;
 
-    index = HEAP_ROOT_INDEX;
+    index = INDEX_ROOT;
     count = count >> 6;
     count = 0 == count ? 1000 : count;
 

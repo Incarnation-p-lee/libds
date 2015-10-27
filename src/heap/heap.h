@@ -4,14 +4,15 @@
 #define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
 #define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
 
-#define HEAP_ROOT_INDEX          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
+#define INDEX_ROOT               0x1u
 #define INDEX_LEFT_CHILD(index)  (index) * 2
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)
+#define INDEX_GD_PARENT(index)   ((index) / 4)
 #define INDEX_LAST(heap)         ((heap)->size)
-#define INDEX_FIRST              HEAP_ROOT_INDEX
+#define INDEX_FIRST              INDEX_ROOT
 #define INDEX_INVALID            0u
 #define DEPTH_INVALID            0xffffffffu
 #define INDEX_LL_CHILD(index)    (index) * 4

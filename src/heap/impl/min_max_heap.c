@@ -103,7 +103,7 @@ min_max_heap_node_find_max(struct min_max_heap *heap)
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
     } else {
-        idx = binary_heap_child_big_nice_index(heap->alias, HEAP_ROOT_INDEX);
+        idx = binary_heap_child_big_nice_index(heap->alias, INDEX_ROOT);
         return HEAP_LINK(heap->alias, idx);
     }
 }
@@ -117,7 +117,7 @@ min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
         binary_heap_node_insert(heap->alias, val, nice,
-            &binary_heap_min_max_percolate_up_ordered_p);
+            &binary_heap_min_max_ordered_p);
     }
 }
 

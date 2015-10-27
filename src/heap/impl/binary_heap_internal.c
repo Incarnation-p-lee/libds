@@ -96,7 +96,7 @@ binary_heap_node_root(struct binary_heap *heap)
 {
     assert(binary_heap_structure_legal_p(heap));
 
-    return HEAP_LINK(heap, HEAP_ROOT_INDEX);
+    return HEAP_LINK(heap, INDEX_ROOT);
 }
 
 static inline struct doubly_linked_list *
@@ -424,10 +424,10 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_valid_ordered_func_ptr_p(order));
 
-    link = HEAP_LINK(heap, HEAP_ROOT_INDEX);
-    HEAP_LINK(heap, HEAP_ROOT_INDEX) = NULL;
-    free_ds(HEAP_CHAIN(heap, HEAP_ROOT_INDEX));
-    HEAP_CHAIN(heap, HEAP_ROOT_INDEX) = NULL;
+    link = HEAP_LINK(heap, INDEX_ROOT);
+    HEAP_LINK(heap, INDEX_ROOT) = NULL;
+    free_ds(HEAP_CHAIN(heap, INDEX_ROOT));
+    HEAP_CHAIN(heap, INDEX_ROOT) = NULL;
 
     nice = HEAP_NICE(heap, INDEX_LAST(heap));
     last = HEAP_CHAIN(heap, INDEX_LAST(heap));
@@ -437,7 +437,7 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
     /*
      * percolate down last node from root.
      */
-    index = binary_heap_node_reorder(heap, HEAP_ROOT_INDEX, nice, order);
+    index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
     assert(NULL == HEAP_CHAIN(heap, index));
     HEAP_CHAIN(heap, index) = last;
 

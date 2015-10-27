@@ -4,7 +4,7 @@ performance_test_min_max_heap_struct_field(uint32 count)
     uint32 index;
     struct min_max_heap *heap;
 
-    index = HEAP_ROOT_INDEX;
+    index = INDEX_ROOT;
     heap = test_min_max_heap_sample(0x2310, 0x1230);
 
     PERFORMANCE_TEST_CHECKPOINT;

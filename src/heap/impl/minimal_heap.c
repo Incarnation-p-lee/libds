@@ -112,9 +112,9 @@ minimal_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
      */
     index = binary_heap_node_reorder(heap, index, HEAP_NICE_LOWER_LMT,
         &binary_heap_minimal_ordered_p);
-    assert(HEAP_ROOT_INDEX == index);
+    assert(INDEX_ROOT == index);
 
-    HEAP_CHAIN(heap, HEAP_ROOT_INDEX) = tmp;
+    HEAP_CHAIN(heap, INDEX_ROOT) = tmp;
     return binary_heap_node_remove_root(heap, &binary_heap_minimal_ordered_p);
 }
 
