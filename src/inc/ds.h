@@ -903,9 +903,9 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
 #define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
 
-#define INDEX_ROOT          0x1u
 #define DEFAULT_BINARY_HEAP_SIZE 4097
 
+#define INDEX_ROOT               0x1u
 #define INDEX_LEFT_CHILD(index)  (index) * 2
 #define INDEX_RIGHT_CHILD(index) ((index) * 2 + 1)
 #define INDEX_PARENT(index)      ((index) / 2)

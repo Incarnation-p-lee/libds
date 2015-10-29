@@ -270,6 +270,8 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
 static inline uint32
 binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
 {
+    uint32 grandson;
+
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_node_depth_even_p(heap, index));
@@ -279,13 +281,16 @@ binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_small_nice_index(heap, index);
     } else {
-        return binary_heap_serial_node_small_nice_index(heap, index, 4);
+        grandson = INDEX_LL_CHILD(index);
+        return binary_heap_serial_node_small_nice_index(heap, grandson, 4);
     }
 }
 
 static inline uint32
 binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
 {
+    uint32 grandson;
+
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_node_depth_odd_p(heap, index));
@@ -295,7 +300,8 @@ binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_big_nice_index(heap, index);
     } else {
-        return binary_heap_serial_node_big_nice_index(heap, index, 4);
+        grandson = INDEX_LL_CHILD(index);
+        return binary_heap_serial_node_big_nice_index(heap, grandson, 4);
     }
 }
 
@@ -321,7 +327,7 @@ binary_heap_serial_node_small_nice_index(struct binary_heap *heap,
         index++;
     }
 
-    return index;
+    return small_index;
 }
 
 static inline uint32
@@ -346,7 +352,7 @@ binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
         index++;
     }
 
-    return index;
+    return big_index;
 }
 
 /*

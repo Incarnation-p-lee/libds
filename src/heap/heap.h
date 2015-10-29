@@ -40,6 +40,7 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 static void *heap_order_func[] = {
     &binary_heap_minimal_ordered_p,
     &binary_heap_maximal_ordered_p,
+    &binary_heap_min_max_ordered_p,
 };
 
 #endif
