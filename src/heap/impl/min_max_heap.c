@@ -134,3 +134,18 @@ min_max_heap_node_depth(struct min_max_heap *heap, uint32 index)
     return binary_heap_node_depth(index);
 }
 
+struct doubly_linked_list *
+min_max_heap_node_remove_min(struct min_max_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (binary_heap_empty_p(heap->alias)) {
+        pr_log_warn("Attempt to remove node in empty heap.\n");
+        return NULL;
+    } else {
+        return binary_heap_node_remove_root(heap->alias,
+            &binary_heap_min_max_ordered_p);
+    }
+}
+

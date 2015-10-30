@@ -269,3 +269,24 @@ unit_test_min_max_heap_node_insert(void)
     unit_test_result_print(SYM_2_STR(min_max_heap_node_insert), pass);
 }
 
+static inline void
+unit_test_min_max_heap_node_remove_min(void)
+{
+    bool pass;
+    struct min_max_heap *heap;
+    struct doubly_linked_list *minimal;
+
+    pass = true;
+    heap = NULL;
+
+    min_max_heap_node_remove_min(heap);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+    minimal = min_max_heap_node_find_min(heap);
+    RESULT_CHECK_pointer(minimal, min_max_heap_node_remove_min(heap), &pass);
+
+    doubly_linked_list_destroy(&minimal);
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_remove_min), pass);
+}
+

@@ -1792,6 +1792,14 @@ static const struct test_layer_table min_max_heap[] = {
             &performance_test_min_max_heap_node_depth,
         },
     },
+    {
+        "node_remove_min",
+        NULL,
+        {
+            &unit_test_min_max_heap_node_remove_min,
+            &performance_test_min_max_heap_node_remove_min,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/

@@ -113,6 +113,7 @@ binary_heap_node_find(struct binary_heap *heap, sint64 nice)
         if (!binary_heap_node_contains_p(heap, nice, &index)) {
             return NULL;
         } else {
+            assert(HEAP_LINK(heap, index));
             return HEAP_LINK(heap, index);
         }
     }
