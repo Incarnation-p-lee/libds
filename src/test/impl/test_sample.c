@@ -266,6 +266,7 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     while (i < size) {
         nice = (sint64)((rand() % range) - (range / 2));
         min_max_heap_node_insert(heap, &heap, nice);
+        assert(NULL != min_max_heap_node_find(heap, nice));
         i++;
     }
 

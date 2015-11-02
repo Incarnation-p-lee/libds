@@ -247,10 +247,13 @@ binary_heap_min_max_ordered_p(struct binary_heap *heap,
         }
 
         if (HEAP_NICE(heap, grandson) <= HEAP_NICE(heap, down_idx)) {
-            printf("hit grandson %d, index %d, up %d, down %d\n", grandson, index, up_idx, down_idx);
-            printf("hit grandson %ld, index %d, up %ld, down %ld\n", HEAP_NICE(heap, grandson),
-                index, HEAP_NICE(heap, up_idx), HEAP_NICE(heap, down_idx));
-            printf("hit l  %ld, r %ld\n", HEAP_NICE(heap, INDEX_LEFT_CHILD(up_idx)), HEAP_NICE(heap, INDEX_LEFT_CHILD(up_idx)));
+            printf("nice %ld\n", nice);
+            printf("index grandson %d, index %d, up %d, down %d\n", grandson, index, up_idx, down_idx);
+            printf("nice grandson %ld, up %ld, down %ld\n", HEAP_NICE(heap, grandson),
+                HEAP_NICE(heap, up_idx), HEAP_NICE(heap, down_idx));
+            printf("nice  %ld\n", HEAP_NICE(heap, index));
+            printf("nice l %ld, r %ld\n", HEAP_NICE(heap, INDEX_LEFT_CHILD(index)),
+                                          HEAP_NICE(heap, INDEX_RIGHT_CHILD(index)));
         }
         assert(HEAP_NICE(heap, grandson) > HEAP_NICE(heap, down_idx));
         assert(HEAP_NICE(heap, grandson) < HEAP_NICE(heap, up_idx));

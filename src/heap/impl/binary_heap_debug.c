@@ -112,3 +112,25 @@ binary_heap_node_depth_odd_p(struct binary_heap *heap, uint32 index)
     return 1u == (depth & 0x1u) ? true : false;
 }
 
+static inline bool
+binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
+{
+    uint32 index;
+    bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
+
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_valid_ordered_func_ptr_p(heap_order));
+
+    index = INDEX_ROOT;
+    order = heap_order;
+
+    while (index <= INDEX_LAST(heap)) {
+        if (!(*order)(heap, index, HEAP_NICE(heap, index), NULL)) {
+            return false;
+        }
+        index++;
+    }
+
+    return true;
+}
+

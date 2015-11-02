@@ -282,6 +282,7 @@ unit_test_min_max_heap_node_remove_min(void)
     min_max_heap_node_remove_min(heap);
 
     heap = test_min_max_heap_sample(0x1345, 0x104E);
+    //heap = test_min_max_heap_sample(0x15, 0xE);
     minimal = min_max_heap_node_find_min(heap);
     RESULT_CHECK_pointer(minimal, min_max_heap_node_remove_min(heap), &pass);
 

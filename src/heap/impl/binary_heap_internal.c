@@ -393,11 +393,11 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
             pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
             binary_heap_capacity_extend(heap);
         }
-        HEAP_CHAIN(heap, heap->size + 1) = NULL;
-
-        index = binary_heap_node_reorder(heap, heap->size + 1, nice, ordering);
-        binary_heap_node_create_by_index(heap, index, nice, val);
         heap->size++;
+        HEAP_CHAIN(heap, heap->size) = NULL;
+
+        index = binary_heap_node_reorder(heap, heap->size, nice, ordering);
+        binary_heap_node_create_by_index(heap, index, nice, val);
     } else {
         /*
          * nice collision occurs.
@@ -405,6 +405,8 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
         inserted = doubly_linked_list_node_create(val, nice);
         doubly_linked_list_node_insert_after_risky(head, inserted);
     }
+
+    assert(binary_heap_ordered_p(heap, ordering));
 }
 
 static inline void
@@ -447,6 +449,7 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
     index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
     assert(NULL == HEAP_CHAIN(heap, index));
     HEAP_CHAIN(heap, index) = last;
+    assert(binary_heap_ordered_p(heap, order));
 
     return link;
 }

@@ -221,6 +221,7 @@ performance_test_min_max_heap_node_depth(uint32 count)
 static inline void
 performance_test_min_max_heap_node_remove_min(uint32 count)
 {
+    sint64 nice;
     struct min_max_heap *heap;
     struct doubly_linked_list *removed;
 
@@ -232,8 +233,10 @@ performance_test_min_max_heap_node_remove_min(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
+        nice = HEAP_NICE(heap->alias, INDEX_ROOT);
         removed = min_max_heap_node_remove_min(heap);
         doubly_linked_list_destroy(&removed);
+        assert(NULL == min_max_heap_node_find(heap, nice));
     }
 
     PERFORMANCE_TEST_ENDPOINT;
