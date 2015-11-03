@@ -48,6 +48,7 @@
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
+#define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))
 
 #if defined X86_64
     #define PTR_TO_UNSIGNED(ptr) (uint64)(ptr)

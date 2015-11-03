@@ -12,6 +12,7 @@ static inline bool binary_heap_empty_p(struct binary_heap *heap);
 static inline bool binary_heap_full_p(struct binary_heap *heap);
 static inline bool binary_heap_index_legal_p(struct binary_heap *heap, uint32 index);
 static inline bool binary_heap_maximal_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *tgt_index);
+static inline bool binary_heap_min_max_nice_ordered_p(struct binary_heap *heap, sint64 nice, uint32 up_index, uint32 down_index, uint32 grandson, uint32 depth);
 static inline bool binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *tgt_index);
 static inline bool binary_heap_min_max_ordered_p(struct binary_heap *heap, uint32 index, sint64 nice, uint32 *tgt_index);
 static inline bool binary_heap_min_max_root_ordered_p(struct binary_heap *heap, sint64 nice, uint32 *tgt_index);
@@ -39,6 +40,7 @@ static inline uint32 binary_heap_child_big_nice_index(struct binary_heap *heap, 
 static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 grandparent, sint64 nice, uint32 grandson);
 static inline uint32 binary_heap_node_depth(uint32 index);
 static inline uint32 binary_heap_node_reorder(struct binary_heap *heap, uint32 index, sint64 nice, void *heap_order);
 static inline uint32 binary_heap_serial_node_big_nice_index(struct binary_heap *heap, uint32 index, uint32 count);

@@ -56,7 +56,7 @@ do
     ;;
     "DEBUG=1")
       debug=1
-      argv_cfg="$argv_cfg -g -DDEBUG"
+      argv_cfg="$argv_cfg -g3 -DDEBUG"
     ;;
     "DEBUG=0")
       debug=0

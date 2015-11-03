@@ -203,6 +203,45 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
     return binary_heap_range_ordered_p(heap, up_idx, down_idx, nice, tgt_index);
 }
 
+static inline uint32
+binary_heap_min_max_ordered_target_index(struct binary_heap *heap,
+    uint32 grandparent, sint64 nice, uint32 grandson)
+{
+    assert(NULL != heap);
+    assert(NULL != heap->base);
+    assert(binary_heap_index_legal_p(heap, grandparent));
+    assert(binary_heap_index_legal_p(heap, grandson));
+
+    /*
+     * percolate to less distance node.
+     */
+    if (SINT64_ABS(HEAP_NICE(heap, grandparent) - nice)
+        < SINT64_ABS(HEAP_NICE(heap, grandson) - nice)) {
+        return grandparent;
+    } else {
+        return grandson;
+    }
+}
+
+static inline bool
+binary_heap_min_max_nice_ordered_p(struct binary_heap *heap, sint64 nice,
+    uint32 up_index, uint32 down_index, uint32 grandson, uint32 depth)
+{
+    assert(binary_heap_index_legal_p(heap, up_index));
+    assert(binary_heap_index_legal_p(heap, down_index));
+    assert(binary_heap_index_legal_p(heap, grandson));
+
+    if (!binary_heap_range_ordered_p(heap, up_index, down_index, nice, NULL)) {
+        return false;
+    } else if (UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) > nice) {
+        return false;
+    } else if (!UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) < nice) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 /*
  * If nice put into index position ordered
  *     Return true, or false
@@ -246,33 +285,19 @@ binary_heap_min_max_ordered_p(struct binary_heap *heap,
             grandson = binary_heap_grandchild_small_nice_index(heap, index);
         }
 
-        if (HEAP_NICE(heap, grandson) <= HEAP_NICE(heap, down_idx)) {
-            printf("nice %ld\n", nice);
-            printf("index grandson %d, index %d, up %d, down %d\n", grandson, index, up_idx, down_idx);
-            printf("nice grandson %ld, up %ld, down %ld\n", HEAP_NICE(heap, grandson),
-                HEAP_NICE(heap, up_idx), HEAP_NICE(heap, down_idx));
-            printf("nice  %ld\n", HEAP_NICE(heap, index));
-            printf("nice l %ld, r %ld\n", HEAP_NICE(heap, INDEX_LEFT_CHILD(index)),
-                                          HEAP_NICE(heap, INDEX_RIGHT_CHILD(index)));
-        }
         assert(HEAP_NICE(heap, grandson) > HEAP_NICE(heap, down_idx));
         assert(HEAP_NICE(heap, grandson) < HEAP_NICE(heap, up_idx));
-
-        if (!binary_heap_range_ordered_p(heap, up_idx, down_idx,
-            nice, tgt_index)) {
-            return false;
-        } else if ((0x1u == UINT32_IDX_BIT(depth, 0)
-            && HEAP_NICE(heap, grandson) < nice)) {
-            return true;
-        } else if (0x0u == UINT32_IDX_BIT(depth, 0)
-            && HEAP_NICE(heap, grandson) > nice) {
-            return true;
-        } else if (tgt_index) {
-            *tgt_index = grandson;
-        }
-
         assert(HEAP_NICE(heap, grandson) != nice);
-        return false;
+
+        if (binary_heap_min_max_nice_ordered_p(heap, nice, up_idx, down_idx,
+            grandson, depth)) {
+            return true;
+        } else {
+            *tgt_index = binary_heap_min_max_ordered_target_index(heap,
+                grandparent, nice, grandson);
+            assert(binary_heap_index_legal_p(heap, *tgt_index));
+            return false;
+        }
     }
 }
 
