@@ -449,8 +449,8 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
     index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
     assert(NULL == HEAP_CHAIN(heap, index));
     HEAP_CHAIN(heap, index) = last;
-    assert(binary_heap_ordered_p(heap, order));
 
+    assert(binary_heap_ordered_p(heap, order));
     return link;
 }
 

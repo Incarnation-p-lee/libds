@@ -221,7 +221,6 @@ performance_test_min_max_heap_node_depth(uint32 count)
 static inline void
 performance_test_min_max_heap_node_remove_min(uint32 count)
 {
-    sint64 nice;
     struct min_max_heap *heap;
     struct doubly_linked_list *removed;
 
@@ -233,16 +232,37 @@ performance_test_min_max_heap_node_remove_min(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        nice = HEAP_NICE(heap->alias, INDEX_ROOT);
         removed = min_max_heap_node_remove_min(heap);
         doubly_linked_list_destroy(&removed);
-        assert(NULL == min_max_heap_node_find(heap, nice));
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
     performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_min),
+        performance_test_time_stamp_period());
+}
+
+static inline void
+performance_test_min_max_heap_node_remove_min_and_destroy(uint32 count)
+{
+    struct min_max_heap *heap;
+
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
+
+    heap = test_min_max_heap_sample(count * 4, count * 2);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        min_max_heap_node_remove_min_and_destroy(heap);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    min_max_heap_destroy(&heap);
+    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_min_and_destroy),
         performance_test_time_stamp_period());
 }
 

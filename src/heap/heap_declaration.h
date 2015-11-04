@@ -87,6 +87,7 @@ void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
 void min_max_heap_cleanup(struct min_max_heap *heap);
 void min_max_heap_destroy(struct min_max_heap **heap);
 void min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice);
+void min_max_heap_node_remove_min_and_destroy(struct min_max_heap *heap);
 void minimal_heap_cleanup(struct minimal_heap *heap);
 void minimal_heap_destroy(struct minimal_heap **heap);
 void minimal_heap_node_decrease_nice(struct minimal_heap *heap, sint64 nice, uint32 offset);
