@@ -32,6 +32,7 @@ static inline void unit_test_min_max_heap_node_find(void);
 static inline void unit_test_min_max_heap_node_find_max(void);
 static inline void unit_test_min_max_heap_node_find_min(void);
 static inline void unit_test_min_max_heap_node_insert(void);
+static inline void unit_test_min_max_heap_node_remove(void);
 static inline void unit_test_min_max_heap_node_remove_min(void);
 static inline void unit_test_min_max_heap_node_remove_min_and_destroy(void);
 static inline void unit_test_min_max_heap_struct_field(void);

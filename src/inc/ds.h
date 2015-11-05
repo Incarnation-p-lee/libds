@@ -916,6 +916,7 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #define INDEX_INVALID            0u
 #define DEPTH_INVALID            0xffffffffu
 #define INDEX_LL_CHILD(index)    (index) * 4
+#define INDEX_RR_CHILD(index)    ((index) * 2 + 1) * 2
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice
@@ -954,6 +955,7 @@ extern struct doubly_linked_list * maximal_heap_node_remove_max(struct maximal_h
 extern struct doubly_linked_list * min_max_heap_node_find(struct min_max_heap *heap, sint64 nice);
 extern struct doubly_linked_list * min_max_heap_node_find_max(struct min_max_heap *heap);
 extern struct doubly_linked_list * min_max_heap_node_find_min(struct min_max_heap *heap);
+extern struct doubly_linked_list * min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice);
 extern struct doubly_linked_list * min_max_heap_node_remove_min(struct min_max_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);

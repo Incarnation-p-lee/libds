@@ -16,6 +16,7 @@
 #define INDEX_INVALID            0u
 #define DEPTH_INVALID            0xffffffffu
 #define INDEX_LL_CHILD(index)    (index) * 4
+#define INDEX_RR_CHILD(index)    ((index) * 2 + 1) * 2
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
 #define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_LEFT_CHILD(index)]->nice

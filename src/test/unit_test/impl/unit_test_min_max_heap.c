@@ -315,3 +315,38 @@ unit_test_min_max_heap_node_remove_min_and_destroy(void)
     unit_test_result_print(SYM_2_STR(min_max_heap_node_remove_min_and_destroy), pass);
 }
 
+static inline void
+unit_test_min_max_heap_node_remove(void)
+{
+    bool pass;
+    uint32 count;
+    sint64 nice;
+    struct min_max_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    pass = true;
+    count = 0x12;
+    heap = NULL;
+
+    min_max_heap_node_remove(heap, 0);
+
+    heap = test_min_max_heap_sample(0x942, 0x73a);
+    nice = 0x12345;
+    RESULT_CHECK_pointer(NULL, min_max_heap_node_remove(heap, nice), &pass);
+
+    nice = 0x7;
+    while (count--) {
+        tmp = min_max_heap_node_find(heap, nice);
+        if (tmp) {
+            RESULT_CHECK_pointer(tmp, min_max_heap_node_remove(heap, nice), &pass);
+            doubly_linked_list_destroy(&tmp);
+        } else {
+            RESULT_CHECK_pointer(NULL, min_max_heap_node_remove(heap, nice), &pass);
+        }
+        nice--;
+    }
+
+    min_max_heap_destroy(&heap);
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_remove), pass);
+}
+

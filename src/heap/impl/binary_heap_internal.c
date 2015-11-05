@@ -271,7 +271,8 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
 static inline uint32
 binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
 {
-    uint32 grandson;
+    uint32 begin;
+    uint32 ret_index;
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
@@ -282,15 +283,23 @@ binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_small_nice_index(heap, index);
     } else {
-        grandson = INDEX_LL_CHILD(index);
-        return binary_heap_serial_node_small_nice_index(heap, grandson, 4);
+        begin = INDEX_LL_CHILD(index);
+        ret_index = binary_heap_serial_node_small_nice_index(heap, begin, 4);
+
+        if (HEAP_NICE(heap, INDEX_RIGHT_CHILD(index))
+            < HEAP_NICE(heap, ret_index)) {
+            return INDEX_RIGHT_CHILD(index);
+        } else {
+            return ret_index;
+        }
     }
 }
 
 static inline uint32
 binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
 {
-    uint32 grandson;
+    uint32 begin;
+    uint32 ret_index;
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
@@ -301,8 +310,15 @@ binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_big_nice_index(heap, index);
     } else {
-        grandson = INDEX_LL_CHILD(index);
-        return binary_heap_serial_node_big_nice_index(heap, grandson, 4);
+        begin = INDEX_LL_CHILD(index);
+        ret_index = binary_heap_serial_node_big_nice_index(heap, begin, 4);
+
+        if (HEAP_NICE(heap, INDEX_RIGHT_CHILD(index))
+            > HEAP_NICE(heap, ret_index)) {
+            return INDEX_RIGHT_CHILD(index);
+        } else {
+            return ret_index;
+        }
     }
 }
 
@@ -430,25 +446,31 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
     uint32 index;
     sint64 nice;
 
+    assert(!binary_heap_empty_p(heap));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_valid_ordered_func_ptr_p(order));
 
     link = HEAP_LINK(heap, INDEX_ROOT);
     HEAP_LINK(heap, INDEX_ROOT) = NULL;
     free_ds(HEAP_CHAIN(heap, INDEX_ROOT));
-    HEAP_CHAIN(heap, INDEX_ROOT) = NULL;
 
-    nice = HEAP_NICE(heap, INDEX_LAST(heap));
-    last = HEAP_CHAIN(heap, INDEX_LAST(heap));
-    HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
-    heap->size--;
+    if (INDEX_ROOT == INDEX_LAST(heap)) {
+        heap->size--;
+    } else {
+        HEAP_CHAIN(heap, INDEX_ROOT) = NULL;
+        nice = HEAP_NICE(heap, INDEX_LAST(heap));
+        last = HEAP_CHAIN(heap, INDEX_LAST(heap));
 
-    /*
-     * percolate down last node from root.
-     */
-    index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
-    assert(NULL == HEAP_CHAIN(heap, index));
-    HEAP_CHAIN(heap, index) = last;
+        HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
+        heap->size--;
+
+        /*
+         * percolate down last node from root.
+         */
+        index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
+        assert(NULL == HEAP_CHAIN(heap, index));
+        HEAP_CHAIN(heap, index) = last;
+    }
 
     assert(binary_heap_ordered_p(heap, order));
     return link;
