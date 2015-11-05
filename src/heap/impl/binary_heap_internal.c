@@ -244,7 +244,7 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
         return INDEX_INVALID;
     } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
         return INDEX_L_CHILD(index);
-    } else if (HEAP_LEFT_CHILD_NICE(heap, index) > HEAP_RIGHT_CHILD_NICE(heap, index)) {
+    } else if (HEAP_L_CHILD_NICE(heap, index) > HEAP_R_CHILD_NICE(heap, index)) {
         return INDEX_R_CHILD(index);
     } else {
         return INDEX_L_CHILD(index);
@@ -261,7 +261,7 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
         return INDEX_INVALID;
     } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
         return INDEX_L_CHILD(index);
-    } else if (HEAP_LEFT_CHILD_NICE(heap, index) < HEAP_RIGHT_CHILD_NICE(heap, index)) {
+    } else if (HEAP_L_CHILD_NICE(heap, index) < HEAP_R_CHILD_NICE(heap, index)) {
         return INDEX_R_CHILD(index);
     } else {
         return INDEX_L_CHILD(index);

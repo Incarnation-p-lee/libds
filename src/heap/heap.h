@@ -19,8 +19,8 @@
 #define INDEX_RR_CHILD(index)    ((index) * 2 + 1) * 2
 
 #define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
-#define HEAP_LEFT_CHILD_NICE(heap, index)  (heap)->base[INDEX_L_CHILD(index)]->nice
-#define HEAP_RIGHT_CHILD_NICE(heap, index) (heap)->base[INDEX_R_CHILD(index)]->nice
+#define HEAP_L_CHILD_NICE(heap, index)  (heap)->base[INDEX_L_CHILD(index)]->nice
+#define HEAP_R_CHILD_NICE(heap, index) (heap)->base[INDEX_R_CHILD(index)]->nice
 #define HEAP_NICE(heap, index)             (heap)->base[index]->nice
 #define HEAP_LINK(heap, index)             (heap)->base[index]->link
 #define HEAP_SIZE(heap)                    (heap)->size
