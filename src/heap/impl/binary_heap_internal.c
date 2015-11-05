@@ -231,7 +231,7 @@ binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
     assert(NULL != heap);
     assert(NULL != heap->base);
 
-    return INDEX_LEFT_CHILD(index) <= INDEX_LAST(heap) ? true : false;
+    return INDEX_L_CHILD(index) <= INDEX_LAST(heap) ? true : false;
 }
 
 static inline uint32
@@ -242,12 +242,12 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
 
     if (!binary_heap_node_child_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_RIGHT_CHILD(index) > INDEX_LAST(heap)) {
-        return INDEX_LEFT_CHILD(index);
+    } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
+        return INDEX_L_CHILD(index);
     } else if (HEAP_LEFT_CHILD_NICE(heap, index) > HEAP_RIGHT_CHILD_NICE(heap, index)) {
-        return INDEX_RIGHT_CHILD(index);
+        return INDEX_R_CHILD(index);
     } else {
-        return INDEX_LEFT_CHILD(index);
+        return INDEX_L_CHILD(index);
     }
 }
 
@@ -259,12 +259,12 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
 
     if (!binary_heap_node_child_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_RIGHT_CHILD(index) > INDEX_LAST(heap)) {
-        return INDEX_LEFT_CHILD(index);
+    } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
+        return INDEX_L_CHILD(index);
     } else if (HEAP_LEFT_CHILD_NICE(heap, index) < HEAP_RIGHT_CHILD_NICE(heap, index)) {
-        return INDEX_RIGHT_CHILD(index);
+        return INDEX_R_CHILD(index);
     } else {
-        return INDEX_LEFT_CHILD(index);
+        return INDEX_L_CHILD(index);
     }
 }
 
@@ -286,9 +286,9 @@ binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
         begin = INDEX_LL_CHILD(index);
         ret_index = binary_heap_serial_node_small_nice_index(heap, begin, 4);
 
-        if (HEAP_NICE(heap, INDEX_RIGHT_CHILD(index))
+        if (HEAP_NICE(heap, INDEX_R_CHILD(index))
             < HEAP_NICE(heap, ret_index)) {
-            return INDEX_RIGHT_CHILD(index);
+            return INDEX_R_CHILD(index);
         } else {
             return ret_index;
         }
@@ -313,9 +313,9 @@ binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
         begin = INDEX_LL_CHILD(index);
         ret_index = binary_heap_serial_node_big_nice_index(heap, begin, 4);
 
-        if (HEAP_NICE(heap, INDEX_RIGHT_CHILD(index))
+        if (HEAP_NICE(heap, INDEX_R_CHILD(index))
             > HEAP_NICE(heap, ret_index)) {
-            return INDEX_RIGHT_CHILD(index);
+            return INDEX_R_CHILD(index);
         } else {
             return ret_index;
         }

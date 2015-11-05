@@ -197,11 +197,11 @@ unit_test_min_max_heap_node_find_max(void)
     heap = test_min_max_heap_sample(0x1345, 0x104E);
 
     index = INDEX_ROOT;
-    if (min_max_heap_nice(heap, INDEX_LEFT_CHILD(index)) >
-        min_max_heap_nice(heap, INDEX_RIGHT_CHILD(index))) {
-        index = INDEX_LEFT_CHILD(index);
+    if (min_max_heap_nice(heap, INDEX_L_CHILD(index)) >
+        min_max_heap_nice(heap, INDEX_R_CHILD(index))) {
+        index = INDEX_L_CHILD(index);
     } else {
-        index = INDEX_RIGHT_CHILD(index);
+        index = INDEX_R_CHILD(index);
     }
 
     RESULT_CHECK_pointer(min_max_heap_link(heap, index),
