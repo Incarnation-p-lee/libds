@@ -205,3 +205,31 @@ min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice)
     }
 }
 
+static inline void
+min_max_heap_node_remove_and_destroy_internal(struct binary_heap *heap,
+    uint32 index)
+{
+    struct doubly_linked_list *removed;
+
+    assert(NULL != heap);
+    assert(INDEX_INVALID != index);
+    assert(index <= INDEX_LAST(heap));
+
+    removed = min_max_heap_node_remove_internal(heap, index);
+    doubly_linked_list_destroy(&removed);
+}
+
+void
+min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice)
+{
+    uint32 index;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+    } else {
+        min_max_heap_node_remove_and_destroy_internal(heap->alias, index);
+    }
+}
+
