@@ -901,32 +901,35 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
-#define HEAP_NICE_UPPER_LMT      0x7fffffffffffffff
-#define HEAP_NICE_LOWER_LMT      (-HEAP_NICE_UPPER_LMT - 1)
+#define HEAP_NICE_UPPER_LMT            0x7fffffffffffffff
+#define HEAP_NICE_LOWER_LMT            (-HEAP_NICE_UPPER_LMT - 1)
 
-#define DEFAULT_BINARY_HEAP_SIZE 4097
+#define DEFAULT_BINARY_HEAP_SIZE       4097
 
-#define INDEX_ROOT               0x1u
-#define INDEX_L_CHILD(index)     (index) * 2
-#define INDEX_R_CHILD(index)     ((index) * 2 + 1)
-#define INDEX_PARENT(index)      ((index) / 2)
-#define INDEX_GD_PARENT(index)   ((index) / 4)
-#define INDEX_LAST(heap)         ((heap)->size)
-#define INDEX_FIRST              INDEX_ROOT
-#define INDEX_INVALID            0u
-#define DEPTH_INVALID            0xffffffffu
-#define INDEX_LL_CHILD(index)    (index) * 4
-#define INDEX_RR_CHILD(index)    ((index) * 2 + 1) * 2
+#define DEPTH_INVALID                  0xffffffffu
 
-#define HEAP_PARENT_NICE(heap, index)      (heap)->base[INDEX_PARENT(index)]->nice
-#define HEAP_L_CHILD_NICE(heap, index)  (heap)->base[INDEX_L_CHILD(index)]->nice
+#define INDEX_INVALID                  0u
+#define INDEX_ROOT                     0x1u
+#define INDEX_L_CHILD(index)           (index) * 2
+#define INDEX_R_CHILD(index)           ((index) * 2 + 1)
+#define INDEX_PARENT(index)            ((index) / 2)
+#define INDEX_GD_PARENT(index)         ((index) / 4)
+#define INDEX_LAST(heap)               ((heap)->size)
+#define INDEX_FIRST                    INDEX_ROOT
+#define INDEX_LL_CHILD(index)          ((index) * 4)
+#define INDEX_LR_CHILD(index)          ((index) * 4 + 1)
+#define INDEX_RL_CHILD(index)          ((index) * 4 + 2)
+#define INDEX_RR_CHILD(index)          ((index) * 2 + 3)
+
+#define HEAP_PARENT_NICE(heap, index)  (heap)->base[INDEX_PARENT(index)]->nice
+#define HEAP_L_CHILD_NICE(heap, index) (heap)->base[INDEX_L_CHILD(index)]->nice
 #define HEAP_R_CHILD_NICE(heap, index) (heap)->base[INDEX_R_CHILD(index)]->nice
-#define HEAP_NICE(heap, index)             (heap)->base[index]->nice
-#define HEAP_LINK(heap, index)             (heap)->base[index]->link
-#define HEAP_SIZE(heap)                    (heap)->size
-#define HEAP_CHAIN(heap, index)            (heap)->base[index]
+#define HEAP_NICE(heap, index)         (heap)->base[index]->nice
+#define HEAP_LINK(heap, index)         (heap)->base[index]->link
+#define HEAP_SIZE(heap)                (heap)->size
+#define HEAP_CHAIN(heap, index)        (heap)->base[index]
 
-#define u_offset(n, offset) (n + offset)
+#define u_offset(n, offset)            (n + offset)
 
 /* EXTERNAL FUNCTIONS */
 /* END OF EXTERNAL FUNCTIONS */
@@ -956,6 +959,7 @@ extern struct doubly_linked_list * min_max_heap_node_find(struct min_max_heap *h
 extern struct doubly_linked_list * min_max_heap_node_find_max(struct min_max_heap *heap);
 extern struct doubly_linked_list * min_max_heap_node_find_min(struct min_max_heap *heap);
 extern struct doubly_linked_list * min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice);
+extern struct doubly_linked_list * min_max_heap_node_remove_max(struct min_max_heap *heap);
 extern struct doubly_linked_list * min_max_heap_node_remove_min(struct min_max_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);

@@ -97,14 +97,18 @@ min_max_heap_node_find_min(struct min_max_heap *heap)
 struct doubly_linked_list *
 min_max_heap_node_find_max(struct min_max_heap *heap)
 {
-    uint32 idx;
+    uint32 index;
 
     if (!heap) {
         pr_log_warn("Attempt to access NULL pointer.\n");
         return NULL;
+    } else if (INDEX_ROOT == INDEX_LAST(heap->alias)) {
+        return HEAP_LINK(heap->alias, INDEX_ROOT);
     } else {
-        idx = binary_heap_child_big_nice_index(heap->alias, INDEX_ROOT);
-        return HEAP_LINK(heap->alias, idx);
+        index = binary_heap_child_big_nice_index(heap->alias, INDEX_ROOT);
+
+        assert(INDEX_INVALID != index);
+        return HEAP_LINK(heap->alias, index);
     }
 }
 
@@ -230,6 +234,29 @@ min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice)
         pr_log_warn("No such the node of heap, nothing will be done.\n");
     } else {
         min_max_heap_node_remove_and_destroy_internal(heap->alias, index);
+    }
+}
+
+struct doubly_linked_list *
+min_max_heap_node_remove_max(struct min_max_heap *heap)
+{
+    uint32 max_index;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return NULL;
+    } else if (binary_heap_empty_p(heap->alias)) {
+        pr_log_warn("Attempt to remove node in empty heap.\n");
+        return NULL;
+    } else {
+        max_index = binary_heap_child_big_nice_index(heap->alias, INDEX_ROOT);
+
+        if (INDEX_INVALID == max_index) {
+            return binary_heap_node_remove_root(heap->alias,
+                &binary_heap_min_max_ordered_p);
+        } else {
+            return min_max_heap_node_remove_internal(heap->alias, max_index);
+        }
     }
 }
 

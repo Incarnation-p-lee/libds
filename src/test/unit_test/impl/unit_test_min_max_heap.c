@@ -282,7 +282,6 @@ unit_test_min_max_heap_node_remove_min(void)
     min_max_heap_node_remove_min(heap);
 
     heap = test_min_max_heap_sample(0x1345, 0x104E);
-    //heap = test_min_max_heap_sample(0x15, 0xE);
     minimal = min_max_heap_node_find_min(heap);
     RESULT_CHECK_pointer(minimal, min_max_heap_node_remove_min(heap), &pass);
 
@@ -381,5 +380,32 @@ unit_test_min_max_heap_node_remove_and_destroy(void)
 
     min_max_heap_destroy(&heap);
     unit_test_result_print(SYM_2_STR(min_max_heap_node_remove_and_destroy), pass);
+}
+
+static inline void
+unit_test_min_max_heap_node_remove_max(void)
+{
+    bool pass;
+    struct min_max_heap *heap;
+    struct doubly_linked_list *maximal;
+
+    pass = true;
+    heap = NULL;
+
+    min_max_heap_node_remove_max(heap);
+
+    heap = test_min_max_heap_sample(0x1345, 0x104E);
+    maximal = min_max_heap_node_find_max(heap);
+    RESULT_CHECK_pointer(maximal, min_max_heap_node_remove_max(heap), &pass);
+    doubly_linked_list_destroy(&maximal);
+    min_max_heap_destroy(&heap);
+
+    heap = test_min_max_heap_sample(0x5, 0x1);
+    maximal = min_max_heap_node_find_max(heap);
+    RESULT_CHECK_pointer(maximal, min_max_heap_node_remove_max(heap), &pass);
+    doubly_linked_list_destroy(&maximal);
+    min_max_heap_destroy(&heap);
+
+    unit_test_result_print(SYM_2_STR(min_max_heap_node_remove_max), pass);
 }
 

@@ -69,6 +69,7 @@ struct doubly_linked_list * min_max_heap_node_find(struct min_max_heap *heap, si
 struct doubly_linked_list * min_max_heap_node_find_max(struct min_max_heap *heap);
 struct doubly_linked_list * min_max_heap_node_find_min(struct min_max_heap *heap);
 struct doubly_linked_list * min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice);
+struct doubly_linked_list * min_max_heap_node_remove_max(struct min_max_heap *heap);
 struct doubly_linked_list * min_max_heap_node_remove_min(struct min_max_heap *heap);
 struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
