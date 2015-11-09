@@ -21,7 +21,7 @@ unit_test_maximal_heap_struct_field(void)
     RESULT_CHECK_pointer(tmp, maximal_heap_link_set(heap, index, tmp), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_struct_field), pass);
+    UNIT_TEST_RESULT(maximal_heap_struct_field, pass);
 }
 
 static inline void
@@ -48,7 +48,7 @@ unit_test_maximal_heap_create(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_create), pass);
+    UNIT_TEST_RESULT(maximal_heap_create, pass);
 }
 
 static inline void
@@ -66,7 +66,7 @@ unit_test_maximal_heap_destroy(void)
     maximal_heap_destroy(&heap);
     RESULT_CHECK_pointer(NULL, heap, &pass);
 
-    unit_test_result_print(SYM_2_STR(maximal_heap_destroy), pass);
+    UNIT_TEST_RESULT(maximal_heap_destroy, pass);
 }
 
 static inline void
@@ -88,7 +88,7 @@ unit_test_maximal_heap_empty_p(void)
     RESULT_CHECK_bool(true, maximal_heap_empty_p(heap), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_empty_p), pass);
+    UNIT_TEST_RESULT(maximal_heap_empty_p, pass);
 }
 
 static inline void
@@ -110,7 +110,7 @@ unit_test_maximal_heap_full_p(void)
     RESULT_CHECK_bool(false, maximal_heap_full_p(heap), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_full_p), pass);
+    UNIT_TEST_RESULT(maximal_heap_full_p, pass);
 }
 
 static inline void
@@ -131,7 +131,7 @@ unit_test_maximal_heap_cleanup(void)
     RESULT_CHECK_bool(true, maximal_heap_empty_p(heap), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_cleanup), pass);
+    UNIT_TEST_RESULT(maximal_heap_cleanup, pass);
 }
 
 static inline void
@@ -158,7 +158,7 @@ unit_test_maximal_heap_node_find(void)
         maximal_heap_node_find(heap, maximal_heap_nice(heap, index)), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_find), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_find, pass);
 }
 
 static inline void
@@ -180,7 +180,7 @@ unit_test_maximal_heap_node_find_max(void)
         maximal_heap_node_find_max(heap), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_find_max), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_find_max, pass);
 }
 
 static inline void
@@ -210,7 +210,7 @@ unit_test_maximal_heap_node_insert(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_insert), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_insert, pass);
 }
 
 static inline void
@@ -231,7 +231,7 @@ unit_test_maximal_heap_node_remove_max(void)
     doubly_linked_list_destroy(&maximal);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_remove_max), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_remove_max, pass);
 }
 
 static inline void
@@ -255,7 +255,7 @@ unit_test_maximal_heap_node_remove_max_and_destroy(void)
     RESULT_CHECK_uint32(size, maximal_heap_size(heap), &pass);
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_remove_max_and_destroy), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_remove_max_and_destroy, pass);
 }
 
 static inline void
@@ -295,7 +295,7 @@ unit_test_maximal_heap_node_decrease_nice(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_decrease_nice), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_decrease_nice, pass);
 }
 
 static inline void
@@ -335,7 +335,7 @@ unit_test_maximal_heap_node_increase_nice(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_increase_nice), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_increase_nice, pass);
 }
 
 static inline void
@@ -371,7 +371,7 @@ unit_test_maximal_heap_node_remove(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_remove), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_remove, pass);
 }
 
 static inline void
@@ -404,7 +404,7 @@ unit_test_maximal_heap_node_remove_and_destroy(void)
     }
 
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_node_remove_and_destroy), pass);
+    UNIT_TEST_RESULT(maximal_heap_node_remove_and_destroy, pass);
 }
 
 static inline void
@@ -448,6 +448,6 @@ unit_test_maximal_heap_build(void)
     free_ds(build);
     free_ds(chain_array);
     maximal_heap_destroy(&heap);
-    unit_test_result_print(SYM_2_STR(maximal_heap_build), pass);
+    UNIT_TEST_RESULT(maximal_heap_build, pass);
 }
 

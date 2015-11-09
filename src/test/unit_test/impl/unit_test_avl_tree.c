@@ -28,7 +28,7 @@ unit_test_avl_tree_struct_field(void)
     RESULT_CHECK_sint32(height, avl_tree_height(tree), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_struct_field), pass);
+    UNIT_TEST_RESULT(avl_tree_struct_field, pass);
 }
 
 static void
@@ -49,7 +49,7 @@ unit_test_avl_tree_create(void)
     RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_create), pass);
+    UNIT_TEST_RESULT(avl_tree_create, pass);
 }
 
 static void
@@ -72,7 +72,7 @@ unit_test_avl_tree_node_create(void)
     RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_create), pass);
+    UNIT_TEST_RESULT(avl_tree_node_create, pass);
 }
 
 static void
@@ -99,7 +99,7 @@ unit_test_avl_tree_initial(void)
     RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_initial), pass);
+    UNIT_TEST_RESULT(avl_tree_initial, pass);
 }
 
 static void
@@ -128,7 +128,7 @@ unit_test_avl_tree_node_initial(void)
     RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_initial), pass);
+    UNIT_TEST_RESULT(avl_tree_node_initial, pass);
 }
 
 static void
@@ -151,7 +151,7 @@ unit_test_avl_tree_destroy(void)
     avl_tree_destroy(&tree);
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
-    unit_test_result_print(SYM_2_STR(avl_tree_destroy), pass);
+    UNIT_TEST_RESULT(avl_tree_destroy, pass);
 }
 
 static void
@@ -178,7 +178,7 @@ unit_test_avl_tree_node_find(void)
     RESULT_CHECK_pointer(tmp, avl_tree_node_find(tree, nice), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_find), pass);
+    UNIT_TEST_RESULT(avl_tree_node_find, pass);
 }
 
 static void
@@ -197,7 +197,7 @@ unit_test_avl_tree_node_find_min(void)
     RESULT_CHECK_pointer(NULL, avl_tree_child_left(tmp), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_find_min), pass);
+    UNIT_TEST_RESULT(avl_tree_node_find_min, pass);
 }
 
 static void
@@ -216,7 +216,7 @@ unit_test_avl_tree_node_find_max(void)
     RESULT_CHECK_pointer(NULL, avl_tree_child_right(tmp), &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_find_max), pass);
+    UNIT_TEST_RESULT(avl_tree_node_find_max, pass);
 }
 
 static void
@@ -244,7 +244,7 @@ unit_test_avl_tree_node_contains_p(void)
 
     avl_tree_destroy(&fake);
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_contains_p), pass);
+    UNIT_TEST_RESULT(avl_tree_node_contains_p, pass);
 }
 
 static void
@@ -276,7 +276,7 @@ unit_test_avl_tree_iterate(void)
     RESULT_CHECK_uint32(cnt, reference, &pass);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_iterate), pass);
+    UNIT_TEST_RESULT(avl_tree_iterate, pass);
 }
 
 static void
@@ -308,7 +308,7 @@ unit_test_avl_tree_balanced_p(void)
     avl_tree_destroy(&tmp);
 
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_balanced_p), pass);
+    UNIT_TEST_RESULT(avl_tree_balanced_p, pass);
 }
 
 static void
@@ -341,7 +341,7 @@ unit_test_avl_tree_node_insert(void)
 
     avl_tree_destroy(&tmp);
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_insert), pass);
+    UNIT_TEST_RESULT(avl_tree_node_insert, pass);
 }
 
 static void
@@ -422,7 +422,7 @@ unit_test_avl_tree_node_remove(void)
 
     avl_tree_destroy(&tmp);
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_remove), pass);
+    UNIT_TEST_RESULT(avl_tree_node_remove, pass);
 }
 
 static void
@@ -493,6 +493,6 @@ unit_test_avl_tree_node_remove_and_destroy(void)
 
     avl_tree_destroy(&tmp);
     avl_tree_destroy(&tree);
-    unit_test_result_print(SYM_2_STR(avl_tree_node_remove_and_destroy), pass);
+    UNIT_TEST_RESULT(avl_tree_node_remove_and_destroy, pass);
 }
 

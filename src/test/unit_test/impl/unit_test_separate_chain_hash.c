@@ -16,7 +16,7 @@ unit_test_separate_chain_hash_struct_field(void)
     RESULT_CHECK_uint32(tmp, separate_chain_hash_load_factor(hash), &pass);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_struct_field), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_struct_field, pass);
 }
 
 static void
@@ -46,7 +46,7 @@ unit_test_separate_chain_hash_create(void)
     RESULT_CHECK_uint32(tmp, separate_chain_hash_load_factor(hash), &pass);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_create), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_create, pass);
 }
 
 static void
@@ -71,7 +71,7 @@ unit_test_separate_chain_hash_destroy(void)
     separate_chain_hash_destroy(&hash);
 
     RESULT_CHECK_pointer(NULL, hash, &pass);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_destroy), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_destroy, pass);
 }
 
 static void
@@ -99,7 +99,7 @@ unit_test_separate_chain_hash_load_factor_calculate(void)
     separate_chain_hash_load_factor_calculate(hash);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_load_factor_calculate), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_load_factor_calculate, pass);
 }
 
 static void
@@ -125,7 +125,7 @@ unit_test_separate_chain_hash_insert(void)
     RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_insert), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_insert, pass);
 }
 
 static void
@@ -161,7 +161,7 @@ unit_test_separate_chain_hash_remove(void)
     RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_remove), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_remove, pass);
 }
 
 static void
@@ -189,7 +189,7 @@ unit_test_separate_chain_hash_find(void)
     RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
 
     separate_chain_hash_destroy(&hash);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_find), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_find, pass);
 }
 
 static void
@@ -219,6 +219,6 @@ unit_test_separate_chain_hash_rehashing(void)
     RESULT_CHECK_pointer(NULL, hash, &pass);
 
     separate_chain_hash_destroy(&new);
-    unit_test_result_print(SYM_2_STR(separate_chain_hash_rehashing), pass);
+    UNIT_TEST_RESULT(separate_chain_hash_rehashing, pass);
 }
 

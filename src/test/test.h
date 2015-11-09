@@ -1,7 +1,9 @@
 #ifndef HAVE_TEST_H
 #define HAVE_TEST_H
 
-#define FILTER_LEN                  32
+#define FILTER_LEN                     32
+#define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
+    SYM_2_STR(symbol), pass)
 
 struct test_case_filter {
     char category[FILTER_LEN];

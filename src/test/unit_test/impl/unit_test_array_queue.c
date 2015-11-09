@@ -18,7 +18,7 @@ unit_test_array_queue_struct_field(void)
     RESULT_CHECK_uint32(capacity, array_queue_rest(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_struct_field), pass);
+    UNIT_TEST_RESULT(array_queue_struct_field, pass);
 }
 
 static void
@@ -34,7 +34,7 @@ unit_test_array_queue_create(void)
     RESULT_CHECK_uint32(array_queue_rest(queue), array_queue_dim(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_create), pass);
+    UNIT_TEST_RESULT(array_queue_create, pass);
 }
 
 static void
@@ -51,7 +51,7 @@ unit_test_array_queue_destroy(void)
     queue = array_queue_create();
     array_queue_destroy(&queue);
     RESULT_CHECK_pointer(NULL, queue, &pass);
-    unit_test_result_print(SYM_2_STR(array_queue_destroy), pass);
+    UNIT_TEST_RESULT(array_queue_destroy, pass);
 }
 
 static void
@@ -95,7 +95,7 @@ unit_test_array_queue_space_expand(void)
     RESULT_CHECK_uint32(capacity + extra, array_queue_capacity(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_space_expand), pass);
+    UNIT_TEST_RESULT(array_queue_space_expand, pass);
 }
 
 static void
@@ -116,7 +116,7 @@ unit_test_array_queue_capacity(void)
         array_queue_capacity(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_capacity), pass);
+    UNIT_TEST_RESULT(array_queue_capacity, pass);
 }
 
 static void
@@ -144,7 +144,7 @@ unit_test_array_queue_space_rest(void)
     RESULT_CHECK_uint32(extra++, array_queue_space_rest(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_space_rest), pass);
+    UNIT_TEST_RESULT(array_queue_space_rest, pass);
 }
 
 static void
@@ -175,7 +175,7 @@ unit_test_array_queue_full_p(void)
     array_queue_enter(queue, &capacity);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_full_p), pass);
+    UNIT_TEST_RESULT(array_queue_full_p, pass);
 }
 
 static void
@@ -195,7 +195,7 @@ unit_test_array_queue_empty_p(void)
     array_queue_space_expand(queue, 1);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_empty_p), pass);
+    UNIT_TEST_RESULT(array_queue_empty_p, pass);
 }
 
 
@@ -227,7 +227,7 @@ unit_test_array_queue_enter(void)
     array_queue_space_expand(queue, 1);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_enter), pass);
+    UNIT_TEST_RESULT(array_queue_enter, pass);
 }
 
 static void
@@ -266,7 +266,7 @@ unit_test_array_queue_leave(void)
     array_queue_space_expand(queue, 1);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_leave), pass);
+    UNIT_TEST_RESULT(array_queue_leave, pass);
 }
 
 static void
@@ -287,7 +287,7 @@ unit_test_array_queue_cleanup(void)
         array_queue_space_rest(queue), &pass);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_cleanup), pass);
+    UNIT_TEST_RESULT(array_queue_cleanup, pass);
 }
 
 static void
@@ -317,6 +317,6 @@ unit_test_array_queue_iterate(void)
     array_queue_iterate(queue, queue_iterate_handler);
 
     array_queue_destroy(&queue);
-    unit_test_result_print(SYM_2_STR(array_queue_iterate), pass);
+    UNIT_TEST_RESULT(array_queue_iterate, pass);
 }
 
