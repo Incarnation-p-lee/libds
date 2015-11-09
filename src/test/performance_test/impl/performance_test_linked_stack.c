@@ -14,8 +14,7 @@ performance_test_linked_stack_struct_field(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_struct_field),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_struct_field);
 }
 
 static void
@@ -32,8 +31,7 @@ performance_test_linked_stack_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(linked_stack_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_create);
 }
 
 static void
@@ -50,8 +48,7 @@ performance_test_linked_stack_destroy(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(linked_stack_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_destroy);
 }
 
 static void
@@ -70,8 +67,7 @@ performance_test_linked_stack_space_expand(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_space_expand),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_space_expand);
 }
 
 static void
@@ -90,8 +86,7 @@ performance_test_linked_stack_full_p(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_full_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_full_p);
 }
 
 static void
@@ -110,8 +105,7 @@ performance_test_linked_stack_space_rest(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_space_rest),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_space_rest);
 }
 
 static void
@@ -130,8 +124,7 @@ performance_test_linked_stack_capacity(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_capacity),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_capacity);
 }
 
 static void
@@ -150,8 +143,7 @@ performance_test_linked_stack_push(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_push),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_push);
 }
 
 static void
@@ -171,8 +163,7 @@ performance_test_linked_stack_pop(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_pop),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_pop);
 }
 
 static void
@@ -191,8 +182,7 @@ performance_test_linked_stack_empty_p(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_empty_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_empty_p);
 }
 
 static void
@@ -211,8 +201,7 @@ performance_test_linked_stack_cleanup(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_cleanup),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_cleanup);
 }
 
 static void
@@ -234,7 +223,6 @@ performance_test_linked_stack_iterate(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     linked_stack_destroy(&stack);
-    performance_test_result_print(SYM_2_STR(linked_stack_iterate),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(linked_stack_iterate);
 }
 

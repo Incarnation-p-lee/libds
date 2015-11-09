@@ -14,8 +14,7 @@ performance_test_splay_tree_struct_field(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_struct_field),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_struct_field);
 }
 
 static void
@@ -32,8 +31,7 @@ performance_test_splay_tree_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(splay_tree_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_create);
 }
 
 static void
@@ -50,8 +48,7 @@ performance_test_splay_tree_node_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(splay_tree_node_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_create);
 }
 
 static void
@@ -70,8 +67,7 @@ performance_test_splay_tree_initial(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_initial),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_initial);
 }
 
 static void
@@ -90,8 +86,7 @@ performance_test_splay_tree_node_initial(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_initial),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_initial);
 }
 
 static void
@@ -108,8 +103,7 @@ performance_test_splay_tree_destroy(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(splay_tree_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_destroy);
 }
 
 static void
@@ -130,8 +124,7 @@ performance_test_splay_tree_node_find(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_find),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_find);
 }
 
 static void
@@ -150,8 +143,7 @@ performance_test_splay_tree_node_find_min(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_find_min),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_find_min);
 }
 
 static void
@@ -170,8 +162,7 @@ performance_test_splay_tree_node_find_max(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_find_max),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_find_max);
 }
 
 static void
@@ -190,8 +181,7 @@ performance_test_splay_tree_height(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_height),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_height);
 }
 
 static void
@@ -212,8 +202,7 @@ performance_test_splay_tree_node_contains_p(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_contains_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_contains_p);
 }
 
 static void
@@ -236,8 +225,7 @@ performance_test_splay_tree_node_insert(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_insert),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_insert);
 }
 
 static void
@@ -264,8 +252,7 @@ performance_test_splay_tree_node_remove(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_remove),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_remove);
 }
 
 static void
@@ -291,8 +278,7 @@ performance_test_splay_tree_node_remove_and_destroy(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_node_remove_and_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_node_remove_and_destroy);
 }
 
 static void
@@ -313,7 +299,6 @@ performance_test_splay_tree_iterate(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     splay_tree_destroy(&tree);
-    performance_test_result_print(SYM_2_STR(splay_tree_iterate),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(splay_tree_iterate);
 }
 

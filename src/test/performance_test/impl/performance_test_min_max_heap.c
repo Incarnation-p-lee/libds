@@ -16,8 +16,7 @@ performance_test_min_max_heap_struct_field(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_struct_field),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_struct_field);
 }
 
 static inline void
@@ -34,8 +33,7 @@ performance_test_min_max_heap_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(min_max_heap_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_create);
 }
 
 static inline void
@@ -52,8 +50,7 @@ performance_test_min_max_heap_destroy(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(min_max_heap_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_destroy);
 }
 
 static inline void
@@ -72,8 +69,7 @@ performance_test_min_max_heap_empty_p(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_empty_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_empty_p);
 }
 
 static inline void
@@ -92,8 +88,7 @@ performance_test_min_max_heap_full_p(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_full_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_full_p);
 }
 
 static inline void
@@ -111,8 +106,7 @@ performance_test_min_max_heap_cleanup(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(min_max_heap_cleanup),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_cleanup);
 }
 
 static inline void
@@ -131,8 +125,7 @@ performance_test_min_max_heap_node_find(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_find),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_find);
 }
 
 static inline void
@@ -151,8 +144,7 @@ performance_test_min_max_heap_node_find_min(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_find_min),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_find_min);
 }
 
 static inline void
@@ -171,8 +163,7 @@ performance_test_min_max_heap_node_find_max(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_find_max),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_find_max);
 }
 
 static inline void
@@ -194,8 +185,7 @@ performance_test_min_max_heap_node_insert(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_insert),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_insert);
 }
 
 static inline void
@@ -214,8 +204,7 @@ performance_test_min_max_heap_node_depth(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_depth),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_depth);
 }
 
 static inline void
@@ -239,8 +228,7 @@ performance_test_min_max_heap_node_remove_min(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_min),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_min);
 }
 
 static inline void
@@ -264,8 +252,7 @@ performance_test_min_max_heap_node_remove_max(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_max),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_max);
 }
 
 static inline void
@@ -287,8 +274,7 @@ performance_test_min_max_heap_node_remove_min_and_destroy(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_min_and_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_min_and_destroy);
 }
 
 static inline void
@@ -312,8 +298,7 @@ performance_test_min_max_heap_node_remove(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove);
 }
 
 static inline void
@@ -335,7 +320,6 @@ performance_test_min_max_heap_node_remove_and_destroy(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     min_max_heap_destroy(&heap);
-    performance_test_result_print(SYM_2_STR(min_max_heap_node_remove_and_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_and_destroy);
 }
 

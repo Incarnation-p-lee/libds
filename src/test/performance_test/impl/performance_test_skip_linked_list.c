@@ -16,8 +16,7 @@ performance_test_skip_linked_list_struct_field(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_struct_field),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_struct_field);
 }
 
 static void
@@ -34,8 +33,7 @@ performance_test_skip_linked_list_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(skip_linked_list_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_create);
 }
 
 static void
@@ -54,8 +52,7 @@ performance_test_skip_linked_list_initial(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_initial),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_initial);
 }
 
 static void
@@ -72,8 +69,7 @@ performance_test_skip_linked_list_node_create(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_create),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_create);
 }
 
 static void
@@ -92,8 +88,7 @@ performance_test_skip_linked_list_node_initial(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_initial),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_initial);
 }
 
 static void
@@ -110,8 +105,7 @@ performance_test_skip_linked_list_destroy(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(skip_linked_list_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_destroy);
 }
 
 static void
@@ -130,8 +124,7 @@ performance_test_skip_linked_list_length(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_length),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_length);
 }
 
 static void
@@ -155,8 +148,7 @@ performance_test_skip_linked_list_node_find_key(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_find_key),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_find_key);
 }
 
 static void
@@ -180,8 +172,7 @@ performance_test_skip_linked_list_key_contains_p(uint32 count)
 
     skip_linked_list_destroy(&tmp);
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_key_contains_p),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_key_contains_p);
 }
 
 static void
@@ -206,8 +197,7 @@ performance_test_skip_linked_list_node_insert(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_insert),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_insert);
 }
 
 static void
@@ -226,8 +216,7 @@ performance_test_skip_linked_list_node_by_index(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_by_index),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_by_index);
 }
 
 static void
@@ -248,8 +237,7 @@ performance_test_skip_linked_list_node_remove(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_remove),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_remove);
 }
 
 static void
@@ -273,8 +261,7 @@ performance_test_skip_linked_list_node_remove_and_destroy(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_node_remove_and_destroy),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_node_remove_and_destroy);
 }
 
 static void
@@ -293,8 +280,7 @@ performance_test_skip_linked_list_iterate(uint32 count)
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    performance_test_result_print(SYM_2_STR(skip_linked_list_iterate),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_iterate);
 }
 
 static void
@@ -316,7 +302,6 @@ performance_test_skip_linked_list_merge(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    performance_test_result_print(SYM_2_STR(skip_linked_list_merge),
-        performance_test_time_stamp_period());
+    PERFORMANCE_TEST_RESULT(skip_linked_list_merge);
 }
 
