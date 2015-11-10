@@ -274,3 +274,27 @@ min_max_heap_node_remove_max(struct min_max_heap *heap)
     }
 }
 
+static inline void
+min_max_heap_node_remove_max_and_destroy_internal(struct min_max_heap *heap)
+{
+    struct doubly_linked_list *removed;
+
+    assert(NULL != heap);
+    assert(binary_heap_structure_legal_p(heap->alias));
+
+    removed = min_max_heap_node_remove_max_internal(heap);
+    doubly_linked_list_destroy(&removed);
+}
+
+void
+min_max_heap_node_remove_max_and_destroy(struct min_max_heap *heap)
+{
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (binary_heap_empty_p(heap->alias)) {
+        pr_log_warn("Attempt to remove node in empty heap.\n");
+    } else {
+        min_max_heap_node_remove_max_and_destroy_internal(heap);
+    }
+}
+

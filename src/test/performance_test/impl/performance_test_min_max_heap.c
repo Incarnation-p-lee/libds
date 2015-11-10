@@ -323,3 +323,25 @@ performance_test_min_max_heap_node_remove_and_destroy(uint32 count)
     PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_and_destroy);
 }
 
+static inline void
+performance_test_min_max_heap_node_remove_max_and_destroy(uint32 count)
+{
+    struct min_max_heap *heap;
+
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
+
+    heap = test_min_max_heap_sample(count * 4, count * 2);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        min_max_heap_node_remove_max_and_destroy(heap);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    min_max_heap_destroy(&heap);
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_remove_max_and_destroy);
+}
+
