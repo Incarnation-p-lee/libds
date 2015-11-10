@@ -83,5 +83,6 @@ The following data structure implemented in this project.
    6. heap
         a. minimal heap
         b. maximal heap
+        c. min_max heap
 
 END
