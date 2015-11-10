@@ -167,30 +167,33 @@ min_max_heap_node_remove_min_and_destroy(struct min_max_heap *heap)
 }
 
 static inline struct doubly_linked_list *
-min_max_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
+min_max_heap_node_remove_internal(struct min_max_heap *heap, uint32 index)
 {
-    struct collision_chain *tmp;
     sint64 nice;
+    struct binary_heap *alias;
+    struct collision_chain *tmp;
 
     assert(NULL != heap);
-    assert(INDEX_INVALID != index);
-    assert(index <= INDEX_LAST(heap));
-    assert(!binary_heap_empty_p(heap));
+    assert(binary_heap_structure_legal_p(heap->alias));
+    assert(binary_heap_index_legal_p(heap->alias, index));
+    assert(!binary_heap_empty_p(heap->alias));
 
-    tmp = HEAP_CHAIN(heap, index);
-    HEAP_CHAIN(heap, index) = NULL;
+    alias = heap->alias;
 
-    nice = HEAP_NICE(heap, INDEX_ROOT) - 1;
+    tmp = HEAP_CHAIN(alias, index);
+    HEAP_CHAIN(alias, index) = NULL;
+
+    nice = HEAP_NICE(alias, INDEX_ROOT) - 1;
     assert(nice != HEAP_NICE_LOWER_LMT);
+
     /*
      * percolate current index node to root, then remove the root.
      */
-    index = binary_heap_node_reorder(heap, index, nice,
-        &binary_heap_min_max_ordered_p);
-    assert(INDEX_ROOT == index);
+    binary_heap_node_reorder(alias, index, nice, &binary_heap_min_max_ordered_p);
+    assert(NULL == HEAP_CHAIN(alias, INDEX_ROOT));
+    HEAP_CHAIN(alias, INDEX_ROOT) = tmp;
 
-    HEAP_CHAIN(heap, INDEX_ROOT) = tmp;
-    return binary_heap_node_remove_root(heap, &binary_heap_min_max_ordered_p);
+    return binary_heap_node_remove_root(alias, &binary_heap_min_max_ordered_p);
 }
 
 struct doubly_linked_list *
@@ -205,19 +208,19 @@ min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice)
         pr_log_warn("No such the node of heap, nothing will be done.\n");
         return NULL;
     } else {
-        return min_max_heap_node_remove_internal(heap->alias, index);
+        return min_max_heap_node_remove_internal(heap, index);
     }
 }
 
 static inline void
-min_max_heap_node_remove_and_destroy_internal(struct binary_heap *heap,
+min_max_heap_node_remove_and_destroy_internal(struct min_max_heap *heap,
     uint32 index)
 {
     struct doubly_linked_list *removed;
 
     assert(NULL != heap);
-    assert(INDEX_INVALID != index);
-    assert(index <= INDEX_LAST(heap));
+    assert(binary_heap_structure_legal_p(heap->alias));
+    assert(binary_heap_index_legal_p(heap->alias, index));
 
     removed = min_max_heap_node_remove_internal(heap, index);
     doubly_linked_list_destroy(&removed);
@@ -233,7 +236,7 @@ min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice)
     } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
         pr_log_warn("No such the node of heap, nothing will be done.\n");
     } else {
-        min_max_heap_node_remove_and_destroy_internal(heap->alias, index);
+        min_max_heap_node_remove_and_destroy_internal(heap, index);
     }
 }
 
@@ -244,7 +247,7 @@ min_max_heap_node_remove_max_internal(struct min_max_heap *heap)
     struct binary_heap *alias;
 
     assert(NULL != heap);
-    assert(NULL != heap->alias);
+    assert(binary_heap_structure_legal_p(heap->alias));
 
     alias = heap->alias;
     max_index = binary_heap_child_big_nice_index(alias, INDEX_ROOT);
@@ -253,7 +256,7 @@ min_max_heap_node_remove_max_internal(struct min_max_heap *heap)
         return binary_heap_node_remove_root(alias,
             &binary_heap_min_max_ordered_p);
     } else {
-        return min_max_heap_node_remove_internal(alias, max_index);
+        return min_max_heap_node_remove_internal(heap, max_index);
     }
 }
 
