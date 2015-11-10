@@ -99,6 +99,7 @@ static inline struct doubly_linked_list *
 maximal_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
 {
     struct collision_chain *tmp;
+    sint64 nice;
 
     assert(NULL != heap);
     assert(INDEX_INVALID != index);
@@ -106,11 +107,13 @@ maximal_heap_node_remove_internal(struct binary_heap *heap, uint32 index)
 
     tmp = HEAP_CHAIN(heap, index);
     HEAP_CHAIN(heap, index) = NULL;
+    nice = HEAP_NICE(heap, INDEX_ROOT) + 1;
+    assert(nice != HEAP_NICE_UPPER_LMT);
 
     /*
      * percolate current index node to root, then remove the root.
      */
-    index = binary_heap_node_reorder(heap, index, HEAP_NICE_UPPER_LMT,
+    index = binary_heap_node_reorder(heap, index, nice,
         &binary_heap_maximal_ordered_p);
     assert(INDEX_ROOT == index);
 

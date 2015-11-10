@@ -36,6 +36,7 @@ static inline struct doubly_linked_list * binary_heap_node_remove_root(struct bi
 static inline struct doubly_linked_list * binary_heap_node_root(struct binary_heap *heap);
 static inline struct doubly_linked_list * maximal_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
 static inline struct doubly_linked_list * min_max_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
+static inline struct doubly_linked_list * min_max_heap_node_remove_max_internal(struct min_max_heap *heap);
 static inline struct doubly_linked_list * minimal_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index);
