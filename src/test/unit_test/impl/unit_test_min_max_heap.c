@@ -478,3 +478,43 @@ unit_test_min_max_heap_node_decrease_nice(void)
     UNIT_TEST_RESULT(min_max_heap_node_decrease_nice, pass);
 }
 
+static inline void
+unit_test_min_max_heap_node_increase_nice(void)
+{
+    bool pass;
+    uint32 count;
+    uint32 offset;
+    sint64 nice;
+    struct min_max_heap *heap;
+    struct doubly_linked_list *tmp;
+
+    pass = true;
+    count = 0x32;
+    heap = NULL;
+    offset = 0;
+
+    min_max_heap_node_increase_nice(heap, 0, offset);
+
+    heap = test_min_max_heap_sample(0x342, 0x423a);
+    min_max_heap_node_increase_nice(heap, 0, offset);
+    offset = 0x14;
+
+    while (count--) {
+        tmp = min_max_heap_node_find(heap, count);
+        if (tmp) {
+            nice = (sint64)count + offset;
+            if (!min_max_heap_node_find(heap, nice)) {
+                min_max_heap_node_increase_nice(heap, count, offset);
+                RESULT_CHECK_pointer(tmp, min_max_heap_node_find(heap, nice), &pass);
+            } else {
+                min_max_heap_node_increase_nice(heap, count, offset);
+            }
+        } else {
+            min_max_heap_node_increase_nice(heap, count, offset);
+        }
+    }
+
+    min_max_heap_destroy(&heap);
+    UNIT_TEST_RESULT(min_max_heap_node_increase_nice, pass);
+}
+

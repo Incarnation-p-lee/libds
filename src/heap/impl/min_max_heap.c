@@ -354,3 +354,29 @@ min_max_heap_node_decrease_nice(struct min_max_heap *heap, sint64 nice,
     }
 }
 
+void
+min_max_heap_node_increase_nice(struct min_max_heap *heap, sint64 nice,
+    uint32 offset)
+{
+    uint32 index;
+    sint64 new_nice;
+
+    new_nice = nice + offset;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (0 == offset) {
+        pr_log_info("Zero offset of nice, nothing will be done.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice
+        || HEAP_NICE_UPPER_LMT == new_nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
+    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+    } else {
+        /*
+         * index of nice has been set already.
+         */
+        min_max_heap_node_nice_alter(heap, index, new_nice);
+    }
+}
+

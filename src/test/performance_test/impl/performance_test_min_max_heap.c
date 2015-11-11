@@ -369,3 +369,25 @@ performance_test_min_max_heap_node_decrease_nice(uint32 count)
     PERFORMANCE_TEST_RESULT(min_max_heap_node_decrease_nice);
 }
 
+static inline void
+performance_test_min_max_heap_node_increase_nice(uint32 count)
+{
+    struct min_max_heap *heap;
+
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
+
+    heap = test_min_max_heap_sample(count * 4, count * 2);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        min_max_heap_node_increase_nice(heap, count, 1);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    min_max_heap_destroy(&heap);
+    PERFORMANCE_TEST_RESULT(min_max_heap_node_increase_nice);
+}
+
