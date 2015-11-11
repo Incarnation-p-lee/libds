@@ -27,6 +27,7 @@ static inline void unit_test_min_max_heap_create(void);
 static inline void unit_test_min_max_heap_destroy(void);
 static inline void unit_test_min_max_heap_empty_p(void);
 static inline void unit_test_min_max_heap_full_p(void);
+static inline void unit_test_min_max_heap_node_decrease_nice(void);
 static inline void unit_test_min_max_heap_node_depth(void);
 static inline void unit_test_min_max_heap_node_find(void);
 static inline void unit_test_min_max_heap_node_find_max(void);

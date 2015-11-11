@@ -980,6 +980,7 @@ extern void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint
 extern void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
 extern void min_max_heap_cleanup(struct min_max_heap *heap);
 extern void min_max_heap_destroy(struct min_max_heap **heap);
+extern void min_max_heap_node_decrease_nice(struct min_max_heap *heap, sint64 nice, uint32 offset);
 extern void min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice);
 extern void min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice);
 extern void min_max_heap_node_remove_max_and_destroy(struct min_max_heap *heap);

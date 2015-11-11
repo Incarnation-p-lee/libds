@@ -298,3 +298,59 @@ min_max_heap_node_remove_max_and_destroy(struct min_max_heap *heap)
     }
 }
 
+static inline void
+min_max_heap_node_nice_alter(struct min_max_heap *heap, uint32 index,
+    sint64 new_nice)
+{
+    uint32 hit_index;
+    struct binary_heap *alias;
+    struct collision_chain *tmp;
+
+    assert(NULL != heap);
+    assert(binary_heap_structure_legal_p(heap->alias));
+    assert(binary_heap_index_legal_p(heap->alias, index));
+
+    alias = heap->alias;
+
+    if (!binary_heap_node_contains_p(alias, new_nice, &hit_index)) {
+        tmp = HEAP_CHAIN(alias, index);
+        HEAP_CHAIN(alias, index) = NULL;
+
+        index = binary_heap_node_reorder(alias, index, new_nice,
+            &binary_heap_min_max_ordered_p);
+        assert(NULL == HEAP_CHAIN(alias, index));
+
+        tmp->nice = new_nice;
+        HEAP_CHAIN(alias, index) = tmp;
+    } else {
+        binary_heap_node_collision_merge(alias, hit_index, index);
+        min_max_heap_node_remove_and_destroy_internal(heap, index);
+    }
+}
+
+void
+min_max_heap_node_decrease_nice(struct min_max_heap *heap, sint64 nice,
+    uint32 offset)
+{
+    uint32 index;
+    sint64 new_nice;
+
+    new_nice = nice - offset;
+
+    if (!heap) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+    } else if (0 == offset) {
+        pr_log_info("Zero offset of nice, nothing will be done.\n");
+    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice
+        || HEAP_NICE_LOWER_LMT == new_nice) {
+        pr_log_warn("Nice specificed reach the limit.\n");
+    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
+        pr_log_warn("No such the node of heap, nothing will be done.\n");
+    } else {
+        /*
+         * index of nice has been set already.
+         */
+        min_max_heap_node_nice_alter(heap, index, new_nice);
+    }
+}
+

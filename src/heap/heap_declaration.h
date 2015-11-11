@@ -58,6 +58,7 @@ static inline void binary_heap_node_remove_root_and_destroy(struct binary_heap *
 static inline void maximal_heap_build_internal(struct binary_heap *heap);
 static inline void maximal_heap_node_nice_alter(struct binary_heap *heap, uint32 index, sint64 new_nice);
 static inline void maximal_heap_node_remove_and_destroy_internal(struct binary_heap *heap, uint32 index);
+static inline void min_max_heap_node_nice_alter(struct min_max_heap *heap, uint32 index, sint64 new_nice);
 static inline void min_max_heap_node_remove_and_destroy_internal(struct min_max_heap *heap, uint32 index);
 static inline void min_max_heap_node_remove_max_and_destroy_internal(struct min_max_heap *heap);
 static inline void minimal_heap_build_internal(struct binary_heap *heap);
@@ -92,6 +93,7 @@ void maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice
 void maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap);
 void min_max_heap_cleanup(struct min_max_heap *heap);
 void min_max_heap_destroy(struct min_max_heap **heap);
+void min_max_heap_node_decrease_nice(struct min_max_heap *heap, sint64 nice, uint32 offset);
 void min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice);
 void min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice);
 void min_max_heap_node_remove_max_and_destroy(struct min_max_heap *heap);
