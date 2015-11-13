@@ -309,6 +309,7 @@ min_max_heap_node_nice_alter(struct min_max_heap *heap, uint32 index,
     assert(NULL != heap);
     assert(binary_heap_structure_legal_p(heap->alias));
     assert(binary_heap_index_legal_p(heap->alias, index));
+    assert(new_nice != HEAP_NICE(heap->alias, index));
 
     alias = heap->alias;
 

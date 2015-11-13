@@ -37,7 +37,7 @@ static inline struct doubly_linked_list * binary_heap_node_root(struct binary_he
 static inline struct doubly_linked_list * maximal_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
 static inline struct doubly_linked_list * min_max_heap_node_remove_internal(struct min_max_heap *heap, uint32 index);
 static inline struct doubly_linked_list * min_max_heap_node_remove_max_internal(struct min_max_heap *heap);
-static inline struct doubly_linked_list * minimal_heap_node_remove_internal(struct binary_heap *heap, uint32 index);
+static inline struct doubly_linked_list * minimal_heap_node_remove_internal(struct minimal_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index);
@@ -61,9 +61,9 @@ static inline void maximal_heap_node_remove_and_destroy_internal(struct binary_h
 static inline void min_max_heap_node_nice_alter(struct min_max_heap *heap, uint32 index, sint64 new_nice);
 static inline void min_max_heap_node_remove_and_destroy_internal(struct min_max_heap *heap, uint32 index);
 static inline void min_max_heap_node_remove_max_and_destroy_internal(struct min_max_heap *heap);
-static inline void minimal_heap_build_internal(struct binary_heap *heap);
-static inline void minimal_heap_node_nice_alter(struct binary_heap *heap, uint32 index, sint64 new_nice);
-static inline void minimal_heap_node_remove_and_destroy_internal(struct binary_heap *heap, uint32 index);
+static inline void minimal_heap_build_internal(struct minimal_heap *heap);
+static inline void minimal_heap_node_nice_alter(struct minimal_heap *heap, uint32 index, sint64 new_nice);
+static inline void minimal_heap_node_remove_and_destroy_internal(struct minimal_heap *heap, uint32 index);
 struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
 struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
 struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
