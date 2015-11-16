@@ -11,9 +11,8 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     small_child = binary_heap_child_small_nice_index(heap, index);
@@ -26,7 +25,8 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
         next = small_child;
         goto HEAP_UNORDERED;
     } else {
-        assert(!binary_heap_nice_repeated_p(heap, parent, small_child, nice));
+        assert(!binary_heap_nice_repeated_p(heap, parent, nice));
+        assert(!binary_heap_nice_repeated_p(heap, small_child, nice));
 
         return true;
     }
@@ -52,9 +52,8 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     big_child = binary_heap_child_big_nice_index(heap, index);
@@ -67,7 +66,8 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
         next = big_child;
         goto HEAP_UNORDERED;
     } else {
-        assert(!binary_heap_nice_repeated_p(heap, parent, big_child, nice));
+        assert(!binary_heap_nice_repeated_p(heap, parent, nice));
+        assert(!binary_heap_nice_repeated_p(heap, big_child, nice));
 
         return true;
     }
@@ -81,25 +81,24 @@ HEAP_UNORDERED:
 }
 
 static inline bool
-binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_idx,
-    uint32 down_idx, sint64 nice, uint32 *tgt_index)
+binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_index,
+    uint32 down_index, sint64 nice, uint32 *tgt_index)
 {
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != up_idx);
-    assert(INDEX_INVALID != down_idx);
-    assert(nice != HEAP_NICE(heap, up_idx));
-    assert(nice != HEAP_NICE(heap, down_idx));
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, up_index));
+    assert(binary_heap_index_legal_p(heap, down_index));
+    assert(nice != HEAP_NICE(heap, up_index));
+    assert(nice != HEAP_NICE(heap, down_index));
 
-    if (HEAP_NICE(heap, down_idx) > nice) {
+    if (HEAP_NICE(heap, down_index) > nice) {
         if (tgt_index) {
-            *tgt_index = down_idx;
+            *tgt_index = down_index;
         }
 
         return false;
-    } else if (HEAP_NICE(heap, up_idx) < nice) {
+    } else if (HEAP_NICE(heap, up_index) < nice) {
         if (tgt_index) {
-            *tgt_index = up_idx;
+            *tgt_index = up_index;
         }
 
         return false;
@@ -114,8 +113,7 @@ binary_heap_min_max_root_ordered_p(struct binary_heap *heap,
 {
     uint32 grandson;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
 
     grandson = binary_heap_grandchild_small_nice_index(heap, INDEX_ROOT);
 
@@ -136,8 +134,7 @@ binary_heap_min_max_root_parent_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 grandson;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
     assert(INDEX_ROOT == INDEX_PARENT(index));
 
     parent = INDEX_ROOT;
@@ -171,9 +168,8 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
     uint32 down_idx;
     uint32 grandparent;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
     assert(INDEX_INVALID != INDEX_GD_PARENT(index));
     assert(!binary_heap_node_child_exist_p(heap, index));
 
@@ -207,8 +203,7 @@ static inline uint32
 binary_heap_min_max_ordered_target_index(struct binary_heap *heap,
     uint32 grandparent, sint64 nice, uint32 grandson)
 {
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, grandparent));
     assert(binary_heap_index_legal_p(heap, grandson));
 
@@ -227,6 +222,7 @@ static inline bool
 binary_heap_min_max_nice_ordered_p(struct binary_heap *heap, sint64 nice,
     uint32 up_index, uint32 down_index, uint32 grandson, uint32 depth)
 {
+    assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, up_index));
     assert(binary_heap_index_legal_p(heap, down_index));
     assert(binary_heap_index_legal_p(heap, grandson));
@@ -258,9 +254,8 @@ binary_heap_min_max_ordered_p(struct binary_heap *heap,
     uint32 up_idx;
     uint32 down_idx;
 
-    assert(NULL != heap);
-    assert(NULL != heap->base);
-    assert(INDEX_INVALID != index);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
 
     if (INDEX_ROOT == index) {
         return binary_heap_min_max_root_ordered_p(heap, nice, tgt_index);

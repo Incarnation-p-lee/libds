@@ -50,7 +50,7 @@ binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
 {
     assert(binary_heap_structure_legal_p(heap));
 
-    if (INDEX_INVALID == index && index > INDEX_LAST(heap)) {
+    if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
         return false;
     } else {
         return true;
@@ -68,18 +68,14 @@ binary_heap_structure_legal_p(struct binary_heap *heap)
 }
 
 static inline bool
-binary_heap_nice_repeated_p(struct binary_heap *heap,
-    uint32 parent, uint32 small_child, sint64 nice)
+binary_heap_nice_repeated_p(struct binary_heap *heap, uint32 index, sint64 nice)
 {
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_nice_legal_p(nice));
 
-    if (INDEX_INVALID == parent && INDEX_INVALID == small_child) {
+    if (INDEX_INVALID == index) {
         return false;
-    } else if (INDEX_INVALID != parent && nice == HEAP_NICE(heap, parent)) {
-        return true;
-    } else if (INDEX_INVALID != small_child
-        && nice == HEAP_NICE(heap, small_child)) {
+    } else if (nice == HEAP_NICE(heap, index)) {
         return true;
     } else {
         return false;

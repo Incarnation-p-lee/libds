@@ -105,6 +105,7 @@ binary_heap_node_find(struct binary_heap *heap, sint64 nice)
     uint32 index;
 
     assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_nice_legal_p(nice));
 
     if (binary_heap_empty_p(heap)) {
         pr_log_info("Attempt to find node in empty heap.\n");
@@ -144,6 +145,7 @@ binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
     sint64 nice, void *val)
 {
     assert(NULL == heap->base[index]);
+    assert(binary_heap_nice_legal_p(nice));
     assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_structure_legal_p(heap));
 
@@ -208,10 +210,9 @@ binary_heap_node_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
     uint32 index_next;
     bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
 
-    assert(NULL != heap_order);
-    assert(NULL == HEAP_CHAIN(heap, index));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
+    assert(binary_heap_nice_legal_p(nice));
     assert(!binary_heap_node_contains_with_null_p(heap, nice));
 
     order = heap_order;
@@ -228,8 +229,8 @@ binary_heap_node_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
 static inline bool
 binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
 {
-    assert(NULL != heap);
-    assert(NULL != heap->base);
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
 
     return INDEX_L_CHILD(index) <= INDEX_LAST(heap) ? true : false;
 }
@@ -373,21 +374,21 @@ binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
 }
 
 /*
- * Merge s_idx indexed node to t_idx indexed node, then remove node s_idx.
+ * Merge s_index indexed node to t_index indexed node, then remove node s_index.
  */
 static inline void
-binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_idx,
-    uint32 s_idx)
+binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_index,
+    uint32 s_index)
 {
     struct doubly_linked_list *head;
 
-    assert(t_idx != s_idx);
+    assert(t_index != s_index);
     assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, t_idx));
-    assert(binary_heap_index_legal_p(heap, s_idx));
+    assert(binary_heap_index_legal_p(heap, t_index));
+    assert(binary_heap_index_legal_p(heap, s_index));
 
-    head = HEAP_LINK(heap, t_idx);
-    doubly_linked_list_merge(head, HEAP_LINK(heap, s_idx));
+    head = HEAP_LINK(heap, t_index);
+    doubly_linked_list_merge(head, HEAP_LINK(heap, s_index));
 }
 
 static inline void
