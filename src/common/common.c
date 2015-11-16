@@ -15,3 +15,4 @@
 #include "impl/memory_maps.c"
 #include "impl/prime.c"
 #include "impl/random.c"
+#include "impl/complain.c"

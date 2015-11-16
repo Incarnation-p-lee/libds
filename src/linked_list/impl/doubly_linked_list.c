@@ -23,9 +23,7 @@ void
 doubly_linked_list_node_initial(struct doubly_linked_list *list,
     void *val, uint32 sid)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list)) {
         list->sid = sid;
         list->next = list;
         list->previous = list;
@@ -44,11 +42,8 @@ doubly_linked_list_node_append(struct doubly_linked_list *node, void *val)
 {
     struct doubly_linked_list *next;
 
-    if (!node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else if (NULL == node->next || NULL == node->previous) {
-        pr_log_warn("Destroyed data structure.\n");
-    } else {
+    if (!complain_null_pointer_p(node) && !complain_null_pointer_p(node->next)
+        && !complain_null_pointer_p(node->previous)) {
         next = doubly_linked_list_node_create(val, 0u);
         doubly_linked_list_node_insert_after_internal(node, next);
     }
@@ -72,8 +67,8 @@ void
 doubly_linked_list_node_insert_after(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
-    if (!cur || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(cur) || complain_null_pointer_p(node)) {
+        return;
     } else if (doubly_linked_list_contains_p_internal(cur, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
@@ -101,8 +96,8 @@ void
 doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
-    if (!cur || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(cur) || complain_null_pointer_p(node)) {
+        return;
     } else if (doubly_linked_list_contains_p_internal(cur, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
@@ -114,9 +109,7 @@ void
 doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
-    if (!cur || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(cur) && !complain_null_pointer_p(node)) {
         doubly_linked_list_node_insert_before_internal(cur, node);
     }
 }
@@ -125,9 +118,7 @@ void
 doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur,
     struct doubly_linked_list *node)
 {
-    if (!cur || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(cur) && !complain_null_pointer_p(node)) {
         doubly_linked_list_node_insert_after_internal(cur, node);
     }
 }
@@ -137,8 +128,7 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
 {
     struct doubly_linked_list *copy;
 
-    if (!node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
         copy = doubly_linked_list_node_create(node->val, node->sid);
@@ -155,9 +145,7 @@ doubly_linked_list_destroy(struct doubly_linked_list **list)
     register struct doubly_linked_list *node;
     register struct doubly_linked_list **next;
 
-    if (!list || !*list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
         node = *list;
         /*
          * Do not call doubly_linked_list_remove_node for
@@ -195,8 +183,7 @@ doubly_linked_list_length_internal(struct doubly_linked_list *list)
 uint32
 doubly_linked_list_length(struct doubly_linked_list *list)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return 0u;
     } else {
         return doubly_linked_list_length_internal(list);
@@ -210,8 +197,7 @@ doubly_linked_list_node_by_index(struct doubly_linked_list *list,
     register struct doubly_linked_list *node;
     uint32 len;
 
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return NULL;
     } else {
         len = doubly_linked_list_length_internal(list);
@@ -256,8 +242,7 @@ bool
 doubly_linked_list_contains_p(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
-    if (!list || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
         return false;
     } else {
         return doubly_linked_list_contains_p_internal(list, node);
@@ -270,9 +255,7 @@ doubly_linked_list_serialize(struct doubly_linked_list *list)
     struct doubly_linked_list *node;
     uint32 index;
 
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list)) {
         index = 0;
         node = list;
 
@@ -310,8 +293,7 @@ doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
 struct doubly_linked_list *
 doubly_linked_list_node_remove(struct doubly_linked_list **node)
 {
-    if (!node || !*node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(node) || complain_null_pointer_p(*node)) {
         return NULL;
     } else {
         return doubly_linked_list_node_remove_internal(node);
@@ -323,23 +305,18 @@ doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node)
 {
     struct doubly_linked_list *removed;
 
-    if (!node || !*node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
         removed = doubly_linked_list_node_remove_internal(node);
         free_ds(removed);
     }
 }
-
 
 void
 doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void *))
 {
     register struct doubly_linked_list *node;
 
-    if (!list || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(handler)) {
         node = list;
 
         do {
@@ -355,8 +332,7 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
     register struct doubly_linked_list *iter;
     register struct doubly_linked_list *new;
 
-    if (!m || !n) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
         return NULL == m ? n : m;
     } else if (m == n) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
