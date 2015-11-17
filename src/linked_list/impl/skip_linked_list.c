@@ -30,9 +30,7 @@ void
 skip_linked_list_node_initial(struct skip_linked_list *list,
     void *val, sint32 key)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list)) {
         list->key = key;
         list->val = val;
         list->next = NULL;
@@ -45,9 +43,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
     register struct skip_linked_list *next;
     register struct skip_linked_list *node;
 
-    if (!*list || !list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(*list) && !complain_null_pointer_p(list)) {
         node = *list;
 
         while (node) {
@@ -82,8 +78,7 @@ skip_linked_list_length_internal(struct skip_linked_list *list)
 uint32
 skip_linked_list_length(struct skip_linked_list *list)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return 0u;
     } else {
         return skip_linked_list_length_internal(list);
@@ -93,8 +88,7 @@ skip_linked_list_length(struct skip_linked_list *list)
 struct skip_linked_list *
 skip_linked_list_node_find_key(struct skip_linked_list *list, sint32 key)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return NULL;
     } else {
         return skip_linked_list_node_find_key_internal(list, key,
@@ -147,8 +141,7 @@ skip_linked_list_key_contains_p_internal(struct skip_linked_list *list, sint32 k
 bool
 skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key)
 {
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return false;
     } else {
         return skip_linked_list_key_contains_p_internal(list, key);
@@ -232,8 +225,7 @@ skip_linked_list_node_insert(struct skip_linked_list **list,
 {
     struct skip_linked_list *inserted;
 
-    if (!list || !tgt) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list) || complain_null_pointer_p(tgt)) {
         return NULL;
     } else {
         inserted = skip_linked_list_node_insert_internal(list, tgt);
@@ -266,8 +258,7 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
     uint32 len;
     register struct skip_linked_list *iter;
 
-    if (!list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list)) {
         return NULL;
     } else {
         iter = list;
@@ -415,9 +406,7 @@ skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list,
 {
     struct skip_linked_list *removed;
 
-    if (!list || !*list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
         removed = skip_linked_list_node_remove_internal(list, key);
 
         if (!removed) {
@@ -434,8 +423,7 @@ skip_linked_list_node_remove(struct skip_linked_list **list,
 {
     struct skip_linked_list *removed;
 
-    if (!list || !*list) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(list) || complain_null_pointer_p(*list)) {
         return NULL;
     } else {
         removed = skip_linked_list_node_remove_internal(list, key);
@@ -454,9 +442,7 @@ skip_linked_list_iterate(struct skip_linked_list *list,
 {
     register struct skip_linked_list *iter;
 
-    if (!list || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(handler)) {
         iter = list;
 
         while(iter) {
@@ -472,8 +458,7 @@ skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
     struct skip_linked_list *iter;
     struct skip_linked_list *inserted;
 
-    if (!m || !n) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
         return NULL == m ? n : m;
     } else if (m == n) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
