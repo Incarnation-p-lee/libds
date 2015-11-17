@@ -7,10 +7,7 @@ hashing_table_create(uint32 size)
     if (!hash) {
         pr_log_err("Fail to get memory from system.\n");
     } else {
-        if (0 == size) {
-            size = DEFAULT_CHAIN_HASH_SIZE;
-            pr_log_warn("Hash table size not specified, use default size.\n");
-        }
+        assert(0 != size);
 
         hash->size = size;
         hashing_table_initial(hash);

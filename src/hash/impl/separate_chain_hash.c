@@ -7,13 +7,15 @@ separate_chain_hash_create(uint32 size)
     hash = malloc_ds(sizeof(*hash));
     if (!hash) {
         pr_log_err("Fail to get memory from system.\n");
-    } else {
-        table = hashing_table_create(size);
-        hashing_table_load_factor_set(table, DEFAULT_LOAD_FACTOR);
-        hashing_table_hash_function_set(table, hashing_function_polynomial);
-
-        hash->table = table;
+    } else if (0 == size) {
+        size = DEFAULT_CHAIN_HASH_SIZE;
     }
+
+    table = hashing_table_create(size);
+    hashing_table_load_factor_set(table, DEFAULT_LOAD_FACTOR);
+    hashing_table_hash_function_set(table, hashing_function_polynomial);
+
+    hash->table = table;
 
     return hash;
 }
@@ -46,24 +48,19 @@ separate_chain_hash_chain_destroy(struct separate_chain_hash *hash)
 void
 separate_chain_hash_destroy(struct separate_chain_hash **hash)
 {
-    if (!hash || !*hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
         separate_chain_hash_chain_destroy(*hash);
         hashing_table_destroy(&(*hash)->table);
 
         free_ds(*hash);
         *hash = NULL;
     }
-
-    return;
 }
 
 uint32
 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
 {
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(hash)) {
         return 0u;
     } else {
         return hashing_table_load_factor_calculate(hash->table);
@@ -119,9 +116,7 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
     struct doubly_linked_list *node;
     struct doubly_linked_list *head;
 
-    if (!hash || !*hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
         factor = separate_chain_hash_load_factor_calculate(*hash);
         if (factor >= separate_chain_hash_load_factor(*hash)) {
             pr_log_info("Reach the load factor limit, will rehashing.\n");
@@ -139,8 +134,6 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
             doubly_linked_list_node_insert_after_risky(head, node);
         }
     }
-
-    return;
 }
 
 void *
@@ -151,8 +144,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
     void *retval;
     uint32 index;
 
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(hash)) {
         return NULL;
     } else {
         retval = NULL;
@@ -177,6 +169,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
         if (NULL == retval) {
             pr_log_info("Not such a key in given hash.\n");
         }
+
         return retval;
     }
 }
@@ -190,9 +183,8 @@ separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
     uint32 index;
 
     retval = NULL;
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+
+    if (!complain_null_pointer_p(hash)) {
         index = separate_chain_hash_index_calculate(hash, key);
         head = separate_chain_hash_chain_head(hash, index);
         if (!head) {
@@ -255,8 +247,6 @@ separate_chain_hash_space_rehashing(struct separate_chain_hash *to,
         }
         iter++;
     }
-
-    return;
 }
 
 struct separate_chain_hash *
@@ -266,11 +256,11 @@ separate_chain_hash_rehashing(struct separate_chain_hash **hash)
     uint32 resize;
 
     new = NULL;
-    if (!hash || !*hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
-        resize = prime_numeral_next(separate_chain_hash_size(*hash));
+
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
+        resize = prime_numeral_next(separate_chain_hash_size(*hash) + 1);
         new = separate_chain_hash_create(resize);
+
         separate_chain_hash_space_rehashing(new, *hash);
         separate_chain_hash_destroy(hash);
     }

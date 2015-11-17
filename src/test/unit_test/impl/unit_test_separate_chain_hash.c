@@ -210,7 +210,7 @@ unit_test_separate_chain_hash_rehashing(void)
     tmp = separate_chain_hash_size(hash);
     new = separate_chain_hash_rehashing(&hash);
     RESULT_CHECK_pointer(NULL, hash, &pass);
-    RESULT_CHECK_uint32(prime_numeral_next(tmp),
+    RESULT_CHECK_uint32(prime_numeral_next(tmp + 1),
         separate_chain_hash_size(new), &pass);
 
     hash = separate_chain_hash_rehashing(&new);

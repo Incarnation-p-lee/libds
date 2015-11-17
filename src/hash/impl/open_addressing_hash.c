@@ -7,16 +7,19 @@ open_addressing_hash_create(uint32 size)
     hash = malloc_ds(sizeof(*hash));
     if (!hash) {
         pr_log_err("Fail to get memory from system.\n");
-    } else {
-        /*
-         * open addressing requires prime table size.
-         */
-        table = hashing_table_create(prime_numeral_next(size));
-        hashing_table_load_factor_set(table, OPEN_ADDRESSING_HASH_LOAD_FACTOR);
-        hashing_table_hash_function_set(table, hashing_function_open_addressing);
-
-        hash->table = table;
+    } else if (0 == size) {
+        size = DEFAULT_CHAIN_HASH_SIZE;
+        pr_log_warn("Hash table size not specified, use default size.\n");
     }
+
+    /*
+     * open addressing requires prime table size.
+     */
+    table = hashing_table_create(prime_numeral_next(size));
+    hashing_table_load_factor_set(table, OPEN_ADDRESSING_HASH_LOAD_FACTOR);
+    hashing_table_hash_function_set(table, hashing_function_open_addressing);
+
+    hash->table = table;
 
     return hash;
 }
@@ -24,9 +27,7 @@ open_addressing_hash_create(uint32 size)
 void
 open_addressing_hash_destroy(struct open_addressing_hash **hash)
 {
-    if (!hash || !*hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
         hashing_table_destroy(&(*hash)->table);
 
         free_ds(*hash);
@@ -39,8 +40,7 @@ open_addressing_hash_destroy(struct open_addressing_hash **hash)
 uint32
 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash)
 {
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(hash)) {
         return 0u;
     } else {
         return hashing_table_load_factor_calculate(hash->table);
@@ -96,9 +96,7 @@ open_addressing_hash_insert(struct open_addressing_hash **hash, void *key)
     uint32 index;
     uint32 iter;
 
-    if (!hash || !*hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
         factor = open_addressing_hash_load_factor_calculate(*hash);
         if (factor >= open_addressing_hash_load_factor(*hash)) {
             pr_log_info("Reach the load factor limit, will rehashing.\n");
@@ -107,7 +105,6 @@ open_addressing_hash_insert(struct open_addressing_hash **hash, void *key)
 
         iter = 0;
         do {
-            // FixMe -p=100000 
             assert(iter < open_addressing_hash_limit(*hash));
 
             index = open_addressing_hash_index_calculate(*hash, key, iter++);
@@ -124,9 +121,8 @@ open_addressing_hash_remove(struct open_addressing_hash *hash, void *key)
     uint32 iter;
 
     retval = NULL;
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+
+    if (!complain_null_pointer_p(hash)) {
         iter = 0;
         do {
             assert(iter < open_addressing_hash_limit(hash));
@@ -157,9 +153,8 @@ open_addressing_hash_find(struct open_addressing_hash *hash, void *key)
     uint32 iter;
 
     retval = NULL;
-    if (!hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+
+    if (!complain_null_pointer_p(hash)) {
         iter = 0;
         do {
             assert(iter < open_addressing_hash_limit(hash));
@@ -218,10 +213,9 @@ open_addressing_hash_rehashing(struct open_addressing_hash **hash)
     uint32 resize;
 
     new = NULL;
-    if (!*hash || !hash) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
-        resize = prime_numeral_next(open_addressing_hash_size(*hash));
+
+    if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
+        resize = prime_numeral_next(open_addressing_hash_size(*hash) + 1);
         new = open_addressing_hash_create(resize);
         open_addressing_hash_space_rehashing(new, *hash);
         open_addressing_hash_destroy(hash);

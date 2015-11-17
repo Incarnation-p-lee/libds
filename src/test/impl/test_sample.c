@@ -171,7 +171,7 @@ test_open_addressing_hash_sample(uint32 count)
     uint64 iter;
     uint64 limit;
 
-    hash = open_addressing_hash_create(0x11u);
+    hash = open_addressing_hash_create(0);
     heap = memory_maps_entry_find("[heap]");
 
     assert(NULL != hash);

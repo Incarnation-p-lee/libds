@@ -5,10 +5,11 @@ unit_test_open_addressing_hash_struct_field(void)
     uint32 tmp;
     struct open_addressing_hash *hash;
 
-    tmp = 0x3u;
+    tmp = 0x2u;
     pass = true;
 
     hash = open_addressing_hash_create(tmp);
+    tmp = prime_numeral_next(tmp);
     RESULT_CHECK_uint32(tmp, open_addressing_hash_size(hash), &pass);
 
     tmp = 100u;
@@ -31,6 +32,7 @@ unit_test_open_addressing_hash_create(void)
 
     hash = open_addressing_hash_create(tmp);
     tmp = DEFAULT_CHAIN_HASH_SIZE;
+    tmp = prime_numeral_next(tmp);
     RESULT_CHECK_uint32(tmp, open_addressing_hash_size(hash), &pass);
     tmp = OPEN_ADDRESSING_HASH_LOAD_FACTOR;
     RESULT_CHECK_uint32(tmp, open_addressing_hash_load_factor(hash), &pass);
@@ -207,10 +209,13 @@ unit_test_open_addressing_hash_rehashing(void)
     RESULT_CHECK_pointer(NULL, open_addressing_hash_rehashing(&hash), &pass);
 
     hash = test_open_addressing_hash_sample(tmp);
+    RESULT_CHECK_uint32(DEFAULT_CHAIN_HASH_SIZE,
+        open_addressing_hash_size(hash), &pass);
     tmp = open_addressing_hash_size(hash);
+
     new = open_addressing_hash_rehashing(&hash);
     RESULT_CHECK_pointer(NULL, hash, &pass);
-    RESULT_CHECK_uint32(prime_numeral_next(tmp),
+    RESULT_CHECK_uint32(prime_numeral_next(tmp + 1),
         open_addressing_hash_size(new), &pass);
 
     hash = open_addressing_hash_rehashing(&new);
