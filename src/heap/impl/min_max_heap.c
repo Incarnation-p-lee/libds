@@ -16,9 +16,7 @@ min_max_heap_create(uint32 capacity)
 void
 min_max_heap_destroy(struct min_max_heap **heap)
 {
-    if (!*heap || !heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
         free_ds(*heap);
         *heap = NULL;
@@ -28,8 +26,7 @@ min_max_heap_destroy(struct min_max_heap **heap)
 bool
 min_max_heap_empty_p(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return false;
     } else {
         return binary_heap_empty_p(heap->alias);
@@ -39,8 +36,7 @@ min_max_heap_empty_p(struct min_max_heap *heap)
 bool
 min_max_heap_full_p(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return true;
     } else {
         return binary_heap_full_p(heap->alias);
@@ -50,9 +46,7 @@ min_max_heap_full_p(struct min_max_heap *heap)
 void
 min_max_heap_cleanup(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(heap)) {
         binary_heap_cleanup(heap->alias);
     }
 }
@@ -60,8 +54,7 @@ min_max_heap_cleanup(struct min_max_heap *heap)
 struct doubly_linked_list *
 min_max_heap_node_find(struct min_max_heap *heap, sint64 nice)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
         pr_log_warn("Nice specificed reach the limit.\n");
@@ -80,8 +73,7 @@ min_max_heap_node_find(struct min_max_heap *heap, sint64 nice)
 struct doubly_linked_list *
 min_max_heap_node_find_min(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else {
         return binary_heap_node_root(heap->alias);
@@ -99,8 +91,7 @@ min_max_heap_node_find_max(struct min_max_heap *heap)
 {
     uint32 index;
 
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (INDEX_ROOT == INDEX_LAST(heap->alias)) {
         return HEAP_LINK(heap->alias, INDEX_ROOT);
@@ -115,8 +106,8 @@ min_max_heap_node_find_max(struct min_max_heap *heap)
 void
 min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
         pr_log_warn("Nice specificed reach the limit.\n");
     } else {
@@ -128,21 +119,20 @@ min_max_heap_node_insert(struct min_max_heap *heap, void *val, sint64 nice)
 uint32
 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return DEPTH_INVALID;
     } else if (INDEX_INVALID == index || index > INDEX_LAST(heap->alias)) {
         pr_log_warn("Illegal index value of heap.\n");
         return DEPTH_INVALID;
+    } else {
+        return binary_heap_node_depth(index);
     }
-
-    return binary_heap_node_depth(index);
 }
 
 struct doubly_linked_list *
 min_max_heap_node_remove_min(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
@@ -156,8 +146,8 @@ min_max_heap_node_remove_min(struct min_max_heap *heap)
 void
 min_max_heap_node_remove_min_and_destroy(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
     } else {
@@ -201,8 +191,7 @@ min_max_heap_node_remove(struct min_max_heap *heap, sint64 nice)
 {
     uint32 index;
 
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
         pr_log_warn("No such the node of heap, nothing will be done.\n");
@@ -231,8 +220,8 @@ min_max_heap_node_remove_and_destroy(struct min_max_heap *heap, sint64 nice)
 {
     uint32 index;
 
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
         pr_log_warn("No such the node of heap, nothing will be done.\n");
     } else {
@@ -263,8 +252,7 @@ min_max_heap_node_remove_max_internal(struct min_max_heap *heap)
 struct doubly_linked_list *
 min_max_heap_node_remove_max(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
@@ -289,8 +277,8 @@ min_max_heap_node_remove_max_and_destroy_internal(struct min_max_heap *heap)
 void
 min_max_heap_node_remove_max_and_destroy(struct min_max_heap *heap)
 {
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
     } else {
@@ -338,8 +326,8 @@ min_max_heap_node_decrease_nice(struct min_max_heap *heap, sint64 nice,
 
     new_nice = nice - offset;
 
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (0 == offset) {
         pr_log_info("Zero offset of nice, nothing will be done.\n");
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice
@@ -364,8 +352,8 @@ min_max_heap_node_increase_nice(struct min_max_heap *heap, sint64 nice,
 
     new_nice = nice + offset;
 
-    if (!heap) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(heap)) {
+        return;
     } else if (0 == offset) {
         pr_log_info("Zero offset of nice, nothing will be done.\n");
     } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice

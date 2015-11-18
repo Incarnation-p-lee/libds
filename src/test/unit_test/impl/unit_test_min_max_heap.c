@@ -222,7 +222,7 @@ unit_test_min_max_heap_node_depth(void)
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_uint32(1, min_max_heap_node_depth(heap, index), &pass);
+    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_node_depth(heap, index), &pass);
 
     heap = test_min_max_heap_sample(0x1345, 0x104E);
     index = INDEX_INVALID;
