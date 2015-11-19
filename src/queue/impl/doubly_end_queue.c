@@ -19,9 +19,7 @@ doubly_end_queue_create(void)
 void
 doubly_end_queue_destroy(struct doubly_end_queue **queue)
 {
-    if (!queue || !*queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(*queue)) {
         if (!doubly_end_queue_empty_p_internal(*queue)) {
             doubly_end_queue_cleanup_internal(*queue);
         }
@@ -37,8 +35,7 @@ doubly_end_queue_length(struct doubly_end_queue *queue)
     uint32 retval;
     struct doubly_end_queue_list *tmp;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return 0u;
     } else {
         if (doubly_end_queue_empty_p_internal(queue)) {
@@ -104,8 +101,7 @@ doubly_end_queue_empty_p_internal(struct doubly_end_queue *queue)
 bool
 doubly_end_queue_empty_p(struct doubly_end_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return false;
     } else {
         return doubly_end_queue_empty_p_internal(queue);
@@ -117,9 +113,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
 {
     struct doubly_end_queue_list *tmp;
 
-    if (!queue || !member) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         tmp = malloc_ds(sizeof(*tmp));
 
         if (!tmp) {
@@ -144,9 +138,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
 {
     struct doubly_end_queue_list *tmp;
 
-    if (!queue || !member) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         tmp = malloc_ds(sizeof(*tmp));
 
         if (!tmp) {
@@ -173,8 +165,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
     struct doubly_linked_list *link;
     void *retval;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return NULL;
     } else {
         if (doubly_end_queue_empty_p_internal(queue)) {
@@ -205,8 +196,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
     struct doubly_linked_list *link;
     void *retval;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return NULL;
     } else {
         if (doubly_end_queue_empty_p_internal(queue)) {
@@ -269,8 +259,8 @@ doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
 void
 doubly_end_queue_cleanup(struct doubly_end_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
+        return;
     } else if (!queue->head) {
         pr_log_info("Cleaned queue, nothing will be done.\n");
     } else {
@@ -283,8 +273,8 @@ doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *))
 {
     register struct doubly_end_queue_list *tmp;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
+        return;
     } else if (!queue->head) {
         pr_log_info("Iterate on _EMPTY_ queue, nothing will be done.\n");
     } else {
