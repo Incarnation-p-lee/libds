@@ -94,6 +94,8 @@ performance_test_doubly_end_queue_head_enter(uint32 count)
 {
     struct doubly_end_queue *queue;
 
+    count = count >> 4;
+    count = count == 0 ? 1000 : count;
     queue = doubly_end_queue_create();
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -133,6 +135,8 @@ performance_test_doubly_end_queue_tail_enter(uint32 count)
 {
     struct doubly_end_queue *queue;
 
+    count = count >> 4;
+    count = count == 0 ? 1000 : count;
     queue = doubly_end_queue_create();
 
     PERFORMANCE_TEST_CHECKPOINT;

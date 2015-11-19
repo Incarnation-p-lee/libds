@@ -27,9 +27,7 @@ array_queue_create(void)
 void
 array_queue_destroy(struct array_queue **queue)
 {
-    if(!queue || !*queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(*queue)) {
         free_ds((*queue)->space.base);
         free_ds(*queue);
         *queue = NULL;
@@ -108,9 +106,7 @@ array_queue_space_expand(struct array_queue *queue, uint32 extra)
 {
     uint32 increment;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue)) {
         if (!extra) {
             increment = array_queue_capacity_internal(queue) + EXPAND_QUEUE_SPACE_MIN;
             pr_log_info("Expanding size not specified, use default.\n");
@@ -133,8 +129,7 @@ array_queue_capacity_internal(struct array_queue *queue)
 uint32
 array_queue_capacity(struct array_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return 0x0u;
     } else {
         return array_queue_capacity_internal(queue);
@@ -155,8 +150,7 @@ array_queue_space_rest_internal(struct array_queue *queue)
 uint32
 array_queue_space_rest(struct array_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return 0x0u;
     } else {
         return array_queue_space_rest_internal(queue);
@@ -177,8 +171,7 @@ array_queue_full_p_internal(struct array_queue *queue)
 bool
 array_queue_full_p(struct array_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return true;
     } else {
         return array_queue_full_p_internal(queue);
@@ -205,8 +198,7 @@ array_queue_empty_p_internal(struct array_queue *queue)
 bool
 array_queue_empty_p(struct array_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return false;
     } else {
         return array_queue_empty_p_internal(queue);
@@ -216,9 +208,7 @@ array_queue_empty_p(struct array_queue *queue)
 void
 array_queue_enter(struct array_queue *queue, void *member)
 {
-    if (!queue || !member) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         if (array_queue_full_p_internal(queue)) {
             array_queue_space_expand(queue, 0u);
         }
@@ -240,8 +230,7 @@ array_queue_leave(struct array_queue *queue)
 {
     void *retval;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return NULL;
     } else if (array_queue_empty_p_internal(queue)) {
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
@@ -266,9 +255,7 @@ array_queue_cleanup(struct array_queue *queue)
 {
     uint32 capacity;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue)) {
         capacity = array_queue_capacity_internal(queue);
         memset(queue->space.base, 0, sizeof(void *) * capacity);
 
@@ -284,9 +271,7 @@ array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
     register void **iter;
     void **lmt;
 
-    if (!queue || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(handler)) {
         if (array_queue_empty_p_internal(queue)) {
             pr_log_info("Iterate on _EMPTY_ queue, nothing will be done.\n");
         } else {

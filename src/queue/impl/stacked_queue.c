@@ -20,9 +20,7 @@ stacked_queue_create(void)
 void
 stacked_queue_destroy(struct stacked_queue **queue)
 {
-    if (!queue || !*queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(*queue)) {
         array_stack_destroy(&(*queue)->enter);
         array_stack_destroy(&(*queue)->leave);
 
@@ -47,9 +45,7 @@ stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
 {
     uint32 increment;
 
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue)) {
         if (!extra) {
             increment = queue->dim;
             pr_log_info("Expanding size not specified, use default.\n");
@@ -70,8 +66,7 @@ stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
 uint32
 stacked_queue_capacity(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return 0;
     } else {
         return stacked_queue_dim(queue);
@@ -100,8 +95,7 @@ stacked_queue_space_rest_internal(struct stacked_queue *queue)
 uint32
 stacked_queue_space_rest(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return 0u;
     } else {
         return stacked_queue_space_rest_internal(queue);
@@ -114,8 +108,7 @@ stacked_queue_space_rest(struct stacked_queue *queue)
 bool
 stacked_queue_full_p(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return true;
     } else {
         return 0u == stacked_queue_space_rest_internal(queue) ? true : false;
@@ -137,8 +130,7 @@ stacked_queue_empty_p_internal(struct stacked_queue *queue)
 bool
 stacked_queue_empty_p(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return false;
     } else {
         return stacked_queue_empty_p_internal(queue);
@@ -148,9 +140,7 @@ stacked_queue_empty_p(struct stacked_queue *queue)
 void
 stacked_queue_enter(struct stacked_queue *queue, void *member)
 {
-    if (!queue || !member) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         if (array_stack_full_p(queue->enter)
             && array_stack_empty_p(queue->leave)) {
             pr_log_info("Empty leave stack, will dump enter stack to leave.\n");
@@ -188,8 +178,7 @@ stacked_queue_stack_dump(struct array_stack *from,
 void *
 stacked_queue_leave(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(queue)) {
         return NULL;
     } else {
         if (stacked_queue_empty_p_internal(queue)) {
@@ -209,9 +198,7 @@ stacked_queue_leave(struct stacked_queue *queue)
 void
 stacked_queue_cleanup(struct stacked_queue *queue)
 {
-    if (!queue) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue)) {
         array_stack_cleanup(queue->enter);
         array_stack_cleanup(queue->leave);
     }
@@ -220,9 +207,7 @@ stacked_queue_cleanup(struct stacked_queue *queue)
 void
 stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *))
 {
-    if (!queue || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(handler)) {
         array_stack_iterate(queue->leave, handler);
         array_stack_iterate(queue->enter, handler);
     }
