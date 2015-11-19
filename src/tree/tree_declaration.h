@@ -43,6 +43,7 @@ static inline struct binary_search_tree * binary_search_tree_right_child_find_mi
 static inline struct binary_search_tree * splay_tree_node_find_internal(struct binary_search_tree **tree, sint64 nice, struct binary_search_tree *root);
 static inline struct binary_search_tree * splay_tree_node_find_max_internal(struct binary_search_tree **tree, struct binary_search_tree *root);
 static inline struct binary_search_tree * splay_tree_node_find_min_internal(struct binary_search_tree **tree, struct binary_search_tree *root);
+static inline struct binary_search_tree * splay_tree_node_insert_internal(struct binary_search_tree **tree, struct binary_search_tree *node, struct binary_search_tree *root);
 static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_max(struct binary_search_tree **tree);
 static inline struct binary_search_tree ** binary_search_tree_node_find_ptr_to_min(struct binary_search_tree **tree);
 static inline void avl_tree_balance_insert_rotate_left(struct binary_search_tree **tree, struct binary_search_tree *node);
@@ -90,7 +91,6 @@ struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tr
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *tree);
 struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *tree, struct binary_search_tree *node);
 struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **tree, sint64 nice);
-struct binary_search_tree * splay_tree_node_insert_internal(struct binary_search_tree **tree, struct binary_search_tree *node, struct binary_search_tree *root);
 struct splay_tree * splay_tree_create(void);
 struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);

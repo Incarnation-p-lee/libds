@@ -537,7 +537,7 @@ splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node)
     }
 }
 
-struct binary_search_tree *
+static inline struct binary_search_tree *
 splay_tree_node_insert_internal(struct binary_search_tree **tree,
     struct binary_search_tree *node,
     struct binary_search_tree *root)

@@ -830,7 +830,6 @@ extern struct binary_search_tree * binary_search_tree_node_find(struct binary_se
 extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *tree);
 extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **tree, sint64 nice);
-extern struct binary_search_tree * splay_tree_node_insert_internal(struct binary_search_tree **tree, struct binary_search_tree *node, struct binary_search_tree *root);
 extern struct splay_tree * splay_tree_create(void);
 extern struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 extern struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);
