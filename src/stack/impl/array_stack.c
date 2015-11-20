@@ -32,9 +32,7 @@ array_stack_create(void)
 void
 array_stack_destroy(struct array_stack **stack)
 {
-    if (!stack || !*stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
         free_ds((*stack)->space.bp);
         free_ds(*stack);
         *stack = NULL;
@@ -75,8 +73,8 @@ array_stack_space_expand(struct array_stack *stack, uint32 extra)
 {
     uint32 increment;
 
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
+        return;
     } else if (extra + stack->space.dim < stack->space.dim) {
         pr_log_warn("Expanding size overflow, nothing will be done.\n");
     } else {
@@ -106,8 +104,7 @@ array_stack_full_p_internal(struct array_stack *stack)
 bool
 array_stack_full_p(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return true;
     } else {
         return array_stack_full_p_internal(stack);
@@ -121,8 +118,7 @@ array_stack_full_p(struct array_stack *stack)
 uint32
 array_stack_capacity(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return 0u;
     } else {
         return stack->space.dim;
@@ -154,8 +150,7 @@ array_stack_space_rest_internal(struct array_stack *stack)
 uint32
 array_stack_space_rest(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return 0;
     } else {
         return array_stack_space_rest_internal(stack);
@@ -169,9 +164,7 @@ array_stack_space_rest(struct array_stack *stack)
 void
 array_stack_push(struct array_stack *stack, void *member)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack)) {
         if (array_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
             array_stack_space_expand_internal(stack, EXPAND_STACK_SPACE_MIN);
@@ -188,8 +181,7 @@ array_stack_push(struct array_stack *stack, void *member)
 void *
 array_stack_pop(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return NULL;
     } else if (array_stack_empty_p_internal(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
@@ -215,8 +207,7 @@ array_stack_empty_p_internal(struct array_stack *stack)
 bool
 array_stack_empty_p(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return false;
     } else if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
         pr_log_err("Array stack overflow.");
@@ -232,9 +223,7 @@ array_stack_empty_p(struct array_stack *stack)
 void
 array_stack_cleanup(struct array_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack)) {
         memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = stack->space.bp;
     }
@@ -249,10 +238,10 @@ array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
 {
     register void **iter;
 
-    if (!stack || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
-        /* iterate from sp to bp */
+    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(handler)) {
+        /* 
+         * iterate from sp to bp
+         */
         iter = stack->space.sp;
         while(iter != stack->space.bp) {
             handler(*(--iter));

@@ -56,6 +56,8 @@ performance_test_linked_stack_space_expand(uint32 count)
 {
     struct linked_stack *stack;
 
+    count = count >> 4;
+    count = 0 == count ? 1000 : count;
     stack = linked_stack_create();
 
     PERFORMANCE_TEST_CHECKPOINT;
