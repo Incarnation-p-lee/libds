@@ -45,9 +45,7 @@ avl_tree_node_create(void *val, sint64 nice)
 void
 avl_tree_initial(struct avl_tree *tree)
 {
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree)) {
         tree->height = 0;
         binary_search_tree_initial_internal(&tree->alias);
     }
@@ -56,9 +54,7 @@ avl_tree_initial(struct avl_tree *tree)
 void
 avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
 {
-    if (!node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(node)) {
         node->height = 0;
         binary_search_tree_node_initial_internal(&node->alias, val, nice);
     }
@@ -96,9 +92,7 @@ avl_tree_destroy_internal(struct avl_tree *tree)
 void
 avl_tree_destroy(struct avl_tree **tree)
 {
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
         avl_tree_destroy_internal(*tree);
         *tree = NULL;
     }
@@ -107,7 +101,7 @@ avl_tree_destroy(struct avl_tree **tree)
 struct avl_tree *
 avl_tree_ptr_container_of(struct binary_search_tree *node)
 {
-    if (!node) {
+    if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
         return CONTAINER_OF(node, struct avl_tree, alias);
@@ -119,8 +113,7 @@ avl_tree_node_find(struct avl_tree *tree, sint64 nice)
 {
     struct binary_search_tree *found;
 
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return NULL;
     } else {
         found = binary_search_tree_node_find_internal(&tree->alias, nice);
@@ -133,8 +126,7 @@ avl_tree_node_find_min(struct avl_tree *tree)
 {
     struct binary_search_tree *found;
 
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return NULL;
     } else {
         found = binary_search_tree_node_find_min_internal(&tree->alias);
@@ -147,8 +139,7 @@ avl_tree_node_find_max(struct avl_tree *tree)
 {
     struct binary_search_tree *found;
 
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return NULL;
     } else {
         found = binary_search_tree_node_find_max_internal(&tree->alias);
@@ -159,8 +150,7 @@ avl_tree_node_find_max(struct avl_tree *tree)
 bool
 avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node)
 {
-    if (!tree || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(node)) {
         return false;
     } else {
         return binary_search_tree_node_contains_p_internal(&tree->alias,
@@ -191,16 +181,15 @@ avl_tree_balanced_internal_p(struct avl_tree *tree)
                 return true;
             }
         }
+    } else {
+        return true;
     }
-
-    return true;
 }
 
 bool
 avl_tree_balanced_p(struct avl_tree *tree)
 {
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return true;
     } else {
         return avl_tree_balanced_internal_p(tree);
@@ -448,7 +437,7 @@ avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice)
     struct binary_search_tree *node;
     struct binary_search_tree *removed;
 
-    if (!tree || !*tree) {
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         node = *tree;
@@ -500,8 +489,7 @@ avl_tree_node_remove(struct avl_tree **tree, sint64 nice)
     struct binary_search_tree *tmp;
     struct binary_search_tree *removed;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         tmp = &(*tree)->alias;
@@ -522,9 +510,7 @@ avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice)
     struct binary_search_tree *tmp;
     struct binary_search_tree *removed;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
         tmp = &(*tree)->alias;
         removed = avl_tree_node_remove_internal(&tmp, nice);
         *tree = avl_tree_ptr_container_of(tmp);
@@ -600,8 +586,8 @@ avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node)
     struct binary_search_tree *tmp;
     struct binary_search_tree *inserted;
 
-    if (!tree || !node || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(node)
+        || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         tmp = &(*tree)->alias;
@@ -616,9 +602,7 @@ void
 avl_tree_iterate(struct avl_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree)) {
         binary_search_tree_iterate(&tree->alias, handle, order);
     }
 }
