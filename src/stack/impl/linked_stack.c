@@ -51,9 +51,7 @@ linked_stack_destroy(struct linked_stack **stack)
 {
     register struct linked_stack_space *node;
 
-    if (!stack || !*stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
         node = (*stack)->base;
 
         while (node) {
@@ -179,10 +177,7 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
 void
 linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
-
+    if (!complain_null_pointer_p(stack)) {
         if (0 == dim) {
             pr_log_warn("Expanding size zero, nothing will be done.\n");
         } else {
@@ -206,8 +201,7 @@ linked_stack_full_p_internal(struct linked_stack *stack)
 bool
 linked_stack_full_p(struct linked_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return true;
     } else {
         return linked_stack_full_p_internal(stack);
@@ -240,8 +234,7 @@ linked_stack_space_rest_internal(struct linked_stack *stack)
 uint32
 linked_stack_space_rest(struct linked_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return 0u;
     } else {
         return linked_stack_space_rest_internal(stack);
@@ -258,18 +251,19 @@ linked_stack_capacity(struct linked_stack *stack)
     uint32 total;
     struct linked_stack_space *st;
 
-    total = 0;
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
+        return 0u;
     } else {
+        total = 0u;
         st = stack->base;
+
         do {
             total += linked_stack_space_node_capacity(st);
             st = linked_stack_space_next_node(st);
         } while (st != stack->base);
-    }
 
-    return total;
+        return total;
+    }
 }
 
 static inline bool
@@ -308,22 +302,18 @@ linked_stack_space_node_capacity(struct linked_stack_space *node)
 static inline uint32
 linked_stack_space_node_space_rest(struct linked_stack_space *node)
 {
-    uint32 rest;
     void **limit;
     void **tmp;
 
     assert(NULL != node);
 
-    rest = 0;
     tmp = node->space.sp;
     limit = node->space.bp + node->space.dim;
     if ((sint32)(tmp - limit) > 0) {
         pr_log_err("Array stack overflow.");
     } else {
-        rest = (uint32)(limit - tmp);
+        return (uint32)(limit - tmp);
     }
-
-    return rest;
 }
 
 /*
@@ -333,9 +323,7 @@ linked_stack_space_node_space_rest(struct linked_stack_space *node)
 void
 linked_stack_push(struct linked_stack *stack, void *member)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack)) {
         if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
             linked_stack_space_expand_internal(stack, EXPAND_STACK_SPACE_MIN);
@@ -348,8 +336,6 @@ linked_stack_push(struct linked_stack *stack, void *member)
 
         *stack->top->space.sp++ = member;
     }
-
-    return;
 }
 
 /*
@@ -359,23 +345,19 @@ linked_stack_push(struct linked_stack *stack, void *member)
 void *
 linked_stack_pop(struct linked_stack *stack)
 {
-    void *data;
-
-    data = NULL;
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
+        return NULL;
     } else if (linked_stack_empty_p_internal(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
+        return NULL;
     } else {
         if (linked_stack_space_node_empty_p(stack->top)) {
             pr_log_info("Stack node is empty, will move to previous node.\n");
             stack->top = linked_stack_space_previous_node(stack->top);
         }
 
-        data = *(--stack->top->space.sp);
+        return *(--stack->top->space.sp);
     }
-
-    return data;
 }
 
 static inline bool
@@ -400,8 +382,7 @@ linked_stack_empty_p_internal(struct linked_stack *stack)
 bool
 linked_stack_empty_p(struct linked_stack *stack)
 {
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(stack)) {
         return false;
     } else {
         return linked_stack_empty_p_internal(stack);
@@ -417,9 +398,7 @@ linked_stack_cleanup(struct linked_stack *stack)
 {
     register struct linked_stack_space *iter;
 
-    if (!stack) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack)) {
         stack->top = stack->base;
         iter = stack->base;
 
@@ -441,9 +420,7 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
     register struct linked_stack_space *node;
     struct linked_stack_space *limit;
 
-    if (!stack || !handler) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(handler)) {
         node = stack->top;
         limit = linked_stack_space_previous_node(stack->base);
 

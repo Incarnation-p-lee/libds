@@ -49,9 +49,7 @@ splay_tree_initial(struct splay_tree *tree)
 void
 splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice)
 {
-    if (!node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(node)) {
         binary_search_tree_node_initial(&node->alias, val, nice);
     }
 }
@@ -59,7 +57,7 @@ splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice)
 struct splay_tree *
 splay_tree_ptr_container_of(struct binary_search_tree *node)
 {
-    if (!node) {
+    if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
         return CONTAINER_OF(node, struct splay_tree, alias);
@@ -98,9 +96,7 @@ splay_tree_destroy_internal(struct splay_tree *tree)
 void
 splay_tree_destroy(struct splay_tree **tree)
 {
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
         splay_tree_destroy_internal(*tree);
         *tree = NULL;
     }
@@ -116,7 +112,7 @@ splay_tree_node_find_internal(struct binary_search_tree **tree, sint64 nice,
 
     node = *tree;
 
-    if (!node) {
+    if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
         if (nice < node->chain.nice) {
@@ -145,8 +141,7 @@ splay_tree_node_find(struct splay_tree **tree, sint64 nice)
     struct binary_search_tree *root;
     struct binary_search_tree *found;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         root = &(*tree)->alias;
@@ -200,8 +195,7 @@ splay_tree_node_find_min(struct splay_tree **tree)
 {
     struct binary_search_tree *root;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         root = &(*tree)->alias;
@@ -255,8 +249,7 @@ splay_tree_node_find_max(struct splay_tree **tree)
 {
     struct binary_search_tree *root;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         root = &(*tree)->alias;
@@ -517,8 +510,7 @@ splay_tree_balance_doubly_splaying_right(struct binary_search_tree **tree)
 sint32
 splay_tree_height(struct splay_tree *tree)
 {
-    if (NULL == tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return -1;
     } else {
         return binary_search_tree_height_internal(&tree->alias);
@@ -528,8 +520,7 @@ splay_tree_height(struct splay_tree *tree)
 bool
 splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node)
 {
-    if (NULL == tree || NULL == node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(node)) {
         return false;
     } else {
         return binary_search_tree_node_contains_p_internal(&tree->alias,
@@ -580,8 +571,8 @@ splay_tree_node_insert(struct splay_tree **tree, struct splay_tree *node)
     struct binary_search_tree *tmp;
     struct binary_search_tree *inserted;
 
-    if (!tree || !*tree || !node) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)
+        || complain_null_pointer_p(node)) {
         return NULL;
     } else {
         tmp = &(*tree)->alias;
@@ -621,8 +612,7 @@ splay_tree_node_remove(struct splay_tree **tree, sint64 nice)
 {
     struct splay_tree *removed;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
         return NULL;
     } else {
         removed = splay_tree_node_remove_internal(tree, nice);
@@ -640,9 +630,7 @@ splay_tree_node_remove_and_destroy(struct splay_tree **tree, sint64 nice)
 {
     struct splay_tree *removed;
 
-    if (!tree || !*tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
-    } else {
+    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
         removed = splay_tree_node_remove_internal(tree, nice);
 
         if (NULL == removed) {
@@ -657,8 +645,8 @@ void
 splay_tree_iterate(struct splay_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    if (NULL == tree || NULL == handle) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree) || complain_null_pointer_p(handle)) {
+        return;
     } else if (!LEGAL_ORDER_P(order)) {
         pr_log_warn("illegal oder type of iterate.\n");
     } else {
