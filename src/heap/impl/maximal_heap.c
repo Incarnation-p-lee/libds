@@ -280,7 +280,7 @@ maximal_heap_build_internal(struct maximal_heap *heap)
     alias = heap->alias;
     iter = HEAP_SIZE(alias) / 2;
 
-    while (index != INDEX_INVALID) {
+    while (iter != INDEX_INVALID) {
         index = iter;
         tmp = HEAP_CHAIN(alias, index);
         nice = HEAP_NICE(alias, index);
