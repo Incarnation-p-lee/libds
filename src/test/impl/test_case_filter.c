@@ -67,11 +67,10 @@ test_case_filter_initial(void)
     struct test_case_filter *filter;
 
     filter = malloc_ds(sizeof(*filter));
-    if (!filter) {
-        pr_log_err("Fail to get memory from system.\n");
-    }
 
-    memset(filter, '\0', sizeof(*filter));
+    if (!complain_no_memory_p(filter)) {
+        memset(filter, '\0', sizeof(*filter));
+    }
 
     return filter;
 }

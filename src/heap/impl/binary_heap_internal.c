@@ -9,13 +9,10 @@ binary_heap_create(uint32 capacity)
     }
 
     heap = malloc_ds(sizeof(*heap));
-    if (!heap) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(heap)) {
         heap->base = malloc_ds(sizeof(*heap->base[0]) * u_offset(capacity, 1));
-        if (!heap->base) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+
+        if (!complain_no_memory_p(heap->base)) {
             binary_heap_initial(heap, capacity);
         }
     }

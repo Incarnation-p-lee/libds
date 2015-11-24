@@ -4,6 +4,7 @@
 #define DEFAULT_QUEUE_SPACE_SIZE   1024
 #define EXPAND_QUEUE_SPACE_MIN     32
 
+extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern bool array_stack_full_p(struct array_stack *stack);
 extern bool array_stack_empty_p(struct array_stack *stack);

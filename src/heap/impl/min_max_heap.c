@@ -4,9 +4,7 @@ min_max_heap_create(uint32 capacity)
     struct min_max_heap *heap;
 
     heap = malloc_ds(sizeof(*heap));
-    if (!heap) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(heap)) {
         heap->alias = binary_heap_create(capacity);
     }
 

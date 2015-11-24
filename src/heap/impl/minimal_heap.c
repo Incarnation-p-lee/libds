@@ -4,9 +4,7 @@ minimal_heap_create(uint32 capacity)
     struct minimal_heap *heap;
 
     heap = malloc_ds(sizeof(*heap));
-    if (!heap) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(heap)) {
         heap->alias = binary_heap_create(capacity);
     }
 
@@ -315,22 +313,19 @@ minimal_heap_build(struct collision_chain **chain_array, uint32 size)
     } else {
         heap = malloc_ds(sizeof(*heap));
 
-        if (!heap) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(heap)) {
             heap->alias = malloc_ds(sizeof(*heap->alias));
 
-            if (!heap->alias) {
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
+            if (!complain_no_memory_p(heap->alias)) {
                 heap->alias->base = chain_array;
                 heap->alias->capacity = size - 1;
                 heap->alias->size = size - 1;
 
                 minimal_heap_build_internal(heap);
-                return heap;
             }
         }
+
+        return heap;
     }
 }
 

@@ -5,8 +5,11 @@ separate_chain_hash_create(uint32 size)
     struct separate_chain_hash *hash;
 
     hash = malloc_ds(sizeof(*hash));
-    if (!hash) {
-        pr_log_err("Fail to get memory from system.\n");
+    if (complain_no_memory_p(hash)) {
+        /*
+         * Will not reach here.
+         */
+        return NULL;
     } else if (0 == size) {
         size = DEFAULT_CHAIN_HASH_SIZE;
     }

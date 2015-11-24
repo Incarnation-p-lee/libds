@@ -5,9 +5,7 @@ stacked_queue_create(void)
 
     queue = malloc_ds(sizeof(*queue));
 
-    if (!queue) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(queue)) {
         queue->sid = 0x0u;
         queue->enter = array_stack_create();
         queue->leave = array_stack_create();

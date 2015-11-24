@@ -32,6 +32,7 @@
 #define u_offset(n, offset)            (n + offset)
 
 /* EXTERNAL FUNCTIONS */
+extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);

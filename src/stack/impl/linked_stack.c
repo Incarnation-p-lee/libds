@@ -8,18 +8,13 @@ linked_stack_create(void)
     struct linked_stack *stack;
 
     stack = malloc_ds(sizeof(*stack));
-    if (!stack) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(stack)) {
         stack->sid = 0u;
         stack->base = malloc_ds(sizeof(*stack->base));
         /*
          * struct linked_space
          */
-        if (!stack->base) {
-            free_ds(stack);
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(stack->base)) {
             stack->top = stack->base;
             doubly_linked_list_initial(&stack->base->link);
             /*
@@ -28,11 +23,7 @@ linked_stack_create(void)
             stack->base->space.bp = malloc_ds(sizeof(void *) *
                 DEFAULT_STACK_SPACE_SIZE);
 
-            if (!stack->base->space.bp) {
-                free_ds(stack->base);
-                free_ds(stack);
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
+            if (!complain_no_memory_p(stack->base->space.bp)) {
                 stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
                 stack->base->space.sp = stack->base->space.bp;
             }
@@ -153,16 +144,11 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
 
     node = malloc_ds(sizeof(*node));
 
-    if (!node) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(node)) {
         doubly_linked_list_initial(&node->link);
         node->space.bp = malloc_ds(sizeof(void *) * dim);
 
-        if (!node->space.bp) {
-            free_ds(node);
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(node->space.bp)) {
             node->space.dim = dim;
             node->space.sp = node->space.bp;
             doubly_linked_list_node_insert_after_risky(&last->link, &node->link);

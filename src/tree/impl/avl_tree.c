@@ -4,15 +4,11 @@ avl_tree_create(void)
     struct avl_tree *tree;
 
     tree = malloc_ds(sizeof(*tree));
-    if (!tree) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(tree)) {
         tree->height = 0;
         tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
 
-        if (!tree->alias.chain.link) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(tree->alias.chain.link)) {
             binary_search_tree_initial_internal(&tree->alias);
         }
     }
@@ -26,15 +22,11 @@ avl_tree_node_create(void *val, sint64 nice)
     struct avl_tree *tree;
 
     tree = malloc_ds(sizeof(*tree));
-    if (!tree) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(tree)) {
         tree->height = 0;
         tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
 
-        if (!tree->alias.chain.link) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(tree->alias.chain.link)) {
             binary_search_tree_node_initial_internal(&tree->alias, val, nice);
         }
     }

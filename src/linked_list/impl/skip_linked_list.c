@@ -10,9 +10,7 @@ skip_linked_list_node_create(void *val, sint32 key)
     struct skip_linked_list *list;
 
     list = malloc_ds(sizeof(*list));
-    if (!list) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(list)) {
         memset(list, 0, sizeof(*list));
         skip_linked_list_node_initial(list, val, key);
     }

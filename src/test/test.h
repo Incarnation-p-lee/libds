@@ -5,6 +5,8 @@
 #define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
     SYM_2_STR(symbol), pass)
 
+extern bool complain_no_memory_p(void *ptr);
+
 struct test_case_filter {
     char category[FILTER_LEN];
     char implement[FILTER_LEN];
