@@ -427,9 +427,6 @@ unit_test_minimal_heap_build(void)
     chain_size = minimal_heap_size(heap) + 1;
     chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
 
-    chain_array[0] = HEAP_CHAIN(heap->alias, INDEX_ROOT);
-    RESULT_CHECK_pointer(NULL, minimal_heap_build(chain_array, 2), &pass);
-
     chain_array[0] = NULL;
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
 

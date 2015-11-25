@@ -1,11 +1,13 @@
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
-#define HEAP_NICE_UPPER_LMT            0x7fffffffffffffff
-#define HEAP_NICE_LOWER_LMT            (-HEAP_NICE_UPPER_LMT - 1)
+/*
+ * HEAP NICE LIMITS not reach the limitation of sint64
+ */
+#define HEAP_NICE_UPPER_LMT            0x7ffffffffffffff
+#define HEAP_NICE_LOWER_LMT            -HEAP_NICE_UPPER_LMT
 
 #define DEFAULT_BINARY_HEAP_SIZE       4097
-
 #define DEPTH_INVALID                  0xffffffffu
 
 #define INDEX_INVALID                  0u
@@ -32,6 +34,7 @@
 #define u_offset(n, offset)            (n + offset)
 
 /* EXTERNAL FUNCTIONS */
+extern bool complain_zero_size_p(uint32 size);
 extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);

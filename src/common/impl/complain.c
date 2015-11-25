@@ -19,3 +19,14 @@ complain_no_memory_p(void *ptr)
     }
 }
 
+bool
+complain_zero_size_p(uint32 size)
+{
+    if (0 == size) {
+        pr_log_warn("Zero size detected.\n");
+        return true;
+    } else {
+        return false;
+    }
+}
+

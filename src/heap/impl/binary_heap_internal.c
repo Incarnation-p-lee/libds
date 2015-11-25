@@ -190,6 +190,7 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
         index++;
     }
 
+    pr_log_warn("No such the node with nice specified\n");
     return false;
 }
 
@@ -488,5 +489,16 @@ binary_heap_node_depth(uint32 index)
     }
 
     return depth;
+}
+
+static inline bool
+binary_heap_nice_legal_p(sint64 nice)
+{
+    if (nice > HEAP_NICE_LOWER_LMT && nice < HEAP_NICE_UPPER_LMT) {
+        return true;
+    } else {
+        pr_log_warn("Nice specificed reach the limit.\n");
+        return false;
+    }
 }
 

@@ -871,11 +871,13 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
-#define HEAP_NICE_UPPER_LMT            0x7fffffffffffffff
-#define HEAP_NICE_LOWER_LMT            (-HEAP_NICE_UPPER_LMT - 1)
+/*
+ * HEAP NICE LIMITS not reach the limitation of sint64
+ */
+#define HEAP_NICE_UPPER_LMT            0x7ffffffffffffff
+#define HEAP_NICE_LOWER_LMT            -HEAP_NICE_UPPER_LMT
 
 #define DEFAULT_BINARY_HEAP_SIZE       4097
-
 #define DEPTH_INVALID                  0xffffffffu
 
 #define INDEX_INVALID                  0u

@@ -36,16 +36,6 @@ binary_heap_node_contains_with_null_p(struct binary_heap *heap, sint64 nice)
 }
 
 static inline bool
-binary_heap_nice_legal_p(sint64 nice)
-{
-    if (nice > HEAP_NICE_LOWER_LMT && nice < HEAP_NICE_UPPER_LMT) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-static inline bool
 binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
 {
     assert(binary_heap_structure_legal_p(heap));
