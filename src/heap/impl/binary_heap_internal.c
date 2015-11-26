@@ -502,3 +502,16 @@ binary_heap_nice_legal_p(sint64 nice)
     }
 }
 
+static inline bool
+binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
+{
+    assert(binary_heap_structure_legal_p(heap));
+
+    if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
+        pr_log_warn("Illegal index value of heap.\n");
+        return false;
+    } else {
+        return true;
+    }
+}
+

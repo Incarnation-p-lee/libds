@@ -36,18 +36,6 @@ binary_heap_node_contains_with_null_p(struct binary_heap *heap, sint64 nice)
 }
 
 static inline bool
-binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
-{
-    assert(binary_heap_structure_legal_p(heap));
-
-    if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-static inline bool
 binary_heap_structure_legal_p(struct binary_heap *heap)
 {
     if (NULL != heap && NULL != heap->base) {
