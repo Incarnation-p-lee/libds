@@ -221,5 +221,26 @@ struct min_max_heap {
     struct binary_heap *alias;
 };
 
+/*
+ * leftist heap
+ *     <null path length>, the shortest length from one node to other node
+ *     who hasn't two child.
+ *     Foreach node in leftist heap, the <null path length> of left child >=
+ *     the <null path length> of right child.
+ *     This structure can finish heap merge in O(N).
+ *     For example:
+ *           1
+ *          / \
+ *         1   0
+ *        / \
+ *       0   0
+ *          /
+ *         0
+ */
+struct leftist_heap {
+    sint32                    npl; /* null path length, NULL node is -1 */
+    struct binary_search_tree alias;
+};
+
 #endif
 

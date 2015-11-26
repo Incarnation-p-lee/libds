@@ -3,8 +3,7 @@ binary_heap_create(uint32 capacity)
 {
     struct binary_heap *heap;
 
-    if (0 == capacity) {
-        pr_log_warn("Cannot create zero binary heap, use default capacity\n");
+    if (complain_zero_size_p(capacity)) {
         capacity = DEFAULT_BINARY_HEAP_SIZE;
     }
 
@@ -353,7 +352,7 @@ binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
     uint32 big_index;
     uint32 rest;
 
-    assert(0 != count);
+    assert(!complain_zero_size_p(count));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
