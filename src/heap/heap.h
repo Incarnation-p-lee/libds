@@ -31,6 +31,8 @@
 #define HEAP_SIZE(heap)                (heap)->size
 #define HEAP_CHAIN(heap, index)        (heap)->base[index]
 
+#define NPL_NULL                       -1
+
 #define u_offset(n, offset)            (n + offset)
 
 /* EXTERNAL FUNCTIONS */
@@ -41,6 +43,8 @@ extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
+extern void doubly_linked_list_destroy(struct doubly_linked_list **list);
+extern void doubly_linked_list_initial(struct doubly_linked_list *list);
 /* END OF EXTERNAL FUNCTIONS */
 
 /* BINARY HEAP DEBUG */

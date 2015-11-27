@@ -38,6 +38,7 @@ static inline struct doubly_linked_list * maximal_heap_node_remove_internal(stru
 static inline struct doubly_linked_list * min_max_heap_node_remove_internal(struct min_max_heap *heap, uint32 index);
 static inline struct doubly_linked_list * min_max_heap_node_remove_max_internal(struct min_max_heap *heap);
 static inline struct doubly_linked_list * minimal_heap_node_remove_internal(struct minimal_heap *heap, uint32 index);
+static inline struct leftist_heap * leftist_heap_create_internal(void *val, sint32 npl);
 static inline uint32 binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index);
@@ -55,6 +56,8 @@ static inline void binary_heap_node_collision_merge(struct binary_heap *heap, ui
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline void binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice, void *ordering);
 static inline void binary_heap_node_remove_root_and_destroy(struct binary_heap *heap, void *ordering);
+static inline void leftist_heap_destroy_internal(struct leftist_heap *heap);
+static inline void leftist_heap_node_destroy(struct leftist_heap *node);
 static inline void maximal_heap_build_internal(struct maximal_heap *heap);
 static inline void maximal_heap_node_nice_alter(struct maximal_heap *heap, uint32 index, sint64 new_nice);
 static inline void maximal_heap_node_remove_and_destroy_internal(struct maximal_heap *heap, uint32 index);
@@ -78,12 +81,16 @@ struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *heap, si
 struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
+struct leftist_heap * leftist_heap_create(void);
+struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp);
+struct leftist_heap * leftist_heap_ptr_container_of(struct binary_search_tree *node);
 struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 struct maximal_heap * maximal_heap_create(uint32 capacity);
 struct min_max_heap * min_max_heap_create(uint32 capacity);
 struct minimal_heap * minimal_heap_build(struct collision_chain **chain_array, uint32 size);
 struct minimal_heap * minimal_heap_create(uint32 capacity);
 uint32 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index);
+void leftist_heap_destroy(struct leftist_heap **heap);
 void maximal_heap_cleanup(struct maximal_heap *heap);
 void maximal_heap_destroy(struct maximal_heap **heap);
 void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);

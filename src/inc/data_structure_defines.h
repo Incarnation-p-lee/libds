@@ -256,4 +256,11 @@
 #define min_max_heap_link_set(heap, index, link) \
     (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
+/* LEFTIST HEAP */
+#define leftist_heap_left(heap) \
+    (assert(heap), leftist_heap_ptr_container_of(heap->alias.left))
+
+#define leftist_heap_right(heap) \
+    (assert(heap), leftist_heap_ptr_container_of(heap->alias.right))
+
 #endif

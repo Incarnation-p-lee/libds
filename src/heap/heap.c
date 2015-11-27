@@ -21,4 +21,5 @@
 #include "impl/minimal_heap.c"
 #include "impl/maximal_heap.c"
 #include "impl/min_max_heap.c"
+#include "impl/leftist_heap.c"
 
