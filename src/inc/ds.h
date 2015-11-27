@@ -449,10 +449,10 @@ struct leftist_heap {
     (assert(tree), (tree)->alias.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.left))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.right))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
 
 #define avl_tree_node_link(tree) \
     (assert(tree), (tree)->alias.chain.link)
@@ -821,7 +821,7 @@ extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *tree);
 extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
 extern struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
-extern struct avl_tree * avl_tree_ptr_container_of(struct binary_search_tree *node);
+extern struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
 extern struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
 extern struct binary_search_tree * binary_search_tree_create(void);
 extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
@@ -969,6 +969,7 @@ extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap 
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct leftist_heap * leftist_heap_create(void);
 extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp);
+extern struct leftist_heap * leftist_heap_ptr_container_of(struct binary_search_tree *node);
 extern struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);

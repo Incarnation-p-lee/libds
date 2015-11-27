@@ -57,6 +57,21 @@
             :"edx", "eax", "rsi", "rdi", "ecx", "ebx")
 
     /*
+     * 1. If NULL == node, avl = NULL
+     * 2. Or avl = node - 0x8
+     */
+    #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
+        asm volatile (                                     \
+            "mov $0x0, %%rdx\n\t"                          \
+            "lea -0x8(%1), %1\n\t"                         \
+            "cmp $0x8, %1\n\t"                             \
+            "cmovl %%rdx, %1\n\t"                          \
+            "mov %1, %0\n\t"                               \
+            :"=r"(avl)                                     \
+            :"r"(node)                                     \
+            :"rdx")
+
+    /*
      * 1. node->nice => rbx, *iter => rcx.
      * 2. compare rbx, and 0x8(rcx).
      * 3. update iter.

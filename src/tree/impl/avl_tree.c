@@ -66,17 +66,23 @@ avl_tree_node_destroy(struct avl_tree *node)
 static inline void
 avl_tree_destroy_internal(struct avl_tree *tree)
 {
+    /*
+     * destroy node in post iterater order.
+     * Warning: sometime if nested function call is too deepth,
+     *     it may reach the default limitation of elf stack size, 8192KB.
+     *     use ulimit -s unlimited or refine this function without nested.
+     */
     if (tree) {
-        /*
-         * destroy node in post iterater order.
-         * Warning: sometime if nested function call is too deepth,
-         *     it may reach the default limitation of elf stack size, 8192KB.
-         *     use ulimit -s unlimited or refine this function without nested.
-         */
-        avl_tree_destroy_internal(avl_tree_child_left(tree));
-        avl_tree_destroy_internal(avl_tree_child_right(tree));
-        tree->alias.left = NULL;
-        tree->alias.right = NULL;
+        if (tree->alias.left) {
+            avl_tree_destroy_internal(avl_tree_child_left(tree));
+            tree->alias.left = NULL;
+        }
+
+        if (tree->alias.right) {
+            avl_tree_destroy_internal(avl_tree_child_right(tree));
+            tree->alias.right = NULL;
+        }
+
         avl_tree_node_destroy(tree);
     }
 }
@@ -91,13 +97,23 @@ avl_tree_destroy(struct avl_tree **tree)
 }
 
 struct avl_tree *
-avl_tree_ptr_container_of(struct binary_search_tree *node)
+avl_tree_ptr_binary_to_avl(struct binary_search_tree *node)
 {
     if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
         return CONTAINER_OF(node, struct avl_tree, alias);
     }
+}
+
+static inline struct avl_tree *
+avl_tree_ptr_to_avl(struct binary_search_tree *node)
+{
+    struct avl_tree *tree;
+
+    avl_tree_ptr_binary_to_avl_optimize(node, tree);
+
+    return tree;
 }
 
 struct avl_tree *
@@ -109,7 +125,7 @@ avl_tree_node_find(struct avl_tree *tree, sint64 nice)
         return NULL;
     } else {
         found = binary_search_tree_node_find_internal(&tree->alias, nice);
-        return avl_tree_ptr_container_of(found);
+        return avl_tree_ptr_to_avl(found);
     }
 }
 
@@ -122,7 +138,7 @@ avl_tree_node_find_min(struct avl_tree *tree)
         return NULL;
     } else {
         found = binary_search_tree_node_find_min_internal(&tree->alias);
-        return avl_tree_ptr_container_of(found);
+        return avl_tree_ptr_to_avl(found);
     }
 }
 
@@ -135,7 +151,7 @@ avl_tree_node_find_max(struct avl_tree *tree)
         return NULL;
     } else {
         found = binary_search_tree_node_find_max_internal(&tree->alias);
-        return avl_tree_ptr_container_of(found);
+        return avl_tree_ptr_to_avl(found);
     }
 }
 
@@ -229,8 +245,8 @@ avl_tree_balance_single_rotate_left(struct binary_search_tree *k1)
     k1->left = k2->right;
     k2->right = k1;
 
-    avl_tree_height_update(avl_tree_ptr_container_of(k1));
-    avl_tree_height_update(avl_tree_ptr_container_of(k2));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k1));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k2));
 
     return k2;
 }
@@ -262,8 +278,8 @@ avl_tree_balance_single_rotate_right(struct binary_search_tree *k1)
     k1->right = k2->left;
     k2->left = k1;
 
-    avl_tree_height_update(avl_tree_ptr_container_of(k1));
-    avl_tree_height_update(avl_tree_ptr_container_of(k2));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k1));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k2));
 
     return k2;
 }
@@ -300,9 +316,9 @@ avl_tree_balance_doubly_rotate_left(struct binary_search_tree *k1)
     k3->left = k2;
     k3->right = k1;
 
-    avl_tree_height_update(avl_tree_ptr_container_of(k1));
-    avl_tree_height_update(avl_tree_ptr_container_of(k2));
-    avl_tree_height_update(avl_tree_ptr_container_of(k3));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k1));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k2));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k3));
 
     return k3;
 }
@@ -339,9 +355,9 @@ avl_tree_balance_doubly_rotate_right(struct binary_search_tree *k1)
     k3->right = k2;
     k3->left = k1;
 
-    avl_tree_height_update(avl_tree_ptr_container_of(k1));
-    avl_tree_height_update(avl_tree_ptr_container_of(k2));
-    avl_tree_height_update(avl_tree_ptr_container_of(k3));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k1));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k2));
+    avl_tree_height_update(avl_tree_ptr_to_avl(k3));
 
     return k3;
 }
@@ -393,8 +409,8 @@ avl_tree_balance_remove_rotate_right(struct binary_search_tree **tree,
 
     tmp = node->right;
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(tmp->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(tmp->right), &right);
 
     if (left <= right) {
         /*
@@ -438,20 +454,20 @@ avl_tree_node_remove_internal(struct binary_search_tree **tree, sint64 nice)
             /* 
              * the left child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(node))) {
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_to_avl(node))) {
                 avl_tree_balance_remove_rotate_right(tree, node);
             }
 
-            avl_tree_height_update(avl_tree_ptr_container_of(node));
+            avl_tree_height_update(avl_tree_ptr_to_avl(node));
         } else if (nice > node->chain.nice) {
             removed = avl_tree_node_remove_internal(&node->right, nice);
             /* 
              * the right child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(node))) {
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_to_avl(node))) {
                 avl_tree_balance_remove_rotate_left(tree, node);
             }
-            avl_tree_height_update(avl_tree_ptr_container_of(node));
+            avl_tree_height_update(avl_tree_ptr_to_avl(node));
         } else {
             /*
              * find the target nice, strip the node.
@@ -486,13 +502,13 @@ avl_tree_node_remove(struct avl_tree **tree, sint64 nice)
     } else {
         tmp = &(*tree)->alias;
         removed = avl_tree_node_remove_internal(&tmp, nice);
-        *tree = avl_tree_ptr_container_of(tmp);
+        *tree = avl_tree_ptr_to_avl(tmp);
 
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         }
 
-        return avl_tree_ptr_container_of(removed);
+        return avl_tree_ptr_to_avl(removed);
     }
 }
 
@@ -505,12 +521,12 @@ avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice)
     if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
         tmp = &(*tree)->alias;
         removed = avl_tree_node_remove_internal(&tmp, nice);
-        *tree = avl_tree_ptr_container_of(tmp);
+        *tree = avl_tree_ptr_to_avl(tmp);
 
         if (NULL == removed) {
             pr_log_warn("Failed to find the node in given tree.\n");
         } else {
-            avl_tree_node_destroy(avl_tree_ptr_container_of(removed));
+            avl_tree_node_destroy(avl_tree_ptr_to_avl(removed));
         }
     }
 }
@@ -530,7 +546,7 @@ avl_tree_node_insert_internal(struct binary_search_tree **tree,
             /* 
              * the left child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(*tree))) {
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_to_avl(*tree))) {
                 avl_tree_balance_insert_rotate_left(tree, node);
             }
         }
@@ -542,7 +558,7 @@ avl_tree_node_insert_internal(struct binary_search_tree **tree,
             /* 
              * the right child-tree.
              */
-            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_container_of(*tree))) {
+            if (!avl_tree_balanced_on_height_p(avl_tree_ptr_to_avl(*tree))) {
                 avl_tree_balance_insert_rotate_right(tree, node);
             }
         }
@@ -559,7 +575,7 @@ avl_tree_node_insert_internal(struct binary_search_tree **tree,
         return *tree;
     }
 
-    avl_tree_height_update(avl_tree_ptr_container_of(*tree));
+    avl_tree_height_update(avl_tree_ptr_to_avl(*tree));
 
     return node;
 }
@@ -584,9 +600,9 @@ avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node)
     } else {
         tmp = &(*tree)->alias;
         inserted = avl_tree_node_insert_internal(&tmp, &node->alias);
-        *tree = avl_tree_ptr_container_of(tmp);
+        *tree = avl_tree_ptr_to_avl(tmp);
 
-        return avl_tree_ptr_container_of(inserted);
+        return avl_tree_ptr_to_avl(inserted);
     }
 }
 
@@ -625,8 +641,8 @@ avl_tree_balance_remove_rotate_left(struct binary_search_tree **tree,
 
     tmp = node->left;
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(tmp->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(tmp->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(tmp->right), &right);
 
     if (left >= right) {
         /*
@@ -716,8 +732,8 @@ avl_tree_balance_child_doubly_strip(struct binary_search_tree *node)
 
     assert(NULL != node);
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(node->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(node->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(node->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(node->right), &right);
 
     if (left > right) {
         /* 

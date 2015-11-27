@@ -154,10 +154,10 @@
     (assert(tree), (tree)->alias.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.left))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.right))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
 
 #define avl_tree_node_link(tree) \
     (assert(tree), (tree)->alias.chain.link)

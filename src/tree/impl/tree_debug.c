@@ -31,8 +31,8 @@ avl_tree_single_rotate_left_precondition_p(struct binary_search_tree *k1)
     assert(NULL != k1);
     assert(NULL != k2);
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->right), &right);
 
     if (left < right) {
         return false;
@@ -53,8 +53,8 @@ avl_tree_single_rotate_right_precondition_p(struct binary_search_tree *k1)
 
     k2 = k1->right;
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->right), &right);
 
     if (right < left) {
         return false;
@@ -75,8 +75,8 @@ avl_tree_doubly_rotate_left_precondition_p(struct binary_search_tree *k1)
 
     k2 = k1->left;
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->right), &right);
 
     if (left < right) {
         return true;
@@ -97,8 +97,8 @@ avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
 
     k2 = k1->right;
 
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->left), &left);
-    avl_tree_height_internal(avl_tree_ptr_container_of(k2->right), &right);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->left), &left);
+    avl_tree_height_internal(avl_tree_ptr_to_avl(k2->right), &right);
 
     if (left > right) {
         return true;
