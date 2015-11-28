@@ -11,12 +11,11 @@ doubly_linked_list_node_create(void *val, uint32 sid)
 
     list = malloc_ds(sizeof(*list));
 
-    if (!list) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(list)) {
         doubly_linked_list_node_initial(list, val, sid);
-        return list;
     }
+
+    return list;
 }
 
 void

@@ -7,17 +7,12 @@ array_stack_create(void)
     struct array_stack *stack;
 
     stack = malloc_ds(sizeof(*stack));
-    if (!stack) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(stack)) {
         stack->sid = 0u;
     }
 
     stack->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
-    if (!stack->space.bp) {
-        free_ds(stack);
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(stack->space.bp)) {
         stack->space.sp = stack->space.bp;
         stack->space.dim = DEFAULT_STACK_SPACE_SIZE;
     }
@@ -54,9 +49,7 @@ array_stack_space_expand_internal(struct array_stack *stack, uint32 increment)
     new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
     assert(new_size > stack->space.dim);
 
-    if (!new_addr) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(new_addr)) {
         stack->space.bp = new_addr;
         stack->space.sp = stack->space.bp + offset;
         stack->space.dim = new_size;

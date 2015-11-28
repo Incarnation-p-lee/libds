@@ -4,9 +4,7 @@ maximal_heap_create(uint32 capacity)
     struct maximal_heap *heap;
 
     heap = malloc_ds(sizeof(*heap));
-    if (!heap) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(heap)) {
         heap->alias = binary_heap_create(capacity);
     }
 
@@ -56,8 +54,7 @@ maximal_heap_node_find(struct maximal_heap *heap, sint64 nice)
 {
     if (complain_null_pointer_p(heap)) {
         return NULL;
-    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
-        pr_log_warn("Nice specificed reach the limit.\n");
+    } if (!binary_heap_nice_legal_p(nice)) {
         return NULL;
     } else {
         return binary_heap_node_find(heap->alias, nice);
@@ -79,9 +76,7 @@ maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
 {
     if (complain_null_pointer_p(heap)) {
         return;
-    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice) {
-        pr_log_warn("Nice specificed reach the limit.\n");
-    } else {
+    } else if (binary_heap_nice_legal_p(nice)) {
         binary_heap_node_insert(heap->alias, val, nice,
             &binary_heap_maximal_ordered_p);
     }
@@ -103,7 +98,6 @@ maximal_heap_node_remove_internal(struct maximal_heap *heap, uint32 index)
     tmp = HEAP_CHAIN(alias, index);
     HEAP_CHAIN(alias, index) = NULL;
     nice = HEAP_NICE(alias, INDEX_ROOT) + 1;
-    assert(nice != HEAP_NICE_UPPER_LMT);
 
     /*
      * percolate current index node to root, then remove the root.
@@ -123,8 +117,9 @@ maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice)
 
     if (complain_null_pointer_p(heap)) {
         return NULL;
+    } else if (!binary_heap_nice_legal_p(nice)) {
+        return NULL;
     } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        pr_log_warn("No such the node of heap, nothing will be done.\n");
         return NULL;
     } else {
         return maximal_heap_node_remove_internal(heap, index);
@@ -152,9 +147,9 @@ maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice)
 
     if (complain_null_pointer_p(heap)) {
         return;
-    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        pr_log_warn("No such the node of heap, nothing will be done.\n");
-    } else {
+    } else if (!binary_heap_nice_legal_p(nice)) {
+        return;
+    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
         maximal_heap_node_remove_and_destroy_internal(heap, index);
     }
 }
@@ -226,17 +221,12 @@ maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 o
 
     if (complain_null_pointer_p(heap)) {
         return;
-    } else if (0 == offset) {
-        pr_log_info("Zero offset of nice, nothing will be done.\n");
-    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice
-        || HEAP_NICE_LOWER_LMT == new_nice) {
-        pr_log_warn("Nice specificed reach the limit.\n");
-    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        pr_log_warn("No such the node of heap, nothing will be done.\n");
-    } else {
-        /*
-         * index of nice has been set already.
-         */
+    } else if (complain_zero_size_p(offset)) {
+        return;
+    } else if (!binary_heap_nice_legal_p(nice)
+        || !binary_heap_nice_legal_p(new_nice)) {
+        return;
+    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
         maximal_heap_node_nice_alter(heap, index, new_nice);
     }
 }
@@ -251,17 +241,12 @@ maximal_heap_node_increase_nice(struct maximal_heap *heap, sint64 nice, uint32 o
 
     if (complain_null_pointer_p(heap)) {
         return;
-    } else if (0 == offset) {
-        pr_log_info("Zero offset of nice, nothing will be done.\n");
-    } else if (HEAP_NICE_LOWER_LMT == nice || HEAP_NICE_UPPER_LMT == nice
-        || HEAP_NICE_UPPER_LMT == new_nice) {
-        pr_log_warn("Nice specificed reach the limit.\n");
-    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        pr_log_warn("No such the node of heap, nothing will be done.\n");
-    } else {
-        /*
-         * index of nice has been set already.
-         */
+    } else if (complain_zero_size_p(offset)) {
+        return;
+    } else if (!binary_heap_nice_legal_p(nice)
+        || !binary_heap_nice_legal_p(new_nice)) {
+        return;
+    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
         maximal_heap_node_nice_alter(heap, index, new_nice);
     }
 }
@@ -305,31 +290,24 @@ maximal_heap_build(struct collision_chain **chain_array, uint32 size)
 
     if (complain_null_pointer_p(chain_array)) {
         return NULL;
-    } else if (0 == size) {
-        pr_log_warn("Zero size of chain array, nothing will be done.\n");
-        return NULL;
-    } else if (NULL != chain_array[0]) {
-        pr_log_warn("First node of chain array should be NULL for heap-ordered.\n");
+    } else if (complain_zero_size_p(size)) {
         return NULL;
     } else {
         heap = malloc_ds(sizeof(*heap));
 
-        if (!heap) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(heap)) {
             heap->alias = malloc_ds(sizeof(*heap->alias));
 
-            if (!heap->alias) {
-                pr_log_err("Fail to get memory from system.\n");
-            } else {
+            if (!complain_no_memory_p(heap->alias)) {
                 heap->alias->base = chain_array;
                 heap->alias->capacity = size - 1;
                 heap->alias->size = size - 1;
 
                 maximal_heap_build_internal(heap);
-                return heap;
             }
         }
+
+        return heap;
     }
 }
 

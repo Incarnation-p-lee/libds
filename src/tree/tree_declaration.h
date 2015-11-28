@@ -21,6 +21,7 @@ static inline bool binary_search_tree_node_child_doubly_p(struct binary_search_t
 static inline bool binary_search_tree_node_contains_p_internal(struct binary_search_tree *tree, struct binary_search_tree *node);
 static inline bool binary_search_tree_node_leaf_p(struct binary_search_tree *node);
 static inline sint32 binary_search_tree_height_internal(struct binary_search_tree *tree);
+static inline struct avl_tree * avl_tree_ptr_to_avl(struct binary_search_tree *node);
 static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip(struct binary_search_tree *node);
 static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip_from_max(struct binary_search_tree *node);
 static inline struct binary_search_tree * avl_tree_balance_child_doubly_strip_from_min(struct binary_search_tree *node);
@@ -83,7 +84,7 @@ struct avl_tree * avl_tree_node_find_max(struct avl_tree *tree);
 struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
 struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
 struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
-struct avl_tree * avl_tree_ptr_container_of(struct binary_search_tree *node);
+struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
 struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
 struct binary_search_tree * binary_search_tree_create(void);
 struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);

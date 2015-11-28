@@ -6,6 +6,7 @@
 
 #define OPEN_ADDRESSING_HASH_LOAD_FACTOR 50u
 
+extern bool complain_no_memory_p(void *ptr);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
 extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);

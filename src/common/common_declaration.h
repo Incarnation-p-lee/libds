@@ -2,7 +2,9 @@
 #define COMMON_DECLARATION_H
 
 
+bool complain_no_memory_p(void *ptr);
 bool complain_null_pointer_p(void *ptr);
+bool complain_zero_size_p(uint32 size);
 static inline FILE * memory_maps_proc_read(void);
 static inline char * memory_maps_one_line_map_name(char *line);
 static inline uint32 memory_maps_one_line_map_authority(char *line);

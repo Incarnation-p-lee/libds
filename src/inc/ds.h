@@ -267,6 +267,27 @@ struct min_max_heap {
     struct binary_heap *alias;
 };
 
+/*
+ * leftist heap
+ *     <null path length>, the shortest length from one node to other node
+ *     who hasn't two child.
+ *     Foreach node in leftist heap, the <null path length> of left child >=
+ *     the <null path length> of right child.
+ *     This structure can finish heap merge in O(N).
+ *     For example:
+ *           1
+ *          / \
+ *         1   0
+ *        / \
+ *       0   0
+ *          /
+ *         0
+ */
+struct leftist_heap {
+    sint32                    npl; /* null path length, NULL node is -1 */
+    struct binary_search_tree alias;
+};
+
 #endif
 
 /* END of ./src/inc/data_structure_types.h */
@@ -428,10 +449,10 @@ struct min_max_heap {
     (assert(tree), (tree)->alias.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.left))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_ptr_container_of(tree->alias.right))
+    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
 
 #define avl_tree_node_link(tree) \
     (assert(tree), (tree)->alias.chain.link)
@@ -529,6 +550,13 @@ struct min_max_heap {
     (assert(heap), HEAP_LINK(heap->alias, index))
 #define min_max_heap_link_set(heap, index, link) \
     (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+
+/* LEFTIST HEAP */
+#define leftist_heap_left(heap) \
+    (assert(heap), leftist_heap_ptr_container_of(heap->alias.left))
+
+#define leftist_heap_right(heap) \
+    (assert(heap), leftist_heap_ptr_container_of(heap->alias.right))
 
 #endif
 /* END of ./src/inc/data_structure_defines.h */
@@ -803,7 +831,7 @@ extern struct avl_tree * avl_tree_node_find_max(struct avl_tree *tree);
 extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
 extern struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
-extern struct avl_tree * avl_tree_ptr_container_of(struct binary_search_tree *node);
+extern struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
 extern struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
 extern struct binary_search_tree * binary_search_tree_create(void);
 extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
@@ -881,11 +909,13 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
-#define HEAP_NICE_UPPER_LMT            0x7fffffffffffffff
-#define HEAP_NICE_LOWER_LMT            (-HEAP_NICE_UPPER_LMT - 1)
+/*
+ * HEAP NICE LIMITS not reach the limitation of sint64
+ */
+#define HEAP_NICE_UPPER_LMT            0x7ffffffffffffff
+#define HEAP_NICE_LOWER_LMT            -HEAP_NICE_UPPER_LMT
 
 #define DEFAULT_BINARY_HEAP_SIZE       4097
-
 #define DEPTH_INVALID                  0xffffffffu
 
 #define INDEX_INVALID                  0u
@@ -908,6 +938,8 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 #define HEAP_LINK(heap, index)         (heap)->base[index]->link
 #define HEAP_SIZE(heap)                (heap)->size
 #define HEAP_CHAIN(heap, index)        (heap)->base[index]
+
+#define NPL_NULL                       -1
 
 #define u_offset(n, offset)            (n + offset)
 
@@ -945,12 +977,16 @@ extern struct doubly_linked_list * minimal_heap_node_find(struct minimal_heap *h
 extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap);
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
+extern struct leftist_heap * leftist_heap_create(void);
+extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp);
+extern struct leftist_heap * leftist_heap_ptr_container_of(struct binary_search_tree *node);
 extern struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);
 extern struct minimal_heap * minimal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern uint32 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index);
+extern void leftist_heap_destroy(struct leftist_heap **heap);
 extern void maximal_heap_cleanup(struct maximal_heap *heap);
 extern void maximal_heap_destroy(struct maximal_heap **heap);
 extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);

@@ -1,11 +1,13 @@
 #ifndef HAVE_HEAP_H
 #define HAVE_HEAP_H
 
-#define HEAP_NICE_UPPER_LMT            0x7fffffffffffffff
-#define HEAP_NICE_LOWER_LMT            (-HEAP_NICE_UPPER_LMT - 1)
+/*
+ * HEAP NICE LIMITS not reach the limitation of sint64
+ */
+#define HEAP_NICE_UPPER_LMT            0x7ffffffffffffff
+#define HEAP_NICE_LOWER_LMT            -HEAP_NICE_UPPER_LMT
 
 #define DEFAULT_BINARY_HEAP_SIZE       4097
-
 #define DEPTH_INVALID                  0xffffffffu
 
 #define INDEX_INVALID                  0u
@@ -29,14 +31,20 @@
 #define HEAP_SIZE(heap)                (heap)->size
 #define HEAP_CHAIN(heap, index)        (heap)->base[index]
 
+#define NPL_NULL                       -1
+
 #define u_offset(n, offset)            (n + offset)
 
 /* EXTERNAL FUNCTIONS */
+extern bool complain_zero_size_p(uint32 size);
+extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **head);
 extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
+extern void doubly_linked_list_destroy(struct doubly_linked_list **list);
+extern void doubly_linked_list_initial(struct doubly_linked_list *list);
 /* END OF EXTERNAL FUNCTIONS */
 
 /* BINARY HEAP DEBUG */

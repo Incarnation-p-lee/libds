@@ -4,9 +4,7 @@ hashing_table_create(uint32 size)
     struct hashing_table *hash;
 
     hash = malloc_ds(sizeof(*hash));
-    if (!hash) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(hash)) {
         assert(0 != size);
 
         hash->size = size;
@@ -24,16 +22,12 @@ hashing_table_initial(struct hashing_table *hash)
     assert(NULL != hash);
 
     hash->space = malloc_ds(sizeof(*hash->space) * hash->size);
-    if (!hash->space) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(hash->space)) {
         iter = hash->space;
         while (iter < hash->space + hash->size) {
             *iter++ = NULL;
         }
     }
-
-    return;
 }
 
 static inline void

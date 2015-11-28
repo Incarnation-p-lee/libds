@@ -10,19 +10,15 @@ binary_search_tree_node_create_internal(void *val, sint64 nice)
     struct binary_search_tree *node;
 
     node = malloc_ds(sizeof(*node));
-    if (!node) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(node)) {
         node->chain.link = malloc_ds(sizeof(*node->chain.link));
 
-        if (!node->chain.link) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(node->chain.link)) {
             binary_search_tree_node_initial_internal(node, val, nice);
         }
-
-        return node;
     }
+
+    return node;
 }
 
 static inline void

@@ -5,15 +5,13 @@ doubly_end_queue_create(void)
 
     queue = malloc_ds(sizeof(*queue));
 
-    if (!queue) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(queue)) {
         queue->sid = 0x0u;
         queue->head = NULL;
         queue->tail = NULL;
-
-        return queue;
     }
+
+    return queue;
 }
 
 void
@@ -116,9 +114,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
     if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         tmp = malloc_ds(sizeof(*tmp));
 
-        if (!tmp) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(tmp)) {
             tmp->val = member;
 
             if (doubly_end_queue_empty_p_internal(queue)) {
@@ -141,9 +137,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
     if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
         tmp = malloc_ds(sizeof(*tmp));
 
-        if (!tmp) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+        if (!complain_no_memory_p(tmp)) {
             tmp->val = member;
 
             if (doubly_end_queue_empty_p_internal(queue)) {

@@ -4,17 +4,12 @@ array_queue_create(void)
     struct array_queue *queue;
 
     queue = malloc_ds(sizeof(*queue));
-    if (!queue) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(queue)) {
         array_queue_sid_set(queue, 0x0u);
     }
 
     queue->space.base = malloc_ds(sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
-    if (!queue->space.base) {
-        free_ds(queue);
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(queue->space.base)) {
         queue->space.dim = DEFAULT_QUEUE_SPACE_SIZE;
         queue->space.rest = DEFAULT_QUEUE_SPACE_SIZE;
         queue->space.front = queue->space.base;
@@ -84,9 +79,7 @@ array_queue_space_expand_internal(struct array_queue *queue, uint32 increment)
     new_size = array_queue_capacity_internal(queue) + increment;
     new_addr = realloc_ds(queue->space.base, sizeof(void *) * new_size);
 
-    if (!new_addr) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(new_addr)) {
         /*
          * realloc may return a address different from queue->space.base 
          */

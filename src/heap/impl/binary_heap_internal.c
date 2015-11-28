@@ -3,19 +3,15 @@ binary_heap_create(uint32 capacity)
 {
     struct binary_heap *heap;
 
-    if (0 == capacity) {
-        pr_log_warn("Cannot create zero binary heap, use default capacity\n");
+    if (complain_zero_size_p(capacity)) {
         capacity = DEFAULT_BINARY_HEAP_SIZE;
     }
 
     heap = malloc_ds(sizeof(*heap));
-    if (!heap) {
-        pr_log_err("Fail to get memory from system.\n");
-    } else {
+    if (!complain_no_memory_p(heap)) {
         heap->base = malloc_ds(sizeof(*heap->base[0]) * u_offset(capacity, 1));
-        if (!heap->base) {
-            pr_log_err("Fail to get memory from system.\n");
-        } else {
+
+        if (!complain_no_memory_p(heap->base)) {
             binary_heap_initial(heap, capacity);
         }
     }
@@ -193,6 +189,7 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
         index++;
     }
 
+    pr_log_warn("No such the node with nice specified\n");
     return false;
 }
 
@@ -355,7 +352,7 @@ binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
     uint32 big_index;
     uint32 rest;
 
-    assert(0 != count);
+    assert(!complain_zero_size_p(count));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
@@ -491,5 +488,29 @@ binary_heap_node_depth(uint32 index)
     }
 
     return depth;
+}
+
+static inline bool
+binary_heap_nice_legal_p(sint64 nice)
+{
+    if (nice > HEAP_NICE_LOWER_LMT && nice < HEAP_NICE_UPPER_LMT) {
+        return true;
+    } else {
+        pr_log_warn("Nice specificed reach the limit.\n");
+        return false;
+    }
+}
+
+static inline bool
+binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
+{
+    assert(binary_heap_structure_legal_p(heap));
+
+    if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
+        pr_log_warn("Illegal index value of heap.\n");
+        return false;
+    } else {
+        return true;
+    }
 }
 
