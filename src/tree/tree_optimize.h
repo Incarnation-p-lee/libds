@@ -23,7 +23,7 @@
      * 2. Compute height of right node and put it to esi
      * 3. Compute abs(edi - esi), and write back to eax
      */
-    #define avl_tree_balanced_on_height_internal_optimize(node, balanced) \
+    #define avl_tree_node_balanced_optimize(node, balanced) \
         asm volatile (                                      \
             "mov $0xffffffff, %%ecx\n\t"                    \
             /* left node height */                          \
@@ -69,6 +69,39 @@
             "mov %1, %0\n\t"                               \
             :"=r"(avl)                                     \
             :"r"(node)                                     \
+            :"rdx")
+
+    /*
+     * assert node should be (struct avl_tree *)
+     * 1. load node->alias.left to %1
+     * 2. If NULL == %1, left = NULL
+     * 3. Or left = %1 - 8
+     */
+    #define avl_tree_left_optimize(node, left) \
+        asm volatile (                         \
+            "mov $0x0, %%rdx\n\t"              \
+            "mov 0x18(%1), %1\n\t"             \
+            "lea -0x8(%1), %1\n\t"             \
+            "cmp $0x8, %1\n\t"                 \
+            "cmovl %%rdx, %1\n\t"              \
+            "mov %1, %0\n\t"                   \
+            :"=r"(left)                        \
+            :"r"(node)                         \
+            :"rdx")
+
+    /*
+     * the same as left
+     */
+    #define avl_tree_right_optimize(node, right) \
+        asm volatile (                           \
+            "mov $0x0, %%rdx\n\t"                \
+            "mov 0x20(%1), %1\n\t"               \
+            "lea -0x8(%1), %1\n\t"               \
+            "cmp $0x8, %1\n\t"                   \
+            "cmovl %%rdx, %1\n\t"                \
+            "mov %1, %0\n\t"                     \
+            :"=r"(right)                         \
+            :"r"(node)                           \
             :"rdx")
 
     /*
@@ -119,7 +152,7 @@
      * 2. Compute height of right node and put it to esi
      * 3. Compute abs(edi - esi), and write back to eax
      */
-    #define avl_tree_balanced_on_height_internal_optimize(node, balanced) \
+    #define avl_tree_node_balanced_optimize(node, balanced) \
         asm volatile (                                      \
             "mov $0xffffffff, %%ecx\n\t"                    \
             /* left node height */                          \
@@ -151,26 +184,28 @@
             :                                               \
             :"r"(node), "r"(balanced)                       \
             :"edx", "eax", "esi", "edi", "ecx", "ebx")
+    /*
+     * 1. If NULL == node, avl = NULL
+     * 2. Or avl = node - 0x8
+     */
+    #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
+        asm volatile (                                     \
+            "mov $0x0, %%edx\n\t"                          \
+            "lea -0x4(%1), %1\n\t"                         \
+            "cmp $0x4, %1\n\t"                             \
+            "cmovl %%edx, %1\n\t"                          \
+            "mov %1, %0\n\t"                               \
+            :"=r"(avl)                                     \
+            :"r"(node)                                     \
+            :"edx")
 
 #endif
 
 #if defined OPT_HOT
-    #define avl_tree_height_internal(node, height) \
-        avl_tree_height_internal_optimize(node, height)
-
     #define avl_tree_child_height_sync(root, left, right)
-
-    #define avl_tree_balanced_on_height_internal(node, b) \
-        avl_tree_balanced_on_height_internal_optimize(node, b)
 #else
-    #define avl_tree_height_internal(node, height) \
-        avl_tree_height_internal_default(node, height)
-
     #define avl_tree_child_height_sync(root, left, right) \
         avl_tree_child_height_sync_with_calculated(root, left, right)
-
-    #define avl_tree_balanced_on_height_internal(node, b) \
-        avl_tree_balanced_on_height_internal_default(node, b)
 #endif
 
 #endif
