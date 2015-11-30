@@ -281,7 +281,7 @@ unit_test_avl_tree_balanced_p(void)
     pass = true;
     RESULT_CHECK_bool(true, avl_tree_balanced_p(NULL), &pass);
 
-    tree = test_avl_tree_sample(0xA8EA, 0xBD64);
+    tree = test_avl_tree_sample(0x48EA, 0x3D64);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
     tmp = avl_tree_node_create(&pass, 0x1234);

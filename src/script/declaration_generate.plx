@@ -74,7 +74,7 @@ sub file_scan() {
     my $body = 1;
     my $head;
 
-    print "Scanning source file $filename .";
+    print "Scanning source file $filename ";
 
     open IMP, '<', $filename or die "$! $filename.";
 
