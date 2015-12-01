@@ -114,7 +114,7 @@ performance_test_avl_tree_node_find(uint32 count)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
-    tree = test_avl_tree_sample(0x12a49, 0x7233);
+    tree = test_avl_tree_sample(0x12a49, 0x5233);
     tmp = avl_tree_node_find_max(tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -134,7 +134,7 @@ performance_test_avl_tree_node_find_min(uint32 count)
 {
     struct avl_tree *tree;
 
-    tree = test_avl_tree_sample(0x62a49, 0x27233);
+    tree = test_avl_tree_sample(0x62a49, 0x4233);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -153,7 +153,7 @@ performance_test_avl_tree_node_find_max(uint32 count)
 {
     struct avl_tree *tree;
 
-    tree = test_avl_tree_sample(0x62a49, 0x27233);
+    tree = test_avl_tree_sample(0x62a49, 0x5233);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -173,7 +173,7 @@ performance_test_avl_tree_node_contains_p(uint32 count)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
-    tree = test_avl_tree_sample(0x62a49, 0x27233);
+    tree = test_avl_tree_sample(0x62a49, 0x6233);
     tmp = avl_tree_node_find_max(tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
