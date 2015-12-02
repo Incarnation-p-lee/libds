@@ -79,20 +79,22 @@
             :"rdx")
 
     /*
-     * assert node should be (struct avl_tree *)
-     * 1. load node->alias.left to %1
-     * 2. If NULL == %1, left = NULL
-     * 3. Or left = %1 - 8
+     * struct binary_search_tree *left = node->alias.left;
+     *
+     * if (NULL == left) {
+     *     return NULL;
+     * } else {
+     *     return CONTAINER_OF(left, struct avl_tree, alias);
+     * }
      */
     #define avl_tree_left_optimize(node, left) \
         asm volatile (                         \
-            "mov $0x0, %%rdx\n\t"              \
-            "mov 0x18(%1), %1\n\t"             \
-            "lea -0x8(%1), %1\n\t"             \
-            "cmp $0x8, %1\n\t"                 \
-            "cmovl %%rdx, %1\n\t"              \
-            "mov %1, %0\n\t"                   \
-            :"=&r"(left)                        \
+            "mov    0x18(%1), %%rdx\n\t"       \
+            "lea -0x8(%%rdx), %%rdx\n\t"       \
+            "mov        $0x0, %0\n\t"          \
+            "cmp        $0x8, %%rdx\n\t"       \
+            "cmovg     %%rdx, %0\n\t"          \
+            :"=r"(left)                        \
             :"r"(node)                         \
             :"rdx")
 
@@ -101,12 +103,11 @@
      */
     #define avl_tree_right_optimize(node, right) \
         asm volatile (                           \
-            "mov $0x0, %%rdx\n\t"                \
-            "mov 0x20(%1), %1\n\t"               \
-            "lea -0x8(%1), %1\n\t"               \
-            "cmp $0x8, %1\n\t"                   \
-            "cmovl %%rdx, %1\n\t"                \
-            "mov %1, %0\n\t"                     \
+            "mov    0x20(%1), %%rdx\n\t"         \
+            "lea -0x8(%%rdx), %%rdx\n\t"         \
+            "mov        $0x0, %0\n\t"            \
+            "cmp        $0x8, %%rdx\n\t"         \
+            "cmovg     %%rdx, %0\n\t"            \
             :"=r"(right)                         \
             :"r"(node)                           \
             :"rdx")
@@ -206,6 +207,40 @@
             "cmovg  %%rdx, %0\n\t"                         \
             :"=&r"(avl)                                    \
             :"r"(node)                                     \
+            :"edx")
+
+    /*
+     * struct binary_search_tree *left = node->alias.left;
+     *
+     * if (NULL == left) {
+     *     return NULL;
+     * } else {
+     *     return CONTAINER_OF(left, struct avl_tree, alias);
+     * }
+     */
+    #define avl_tree_left_optimize(node, left) \
+        asm volatile (                         \
+            "mov    0x10(%1), %%edx\n\t"       \
+            "lea -0x4(%%edx), %%edx\n\t"       \
+            "mov        $0x0, %0\n\t"          \
+            "cmp        $0x4, %%edx\n\t"       \
+            "cmovg     %%edx, %0\n\t"          \
+            :"=r"(left)                        \
+            :"r"(node)                         \
+            :"edx")
+
+    /*
+     * the same as left
+     */
+    #define avl_tree_right_optimize(node, right) \
+        asm volatile (                           \
+            "mov    0x14(%1), %%edx\n\t"         \
+            "lea -0x4(%%edx), %%edx\n\t"         \
+            "mov        $0x0, %0\n\t"            \
+            "cmp        $0x4, %%edx\n\t"         \
+            "cmovg     %%edx, %0\n\t"            \
+            :"=r"(right)                         \
+            :"r"(node)                           \
             :"edx")
 
 #endif

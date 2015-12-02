@@ -38,8 +38,7 @@ binary_search_tree_destroy(struct binary_search_tree **tree)
 struct binary_search_tree *
 binary_search_tree_node_find(struct binary_search_tree *tree, sint64 nice)
 {
-    if (!tree) {
-        pr_log_warn("Attempt to access NULL pointer.\n");
+    if (complain_null_pointer_p(tree)) {
         return NULL;
     } else {
         return binary_search_tree_node_find_internal(tree, nice);

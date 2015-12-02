@@ -552,11 +552,26 @@ struct leftist_heap {
     (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
 /* LEFTIST HEAP */
-#define leftist_heap_left(heap) \
-    (assert(heap), leftist_heap_ptr_container_of(heap->alias.left))
+#define leftist_heap_node_nice(heap) \
+    (assert(heap), (heap)->alias.chain.nice)
+#define leftist_heap_node_nice_set(heap, v) \
+    (assert(heap), (heap)->alias.chain.nice = (v))
 
-#define leftist_heap_right(heap) \
-    (assert(heap), leftist_heap_ptr_container_of(heap->alias.right))
+#define leftist_heap_child_left(heap) \
+    (assert(heap), leftist_heap_ptr_binary_to_leftist(heap->alias.left))
+
+#define leftist_heap_child_right(heap) \
+    (assert(heap), leftist_heap_ptr_binary_to_leftist(heap->alias.right))
+
+#define leftist_heap_node_link(heap) \
+    (assert(heap), (heap)->alias.chain.link)
+#define leftist_heap_node_link_set(tree, v) \
+    (assert(heap), (heap)->alias.chain.link = (v))
+
+#define leftist_heap_npl(heap) \
+    (assert(heap), (heap)->npl)
+#define leftist_heap_npl_set(tree, v) \
+    (assert(heap), (heap)->npl = (v))
 
 #endif
 /* END of ./src/inc/data_structure_defines.h */
@@ -963,6 +978,7 @@ extern bool min_max_heap_empty_p(struct min_max_heap *heap);
 extern bool min_max_heap_full_p(struct min_max_heap *heap);
 extern bool minimal_heap_empty_p(struct minimal_heap *heap);
 extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern struct doubly_linked_list * leftist_heap_node_find_min(struct leftist_heap *heap);
 extern struct doubly_linked_list * maximal_heap_node_find(struct maximal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * maximal_heap_node_find_max(struct maximal_heap *heap);
 extern struct doubly_linked_list * maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice);
@@ -979,7 +995,8 @@ extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap 
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct leftist_heap * leftist_heap_create(void);
 extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp);
-extern struct leftist_heap * leftist_heap_ptr_container_of(struct binary_search_tree *node);
+extern struct leftist_heap * leftist_heap_node_find(struct leftist_heap *heap, sint64 nice);
+extern struct leftist_heap * leftist_heap_ptr_binary_to_leftist(struct binary_search_tree *node);
 extern struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);
@@ -987,6 +1004,7 @@ extern struct minimal_heap * minimal_heap_build(struct collision_chain **chain_a
 extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern uint32 min_max_heap_node_depth(struct min_max_heap *heap, uint32 index);
 extern void leftist_heap_destroy(struct leftist_heap **heap);
+extern void leftist_heap_node_insert(struct leftist_heap *heap, void *val, sint64 nice);
 extern void maximal_heap_cleanup(struct maximal_heap *heap);
 extern void maximal_heap_destroy(struct maximal_heap **heap);
 extern void maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset);
