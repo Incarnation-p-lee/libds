@@ -62,17 +62,19 @@
             :"edx", "eax", "rsi", "rdi", "ecx", "ebx")
 
     /*
-     * 1. If NULL == node, avl = NULL
-     * 2. Or avl = node - 0x8
+     * if (NULL == node) {
+     *     return NULL;
+     * } else {
+     *     return CONTAINER_OF(node, struct avl_tree, alias);
+     * }
      */
     #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
         asm volatile (                                     \
-            "mov $0x0, %%rdx\n\t"                          \
-            "lea -0x8(%1), %1\n\t"                         \
-            "cmp $0x8, %1\n\t"                             \
-            "cmovl %%rdx, %1\n\t"                          \
-            "mov %1, %0\n\t"                               \
-            :"=r"(avl)                                     \
+            "mov     $0x0, %0\n\t"                         \
+            "lea -0x8(%1), %%rdx\n\t"                      \
+            "cmp     $0x8, %%rdx\n\t"                      \
+            "cmovg  %%rdx, %0\n\t"                         \
+            :"=&r"(avl)                                    \
             :"r"(node)                                     \
             :"rdx")
 
@@ -90,7 +92,7 @@
             "cmp $0x8, %1\n\t"                 \
             "cmovl %%rdx, %1\n\t"              \
             "mov %1, %0\n\t"                   \
-            :"=r"(left)                        \
+            :"=&r"(left)                        \
             :"r"(node)                         \
             :"rdx")
 
@@ -190,17 +192,19 @@
             :"r"(node), "r"(balanced)                       \
             :"edx", "eax", "esi", "edi", "ecx", "ebx")
     /*
-     * 1. If NULL == node, avl = NULL
-     * 2. Or avl = node - 0x8
+     * if (NULL == node) {
+     *     return NULL;
+     * } else {
+     *     return CONTAINER_OF(node, struct avl_tree, alias);
+     * }
      */
     #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
         asm volatile (                                     \
-            "mov $0x0, %%edx\n\t"                          \
-            "lea -0x4(%1), %1\n\t"                         \
-            "cmp $0x4, %1\n\t"                             \
-            "cmovl %%edx, %1\n\t"                          \
-            "mov %1, %0\n\t"                               \
-            :"=r"(avl)                                     \
+            "mov     $0x0, %0\n\t"                         \
+            "lea -0x4(%1), %%edx\n\t"                      \
+            "cmp     $0x4, %%edx\n\t"                      \
+            "cmovg  %%rdx, %0\n\t"                         \
+            :"=&r"(avl)                                    \
             :"r"(node)                                     \
             :"edx")
 
