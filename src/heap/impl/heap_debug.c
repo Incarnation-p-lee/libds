@@ -108,3 +108,91 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
     return true;
 }
 
+static inline bool
+leftist_heap_structure_legal_p(struct leftist_heap *heap)
+{
+    if (NULL == heap || NULL == heap->alias.chain.link) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+leftist_heap_ptr_to_avl_optimize_validity_p(struct binary_search_tree *node,
+    void *expected)
+{
+    void *computed;
+
+    computed = leftist_heap_ptr_binary_to_leftist(node);
+
+    if (computed == expected) {
+        return true;
+    } else {
+        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        return false;
+    }
+}
+
+static inline bool
+leftist_heap_left_optimize_validity_p(struct leftist_heap *node,
+    void *expected)
+{
+    void *computed;
+
+    computed = leftist_heap_child_left(node);
+
+    if (computed == expected) {
+        return true;
+    } else {
+        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        return false;
+    }
+}
+
+static inline bool
+leftist_heap_right_optimize_validity_p(struct leftist_heap *node,
+    void *expected)
+{
+    void *computed;
+
+    computed = leftist_heap_child_right(node);
+
+    if (computed == expected) {
+        return true;
+    } else {
+        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        return false;
+    }
+}
+
+static inline sint32
+leftist_heap_npl_internal_default(struct leftist_heap *node)
+{
+    if (!node) {
+        return -1;
+    } else {
+        return node->npl;
+    }
+}
+
+static inline bool
+leftist_heap_npl_optimize_validity_p(struct leftist_heap *node,
+    sint32 expected)
+{
+    sint32 computed;
+
+    computed = leftist_heap_npl_internal_default(node);
+
+    if (computed == expected) {
+        return true;
+    } else {
+        fprintf(stdout, "[32mexpected[0m: %d\n", expected);
+        fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
+        return false;
+    }
+}
+
