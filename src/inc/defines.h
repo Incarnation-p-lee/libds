@@ -7,6 +7,16 @@
 #define SYM_2_STR(symbol)    (#symbol)
 #define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
 
+/*
+ * abs without if-else
+ *     y = x >> 31, x eq 0xffffffff or 0x0
+ *     z = y + x, x eq x - 1 or unchanged
+ *     abs = z ^ x, x eq -x or unchanged.
+ */
+#define abs_in_width(x, n)   ((((x) >> ((n) - 1)) + (x)) ^ ((x) >> ((n) - 1)))
+#define abs_sint32(x)        abs_in_width((sint32)x, 32)
+#define abs_sint64(x)        abs_in_width((sint64)x, 64)
+
 #define NAME_LEN             128
 #define CONTENT_LEN          NAME_LEN
 

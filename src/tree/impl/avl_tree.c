@@ -164,7 +164,7 @@ avl_tree_node_balanced_default_p(struct avl_tree *node)
     right = avl_tree_height_internal(avl_tree_right(node));
     assert(avl_tree_height_sync_with_calculated_p(node, left, right));
 
-    if (abs(left - right) > 1) {
+    if (abs_sint32(left - right) > 1) {
         return false;
     } else {
         return true;
@@ -767,7 +767,7 @@ avl_tree_height_internal(struct avl_tree *tree)
 {
     sint32 height;
 
-    avl_tree_height_internal_optimize(tree, &height);
+    avl_tree_height_internal_optimize(tree, height);
     assert(avl_tree_height_optimize_validity_p(tree, height));
 
     return height;

@@ -3,20 +3,25 @@
 
 #if defined X86_64
     /*
-     * 1. If node == NULL, fake a valid address for cmovne with edx unchanged
-     * 2. If node != NULL, %0 unchanged, will load correct value tp edx
-     * 3. TAKE care of 0x10 offset, changed structure avl_tree may effect on this value.
+     * if (!node) {
+     *     return -1;
+     * } else {
+     *     return node->height;
+     * }
      */
     #define avl_tree_height_internal_optimize(node, height) \
         asm volatile (                                      \
-            "mov $0xffffffff, %%edx\n\t"                    \
-            "cmp $0x0, %0\n\t"                              \
-            "cmovz %1, %0\n\t"                              \
-            "cmovne 0x0(%0), %%edx\n\t"                     \
-            "mov %%edx, (%1)\n\t"                           \
-            :                                               \
-            :"r"(node), "r"(height)                         \
-            :"edx")
+            "mov $0xffffffff, %0\n\t"                       \
+            "cmp        $0x0, %1\n\t"                       \
+            "cmovz     %%rsp, %1\n\t"                       \
+            "cmovne  0x0(%1), %0\n\t"                       \
+            :"=&r"(height)                                  \
+            :"r"(node))
+            /*
+             * &: means earlyclobber operand, will be modified before
+             *    instruction finished. Therefore, this operand cannot
+             *    be lie in an input operand.
+             */
 
     /*
      * 1. Compute height of left node and put it to edi
@@ -132,20 +137,20 @@
 
 #if defined X86_32
     /*
-     * If node == NULL, fake a valid address for cmovne with edx unchanged
-     * If node != NULL, %0 unchanged, will load correct value tp edx
-     * TAKE care of 0x10 offset, changed structure avl_tree may effect on this value.
+     * if (!node) {
+     *     return -1;
+     * } else {
+     *     return node->height;
+     * }
      */
     #define avl_tree_height_internal_optimize(node, height) \
         asm volatile (                                      \
-            "mov $0xffffffff, %%edx\n\t"                    \
-            "cmp $0x0, %0\n\t"                              \
-            "cmovz %1, %0\n\t"                              \
-            "cmovne 0x10(%0), %%edx\n\t"                    \
-            "mov %%edx, (%1)\n\t"                           \
-            :                                               \
-            :"r"(node), "r"(height)                         \
-            :"edx")
+            "mov $0xffffffff, %0\n\t"                       \
+            "cmp        $0x0, %1\n\t"                       \
+            "cmovz     %%esp, %1\n\t"                       \
+            "cmovne  0x0(%1), %0\n\t"                       \
+            :"=&r"(height)                                  \
+            :"r"(node))
 
     /*
      * 1. Compute height of left node and put it to edi
@@ -199,13 +204,6 @@
             :"r"(node)                                     \
             :"edx")
 
-#endif
-
-#if defined OPT_HOT
-    #define avl_tree_child_height_sync(root, left, right)
-#else
-    #define avl_tree_child_height_sync(root, left, right) \
-        avl_tree_child_height_sync_with_calculated(root, left, right)
 #endif
 
 #endif
