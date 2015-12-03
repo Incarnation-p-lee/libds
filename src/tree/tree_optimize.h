@@ -24,42 +24,46 @@
              */
 
     /*
-     * 1. Compute height of left node and put it to edi
-     * 2. Compute height of right node and put it to esi
-     * 3. Compute abs(edi - esi), and write back to eax
+     * sint32 left;
+     * sint32 right;
+     *
+     * left = avl_tree_height_internal(avl_tree_left(node));
+     * right = avl_tree_height_internal(avl_tree_right(node));
+     *
+     * if (abs_sint32(left - right) > 1) {
+     *     return false;
+     * } else {
+     *     return true;
+     * }
      */
     #define avl_tree_node_balanced_optimize(node, balanced) \
         asm volatile (                                      \
-            "mov $0xffffffff, %%ecx\n\t"                    \
-            /* left node height */                          \
-            "mov 0x18(%0), %%rdi\n\t"                       \
-            "cmp $0x0, %%rdi\n\t"                           \
-            "cmove %1, %%rdi\n\t"                           \
-            "cmovne -0x8(%%rdi), %%edi\n\t"                 \
-            "cmove %%ecx, %%edi\n\t"                        \
-            /* left node height */                          \
-            "mov 0x20(%0), %%rsi\n\t"                       \
-            "cmp $0x0, %%rsi\n\t"                           \
-            "cmove %1, %%rsi\n\t"                           \
-            "cmovne -0x8(%%rsi), %%esi\n\t"                 \
-            "cmove %%ecx, %%esi\n\t"                        \
-            /* initial const variable */                    \
-            "mov $0x0, %%ebx\n\t"                           \
-            "mov $0x1, %%eax\n\t"                           \
-            /* compute abs of (left - right) */             \
-            "sub %%esi, %%edi\n\t"                          \
-            "mov %%edi, %%esi\n\t"                          \
-            "and $0x80000000, %%esi\n\t"                    \
-            "cmovz %%ebx, %%ecx\n\t"                        \
-            "xor %%ecx, %%edi\n\t"                          \
-            "shr $0x1f, %%ecx\n\t"                          \
-            "add %%ecx, %%edi\n\t"                          \
-            "cmp %%eax, %%edi\n\t"                          \
-            "cmovg %%ebx, %%eax\n\t"                        \
-            "mov %%eax, (%1)\n\t"                           \
-            :                                               \
-            :"r"(node), "r"(balanced)                       \
-            :"edx", "eax", "rsi", "rdi", "ecx", "ebx")
+            /* left node height in %%edx */                 \
+            "mov       0x18(%1), %%rbx\n\t"                 \
+            "cmp           $0x0, %%rbx\n\t"                 \
+            "mov    $0xffffffff, %%edx\n\t"                 \
+            "cmove        %%rsp, %%rbx\n\t"                 \
+            "cmovne -0x8(%%rbx), %%edx\n\t"                 \
+            /* right node height in %%ecx */                \
+            "mov       0x20(%1), %%rbx\n\t"                 \
+            "cmp           $0x0, %%rbx\n\t"                 \
+            "mov    $0xffffffff, %%ecx\n\t"                 \
+            "cmove        %%rsp, %%rbx\n\t"                 \
+            "cmovne -0x8(%%rbx), %%ecx\n\t"                 \
+            /* abs(left - right) */                         \
+            "sub          %%ecx, %%edx\n\t"                 \
+            "mov          %%edx, %%ecx\n\t"                 \
+            "sar          $0x1f, %%ecx\n\t"                 \
+            "add          %%ecx, %%edx\n\t"                 \
+            "xor          %%ecx, %%edx\n\t"                 \
+            /* return true or false */                      \
+            "cmp           $0x1, %%edx\n\t"                 \
+            "mov           $0x0, %%ecx\n\t"                 \
+            "mov           $0x1, %0\n\t"                    \
+            "cmovg        %%ecx, %0\n\t"                    \
+            :"=r"(balanced)                                 \
+            :"r"(node)                                      \
+            :"rbx", "edx", "ecx")
 
     /*
      * if (NULL == node) {
@@ -156,42 +160,47 @@
             :"r"(node))
 
     /*
-     * 1. Compute height of left node and put it to edi
-     * 2. Compute height of right node and put it to esi
-     * 3. Compute abs(edi - esi), and write back to eax
+     * sint32 left;
+     * sint32 right;
+     *
+     * left = avl_tree_height_internal(avl_tree_left(node));
+     * right = avl_tree_height_internal(avl_tree_right(node));
+     *
+     * if (abs_sint32(left - right) > 1) {
+     *     return false;
+     * } else {
+     *     return true;
+     * }
      */
     #define avl_tree_node_balanced_optimize(node, balanced) \
         asm volatile (                                      \
-            "mov $0xffffffff, %%ecx\n\t"                    \
-            /* left node height */                          \
-            "mov 0x18(%0), %%edi\n\t"                       \
-            "cmp $0x0, %%edi\n\t"                           \
-            "cmove %1, %%edi\n\t"                           \
-            "cmovne 0x10(%%edi), %%edi\n\t"                 \
-            "cmove %%ecx, %%edi\n\t"                        \
-            /* left node height */                          \
-            "mov 0x1c(%0), %%esi\n\t"                       \
-            "cmp $0x0, %%esi\n\t"                           \
-            "cmove %1, %%esi\n\t"                           \
-            "cmovne 0x10(%%esi), %%esi\n\t"                 \
-            "cmove %%ecx, %%esi\n\t"                        \
-            /* initial const variable */                    \
-            "mov $0x0, %%ebx\n\t"                           \
-            "mov $0x1, %%eax\n\t"                           \
-            /* compute abs of (left - right) */             \
-            "sub %%esi, %%edi\n\t"                          \
-            "mov %%edi, %%esi\n\t"                          \
-            "and $0x80000000, %%esi\n\t"                    \
-            "cmovz %%ebx, %%ecx\n\t"                        \
-            "xor %%ecx, %%edi\n\t"                          \
-            "shr $0x1f, %%ecx\n\t"                          \
-            "add %%ecx, %%edi\n\t"                          \
-            "cmp %%eax, %%edi\n\t"                          \
-            "cmovg %%ebx, %%eax\n\t"                        \
-            "mov %%eax, (%1)\n\t"                           \
-            :                                               \
-            :"r"(node), "r"(balanced)                       \
-            :"edx", "eax", "esi", "edi", "ecx", "ebx")
+            /* left node height in %%edx */                 \
+            "mov       0x10(%1), %%ebx\n\t"                 \
+            "cmp           $0x0, %%ebx\n\t"                 \
+            "mov    $0xffffffff, %%edx\n\t"                 \
+            "cmove        %%esp, %%ebx\n\t"                 \
+            "cmovne -0x4(%%ebx), %%edx\n\t"                 \
+            /* right node height in %%ecx */                \
+            "mov       0x14(%1), %%ebx\n\t"                 \
+            "cmp           $0x0, %%ebx\n\t"                 \
+            "mov    $0xffffffff, %%ecx\n\t"                 \
+            "cmove        %%esp, %%ebx\n\t"                 \
+            "cmovne -0x4(%%ebx), %%ecx\n\t"                 \
+            /* abs(left - right) */                         \
+            "sub          %%ecx, %%edx\n\t"                 \
+            "mov          %%edx, %%ecx\n\t"                 \
+            "sar          $0x1f, %%ecx\n\t"                 \
+            "add          %%ecx, %%edx\n\t"                 \
+            "xor          %%ecx, %%edx\n\t"                 \
+            /* return true or false */                      \
+            "cmp           $0x1, %%edx\n\t"                 \
+            "mov           $0x0, %%ecx\n\t"                 \
+            "mov           $0x1, %0\n\t"                    \
+            "cmovg        %%ecx, %0\n\t"                    \
+            :"=r"(balanced)                                 \
+            :"r"(node)                                      \
+            :"ebx", "edx", "ecx")
+
     /*
      * if (NULL == node) {
      *     return NULL;

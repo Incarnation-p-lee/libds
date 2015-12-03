@@ -780,7 +780,7 @@ avl_tree_node_balanced_p(struct avl_tree *node)
 
     assert(NULL != node);
 
-    avl_tree_node_balanced_optimize(node, &balanced);
+    avl_tree_node_balanced_optimize(node, balanced);
     assert(avl_tree_node_balanced_optimize_validity_p(node, balanced));
 
     return balanced;
