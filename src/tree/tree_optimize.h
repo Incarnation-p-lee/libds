@@ -74,11 +74,11 @@
      */
     #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
         asm volatile (                                     \
-            "mov     $0x0, %0\n\t"                         \
             "lea -0x8(%1), %%rdx\n\t"                      \
             "cmp     $0x8, %%rdx\n\t"                      \
+            "mov     $0x0, %0\n\t"                         \
             "cmovg  %%rdx, %0\n\t"                         \
-            :"=&r"(avl)                                    \
+            :"=r"(avl)                                     \
             :"r"(node)                                     \
             :"rdx")
 
@@ -210,11 +210,11 @@
      */
     #define avl_tree_ptr_binary_to_avl_optimize(node, avl) \
         asm volatile (                                     \
-            "mov     $0x0, %0\n\t"                         \
             "lea -0x4(%1), %%edx\n\t"                      \
             "cmp     $0x4, %%edx\n\t"                      \
+            "mov     $0x0, %0\n\t"                         \
             "cmovg  %%rdx, %0\n\t"                         \
-            :"=&r"(avl)                                    \
+            :"=r"(avl)                                     \
             :"r"(node)                                     \
             :"edx")
 
