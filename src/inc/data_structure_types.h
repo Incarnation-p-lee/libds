@@ -236,6 +236,9 @@ struct min_max_heap {
  *       0   0
  *          /
  *         0
+ * Note: unlike binary search tree, leftist heap allow repeated nice.
+ *       So there is not collision chain concept here, just reuse the
+ *       structure binary search tree.
  */
 struct leftist_heap {
     sint32                    npl; /* null path length, NULL node is -1 */

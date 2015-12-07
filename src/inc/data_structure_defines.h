@@ -270,12 +270,12 @@
 
 #define leftist_heap_node_link(heap) \
     (assert(heap), (heap)->alias.chain.link)
-#define leftist_heap_node_link_set(tree, v) \
+#define leftist_heap_node_link_set(heap, v) \
     (assert(heap), (heap)->alias.chain.link = (v))
 
 #define leftist_heap_npl(heap) \
     (assert(heap), (heap)->npl)
-#define leftist_heap_npl_set(tree, v) \
+#define leftist_heap_npl_set(heap, v) \
     (assert(heap), (heap)->npl = (v))
 
 #endif

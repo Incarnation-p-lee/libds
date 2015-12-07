@@ -282,6 +282,9 @@ struct min_max_heap {
  *       0   0
  *          /
  *         0
+ * Note: unlike binary search tree, leftist heap allow repeated nice.
+ *       So there is not collision chain concept here, just reuse the
+ *       structure binary search tree.
  */
 struct leftist_heap {
     sint32                    npl; /* null path length, NULL node is -1 */
@@ -565,12 +568,12 @@ struct leftist_heap {
 
 #define leftist_heap_node_link(heap) \
     (assert(heap), (heap)->alias.chain.link)
-#define leftist_heap_node_link_set(tree, v) \
+#define leftist_heap_node_link_set(heap, v) \
     (assert(heap), (heap)->alias.chain.link = (v))
 
 #define leftist_heap_npl(heap) \
     (assert(heap), (heap)->npl)
-#define leftist_heap_npl_set(tree, v) \
+#define leftist_heap_npl_set(heap, v) \
     (assert(heap), (heap)->npl = (v))
 
 #endif
@@ -612,6 +615,7 @@ struct leftist_heap {
 
 #define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
 #define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
+#define MIN_S(x, y) ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 #define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))
@@ -994,6 +998,7 @@ extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_hea
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct leftist_heap * leftist_heap_create(void);
+extern struct leftist_heap * leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge);
 extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp);
 extern struct leftist_heap * leftist_heap_node_find(struct leftist_heap *heap, sint64 nice);
 extern struct leftist_heap * leftist_heap_ptr_binary_to_leftist(struct binary_search_tree *node);

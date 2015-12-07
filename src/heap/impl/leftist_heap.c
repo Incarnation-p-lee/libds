@@ -121,9 +121,129 @@ leftist_heap_node_insert(struct leftist_heap *heap, void *val, sint64 nice)
 }
 
 static inline void
+leftist_heap_node_npl_update(struct leftist_heap *node)
+{
+    sint32 l_npl;
+    sint32 r_npl;
+
+    assert(leftist_heap_structure_legal_p(node));
+
+    l_npl = leftist_heap_npl_internal(leftist_heap_left(node));
+    r_npl = leftist_heap_npl_internal(leftist_heap_right(node));
+
+    leftist_heap_npl_set(node, MIN_S(l_npl, r_npl) + 1);
+}
+
+static inline bool
+leftist_heap_node_ordered_p(struct leftist_heap *node)
+{
+    assert(NULL != node);
+
+    if (leftist_heap_npl_internal(leftist_heap_left(node))
+        >= leftist_heap_npl_internal(leftist_heap_right(node))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline void
+leftist_heap_node_child_swap(struct leftist_heap *node)
+{
+    struct binary_search_tree *tmp;
+
+    assert(NULL != node);
+
+    tmp = node->alias.left;
+    node->alias.left = node->alias.right;
+    node->alias.right = tmp;
+}
+
+static inline struct leftist_heap *
+leftist_heap_merge_from_right(struct leftist_heap *heap,
+    struct leftist_heap *merge)
+{
+    struct leftist_heap *tmp;
+    struct leftist_heap *touched;
+    struct leftist_heap *retval;
+
+    assert(leftist_heap_structure_legal_p(heap));
+    assert(leftist_heap_structure_legal_p(merge));
+
+    retval = leftist_heap_node_nice(heap) > leftist_heap_node_nice(merge) ?
+        merge : heap;
+
+    while (heap && merge) {
+        if (leftist_heap_node_nice(heap) < leftist_heap_node_nice(merge)) {
+            touched = heap;
+            tmp = leftist_heap_right(heap);
+            heap->alias.right = &merge->alias;
+            heap = tmp;
+        } else {
+            touched = merge;
+            tmp = leftist_heap_right(merge);
+            merge->alias.right = &heap->alias;
+            merge = tmp;
+        }
+
+        leftist_heap_node_npl_update(touched);
+    }
+
+    return retval;
+}
+
+static inline void
+leftist_heap_reorder_from_right(struct leftist_heap *heap)
+{
+    if (heap) {
+        leftist_heap_reorder_from_right(leftist_heap_right(heap));
+        if (!leftist_heap_node_ordered_p(heap)) {
+            leftist_heap_node_child_swap(heap);
+        }
+    }
+}
+
+static inline struct leftist_heap *
+leftist_heap_merge_internal(struct leftist_heap *heap,
+    struct leftist_heap *merge)
+{
+    struct leftist_heap *tmp;
+    struct leftist_heap *right_h;
+    struct leftist_heap *right_m;
+    struct leftist_heap *retval;
+
+    assert(NULL != heap);
+    assert(NULL != merge);
+
+    right_h = leftist_heap_right(heap);
+    right_m = leftist_heap_right(merge);
+    tmp = leftist_heap_merge_from_right(right_h, right_m);
+
+    if (leftist_heap_node_nice(heap) < leftist_heap_node_nice(merge)) {
+        heap->alias.right = &merge->alias;
+        merge->alias.right = &tmp->alias;
+        retval = heap;
+    } else {
+        merge->alias.right = &heap->alias;
+        heap->alias.right = &tmp->alias;
+        retval = merge;
+    }
+
+    leftist_heap_reorder_from_right(retval);
+
+    return retval;
+}
+
+struct leftist_heap *
 leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
 {
-
+    if (NULL == heap) {
+        return merge;
+    } else if (NULL != merge) {
+        return leftist_heap_merge_internal(heap, merge);
+    } else {
+        return NULL;
+    }
 }
 
 static inline struct leftist_heap *
