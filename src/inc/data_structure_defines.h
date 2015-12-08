@@ -257,21 +257,16 @@
     (assert(heap), HEAP_LINK(heap->alias, index) = (link))
 
 /* LEFTIST HEAP */
-#define leftist_heap_node_nice(heap) \
-    (assert(heap), (heap)->alias.chain.nice)
-#define leftist_heap_node_nice_set(heap, v) \
-    (assert(heap), (heap)->alias.chain.nice = (v))
+#define leftist_heap_nice(heap) \
+    (assert(heap), (heap)->data.nice)
+#define leftist_heap_nice_set(heap, v) \
+    (assert(heap), (heap)->data.nice = (v))
 
-#define leftist_heap_child_left(heap) \
-    (assert(heap), leftist_heap_ptr_binary_to_leftist(heap->alias.left))
+#define leftist_heap_left(heap) \
+    (assert(heap), (heap)->left)
 
-#define leftist_heap_child_right(heap) \
-    (assert(heap), leftist_heap_ptr_binary_to_leftist(heap->alias.right))
-
-#define leftist_heap_node_link(heap) \
-    (assert(heap), (heap)->alias.chain.link)
-#define leftist_heap_node_link_set(heap, v) \
-    (assert(heap), (heap)->alias.chain.link = (v))
+#define leftist_heap_right(heap) \
+    (assert(heap), (heap)->right)
 
 #define leftist_heap_npl(heap) \
     (assert(heap), (heap)->npl)
@@ -279,3 +274,4 @@
     (assert(heap), (heap)->npl = (v))
 
 #endif
+

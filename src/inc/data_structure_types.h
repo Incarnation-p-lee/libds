@@ -190,6 +190,14 @@ struct open_addressing_hash {
 };
 
 /*
+ * Hold all data heap stored
+ */
+struct heap_data {
+    sint64 nice;
+    void   *val;
+};
+
+/*
  * generate heap
  */
 struct binary_heap {
@@ -229,20 +237,22 @@ struct min_max_heap {
  *     the <null path length> of right child.
  *     This structure can finish heap merge in O(N).
  *     For example:
- *           1
- *          / \
- *         1   0
- *        / \
- *       0   0
- *          /
- *         0
+ *           4<1>
+ *          /    \
+ *         7<1>   9<0>
+ *        /    \
+ *       12<0>  18<0>
+ *             /
+ *            21<0>
  * Note: unlike binary search tree, leftist heap allow repeated nice.
  *       So there is not collision chain concept here, just reuse the
  *       structure binary search tree.
  */
 struct leftist_heap {
-    sint32                    npl; /* null path length, NULL node is -1 */
-    struct binary_search_tree alias;
+    sint32              npl; /* null path length, NULL node is -1 */
+    struct heap_data    data;
+    struct leftist_heap *left;
+    struct leftist_heap *right;
 };
 
 #endif
