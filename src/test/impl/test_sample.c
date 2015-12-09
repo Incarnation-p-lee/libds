@@ -273,3 +273,24 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
+static inline struct leftist_heap *
+test_leftist_heap_sample(uint64 range, uint32 size)
+{
+    struct leftist_heap *heap;
+    sint64 nice;
+    uint32 i;
+
+    assert(0 != size);
+
+    heap = leftist_heap_create();
+    i = 0;
+    while (i < size) {
+        nice = (sint64)((rand() % range) - (range / 2));
+        heap = leftist_heap_insert(heap, &heap, nice);
+        i++;
+    }
+
+    return heap;
+}
+
+

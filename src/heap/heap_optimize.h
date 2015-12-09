@@ -11,9 +11,10 @@
      */
     #define leftist_heap_npl_optimize(node, npl) \
         asm volatile (                           \
-            "cmp          $0x0, %1\n\t"          \
-            "cmovz       %%rsp, %%rdx\n\t"       \
+            "mov            %1, %%rdx\n\t"       \
+            "cmp          $0x0, %%rdx\n\t"       \
             "mov   $0xffffffff, %0\n\t"          \
+            "cmovz       %%rsp, %%rdx\n\t"       \
             "cmovnz 0x0(%%rdx), %0\n\t"          \
             :"=r"(npl)                           \
             :"r"(node)                           \
@@ -31,9 +32,10 @@
      */
     #define leftist_heap_npl_optimize(node, npl) \
         asm volatile (                           \
-            "cmp          $0x0, %1\n\t"          \
-            "cmovz       %%esp, %%edx\n\t"       \
+            "mov            %1, %%edx\n\t"       \
+            "cmp          $0x0, %%edx\n\t"       \
             "mov   $0xffffffff, %0\n\t"          \
+            "cmovz       %%esp, %%edx\n\t"       \
             "cmovnz 0x0(%%edx), %0\n\t"          \
             :"=r"(npl)                           \
             :"r"(node)                           \

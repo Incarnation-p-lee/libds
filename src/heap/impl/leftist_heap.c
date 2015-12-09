@@ -36,7 +36,7 @@ leftist_heap_destroy_internal(struct leftist_heap *heap)
 {
     if (heap) {
         leftist_heap_destroy_internal(leftist_heap_left(heap));
-        leftist_heap_destroy_internal(leftist_heap_left(heap));
+        leftist_heap_destroy_internal(leftist_heap_right(heap));
 
         free_ds(heap);
     }
@@ -69,8 +69,11 @@ leftist_heap_node_get_min(struct leftist_heap *heap)
     }
 }
 
+/*
+ * _RETURN_ the new leftist heap.
+ */
 struct leftist_heap *
-leftist_heap_node_insert(struct leftist_heap *heap, void *val, sint64 nice)
+leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice)
 {
     struct leftist_heap *node;
 
@@ -97,7 +100,7 @@ leftist_heap_node_npl_update(struct leftist_heap *node)
 }
 
 static inline bool
-leftist_heap_node_ordered_p(struct leftist_heap *node)
+leftist_heap_node_npl_ordered_p(struct leftist_heap *node)
 {
     assert(NULL != node);
 
@@ -125,29 +128,36 @@ static inline struct leftist_heap *
 leftist_heap_merge_from_right(struct leftist_heap *heap,
     struct leftist_heap *merge)
 {
-    struct leftist_heap *tmp;
-    struct leftist_heap *touched;
     struct leftist_heap *retval;
+    struct leftist_heap *tmp;
+    struct leftist_heap **major;
+    struct leftist_heap *minor;
 
     assert(leftist_heap_structure_legal_p(heap));
     assert(leftist_heap_structure_legal_p(merge));
 
-    retval = leftist_heap_nice(heap) > leftist_heap_nice(merge) ? merge : heap;
+    if (leftist_heap_nice(heap) <= leftist_heap_nice(merge)) {
+        retval = heap;
+        major = &heap;
+        minor = merge;
+    } else {
+        retval = merge;
+        major = &merge;
+        minor = heap;
+    }
 
-    while (heap && merge) {
-        if (leftist_heap_nice(heap) < leftist_heap_nice(merge)) {
-            touched = heap;
-            tmp = heap->right;
-            heap->right = merge;
-            heap = tmp;
+    while (minor) {
+        if (!*major) {
+            *major = minor;
+            break;
+        } else if (leftist_heap_nice(*major) <= leftist_heap_nice(minor)) {
+            major = &(*major)->right;
         } else {
-            touched = merge;
-            tmp = merge->right;
-            merge->right = heap;
-            merge = tmp;
+            tmp = *major;
+            *major = minor;
+            major = &minor->right;
+            minor = tmp;
         }
-
-        leftist_heap_node_npl_update(touched);
     }
 
     return retval;
@@ -158,7 +168,8 @@ leftist_heap_reorder_from_right(struct leftist_heap *heap)
 {
     if (heap) {
         leftist_heap_reorder_from_right(leftist_heap_right(heap));
-        if (!leftist_heap_node_ordered_p(heap)) {
+        leftist_heap_node_npl_update(heap);
+        if (!leftist_heap_node_npl_ordered_p(heap)) {
             leftist_heap_node_child_swap(heap);
         }
     }
@@ -168,33 +179,24 @@ static inline struct leftist_heap *
 leftist_heap_merge_internal(struct leftist_heap *heap,
     struct leftist_heap *merge)
 {
-    struct leftist_heap *tmp;
-    struct leftist_heap *right_h;
-    struct leftist_heap *right_m;
     struct leftist_heap *retval;
 
     assert(NULL != heap);
     assert(NULL != merge);
+    assert(leftist_heap_validity_p(heap));
+    assert(leftist_heap_validity_p(merge));
 
-    right_h = leftist_heap_right(heap);
-    right_m = leftist_heap_right(merge);
-    tmp = leftist_heap_merge_from_right(right_h, right_m);
-
-    if (leftist_heap_nice(heap) < leftist_heap_nice(merge)) {
-        heap->right = merge;
-        merge->right = tmp;
-        retval = heap;
-    } else {
-        merge->right = heap;
-        heap->right = tmp;
-        retval = merge;
-    }
-
+    retval = leftist_heap_merge_from_right(heap, merge);
     leftist_heap_reorder_from_right(retval);
+
+    assert(leftist_heap_validity_p(retval));
 
     return retval;
 }
 
+/*
+ * _RETURN_ the new leftist heap.
+ */
 struct leftist_heap *
 leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
 {
@@ -207,6 +209,9 @@ leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
     }
 }
 
+/*
+ * _RETURN_ the removed leftist heap node.
+ */
 struct leftist_heap *
 leftist_heap_remove_min(struct leftist_heap **heap)
 {

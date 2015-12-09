@@ -581,6 +581,11 @@ struct leftist_heap {
 #define leftist_heap_npl_set(heap, v) \
     (assert(heap), (heap)->npl = (v))
 
+#define leftist_heap_val(heap) \
+    (assert(heap), (heap)->data.val)
+#define leftist_heap_val_set(heap, v) \
+    (assert(heap), (heap)->data.val = (v))
+
 #endif
 
 /* END of ./src/inc/data_structure_defines.h */
@@ -1003,9 +1008,9 @@ extern struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_hea
 extern struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 extern struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 extern struct leftist_heap * leftist_heap_create(void);
+extern struct leftist_heap * leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice);
 extern struct leftist_heap * leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge);
 extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp, sint64 nice);
-extern struct leftist_heap * leftist_heap_node_insert(struct leftist_heap *heap, void *val, sint64 nice);
 extern struct leftist_heap * leftist_heap_remove_min(struct leftist_heap **heap);
 extern struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);

@@ -111,7 +111,9 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
 static inline bool
 leftist_heap_structure_legal_p(struct leftist_heap *heap)
 {
-    if (NULL == heap || heap->left == heap->right) {
+    if (NULL == heap) {
+        return false;
+    } else if (NULL != heap->left && heap->left == heap->right) {
         return false;
     } else {
         return true;
@@ -142,6 +144,42 @@ leftist_heap_npl_optimize_validity_p(struct leftist_heap *node,
         fprintf(stdout, "[32mexpected[0m: %d\n", expected);
         fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
         return false;
+    }
+}
+
+static inline bool
+leftist_heap_node_heap_ordered_p(struct leftist_heap *node)
+{
+    if (!node) {
+        return true;
+    } else if (NULL == node->left && NULL == node->right) {
+        return true;
+    } else if (NULL != node->left
+        && leftist_heap_nice(node) > leftist_heap_nice(node->left)) {
+        return false;
+    } else if (NULL != node->right
+        && leftist_heap_nice(node) > leftist_heap_nice(node->right)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+leftist_heap_validity_p(struct leftist_heap *heap)
+{
+    if (!heap) {
+        return true;
+    } else if (!leftist_heap_node_heap_ordered_p(heap)) {
+        return false;
+    } else if (!leftist_heap_node_npl_ordered_p(heap)) {
+        return false;
+    } else if (!leftist_heap_validity_p(heap->left)) {
+        return false;
+    } else if (!leftist_heap_validity_p(heap->right)) {
+        return false;
+    } else {
+        return true;
     }
 }
 

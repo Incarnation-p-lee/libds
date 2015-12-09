@@ -19,6 +19,7 @@ static inline struct avl_tree * test_avl_tree_sample(uint64 range, uint32 count)
 static inline struct binary_search_tree * test_binary_search_tree_sample(uint64 range, uint32 count);
 static inline struct doubly_end_queue * test_doubly_end_queue_sample(uint32 count);
 static inline struct doubly_linked_list * test_doubly_linked_list_sample(uint32 range, uint32 node_count);
+static inline struct leftist_heap * test_leftist_heap_sample(uint64 range, uint32 size);
 static inline struct maximal_heap * test_maximal_heap_sample(uint64 range, uint32 size);
 static inline struct min_max_heap * test_min_max_heap_sample(uint64 range, uint32 size);
 static inline struct minimal_heap * test_minimal_heap_sample(uint64 range, uint32 size);

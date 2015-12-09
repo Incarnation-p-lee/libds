@@ -29,9 +29,11 @@ static inline bool binary_heap_ordered_p(struct binary_heap *heap, void *heap_or
 static inline bool binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_index, uint32 down_index, sint64 nice, uint32 *tgt_index);
 static inline bool binary_heap_structure_legal_p(struct binary_heap *heap);
 static inline bool binary_heap_valid_ordered_func_ptr_p(void *func_ptr);
-static inline bool leftist_heap_node_ordered_p(struct leftist_heap *node);
+static inline bool leftist_heap_node_heap_ordered_p(struct leftist_heap *node);
+static inline bool leftist_heap_node_npl_ordered_p(struct leftist_heap *node);
 static inline bool leftist_heap_npl_optimize_validity_p(struct leftist_heap *node, sint32 expected);
 static inline bool leftist_heap_structure_legal_p(struct leftist_heap *heap);
+static inline bool leftist_heap_validity_p(struct leftist_heap *heap);
 static inline sint32 leftist_heap_npl_internal(struct leftist_heap *node);
 static inline sint32 leftist_heap_npl_internal_default(struct leftist_heap *node);
 static inline struct binary_heap * binary_heap_create(uint32 capacity);
@@ -92,9 +94,9 @@ struct doubly_linked_list * minimal_heap_node_find_min(struct minimal_heap *heap
 struct doubly_linked_list * minimal_heap_node_remove(struct minimal_heap *heap, sint64 nice);
 struct doubly_linked_list * minimal_heap_node_remove_min(struct minimal_heap *heap);
 struct leftist_heap * leftist_heap_create(void);
+struct leftist_heap * leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice);
 struct leftist_heap * leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge);
 struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp, sint64 nice);
-struct leftist_heap * leftist_heap_node_insert(struct leftist_heap *heap, void *val, sint64 nice);
 struct leftist_heap * leftist_heap_remove_min(struct leftist_heap **heap);
 struct maximal_heap * maximal_heap_build(struct collision_chain **chain_array, uint32 size);
 struct maximal_heap * maximal_heap_create(uint32 capacity);

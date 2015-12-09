@@ -273,5 +273,10 @@
 #define leftist_heap_npl_set(heap, v) \
     (assert(heap), (heap)->npl = (v))
 
+#define leftist_heap_val(heap) \
+    (assert(heap), (heap)->data.val)
+#define leftist_heap_val_set(heap, v) \
+    (assert(heap), (heap)->data.val = (v))
+
 #endif
 

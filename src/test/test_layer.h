@@ -1858,6 +1858,42 @@ static const struct test_layer_table min_max_heap[] = {
     },
     {NULL,                          NULL, {NULL, NULL},},
 };
+
+static const struct test_layer_table leftist_heap[] = {
+    {
+        "struct_field",
+        NULL,
+        {
+            &unit_test_leftist_heap_struct_field,
+            NULL,
+        },
+    },
+    {
+        "create",
+        NULL,
+        {
+            &unit_test_leftist_heap_create,
+            NULL,
+        },
+    },
+    {
+        "node_create",
+        NULL,
+        {
+            &unit_test_leftist_heap_node_create,
+            NULL,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &unit_test_leftist_heap_destroy,
+            NULL,
+        },
+    },
+    {NULL,                          NULL, {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1908,6 +1944,7 @@ static const struct test_layer_table test_heap_implement[] = {
     {"minimal", minimal_heap, {NULL, NULL},},
     {"maximal", maximal_heap, {NULL, NULL},},
     {"min_max", min_max_heap, {NULL, NULL},},
+    {"leftist", leftist_heap, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,      NULL,         {NULL, NULL},},
 };
