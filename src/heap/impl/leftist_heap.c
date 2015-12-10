@@ -52,7 +52,7 @@ leftist_heap_destroy(struct leftist_heap **heap)
 }
 
 static inline void *
-leftist_heap_node_get_min_internal(struct leftist_heap *heap)
+leftist_heap_get_min_internal(struct leftist_heap *heap)
 {
     assert(leftist_heap_structure_legal_p(heap));
 
@@ -60,12 +60,12 @@ leftist_heap_node_get_min_internal(struct leftist_heap *heap)
 }
 
 void *
-leftist_heap_node_get_min(struct leftist_heap *heap)
+leftist_heap_get_min(struct leftist_heap *heap)
 {
     if (complain_null_pointer_p(heap)) {
         return NULL;
     } else {
-        return leftist_heap_node_get_min_internal(heap);
+        return leftist_heap_get_min_internal(heap);
     }
 }
 
@@ -204,9 +204,38 @@ leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
         return NULL;
     } else if (NULL == heap) {
         return merge;
+    } else if (NULL == merge) {
+        return heap;
     } else {
         return leftist_heap_merge_internal(heap, merge);
     }
+}
+
+static inline struct leftist_heap *
+leftist_heap_remove_min_internal(struct leftist_heap **heap)
+{
+    struct leftist_heap *removed;
+    struct leftist_heap *left;
+    struct leftist_heap *right;
+
+    assert(heap);
+    assert(leftist_heap_structure_legal_p(*heap));
+
+    removed = *heap;
+    left = removed->left;
+    right = removed->right;
+
+    if (NULL == left) {
+        *heap = right;
+    } else if (NULL == right) {
+        *heap = left;
+    } else {
+        *heap = leftist_heap_merge_internal(left, right);
+    }
+
+    removed->left = NULL;
+    removed->right = NULL;
+    return removed;
 }
 
 /*
@@ -215,22 +244,18 @@ leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
 struct leftist_heap *
 leftist_heap_remove_min(struct leftist_heap **heap)
 {
-    struct leftist_heap *removed;
-    struct leftist_heap *left;
-    struct leftist_heap *right;
-
     if (complain_null_pointer_p(heap) || complain_null_pointer_p(*heap)) {
         return NULL;
     } else {
-        removed = *heap;
-        left = removed->left;
-        right = removed->right;
+        return leftist_heap_remove_min_internal(heap);
+    }
+}
 
-        *heap = leftist_heap_merge_internal(left, right);
-
-        removed->left = NULL;
-        removed->right = NULL;
-        return removed;
+void
+leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
+{
+    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
+        free_ds(leftist_heap_remove_min_internal(heap));
     }
 }
 

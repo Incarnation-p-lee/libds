@@ -1892,6 +1892,46 @@ static const struct test_layer_table leftist_heap[] = {
             NULL,
         },
     },
+    {
+        "get_min",
+        NULL,
+        {
+            &unit_test_leftist_heap_get_min,
+            NULL,
+        },
+    },
+    {
+        "insert",
+        NULL,
+        {
+            &unit_test_leftist_heap_insert,
+            NULL,
+        },
+    },
+    {
+        "merge",
+        NULL,
+        {
+            &unit_test_leftist_heap_merge,
+            NULL,
+        },
+    },
+    {
+        "remove_min",
+        NULL,
+        {
+            &unit_test_leftist_heap_remove_min,
+            NULL,
+        },
+    },
+    {
+        "remove_min_and_destroy",
+        NULL,
+        {
+            &unit_test_leftist_heap_remove_min_and_destroy,
+            NULL,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/
