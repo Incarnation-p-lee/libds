@@ -33,6 +33,7 @@ extern void end_of_report_print(void);
 extern void memory_maps_obtain(void);
 extern void test_parameter_parser(uint32 argc, char **argv);
 extern void test_execution_start(void);
+extern void memory_cache_cleanup(void);
 
 
 /* END OF GLOBAL EXPORTED INTERFACE */
