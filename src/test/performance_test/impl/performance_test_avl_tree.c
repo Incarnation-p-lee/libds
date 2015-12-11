@@ -173,6 +173,7 @@ performance_test_avl_tree_node_contains_p(uint32 count)
     struct avl_tree *tree;
     struct avl_tree *tmp;
 
+    count = count << 2;
     tree = test_avl_tree_sample(0x62a49, 0x6233);
     tmp = avl_tree_node_find_max(tree);
 
