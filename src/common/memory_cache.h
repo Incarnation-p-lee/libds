@@ -1,8 +1,10 @@
 #ifndef HAVE_MEMORY_CACHE_H
 #define HAVE_MEMORY_CACHE_H
 
-#define MEM_ENTRY_CNT  512
+#define MEM_ENTRY_CNT  16
 #define MEM_ENTRY_NULL 0
+#define MEM_PRE_LEN    0x10
+#define MEM_TO_REAL(a) (a - MEM_PRE_LEN)
 
 struct memory_cache_entry {
     void   *addr;

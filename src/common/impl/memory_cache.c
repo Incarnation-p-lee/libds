@@ -12,10 +12,10 @@ memory_cache_allocate(uint32 size)
         memory_cache_remove_entry_by_index(mem_cc_set.index);
         return retval;
     } else {
-        retval = malloc_ds(size + 4);
+        retval = malloc_ds(size + MEM_PRE_LEN);
         *(uint32 *)retval = size;
 
-        return retval + 4;
+        return retval + MEM_PRE_LEN;
     }
 }
 
@@ -25,11 +25,11 @@ memory_cache_free(void *addr)
     uint32 size;
 
     if (!complain_null_pointer_p(addr)) {
-        size = *(uint32 *)(addr - 4);
+        size = *(uint32 *)(MEM_TO_REAL(addr));
         assert(0 != size);
 
         if (!memory_cache_add_entry_p(addr, size)) {
-            free_ds(addr - 4);
+            free_ds(MEM_TO_REAL(addr));
         }
     }
 }
@@ -125,7 +125,7 @@ memory_cache_cleanup(void)
     index_start = 0;
     while (index_start < MEM_ENTRY_CNT) {
         if (MEM_ENTRY_NULL != mem_cc_set.list[index_start].size) {
-            free_ds(mem_cc_set.list[index_start].addr - 4);
+            free_ds(MEM_TO_REAL(mem_cc_set.list[index_start].addr));
         }
         index_start++;
     }
