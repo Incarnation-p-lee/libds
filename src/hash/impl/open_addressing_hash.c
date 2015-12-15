@@ -4,7 +4,7 @@ open_addressing_hash_create(uint32 size)
     struct hashing_table *table;
     struct open_addressing_hash *hash;
 
-    hash = malloc_ds(sizeof(*hash));
+    hash = memory_cache_allocate(sizeof(*hash));
     if (complain_no_memory_p(hash)) {
         /*
          * Will not reach here.
@@ -33,7 +33,7 @@ open_addressing_hash_destroy(struct open_addressing_hash **hash)
     if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
         hashing_table_destroy(&(*hash)->table);
 
-        free_ds(*hash);
+        memory_cache_free(*hash);
         *hash = NULL;
     }
 

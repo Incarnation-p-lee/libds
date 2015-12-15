@@ -306,7 +306,7 @@ doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node)
 
     if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
         removed = doubly_linked_list_node_remove_internal(node);
-        free_ds(removed);
+        memory_cache_free(removed);
     }
 }
 

@@ -4,7 +4,7 @@ separate_chain_hash_create(uint32 size)
     struct hashing_table *table;
     struct separate_chain_hash *hash;
 
-    hash = malloc_ds(sizeof(*hash));
+    hash = memory_cache_allocate(sizeof(*hash));
     if (complain_no_memory_p(hash)) {
         /*
          * Will not reach here.
@@ -55,7 +55,7 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
         separate_chain_hash_chain_destroy(*hash);
         hashing_table_destroy(&(*hash)->table);
 
-        free_ds(*hash);
+        memory_cache_free(*hash);
         *hash = NULL;
     }
 }
