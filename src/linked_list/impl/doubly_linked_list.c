@@ -152,7 +152,6 @@ doubly_linked_list_destroy(struct doubly_linked_list **list)
          */
         do {
             next = &node->next;
-            // free_ds(node);
             memory_cache_free(node);
             node = *next;
         } while(*list != node);
