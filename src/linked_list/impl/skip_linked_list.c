@@ -9,7 +9,7 @@ skip_linked_list_node_create(void *val, sint32 key)
 {
     struct skip_linked_list *list;
 
-    list = malloc_ds(sizeof(*list));
+    list = memory_cache_allocate(sizeof(*list));
     if (!complain_no_memory_p(list)) {
         memset(list, 0, sizeof(*list));
         skip_linked_list_node_initial(list, val, key);
@@ -46,7 +46,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
 
         while (node) {
             next = node->next;
-            free_ds(node);
+            memory_cache_free(node);
             node = next;
         }
 
@@ -410,7 +410,7 @@ skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list,
         if (!removed) {
             pr_log_warn("The node to be removed do not exist in given list.\n");
         } else {
-            free_ds(removed);
+            memory_cache_free(removed);
         }
     }
 }
