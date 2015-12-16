@@ -3,7 +3,7 @@ doubly_end_queue_create(void)
 {
     struct doubly_end_queue *queue;
 
-    queue = malloc_ds(sizeof(*queue));
+    queue = memory_cache_allocate(sizeof(*queue));
 
     if (!complain_no_memory_p(queue)) {
         queue->sid = 0x0u;
@@ -22,7 +22,7 @@ doubly_end_queue_destroy(struct doubly_end_queue **queue)
             doubly_end_queue_cleanup_internal(*queue);
         }
 
-        free_ds(*queue);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }
@@ -112,7 +112,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
     struct doubly_end_queue_list *tmp;
 
     if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
-        tmp = malloc_ds(sizeof(*tmp));
+        tmp = memory_cache_allocate(sizeof(*tmp));
 
         if (!complain_no_memory_p(tmp)) {
             tmp->val = member;
@@ -135,7 +135,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
     struct doubly_end_queue_list *tmp;
 
     if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
-        tmp = malloc_ds(sizeof(*tmp));
+        tmp = memory_cache_allocate(sizeof(*tmp));
 
         if (!complain_no_memory_p(tmp)) {
             tmp->val = member;
@@ -174,7 +174,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
             } else {
                 link = &queue->head->link;
                 doubly_linked_list_node_remove(&link);
-                free_ds(queue->head);
+                memory_cache_free(queue->head);
                 queue->head = tmp;
             }
 
@@ -205,7 +205,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             } else {
                 link = &queue->tail->link;
                 doubly_linked_list_node_remove(&link);
-                free_ds(queue->tail);
+                memory_cache_free(queue->tail);
                 queue->tail = tmp;
             }
 
@@ -220,7 +220,7 @@ doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
     assert(queue);
     assert(queue->head == queue->tail);
 
-    free_ds(queue->head);
+    memory_cache_free(queue->head);
     queue->head = NULL;
     queue->tail = NULL;
 }
@@ -241,7 +241,7 @@ doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
         next = doubly_end_queue_list_next(tmp);
         link = &tmp->link;
         doubly_linked_list_node_remove(&link);
-        free_ds(tmp);
+        memory_cache_free(tmp);
 
         tmp = next;
     }

@@ -4,6 +4,9 @@
 #define DEFAULT_QUEUE_SPACE_SIZE   1024
 #define EXPAND_QUEUE_SPACE_MIN     32
 
+extern void * memory_cache_allocate(uint32 size);
+extern void memory_cache_free(void *addr);
+extern void * memory_cache_re_allocate(void *addr, uint32 size);
 extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern bool array_stack_full_p(struct array_stack *stack);
