@@ -19,6 +19,30 @@ memory_cache_allocate(uint32 size)
     }
 }
 
+void *
+memory_cache_re_allocate(void *addr, uint32 size)
+{
+    uint32 old_size;
+    void *new_addr;
+
+    if (complain_zero_size_p(size)) {
+        return NULL;
+    } else if (complain_null_pointer_p(addr)) {
+        return memory_cache_allocate(size);
+    } else {
+        old_size = *(uint32 *)MEM_TO_REAL(addr);
+        assert(0 != old_size);
+
+        if (size <= old_size) {
+            return addr;
+        } else {
+            new_addr = realloc_ds(MEM_TO_REAL(addr), size + MEM_PRE_LEN);
+            *(uint32 *)new_addr = size;
+            return new_addr + MEM_PRE_LEN;
+        }
+    }
+}
+
 void
 memory_cache_free(void *addr)
 {

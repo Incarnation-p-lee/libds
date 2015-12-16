@@ -20,6 +20,7 @@ struct memory_maps * memory_maps_entry_find(char *name);
 uint32 prime_numeral_next(uint32 prime);
 uint32 random_uint32_with_limit(uint32 lmt);
 void * memory_cache_allocate(uint32 size);
+void * memory_cache_re_allocate(void *addr, uint32 size);
 void memory_cache_cleanup(void);
 void memory_cache_free(void *addr);
 void memory_maps_obtain(void);

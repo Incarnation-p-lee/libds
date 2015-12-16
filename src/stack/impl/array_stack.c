@@ -1,17 +1,19 @@
 /*
- * _RETURN_ one instance of array_stack.  *   If no memory available, it never _RETURN_, export an error and exit.
+ * _RETURN_ one instance of array_stack.
+ *   If no memory available, it never _RETURN_, export an error and exit.
  */
 struct array_stack *
 array_stack_create(void)
 {
     struct array_stack *stack;
 
-    stack = malloc_ds(sizeof(*stack));
+    stack = memory_cache_allocate(sizeof(*stack));
     if (!complain_no_memory_p(stack)) {
         stack->sid = 0u;
     }
 
-    stack->space.bp = malloc_ds(sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
+    stack->space.bp = memory_cache_allocate(
+        sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
     if (!complain_no_memory_p(stack->space.bp)) {
         stack->space.sp = stack->space.bp;
         stack->space.dim = DEFAULT_STACK_SPACE_SIZE;
@@ -28,8 +30,8 @@ void
 array_stack_destroy(struct array_stack **stack)
 {
     if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
-        free_ds((*stack)->space.bp);
-        free_ds(*stack);
+        memory_cache_free((*stack)->space.bp);
+        memory_cache_free(*stack);
         *stack = NULL;
     }
 }
@@ -46,7 +48,8 @@ array_stack_space_expand_internal(struct array_stack *stack, uint32 increment)
 
     offset = (ptrdiff_t)(stack->space.sp - stack->space.bp);
     new_size = stack->space.dim + increment;
-    new_addr = realloc_ds(stack->space.bp, sizeof(void *) * new_size);
+    new_addr = memory_cache_re_allocate(stack->space.bp,
+        sizeof(void *) * new_size);
     assert(new_size > stack->space.dim);
 
     if (!complain_no_memory_p(new_addr)) {
