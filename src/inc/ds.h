@@ -684,7 +684,7 @@ extern struct single_linked_list * single_linked_list_merge(struct single_linked
 extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *list, uint32 index);
 extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
-extern struct single_linked_list * single_linked_list_node_previous(struct single_linked_list *node);
+extern struct single_linked_list * single_linked_list_previous(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
 extern struct skip_linked_list * skip_linked_list_create(void);
 extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
@@ -709,13 +709,10 @@ extern void doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list
 extern void doubly_linked_list_serialize(struct doubly_linked_list *list);
 extern void single_linked_list_destroy(struct single_linked_list **list);
 extern void single_linked_list_initial(struct single_linked_list *list);
+extern void single_linked_list_insert_after(struct single_linked_list *list, void *val);
+extern void single_linked_list_insert_before(struct single_linked_list *list, void *val);
 extern void single_linked_list_iterate(struct single_linked_list *list, void (*handler)(void *));
-extern void single_linked_list_node_append(struct single_linked_list *node, void *val);
 extern void single_linked_list_node_initial(struct single_linked_list *list, void *val, uint32 sid);
-extern void single_linked_list_node_insert_after(struct single_linked_list *cur, struct single_linked_list *node);
-extern void single_linked_list_node_insert_after_risky(struct single_linked_list *cur, struct single_linked_list *node);
-extern void single_linked_list_node_insert_before(struct single_linked_list *cur, struct single_linked_list *node);
-extern void single_linked_list_node_insert_before_risky(struct single_linked_list *cur, struct single_linked_list *node);
 extern void single_linked_list_node_remove_and_destroy(struct single_linked_list **node);
 extern void single_linked_list_serialize(struct single_linked_list *list);
 extern void skip_linked_list_destroy(struct skip_linked_list **list);
