@@ -122,7 +122,6 @@ mkdir -p $objdir/out/
 perl src/script/export_api_include.plx
 cp src/inc/ds.h $objdir/out/
 # update module declaration head file
-echo "$debug version = $debug"
 perl src/script/declaration_generate.plx $debug
 
 function compile_obj() {
