@@ -255,7 +255,7 @@ void
 leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
-        free_ds(leftist_heap_remove_min_internal(heap));
+        memory_cache_free(leftist_heap_remove_min_internal(heap));
     }
 }
 
