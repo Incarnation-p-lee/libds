@@ -2,7 +2,7 @@ language: c
 compiler:
   - gcc
   - clang
-script: sh src/script/build.sh DEBUG=1
+script: bash src/script/build.sh DEBUG=1
 notifications:
   email:
     - incarnation.p.lee@outlook.com
