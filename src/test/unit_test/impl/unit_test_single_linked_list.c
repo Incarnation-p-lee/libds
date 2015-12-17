@@ -36,7 +36,7 @@ unit_test_single_linked_list_create(void)
     tmp = single_linked_list_create();
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_previous(tmp), &pass);
 
     single_linked_list_destroy(&tmp);
     UNIT_TEST_RESULT(single_linked_list_create, pass);
@@ -59,7 +59,7 @@ unit_test_single_linked_list_node_create(void)
     RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(&sid, single_linked_list_node_val(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_previous(tmp), &pass);
 
     single_linked_list_destroy(&tmp);
     UNIT_TEST_RESULT(single_linked_list_node_create, pass);
@@ -84,7 +84,7 @@ unit_test_single_linked_list_node_initial(void)
 
     RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_previous(tmp), &pass);
     RESULT_CHECK_pointer(&pass, single_linked_list_node_val(tmp), &pass);
 
     single_linked_list_destroy(&tmp);
@@ -103,39 +103,14 @@ unit_test_single_linked_list_initial(void)
 
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);
     RESULT_CHECK_pointer(tmp, single_linked_list_node_next(tmp), &pass);
-    RESULT_CHECK_pointer(tmp, single_linked_list_node_previous(tmp), &pass);
+    RESULT_CHECK_pointer(tmp, single_linked_list_previous(tmp), &pass);
 
     single_linked_list_destroy(&tmp);
     UNIT_TEST_RESULT(single_linked_list_initial, pass);
 }
 
 static void
-unit_test_single_linked_list_node_append(void)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *next;
-    struct single_linked_list *append;
-    bool pass;
-
-    pass = true;
-    head = test_single_linked_list_sample(0xA2E, 0x53D);
-    single_linked_list_node_append(NULL, &pass);
-
-    next = single_linked_list_node_next(head);
-    single_linked_list_node_append(head, &pass);
-    append = single_linked_list_node_next(head);
-
-    RESULT_CHECK_pointer(&pass, single_linked_list_node_val(append), &pass);
-    RESULT_CHECK_pointer(head, single_linked_list_node_previous(append), &pass);
-    RESULT_CHECK_pointer(next, single_linked_list_node_next(append), &pass);
-    RESULT_CHECK_pointer(append, single_linked_list_node_previous(next), &pass);
-
-    single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_append, pass);
-}
-
-static void
-unit_test_single_linked_list_node_previous(void)
+unit_test_single_linked_list_previous(void)
 {
     struct single_linked_list *head;
     struct single_linked_list *prev;
@@ -144,184 +119,66 @@ unit_test_single_linked_list_node_previous(void)
 
     pass = true;
     head = test_single_linked_list_sample(0x9AB, 0xBF3);
-    single_linked_list_node_append(head, &pass);
-    RESULT_CHECK_pointer(NULL, single_linked_list_node_previous(NULL), &pass);
+    single_linked_list_insert_after(head, &pass);
+    RESULT_CHECK_pointer(NULL, single_linked_list_previous(NULL), &pass);
 
-    prev = single_linked_list_node_previous(head);
-    RESULT_CHECK_pointer(prev, single_linked_list_node_previous(head), &pass);
+    prev = single_linked_list_previous(head);
+    RESULT_CHECK_pointer(prev, single_linked_list_previous(head), &pass);
 
     tmp = single_linked_list_node_next(head);
     single_linked_list_node_next_set(head, NULL);
-    prev = single_linked_list_node_previous(head);
+    prev = single_linked_list_previous(head);
     RESULT_CHECK_pointer(NULL, prev, &pass);
     single_linked_list_node_next_set(head, tmp);
 
     single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_previous, pass);
+    UNIT_TEST_RESULT(single_linked_list_previous, pass);
 }
 
 static void
-unit_test_single_linked_list_node_insert_before(void)
+unit_test_single_linked_list_insert_before(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *node;
+    struct single_linked_list *inserted;
     struct single_linked_list *prev;
-    struct single_linked_list *copy;
-    bool pass;
-
-    pass = true;
-    head = test_single_linked_list_sample(0xa26, 0x239);
-    single_linked_list_node_append(head, &pass);
-
-    node = single_linked_list_create();
-    copy = single_linked_list_node_copy(node);
-
-    single_linked_list_node_insert_before(NULL, node);
-    RESULT_CHECK_single_linked_list_node(copy, node, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    copy = single_linked_list_node_copy(head);
-    single_linked_list_node_insert_before(head, NULL);
-    RESULT_CHECK_single_linked_list_node(copy, head, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    prev = single_linked_list_node_previous(head);
-    single_linked_list_node_insert_before(head, node);
-    RESULT_CHECK_pointer(node, single_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(head, single_linked_list_node_next(node), &pass);
-    RESULT_CHECK_pointer(prev, single_linked_list_node_previous(node), &pass);
-    RESULT_CHECK_pointer(node, single_linked_list_node_next(prev), &pass);
-
-    node = single_linked_list_create();
-    single_linked_list_node_insert_before(head, node);
-
-    single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_insert_before, pass);
-}
-
-static void
-unit_test_single_linked_list_node_insert_before_risky(void)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *node;
-    struct single_linked_list *prev;
-    struct single_linked_list *copy;
-    bool pass;
-
-    pass = true;
-    head = test_single_linked_list_sample(0xa26, 0x239);
-    single_linked_list_node_append(head, &pass);
-
-    node = single_linked_list_create();
-    copy = single_linked_list_node_copy(node);
-
-    single_linked_list_node_insert_before_risky(NULL, node);
-    RESULT_CHECK_single_linked_list_node(copy, node, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    copy = single_linked_list_node_copy(head);
-    single_linked_list_node_insert_before_risky(head, NULL);
-    RESULT_CHECK_single_linked_list_node(copy, head, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    prev = single_linked_list_node_previous(head);
-    single_linked_list_node_insert_before_risky(head, node);
-    RESULT_CHECK_pointer(node, single_linked_list_node_previous(head), &pass);
-    RESULT_CHECK_pointer(head, single_linked_list_node_next(node), &pass);
-    RESULT_CHECK_pointer(prev, single_linked_list_node_previous(node), &pass);
-    RESULT_CHECK_pointer(node, single_linked_list_node_next(prev), &pass);
-
-    node = single_linked_list_create();
-    single_linked_list_node_insert_before_risky(head, node);
-
-    single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_insert_before_risky, pass);
-}
-
-static void
-unit_test_single_linked_list_node_insert_after(void)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *node;
-    struct single_linked_list *next;
-    struct single_linked_list *copy;
     bool pass;
 
     pass = true;
     head = test_single_linked_list_sample(0x28AB, 0x1E9C);
-    single_linked_list_node_append(head, &pass);
+    single_linked_list_insert_after(NULL, NULL);
 
-    node = single_linked_list_create();
-    copy = single_linked_list_node_copy(node);
-
-    single_linked_list_node_insert_after(NULL, node);
-    RESULT_CHECK_single_linked_list_node(copy, node, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    copy = single_linked_list_node_copy(head);
-    single_linked_list_node_insert_after(head, NULL);
-    RESULT_CHECK_single_linked_list_node(copy, head, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    next = single_linked_list_node_next(head);
-    single_linked_list_node_insert_after(head, node);
-    RESULT_CHECK_pointer(node, single_linked_list_node_next(head), &pass);
-    RESULT_CHECK_pointer(head, single_linked_list_node_previous(node), &pass);
-    RESULT_CHECK_pointer(next, single_linked_list_node_next(node), &pass);
-    RESULT_CHECK_pointer(node, single_linked_list_node_previous(next), &pass);
-
-    node = single_linked_list_create();
-    single_linked_list_node_insert_after(head, node);
+    prev = single_linked_list_previous(head);
+    single_linked_list_insert_before(head, &pass);
+    inserted = single_linked_list_previous(head);
+    RESULT_CHECK_pointer(inserted, single_linked_list_previous(head), &pass);
+    RESULT_CHECK_pointer(prev, single_linked_list_previous(inserted), &pass);
+    RESULT_CHECK_pointer(&pass, single_linked_list_node_val(inserted), &pass);
 
     single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_insert_after, pass);
+    UNIT_TEST_RESULT(single_linked_list_insert_after, pass);
 }
 
 static void
-unit_test_single_linked_list_node_insert_after_risky(void)
+unit_test_single_linked_list_insert_after(void)
 {
     struct single_linked_list *head;
-    struct single_linked_list *node;
+    struct single_linked_list *inserted;
     struct single_linked_list *next;
-    struct single_linked_list *copy;
     bool pass;
 
     pass = true;
     head = test_single_linked_list_sample(0x28AB, 0x1E9C);
-    single_linked_list_node_append(head, &pass);
-
-    node = single_linked_list_create();
-    copy = single_linked_list_node_copy(node);
-
-    single_linked_list_node_insert_after_risky(NULL, node);
-    RESULT_CHECK_single_linked_list_node(copy, node, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
-
-    copy = single_linked_list_node_copy(head);
-    single_linked_list_node_insert_after_risky(head, NULL);
-    RESULT_CHECK_single_linked_list_node(copy, head, &pass);
-    single_linked_list_node_initial(copy, NULL, 0x0u);
-    single_linked_list_destroy(&copy);
+    single_linked_list_insert_after(NULL, NULL);
 
     next = single_linked_list_node_next(head);
-    single_linked_list_node_insert_after_risky(head, node);
-    RESULT_CHECK_pointer(node, single_linked_list_node_next(head), &pass);
-    RESULT_CHECK_pointer(head, single_linked_list_node_previous(node), &pass);
-    RESULT_CHECK_pointer(next, single_linked_list_node_next(node), &pass);
-    RESULT_CHECK_pointer(node, single_linked_list_node_previous(next), &pass);
-
-    node = single_linked_list_create();
-    single_linked_list_node_insert_after_risky(head, node);
+    single_linked_list_insert_after(head, &pass);
+    inserted = single_linked_list_node_next(head);
+    RESULT_CHECK_pointer(inserted, single_linked_list_node_next(head), &pass);
+    RESULT_CHECK_pointer(next, single_linked_list_node_next(inserted), &pass);
+    RESULT_CHECK_pointer(&pass, single_linked_list_node_val(inserted), &pass);
 
     single_linked_list_destroy(&head);
-    UNIT_TEST_RESULT(single_linked_list_node_insert_after_risky, pass);
+    UNIT_TEST_RESULT(single_linked_list_insert_after, pass);
 }
 
 static void
@@ -545,23 +402,19 @@ unit_test_single_linked_list_node_remove_and_destroy(void)
 static void
 unit_test_single_linked_list_iterate(void)
 {
-    struct single_linked_list *head;
-    struct single_linked_list *tmp;
     bool pass;
+    uint32 len;
+    struct single_linked_list *head;
 
     pass = true;
+    single_linked_list_iterate(NULL, &single_linked_list_iterate_handler);
+
     head = test_single_linked_list_sample(0x1E2, 0x282);
+    single_linked_list_node_sid_set(head, 0);
+    single_linked_list_iterate(head, &single_linked_list_iterate_handler);
 
-    single_linked_list_iterate(head, &linked_list_iterate_handler);
-    single_linked_list_iterate(NULL, &linked_list_iterate_handler);
-
-    tmp = head;
-    do {
-        RESULT_CHECK_uint32(0xdeadu, single_linked_list_node_sid(tmp), &pass);
-        tmp = single_linked_list_node_next(tmp);
-    } while (tmp != head);
-
-    single_linked_list_iterate(head, &linked_list_iterate_handler);
+    len = single_linked_list_length(head);
+    RESULT_CHECK_uint32(len, single_linked_list_node_sid(head), &pass);
 
     single_linked_list_destroy(&head);
     UNIT_TEST_RESULT(single_linked_list_iterate, pass);
@@ -573,24 +426,19 @@ unit_test_single_linked_list_merge(void)
     uint32 raw[] = {0xa, 0xb, 0xc, 0xd, 0xe, 0xf,};
     struct single_linked_list *head;
     struct single_linked_list *head_n;
-    struct single_linked_list *tmp;
     bool pass;
 
     pass = true;
     head = single_linked_list_create();
 
     single_linked_list_node_initial(head, raw, 0x0u);
-    tmp = single_linked_list_node_create(raw + 1, 0x0u);
-    single_linked_list_node_insert_before(head, tmp);
-    tmp = single_linked_list_node_create(raw + 2, 0x0u);
-    single_linked_list_node_insert_before(head, tmp);
+    single_linked_list_insert_before(head, raw + 1);
+    single_linked_list_insert_before(head, raw + 2);
 
     head_n = single_linked_list_create();
     single_linked_list_node_initial(head_n, raw + 2, 0x0u);
-    tmp = single_linked_list_node_create(raw + 3, 0x0u);
-    single_linked_list_node_insert_before(head_n, tmp);
-    tmp = single_linked_list_node_create(raw + 4, 0x0u);
-    single_linked_list_node_insert_before(head_n, tmp);
+    single_linked_list_insert_before(head_n, raw + 3);
+    single_linked_list_insert_before(head_n, raw + 4);
 
     RESULT_CHECK_pointer(NULL, single_linked_list_merge(NULL, NULL), &pass);
     RESULT_CHECK_pointer(head, single_linked_list_merge(head, NULL), &pass);

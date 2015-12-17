@@ -94,28 +94,7 @@ performance_test_single_linked_list_initial(uint32 count)
 }
 
 static void
-performance_test_single_linked_list_node_append(uint32 count)
-{
-    struct single_linked_list *tmp;
-
-    count = count >> 6;
-    count = 0 == count ? 1000 : count;
-    tmp = single_linked_list_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        single_linked_list_node_append(tmp, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    single_linked_list_destroy(&tmp);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_append);
-}
-
-static void
-performance_test_single_linked_list_node_previous(uint32 count)
+performance_test_single_linked_list_previous(uint32 count)
 {
     struct single_linked_list *head;
     struct single_linked_list *prev;
@@ -126,20 +105,19 @@ performance_test_single_linked_list_node_previous(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        prev = single_linked_list_node_previous(prev);
+        prev = single_linked_list_previous(prev);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     single_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_previous);
+    PERFORMANCE_TEST_RESULT(single_linked_list_previous);
 }
 
 static void
-performance_test_single_linked_list_node_insert_before(uint32 count)
+performance_test_single_linked_list_insert_before(uint32 count)
 {
     struct single_linked_list *head;
-    struct single_linked_list *tmp;
 
     count = count >> 6;
     count = 0u == count ? 1000 : count;
@@ -148,44 +126,20 @@ performance_test_single_linked_list_node_insert_before(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = single_linked_list_create();
-        single_linked_list_node_insert_before(head, tmp);
+        single_linked_list_insert_before(head, head);
         single_linked_list_node_remove_and_destroy(&head);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     single_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_insert_before);
+    PERFORMANCE_TEST_RESULT(single_linked_list_insert_before);
 }
 
 static void
-performance_test_single_linked_list_node_insert_before_risky(uint32 count)
+performance_test_single_linked_list_insert_after(uint32 count)
 {
     struct single_linked_list *head;
-    struct single_linked_list *tmp;
-
-    head = test_single_linked_list_sample(0x722, 0x342);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = single_linked_list_create();
-        single_linked_list_node_insert_before_risky(head, tmp);
-        single_linked_list_node_remove_and_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    single_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_insert_before_risky);
-}
-
-static void
-performance_test_single_linked_list_node_insert_after(uint32 count)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *tmp;
 
     count = count >> 6;
     count = 0 == count ? 1000 : count;
@@ -194,37 +148,14 @@ performance_test_single_linked_list_node_insert_after(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = single_linked_list_create();
-        single_linked_list_node_insert_after(head, tmp);
+        single_linked_list_insert_after(head, head);
         single_linked_list_node_remove_and_destroy(&head);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     single_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_insert_after);
-}
-
-static void
-performance_test_single_linked_list_node_insert_after_risky(uint32 count)
-{
-    struct single_linked_list *head;
-    struct single_linked_list *tmp;
-
-    head = test_single_linked_list_sample(0x722, 0x342);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = single_linked_list_create();
-        single_linked_list_node_insert_after_risky(head, tmp);
-        single_linked_list_node_remove_and_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    single_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(single_linked_list_node_insert_after_risky);
+    PERFORMANCE_TEST_RESULT(single_linked_list_insert_after);
 }
 
 static void
@@ -360,7 +291,8 @@ performance_test_single_linked_list_node_remove(uint32 count)
 
     while (count--) {
         removed = single_linked_list_node_remove(&head);
-        single_linked_list_node_insert_before(head, removed);
+        single_linked_list_insert_before(head, head);
+        single_linked_list_destroy(&removed);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -373,16 +305,14 @@ static void
 performance_test_single_linked_list_node_remove_and_destroy(uint32 count)
 {
     struct single_linked_list *head;
-    struct single_linked_list *tmp;
 
     head = test_single_linked_list_sample(0xe0d, 0x493);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = single_linked_list_create();
         single_linked_list_node_remove_and_destroy(&head);
-        single_linked_list_node_insert_after(head, tmp);
+        single_linked_list_insert_after(head, head);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
