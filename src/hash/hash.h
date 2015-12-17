@@ -12,5 +12,7 @@ extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uin
 extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
 extern void doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node);
 extern bool complain_null_pointer_p(void *ptr);
+extern void * memory_cache_allocate(uint32 size);
+extern void memory_cache_free(void *addr);
 
 #endif

@@ -3,7 +3,7 @@ hashing_table_create(uint32 size)
 {
     struct hashing_table *hash;
 
-    hash = malloc_ds(sizeof(*hash));
+    hash = memory_cache_allocate(sizeof(*hash));
     if (!complain_no_memory_p(hash)) {
         assert(0 != size);
 
@@ -21,7 +21,7 @@ hashing_table_initial(struct hashing_table *hash)
 
     assert(NULL != hash);
 
-    hash->space = malloc_ds(sizeof(*hash->space) * hash->size);
+    hash->space = memory_cache_allocate(sizeof(*hash->space) * hash->size);
     if (!complain_no_memory_p(hash->space)) {
         iter = hash->space;
         while (iter < hash->space + hash->size) {
@@ -55,8 +55,8 @@ hashing_table_destroy(struct hashing_table **hash)
     assert(NULL != *hash);
     assert(NULL != (*hash)->space);
 
-    free_ds((*hash)->space);
-    free_ds(*hash);
+    memory_cache_free((*hash)->space);
+    memory_cache_free((*hash));
     *hash = NULL;
 }
 

@@ -9,7 +9,7 @@ single_linked_list_node_create(void *val, uint32 sid)
 {
     struct single_linked_list *list;
 
-    list = malloc_ds(sizeof(*list));
+    list = memory_cache_allocate(sizeof(*list));
     if (!complain_no_memory_p(list)) {
         single_linked_list_node_initial(list, val, sid);
     }
@@ -149,7 +149,7 @@ single_linked_list_destroy(struct single_linked_list **list)
          */
         do {
             next = &node->next;
-            free_ds(node);
+            memory_cache_free(node);
             node = *next;
         } while (*list != node);
 
@@ -327,7 +327,7 @@ single_linked_list_node_remove_and_destroy(struct single_linked_list **node)
 
     if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
         removed = single_linked_list_node_remove_internal(node);
-        free_ds(removed);
+        memory_cache_free(removed);
     }
 }
 

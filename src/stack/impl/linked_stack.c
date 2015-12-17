@@ -7,10 +7,10 @@ linked_stack_create(void)
 {
     struct linked_stack *stack;
 
-    stack = malloc_ds(sizeof(*stack));
+    stack = memory_cache_allocate(sizeof(*stack));
     if (!complain_no_memory_p(stack)) {
         stack->sid = 0u;
-        stack->base = malloc_ds(sizeof(*stack->base));
+        stack->base = memory_cache_allocate(sizeof(*stack->base));
         /*
          * struct linked_space
          */
@@ -20,7 +20,7 @@ linked_stack_create(void)
             /*
              * struct array_stack_space
              */
-            stack->base->space.bp = malloc_ds(sizeof(void *) *
+            stack->base->space.bp = memory_cache_allocate(sizeof(void *) *
                 DEFAULT_STACK_SPACE_SIZE);
 
             if (!complain_no_memory_p(stack->base->space.bp)) {
@@ -49,7 +49,7 @@ linked_stack_destroy(struct linked_stack **stack)
             node = linked_stack_space_remove_node(node);
         }
 
-        free_ds(*stack);
+        memory_cache_free(*stack);
         *stack = NULL;
     }
 }
@@ -117,8 +117,8 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
     link = &node->link;
 
     doubly_linked_list_node_remove(&link);
-    free_ds(node->space.bp);
-    free_ds(node);
+    memory_cache_free(node->space.bp);
+    memory_cache_free(node);
 
     if (NULL == link) {
         /*
@@ -142,11 +142,11 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
     assert(NULL != last);
     assert(NULL != stack);
 
-    node = malloc_ds(sizeof(*node));
+    node = memory_cache_allocate(sizeof(*node));
 
     if (!complain_no_memory_p(node)) {
         doubly_linked_list_initial(&node->link);
-        node->space.bp = malloc_ds(sizeof(void *) * dim);
+        node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
 
         if (!complain_no_memory_p(node->space.bp)) {
             node->space.dim = dim;

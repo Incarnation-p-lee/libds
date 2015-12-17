@@ -317,7 +317,7 @@ performance_test_maximal_heap_build(uint32 count)
 
     heap = test_maximal_heap_sample(0x12f, 0xa1);
     chain_size = maximal_heap_size(heap) + 1;
-    chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
+    chain_array = memory_cache_allocate(chain_size * sizeof(chain_array[0]));
 
     chain_array[0] = NULL;
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
@@ -328,13 +328,13 @@ performance_test_maximal_heap_build(uint32 count)
         test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
         build = maximal_heap_build(chain_array, chain_size);
 
-        free_ds(build->alias);
-        free_ds(build);
+        memory_cache_free(build->alias);
+        memory_cache_free(build);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
-    free_ds(chain_array);
+    memory_cache_free(chain_array);
     maximal_heap_destroy(&heap);
     PERFORMANCE_TEST_RESULT(maximal_heap_build);
 }

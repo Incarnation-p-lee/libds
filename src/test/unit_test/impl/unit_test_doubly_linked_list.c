@@ -78,7 +78,7 @@ unit_test_doubly_linked_list_node_initial(void)
     doubly_linked_list_node_initial(tmp, &pass, sid);
     RESULT_CHECK_pointer(tmp, NULL, &pass);
 
-    tmp = malloc_ds(sizeof(*tmp));
+    tmp = doubly_linked_list_create();
     doubly_linked_list_node_initial(tmp, &pass, sid);
 
     RESULT_CHECK_uint32(sid, doubly_linked_list_node_sid(tmp), &pass);
@@ -97,7 +97,7 @@ unit_test_doubly_linked_list_initial(void)
     struct doubly_linked_list *tmp;
 
     pass = true;
-    tmp = malloc_ds(sizeof(*tmp));
+    tmp = doubly_linked_list_create();
 
     doubly_linked_list_initial(tmp);
 

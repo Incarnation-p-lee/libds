@@ -3,12 +3,13 @@ array_queue_create(void)
 {
     struct array_queue *queue;
 
-    queue = malloc_ds(sizeof(*queue));
+    queue = memory_cache_allocate(sizeof(*queue));
     if (!complain_no_memory_p(queue)) {
         array_queue_sid_set(queue, 0x0u);
     }
 
-    queue->space.base = malloc_ds(sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
+    queue->space.base = memory_cache_allocate(
+        sizeof(void *) * DEFAULT_QUEUE_SPACE_SIZE);
     if (!complain_no_memory_p(queue->space.base)) {
         queue->space.dim = DEFAULT_QUEUE_SPACE_SIZE;
         queue->space.rest = DEFAULT_QUEUE_SPACE_SIZE;
@@ -23,8 +24,8 @@ void
 array_queue_destroy(struct array_queue **queue)
 {
     if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(*queue)) {
-        free_ds((*queue)->space.base);
-        free_ds(*queue);
+        memory_cache_free((*queue)->space.base);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }
@@ -77,7 +78,7 @@ array_queue_space_expand_internal(struct array_queue *queue, uint32 increment)
     assert(0 != increment);
 
     new_size = array_queue_capacity_internal(queue) + increment;
-    new_addr = realloc_ds(queue->space.base, sizeof(void *) * new_size);
+    new_addr = memory_cache_re_allocate(queue->space.base, sizeof(void *) * new_size);
 
     if (!complain_no_memory_p(new_addr)) {
         /*

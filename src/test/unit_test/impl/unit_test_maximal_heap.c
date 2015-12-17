@@ -426,7 +426,7 @@ unit_test_maximal_heap_build(void)
     RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 0), &pass);
 
     chain_size = maximal_heap_size(heap) + 1;
-    chain_array = malloc_ds(chain_size * sizeof(chain_array[0]));
+    chain_array = memory_cache_allocate(chain_size * sizeof(chain_array[0]));
 
     chain_array[0] = NULL;
     memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
@@ -441,9 +441,9 @@ unit_test_maximal_heap_build(void)
         idx--;
     }
 
-    free_ds(build->alias);
-    free_ds(build);
-    free_ds(chain_array);
+    memory_cache_free(build->alias);
+    memory_cache_free(build);
+    memory_cache_free(chain_array);
     maximal_heap_destroy(&heap);
     UNIT_TEST_RESULT(maximal_heap_build, pass);
 }

@@ -7,9 +7,9 @@ binary_heap_create(uint32 capacity)
         capacity = DEFAULT_BINARY_HEAP_SIZE;
     }
 
-    heap = malloc_ds(sizeof(*heap));
+    heap = memory_cache_allocate(sizeof(*heap));
     if (!complain_no_memory_p(heap)) {
-        heap->base = malloc_ds(sizeof(*heap->base[0]) * u_offset(capacity, 1));
+        heap->base = memory_cache_allocate(sizeof(*heap->base[0]) * u_offset(capacity, 1));
 
         if (!complain_no_memory_p(heap->base)) {
             binary_heap_initial(heap, capacity);
@@ -43,8 +43,8 @@ binary_heap_destroy(struct binary_heap **heap)
     assert(binary_heap_structure_legal_p(*heap));
 
     binary_heap_cleanup(*heap);
-    free_ds((*heap)->base);
-    free_ds(*heap);
+    memory_cache_free((*heap)->base);
+    memory_cache_free(*heap);
 
     *heap = NULL;
 }
@@ -79,7 +79,7 @@ binary_heap_cleanup(struct binary_heap *heap)
         doubly_linked_list_destroy(&HEAP_LINK(heap, index));
         assert(NULL == HEAP_LINK(heap, index));
 
-        free_ds(HEAP_CHAIN(heap, index));
+        memory_cache_free(HEAP_CHAIN(heap, index));
         HEAP_CHAIN(heap, index) = NULL;
         index++;
     }
@@ -125,14 +125,14 @@ binary_heap_capacity_extend(struct binary_heap *heap)
     assert(binary_heap_structure_legal_p(heap));
 
     size = sizeof(heap->base[0]) * u_offset(heap->capacity * 2, 1);
-    new = malloc_ds(size);
+    new = memory_cache_allocate(size);
     memset(new, 0, size);
 
     size = sizeof(heap->base[0]) * u_offset(heap->capacity, 1);
     memcpy(new, heap->base, size);
 
     heap->capacity = heap->capacity * 2;
-    free_ds(heap->base);
+    memory_cache_free(heap->base);
     heap->base = new;
 }
 
@@ -155,7 +155,7 @@ binary_heap_collision_chain_create(sint64 nice, void *val)
 
     assert(binary_heap_nice_legal_p(nice));
 
-    retval = malloc_ds(sizeof(*retval));
+    retval = memory_cache_allocate(sizeof(*retval));
     retval->nice = nice;
     retval->link = doubly_linked_list_node_create(val, 0);
 
@@ -450,7 +450,7 @@ binary_heap_node_remove_root(struct binary_heap *heap, void *order)
 
     link = HEAP_LINK(heap, INDEX_ROOT);
     HEAP_LINK(heap, INDEX_ROOT) = NULL;
-    free_ds(HEAP_CHAIN(heap, INDEX_ROOT));
+    memory_cache_free(HEAP_CHAIN(heap, INDEX_ROOT));
 
     if (INDEX_ROOT == INDEX_LAST(heap)) {
         heap->size--;

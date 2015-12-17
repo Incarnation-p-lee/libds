@@ -79,7 +79,7 @@ unit_test_single_linked_list_node_initial(void)
     single_linked_list_node_initial(tmp, &pass, sid);
     RESULT_CHECK_pointer(tmp, NULL, &pass);
 
-    tmp = malloc_ds(sizeof(*tmp));
+    tmp = single_linked_list_create();
     single_linked_list_node_initial(tmp, &pass, sid);
 
     RESULT_CHECK_uint32(sid, single_linked_list_node_sid(tmp), &pass);
@@ -98,7 +98,7 @@ unit_test_single_linked_list_initial(void)
     struct single_linked_list *tmp;
 
     pass = true;
-    tmp = malloc_ds(sizeof(*tmp));
+    tmp = single_linked_list_create();
     single_linked_list_initial(tmp);
 
     RESULT_CHECK_uint32(0x0u, single_linked_list_node_sid(tmp), &pass);

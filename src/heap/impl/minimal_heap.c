@@ -3,7 +3,7 @@ minimal_heap_create(uint32 capacity)
 {
     struct minimal_heap *heap;
 
-    heap = malloc_ds(sizeof(*heap));
+    heap = memory_cache_allocate(sizeof(*heap));
     if (!complain_no_memory_p(heap)) {
         heap->alias = binary_heap_create(capacity);
     }
@@ -16,7 +16,7 @@ minimal_heap_destroy(struct minimal_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
-        free_ds(*heap);
+        memory_cache_free(*heap);
         *heap = NULL;
     }
 }
@@ -294,10 +294,10 @@ minimal_heap_build(struct collision_chain **chain_array, uint32 size)
     } else if (complain_zero_size_p(size)) {
         return NULL;
     } else {
-        heap = malloc_ds(sizeof(*heap));
+        heap = memory_cache_allocate(sizeof(*heap));
 
         if (!complain_no_memory_p(heap)) {
-            heap->alias = malloc_ds(sizeof(*heap->alias));
+            heap->alias = memory_cache_allocate(sizeof(*heap->alias));
 
             if (!complain_no_memory_p(heap->alias)) {
                 heap->alias->base = chain_array;

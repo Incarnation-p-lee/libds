@@ -3,10 +3,11 @@ avl_tree_create(void)
 {
     struct avl_tree *tree;
 
-    tree = malloc_ds(sizeof(*tree));
+    tree = memory_cache_allocate(sizeof(*tree));
     if (!complain_no_memory_p(tree)) {
         tree->height = 0;
-        tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
+        tree->alias.chain.link = memory_cache_allocate(
+            sizeof(*tree->alias.chain.link));
 
         if (!complain_no_memory_p(tree->alias.chain.link)) {
             binary_search_tree_initial_internal(&tree->alias);
@@ -21,10 +22,11 @@ avl_tree_node_create(void *val, sint64 nice)
 {
     struct avl_tree *tree;
 
-    tree = malloc_ds(sizeof(*tree));
+    tree = memory_cache_allocate(sizeof(*tree));
     if (!complain_no_memory_p(tree)) {
         tree->height = 0;
-        tree->alias.chain.link = malloc_ds(sizeof(*tree->alias.chain.link));
+        tree->alias.chain.link = memory_cache_allocate(
+            sizeof(*tree->alias.chain.link));
 
         if (!complain_no_memory_p(tree->alias.chain.link)) {
             binary_search_tree_node_initial_internal(&tree->alias, val, nice);
@@ -60,7 +62,7 @@ avl_tree_node_destroy(struct avl_tree *node)
     assert(NULL == avl_tree_right(node));
 
     doubly_linked_list_destroy(&node->alias.chain.link);
-    free_ds(node);
+    memory_cache_free(node);
 }
 
 static inline void

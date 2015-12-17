@@ -3,7 +3,7 @@ stacked_queue_create(void)
 {
     struct stacked_queue *queue;
 
-    queue = malloc_ds(sizeof(*queue));
+    queue = memory_cache_allocate(sizeof(*queue));
 
     if (!complain_no_memory_p(queue)) {
         queue->sid = 0x0u;
@@ -22,7 +22,7 @@ stacked_queue_destroy(struct stacked_queue **queue)
         array_stack_destroy(&(*queue)->enter);
         array_stack_destroy(&(*queue)->leave);
 
-        free_ds(*queue);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }

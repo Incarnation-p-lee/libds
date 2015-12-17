@@ -9,9 +9,9 @@ binary_search_tree_node_create_internal(void *val, sint64 nice)
 {
     struct binary_search_tree *node;
 
-    node = malloc_ds(sizeof(*node));
+    node = memory_cache_allocate(sizeof(*node));
     if (!complain_no_memory_p(node)) {
-        node->chain.link = malloc_ds(sizeof(*node->chain.link));
+        node->chain.link = memory_cache_allocate(sizeof(*node->chain.link));
 
         if (!complain_no_memory_p(node->chain.link)) {
             binary_search_tree_node_initial_internal(node, val, nice);
@@ -47,7 +47,7 @@ binary_search_tree_node_destroy(struct binary_search_tree *node)
     assert(NULL != node);
 
     doubly_linked_list_destroy(&node->chain.link);
-    free_ds(node);
+    memory_cache_free(node);
 }
 
 static inline void
