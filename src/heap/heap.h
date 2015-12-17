@@ -46,6 +46,9 @@ extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked
 extern void doubly_linked_list_destroy(struct doubly_linked_list **list);
 extern void doubly_linked_list_initial(struct doubly_linked_list *list);
 extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *tree, sint64 nice);
+extern void * memory_cache_allocate(uint32 size);
+extern void memory_cache_free(void *addr);
+extern void * memory_cache_re_allocate(void *addr, uint32 size);
 /* END OF EXTERNAL FUNCTIONS */
 
 /* BINARY HEAP DEBUG */

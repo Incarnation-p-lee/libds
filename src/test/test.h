@@ -6,6 +6,8 @@
     SYM_2_STR(symbol), pass)
 
 extern bool complain_no_memory_p(void *ptr);
+extern void * memory_cache_allocate(uint32 size);
+extern void memory_cache_free(void *addr);
 
 struct test_case_filter {
     char category[FILTER_LEN];

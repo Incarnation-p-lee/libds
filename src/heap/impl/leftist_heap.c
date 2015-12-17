@@ -5,7 +5,7 @@ leftist_heap_create_internal(void *val, sint32 npl, sint64 nice)
 
     assert(NPL_NULL != npl);
 
-    heap = malloc_ds(sizeof(*heap));
+    heap = memory_cache_allocate(sizeof(*heap));
 
     if (!complain_no_memory_p(heap)) {
         heap->npl = npl;
@@ -38,7 +38,7 @@ leftist_heap_destroy_internal(struct leftist_heap *heap)
         leftist_heap_destroy_internal(leftist_heap_left(heap));
         leftist_heap_destroy_internal(leftist_heap_right(heap));
 
-        free_ds(heap);
+        memory_cache_free(heap);
     }
 }
 

@@ -3,7 +3,7 @@ min_max_heap_create(uint32 capacity)
 {
     struct min_max_heap *heap;
 
-    heap = malloc_ds(sizeof(*heap));
+    heap = memory_cache_allocate(sizeof(*heap));
     if (!complain_no_memory_p(heap)) {
         heap->alias = binary_heap_create(capacity);
     }
@@ -16,7 +16,7 @@ min_max_heap_destroy(struct min_max_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
-        free_ds(*heap);
+        memory_cache_free(*heap);
         *heap = NULL;
     }
 }

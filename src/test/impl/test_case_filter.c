@@ -66,7 +66,7 @@ test_case_filter_initial(void)
 {
     struct test_case_filter *filter;
 
-    filter = malloc_ds(sizeof(*filter));
+    filter = memory_cache_allocate(sizeof(*filter));
 
     if (!complain_no_memory_p(filter)) {
         memset(filter, '\0', sizeof(*filter));
@@ -80,7 +80,7 @@ test_case_filter_destroy(struct test_case_filter **filter)
 {
     assert(NULL != filter);
 
-    free_ds(*filter);
+    memory_cache_free(*filter);
     *filter = NULL;
 }
 
