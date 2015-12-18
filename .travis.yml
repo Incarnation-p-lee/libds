@@ -4,6 +4,8 @@ compiler:
   - clang
 script: 
   - bash src/script/build.sh DEBUG=1
+  - file obj_out/out/ds.elf
+  - ldd obj_out/out/ds.elf
   - ./obj_out/out/ds.elf -l -u
 notifications:
   email:
