@@ -173,7 +173,7 @@ done
 compile_obj "src/"
 
 # generate makefile for obj_out
-sh src/script/update_lk_mk.sh "static=$static"
+bash src/script/update_lk_mk.sh "static=$static"
 
 # link to elf
 cd $objdir > /dev/null
