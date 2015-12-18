@@ -4,7 +4,7 @@ compiler:
   - clang
 script: 
   - bash src/script/build.sh DEBUG=1
-  - exec ./obj_out/out/ds.elf
+  - ./obj_out/out/ds.elf -l
 notifications:
   email:
     - incarnation.p.lee@outlook.com
