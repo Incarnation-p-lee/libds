@@ -6,6 +6,10 @@ memory_trace_print(void)
     printf("    . Realloc %10"U64_MDF_U"\n", realloc_cnt);
     printf("    . Free    %10"U64_MDF_U"\n", free_cnt);
     printf("  >> Memory End <<\n\n");
+
+    if (free_cnt != malloc_cnt) {
+        exit(1);
+    }
 }
 
 void
