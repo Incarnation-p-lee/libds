@@ -2,15 +2,10 @@ language: c
 compiler:
   - gcc
   - clang
-before_install:
-  - sudo apt-get install gdb
 script: 
   - bash src/script/build.sh DEBUG=1
-  - ls -l obj_out/out/ds.elf
-  - uname -a
-  - ./obj_out/out/ds.elf
-  - gdb ./obj_out/out/ds.elf -c core
-  - bt
+  - bash src/script/run_unit_test.sh
+  - ls -l /proc
 notifications:
   email:
     - incarnation.p.lee@outlook.com

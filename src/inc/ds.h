@@ -684,8 +684,8 @@ extern struct single_linked_list * single_linked_list_merge(struct single_linked
 extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *list, uint32 index);
 extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
-extern struct single_linked_list * single_linked_list_previous(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
+extern struct single_linked_list * single_linked_list_previous(struct single_linked_list *node);
 extern struct skip_linked_list * skip_linked_list_create(void);
 extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);

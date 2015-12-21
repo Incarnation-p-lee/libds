@@ -6,8 +6,6 @@ memory_maps_obtain(void)
     maps = memory_maps_proc_read();
     memory_maps_filter_process(maps);
     fclose(maps);
-
-    return;
 }
 
 struct memory_maps *
@@ -49,8 +47,11 @@ memory_maps_filter_process(FILE *maps)
     char line[NAME_LEN];
 
     memset(line, 0, sizeof(line));
+    printf("pli28  CCC\n");
     while (fgets(line, NAME_LEN, maps)) {
+        printf("pli28  AAA %s\n", line);
         memory_maps_one_line_process(line, strlen(line));
+        printf("pli28  BBB\n");
         memset(line, 0, sizeof(line));
     }
 }

@@ -17,7 +17,7 @@
 #define abs_sint32(x)        abs_in_width((sint32)x, 32)
 #define abs_sint64(x)        abs_in_width((sint64)x, 64)
 
-#define NAME_LEN             128
+#define NAME_LEN             256
 #define CONTENT_LEN          NAME_LEN
 
 #ifdef DEBUG
