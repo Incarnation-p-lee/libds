@@ -5,7 +5,6 @@ compiler:
 script: 
   - bash src/script/build.sh DEBUG=1
   - bash src/script/run_unit_test.sh
-  - ls -l /proc
 notifications:
   email:
     - incarnation.p.lee@outlook.com
