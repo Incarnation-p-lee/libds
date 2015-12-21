@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
+
 UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
     1. sh src/script/build.sh [options]
