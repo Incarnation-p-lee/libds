@@ -10,6 +10,15 @@ static inline void performance_test_execution_category(const struct test_layer_t
 static inline void performance_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter, struct test_extra_info *info);
 static inline void performance_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter, struct test_extra_info *info);
 static inline void performance_test_execution_start(struct test_extra_info *info, char *content);
+static inline void performance_test_leftist_heap_create(uint32 count);
+static inline void performance_test_leftist_heap_destroy(uint32 count);
+static inline void performance_test_leftist_heap_get_min(uint32 count);
+static inline void performance_test_leftist_heap_insert(uint32 count);
+static inline void performance_test_leftist_heap_merge(uint32 count);
+static inline void performance_test_leftist_heap_node_create(uint32 count);
+static inline void performance_test_leftist_heap_remove_min(uint32 count);
+static inline void performance_test_leftist_heap_remove_min_and_destroy(uint32 count);
+static inline void performance_test_leftist_heap_struct_field(uint32 count);
 static inline void performance_test_maximal_heap_build(uint32 count);
 static inline void performance_test_maximal_heap_cleanup(uint32 count);
 static inline void performance_test_maximal_heap_create(uint32 count);
