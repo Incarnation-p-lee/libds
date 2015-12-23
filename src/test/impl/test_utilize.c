@@ -8,6 +8,8 @@ memory_trace_print(void)
     printf("  >> Memory End <<\n\n");
 
     if (free_cnt != malloc_cnt) {
+        printf("Memory leak at malloc %10"U64_MDF_U" <=> free %10"U64_MDF_U"\n",
+            malloc_cnt, free_cnt);
         exit(1);
     }
 }
