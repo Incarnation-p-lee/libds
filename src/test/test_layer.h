@@ -1841,7 +1841,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_struct_field,
-            NULL,
+            &performance_test_leftist_heap_struct_field,
         },
     },
     {
@@ -1849,7 +1849,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_create,
-            NULL,
+            &performance_test_leftist_heap_create,
         },
     },
     {
@@ -1857,7 +1857,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_node_create,
-            NULL,
+            &performance_test_leftist_heap_node_create,
         },
     },
     {
@@ -1865,7 +1865,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_destroy,
-            NULL,
+            &performance_test_leftist_heap_destroy,
         },
     },
     {
@@ -1873,7 +1873,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_get_min,
-            NULL,
+            &performance_test_leftist_heap_get_min,
         },
     },
     {
@@ -1881,7 +1881,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_insert,
-            NULL,
+            &performance_test_leftist_heap_insert,
         },
     },
     {
@@ -1889,7 +1889,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_merge,
-            NULL,
+            &performance_test_leftist_heap_merge,
         },
     },
     {
@@ -1897,7 +1897,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_remove_min,
-            NULL,
+            &performance_test_leftist_heap_remove_min,
         },
     },
     {
@@ -1905,7 +1905,7 @@ static const struct test_layer_table leftist_heap[] = {
         NULL,
         {
             &unit_test_leftist_heap_remove_min_and_destroy,
-            NULL,
+            &performance_test_leftist_heap_remove_min_and_destroy,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},

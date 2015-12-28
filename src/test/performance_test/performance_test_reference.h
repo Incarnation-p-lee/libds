@@ -241,6 +241,16 @@ static struct performance_test_reference performance_reference[] = {
     {"min_max_heap_node_remove_and_destroy",             0x0u, 0x0u},
     {"min_max_heap_node_decrease_nice",                  0x0u, 0x0u},
     {"min_max_heap_node_increase_nice",                  0x0u, 0x0u},
+
+    {"leftist_heap_struct_field",                        0x0u, 0x0u},
+    {"leftist_heap_create",                              0x0u, 0x0u},
+    {"leftist_heap_node_create",                         0x0u, 0x0u},
+    {"leftist_heap_destroy",                             0x0u, 0x0u},
+    {"leftist_heap_get_min",                             0x0u, 0x0u},
+    {"leftist_heap_insert",                              0x0u, 0x0u},
+    {"leftist_heap_merge",                               0x0u, 0x0u},
+    {"leftist_heap_remove_min",                          0x0u, 0x0u},
+    {"leftist_heap_remove_min_and_destroy",              0x0u, 0x0u},
     {NULL,                                               0x0u, 0x0u},
 };
 
