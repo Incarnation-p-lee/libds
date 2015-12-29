@@ -1,124 +1,143 @@
 struct doubly_linked_list *
 doubly_linked_list_create(void)
 {
-    return doubly_linked_list_node_create(NULL, 0u);
+    return doubly_linked_list_node_create_internal(NULL);
 }
 
-struct doubly_linked_list *
-doubly_linked_list_node_create(void *val, uint32 sid)
+static inline void
+doubly_linked_list_initial_internal(struct doubly_linked_list *list, void *val)
 {
-    struct doubly_linked_list *list;
+    assert(!complain_null_pointer_p(list));
 
-    list = memory_cache_allocate(sizeof(*list));
-
-    if (!complain_no_memory_p(list)) {
-        doubly_linked_list_node_initial(list, val, sid);
-    }
-
-    return list;
-}
-
-void
-doubly_linked_list_node_initial(struct doubly_linked_list *list,
-    void *val, uint32 sid)
-{
-    if (!complain_null_pointer_p(list)) {
-        list->sid = sid;
-        list->next = list;
-        list->previous = list;
-        list->val = val;
-    }
+    list->next = list;
+    list->previous = list;
+    list->val = val;
 }
 
 void
 doubly_linked_list_initial(struct doubly_linked_list *list)
 {
-    doubly_linked_list_node_initial(list, NULL, 0u);
-}
-
-void
-doubly_linked_list_node_append(struct doubly_linked_list *node, void *val)
-{
-    struct doubly_linked_list *next;
-
-    if (!complain_null_pointer_p(node) && !complain_null_pointer_p(node->next)
-        && !complain_null_pointer_p(node->previous)) {
-        next = doubly_linked_list_node_create(val, 0u);
-        doubly_linked_list_node_insert_after_internal(node, next);
+    if (complain_null_pointer_p(list)) {
+        doubly_linked_list_initial_internal(list, NULL);
     }
 }
 
+static inline struct doubly_linked_list *
+doubly_linked_list_node_create_internal(void *val)
+{
+    struct doubly_linked_list *list;
+
+    list = memory_cache_allocate(sizeof(*list));
+    doubly_linked_list_initial_internal(list, val);
+
+    return list;
+}
+
+struct doubly_linked_list *
+doubly_linked_list_node_create(void *val)
+{
+    return doubly_linked_list_node_create_internal(val);
+}
+
 static inline void
-doubly_linked_list_node_insert_after_internal(struct doubly_linked_list *cur,
+doubly_linked_list_insert_after_internal(struct doubly_linked_list *list,
+    void *val)
+{
+    struct doubly_linked_list *node;
+
+    assert(!complain_null_pointer_p(list));
+
+    node = doubly_linked_list_node_create(val);
+
+    list->next->previous = node;
+    node->next = list->next;
+    list->next = node;
+    node->previous = list;
+}
+
+static inline void
+doubly_linked_list_insert_ptr_after_internal(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
-    assert(NULL != cur);
-    assert(NULL != node);
-    assert(!doubly_linked_list_contains_p_internal(cur, node));
+    assert(!complain_null_pointer_p(list));
+    assert(!complain_null_pointer_p(list));
+    assert(!doubly_linked_list_contains_p_internal(list, node));
 
-    cur->next->previous = node;
-    node->next = cur->next;
-    cur->next = node;
-    node->previous = cur;
+    list->next->previous = node;
+    node->next = list->next;
+    list->next = node;
+    node->previous = list;
 }
 
 void
-doubly_linked_list_node_insert_after(struct doubly_linked_list *cur,
+doubly_linked_list_insert_ptr_after(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
-    if (complain_null_pointer_p(cur) || complain_null_pointer_p(node)) {
+    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
         return;
-    } else if (doubly_linked_list_contains_p_internal(cur, node)) {
+    } else if (doubly_linked_list_contains_p_internal(list, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
-        doubly_linked_list_node_insert_after_internal(cur, node);
+        doubly_linked_list_insert_ptr_after_internal(list, node);
     }
 }
 
 static inline void
-doubly_linked_list_node_insert_before_internal(struct doubly_linked_list *cur,
+doubly_linked_list_insert_ptr_before_internal(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
     struct doubly_linked_list *prev;
 
-    assert(NULL != cur);
-    assert(NULL != node);
-    assert(!doubly_linked_list_contains_p_internal(cur, node));
+    assert(!complain_null_pointer_p(list));
+    assert(!complain_null_pointer_p(node));
+    assert(!doubly_linked_list_contains_p_internal(list, node));
 
-    prev = doubly_linked_list_node_previous(cur);
+    prev = doubly_linked_list_previous(list);
     assert(NULL != prev);
 
-    doubly_linked_list_node_insert_after_internal(prev, node);
+    doubly_linked_list_insert_ptr_after_internal(prev, node);
 }
 
 void
-doubly_linked_list_node_insert_before(struct doubly_linked_list *cur,
+doubly_linked_list_insert_ptr_before(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
-    if (complain_null_pointer_p(cur) || complain_null_pointer_p(node)) {
+    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
         return;
-    } else if (doubly_linked_list_contains_p_internal(cur, node)) {
+    } else if (doubly_linked_list_contains_p_internal(list, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
-        doubly_linked_list_node_insert_before_internal(cur, node);
+        doubly_linked_list_insert_ptr_before_internal(list, node);
     }
 }
 
 void
-doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node)
+doubly_linked_list_insert_after(struct doubly_linked_list *list, void *val)
 {
-    if (!complain_null_pointer_p(cur) && !complain_null_pointer_p(node)) {
-        doubly_linked_list_node_insert_before_internal(cur, node);
+    if (!complain_null_pointer_p(list)) {
+        doubly_linked_list_insert_after_internal(list, val);
     }
 }
 
-void
-doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur,
-    struct doubly_linked_list *node)
+static inline void
+doubly_linked_list_insert_before_internal(struct doubly_linked_list *list,
+    void *val)
 {
-    if (!complain_null_pointer_p(cur) && !complain_null_pointer_p(node)) {
-        doubly_linked_list_node_insert_after_internal(cur, node);
+    struct doubly_linked_list *prev;
+
+    assert(!complain_null_pointer_p(list));
+
+    prev = doubly_linked_list_previous(list);
+    assert(NULL != prev);
+
+    doubly_linked_list_insert_after_internal(prev, val);
+}
+
+void
+doubly_linked_list_insert_before(struct doubly_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        doubly_linked_list_insert_before_internal(list, val);
     }
 }
 
@@ -130,7 +149,7 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
     if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
-        copy = doubly_linked_list_node_create(node->val, node->sid);
+        copy = doubly_linked_list_node_create(node->val);
         copy->next = node->next;
         copy->previous = node->previous;
 
@@ -231,6 +250,7 @@ doubly_linked_list_contains_p_internal(struct doubly_linked_list *list,
         if (iter == node) {
             return true;
         }
+
         iter = iter->next;
     } while (iter != list);
 
@@ -248,25 +268,8 @@ doubly_linked_list_contains_p(struct doubly_linked_list *list,
     }
 }
 
-void
-doubly_linked_list_serialize(struct doubly_linked_list *list)
-{
-    struct doubly_linked_list *node;
-    uint32 index;
-
-    if (!complain_null_pointer_p(list)) {
-        index = 0;
-        node = list;
-
-        do {
-            node->sid = index++;
-            node = node->next;
-        } while (node != list);
-    }
-}
-
 static inline struct doubly_linked_list *
-doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
+doubly_linked_list_remove_internal(struct doubly_linked_list **node)
 {
     struct doubly_linked_list *removed;
 
@@ -281,7 +284,9 @@ doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
     } else {
         removed->previous->next = removed->next;
         removed->next->previous = removed->previous;
+
         *node = removed->next;
+
         removed->next = removed;
         removed->previous = removed;
 
@@ -290,22 +295,22 @@ doubly_linked_list_node_remove_internal(struct doubly_linked_list **node)
 }
 
 struct doubly_linked_list *
-doubly_linked_list_node_remove(struct doubly_linked_list **node)
+doubly_linked_list_remove(struct doubly_linked_list **node)
 {
     if (complain_null_pointer_p(node) || complain_null_pointer_p(*node)) {
         return NULL;
     } else {
-        return doubly_linked_list_node_remove_internal(node);
+        return doubly_linked_list_remove_internal(node);
     }
 }
 
 void
-doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node)
+doubly_linked_list_remove_and_destroy(struct doubly_linked_list **node)
 {
     struct doubly_linked_list *removed;
 
     if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
-        removed = doubly_linked_list_node_remove_internal(node);
+        removed = doubly_linked_list_remove_internal(node);
         memory_cache_free(removed);
     }
 }
@@ -319,7 +324,7 @@ doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void
         node = list;
 
         do {
-            (*handler)(doubly_linked_list_node_val(node));
+            (*handler)(doubly_linked_list_val(node));
             node = node->next;
         } while (node != list);
     }
@@ -329,10 +334,13 @@ struct doubly_linked_list *
 doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n)
 {
     register struct doubly_linked_list *iter;
-    register struct doubly_linked_list *new;
 
     if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
-        return NULL == m ? n : m;
+        if (NULL == m) {
+            return n;
+        } else {
+            return m;
+        }
     } else if (m == n) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
         return m;
@@ -340,11 +348,7 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
         iter = n;
 
         do {
-            if (!doubly_linked_list_contains_p_internal(m, iter)) {
-                new = doubly_linked_list_node_create(iter->val, iter->sid);
-                doubly_linked_list_node_insert_before_internal(m, new);
-            }
-
+            doubly_linked_list_insert_after_internal(m, iter->val);
             iter = iter->next;
         } while (iter != n);
 

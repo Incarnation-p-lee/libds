@@ -394,7 +394,6 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
 {
     uint32 index;
     struct doubly_linked_list *head;
-    struct doubly_linked_list *inserted;
 
     assert(binary_heap_nice_legal_p(nice));
     assert(binary_heap_structure_legal_p(heap));
@@ -416,8 +415,7 @@ binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
         /*
          * nice collision occurs.
          */
-        inserted = doubly_linked_list_node_create(val, nice);
-        doubly_linked_list_node_insert_after_risky(head, inserted);
+        doubly_linked_list_insert_after(head, val);
     }
 
     assert(binary_heap_ordered_p(heap, ordering));

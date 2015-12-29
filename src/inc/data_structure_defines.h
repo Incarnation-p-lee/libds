@@ -8,30 +8,24 @@
 /* DOUBLY LINKED LIST */
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
         RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
     } while (false)
 
-#define doubly_linked_list_node_val(node) \
+#define doubly_linked_list_val(node) \
     (assert(node), (node)->val)
-#define doubly_linked_list_node_val_set(node, v) \
+#define doubly_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define doubly_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define doubly_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define doubly_linked_list_node_next(node) \
+#define doubly_linked_list_next(node) \
     (assert(node), (node)->next)
-#define doubly_linked_list_node_next_set(node, v) \
+#define doubly_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
-#define doubly_linked_list_node_previous(node) \
+#define doubly_linked_list_previous(node) \
     (assert(node), (node)->previous)
-#define doubly_linked_list_node_previous_set(node, v) \
+#define doubly_linked_list_previous_set(node, v) \
     (assert(node), (node)->previous = (v))
 
 

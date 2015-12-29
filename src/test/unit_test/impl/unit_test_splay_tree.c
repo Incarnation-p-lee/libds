@@ -67,7 +67,7 @@ unit_test_splay_tree_node_create(void)
     RESULT_CHECK_sint64(nice, splay_tree_node_nice(tree), &pass);
 
     link = splay_tree_node_link(tree);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(link), &pass);
 
     splay_tree_destroy(&tree);
     UNIT_TEST_RESULT(splay_tree_node_create, pass);
@@ -89,7 +89,7 @@ unit_test_splay_tree_initial(void)
     RESULT_CHECK_pointer(NULL, splay_tree_child_right(tree), &pass);
     RESULT_CHECK_sint64(nice, splay_tree_node_nice(tree), &pass);
     link = splay_tree_node_link(tree);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(link), &pass);
 
     splay_tree_initial(NULL);
     splay_tree_initial(tree);
@@ -99,7 +99,7 @@ unit_test_splay_tree_initial(void)
     RESULT_CHECK_sint64(0x0, splay_tree_node_nice(tree), &pass);
 
     link = splay_tree_node_link(tree);
-    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_val(link), &pass);
 
     splay_tree_destroy(&tree);
     UNIT_TEST_RESULT(splay_tree_initial, pass);
@@ -128,7 +128,7 @@ unit_test_splay_tree_node_initial(void)
     RESULT_CHECK_pointer(NULL, splay_tree_child_left(tree), &pass);
     RESULT_CHECK_pointer(NULL, splay_tree_child_right(tree), &pass);
     RESULT_CHECK_sint64(nice, splay_tree_node_nice(tree), &pass);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(link), &pass);
 
     splay_tree_destroy(&tree);
     UNIT_TEST_RESULT(splay_tree_node_initial, pass);

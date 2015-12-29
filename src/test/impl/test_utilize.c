@@ -34,8 +34,11 @@ single_linked_list_iterate_handler(void *node)
 static void
 linked_list_iterate_handler(void *node)
 {
+    uint32 *tmp;
+
     if (node) {
-        *(uint32 *)node = 0xDEADu;
+        tmp = node;
+        *tmp += 1;
     }
 }
 

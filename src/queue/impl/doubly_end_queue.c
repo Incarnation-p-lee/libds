@@ -111,7 +111,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
 {
     struct doubly_end_queue_list *tmp;
 
-    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
+    if (!complain_null_pointer_p(queue)) {
         tmp = memory_cache_allocate(sizeof(*tmp));
 
         if (!complain_no_memory_p(tmp)) {
@@ -122,7 +122,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 doubly_linked_list_initial(&queue->head->link);
             } else {
-                doubly_linked_list_node_insert_before_risky(&queue->head->link, &tmp->link);
+                doubly_linked_list_insert_ptr_before(&queue->head->link, &tmp->link);
                 queue->head = tmp;
             }
         }
@@ -145,7 +145,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 doubly_linked_list_initial(&queue->head->link);
             } else {
-                doubly_linked_list_node_insert_after_risky(&queue->tail->link, &tmp->link);
+                doubly_linked_list_insert_ptr_after(&queue->tail->link, &tmp->link);
                 queue->tail = tmp;
             }
         }
@@ -173,7 +173,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
                 doubly_end_queue_last_node_clean(queue);
             } else {
                 link = &queue->head->link;
-                doubly_linked_list_node_remove(&link);
+                doubly_linked_list_remove(&link);
                 memory_cache_free(queue->head);
                 queue->head = tmp;
             }
@@ -204,7 +204,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
                 doubly_end_queue_last_node_clean(queue);
             } else {
                 link = &queue->tail->link;
-                doubly_linked_list_node_remove(&link);
+                doubly_linked_list_remove(&link);
                 memory_cache_free(queue->tail);
                 queue->tail = tmp;
             }
@@ -240,7 +240,7 @@ doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
     while (tmp != queue->tail) {
         next = doubly_end_queue_list_next(tmp);
         link = &tmp->link;
-        doubly_linked_list_node_remove(&link);
+        doubly_linked_list_remove(&link);
         memory_cache_free(tmp);
 
         tmp = next;

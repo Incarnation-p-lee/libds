@@ -10,7 +10,8 @@ static const struct test_layer_table single_linked_list_interface[] = {
             &performance_test_single_linked_list_struct_field,
         },
     },
-    {   "initial",
+    {
+        "initial",
         NULL,
         {
             &unit_test_single_linked_list_initial,
@@ -153,27 +154,12 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
             &performance_test_doubly_linked_list_struct_field,
         },
     },
-    {   "initial",
-        NULL,
-        {
-            &unit_test_doubly_linked_list_initial,
-            &performance_test_doubly_linked_list_initial,
-        },
-    },
     {
         "create",
         NULL,
         {
             &unit_test_doubly_linked_list_create,
             &performance_test_doubly_linked_list_create,
-        },
-    },
-    {
-        "node_initial",
-        NULL,
-        {
-            &unit_test_doubly_linked_list_node_initial,
-            &performance_test_doubly_linked_list_node_initial,
         },
     },
     {
@@ -185,41 +171,26 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
         },
     },
     {
-        "node_append",
+        "initial",
         NULL,
         {
-            &unit_test_doubly_linked_list_node_append,
-            &performance_test_doubly_linked_list_node_append,
+            &unit_test_doubly_linked_list_initial,
+            &performance_test_doubly_linked_list_initial,
         },
     },
     {
-        "node_insert_before",
+        "insert_before",
         NULL,
         {
-            &unit_test_doubly_linked_list_node_insert_before,
-            &performance_test_doubly_linked_list_node_insert_before,
+            &unit_test_doubly_linked_list_insert_before,
+            &performance_test_doubly_linked_list_insert_before,
         },
     },
-    {
-        "node_insert_before_risky",
+    {   "insert_after",
         NULL,
         {
-            &unit_test_doubly_linked_list_node_insert_before_risky,
-            &performance_test_doubly_linked_list_node_insert_before_risky,
-        },
-    },
-    {   "node_insert_after",
-        NULL,
-        {
-            &unit_test_doubly_linked_list_node_insert_after,
-            &performance_test_doubly_linked_list_node_insert_after,
-        },
-    },
-    {   "node_insert_after_risky",
-        NULL,
-        {
-            &unit_test_doubly_linked_list_node_insert_after_risky,
-            &performance_test_doubly_linked_list_node_insert_after_risky,
+            &unit_test_doubly_linked_list_insert_after,
+            &performance_test_doubly_linked_list_insert_after,
         },
     },
     {
@@ -254,13 +225,6 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
             &performance_test_doubly_linked_list_contains_p,
         },
     },
-    {   "serialize",
-        NULL,
-        {
-            &unit_test_doubly_linked_list_serialize,
-            &performance_test_doubly_linked_list_serialize,
-        },
-    },
     {
         "node_copy",
         NULL,
@@ -269,19 +233,20 @@ static const struct test_layer_table doubly_linked_list_interface[] = {
             &performance_test_doubly_linked_list_node_copy,
         },
     },
-    {   "node_remove",
+    {
+        "remove",
         NULL,
         {
-            &unit_test_doubly_linked_list_node_remove,
-            &performance_test_doubly_linked_list_node_remove,
+            &unit_test_doubly_linked_list_remove,
+            &performance_test_doubly_linked_list_remove,
         },
     },
     {
-        "node_remove_and_destroy",
+        "remove_and_destroy",
         NULL,
         {
-            &unit_test_doubly_linked_list_node_remove_and_destroy,
-            &performance_test_doubly_linked_list_node_remove_and_destroy,
+            &unit_test_doubly_linked_list_remove_and_destroy,
+            &performance_test_doubly_linked_list_remove_and_destroy,
         },
     },
     {

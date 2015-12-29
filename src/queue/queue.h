@@ -17,12 +17,12 @@ extern void array_stack_destroy(struct array_stack **stack);
 extern void array_stack_space_expand(struct array_stack *stack, uint32 extra);
 extern void array_stack_push(struct array_stack *stack, void *member);
 extern void doubly_linked_list_initial(struct doubly_linked_list *);
-extern void doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
+extern void doubly_linked_list_insert_ptr_before(struct doubly_linked_list *list, struct doubly_linked_list *node);
+extern void doubly_linked_list_insert_ptr_after(struct doubly_linked_list *list, struct doubly_linked_list *node);
 extern void * array_stack_pop(struct array_stack *stack);
 extern uint32 array_stack_capacity(struct array_stack *stack);
 extern uint32 array_stack_space_rest(struct array_stack *stack);
 extern struct array_stack * array_stack_create(void);
-extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
+extern struct doubly_linked_list * doubly_linked_list_remove(struct doubly_linked_list **node);
 
 #endif

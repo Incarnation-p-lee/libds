@@ -76,9 +76,9 @@ linked_stack_space_next_node(struct linked_stack_space *node)
     struct doubly_linked_list *tmp;
 
     assert(NULL != node);
-    assert(NULL != doubly_linked_list_node_next(&node->link));
+    assert(NULL != doubly_linked_list_next(&node->link));
 
-    tmp = doubly_linked_list_node_next(&node->link);
+    tmp = doubly_linked_list_next(&node->link);
     next = linked_stack_space_offset_reflect(tmp);
 
     return next;
@@ -93,7 +93,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
 
-    tmp = doubly_linked_list_node_previous(&node->link);
+    tmp = doubly_linked_list_previous(&node->link);
 
     assert(NULL != node);
     assert(NULL != tmp);
@@ -116,7 +116,7 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 
     link = &node->link;
 
-    doubly_linked_list_node_remove(&link);
+    doubly_linked_list_remove(&link);
     memory_cache_free(node->space.bp);
     memory_cache_free(node);
 
@@ -151,7 +151,7 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
         if (!complain_no_memory_p(node->space.bp)) {
             node->space.dim = dim;
             node->space.sp = node->space.bp;
-            doubly_linked_list_node_insert_after_risky(&last->link, &node->link);
+            doubly_linked_list_insert_ptr_after(&last->link, &node->link);
         }
     }
 }

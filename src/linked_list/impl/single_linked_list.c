@@ -204,6 +204,7 @@ single_linked_list_serialize(struct single_linked_list *list)
     if (!complain_null_pointer_p(list)) {
         index = 0;
         node = list;
+
         do {
             node->sid = index++;
             node = node->next;
