@@ -1,27 +1,4 @@
 static void
-performance_test_doubly_linked_list_struct_field(uint32 count)
-{
-    uint32 sid;
-    struct doubly_linked_list *tmp;
-
-    sid = 0xfade;
-    tmp = doubly_linked_list_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_val_set(tmp, &sid);
-        doubly_linked_list_next_set(tmp, tmp);
-        doubly_linked_list_previous_set(tmp, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&tmp);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_struct_field);
-}
-
-static void
 performance_test_doubly_linked_list_create(uint32 count)
 {
     struct doubly_linked_list *tmp;

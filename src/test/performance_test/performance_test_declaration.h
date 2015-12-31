@@ -155,7 +155,6 @@ static void performance_test_doubly_linked_list_node_copy(uint32 count);
 static void performance_test_doubly_linked_list_node_create(uint32 count);
 static void performance_test_doubly_linked_list_remove(uint32 count);
 static void performance_test_doubly_linked_list_remove_and_destroy(uint32 count);
-static void performance_test_doubly_linked_list_struct_field(uint32 count);
 static void performance_test_linked_stack_capacity(uint32 count);
 static void performance_test_linked_stack_cleanup(uint32 count);
 static void performance_test_linked_stack_create(uint32 count);
