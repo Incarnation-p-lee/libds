@@ -1,280 +1,73 @@
-static void
-performance_test_doubly_linked_list_create(uint32 count)
-{
-    struct doubly_linked_list *tmp;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = doubly_linked_list_create();
-        doubly_linked_list_destroy(&tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_create);
-}
-
-static void
-performance_test_doubly_linked_list_initial(uint32 count)
-{
-    struct doubly_linked_list *tmp;
-
-    tmp = doubly_linked_list_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_initial(tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_initial);
-}
-
-static void
-performance_test_doubly_linked_list_node_create(uint32 count)
-{
-    struct doubly_linked_list *tmp;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = doubly_linked_list_node_create(&count);
-        doubly_linked_list_destroy(&tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_node_create);
-}
-
-static void
-performance_test_doubly_linked_list_insert_before(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    count = count >> 6;
-    count = 0u == count ? 1000 : count;
-    head = test_doubly_linked_list_sample(0x722, 0x342);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_insert_before(head, &head);
-        doubly_linked_list_remove_and_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_insert_before);
-}
-
-static void
-performance_test_doubly_linked_list_insert_after(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    count = count >> 6;
-    count = 0u == count ? 1000 : count;
-    head = test_doubly_linked_list_sample(0x722, 0x342);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_insert_after(head, &head);
-        doubly_linked_list_remove_and_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_insert_after);
-}
-
-static void
-performance_test_doubly_linked_list_destroy(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        head = test_doubly_linked_list_sample(0x22, 0x9);
-        doubly_linked_list_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_destroy);
-}
-
-static void
-performance_test_doubly_linked_list_length(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    head = test_doubly_linked_list_sample(0xe3e, 0x9a7);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_length(head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_length);
-}
-
-static void
-performance_test_doubly_linked_list_node_by_index(uint32 count)
-{
-    struct doubly_linked_list *head;
-    uint32 length;
-
-    head = test_doubly_linked_list_sample(0xfde, 0x4af);
-    length = doubly_linked_list_length(head);
-    length /= 2;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_node_by_index(head, length);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_node_by_index);
-}
-
-static void
-performance_test_doubly_linked_list_contains_p(uint32 count)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *tmp;
-
-    head = test_doubly_linked_list_sample(0xfde, 0x4af);
-    tmp = head;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_contains_p(head, tmp);
-        tmp = doubly_linked_list_next(tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_contains_p);
-}
-
-static void
-performance_test_doubly_linked_list_node_copy(uint32 count)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *tmp;
-
-    head = doubly_linked_list_node_create(&count);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = doubly_linked_list_node_copy(head);
-        doubly_linked_list_next_set(tmp, tmp);
-        doubly_linked_list_destroy(&tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_node_copy);
-}
-
-static void
-performance_test_doubly_linked_list_remove(uint32 count)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *removed;
-
-    head = test_doubly_linked_list_sample(0xe0d, 0x493);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        removed = doubly_linked_list_remove(&head);
-        doubly_linked_list_insert_before(head, &head);
-        doubly_linked_list_destroy(&removed);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_remove);
-}
-
-static void
-performance_test_doubly_linked_list_remove_and_destroy(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    head = test_doubly_linked_list_sample(0xe0d, 0x493);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_remove_and_destroy(&head);
-        doubly_linked_list_insert_after(head, &head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_remove_and_destroy);
-}
-
-static void
-performance_test_doubly_linked_list_iterate(uint32 count)
-{
-    struct doubly_linked_list *head;
-
-    head = test_doubly_linked_list_sample(0xe0d, 0x493);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        doubly_linked_list_iterate(head, &linked_list_iterate_handler);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_linked_list_destroy(&head);
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_iterate);
-}
-
-static void
-performance_test_doubly_linked_list_merge(uint32 count)
-{
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *tmp;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        head = test_doubly_linked_list_sample(0xe0d, 0xd);
-        tmp = test_doubly_linked_list_sample(0xfe0d, 0xf);
-        doubly_linked_list_merge(head, tmp);
-        doubly_linked_list_destroy(&tmp);
-        doubly_linked_list_destroy(&head);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_linked_list_merge);
-}
+#include "../performance_test_linked_list.h"
+
+#define LINKED_LIST                    doubly_linked_list
+#define LINKED_LIST_next               doubly_linked_list_next
+#define LINKED_LIST_next_set           doubly_linked_list_next_set
+#define LINKED_LIST_previous           doubly_linked_list_previous
+#define LINKED_LIST_previous_set       doubly_linked_list_previous_set
+#define LINKED_LIST_val                doubly_linked_list_val
+#define LINKED_LIST_val_set            doubly_linked_list_val_set
+
+#define LINKED_LIST_create             doubly_linked_list_create
+#define LINKED_LIST_initial            doubly_linked_list_initial
+#define LINKED_LIST_node_create        doubly_linked_list_node_create
+#define LINKED_LIST_insert_ptr_after   doubly_linked_list_insert_ptr_after
+#define LINKED_LIST_insert_ptr_before  doubly_linked_list_insert_ptr_before
+#define LINKED_LIST_insert_after       doubly_linked_list_insert_after
+#define LINKED_LIST_insert_before      doubly_linked_list_insert_before
+#define LINKED_LIST_destroy            doubly_linked_list_destroy
+#define LINKED_LIST_length             doubly_linked_list_length
+#define LINKED_LIST_node_by_index      doubly_linked_list_node_by_index
+#define LINKED_LIST_contains_p         doubly_linked_list_contains_p
+#define LINKED_LIST_node_copy          doubly_linked_list_node_copy
+#define LINKED_LIST_remove             doubly_linked_list_remove
+#define LINKED_LIST_remove_and_destroy doubly_linked_list_remove_and_destroy
+#define LINKED_LIST_iterate            doubly_linked_list_iterate
+#define LINKED_LIST_merge              doubly_linked_list_merge
+
+#define TEST_LINKED_LIST_sample        test_doubly_linked_list_sample
+
+PT_LINKED_LIST_create(doubly)
+PT_LINKED_LIST_initial(doubly)
+PT_LINKED_LIST_node_create(doubly)
+PT_LINKED_LIST_insert_ptr_after(doubly)
+PT_LINKED_LIST_insert_ptr_before(doubly)
+PT_LINKED_LIST_insert_after(doubly)
+PT_LINKED_LIST_insert_before(doubly)
+PT_LINKED_LIST_destroy(doubly)
+PT_LINKED_LIST_length(doubly)
+PT_LINKED_LIST_node_by_index(doubly)
+PT_LINKED_LIST_contains_p(doubly)
+PT_LINKED_LIST_node_copy(doubly)
+PT_LINKED_LIST_remove(doubly)
+PT_LINKED_LIST_remove_and_destroy(doubly)
+PT_LINKED_LIST_iterate(doubly)
+PT_LINKED_LIST_merge(doubly)
+
+#undef LINKED_LIST
+#undef LINKED_LIST_next
+#undef LINKED_LIST_next_set
+#undef LINKED_LIST_previous
+#undef LINKED_LIST_previous_set
+#undef LINKED_LIST_val
+#undef LINKED_LIST_val_set
+
+#undef LINKED_LIST_create
+#undef LINKED_LIST_initial
+#undef LINKED_LIST_node_create
+#undef LINKED_LIST_insert_ptr_after
+#undef LINKED_LIST_insert_ptr_before
+#undef LINKED_LIST_insert_after
+#undef LINKED_LIST_insert_before
+#undef LINKED_LIST_destroy
+#undef LINKED_LIST_length
+#undef LINKED_LIST_node_by_index
+#undef LINKED_LIST_contains_p
+#undef LINKED_LIST_node_copy
+#undef LINKED_LIST_remove
+#undef LINKED_LIST_remove_and_destroy
+#undef LINKED_LIST_iterate
+#undef LINKED_LIST_merge
+
+#undef TEST_LINKED_LIST_sample
 

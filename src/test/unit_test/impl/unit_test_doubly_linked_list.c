@@ -1,12 +1,12 @@
 #include "../unit_test_linked_list.h"
 
-#define LINKED_LIST              doubly_linked_list
-#define LINKED_LIST_next         doubly_linked_list_next
-#define LINKED_LIST_next_set     doubly_linked_list_next_set
-#define LINKED_LIST_previous     doubly_linked_list_previous
-#define LINKED_LIST_previous_set doubly_linked_list_previous_set
-#define LINKED_LIST_val          doubly_linked_list_val
-#define LINKED_LIST_val_set      doubly_linked_list_val_set
+#define LINKED_LIST                    doubly_linked_list
+#define LINKED_LIST_next               doubly_linked_list_next
+#define LINKED_LIST_next_set           doubly_linked_list_next_set
+#define LINKED_LIST_previous           doubly_linked_list_previous
+#define LINKED_LIST_previous_set       doubly_linked_list_previous_set
+#define LINKED_LIST_val                doubly_linked_list_val
+#define LINKED_LIST_val_set            doubly_linked_list_val_set
 
 #define LINKED_LIST_create             doubly_linked_list_create
 #define LINKED_LIST_initial            doubly_linked_list_initial
