@@ -5,7 +5,6 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
     uint32 i;
 
     list = single_linked_list_create();
-    single_linked_list_node_initial(list, list, range);
 
     i = 1;
     while (i < node_count) {

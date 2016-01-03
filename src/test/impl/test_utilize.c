@@ -21,17 +21,6 @@ end_of_report_print(void)
 }
 
 static void
-single_linked_list_iterate_handler(void *node)
-{
-    struct single_linked_list *tmp;
-
-    if (node) {
-        tmp = node;
-        tmp->sid += 1;
-    }
-}
-
-static void
 linked_list_iterate_handler(void *node)
 {
     uint32 *tmp;

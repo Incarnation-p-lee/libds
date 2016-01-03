@@ -32,25 +32,22 @@
 /* SINGLE LINKED LIST */
 #define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
     } while (false)
 
-#define single_linked_list_node_val(node) \
+#define single_linked_list_val(node) \
     (assert(node), (node)->val)
-#define single_linked_list_node_val_set(node, v) \
+#define single_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define single_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define single_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define single_linked_list_node_next(node) \
+#define single_linked_list_next(node) \
     (assert(node), (node)->next)
-#define single_linked_list_node_next_set(node, v) \
+#define single_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
+
+#define single_linked_list_previous_set(node, v) \
+    (pr_log_info("Single linked list previous set not supported.\n"))
 
 
 /* SKIP LINKED LIST */

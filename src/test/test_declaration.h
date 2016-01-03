@@ -40,7 +40,6 @@ static inline void test_parameter_parser_internal(struct test_suite *suite, char
 static struct test_case_filter * test_case_filter_obtain(char *arg);
 static void linked_list_iterate_handler(void *node);
 static void queue_iterate_handler(void *ptr);
-static void single_linked_list_iterate_handler(void *node);
 static void stack_iterate_handler(void *ptr);
 static void test_case_filter_destroy(struct test_case_filter **filter);
 static void test_case_filter_parser(struct test_case_filter *filter, char *arg);

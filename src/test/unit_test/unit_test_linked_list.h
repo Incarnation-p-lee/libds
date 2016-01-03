@@ -54,6 +54,26 @@ utest_##name##_linked_list_node_create(void)                       \
     UNIT_TEST_RESULT(name##_linked_list_node_create, pass);        \
 }
 
+#define UT_LINKED_LIST_previous(name)                              \
+static void                                                        \
+utest_##name##_linked_list_previous(void)                          \
+{                                                                  \
+    bool pass;                                                     \
+    struct LINKED_LIST *list;                                      \
+    struct LINKED_LIST *prev;                                      \
+                                                                   \
+    pass = true;                                                   \
+    LINKED_LIST_previous(NULL);                                    \
+                                                                   \
+    list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                \
+    prev = LINKED_LIST_previous(list);                             \
+                                                                   \
+    RESULT_CHECK_pointer(list, LINKED_LIST_next(prev), &pass);     \
+                                                                   \
+    LINKED_LIST_destroy(&list);                                    \
+    UNIT_TEST_RESULT(name##_linked_list_previous, pass);           \
+}
+
 #define UT_LINKED_LIST_insert_ptr_after(name)                          \
 static void                                                            \
 utest_##name##_linked_list_insert_ptr_after(void)                      \
@@ -415,7 +435,7 @@ utest_##name##_linked_list_merge(void)                                \
     list = LINKED_LIST_merge(list, list_n);                           \
     RESULT_CHECK_uint32(0x6u, LINKED_LIST_length(list), &pass);       \
                                                                       \
-    list = doubly_linked_list_merge(list, list_n);                    \
+    list = LINKED_LIST_merge(list, list_n);                    \
                                                                       \
     LINKED_LIST_destroy(&list);                                       \
     LINKED_LIST_destroy(&list_n);                                     \

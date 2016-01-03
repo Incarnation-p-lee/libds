@@ -57,6 +57,26 @@ ptest_##name##_linked_list_node_create(uint32 count)         \
     PERFORMANCE_TEST_RESULT(name##_linked_list_node_create); \
 }
 
+#define PT_LINKED_LIST_previous(name)                     \
+static void                                               \
+ptest_##name##_linked_list_previous(uint32 count)         \
+{                                                         \
+    struct LINKED_LIST *list;                             \
+                                                          \
+    list = TEST_LINKED_LIST_sample(0x22, 0x12);           \
+                                                          \
+    PERFORMANCE_TEST_CHECKPOINT;                          \
+                                                          \
+    while (count--) {                                     \
+        list = LINKED_LIST_previous(list);                \
+    }                                                     \
+                                                          \
+    PERFORMANCE_TEST_ENDPOINT;                            \
+                                                          \
+    LINKED_LIST_destroy(&list);                           \
+    PERFORMANCE_TEST_RESULT(name##_linked_list_previous); \
+}
+
 #define PT_LINKED_LIST_insert_ptr_before(name)                     \
 static void                                                        \
 ptest_##name##_linked_list_insert_ptr_before(uint32 count)         \

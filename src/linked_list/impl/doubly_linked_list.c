@@ -17,7 +17,7 @@ doubly_linked_list_initial_internal(struct doubly_linked_list *list, void *val)
 void
 doubly_linked_list_initial(struct doubly_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (!complain_null_pointer_p(list)) {
         doubly_linked_list_initial_internal(list, NULL);
     }
 }
@@ -47,7 +47,7 @@ doubly_linked_list_insert_after_internal(struct doubly_linked_list *list,
 
     assert(!complain_null_pointer_p(list));
 
-    node = doubly_linked_list_node_create(val);
+    node = doubly_linked_list_node_create_internal(val);
 
     list->next->previous = node;
     node->next = list->next;
@@ -149,7 +149,7 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
     if (complain_null_pointer_p(node)) {
         return NULL;
     } else {
-        copy = doubly_linked_list_node_create(node->val);
+        copy = doubly_linked_list_node_create_internal(node->val);
         copy->next = node->next;
         copy->previous = node->previous;
 
@@ -336,11 +336,7 @@ doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list
     register struct doubly_linked_list *iter;
 
     if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
-        if (NULL == m) {
-            return n;
-        } else {
-            return m;
-        }
+        return NULL == m ? n : m;
     } else if (m == n) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
         return m;
