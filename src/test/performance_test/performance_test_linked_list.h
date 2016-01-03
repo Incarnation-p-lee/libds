@@ -329,15 +329,18 @@ static void                                                      \
 ptest_##name##_linked_list_iterate(uint32 count)                 \
 {                                                                \
     uint32 refer;                                                \
+    uint32 length;                                               \
     struct LINKED_LIST *tmp;                                     \
     struct LINKED_LIST *list;                                    \
                                                                  \
     list = TEST_LINKED_LIST_sample(0xe0d, 0x493);                \
+    length = LINKED_LIST_length(list);                           \
+                                                                 \
     tmp = list;                                                  \
-    do {                                                         \
+    while (0 != length--) {                                      \
         LINKED_LIST_val_set(tmp, &refer);                        \
         tmp = LINKED_LIST_next(tmp);                             \
-    } while (tmp != list);                                       \
+    }                                                            \
                                                                  \
     PERFORMANCE_TEST_CHECKPOINT;                                 \
                                                                  \

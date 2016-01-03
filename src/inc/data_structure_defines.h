@@ -51,20 +51,23 @@
 
 
 /* SKIP LINKED LIST */
-#define skip_linked_list_node_key(node) \
+#define skip_linked_list_key(node) \
     (assert(node), (node)->key)
-#define skip_linked_list_node_key_set(node, k) \
+#define skip_linked_list_key_set(node, k) \
     (assert(node), (node)->key = (k))
 
-#define skip_linked_list_node_val(node) \
+#define skip_linked_list_val(node) \
     (assert(node), (node)->val)
-#define skip_linked_list_node_val_set(node, v) \
+#define skip_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define skip_linked_list_node_next(node) \
+#define skip_linked_list_next(node) \
     (assert(node), (node)->next)
-#define skip_linked_list_node_next_set(node, n) \
+#define skip_linked_list_next_set(node, n) \
     (assert(node), (node)->next = (n))
+
+#define skip_linked_list_previous(node) \
+    (pr_log_info("Skip linked list previous not supported.\n"), node)
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \

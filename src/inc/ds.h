@@ -358,20 +358,23 @@ struct leftist_heap {
 
 
 /* SKIP LINKED LIST */
-#define skip_linked_list_node_key(node) \
+#define skip_linked_list_key(node) \
     (assert(node), (node)->key)
-#define skip_linked_list_node_key_set(node, k) \
+#define skip_linked_list_key_set(node, k) \
     (assert(node), (node)->key = (k))
 
-#define skip_linked_list_node_val(node) \
+#define skip_linked_list_val(node) \
     (assert(node), (node)->val)
-#define skip_linked_list_node_val_set(node, v) \
+#define skip_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define skip_linked_list_node_next(node) \
+#define skip_linked_list_next(node) \
     (assert(node), (node)->next)
-#define skip_linked_list_node_next_set(node, n) \
+#define skip_linked_list_next_set(node, n) \
     (assert(node), (node)->next = (n))
+
+#define skip_linked_list_previous(node) \
+    (pr_log_info("Skip linked list previous not supported.\n"), node)
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \
@@ -677,12 +680,12 @@ extern struct single_linked_list * single_linked_list_node_create(void *val);
 extern struct single_linked_list * single_linked_list_previous(struct single_linked_list *node);
 extern struct single_linked_list * single_linked_list_remove(struct single_linked_list **node);
 extern struct skip_linked_list * skip_linked_list_create(void);
+extern struct skip_linked_list * skip_linked_list_find_key(struct skip_linked_list *list, sint32 key);
+extern struct skip_linked_list * skip_linked_list_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 extern struct skip_linked_list * skip_linked_list_node_create(void *val, sint32 key);
-extern struct skip_linked_list * skip_linked_list_node_find_key(struct skip_linked_list *list, sint32 key);
-extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
-extern struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list **list, sint32 key);
+extern struct skip_linked_list * skip_linked_list_remove(struct skip_linked_list **list, sint32 key);
 extern uint32 doubly_linked_list_length(struct doubly_linked_list *list);
 extern uint32 single_linked_list_length(struct single_linked_list *list);
 extern uint32 skip_linked_list_length(struct skip_linked_list *list);
@@ -705,8 +708,7 @@ extern void single_linked_list_remove_and_destroy(struct single_linked_list **no
 extern void skip_linked_list_destroy(struct skip_linked_list **list);
 extern void skip_linked_list_initial(struct skip_linked_list *list);
 extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
-extern void skip_linked_list_node_initial(struct skip_linked_list *list, void *val, sint32 key);
-extern void skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list, sint32 key);
+extern void skip_linked_list_remove_and_destroy(struct skip_linked_list **list, sint32 key);
 
 #endif
 /* END of ./src/linked_list/linked_list_declaration.h */

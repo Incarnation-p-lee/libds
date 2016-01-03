@@ -1,62 +1,46 @@
-static void
-performance_test_skip_linked_list_struct_field(uint32 count)
-{
-    struct skip_linked_list *list;
+#include "../performance_test_linked_list.h"
 
-    list = skip_linked_list_create();
+#define LINKED_LIST                    skip_linked_list
+#define LINKED_LIST_next               skip_linked_list_next
+#define LINKED_LIST_next_set           skip_linked_list_next_set
+#define LINKED_LIST_previous           skip_linked_list_previous
+#define LINKED_LIST_val                skip_linked_list_val
+#define LINKED_LIST_val_set            skip_linked_list_val_set
 
-    PERFORMANCE_TEST_CHECKPOINT;
+#define LINKED_LIST_create             skip_linked_list_create
+#define LINKED_LIST_initial            skip_linked_list_initial
+#define LINKED_LIST_destroy            skip_linked_list_destroy
+#define LINKED_LIST_length             skip_linked_list_length
+#define LINKED_LIST_node_by_index      skip_linked_list_node_by_index
+#define LINKED_LIST_iterate            skip_linked_list_iterate
 
-    while (count--) {
-        skip_linked_list_node_key_set(list, 0xadeu);
-        skip_linked_list_node_val_set(list, &count);
-        skip_linked_list_node_next_set(list, NULL);
-    }
+#define TEST_LINKED_LIST_sample        test_skip_linked_list_sample
 
-    PERFORMANCE_TEST_ENDPOINT;
+PT_LINKED_LIST_create(skip)
+PT_LINKED_LIST_initial(skip)
+PT_LINKED_LIST_destroy(skip)
+PT_LINKED_LIST_length(skip)
+PT_LINKED_LIST_node_by_index(skip)
+PT_LINKED_LIST_iterate(skip)
 
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_struct_field);
-}
+#undef LINKED_LIST
+#undef LINKED_LIST_next
+#undef LINKED_LIST_next_set
+#undef LINKED_LIST_previous
+#undef LINKED_LIST_val
+#undef LINKED_LIST_val_set
 
-static void
-performance_test_skip_linked_list_create(uint32 count)
-{
-    struct skip_linked_list *list;
+#undef LINKED_LIST_create
+#undef LINKED_LIST_initial
+#undef LINKED_LIST_destroy
+#undef LINKED_LIST_length
+#undef LINKED_LIST_node_by_index
+#undef LINKED_LIST_iterate
 
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        list = skip_linked_list_create();
-        skip_linked_list_destroy(&list);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(skip_linked_list_create);
-}
-
-static void
-performance_test_skip_linked_list_initial(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    list = skip_linked_list_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        skip_linked_list_initial(list);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_initial);
-}
+#undef TEST_LINKED_LIST_sample
 
 static void
-performance_test_skip_linked_list_node_create(uint32 count)
+ptest_skip_linked_list_node_create(uint32 count)
 {
     struct skip_linked_list *list;
 
@@ -73,62 +57,7 @@ performance_test_skip_linked_list_node_create(uint32 count)
 }
 
 static void
-performance_test_skip_linked_list_node_initial(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    list = skip_linked_list_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        skip_linked_list_node_initial(list, list, 0xdeadu);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_initial);
-}
-
-static void
-performance_test_skip_linked_list_destroy(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        list = test_skip_linked_list_sample(0x45, 0xf);
-        skip_linked_list_destroy(&list);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(skip_linked_list_destroy);
-}
-
-static void
-performance_test_skip_linked_list_length(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    list = test_skip_linked_list_sample(0xf45, 0x334);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        skip_linked_list_length(list);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_length);
-}
-
-static void
-performance_test_skip_linked_list_node_find_key(uint32 count)
+ptest_skip_linked_list_find_key(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -137,22 +66,22 @@ performance_test_skip_linked_list_node_find_key(uint32 count)
     key = 0xfade;
     list = test_skip_linked_list_sample(0xf45, 0x734);
     tmp = skip_linked_list_node_create(list, key);
-    skip_linked_list_node_insert(&list, tmp);
+    skip_linked_list_insert(&list, tmp);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        skip_linked_list_node_find_key(list, key);
+        skip_linked_list_find_key(list, key);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_find_key);
+    PERFORMANCE_TEST_RESULT(skip_linked_list_find_key);
 }
 
 static void
-performance_test_skip_linked_list_key_contains_p(uint32 count)
+ptest_skip_linked_list_key_contains_p(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -176,7 +105,7 @@ performance_test_skip_linked_list_key_contains_p(uint32 count)
 }
 
 static void
-performance_test_skip_linked_list_node_insert(uint32 count)
+ptest_skip_linked_list_insert(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -189,38 +118,18 @@ performance_test_skip_linked_list_node_insert(uint32 count)
 
     while (count--) {
         tmp = skip_linked_list_node_create(list, key);
-        skip_linked_list_node_insert(&list, tmp);
-        skip_linked_list_node_remove_and_destroy(&list,
-            skip_linked_list_node_key(tmp));
+        skip_linked_list_insert(&list, tmp);
+        skip_linked_list_remove_and_destroy(&list, skip_linked_list_key(tmp));
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_insert);
+    PERFORMANCE_TEST_RESULT(skip_linked_list_insert);
 }
 
 static void
-performance_test_skip_linked_list_node_by_index(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    list = test_skip_linked_list_sample(0xe12, 0x245);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        skip_linked_list_node_by_index(list, count % 2);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_by_index);
-}
-
-static void
-performance_test_skip_linked_list_node_remove(uint32 count)
+ptest_skip_linked_list_remove(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -230,18 +139,18 @@ performance_test_skip_linked_list_node_remove(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = skip_linked_list_node_remove(&list, skip_linked_list_node_key(list));
-        skip_linked_list_node_insert(&list, tmp);
+        tmp = skip_linked_list_remove(&list, skip_linked_list_key(list));
+        skip_linked_list_insert(&list, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_remove);
+    PERFORMANCE_TEST_RESULT(skip_linked_list_remove);
 }
 
 static void
-performance_test_skip_linked_list_node_remove_and_destroy(uint32 count)
+ptest_skip_linked_list_remove_and_destroy(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -254,37 +163,18 @@ performance_test_skip_linked_list_node_remove_and_destroy(uint32 count)
 
     while (count--) {
         tmp = skip_linked_list_node_create(list, key++);
-        skip_linked_list_node_remove_and_destroy(&list, skip_linked_list_node_key(list));
-        skip_linked_list_node_insert(&list, tmp);
+        skip_linked_list_remove_and_destroy(&list, skip_linked_list_key(list));
+        skip_linked_list_insert(&list, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_node_remove_and_destroy);
+    PERFORMANCE_TEST_RESULT(skip_linked_list_remove_and_destroy);
 }
 
 static void
-performance_test_skip_linked_list_iterate(uint32 count)
-{
-    struct skip_linked_list *list;
-
-    list = test_skip_linked_list_sample(0x912, 0x345);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        skip_linked_list_iterate(list, &linked_list_iterate_handler);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_iterate);
-}
-
-static void
-performance_test_skip_linked_list_merge(uint32 count)
+ptest_skip_linked_list_merge(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;

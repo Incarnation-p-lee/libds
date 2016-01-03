@@ -44,15 +44,15 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     assert(0 != count);
 
     list = skip_linked_list_create();
-    skip_linked_list_node_initial(list, list, 0);
+    skip_linked_list_initial(list);
 
     i = 1;
     while (i < count) {
         key = (sint32)(rand() % range) - (sint32)range / 2;
-        if (!skip_linked_list_node_find_key(list, key)) {
+        if (!skip_linked_list_find_key(list, key)) {
             tmp = skip_linked_list_node_create(NULL, key);
-            skip_linked_list_node_val_set(tmp, tmp);
-            skip_linked_list_node_insert(&list, tmp);
+            skip_linked_list_val_set(tmp, tmp);
+            skip_linked_list_insert(&list, tmp);
         }
         i++;
     }

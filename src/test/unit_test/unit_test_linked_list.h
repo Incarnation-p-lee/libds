@@ -387,20 +387,22 @@ utest_##name##_linked_list_iterate(void)                         \
 {                                                                \
     bool pass;                                                   \
     uint32 refer;                                                \
+    uint32 length;                                               \
     struct LINKED_LIST *tmp;                                     \
     struct LINKED_LIST *list;                                    \
                                                                  \
-    pass = true;                                                 \
     refer = 0;                                                   \
+    pass = true;                                                 \
     list = TEST_LINKED_LIST_sample(0x1F2, 0x381);                \
+    length = LINKED_LIST_length(list);                           \
                                                                  \
     LINKED_LIST_iterate(NULL, &linked_list_iterate_handler);     \
                                                                  \
     tmp = list;                                                  \
-    do {                                                         \
+    while (0 != length--) {                                      \
         LINKED_LIST_val_set(tmp, &refer);                        \
         tmp = LINKED_LIST_next(tmp);                             \
-    } while (tmp != list);                                       \
+    }                                                            \
                                                                  \
     tmp = list;                                                  \
     LINKED_LIST_iterate(list, &linked_list_iterate_handler);     \
@@ -420,11 +422,13 @@ utest_##name##_linked_list_merge(void)                                \
     uint32 raw[] = {0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0x1};               \
                                                                       \
     pass = true;                                                      \
-    list = LINKED_LIST_node_create(raw);                              \
+    list = LINKED_LIST_create();                                      \
+    LINKED_LIST_val_set(list, raw);                                   \
     LINKED_LIST_insert_before(list, raw + 1);                         \
     LINKED_LIST_insert_before(list, raw + 2);                         \
                                                                       \
-    list_n = LINKED_LIST_node_create(raw + 3);                        \
+    list_n = LINKED_LIST_create();                                    \
+    LINKED_LIST_val_set(list, raw + 3);                               \
     LINKED_LIST_insert_before(list_n, raw + 4);                       \
     LINKED_LIST_insert_before(list_n, raw + 5);                       \
                                                                       \

@@ -82,6 +82,8 @@ sub file_scan() {
         chomp;
         next if /^$/;
         next if /:$/;
+        next if /^UT_/;
+        next if /^PT_/;
 
         if (/^\w/) {
             $body = 0;
