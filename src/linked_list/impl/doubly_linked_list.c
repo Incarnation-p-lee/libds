@@ -160,8 +160,8 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
 void
 doubly_linked_list_destroy(struct doubly_linked_list **list)
 {
-    register struct doubly_linked_list *node;
-    register struct doubly_linked_list **next;
+    struct doubly_linked_list *node;
+    struct doubly_linked_list *next;
 
     if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
         node = *list;
@@ -170,9 +170,9 @@ doubly_linked_list_destroy(struct doubly_linked_list **list)
          * the consider of performance drop.
          */
         do {
-            next = &node->next;
+            next = node->next;
             memory_cache_free(node);
-            node = *next;
+            node = next;
         } while(*list != node);
 
         *list = NULL;

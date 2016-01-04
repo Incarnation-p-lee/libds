@@ -155,8 +155,8 @@ single_linked_list_node_copy(struct single_linked_list *node)
 void
 single_linked_list_destroy(struct single_linked_list **list)
 {
-    register struct single_linked_list *node;
-    register struct single_linked_list **next;
+    struct single_linked_list *node;
+    struct single_linked_list *next;
 
     if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
         node = *list;
@@ -167,9 +167,9 @@ single_linked_list_destroy(struct single_linked_list **list)
          * drop in performance test.
          */
         do {
-            next = &node->next;
+            next = node->next;
             memory_cache_free(node);
-            node = *next;
+            node = next;
         } while (*list != node);
 
         *list = NULL;
