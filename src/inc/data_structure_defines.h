@@ -46,8 +46,10 @@
 #define single_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
-#define single_linked_list_previous_set(node, v) \
-    (pr_log_info("Single linked list previous set not supported.\n"))
+/*
+ * Single linked list previous set not supported.
+ */
+#define single_linked_list_previous_set(node, v)
 
 
 /* SKIP LINKED LIST */
@@ -66,8 +68,11 @@
 #define skip_linked_list_next_set(node, n) \
     (assert(node), (node)->next = (n))
 
+/*
+ * Skip linked list previous not supported.
+ */
 #define skip_linked_list_previous(node) \
-    (pr_log_info("Skip linked list previous not supported.\n"), node)
+    (node)
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \
