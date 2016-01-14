@@ -221,10 +221,13 @@
 #define minimal_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->alias, index))
 
-#define minimal_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->alias, index))
-#define minimal_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+#define minimal_heap_val(heap, index) \
+    (assert(heap), HEAP_VAL(heap->alias, index))
+#define minimal_heap_val_set(heap, index, val) \
+    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+
+#define minimal_heap_index_last(heap) \
+    (assert(heap), INDEX_LAST(heap->alias))
 
 /* MAXIMAL HEAP */
 #define maximal_heap_size(heap) \
@@ -236,10 +239,13 @@
 #define maximal_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->alias, index))
 
-#define maximal_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->alias, index))
-#define maximal_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+#define maximal_heap_val(heap, index) \
+    (assert(heap), HEAP_VAL(heap->alias, index))
+#define maximal_heap_val_set(heap, index, val) \
+    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+
+#define maximal_heap_index_last(heap) \
+    (assert(heap), INDEX_LAST(heap->alias))
 
 /* MIN_MAX HEAP */
 #define min_max_heap_size(heap) \

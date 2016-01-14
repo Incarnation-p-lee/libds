@@ -13,9 +13,13 @@ memory_cache_allocate(uint32 size)
         return retval;
     } else {
         retval = malloc_ds(size + MEM_PRE_LEN);
-        *(uint32 *)retval = size;
 
-        return retval + MEM_PRE_LEN;
+        if (!complain_no_memory_p(retval)) {
+            *(uint32 *)retval = size;
+            return retval + MEM_PRE_LEN;
+        } else {
+            return NULL;
+        }
     }
 }
 

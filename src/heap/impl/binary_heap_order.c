@@ -25,9 +25,6 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
         next = small_child;
         goto HEAP_UNORDERED;
     } else {
-        assert(!binary_heap_nice_repeated_p(heap, parent, nice));
-        assert(!binary_heap_nice_repeated_p(heap, small_child, nice));
-
         return true;
     }
 
@@ -37,6 +34,35 @@ HEAP_UNORDERED:
     }
 
     return false;
+}
+
+/*
+ * Only for Build heap, as it need percolate down
+ */
+static inline bool
+binary_heap_minimal_percolate_down(struct binary_heap *heap,
+    uint32 index, sint64 nice, uint32 *tgt_index)
+{
+    uint32 next;
+    uint32 small_child;
+
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    small_child = binary_heap_child_small_nice_index(heap, index);
+
+    if (INDEX_INVALID != small_child
+        && HEAP_NICE(heap, small_child) < nice) {
+        next = small_child;
+
+        if (tgt_index) {
+            *tgt_index = next;
+        }
+
+        return false;
+    } else {
+        return true;
+    }
 }
 
 /*
@@ -66,9 +92,6 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
         next = big_child;
         goto HEAP_UNORDERED;
     } else {
-        assert(!binary_heap_nice_repeated_p(heap, parent, nice));
-        assert(!binary_heap_nice_repeated_p(heap, big_child, nice));
-
         return true;
     }
 
@@ -171,11 +194,11 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
     assert(INDEX_INVALID != INDEX_GD_PARENT(index));
-    assert(!binary_heap_node_child_exist_p(heap, index));
+    assert(!binary_heap_child_exist_p(heap, index));
 
     parent = INDEX_PARENT(index);
     grandparent = INDEX_GD_PARENT(index);
-    depth = binary_heap_node_depth(index);
+    depth = binary_heap_depth(index);
 
     assert(nice != HEAP_NICE(heap, parent));
     assert(nice != HEAP_NICE(heap, grandparent));
@@ -262,11 +285,11 @@ binary_heap_min_max_ordered_p(struct binary_heap *heap,
     } else if (INDEX_ROOT == INDEX_PARENT(index)) {
         return binary_heap_min_max_root_parent_ordered_p(heap, index, nice,
             tgt_index);
-    } else if (!binary_heap_node_child_exist_p(heap, index)) {
+    } else if (!binary_heap_child_exist_p(heap, index)) {
         return binary_heap_min_max_no_child_ordered_p(heap, index, nice,
             tgt_index);
     } else {
-        depth = binary_heap_node_depth(index);
+        depth = binary_heap_depth(index);
         parent = INDEX_PARENT(index);
         grandparent = INDEX_GD_PARENT(index);
 

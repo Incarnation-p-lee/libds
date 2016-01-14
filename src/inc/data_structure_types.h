@@ -199,9 +199,10 @@ struct heap_data {
 
 /*
  * generate heap
+ * allow different node with the same nice
  */
 struct binary_heap {
-    struct collision_chain **base;
+    struct heap_data **base;
     uint32 capacity;
     uint32 size;
 };

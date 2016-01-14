@@ -1417,136 +1417,105 @@ static const struct test_layer_table open_addressing_hash[] = {
 
 static const struct test_layer_table minimal_heap[] = {
     {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_minimal_heap_struct_field,
-            &performance_test_minimal_heap_struct_field,
-        },
-    },
-    {
         "create",
         NULL,
         {
-            &unit_test_minimal_heap_create,
-            &performance_test_minimal_heap_create,
+            &utest_minimal_heap_create,
+            &ptest_minimal_heap_create,
         },
     },
     {
         "destroy",
         NULL,
         {
-            &unit_test_minimal_heap_destroy,
-            &performance_test_minimal_heap_destroy,
+            &utest_minimal_heap_destroy,
+            &ptest_minimal_heap_destroy,
         },
     },
     {
         "empty_p",
         NULL,
         {
-            &unit_test_minimal_heap_empty_p,
-            &performance_test_minimal_heap_empty_p,
+            &utest_minimal_heap_empty_p,
+            &ptest_minimal_heap_empty_p,
         },
     },
     {
         "full_p",
         NULL,
         {
-            &unit_test_minimal_heap_full_p,
-            &performance_test_minimal_heap_full_p,
+            &utest_minimal_heap_full_p,
+            &ptest_minimal_heap_full_p,
         },
     },
     {
         "cleanup",
         NULL,
         {
-            &unit_test_minimal_heap_cleanup,
-            &performance_test_minimal_heap_cleanup,
+            &utest_minimal_heap_cleanup,
+            &ptest_minimal_heap_cleanup,
         },
     },
     {
-        "node_find",
+        "get_min",
         NULL,
         {
-            &unit_test_minimal_heap_node_find,
-            &performance_test_minimal_heap_node_find,
+            &utest_minimal_heap_get_min,
+            &ptest_minimal_heap_get_min,
         },
     },
     {
-        "node_find_min",
+        "insert",
         NULL,
         {
-            &unit_test_minimal_heap_node_find_min,
-            &performance_test_minimal_heap_node_find_min,
+            &utest_minimal_heap_insert,
+            &ptest_minimal_heap_insert,
         },
     },
     {
-        "node_insert",
+        "remove_min",
         NULL,
         {
-            &unit_test_minimal_heap_node_insert,
-            &performance_test_minimal_heap_node_insert,
+            &utest_minimal_heap_remove_min,
+            &ptest_minimal_heap_remove_min,
         },
     },
     {
-        "node_remove_min",
+        "remove",
         NULL,
         {
-            &unit_test_minimal_heap_node_remove_min,
-            &performance_test_minimal_heap_node_remove_min,
+            &utest_minimal_heap_remove,
+            &ptest_minimal_heap_remove,
         },
     },
     {
-        "node_remove_min_and_destroy",
+        "decrease_nice",
         NULL,
         {
-            &unit_test_minimal_heap_node_remove_min_and_destroy,
-            &performance_test_minimal_heap_node_remove_min_and_destroy,
+            &utest_minimal_heap_decrease_nice,
+            &ptest_minimal_heap_decrease_nice,
         },
     },
     {
-        "node_remove",
+        "increase_nice",
         NULL,
         {
-            &unit_test_minimal_heap_node_remove,
-            &performance_test_minimal_heap_node_remove,
-        },
-    },
-    {
-        "node_remove_and_destroy",
-        NULL,
-        {
-            &unit_test_minimal_heap_node_remove_and_destroy,
-            &performance_test_minimal_heap_node_remove_and_destroy,
-        },
-    },
-    {
-        "node_decrease_nice",
-        NULL,
-        {
-            &unit_test_minimal_heap_node_decrease_nice,
-            &performance_test_minimal_heap_node_decrease_nice,
-        },
-    },
-    {
-        "node_increase_nice",
-        NULL,
-        {
-            &unit_test_minimal_heap_node_increase_nice,
-            &performance_test_minimal_heap_node_increase_nice,
+            &utest_minimal_heap_increase_nice,
+            &ptest_minimal_heap_increase_nice,
         },
     },
     {
         "build",
         NULL,
         {
-            &unit_test_minimal_heap_build,
-            &performance_test_minimal_heap_build,
+            &utest_minimal_heap_build,
+            &ptest_minimal_heap_build,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},
 };
 
+#if 0
 static const struct test_layer_table maximal_heap[] = {
     {
         "struct_field",
@@ -1834,6 +1803,7 @@ static const struct test_layer_table min_max_heap[] = {
     },
     {NULL,                          NULL, {NULL, NULL},},
 };
+#endif
 
 static const struct test_layer_table leftist_heap[] = {
     {
@@ -1958,8 +1928,8 @@ static const struct test_layer_table test_hash_implement[] = {
 
 static const struct test_layer_table test_heap_implement[] = {
     {"minimal", minimal_heap, {NULL, NULL},},
-    {"maximal", maximal_heap, {NULL, NULL},},
-    {"min_max", min_max_heap, {NULL, NULL},},
+    // {"maximal", maximal_heap, {NULL, NULL},},
+    // {"min_max", min_max_heap, {NULL, NULL},},
     {"leftist", leftist_heap, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,      NULL,         {NULL, NULL},},

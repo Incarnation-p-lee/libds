@@ -27,9 +27,9 @@
 #define HEAP_L_CHILD_NICE(heap, index) (heap)->base[INDEX_L_CHILD(index)]->nice
 #define HEAP_R_CHILD_NICE(heap, index) (heap)->base[INDEX_R_CHILD(index)]->nice
 #define HEAP_NICE(heap, index)         (heap)->base[index]->nice
-#define HEAP_LINK(heap, index)         (heap)->base[index]->link
 #define HEAP_SIZE(heap)                (heap)->size
-#define HEAP_CHAIN(heap, index)        (heap)->base[index]
+#define HEAP_VAL(heap, index)          (heap)->base[index]->val
+#define HEAP_DATA(heap, index)         (heap)->base[index]
 
 #define NPL_NULL                       -1
 

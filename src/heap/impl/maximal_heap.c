@@ -4,9 +4,7 @@ maximal_heap_create(uint32 capacity)
     struct maximal_heap *heap;
 
     heap = memory_cache_allocate(sizeof(*heap));
-    if (!complain_no_memory_p(heap)) {
-        heap->alias = binary_heap_create(capacity);
-    }
+    heap->alias = binary_heap_create(capacity);
 
     return heap;
 }
@@ -49,113 +47,71 @@ maximal_heap_cleanup(struct maximal_heap *heap)
     }
 }
 
-struct doubly_linked_list *
-maximal_heap_node_find(struct maximal_heap *heap, sint64 nice)
-{
-    if (complain_null_pointer_p(heap)) {
-        return NULL;
-    } if (!binary_heap_nice_legal_p(nice)) {
-        return NULL;
-    } else {
-        return binary_heap_node_find(heap->alias, nice);
-    }
-}
-
-struct doubly_linked_list *
-maximal_heap_node_find_max(struct maximal_heap *heap)
+void *
+maximal_heap_get_max(struct maximal_heap *heap)
 {
     if (complain_null_pointer_p(heap)) {
         return NULL;
     } else {
-        return binary_heap_node_root(heap->alias);
+        return binary_heap_root(heap->alias);
     }
 }
 
 void
-maximal_heap_node_insert(struct maximal_heap *heap, void *val, sint64 nice)
+maximal_heap_insert(struct maximal_heap *heap, void *val, sint64 nice)
 {
     if (complain_null_pointer_p(heap)) {
         return;
     } else if (binary_heap_nice_legal_p(nice)) {
-        binary_heap_node_insert(heap->alias, val, nice,
+        binary_heap_insert(heap->alias, val, nice,
             &binary_heap_maximal_ordered_p);
     }
 }
 
 static inline struct doubly_linked_list *
-maximal_heap_node_remove_internal(struct maximal_heap *heap, uint32 index)
+maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
 {
     sint64 nice;
+    struct heap_data *tmp;
     struct binary_heap *alias;
-    struct collision_chain *tmp;
 
-    assert(NULL != heap);
+    assert(!complain_null_pointer_p(heap));
+    assert(!binary_heap_empty_p(heap->alias));
     assert(binary_heap_structure_legal_p(heap->alias));
     assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
 
-    tmp = HEAP_CHAIN(alias, index);
-    HEAP_CHAIN(alias, index) = NULL;
+    tmp = HEAP_DATA(alias, index);
+    HEAP_DATA(alias, index) = NULL;
     nice = HEAP_NICE(alias, INDEX_ROOT) + 1;
 
     /*
      * percolate current index node to root, then remove the root.
      */
-    index = binary_heap_node_reorder(alias, index, nice,
-        &binary_heap_maximal_ordered_p);
+    index = binary_heap_reorder(alias, index, nice, &binary_heap_maximal_ordered_p);
+
     assert(INDEX_ROOT == index);
+    assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
 
-    HEAP_CHAIN(alias, INDEX_ROOT) = tmp;
-    return binary_heap_node_remove_root(alias, &binary_heap_maximal_ordered_p);
+    HEAP_DATA(alias, INDEX_ROOT) = tmp;
+    return binary_heap_remove_root(alias, &binary_heap_maximal_ordered_p);
 }
 
-struct doubly_linked_list *
-maximal_heap_node_remove(struct maximal_heap *heap, sint64 nice)
+void *
+maximal_heap_remove(struct maximal_heap *heap, uint32 index)
 {
-    uint32 index;
-
     if (complain_null_pointer_p(heap)) {
         return NULL;
-    } else if (!binary_heap_nice_legal_p(nice)) {
-        return NULL;
-    } else if (!binary_heap_node_contains_p(heap->alias, nice, &index)) {
+    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return NULL;
     } else {
-        return maximal_heap_node_remove_internal(heap, index);
+        return maximal_heap_remove_internal(heap, index);
     }
 }
 
-static inline void
-maximal_heap_node_remove_and_destroy_internal(struct maximal_heap *heap,
-    uint32 index)
-{
-    struct doubly_linked_list *removed;
-
-    assert(NULL != heap);
-    assert(binary_heap_structure_legal_p(heap->alias));
-    assert(binary_heap_index_legal_p(heap->alias, index));
-
-    removed = maximal_heap_node_remove_internal(heap, index);
-    doubly_linked_list_destroy(&removed);
-}
-
-void
-maximal_heap_node_remove_and_destroy(struct maximal_heap *heap, sint64 nice)
-{
-    uint32 index;
-
-    if (complain_null_pointer_p(heap)) {
-        return;
-    } else if (!binary_heap_nice_legal_p(nice)) {
-        return;
-    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        maximal_heap_node_remove_and_destroy_internal(heap, index);
-    }
-}
-
-struct doubly_linked_list *
-maximal_heap_node_remove_max(struct maximal_heap *heap)
+void *
+maximal_heap_remove_max(struct maximal_heap *heap)
 {
     if (complain_null_pointer_p(heap)) {
         return NULL;
@@ -163,91 +119,67 @@ maximal_heap_node_remove_max(struct maximal_heap *heap)
         pr_log_warn("Attempt to remove node in empty heap.\n");
         return NULL;
     } else {
-        return binary_heap_node_remove_root(heap->alias,
-            &binary_heap_maximal_ordered_p);
-    }
-}
-
-void
-maximal_heap_node_remove_max_and_destroy(struct maximal_heap *heap)
-{
-    if (complain_null_pointer_p(heap)) {
-        return;
-    } else if (binary_heap_empty_p(heap->alias)) {
-        pr_log_warn("Attempt to remove node in empty heap.\n");
-    } else {
-        binary_heap_node_remove_root_and_destroy(heap->alias,
+        return binary_heap_remove_root(heap->alias,
             &binary_heap_maximal_ordered_p);
     }
 }
 
 static inline void
-maximal_heap_node_nice_alter(struct maximal_heap *heap, uint32 index,
+maximal_heap_nice_alter(struct maximal_heap *heap, uint32 index,
     sint64 new_nice)
 {
-    uint32 hit_idx;
+    struct heap_data *tmp;
     struct binary_heap *alias;
-    struct collision_chain *tmp;
 
-    assert(NULL != heap);
+    assert(!complain_null_pointer_p(heap));
     assert(binary_heap_structure_legal_p(heap->alias));
     assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
+    tmp = HEAP_DATA(alias, index);
+    HEAP_DATA(alias, index) = NULL;
 
-    if (!binary_heap_node_contains_p(alias, new_nice, &hit_idx)) {
-        tmp = HEAP_CHAIN(alias, index);
-        HEAP_CHAIN(alias, index) = NULL;
+    index = binary_heap_reorder(alias, index, new_nice,
+        &binary_heap_maximal_ordered_p);
+    assert(NULL == HEAP_DATA(alias, index));
 
-        index = binary_heap_node_reorder(alias, index, new_nice,
-            &binary_heap_maximal_ordered_p);
-        assert(NULL == HEAP_CHAIN(alias, index));
+    tmp->nice = new_nice;
+    HEAP_DATA(alias, index) = tmp;
+}
 
-        tmp->nice = new_nice;
-        HEAP_CHAIN(alias, index) = tmp;
+void
+maximal_heap_decrease_nice(struct maximal_heap *heap, uint32 index,
+    uint32 offset)
+{
+    sint64 nice;
+
+    if (complain_null_pointer_p(heap)) {
+        return;
+    } else if (complain_zero_size_p(offset)) {
+        return;
+    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
+        return;
     } else {
-        binary_heap_node_collision_merge(alias, hit_idx, index);
-        maximal_heap_node_remove_and_destroy_internal(heap, index);
+        nice = HEAP_NICE(heap->alias, index) - offset;
+        maximal_heap_nice_alter(heap, index, nice);
     }
 }
 
 void
-maximal_heap_node_decrease_nice(struct maximal_heap *heap, sint64 nice, uint32 offset)
+maximal_heap_increase_nice(struct maximal_heap *heap, uint32 index,
+    uint32 offset)
 {
-    uint32 index;
-    sint64 new_nice;
-
-    new_nice = nice - offset;
+    sint64 nice;
 
     if (complain_null_pointer_p(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
-    } else if (!binary_heap_nice_legal_p(nice)
-        || !binary_heap_nice_legal_p(new_nice)) {
+    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return;
-    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        maximal_heap_node_nice_alter(heap, index, new_nice);
-    }
-}
-
-void
-maximal_heap_node_increase_nice(struct maximal_heap *heap, sint64 nice, uint32 offset)
-{
-    uint32 index;
-    sint64 new_nice;
-
-    new_nice = nice + offset;
-
-    if (complain_null_pointer_p(heap)) {
-        return;
-    } else if (complain_zero_size_p(offset)) {
-        return;
-    } else if (!binary_heap_nice_legal_p(nice)
-        || !binary_heap_nice_legal_p(new_nice)) {
-        return;
-    } else if (binary_heap_node_contains_p(heap->alias, nice, &index)) {
-        maximal_heap_node_nice_alter(heap, index, new_nice);
+    } else {
+        nice = HEAP_NICE(heap->alias, index) + offset;
+        maximal_heap_nice_alter(heap, index, nice);
     }
 }
 
@@ -257,34 +189,34 @@ maximal_heap_build_internal(struct maximal_heap *heap)
     uint32 iter;
     uint32 index;
     sint64 nice;
+    struct heap_data *tmp;
     struct binary_heap *alias;
-    struct collision_chain *tmp;
 
-    assert(NULL != heap);
-    assert(binary_heap_structure_legal_p(heap->alias));
+    assert(!complain_null_pointer_p(heap));
     assert(binary_heap_full_p(heap->alias));
+    assert(binary_heap_structure_legal_p(heap->alias));
 
     alias = heap->alias;
     iter = HEAP_SIZE(alias) / 2;
 
     while (iter != INDEX_INVALID) {
         index = iter;
-        tmp = HEAP_CHAIN(alias, index);
+        tmp = HEAP_DATA(alias, index);
         nice = HEAP_NICE(alias, index);
+        HEAP_DATA(alias, index) = NULL;
 
-        HEAP_CHAIN(alias, index) = NULL;
-        index = binary_heap_node_reorder(alias, index, nice,
+        index = binary_heap_reorder(alias, index, nice,
             &binary_heap_maximal_ordered_p);
 
-        assert(NULL == HEAP_CHAIN(alias, index));
-        HEAP_CHAIN(alias, index) = tmp;
+        assert(NULL == HEAP_DATA(alias, index));
+        HEAP_DATA(alias, index) = tmp;
 
         iter--;
     }
 }
 
 struct maximal_heap *
-maximal_heap_build(struct collision_chain **chain_array, uint32 size)
+maximal_heap_build(struct heap_data **chain_array, uint32 size)
 {
     struct maximal_heap *heap;
 
@@ -294,18 +226,14 @@ maximal_heap_build(struct collision_chain **chain_array, uint32 size)
         return NULL;
     } else {
         heap = memory_cache_allocate(sizeof(*heap));
+        heap->alias = memory_cache_allocate(sizeof(*heap->alias));
 
-        if (!complain_no_memory_p(heap)) {
-            heap->alias = memory_cache_allocate(sizeof(*heap->alias));
+        heap->alias->base = chain_array;
+        heap->alias->capacity = size - 1;
+        heap->alias->size = size - 1;
 
-            if (!complain_no_memory_p(heap->alias)) {
-                heap->alias->base = chain_array;
-                heap->alias->capacity = size - 1;
-                heap->alias->size = size - 1;
-
-                maximal_heap_build_internal(heap);
-            }
-        }
+        maximal_heap_build_internal(heap);
+        maximal_heap_build_internal(heap);
 
         return heap;
     }

@@ -1,4 +1,5 @@
 #include "unit_test.h"
+#include "unit_test_heap.h"
 #include "unit_test_declaration.h"
 
 #include "unit_test_linked_list.c"

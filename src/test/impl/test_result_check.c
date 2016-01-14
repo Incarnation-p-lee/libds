@@ -1,5 +1,5 @@
 static inline bool
-test_result_check_pointer_p(void *get, void *expect, bool *pass)
+test_result_check_pointer_p(void *expect, void *get, bool *pass)
 {
     bool tmp;
 
@@ -8,8 +8,27 @@ test_result_check_pointer_p(void *get, void *expect, bool *pass)
     tmp = (expect == get);
 
     if (!tmp) {
-        fprintf(stdout, "[32mexpected[0m: %p\n", get);
-        fprintf(stdout, "[31mcomputed[0m: %p\n", expect);
+        fprintf(stdout, "[32mexpected[0m: %p\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", get);
+    }
+
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
+test_result_check_not_equal_pointer_p(void *expect, void *get, bool *pass)
+{
+    bool tmp;
+
+    assert(NULL != pass);
+
+    tmp = (expect != get);
+
+    if (!tmp) {
+        fprintf(stdout, "[32mexpected[0m: %p\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %p\n", get);
     }
 
     *pass = *pass && tmp;
@@ -127,6 +146,24 @@ test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass)
     tmp = (expect == get);
 
     if (!tmp) {
+        fprintf(stdout, "[32mexpected[0m: %#"S64_MDF_X"\n", expect);
+        fprintf(stdout, "[31mcomputed[0m: %#"S64_MDF_X"\n", get);
+    }
+
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+
+static inline bool
+test_result_check_not_less_sint64_p(sint64 expect, sint64 get, bool *pass)
+{
+    bool tmp;
+
+    tmp = (expect >= get);
+
+    if (!tmp) {
+        fprintf(stdout, "[expect >= computed]\n");
         fprintf(stdout, "[32mexpected[0m: %#"S64_MDF_X"\n", expect);
         fprintf(stdout, "[31mcomputed[0m: %#"S64_MDF_X"\n", get);
     }

@@ -1,13 +1,13 @@
 static inline void
-test_binary_heap_collision_chain_randomization(struct collision_chain **chain_array,
+test_binary_heap_data_randomization(struct heap_data **hd_array,
     uint32 last)
 {
     uint32 idx;
     uint32 rand_idx;
-    struct collision_chain *chain_bk;
+    struct heap_data *bk;
 
-    assert(NULL != chain_array);
-    assert(NULL == chain_array[0]);
+    assert(NULL != hd_array);
+    assert(NULL == hd_array[0]);
 
     idx = INDEX_ROOT;
 
@@ -15,9 +15,9 @@ test_binary_heap_collision_chain_randomization(struct collision_chain **chain_ar
         rand_idx = rand() % idx;
         rand_idx = INDEX_INVALID == rand_idx ? INDEX_ROOT : rand_idx;
 
-        chain_bk = chain_array[rand_idx];
-        chain_array[rand_idx] = chain_array[idx];
-        chain_array[idx++] = chain_bk;
+        bk = hd_array[rand_idx];
+        hd_array[rand_idx] = hd_array[idx];
+        hd_array[idx++] = bk;
     }
 }
 

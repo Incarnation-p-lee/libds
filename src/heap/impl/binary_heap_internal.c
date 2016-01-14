@@ -2,38 +2,24 @@ static inline struct binary_heap *
 binary_heap_create(uint32 capacity)
 {
     struct binary_heap *heap;
+    register struct heap_data **iterator;
 
     if (complain_zero_size_p(capacity)) {
         capacity = DEFAULT_BINARY_HEAP_SIZE;
     }
 
     heap = memory_cache_allocate(sizeof(*heap));
-    if (!complain_no_memory_p(heap)) {
-        heap->base = memory_cache_allocate(sizeof(*heap->base[0]) * u_offset(capacity, 1));
-
-        if (!complain_no_memory_p(heap->base)) {
-            binary_heap_initial(heap, capacity);
-        }
-    }
-
-    return heap;
-}
-
-static inline void
-binary_heap_initial(struct binary_heap *heap, uint32 capacity)
-{
-    register struct collision_chain **iter;
-
-    assert(0 != capacity);
-    assert(binary_heap_structure_legal_p(heap));
+    heap->base = memory_cache_allocate(sizeof(*iterator) * (capacity + 1));
 
     heap->capacity = capacity;
     heap->size = 0;
 
-    iter = heap->base;
-    while (iter < heap->base + u_offset(heap->capacity, 1)) {
-        *iter++ = NULL;
+    iterator = heap->base;
+    while (iterator < heap->base + u_offset(capacity, 1)) {
+        *iterator++ = NULL;
     }
+
+    return heap;
 }
 
 static inline void
@@ -75,51 +61,26 @@ binary_heap_cleanup(struct binary_heap *heap)
     index = INDEX_FIRST;
 
     while (index <= INDEX_LAST(heap)) {
-        assert(NULL != HEAP_CHAIN(heap, index));
-        doubly_linked_list_destroy(&HEAP_LINK(heap, index));
-        assert(NULL == HEAP_LINK(heap, index));
-
-        memory_cache_free(HEAP_CHAIN(heap, index));
-        HEAP_CHAIN(heap, index) = NULL;
+        memory_cache_free(HEAP_DATA(heap, index));
+        HEAP_DATA(heap, index) = NULL;
         index++;
     }
 
     heap->size = 0;
 }
 
-static inline struct doubly_linked_list *
-binary_heap_node_root(struct binary_heap *heap)
+static inline void *
+binary_heap_root(struct binary_heap *heap)
 {
     assert(binary_heap_structure_legal_p(heap));
 
-    return HEAP_LINK(heap, INDEX_ROOT);
-}
-
-static inline struct doubly_linked_list *
-binary_heap_node_find(struct binary_heap *heap, sint64 nice)
-{
-    uint32 index;
-
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_nice_legal_p(nice));
-
-    if (binary_heap_empty_p(heap)) {
-        pr_log_info("Attempt to find node in empty heap.\n");
-        return NULL;
-    } else {
-        if (!binary_heap_node_contains_p(heap, nice, &index)) {
-            return NULL;
-        } else {
-            assert(HEAP_LINK(heap, index));
-            return HEAP_LINK(heap, index);
-        }
-    }
+    return HEAP_VAL(heap, INDEX_ROOT);
 }
 
 static inline void
 binary_heap_capacity_extend(struct binary_heap *heap)
 {
-    struct collision_chain **new;
+    struct heap_data **new;
     uint32 size;
 
     assert(binary_heap_structure_legal_p(heap));
@@ -134,63 +95,34 @@ binary_heap_capacity_extend(struct binary_heap *heap)
     heap->capacity = heap->capacity * 2;
     memory_cache_free(heap->base);
     heap->base = new;
+
+    assert(binary_heap_structure_legal_p(heap));
 }
 
 static inline void
 binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
     sint64 nice, void *val)
 {
-    assert(NULL == heap->base[index]);
+    assert(complain_null_pointer_p(heap->base[index]));
     assert(binary_heap_nice_legal_p(nice));
     assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_structure_legal_p(heap));
 
-    HEAP_CHAIN(heap, index) = binary_heap_collision_chain_create(nice, val);
+    HEAP_DATA(heap, index) = binary_heap_node_create(nice, val);
 }
 
-static inline struct collision_chain *
-binary_heap_collision_chain_create(sint64 nice, void *val)
+static inline struct heap_data *
+binary_heap_node_create(sint64 nice, void *val)
 {
-    struct collision_chain *retval;
+    struct heap_data *retval;
 
     assert(binary_heap_nice_legal_p(nice));
 
     retval = memory_cache_allocate(sizeof(*retval));
     retval->nice = nice;
-    retval->link = doubly_linked_list_node_create(val, 0);
+    retval->val = val;
 
     return retval;
-}
-
-/*
- * If contains the nice specificed, *tgt will be set to the index with nice.
- * If NOT contains, unchanged to *tgt.
- * If NULL == tgt, will ignore this parameter.
- */
-static inline bool
-binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
-{
-    register uint32 index;
-
-    assert(binary_heap_nice_legal_p(nice));
-    assert(binary_heap_structure_legal_p(heap));
-
-    index = INDEX_FIRST;
-
-    while (index <= INDEX_LAST(heap)) {
-        if (nice == HEAP_NICE(heap, index)) {
-            if (tgt) {
-                *tgt = index;
-            }
-
-            return true;
-        }
-
-        index++;
-    }
-
-    pr_log_warn("No such the node with nice specified\n");
-    return false;
 }
 
 /*
@@ -201,7 +133,7 @@ binary_heap_node_contains_p(struct binary_heap *heap, sint64 nice, uint32 *tgt)
  * RETURN the re-ordered index of heap with that nice.
  */
 static inline uint32
-binary_heap_node_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
+binary_heap_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
     void *heap_order)
 {
     uint32 index_next;
@@ -210,21 +142,20 @@ binary_heap_node_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_nice_legal_p(nice));
-    assert(!binary_heap_node_contains_with_null_p(heap, nice));
 
     order = heap_order;
 
     while (!(*order)(heap, index, nice, &index_next)) {
-        HEAP_CHAIN(heap, index) = HEAP_CHAIN(heap, index_next);
+        HEAP_DATA(heap, index) = HEAP_DATA(heap, index_next);
         index = index_next;
     }
 
-    HEAP_CHAIN(heap, index) = NULL;
+    HEAP_DATA(heap, index) = NULL;
     return index;
 }
 
 static inline bool
-binary_heap_node_child_exist_p(struct binary_heap *heap, uint32 index)
+binary_heap_child_exist_p(struct binary_heap *heap, uint32 index)
 {
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
@@ -238,7 +169,7 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
-    if (!binary_heap_node_child_exist_p(heap, index)) {
+    if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
         return INDEX_L_CHILD(index);
@@ -255,7 +186,7 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
-    if (!binary_heap_node_child_exist_p(heap, index)) {
+    if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
         return INDEX_L_CHILD(index);
@@ -274,15 +205,15 @@ binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
-    assert(binary_heap_node_depth_even_p(heap, index));
+    assert(binary_heap_depth_even_p(heap, index));
 
-    if (!binary_heap_node_child_exist_p(heap, index)) {
+    if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_small_nice_index(heap, index);
     } else {
         begin = INDEX_LL_CHILD(index);
-        ret_index = binary_heap_serial_node_small_nice_index(heap, begin, 4);
+        ret_index = binary_heap_serial_small_nice_index(heap, begin, 4);
 
         if (HEAP_NICE(heap, INDEX_R_CHILD(index))
             < HEAP_NICE(heap, ret_index)) {
@@ -301,15 +232,15 @@ binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
-    assert(binary_heap_node_depth_odd_p(heap, index));
+    assert(binary_heap_depth_odd_p(heap, index));
 
-    if (!binary_heap_node_child_exist_p(heap, index)) {
+    if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
         return binary_heap_child_big_nice_index(heap, index);
     } else {
         begin = INDEX_LL_CHILD(index);
-        ret_index = binary_heap_serial_node_big_nice_index(heap, begin, 4);
+        ret_index = binary_heap_serial_big_nice_index(heap, begin, 4);
 
         if (HEAP_NICE(heap, INDEX_R_CHILD(index))
             > HEAP_NICE(heap, ret_index)) {
@@ -321,13 +252,13 @@ binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_serial_node_small_nice_index(struct binary_heap *heap,
+binary_heap_serial_small_nice_index(struct binary_heap *heap,
     uint32 index, uint32 count)
 {
     uint32 small_index;
     uint32 rest;
 
-    assert(0 != count);
+    assert(!complain_zero_size_p(count));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
@@ -346,7 +277,7 @@ binary_heap_serial_node_small_nice_index(struct binary_heap *heap,
 }
 
 static inline uint32
-binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
+binary_heap_serial_big_nice_index(struct binary_heap *heap,
     uint32 index, uint32 count)
 {
     uint32 big_index;
@@ -370,112 +301,69 @@ binary_heap_serial_node_big_nice_index(struct binary_heap *heap,
     return big_index;
 }
 
-/*
- * Merge s_index indexed node to t_index indexed node, then remove node s_index.
- */
 static inline void
-binary_heap_node_collision_merge(struct binary_heap *heap, uint32 t_index,
-    uint32 s_index)
-{
-    struct doubly_linked_list *head;
-
-    assert(t_index != s_index);
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, t_index));
-    assert(binary_heap_index_legal_p(heap, s_index));
-
-    head = HEAP_LINK(heap, t_index);
-    doubly_linked_list_merge(head, HEAP_LINK(heap, s_index));
-}
-
-static inline void
-binary_heap_node_insert(struct binary_heap *heap, void *val, sint64 nice,
+binary_heap_insert(struct binary_heap *heap, void *val, sint64 nice,
     void *ordering)
 {
     uint32 index;
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *inserted;
 
     assert(binary_heap_nice_legal_p(nice));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_valid_ordered_func_ptr_p(ordering));
 
-    head = binary_heap_node_find(heap, nice);
-
-    if (!head) {
-        if (binary_heap_full_p(heap)) {
-            pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
-            binary_heap_capacity_extend(heap);
-        }
-        heap->size++;
-        HEAP_CHAIN(heap, heap->size) = NULL;
-
-        index = binary_heap_node_reorder(heap, heap->size, nice, ordering);
-        binary_heap_node_create_by_index(heap, index, nice, val);
-    } else {
-        /*
-         * nice collision occurs.
-         */
-        inserted = doubly_linked_list_node_create(val, nice);
-        doubly_linked_list_node_insert_after_risky(head, inserted);
+    if (binary_heap_full_p(heap)) {
+        pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
+        binary_heap_capacity_extend(heap);
     }
+
+    heap->size++;
+    HEAP_DATA(heap, heap->size) = NULL;
+
+    index = binary_heap_reorder(heap, heap->size, nice, ordering);
+    binary_heap_node_create_by_index(heap, index, nice, val);
 
     assert(binary_heap_ordered_p(heap, ordering));
 }
 
-static inline void
-binary_heap_node_remove_root_and_destroy(struct binary_heap *heap,
-    void *ordering)
+static inline void *
+binary_heap_remove_root(struct binary_heap *heap, void *order)
 {
-    struct doubly_linked_list *removed;
-
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_valid_ordered_func_ptr_p(ordering));
-
-    removed = binary_heap_node_remove_root(heap, ordering);
-    doubly_linked_list_destroy(&removed);
-}
-
-static inline struct doubly_linked_list *
-binary_heap_node_remove_root(struct binary_heap *heap, void *order)
-{
-    struct doubly_linked_list *link;
-    struct collision_chain *last;
-    uint32 index;
     sint64 nice;
+    uint32 index;
+    struct heap_data *last;
+    void *retval;
 
     assert(!binary_heap_empty_p(heap));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_valid_ordered_func_ptr_p(order));
 
-    link = HEAP_LINK(heap, INDEX_ROOT);
-    HEAP_LINK(heap, INDEX_ROOT) = NULL;
-    memory_cache_free(HEAP_CHAIN(heap, INDEX_ROOT));
+    retval = HEAP_VAL(heap, INDEX_ROOT);
+    memory_cache_free(HEAP_DATA(heap, INDEX_ROOT));
+    HEAP_DATA(heap, INDEX_ROOT) = NULL;
 
     if (INDEX_ROOT == INDEX_LAST(heap)) {
         heap->size--;
     } else {
-        HEAP_CHAIN(heap, INDEX_ROOT) = NULL;
         nice = HEAP_NICE(heap, INDEX_LAST(heap));
-        last = HEAP_CHAIN(heap, INDEX_LAST(heap));
+        last = HEAP_DATA(heap, INDEX_LAST(heap));
 
-        HEAP_CHAIN(heap, INDEX_LAST(heap)) = NULL;
+        HEAP_DATA(heap, INDEX_LAST(heap)) = NULL;
         heap->size--;
 
         /*
          * percolate down last node from root.
          */
-        index = binary_heap_node_reorder(heap, INDEX_ROOT, nice, order);
-        assert(NULL == HEAP_CHAIN(heap, index));
-        HEAP_CHAIN(heap, index) = last;
+        index = binary_heap_reorder(heap, INDEX_ROOT, nice, order);
+        assert(NULL == HEAP_DATA(heap, index));
+        HEAP_DATA(heap, index) = last;
     }
 
     assert(binary_heap_ordered_p(heap, order));
-    return link;
+    return retval;
 }
 
 static inline uint32
-binary_heap_node_depth(uint32 index)
+binary_heap_depth(uint32 index)
 {
     uint32 depth;
 

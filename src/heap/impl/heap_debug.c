@@ -16,26 +16,6 @@ binary_heap_valid_ordered_func_ptr_p(void *func_ptr)
 }
 
 static inline bool
-binary_heap_node_contains_with_null_p(struct binary_heap *heap, sint64 nice)
-{
-    register uint32 index;
-
-    assert(binary_heap_structure_legal_p(heap));
-
-    index = INDEX_FIRST;
-
-    while (index <= INDEX_LAST(heap)) {
-        if (HEAP_CHAIN(heap, index) && nice == HEAP_NICE(heap, index)) {
-            return true;
-        }
-
-        index++;
-    }
-
-    return false;
-}
-
-static inline bool
 binary_heap_structure_legal_p(struct binary_heap *heap)
 {
     if (NULL != heap && NULL != heap->base) {
@@ -46,42 +26,27 @@ binary_heap_structure_legal_p(struct binary_heap *heap)
 }
 
 static inline bool
-binary_heap_nice_repeated_p(struct binary_heap *heap, uint32 index, sint64 nice)
-{
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_nice_legal_p(nice));
-
-    if (INDEX_INVALID == index) {
-        return false;
-    } else if (nice == HEAP_NICE(heap, index)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-static inline bool
-binary_heap_node_depth_even_p(struct binary_heap *heap, uint32 index)
+binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
-    depth = binary_heap_node_depth(index);
+    depth = binary_heap_depth(index);
 
     return 0u == (depth & 0x1u) ? true : false;
 }
 
 static inline bool
-binary_heap_node_depth_odd_p(struct binary_heap *heap, uint32 index)
+binary_heap_depth_odd_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
-    depth = binary_heap_node_depth(index);
+    depth = binary_heap_depth(index);
 
     return 1u == (depth & 0x1u) ? true : false;
 }

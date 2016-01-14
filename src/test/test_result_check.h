@@ -15,6 +15,14 @@
         }                                                         \
     } while (false)
 
+#define RESULT_CHECK_NOT_EQUAL_pointer(expect, get, pass)                \
+    do {                                                                 \
+        if (!test_result_check_not_equal_pointer_p(expect, get, pass)) { \
+            LOCATION_PRINT;                                              \
+            assert(false);                                               \
+        }                                                                \
+    } while (false)
+
 #define RESULT_CHECK_bool(expect, get, pass)                \
     do {                                                    \
         if (!test_result_check_bool_p(expect, get, pass)) { \
@@ -85,6 +93,14 @@
             LOCATION_PRINT;                                   \
             assert(false);                                    \
         }                                                     \
+    } while (false)
+
+#define RESULT_CHECK_NOT_LESS_sint64(expect, get, pass)                \
+    do {                                                               \
+        if (!test_result_check_not_less_sint64_p(expect, get, pass)) { \
+            LOCATION_PRINT;                                            \
+            assert(false);                                             \
+        }                                                              \
     } while (false)
 
 #define RESULT_CHECK_float(expect, get, pass)                \
