@@ -1,6 +1,22 @@
 #ifndef HAVE_DEFINED_UNIT_TEST_HEAP_H
 #define HAVE_DEFINED_UNIT_TEST_HEAP_H
 
+#define UT_HEAP_structure_legal_p(name)                               \
+static inline bool                                                    \
+utest_##name##_heap_structure_legal_p(struct name##_heap *heap)       \
+{                                                                     \
+    bool result;                                                      \
+                                                                      \
+    assert(!complain_null_pointer_p(heap));                           \
+                                                                      \
+    result = true;                                                    \
+                                                                      \
+    RESULT_CHECK_NOT_EQUAL_pointer(NULL, heap->alias, &result);       \
+    RESULT_CHECK_NOT_EQUAL_pointer(NULL, heap->alias->base, &result); \
+                                                                      \
+    return result;                                                    \
+}
+
 #define UT_HEAP_create(name)                                      \
 static inline void                                                \
 utest_##name##_heap_create(void)                                  \
@@ -109,25 +125,46 @@ utest_##name##_heap_cleanup(void)                       \
     UNIT_TEST_RESULT(name##_heap_cleanup, pass);        \
 }
 
-#define UT_HEAP_get_min(name)                                                 \
-static inline void                                                            \
-utest_##name##_heap_get_min(void)                                             \
-{                                                                             \
-    bool pass;                                                                \
-    void *val;                                                                \
-    struct HEAP *heap;                                                        \
-                                                                              \
-    pass = true;                                                              \
-    heap = NULL;                                                              \
-                                                                              \
-    RESULT_CHECK_pointer(NULL, HEAP_get_min(heap), &pass);                    \
-                                                                              \
-    heap = TEST_HEAP_sample(0x1345, 0x104E);                                  \
-    val = HEAP_val(heap, INDEX_ROOT);                                         \
-    RESULT_CHECK_pointer(val, HEAP_get_min(heap), &pass);                     \
-                                                                              \
-    HEAP_destroy(&heap);                                                      \
-    UNIT_TEST_RESULT(name##_heap_get_min, pass);                              \
+#define UT_HEAP_get_min(name)                              \
+static inline void                                         \
+utest_##name##_heap_get_min(void)                          \
+{                                                          \
+    bool pass;                                             \
+    void *val;                                             \
+    struct HEAP *heap;                                     \
+                                                           \
+    pass = true;                                           \
+    heap = NULL;                                           \
+                                                           \
+    RESULT_CHECK_pointer(NULL, HEAP_get_min(heap), &pass); \
+                                                           \
+    heap = TEST_HEAP_sample(0x1345, 0x104E);               \
+    val = HEAP_val(heap, INDEX_ROOT);                      \
+    RESULT_CHECK_pointer(val, HEAP_get_min(heap), &pass);  \
+                                                           \
+    HEAP_destroy(&heap);                                   \
+    UNIT_TEST_RESULT(name##_heap_get_min, pass);           \
+}
+
+#define UT_HEAP_get_max(name)                              \
+static inline void                                         \
+utest_##name##_heap_get_max(void)                          \
+{                                                          \
+    bool pass;                                             \
+    void *val;                                             \
+    struct HEAP *heap;                                     \
+                                                           \
+    pass = true;                                           \
+    heap = NULL;                                           \
+                                                           \
+    RESULT_CHECK_pointer(NULL, HEAP_get_max(heap), &pass); \
+                                                           \
+    heap = TEST_HEAP_sample(0x1345, 0x104E);               \
+    val = HEAP_val(heap, INDEX_ROOT);                      \
+    RESULT_CHECK_pointer(val, HEAP_get_max(heap), &pass);  \
+                                                           \
+    HEAP_destroy(&heap);                                   \
+    UNIT_TEST_RESULT(name##_heap_get_max, pass);           \
 }
 
 #define UT_HEAP_insert(name)                                   \
@@ -205,6 +242,27 @@ utest_##name##_heap_remove_min(void)                         \
                                                              \
     HEAP_destroy(&heap);                                     \
     UNIT_TEST_RESULT(name##_heap_remove_min, pass);          \
+}
+
+#define UT_HEAP_remove_max(name)                             \
+static inline void                                           \
+utest_##name##_heap_remove_max(void)                         \
+{                                                            \
+    bool pass;                                               \
+    void *tmp;                                               \
+    struct HEAP *heap;                                       \
+                                                             \
+    pass = true;                                             \
+    heap = NULL;                                             \
+                                                             \
+    HEAP_remove_max(heap);                                   \
+                                                             \
+    heap = TEST_HEAP_sample(0x1435, 0x1D4E);                 \
+    tmp = HEAP_get_max(heap);                                \
+    RESULT_CHECK_pointer(tmp, HEAP_remove_max(heap), &pass); \
+                                                             \
+    HEAP_destroy(&heap);                                     \
+    UNIT_TEST_RESULT(name##_heap_remove_max, pass);          \
 }
 
 #define UT_HEAP_build(name)                                                 \

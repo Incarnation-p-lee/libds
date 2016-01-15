@@ -55,7 +55,6 @@ sub module_traversal() {
     opendir MD, $basedir or die "$! $basedir.";
 
     while (readdir(MD)) {
-        next if /unit_test_maximal_heap/;
         next if /unit_test_min_max_heap/;
         next if /performance_test_maximal_heap/;
         next if /performance_test_min_max_heap/;

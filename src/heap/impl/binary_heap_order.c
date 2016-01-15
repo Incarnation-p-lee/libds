@@ -103,6 +103,35 @@ HEAP_UNORDERED:
     return false;
 }
 
+/*
+ * Only for Build heap, as it need percolate down
+ */
+static inline bool
+binary_heap_maximal_percolate_down(struct binary_heap *heap,
+    uint32 index, sint64 nice, uint32 *tgt_index)
+{
+    uint32 next;
+    uint32 big_child;
+
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    big_child = binary_heap_child_big_nice_index(heap, index);
+
+    if (INDEX_INVALID != big_child
+        && HEAP_NICE(heap, big_child) > nice) {
+        next = big_child;
+
+        if (tgt_index) {
+            *tgt_index = next;
+        }
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
 static inline bool
 binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_index,
     uint32 down_index, sint64 nice, uint32 *tgt_index)

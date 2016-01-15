@@ -2,13 +2,15 @@
 #define UNIT_TEST_DECLARATION_H
 
 
+static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
-static inline bool utest_minimal_heap_structure_legal_p(struct minimal_heap *heap);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);
 static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
 static inline void unit_test_result_print(char *name, bool passed);
+static inline void utest_maximal_heap_decrease_nice(void);
+static inline void utest_maximal_heap_increase_nice(void);
 static inline void utest_minimal_heap_decrease_nice(void);
 static inline void utest_minimal_heap_increase_nice(void);
 static void unit_test_array_queue_capacity(void);

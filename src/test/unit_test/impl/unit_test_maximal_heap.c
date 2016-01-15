@@ -1,450 +1,146 @@
-static inline void
-unit_test_maximal_heap_struct_field(void)
+#define HEAP                   maximal_heap
+#define HEAP_val               maximal_heap_val
+#define HEAP_nice              maximal_heap_nice
+#define HEAP_size              maximal_heap_size
+#define HEAP_structure_legal_p utest_maximal_heap_structure_legal_p
+#define TEST_HEAP_sample       test_maximal_heap_sample
+#define TEST_HEAP_ordered_p    utest_maximal_heap_ordered_p
+
+#define HEAP_create            maximal_heap_create
+#define HEAP_destroy           maximal_heap_destroy
+#define HEAP_empty_p           maximal_heap_empty_p
+#define HEAP_full_p            maximal_heap_full_p
+#define HEAP_cleanup           maximal_heap_cleanup
+#define HEAP_get_max           maximal_heap_get_max
+#define HEAP_insert            maximal_heap_insert
+#define HEAP_remove            maximal_heap_remove
+#define HEAP_remove_max        maximal_heap_remove_max
+#define HEAP_build             maximal_heap_build
+
+#include "../unit_test_heap.h"
+
+UT_HEAP_structure_legal_p(maximal)
+UT_HEAP_create(maximal)
+UT_HEAP_destroy(maximal)
+UT_HEAP_empty_p(maximal)
+UT_HEAP_full_p(maximal)
+UT_HEAP_cleanup(maximal)
+UT_HEAP_get_max(maximal)
+UT_HEAP_insert(maximal)
+UT_HEAP_remove(maximal)
+UT_HEAP_remove_max(maximal)
+UT_HEAP_build(maximal)
+
+#undef HEAP
+#undef HEAP_val
+#undef HEAP_nice
+#undef HEAP_size
+#undef HEAP_structure_legal_p
+#undef TEST_HEAP_sample
+#undef TEST_HEAP_ordered_p
+
+#undef HEAP_create
+#undef HEAP_destroy
+#undef HEAP_empty_p
+#undef HEAP_full_p
+#undef HEAP_cleanup
+#undef HEAP_get_max
+#undef HEAP_insert
+#undef HEAP_remove
+#undef HEAP_remove_max
+#undef HEAP_build
+
+
+static inline bool
+utest_maximal_heap_ordered_p(struct maximal_heap *heap)
 {
-    bool pass;
     uint32 index;
-    struct maximal_heap *heap;
-    struct doubly_linked_list *tmp;
+    uint32 index_last;
+    uint32 index_left;
+    uint32 index_right;
 
-    pass = true;
-    index = 1;
-    heap = test_maximal_heap_sample(0x3A2, 0x2F3);
+    assert(utest_maximal_heap_structure_legal_p(heap));
 
-    RESULT_CHECK_uint32(heap->alias->size, maximal_heap_size(heap), &pass);
-    RESULT_CHECK_uint32(heap->alias->capacity, maximal_heap_capacity(heap), &pass);
-    RESULT_CHECK_sint64(heap->alias->base[index]->nice,
-        maximal_heap_nice(heap, index), &pass);
-    RESULT_CHECK_pointer(heap->alias->base[index]->link,
-        maximal_heap_link(heap, index), &pass);
-    tmp = maximal_heap_link(heap, index);
-    RESULT_CHECK_pointer(NULL, maximal_heap_link_set(heap, index, NULL), &pass);
-    RESULT_CHECK_pointer(tmp, maximal_heap_link_set(heap, index, tmp), &pass);
+    index = INDEX_ROOT;
+    index_last = maximal_heap_index_last(heap);
 
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_struct_field, pass);
-}
+    while (index <= index_last) {
+        index_left = INDEX_L_CHILD(index);
+        index_right = INDEX_R_CHILD(index);
 
-static inline void
-unit_test_maximal_heap_create(void)
-{
-    bool pass;
-    uint32 capacity;
-    struct maximal_heap *heap;
-    struct collision_chain **iter;
-
-    pass = true;
-    capacity = 0u;
-
-    heap = maximal_heap_create(capacity++);
-    maximal_heap_destroy(&heap);
-
-    heap = maximal_heap_create(capacity);
-    RESULT_CHECK_uint32(capacity, maximal_heap_capacity(heap), &pass);
-    RESULT_CHECK_uint32(0u, maximal_heap_size(heap), &pass);
-
-    iter = heap->alias->base;
-    while (iter < heap->alias->base + u_offset(heap->alias->capacity, 1)) {
-        RESULT_CHECK_pointer(NULL, *iter++, &pass);
-    }
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_create, pass);
-}
-
-static inline void
-unit_test_maximal_heap_destroy(void)
-{
-    bool pass;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    maximal_heap_destroy(&heap);
-
-    heap = maximal_heap_create(0u);
-    maximal_heap_destroy(&heap);
-    RESULT_CHECK_pointer(NULL, heap, &pass);
-
-    UNIT_TEST_RESULT(maximal_heap_destroy, pass);
-}
-
-static inline void
-unit_test_maximal_heap_empty_p(void)
-{
-    bool pass;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    RESULT_CHECK_bool(false, maximal_heap_empty_p(heap), &pass);
-
-    heap = test_maximal_heap_sample(0x234, 0x134);
-    RESULT_CHECK_bool(false, maximal_heap_empty_p(heap), &pass);
-    maximal_heap_destroy(&heap);
-
-    heap = maximal_heap_create(0u);
-    RESULT_CHECK_bool(true, maximal_heap_empty_p(heap), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_empty_p, pass);
-}
-
-static inline void
-unit_test_maximal_heap_full_p(void)
-{
-    bool pass;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    RESULT_CHECK_bool(true, maximal_heap_full_p(heap), &pass);
-
-    heap = test_maximal_heap_sample(0x1, 0x1);
-    RESULT_CHECK_bool(true, maximal_heap_full_p(heap), &pass);
-    maximal_heap_destroy(&heap);
-
-    heap = maximal_heap_create(0u);
-    RESULT_CHECK_bool(false, maximal_heap_full_p(heap), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_full_p, pass);
-}
-
-static inline void
-unit_test_maximal_heap_cleanup(void)
-{
-    bool pass;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    maximal_heap_cleanup(heap);
-
-    heap = test_maximal_heap_sample(0x345, 0x80E);
-    maximal_heap_cleanup(heap);
-
-    RESULT_CHECK_bool(false, maximal_heap_full_p(heap), &pass);
-    RESULT_CHECK_bool(true, maximal_heap_empty_p(heap), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_cleanup, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_find(void)
-{
-    bool pass;
-    uint32 index;
-    struct maximal_heap *heap;
-
-    pass = true;
-    index = 1u;
-    heap = NULL;
-
-    RESULT_CHECK_pointer(NULL, maximal_heap_node_find(heap, index), &pass);
-
-    heap = test_maximal_heap_sample(0x345, 0x10E);
-    RESULT_CHECK_pointer(maximal_heap_link(heap, index),
-        maximal_heap_node_find(heap, maximal_heap_nice(heap, index)), &pass);
-    index = 0x144Eu;
-    RESULT_CHECK_pointer(NULL, maximal_heap_node_find(heap, (sint64)index), &pass);
-
-    index = 0x2u;
-    RESULT_CHECK_pointer(maximal_heap_link(heap, index),
-        maximal_heap_node_find(heap, maximal_heap_nice(heap, index)), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_find, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_find_max(void)
-{
-    bool pass;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    RESULT_CHECK_pointer(NULL, maximal_heap_node_find_max(heap), &pass);
-
-    heap = test_maximal_heap_sample(0x134, 0x14E);
-    RESULT_CHECK_pointer(maximal_heap_link(heap, 1u),
-        maximal_heap_node_find_max(heap), &pass);
-
-    RESULT_CHECK_pointer(maximal_heap_link(heap, 1u),
-        maximal_heap_node_find_max(heap), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_find_max, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_insert(void)
-{
-    bool pass;
-    uint32 size;
-    uint32 count;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-    count = 0x72;
-
-    maximal_heap_node_insert(heap, &pass, 0u);
-
-    heap = test_maximal_heap_sample(0x345, 0x14E);
-    while (count--) {
-        size = maximal_heap_size(heap);
-        if (maximal_heap_node_find(heap, count)) {
-            maximal_heap_node_insert(heap, &pass, count);
-            RESULT_CHECK_uint32(size, maximal_heap_size(heap), &pass);
-        } else {
-            maximal_heap_node_insert(heap, &pass, count);
-            RESULT_CHECK_uint32(size + 1, maximal_heap_size(heap), &pass);
+        if (index_left <= index_last &&
+            maximal_heap_nice(heap, index) < maximal_heap_nice(heap, index_left)) {
+            return false;
         }
+
+        if (index_right <= index_last &&
+            maximal_heap_nice(heap, index) < maximal_heap_nice(heap, index_right)) {
+            return false;
+        }
+
+	index++;
     }
 
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_insert, pass);
+    return true;
 }
 
 static inline void
-unit_test_maximal_heap_node_remove_max(void)
+utest_maximal_heap_decrease_nice(void)
 {
     bool pass;
-    struct maximal_heap *heap;
-    struct doubly_linked_list *maximal;
-
-    pass = true;
-    heap = NULL;
-
-    maximal_heap_node_remove_max(heap);
-
-    heap = test_maximal_heap_sample(0x135, 0xD4E);
-    maximal = maximal_heap_node_find_max(heap);
-    RESULT_CHECK_pointer(maximal, maximal_heap_node_remove_max(heap), &pass);
-    doubly_linked_list_destroy(&maximal);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_remove_max, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_remove_max_and_destroy(void)
-{
-    bool pass;
-    uint32 size;
-    struct maximal_heap *heap;
-
-    pass = true;
-    heap = NULL;
-
-    maximal_heap_node_remove_max_and_destroy(heap);
-
-    heap = test_maximal_heap_sample(0x235, 0x14E);
-    size = maximal_heap_size(heap);
-
-    maximal_heap_node_find_max(heap);
-    maximal_heap_node_remove_max_and_destroy(heap);
-    size--;
-    RESULT_CHECK_uint32(size, maximal_heap_size(heap), &pass);
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_remove_max_and_destroy, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_decrease_nice(void)
-{
-    bool pass;
-    uint32 offset;
-    uint32 count;
     sint64 nice;
+    uint32 index;
+    uint32 offset;
     struct maximal_heap *heap;
-    struct doubly_linked_list *tmp;
 
     pass = true;
     heap = NULL;
     offset = 0;
-    count = 0x29;
 
-    maximal_heap_node_decrease_nice(heap, 0, offset);
+    maximal_heap_decrease_nice(heap, 0, offset);
 
     heap = test_maximal_heap_sample(0x345, 0x2E0);
-    maximal_heap_node_decrease_nice(heap, 0, offset);
-    offset = 0x3B;
+    maximal_heap_decrease_nice(heap, 0, offset);
 
-    while (count--) {
-        tmp = maximal_heap_node_find(heap, count);
-        if (tmp) {
-            nice = (sint64)count - offset;
-            if (!maximal_heap_node_find(heap, nice)) {
-                maximal_heap_node_decrease_nice(heap, count, offset);
-                RESULT_CHECK_pointer(tmp, maximal_heap_node_find(heap, nice), &pass);
-            } else {
-                maximal_heap_node_decrease_nice(heap, count, offset);
-            }
-        } else {
-            maximal_heap_node_decrease_nice(heap, count, offset);
-        }
-    }
+    offset = 0xa7ec;
+    index = 0x123;
+    nice = maximal_heap_nice(heap, index);
+
+    maximal_heap_decrease_nice(heap, index, offset);
+    RESULT_CHECK_NOT_LESS_sint64(maximal_heap_nice(heap, index),
+        nice - offset, &pass);
 
     maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_decrease_nice, pass);
+    UNIT_TEST_RESULT(maximal_heap_decrease_nice, pass);
 }
 
 static inline void
-unit_test_maximal_heap_node_increase_nice(void)
+utest_maximal_heap_increase_nice(void)
 {
     bool pass;
-    uint32 count;
-    uint32 offset;
     sint64 nice;
+    uint32 index;
+    uint32 offset;
     struct maximal_heap *heap;
-    struct doubly_linked_list *tmp;
 
     pass = true;
-    count = 0x35;
     heap = NULL;
     offset = 0;
 
-    maximal_heap_node_increase_nice(heap, 0, offset);
+    maximal_heap_increase_nice(heap, 0, offset);
 
-    heap = test_maximal_heap_sample(0x942, 0x73a);
-    maximal_heap_node_increase_nice(heap, 0, offset);
-    offset = 0x1234;
+    heap = test_maximal_heap_sample(0x345, 0x2E0);
+    maximal_heap_increase_nice(heap, 0, offset);
 
-    while (count--) {
-        tmp = maximal_heap_node_find(heap, count);
-        if (tmp) {
-            nice = (sint64)count + offset;
-            if (!maximal_heap_node_find(heap, nice)) {
-                maximal_heap_node_increase_nice(heap, count, offset);
-                RESULT_CHECK_pointer(tmp, maximal_heap_node_find(heap, nice), &pass);
-            } else {
-                maximal_heap_node_increase_nice(heap, count, offset);
-            }
-        } else {
-            maximal_heap_node_increase_nice(heap, count, offset);
-        }
-    }
+    offset = 0xa7ec;
+    index = 0x123;
+    nice = maximal_heap_nice(heap, index);
+
+    maximal_heap_increase_nice(heap, index, offset);
+    RESULT_CHECK_sint64(nice + offset,
+        maximal_heap_nice(heap, INDEX_ROOT), &pass);
 
     maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_increase_nice, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_remove(void)
-{
-    bool pass;
-    uint32 count;
-    sint64 nice;
-    struct maximal_heap *heap;
-    struct doubly_linked_list *tmp;
-
-    pass = true;
-    count = 0x19;
-    heap = NULL;
-
-    maximal_heap_node_remove(heap, 0);
-
-    heap = test_maximal_heap_sample(0x942, 0x73a);
-    nice = 0x12345;
-    RESULT_CHECK_pointer(NULL, maximal_heap_node_remove(heap, nice), &pass);
-
-    nice = 0x35;
-
-    while (count--) {
-        tmp = maximal_heap_node_find(heap, nice);
-        if (tmp) {
-            RESULT_CHECK_pointer(tmp, maximal_heap_node_remove(heap, nice), &pass);
-            doubly_linked_list_destroy(&tmp);
-        } else {
-            RESULT_CHECK_pointer(NULL, maximal_heap_node_remove(heap, nice), &pass);
-        }
-        nice--;
-    }
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_remove, pass);
-}
-
-static inline void
-unit_test_maximal_heap_node_remove_and_destroy(void)
-{
-    bool pass;
-    uint32 count;
-    sint64 nice;
-    struct maximal_heap *heap;
-    struct doubly_linked_list *tmp;
-
-    pass = true;
-    count = 0x27;
-    heap = NULL;
-
-    maximal_heap_node_remove_and_destroy(heap, 0);
-
-    heap = test_maximal_heap_sample(0x942, 0x73a);
-    nice = 0x12345;
-    maximal_heap_node_remove_and_destroy(heap, nice);
-
-    nice = 0x20;
-    while (count--) {
-        tmp = maximal_heap_node_find(heap, nice);
-        if (tmp) {
-            maximal_heap_node_remove_and_destroy(heap, nice);
-            RESULT_CHECK_pointer(NULL, maximal_heap_node_find(heap, nice), &pass);
-        }
-        nice--;
-    }
-
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_node_remove_and_destroy, pass);
-}
-
-static inline void
-unit_test_maximal_heap_build(void)
-{
-    bool pass;
-    uint32 idx;
-    uint32 chain_size;
-    struct maximal_heap *heap;
-    struct maximal_heap *build;
-    struct collision_chain **chain_array;
-
-    pass = true;
-    heap = NULL;
-    chain_array = NULL;
-
-    RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 2), &pass);
-    heap = test_maximal_heap_sample(0xe32f, 0x211a);
-    RESULT_CHECK_pointer(NULL, maximal_heap_build(chain_array, 0), &pass);
-
-    chain_size = maximal_heap_size(heap) + 1;
-    chain_array = memory_cache_allocate(chain_size * sizeof(chain_array[0]));
-
-    chain_array[0] = NULL;
-    memcpy(chain_array, heap->alias->base, chain_size * sizeof(chain_array[0]));
-
-    test_binary_heap_collision_chain_randomization(chain_array, INDEX_LAST(heap->alias));
-    build = maximal_heap_build(chain_array, chain_size);
-
-    idx = INDEX_LAST(heap->alias);
-    while (idx > INDEX_ROOT) {
-        RESULT_CHECK_MORE_sint64(HEAP_NICE(heap->alias, INDEX_PARENT(idx)),
-            HEAP_NICE(heap->alias, idx), &pass);
-        idx--;
-    }
-
-    memory_cache_free(build->alias);
-    memory_cache_free(build);
-    memory_cache_free(chain_array);
-    maximal_heap_destroy(&heap);
-    UNIT_TEST_RESULT(maximal_heap_build, pass);
+    UNIT_TEST_RESULT(maximal_heap_increase_nice, pass);
 }
 

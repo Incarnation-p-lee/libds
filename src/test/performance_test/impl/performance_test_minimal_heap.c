@@ -2,7 +2,6 @@
 #define HEAP_val               minimal_heap_val
 #define HEAP_nice              minimal_heap_nice
 #define HEAP_size              minimal_heap_size
-#define HEAP_structure_legal_p utest_minimal_heap_structure_legal_p
 #define TEST_HEAP_sample       test_minimal_heap_sample
 
 #define HEAP_create            minimal_heap_create
@@ -37,7 +36,6 @@ PT_HEAP_build(minimal)
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
-#undef HEAP_structure_legal_p
 #undef TEST_HEAP_sample
 
 #undef HEAP_create

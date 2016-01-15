@@ -219,11 +219,11 @@ minimal_heap_build_internal(struct minimal_heap *heap)
 }
 
 struct minimal_heap *
-minimal_heap_build(struct heap_data **chain_array, uint32 size)
+minimal_heap_build(struct heap_data **hd_array, uint32 size)
 {
     struct minimal_heap *heap;
 
-    if (complain_null_pointer_p(chain_array)) {
+    if (complain_null_pointer_p(hd_array)) {
         return NULL;
     } else if (complain_zero_size_p(size)) {
         return NULL;
@@ -231,11 +231,11 @@ minimal_heap_build(struct heap_data **chain_array, uint32 size)
         heap = memory_cache_allocate(sizeof(*heap));
         heap->alias = memory_cache_allocate(sizeof(*heap->alias));
 
-        heap->alias->base = chain_array;
+        heap->alias->base = hd_array;
         heap->alias->capacity = size - 1;
         heap->alias->size = size - 1;
 
-        chain_array[0] = NULL;
+        hd_array[0] = NULL;
         minimal_heap_build_internal(heap);
 
         return heap;

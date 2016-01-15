@@ -1003,10 +1003,10 @@ extern struct leftist_heap * leftist_heap_insert(struct leftist_heap *heap, void
 extern struct leftist_heap * leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge);
 extern struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp, sint64 nice);
 extern struct leftist_heap * leftist_heap_remove_min(struct leftist_heap **heap);
-extern struct maximal_heap * maximal_heap_build(struct heap_data **chain_array, uint32 size);
+extern struct maximal_heap * maximal_heap_build(struct heap_data **hd_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);
-extern struct minimal_heap * minimal_heap_build(struct heap_data **chain_array, uint32 size);
+extern struct minimal_heap * minimal_heap_build(struct heap_data **hd_array, uint32 size);
 extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern uint32 min_max_heap_depth(struct min_max_heap *heap, uint32 index);
 extern void * leftist_heap_get_min(struct leftist_heap *heap);

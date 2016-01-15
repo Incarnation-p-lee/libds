@@ -105,6 +105,9 @@ maximal_heap_remove(struct maximal_heap *heap, uint32 index)
         return NULL;
     } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return NULL;
+    } else if (INDEX_ROOT == index) {
+        return binary_heap_remove_root(heap->alias,
+            &binary_heap_maximal_ordered_p);
     } else {
         return maximal_heap_remove_internal(heap, index);
     }
@@ -206,7 +209,7 @@ maximal_heap_build_internal(struct maximal_heap *heap)
         HEAP_DATA(alias, index) = NULL;
 
         index = binary_heap_reorder(alias, index, nice,
-            &binary_heap_maximal_ordered_p);
+            &binary_heap_maximal_percolate_down);
 
         assert(NULL == HEAP_DATA(alias, index));
         HEAP_DATA(alias, index) = tmp;
@@ -216,11 +219,11 @@ maximal_heap_build_internal(struct maximal_heap *heap)
 }
 
 struct maximal_heap *
-maximal_heap_build(struct heap_data **chain_array, uint32 size)
+maximal_heap_build(struct heap_data **hd_array, uint32 size)
 {
     struct maximal_heap *heap;
 
-    if (complain_null_pointer_p(chain_array)) {
+    if (complain_null_pointer_p(hd_array)) {
         return NULL;
     } else if (complain_zero_size_p(size)) {
         return NULL;
@@ -228,11 +231,11 @@ maximal_heap_build(struct heap_data **chain_array, uint32 size)
         heap = memory_cache_allocate(sizeof(*heap));
         heap->alias = memory_cache_allocate(sizeof(*heap->alias));
 
-        heap->alias->base = chain_array;
+        heap->alias->base = hd_array;
         heap->alias->capacity = size - 1;
         heap->alias->size = size - 1;
 
-        maximal_heap_build_internal(heap);
+        hd_array[0] = NULL;
         maximal_heap_build_internal(heap);
 
         return heap;

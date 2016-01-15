@@ -19,6 +19,7 @@
 
 #include "../unit_test_heap.h"
 
+UT_HEAP_structure_legal_p(minimal)
 UT_HEAP_create(minimal)
 UT_HEAP_destroy(minimal)
 UT_HEAP_empty_p(minimal)
@@ -44,25 +45,11 @@ UT_HEAP_build(minimal)
 #undef HEAP_full_p
 #undef HEAP_cleanup
 #undef HEAP_get_min
+#undef HEAP_insert
 #undef HEAP_remove
 #undef HEAP_remove_min
 #undef HEAP_build
 
-
-static inline bool
-utest_minimal_heap_structure_legal_p(struct minimal_heap *heap)
-{
-    bool result;
-
-    assert(!complain_null_pointer_p(heap));
-
-    result = true;
-
-    RESULT_CHECK_NOT_EQUAL_pointer(NULL, heap->alias, &result);
-    RESULT_CHECK_NOT_EQUAL_pointer(NULL, heap->alias->base, &result);
-
-    return result;
-}
 
 static inline bool
 utest_minimal_heap_ordered_p(struct minimal_heap *heap)
@@ -83,13 +70,11 @@ utest_minimal_heap_ordered_p(struct minimal_heap *heap)
 
         if (index_left <= index_last &&
             minimal_heap_nice(heap, index) > minimal_heap_nice(heap, index_left)) {
-            printf("AA\n");
             return false;
         }
 
         if (index_right <= index_last &&
             minimal_heap_nice(heap, index) > minimal_heap_nice(heap, index_right)) {
-            printf("BB\n");
             return false;
         }
 
@@ -153,7 +138,7 @@ utest_minimal_heap_increase_nice(void)
 
     minimal_heap_increase_nice(heap, index, offset);
     RESULT_CHECK_NOT_LESS_sint64(nice + offset,
-        minimal_heap_nice(heap, INDEX_ROOT), &pass);
+        minimal_heap_nice(heap, index), &pass);
 
     minimal_heap_destroy(&heap);
     UNIT_TEST_RESULT(minimal_heap_increase_nice, pass);
