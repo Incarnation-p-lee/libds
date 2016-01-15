@@ -8,72 +8,71 @@
 /* DOUBLY LINKED LIST */
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
         RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
     } while (false)
 
-#define doubly_linked_list_node_val(node) \
+#define doubly_linked_list_val(node) \
     (assert(node), (node)->val)
-#define doubly_linked_list_node_val_set(node, v) \
+#define doubly_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define doubly_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define doubly_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define doubly_linked_list_node_next(node) \
+#define doubly_linked_list_next(node) \
     (assert(node), (node)->next)
-#define doubly_linked_list_node_next_set(node, v) \
+#define doubly_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
-#define doubly_linked_list_node_previous(node) \
+#define doubly_linked_list_previous(node) \
     (assert(node), (node)->previous)
-#define doubly_linked_list_node_previous_set(node, v) \
+#define doubly_linked_list_previous_set(node, v) \
     (assert(node), (node)->previous = (v))
 
 
 /* SINGLE LINKED LIST */
 #define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
     } while (false)
 
-#define single_linked_list_node_val(node) \
+#define single_linked_list_val(node) \
     (assert(node), (node)->val)
-#define single_linked_list_node_val_set(node, v) \
+#define single_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define single_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define single_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define single_linked_list_node_next(node) \
+#define single_linked_list_next(node) \
     (assert(node), (node)->next)
-#define single_linked_list_node_next_set(node, v) \
+#define single_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
+
+/*
+ * Single linked list previous set not supported.
+ */
+#define single_linked_list_previous_set(node, v)
 
 
 /* SKIP LINKED LIST */
-#define skip_linked_list_node_key(node) \
+#define skip_linked_list_key(node) \
     (assert(node), (node)->key)
-#define skip_linked_list_node_key_set(node, k) \
+#define skip_linked_list_key_set(node, k) \
     (assert(node), (node)->key = (k))
 
-#define skip_linked_list_node_val(node) \
+#define skip_linked_list_val(node) \
     (assert(node), (node)->val)
-#define skip_linked_list_node_val_set(node, v) \
+#define skip_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define skip_linked_list_node_next(node) \
+#define skip_linked_list_next(node) \
     (assert(node), (node)->next)
-#define skip_linked_list_node_next_set(node, n) \
+#define skip_linked_list_next_set(node, n) \
     (assert(node), (node)->next = (n))
+
+/*
+ * Skip linked list previous not supported.
+ */
+#define skip_linked_list_previous(node) \
+    (node)
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \

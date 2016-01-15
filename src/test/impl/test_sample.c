@@ -5,7 +5,6 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
     uint32 i;
 
     list = single_linked_list_create();
-    single_linked_list_node_initial(list, list, range);
 
     i = 1;
     while (i < node_count) {
@@ -19,20 +18,14 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
 static inline struct doubly_linked_list *
 test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 {
-    struct doubly_linked_list *list;
-    struct doubly_linked_list *tmp;
-    uint32 sid;
     uint32 i;
+    struct doubly_linked_list *list;
 
     list = doubly_linked_list_create();
-    doubly_linked_list_node_initial(list, list, range);
 
     i = 1;
     while (i < node_count) {
-        sid = (uint32)(rand() % range);
-        tmp = doubly_linked_list_create();
-        doubly_linked_list_node_initial(tmp, tmp, sid);
-        doubly_linked_list_node_insert_before_risky(list, tmp);
+        doubly_linked_list_insert_after(list, list);
         i++;
     }
 
@@ -51,15 +44,15 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     assert(0 != count);
 
     list = skip_linked_list_create();
-    skip_linked_list_node_initial(list, list, 0);
+    skip_linked_list_initial(list);
 
     i = 1;
     while (i < count) {
         key = (sint32)(rand() % range) - (sint32)range / 2;
-        if (!skip_linked_list_node_find_key(list, key)) {
+        if (!skip_linked_list_find_key(list, key)) {
             tmp = skip_linked_list_node_create(NULL, key);
-            skip_linked_list_node_val_set(tmp, tmp);
-            skip_linked_list_node_insert(&list, tmp);
+            skip_linked_list_val_set(tmp, tmp);
+            skip_linked_list_insert(&list, tmp);
         }
         i++;
     }

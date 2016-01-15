@@ -1,5 +1,5 @@
 static inline struct single_linked_list *
-single_linked_list_node_remove_internal_optimize(
+single_linked_list_remove_internal_optimize(
     struct single_linked_list **node)
 {
     struct single_linked_list *next;

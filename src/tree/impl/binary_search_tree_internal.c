@@ -37,8 +37,9 @@ binary_search_tree_node_initial_internal(struct binary_search_tree *node,
     node->right = NULL;
     node->chain.nice = nice;
 
-    doubly_linked_list_initial(node->chain.link);
-    doubly_linked_list_node_val_set(node->chain.link, val);
+    doubly_linked_list_next_set(node->chain.link, node->chain.link);
+    doubly_linked_list_previous_set(node->chain.link, node->chain.link);
+    doubly_linked_list_val_set(node->chain.link, val);
 }
 
 static inline void

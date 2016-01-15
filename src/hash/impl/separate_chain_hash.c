@@ -116,7 +116,6 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
 {
     uint32 factor;
     uint32 index;
-    struct doubly_linked_list *node;
     struct doubly_linked_list *head;
 
     if (!complain_null_pointer_p(hash) && !complain_null_pointer_p(*hash)) {
@@ -129,12 +128,13 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
         index = separate_chain_hash_index_calculate(*hash, key);
         head = separate_chain_hash_chain_head(*hash, index);
         if (!head) {
-            /* Empty linked list */
+            /*
+             * Empty linked list
+             */
             head = doubly_linked_list_node_create(key, 0x0u);
             separate_chain_hash_chain_head_set(*hash, index, head);
         } else {
-            node = doubly_linked_list_node_create(key, 0x0u);
-            doubly_linked_list_node_insert_after_risky(head, node);
+            doubly_linked_list_insert_after(head, key);
         }
     }
 }
@@ -158,12 +158,12 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
         } else {
             iter = head;
             do {
-                if (key == doubly_linked_list_node_val(iter)) {
+                if (key == doubly_linked_list_val(iter)) {
                     retval = key;
-                    doubly_linked_list_node_remove_and_destroy(&iter);
+                    doubly_linked_list_remove_and_destroy(&iter);
                     break;
                 }
-                iter = doubly_linked_list_node_next(iter);
+                iter = doubly_linked_list_next(iter);
             } while (iter != head);
 
             separate_chain_hash_chain_head_set(hash, index, iter);
@@ -195,11 +195,11 @@ separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
         } else {
             iter = head;
             do {
-                if (key == doubly_linked_list_node_val(iter)) {
+                if (key == doubly_linked_list_val(iter)) {
                     retval = key;
                     break;
                 }
-                iter = doubly_linked_list_node_next(iter);
+                iter = doubly_linked_list_next(iter);
             } while (iter != head);
         }
 
@@ -223,9 +223,9 @@ separate_chain_hash_chain_rehashing(struct doubly_linked_list *link,
 
     iter = link;
     do {
-        tmp = doubly_linked_list_node_val(iter);
+        tmp = doubly_linked_list_val(iter);
         separate_chain_hash_insert(&hash, tmp);
-        iter = doubly_linked_list_node_next(iter);
+        iter = doubly_linked_list_next(iter);
     } while (iter != link);
 
     return;

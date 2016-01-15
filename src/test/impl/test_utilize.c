@@ -21,21 +21,13 @@ end_of_report_print(void)
 }
 
 static void
-single_linked_list_iterate_handler(void *node)
+linked_list_iterate_handler(void *node)
 {
-    struct single_linked_list *tmp;
+    uint32 *tmp;
 
     if (node) {
         tmp = node;
-        tmp->sid += 1;
-    }
-}
-
-static void
-linked_list_iterate_handler(void *node)
-{
-    if (node) {
-        *(uint32 *)node = 0xDEADu;
+        *tmp += 1;
     }
 }
 

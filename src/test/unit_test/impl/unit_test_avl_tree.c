@@ -44,7 +44,7 @@ unit_test_avl_tree_create(void)
     RESULT_CHECK_sint64(0x0, avl_tree_node_nice(tree), &pass);
 
     link = avl_tree_node_link(tree);
-    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_val(link), &pass);
 
     avl_tree_destroy(&tree);
     UNIT_TEST_RESULT(avl_tree_create, pass);
@@ -65,7 +65,7 @@ unit_test_avl_tree_node_create(void)
     RESULT_CHECK_sint64(nice, avl_tree_node_nice(tree), &pass);
 
     link = avl_tree_node_link(tree);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(link), &pass);
 
     avl_tree_destroy(&tree);
     UNIT_TEST_RESULT(avl_tree_node_create, pass);
@@ -90,7 +90,7 @@ unit_test_avl_tree_initial(void)
     RESULT_CHECK_sint64(0x0, avl_tree_node_nice(tree), &pass);
 
     link = avl_tree_node_link(tree);
-    RESULT_CHECK_pointer(NULL, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(NULL, doubly_linked_list_val(link), &pass);
 
     avl_tree_destroy(&tree);
     UNIT_TEST_RESULT(avl_tree_initial, pass);
@@ -117,7 +117,7 @@ unit_test_avl_tree_node_initial(void)
     RESULT_CHECK_sint64(nice, avl_tree_node_nice(tree), &pass);
 
     link = avl_tree_node_link(tree);
-    RESULT_CHECK_pointer(&pass, doubly_linked_list_node_val(link), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(link), &pass);
 
     avl_tree_destroy(&tree);
     UNIT_TEST_RESULT(avl_tree_node_initial, pass);

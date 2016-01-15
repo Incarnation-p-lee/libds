@@ -67,7 +67,6 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    uint32                    sid;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
@@ -317,72 +316,71 @@ struct leftist_heap {
 /* DOUBLY LINKED LIST */
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
         RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
     } while (false)
 
-#define doubly_linked_list_node_val(node) \
+#define doubly_linked_list_val(node) \
     (assert(node), (node)->val)
-#define doubly_linked_list_node_val_set(node, v) \
+#define doubly_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define doubly_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define doubly_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define doubly_linked_list_node_next(node) \
+#define doubly_linked_list_next(node) \
     (assert(node), (node)->next)
-#define doubly_linked_list_node_next_set(node, v) \
+#define doubly_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
 
-#define doubly_linked_list_node_previous(node) \
+#define doubly_linked_list_previous(node) \
     (assert(node), (node)->previous)
-#define doubly_linked_list_node_previous_set(node, v) \
+#define doubly_linked_list_previous_set(node, v) \
     (assert(node), (node)->previous = (v))
 
 
 /* SINGLE LINKED LIST */
 #define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_uint32((aim)->sid, (ex)->sid, (pass));            \
         RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
     } while (false)
 
-#define single_linked_list_node_val(node) \
+#define single_linked_list_val(node) \
     (assert(node), (node)->val)
-#define single_linked_list_node_val_set(node, v) \
+#define single_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define single_linked_list_node_sid(node) \
-    (assert(node), (node)->sid)
-#define single_linked_list_node_sid_set(node, v) \
-    (assert(node), (node)->sid = (v))
-
-#define single_linked_list_node_next(node) \
+#define single_linked_list_next(node) \
     (assert(node), (node)->next)
-#define single_linked_list_node_next_set(node, v) \
+#define single_linked_list_next_set(node, v) \
     (assert(node), (node)->next = (v))
+
+/*
+ * Single linked list previous set not supported.
+ */
+#define single_linked_list_previous_set(node, v)
 
 
 /* SKIP LINKED LIST */
-#define skip_linked_list_node_key(node) \
+#define skip_linked_list_key(node) \
     (assert(node), (node)->key)
-#define skip_linked_list_node_key_set(node, k) \
+#define skip_linked_list_key_set(node, k) \
     (assert(node), (node)->key = (k))
 
-#define skip_linked_list_node_val(node) \
+#define skip_linked_list_val(node) \
     (assert(node), (node)->val)
-#define skip_linked_list_node_val_set(node, v) \
+#define skip_linked_list_val_set(node, v) \
     (assert(node), (node)->val = (v))
 
-#define skip_linked_list_node_next(node) \
+#define skip_linked_list_next(node) \
     (assert(node), (node)->next)
-#define skip_linked_list_node_next_set(node, n) \
+#define skip_linked_list_next_set(node, n) \
     (assert(node), (node)->next = (n))
+
+/*
+ * Skip linked list previous not supported.
+ */
+#define skip_linked_list_previous(node) \
+    (node)
 
 /* ARRAY STACK */
 #define RESULT_CHECK_array_stack(aim, ex, pass)                        \
@@ -684,49 +682,45 @@ extern struct doubly_linked_list * doubly_linked_list_create(void);
 extern struct doubly_linked_list * doubly_linked_list_merge(struct doubly_linked_list *m, struct doubly_linked_list *n);
 extern struct doubly_linked_list * doubly_linked_list_node_by_index(struct doubly_linked_list *list, uint32 index);
 extern struct doubly_linked_list * doubly_linked_list_node_copy(struct doubly_linked_list *node);
-extern struct doubly_linked_list * doubly_linked_list_node_create(void *val, uint32 sid);
-extern struct doubly_linked_list * doubly_linked_list_node_remove(struct doubly_linked_list **node);
+extern struct doubly_linked_list * doubly_linked_list_node_create(void *val);
+extern struct doubly_linked_list * doubly_linked_list_remove(struct doubly_linked_list **node);
 extern struct single_linked_list * single_linked_list_create(void);
 extern struct single_linked_list * single_linked_list_merge(struct single_linked_list *m, struct single_linked_list *n);
 extern struct single_linked_list * single_linked_list_node_by_index(struct single_linked_list *list, uint32 index);
 extern struct single_linked_list * single_linked_list_node_copy(struct single_linked_list *node);
-extern struct single_linked_list * single_linked_list_node_create(void *val, uint32 sid);
-extern struct single_linked_list * single_linked_list_node_remove(struct single_linked_list **node);
+extern struct single_linked_list * single_linked_list_node_create(void *val);
 extern struct single_linked_list * single_linked_list_previous(struct single_linked_list *node);
+extern struct single_linked_list * single_linked_list_remove(struct single_linked_list **node);
 extern struct skip_linked_list * skip_linked_list_create(void);
+extern struct skip_linked_list * skip_linked_list_find_key(struct skip_linked_list *list, sint32 key);
+extern struct skip_linked_list * skip_linked_list_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
 extern struct skip_linked_list * skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n);
 extern struct skip_linked_list * skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index);
 extern struct skip_linked_list * skip_linked_list_node_create(void *val, sint32 key);
-extern struct skip_linked_list * skip_linked_list_node_find_key(struct skip_linked_list *list, sint32 key);
-extern struct skip_linked_list * skip_linked_list_node_insert(struct skip_linked_list **list, struct skip_linked_list *tgt);
-extern struct skip_linked_list * skip_linked_list_node_remove(struct skip_linked_list **list, sint32 key);
+extern struct skip_linked_list * skip_linked_list_remove(struct skip_linked_list **list, sint32 key);
 extern uint32 doubly_linked_list_length(struct doubly_linked_list *list);
 extern uint32 single_linked_list_length(struct single_linked_list *list);
 extern uint32 skip_linked_list_length(struct skip_linked_list *list);
 extern void doubly_linked_list_destroy(struct doubly_linked_list **list);
 extern void doubly_linked_list_initial(struct doubly_linked_list *list);
+extern void doubly_linked_list_insert_after(struct doubly_linked_list *list, void *val);
+extern void doubly_linked_list_insert_before(struct doubly_linked_list *list, void *val);
+extern void doubly_linked_list_insert_ptr_after(struct doubly_linked_list *list, struct doubly_linked_list *node);
+extern void doubly_linked_list_insert_ptr_before(struct doubly_linked_list *list, struct doubly_linked_list *node);
 extern void doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void *));
-extern void doubly_linked_list_node_append(struct doubly_linked_list *node, void *val);
-extern void doubly_linked_list_node_initial(struct doubly_linked_list *list, void *val, uint32 sid);
-extern void doubly_linked_list_node_insert_after(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_insert_after_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_insert_before(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_insert_before_risky(struct doubly_linked_list *cur, struct doubly_linked_list *node);
-extern void doubly_linked_list_node_remove_and_destroy(struct doubly_linked_list **node);
-extern void doubly_linked_list_serialize(struct doubly_linked_list *list);
+extern void doubly_linked_list_remove_and_destroy(struct doubly_linked_list **node);
 extern void single_linked_list_destroy(struct single_linked_list **list);
 extern void single_linked_list_initial(struct single_linked_list *list);
 extern void single_linked_list_insert_after(struct single_linked_list *list, void *val);
 extern void single_linked_list_insert_before(struct single_linked_list *list, void *val);
+extern void single_linked_list_insert_ptr_after(struct single_linked_list *list, struct single_linked_list *node);
+extern void single_linked_list_insert_ptr_before(struct single_linked_list *list, struct single_linked_list *node);
 extern void single_linked_list_iterate(struct single_linked_list *list, void (*handler)(void *));
-extern void single_linked_list_node_initial(struct single_linked_list *list, void *val, uint32 sid);
-extern void single_linked_list_node_remove_and_destroy(struct single_linked_list **node);
-extern void single_linked_list_serialize(struct single_linked_list *list);
+extern void single_linked_list_remove_and_destroy(struct single_linked_list **node);
 extern void skip_linked_list_destroy(struct skip_linked_list **list);
 extern void skip_linked_list_initial(struct skip_linked_list *list);
 extern void skip_linked_list_iterate(struct skip_linked_list *list, void (*handler)(void *));
-extern void skip_linked_list_node_initial(struct skip_linked_list *list, void *val, sint32 key);
-extern void skip_linked_list_node_remove_and_destroy(struct skip_linked_list **list, sint32 key);
+extern void skip_linked_list_remove_and_destroy(struct skip_linked_list **list, sint32 key);
 
 #endif
 /* END of ./src/linked_list/linked_list_declaration.h */

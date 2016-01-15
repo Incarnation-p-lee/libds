@@ -21,7 +21,6 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    uint32                    sid;
     void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;

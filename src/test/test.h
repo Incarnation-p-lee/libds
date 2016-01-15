@@ -2,6 +2,7 @@
 #define HAVE_TEST_H
 
 #define FILTER_LEN                     32
+#define DEFAULT_ITERATION_CNT          1000000u
 #define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
     SYM_2_STR(symbol), pass)
 
