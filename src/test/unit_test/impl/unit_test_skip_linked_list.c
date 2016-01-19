@@ -1,5 +1,3 @@
-#include "../unit_test_linked_list.h"
-
 #define LINKED_LIST                    skip_linked_list
 #define LINKED_LIST_next               skip_linked_list_next
 #define LINKED_LIST_next_set           skip_linked_list_next_set
@@ -13,10 +11,15 @@
 #define LINKED_LIST_length             skip_linked_list_length
 #define LINKED_LIST_node_by_index      skip_linked_list_node_by_index
 #define LINKED_LIST_iterate            skip_linked_list_iterate
-
 #define TEST_LINKED_LIST_sample        test_skip_linked_list_sample
+#define TEST_LINKED_LIST_node_legal_p  utest_skip_linked_list_node_legal_p
 
+#include "../unit_test_linked_list.h"
+
+UT_LINKED_LIST_create(skip)
+UT_LINKED_LIST_initial(skip)
 UT_LINKED_LIST_destroy(skip)
+UT_LINKED_LIST_length(skip)
 UT_LINKED_LIST_node_by_index(skip)
 UT_LINKED_LIST_iterate(skip)
 
@@ -33,42 +36,21 @@ UT_LINKED_LIST_iterate(skip)
 #undef LINKED_LIST_length
 #undef LINKED_LIST_node_by_index
 #undef LINKED_LIST_iterate
-
 #undef TEST_LINKED_LIST_sample
+#undef TEST_LINKED_LIST_node_legal_p
 
-static void
-utest_skip_linked_list_create(void)
+static inline bool
+utest_skip_linked_list_node_legal_p(struct skip_linked_list *node)
 {
-    struct skip_linked_list *list;
-    bool pass;
+    assert(!complain_null_pointer_p(node));
 
-    pass = true;
-
-    list = skip_linked_list_create();
-    RESULT_CHECK_pointer(NULL, skip_linked_list_val(list), &pass);
-    RESULT_CHECK_sint32(0, skip_linked_list_key(list), &pass);
-
-    skip_linked_list_destroy(&list);
-    UNIT_TEST_RESULT(skip_linked_list_create, pass);
-}
-
-static void
-utest_skip_linked_list_initial(void)
-{
-    struct skip_linked_list *list;
-    bool pass;
-
-    pass = true;
-    list = NULL;
-    skip_linked_list_initial(list);
-
-    list = skip_linked_list_create();
-    skip_linked_list_initial(list);
-    RESULT_CHECK_pointer(NULL, skip_linked_list_val(list), &pass);
-    RESULT_CHECK_sint32(0, skip_linked_list_key(list), &pass);
-
-    skip_linked_list_destroy(&list);
-    UNIT_TEST_RESULT(skip_linked_list_initial, pass);
+    if (NULL != skip_linked_list_val(node)) {
+        return false;
+    } else if (0 != skip_linked_list_key(node)) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 static void
@@ -88,33 +70,6 @@ utest_skip_linked_list_node_create(void)
     skip_linked_list_destroy(&list);
     UNIT_TEST_RESULT(skip_linked_list_node_create, pass);
 }
-
-static void
-utest_skip_linked_list_length(void)
-{
-    bool pass;
-    uint32 len;
-    struct skip_linked_list *list;
-    register struct skip_linked_list *iter;
-
-    pass = true;
-    list = NULL;
-
-    RESULT_CHECK_uint32(0, skip_linked_list_length(list), &pass);
-    list = test_skip_linked_list_sample(0x6245, 0x1034);
-
-    len = 0;
-    iter = list;
-    while (iter) {
-        len++;
-        iter = skip_linked_list_next(iter);
-    }
-    RESULT_CHECK_uint32(len, skip_linked_list_length(list), &pass);
-
-    skip_linked_list_destroy(&list);
-    UNIT_TEST_RESULT(skip_linked_list_length, pass);
-}
-
 
 static void
 utest_skip_linked_list_key_contains_p(void)
@@ -197,8 +152,7 @@ utest_skip_linked_list_insert(void)
     RESULT_CHECK_pointer(NULL, skip_linked_list_insert(&list, tmp), &pass);
 
     tmp = skip_linked_list_node_create(&pass, key);
-    RESULT_CHECK_pointer(NULL, skip_linked_list_insert(&list, tmp), &pass);
-    skip_linked_list_destroy(&tmp);
+    RESULT_CHECK_pointer(tmp, skip_linked_list_insert(&list, tmp), &pass);
 
     key = 0x1ffff;
     tmp = skip_linked_list_node_create(&pass, key++);
@@ -268,7 +222,12 @@ utest_skip_linked_list_remove_and_destroy(void)
         if (NULL != tmp) {
             key = tmp->key;
             skip_linked_list_remove_and_destroy(&list, key);
-            RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, key), &pass);
+
+            if (skip_linked_list_find_key(list, count)) {
+                RESULT_CHECK_bool(true, skip_linked_list_key_contains_p(list, key), &pass);
+            } else {
+                RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, key), &pass);
+            }
         }
     }
 

@@ -2,8 +2,11 @@
 #define UNIT_TEST_DECLARATION_H
 
 
+static inline bool utest_doubly_linked_list_node_legal_p(struct doubly_linked_list *node);
 static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
+static inline bool utest_single_linked_list_node_legal_p(struct single_linked_list *node);
+static inline bool utest_skip_linked_list_node_legal_p(struct skip_linked_list *node);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);
@@ -142,12 +145,9 @@ static void unit_test_stacked_queue_leave(void);
 static void unit_test_stacked_queue_space_expand(void);
 static void unit_test_stacked_queue_space_rest(void);
 static void unit_test_stacked_queue_struct_field(void);
-static void utest_skip_linked_list_create(void);
 static void utest_skip_linked_list_find_key(void);
-static void utest_skip_linked_list_initial(void);
 static void utest_skip_linked_list_insert(void);
 static void utest_skip_linked_list_key_contains_p(void);
-static void utest_skip_linked_list_length(void);
 static void utest_skip_linked_list_merge(void);
 static void utest_skip_linked_list_node_create(void);
 static void utest_skip_linked_list_remove(void);

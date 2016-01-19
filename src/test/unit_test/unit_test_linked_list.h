@@ -1,57 +1,54 @@
 #ifndef HAVE_UNIT_TEST_LINKED_LIST_H
 #define HAVE_UNIT_TEST_LINKED_LIST_H
 
-#define UT_LINKED_LIST_create(name)                                \
-static void                                                        \
-utest_##name##_linked_list_create(void)                            \
-{                                                                  \
-    bool pass;                                                     \
-    struct LINKED_LIST *list;                                      \
-                                                                   \
-    pass = true;                                                   \
-    list = LINKED_LIST_create();                                   \
-                                                                   \
-    RESULT_CHECK_pointer(list,  LINKED_LIST_next(list), &pass);    \
-    RESULT_CHECK_pointer(list, LINKED_LIST_previous(list), &pass); \
-                                                                   \
-    LINKED_LIST_destroy(&list);                                    \
-    UNIT_TEST_RESULT(name##_linked_list_create, pass);             \
+#define UT_LINKED_LIST_create(name)                                      \
+static void                                                              \
+utest_##name##_linked_list_create(void)                                  \
+{                                                                        \
+    bool pass;                                                           \
+    struct LINKED_LIST *list;                                            \
+                                                                         \
+    pass = true;                                                         \
+    list = LINKED_LIST_create();                                         \
+                                                                         \
+    RESULT_CHECK_bool(true, TEST_LINKED_LIST_node_legal_p(list), &pass); \
+                                                                         \
+    LINKED_LIST_destroy(&list);                                          \
+    UNIT_TEST_RESULT(name##_linked_list_create, pass);                   \
 }
 
-#define UT_LINKED_LIST_initial(name)                               \
-static void                                                        \
-utest_##name##_linked_list_initial(void)                           \
-{                                                                  \
-    bool pass;                                                     \
-    struct LINKED_LIST *list;                                      \
-                                                                   \
-    pass = true;                                                   \
-    list= memory_cache_allocate(sizeof(*list));                    \
-                                                                   \
-    LINKED_LIST_initial(list);                                     \
-    RESULT_CHECK_pointer(list, LINKED_LIST_next(list), &pass);     \
-    RESULT_CHECK_pointer(list, LINKED_LIST_previous(list), &pass); \
-                                                                   \
-    LINKED_LIST_destroy(&list);                                    \
-    UNIT_TEST_RESULT(name##_linked_list_initial, pass);            \
+#define UT_LINKED_LIST_initial(name)                                     \
+static void                                                              \
+utest_##name##_linked_list_initial(void)                                 \
+{                                                                        \
+    bool pass;                                                           \
+    struct LINKED_LIST *list;                                            \
+                                                                         \
+    pass = true;                                                         \
+    list= memory_cache_allocate(sizeof(*list));                          \
+                                                                         \
+    LINKED_LIST_initial(list);                                           \
+    RESULT_CHECK_bool(true, TEST_LINKED_LIST_node_legal_p(list), &pass); \
+                                                                         \
+    LINKED_LIST_destroy(&list);                                          \
+    UNIT_TEST_RESULT(name##_linked_list_initial, pass);                  \
 }
 
-#define UT_LINKED_LIST_node_create(name)                           \
-static void                                                        \
-utest_##name##_linked_list_node_create(void)                       \
-{                                                                  \
-    bool pass;                                                     \
-    struct LINKED_LIST *list;                                      \
-                                                                   \
-    pass = true;                                                   \
-    list = LINKED_LIST_node_create(&list);                         \
-                                                                   \
-    RESULT_CHECK_pointer(&list, LINKED_LIST_val(list), &pass);     \
-    RESULT_CHECK_pointer(list, LINKED_LIST_next(list), &pass);     \
-    RESULT_CHECK_pointer(list, LINKED_LIST_previous(list), &pass); \
-                                                                   \
-    LINKED_LIST_destroy(&list);                                    \
-    UNIT_TEST_RESULT(name##_linked_list_node_create, pass);        \
+#define UT_LINKED_LIST_node_create(name)                                 \
+static void                                                              \
+utest_##name##_linked_list_node_create(void)                             \
+{                                                                        \
+    bool pass;                                                           \
+    struct LINKED_LIST *list;                                            \
+                                                                         \
+    pass = true;                                                         \
+    list = LINKED_LIST_node_create(&list);                               \
+                                                                         \
+    RESULT_CHECK_pointer(&list, LINKED_LIST_val(list), &pass);           \
+    RESULT_CHECK_bool(true, TEST_LINKED_LIST_node_legal_p(list), &pass); \
+                                                                         \
+    LINKED_LIST_destroy(&list);                                          \
+    UNIT_TEST_RESULT(name##_linked_list_node_create, pass);              \
 }
 
 #define UT_LINKED_LIST_previous(name)                              \

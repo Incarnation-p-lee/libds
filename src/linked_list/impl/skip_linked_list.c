@@ -193,9 +193,9 @@ skip_linked_list_insert_internal(struct skip_linked_list **list,
         while (true) {
             head = &iter->layer[lvl];
 
-            if (iter == tgt || iter->key == tgt->key) {
+            if (iter == tgt || *head == tgt) {
                 return NULL;
-            } else if (!*head || (*head)->key > tgt->key) {
+            } else if (!*head || (*head)->key >= tgt->key) {
                 prev_list[lvl] = iter;
 
                 if (SKIP_LIST_BOTTOM_IDX == lvl) {
@@ -224,9 +224,6 @@ skip_linked_list_insert(struct skip_linked_list **list,
     struct skip_linked_list *inserted;
 
     if (complain_null_pointer_p(list) || complain_null_pointer_p(tgt)) {
-        return NULL;
-    } else if (skip_linked_list_find_key(*list, tgt->key)) {
-        pr_log_warn("Attempt to insert node contains already.\n");
         return NULL;
     } else {
         inserted = skip_linked_list_insert_internal(list, tgt);

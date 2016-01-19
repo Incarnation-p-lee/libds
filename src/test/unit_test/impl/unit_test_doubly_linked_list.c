@@ -1,5 +1,3 @@
-#include "../unit_test_linked_list.h"
-
 #define LINKED_LIST                    doubly_linked_list
 #define LINKED_LIST_next               doubly_linked_list_next
 #define LINKED_LIST_next_set           doubly_linked_list_next_set
@@ -27,6 +25,9 @@
 
 #define TEST_LINKED_LIST_sample        test_doubly_linked_list_sample
 #define RESULT_CHECK_LINKED_LIST_node  RESULT_CHECK_doubly_linked_list_node
+#define TEST_LINKED_LIST_node_legal_p  utest_doubly_linked_list_node_legal_p
+
+#include "../unit_test_linked_list.h"
 
 UT_LINKED_LIST_create(doubly)
 UT_LINKED_LIST_initial(doubly)
@@ -72,4 +73,20 @@ UT_LINKED_LIST_merge(doubly)
 
 #undef TEST_LINKED_LIST_sample
 #undef RESULT_CHECK_LINKED_LIST_node
+#undef TEST_LINKED_LIST_node_legal_p
+
+
+static inline bool
+utest_doubly_linked_list_node_legal_p(struct doubly_linked_list *node)
+{
+    assert(!complain_null_pointer_p(node));
+
+    if (node != doubly_linked_list_next(node)) {
+        return false;
+    } else if (node != doubly_linked_list_previous(node)) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
