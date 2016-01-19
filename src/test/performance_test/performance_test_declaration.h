@@ -48,7 +48,6 @@ static void performance_test_array_stack_pop(uint32 count);
 static void performance_test_array_stack_push(uint32 count);
 static void performance_test_array_stack_space_expand(uint32 count);
 static void performance_test_array_stack_space_rest(uint32 count);
-static void performance_test_array_stack_struct_field(uint32 count);
 static void performance_test_avl_tree_balanced_p(uint32 count);
 static void performance_test_avl_tree_create(uint32 count);
 static void performance_test_avl_tree_destroy(uint32 count);

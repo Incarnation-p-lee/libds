@@ -1,24 +1,4 @@
 static void
-performance_test_array_stack_struct_field(uint32 count)
-{
-    struct array_stack *stack;
-
-    stack = array_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        array_stack_sid_set(stack, 0x32);
-        array_stack_space_dim_set(stack, 0x43);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    array_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(array_stack_struct_field);
-}
-
-static void
 performance_test_array_stack_create(uint32 count)
 {
     struct array_stack *stack;
