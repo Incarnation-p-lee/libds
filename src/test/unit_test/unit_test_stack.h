@@ -1,23 +1,20 @@
 #ifndef HAVE_DEFINED_UNIT_TEST_STACK_H
 #define HAVE_DEFINED_UNIT_TEST_STACK_H
 
-#define UT_STACK_create(name)                           \
-static void                                             \
-utest_##name##_stack_create(void)                       \
-{                                                       \
-    bool pass;                                          \
-    struct STACK *stack;                                \
-                                                        \
-    pass = true;                                        \
-    stack = STACK_create();                             \
-                                                        \
-    RESULT_CHECK_uint32(0x0u, STACK_sid(stack), &pass); \
-                                                        \
-    RESULT_CHECK_uint32(DEFAULT_STACK_SPACE_SIZE,       \
-        STACK_space_dim(stack), &pass);                 \
-                                                        \
-    STACK_destroy(&stack);                              \
-    UNIT_TEST_RESULT(name##_stack_create, pass);        \
+#define UT_STACK_create(name)                                  \
+static void                                                    \
+utest_##name##_stack_create(void)                              \
+{                                                              \
+    bool pass;                                                 \
+    struct STACK *stack;                                       \
+                                                               \
+    pass = true;                                               \
+    stack = STACK_create();                                    \
+                                                               \
+    RESULT_CHECK_bool(true, TEST_STACK_legal_p(stack), &pass); \
+                                                               \
+    STACK_destroy(&stack);                                     \
+    UNIT_TEST_RESULT(name##_stack_create, pass);               \
 }
 
 #define UT_STACK_destroy(name)                    \
@@ -40,32 +37,34 @@ utest_##name##_stack_destroy(void)                \
     UNIT_TEST_RESULT(name##_stack_destroy, pass); \
 }
 
-#define UT_STACK_space_expand(name)                                         \
-static void                                                                 \
-utest_##name##_stack_space_expand(void)                                     \
-{                                                                           \
-    bool pass;                                                              \
-    struct STACK *stack;                                                    \
-    uint32 stk_size;                                                        \
-                                                                            \
-    pass = true;                                                            \
-    stack = STACK_create();                                                 \
-    stk_size = STACK_space_dim(stack);                                      \
-                                                                            \
-    STACK_space_expand(NULL, 0);                                            \
-    STACK_space_expand(stack, 0);                                           \
-    RESULT_CHECK_uint32(stk_size * 2 + 32u, STACK_space_dim(stack), &pass); \
-                                                                            \
-    stk_size = STACK_space_dim(stack);                                      \
-    STACK_space_expand(stack, 1u);                                          \
-    RESULT_CHECK_uint32(++stk_size, STACK_space_dim(stack), &pass);         \
-                                                                            \
-    stk_size = STACK_space_dim(stack);                                      \
-    STACK_space_expand(stack, 0xffffffffu - stk_size + 1);                  \
-    RESULT_CHECK_uint32(stk_size, STACK_space_dim(stack), &pass);           \
-                                                                            \
-    STACK_destroy(&stack);                                                  \
-    UNIT_TEST_RESULT(name##_stack_space_expand, pass);                      \
+#define UT_STACK_resize(name)                                      \
+static void                                                        \
+utest_##name##_stack_resize(void)                                  \
+{                                                                  \
+    bool pass;                                                     \
+    struct STACK *stack;                                           \
+    uint32 stk_size;                                               \
+                                                                   \
+    pass = true;                                                   \
+    stack = STACK_create();                                        \
+    stk_size = STACK_capacity(stack);                              \
+                                                                   \
+    STACK_resize(NULL, 0);                                         \
+    STACK_resize(stack, 0);                                        \
+                                                                   \
+    stk_size = stk_size * 2 + EXPAND_STACK_SPACE_MIN;              \
+    RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);   \
+                                                                   \
+    stk_size = STACK_capacity(stack);                              \
+    STACK_resize(stack, stk_size + 1);                             \
+    RESULT_CHECK_uint32(++stk_size, STACK_capacity(stack), &pass); \
+                                                                   \
+    stk_size = STACK_capacity(stack);                              \
+    STACK_resize(stack, stk_size);                                 \
+    RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);   \
+                                                                   \
+    STACK_destroy(&stack);                                         \
+    UNIT_TEST_RESULT(name##_stack_resize, pass);                   \
 }
 
 #define UT_STACK_full_p(name)                             \
@@ -81,7 +80,7 @@ utest_##name##_stack_full_p(void)                         \
                                                           \
     stack = STACK_create();                               \
     pass = true;                                          \
-    tmp = STACK_space_dim(stack);                         \
+    tmp = STACK_capacity(stack);                          \
     mem = &tmp;                                           \
                                                           \
     RESULT_CHECK_bool(false, STACK_full_p(stack), &pass); \
@@ -111,72 +110,74 @@ utest_##name##_stack_capacity(void)                                      \
     pass = true;                                                         \
     stack = STACK_create();                                              \
                                                                          \
-    stk_size = STACK_space_dim(stack);                                   \
+    stk_size = STACK_capacity(stack);                                    \
     RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);         \
                                                                          \
     extra = 1024u;                                                       \
-    STACK_space_expand(stack, extra);                                    \
+    STACK_resize(stack, extra + stk_size);                               \
     RESULT_CHECK_uint32(stk_size + extra, STACK_capacity(stack), &pass); \
                                                                          \
     STACK_destroy(&stack);                                               \
     UNIT_TEST_RESULT(name##_stack_capacity, pass);                       \
 }
 
-#define UT_STACK_space_rest(name)                                       \
-static void                                                             \
-utest_##name##_stack_space_rest(void)                                   \
-{                                                                       \
-    bool pass;                                                          \
-    struct STACK *stack;                                                \
-    uint32 stk_size;                                                    \
-                                                                        \
-    RESULT_CHECK_uint32(0x0u, STACK_capacity(NULL), &pass);             \
-                                                                        \
-    pass = true;                                                        \
-    stack = STACK_create();                                             \
-    stk_size = STACK_capacity(stack);                                   \
-                                                                        \
-    RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);        \
-                                                                        \
-    STACK_push(stack, &stk_size);                                       \
-    RESULT_CHECK_uint32(stk_size, STACK_space_rest(stack) + 1u, &pass); \
-                                                                        \
-    STACK_destroy(&stack);                                              \
-    UNIT_TEST_RESULT(name##_stack_space_rest, pass);                    \
+#define UT_STACK_rest(name)                                       \
+static void                                                       \
+utest_##name##_stack_rest(void)                                   \
+{                                                                 \
+    bool pass;                                                    \
+    struct STACK *stack;                                          \
+    uint32 stk_size;                                              \
+                                                                  \
+    RESULT_CHECK_uint32(0x0u, STACK_capacity(NULL), &pass);       \
+                                                                  \
+    pass = true;                                                  \
+    stack = STACK_create();                                       \
+    stk_size = STACK_capacity(stack);                             \
+                                                                  \
+    RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);  \
+                                                                  \
+    STACK_push(stack, &stk_size);                                 \
+    RESULT_CHECK_uint32(stk_size, STACK_rest(stack) + 1u, &pass); \
+                                                                  \
+    STACK_destroy(&stack);                                        \
+    UNIT_TEST_RESULT(name##_stack_rest, pass);                    \
 }
 
-#define UT_STACK_push(name)                                        \
-static void                                                        \
-utest_##name##_stack_push(void)                                    \
-{                                                                  \
-    bool pass;                                                     \
-    struct STACK *stack;                                           \
-    void *mem;                                                     \
-    uint32 tmp;                                                    \
-                                                                   \
-    mem = &tmp;                                                    \
-    pass = true;                                                   \
-                                                                   \
-    stack = STACK_create();                                        \
-    tmp = STACK_space_dim(stack);                                  \
-    STACK_push(NULL, mem);                                         \
-                                                                   \
-    while (tmp) {                                                  \
-        STACK_push(stack, mem);                                    \
-        tmp--;                                                     \
-    }                                                              \
-                                                                   \
-    RESULT_CHECK_bool(true, STACK_full_p(stack), &pass);           \
-                                                                   \
-    tmp = STACK_space_dim(stack);                                  \
-    STACK_push(stack, mem);                                        \
-    RESULT_CHECK_uint32(tmp + 32u, STACK_space_dim(stack), &pass); \
-                                                                   \
-    STACK_push(stack, mem);                                        \
-    STACK_pop(stack);                                              \
-                                                                   \
-    STACK_destroy(&stack);                                         \
-    UNIT_TEST_RESULT(name##_stack_push, pass);                     \
+#define UT_STACK_push(name)                                 \
+static void                                                 \
+utest_##name##_stack_push(void)                             \
+{                                                           \
+    bool pass;                                              \
+    struct STACK *stack;                                    \
+    void *mem;                                              \
+    uint32 tmp;                                             \
+                                                            \
+    mem = &tmp;                                             \
+    pass = true;                                            \
+                                                            \
+    stack = STACK_create();                                 \
+    tmp = STACK_capacity(stack);                            \
+    STACK_push(NULL, mem);                                  \
+                                                            \
+    while (tmp) {                                           \
+        STACK_push(stack, mem);                             \
+        tmp--;                                              \
+    }                                                       \
+                                                            \
+    RESULT_CHECK_bool(true, STACK_full_p(stack), &pass);    \
+                                                            \
+    tmp = STACK_capacity(stack);                            \
+    STACK_push(stack, mem);                                 \
+                                                            \
+    tmp = tmp * 2 + EXPAND_STACK_SPACE_MIN;                 \
+    RESULT_CHECK_uint32(tmp, STACK_capacity(stack), &pass); \
+                                                            \
+    STACK_push(stack, mem);                                 \
+    STACK_pop(stack);                                       \
+                                                            \
+    STACK_destroy(&stack);                                  \
+    UNIT_TEST_RESULT(name##_stack_push, pass);              \
 }
 
 #define UT_STACK_pop(name)                                \

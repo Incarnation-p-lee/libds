@@ -2,7 +2,9 @@
 #define UNIT_TEST_DECLARATION_H
 
 
+static inline bool utest_array_stack_struct_legal_p(struct array_stack *stack);
 static inline bool utest_doubly_linked_list_node_legal_p(struct doubly_linked_list *node);
+static inline bool utest_linked_stack_struct_legal_p(struct linked_stack *stack);
 static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
 static inline bool utest_single_linked_list_node_legal_p(struct single_linked_list *node);
@@ -78,18 +80,6 @@ static void unit_test_leftist_heap_node_create(void);
 static void unit_test_leftist_heap_remove_min(void);
 static void unit_test_leftist_heap_remove_min_and_destroy(void);
 static void unit_test_leftist_heap_struct_field(void);
-static void unit_test_linked_stack_capacity(void);
-static void unit_test_linked_stack_cleanup(void);
-static void unit_test_linked_stack_create(void);
-static void unit_test_linked_stack_destroy(void);
-static void unit_test_linked_stack_empty_p(void);
-static void unit_test_linked_stack_full_p(void);
-static void unit_test_linked_stack_iterate(void);
-static void unit_test_linked_stack_pop(void);
-static void unit_test_linked_stack_push(void);
-static void unit_test_linked_stack_space_expand(void);
-static void unit_test_linked_stack_space_rest(void);
-static void unit_test_linked_stack_struct_field(void);
 static void unit_test_open_addressing_hash_create(void);
 static void unit_test_open_addressing_hash_destroy(void);
 static void unit_test_open_addressing_hash_find(void);

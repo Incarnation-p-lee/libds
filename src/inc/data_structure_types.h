@@ -61,7 +61,6 @@ struct array_stack_space {
  * array stack
  */
 struct array_stack {
-    uint32                   sid;
     struct array_stack_space space;
 };
 
@@ -77,7 +76,6 @@ struct linked_stack_space {
  * linked stack
  */
 struct linked_stack {
-    uint32                    sid;
     struct linked_stack_space *base;
     struct linked_stack_space *top;
 };

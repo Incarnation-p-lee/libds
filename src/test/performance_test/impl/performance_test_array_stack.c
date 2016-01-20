@@ -33,7 +33,7 @@ performance_test_array_stack_destroy(uint32 count)
 }
 
 static void
-performance_test_array_stack_space_expand(uint32 count)
+performance_test_array_stack_resize(uint32 count)
 {
     struct array_stack *stack;
 
@@ -42,13 +42,13 @@ performance_test_array_stack_space_expand(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        array_stack_space_expand(stack, 1u);
+        array_stack_resize(stack, count);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     array_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(array_stack_space_expand);
+    PERFORMANCE_TEST_RESULT(array_stack_resize);
 }
 
 static void
@@ -99,7 +99,7 @@ performance_test_array_stack_space_rest(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        array_stack_space_rest(stack);
+        array_stack_rest(stack);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

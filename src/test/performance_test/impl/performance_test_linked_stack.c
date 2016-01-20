@@ -1,23 +1,4 @@
 static void
-performance_test_linked_stack_struct_field(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_sid_set(stack, 0x32);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_struct_field);
-}
-
-static void
 performance_test_linked_stack_create(uint32 count)
 {
     struct linked_stack *stack;
@@ -63,7 +44,7 @@ performance_test_linked_stack_space_expand(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        linked_stack_space_expand(stack, 1u);
+        linked_stack_resize(stack, 1u);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -101,7 +82,7 @@ performance_test_linked_stack_space_rest(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        linked_stack_space_rest(stack);
+        linked_stack_rest(stack);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

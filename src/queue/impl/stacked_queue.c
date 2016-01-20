@@ -33,8 +33,8 @@ stacked_queue_space_expand_internal(struct stacked_queue *queue, uint32 incremen
     assert(NULL != queue);
     assert(0 != increment);
 
-    array_stack_space_expand(queue->enter, increment);
-    array_stack_space_expand(queue->leave, increment);
+    array_stack_resize(queue->enter, increment);
+    array_stack_resize(queue->leave, increment);
     queue->dim = array_stack_capacity(queue->enter);
 }
 
@@ -78,7 +78,7 @@ stacked_queue_space_rest_internal(struct stacked_queue *queue)
 
     assert(NULL != queue);
 
-    rest = array_stack_space_rest(queue->enter);
+    rest = array_stack_rest(queue->enter);
 
     if (array_stack_empty_p(queue->leave)) {
         rest += array_stack_capacity(queue->leave);
@@ -160,11 +160,11 @@ stacked_queue_stack_dump(struct array_stack *from,
 
     assert(NULL != from);
     assert(NULL != to);
-    assert(array_stack_capacity(from) >= array_stack_space_rest(from));
+    assert(array_stack_capacity(from) >= array_stack_rest(from));
 
-    count = array_stack_capacity(from) - array_stack_space_rest(from);
+    count = array_stack_capacity(from) - array_stack_rest(from);
 
-    if (count > array_stack_space_rest(to)) {
+    if (count > array_stack_rest(to)) {
         pr_log_err("Operation may result in array stack overflow.\n");
     } else {
         while (!array_stack_empty_p(from)) {

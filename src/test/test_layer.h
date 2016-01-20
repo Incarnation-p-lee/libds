@@ -399,11 +399,11 @@ static const struct test_layer_table array_stack[] = {
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
-            &utest_array_stack_space_expand,
-            &performance_test_array_stack_space_expand,
+            &utest_array_stack_resize,
+            &performance_test_array_stack_resize,
         },
     },
     {
@@ -423,10 +423,10 @@ static const struct test_layer_table array_stack[] = {
         },
     },
     {
-        "space_rest",
+        "rest",
         NULL,
         {
-            &utest_array_stack_space_rest,
+            &utest_array_stack_rest,
             &performance_test_array_stack_space_rest,
         },
     },
@@ -475,25 +475,17 @@ static const struct test_layer_table array_stack[] = {
 
 static const struct test_layer_table linked_stack[] = {
     {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_linked_stack_struct_field,
-            &performance_test_linked_stack_struct_field,
-        },
-    },
-    {
         "create",
         NULL,
         {
-            &unit_test_linked_stack_create,
+            &utest_linked_stack_create,
             &performance_test_linked_stack_create,
         },
     },
     {   "destroy",
         NULL,
         {
-            &unit_test_linked_stack_destroy,
+            &utest_linked_stack_destroy,
             &performance_test_linked_stack_destroy,
         },
     },
@@ -501,7 +493,7 @@ static const struct test_layer_table linked_stack[] = {
         "space_expand",
         NULL,
         {
-            &unit_test_linked_stack_space_expand,
+            &utest_linked_stack_resize,
             &performance_test_linked_stack_space_expand,
         },
     },
@@ -509,15 +501,15 @@ static const struct test_layer_table linked_stack[] = {
         "full_p",
         NULL,
         {
-            &unit_test_linked_stack_full_p,
+            &utest_linked_stack_full_p,
             &performance_test_linked_stack_full_p,
         },
     },
     {
-        "space_rest",
+        "rest",
         NULL,
         {
-            &unit_test_linked_stack_space_rest,
+            &utest_linked_stack_rest,
             &performance_test_linked_stack_space_rest,
         },
     },
@@ -525,7 +517,7 @@ static const struct test_layer_table linked_stack[] = {
         "capacity",
         NULL,
         {
-            &unit_test_linked_stack_capacity,
+            &utest_linked_stack_capacity,
             &performance_test_linked_stack_capacity,
         },
     },
@@ -533,7 +525,7 @@ static const struct test_layer_table linked_stack[] = {
         "push",
         NULL,
         {
-            &unit_test_linked_stack_push,
+            &utest_linked_stack_push,
             &performance_test_linked_stack_push,
         },
     },
@@ -541,7 +533,7 @@ static const struct test_layer_table linked_stack[] = {
         "pop",
         NULL,
         {
-            &unit_test_linked_stack_pop,
+            &utest_linked_stack_pop,
             &performance_test_linked_stack_pop,
         },
     },
@@ -549,7 +541,7 @@ static const struct test_layer_table linked_stack[] = {
         "empty_p",
         NULL,
         {
-            &unit_test_linked_stack_empty_p,
+            &utest_linked_stack_empty_p,
             &performance_test_linked_stack_empty_p,
         },
     },
@@ -557,7 +549,7 @@ static const struct test_layer_table linked_stack[] = {
         "cleanup",
         NULL,
         {
-            &unit_test_linked_stack_cleanup,
+            &utest_linked_stack_cleanup,
             &performance_test_linked_stack_cleanup,
         },
     },
@@ -565,7 +557,7 @@ static const struct test_layer_table linked_stack[] = {
         "iterate",
         NULL,
         {
-            &unit_test_linked_stack_iterate,
+            &utest_linked_stack_iterate,
             &performance_test_linked_stack_iterate,
         },
     },

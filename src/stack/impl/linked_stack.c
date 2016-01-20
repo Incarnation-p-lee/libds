@@ -8,27 +8,20 @@ linked_stack_create(void)
     struct linked_stack *stack;
 
     stack = memory_cache_allocate(sizeof(*stack));
-    if (!complain_no_memory_p(stack)) {
-        stack->sid = 0u;
-        stack->base = memory_cache_allocate(sizeof(*stack->base));
-        /*
-         * struct linked_space
-         */
-        if (!complain_no_memory_p(stack->base)) {
-            stack->top = stack->base;
-            doubly_linked_list_initial(&stack->base->link);
-            /*
-             * struct array_stack_space
-             */
-            stack->base->space.bp = memory_cache_allocate(sizeof(void *) *
-                DEFAULT_STACK_SPACE_SIZE);
+    stack->base = memory_cache_allocate(sizeof(*stack->base));
+    /*
+     * struct linked_space
+     */
+    stack->top = stack->base;
+    doubly_linked_list_initial(&stack->base->link);
+    /*
+     * struct array_stack_space
+     */
+    stack->base->space.bp = memory_cache_allocate(sizeof(void *) *
+        DEFAULT_STACK_SPACE_SIZE);
 
-            if (!complain_no_memory_p(stack->base->space.bp)) {
-                stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
-                stack->base->space.sp = stack->base->space.bp;
-            }
-        }
-    }
+    stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
+    stack->base->space.sp = stack->base->space.bp;
 
     return stack;
 }
@@ -131,7 +124,7 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 }
 
 static inline void
-linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
+linked_stack_resize_internal(struct linked_stack *stack, uint32 dim)
 {
     struct linked_stack_space *node;
     struct linked_stack_space *last;
@@ -144,16 +137,12 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
 
     node = memory_cache_allocate(sizeof(*node));
 
-    if (!complain_no_memory_p(node)) {
-        doubly_linked_list_initial(&node->link);
-        node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
+    doubly_linked_list_initial(&node->link);
+    node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
 
-        if (!complain_no_memory_p(node->space.bp)) {
-            node->space.dim = dim;
-            node->space.sp = node->space.bp;
-            doubly_linked_list_insert_ptr_after(&last->link, &node->link);
-        }
-    }
+    node->space.dim = dim;
+    node->space.sp = node->space.bp;
+    doubly_linked_list_insert_ptr_after(&last->link, &node->link);
 }
 
 /*
@@ -161,14 +150,19 @@ linked_stack_space_expand_internal(struct linked_stack *stack, uint32 dim)
  *   If invalid _ARGV_, nothing will be done.
  */
 void
-linked_stack_space_expand(struct linked_stack *stack, uint32 dim)
+linked_stack_resize(struct linked_stack *stack, uint32 dim)
 {
-    if (!complain_null_pointer_p(stack)) {
+    if (complain_null_pointer_p(stack)) {
+        return;
+    } else {
         if (0 == dim) {
-            pr_log_warn("Expanding size zero, nothing will be done.\n");
-        } else {
-            linked_stack_space_expand_internal(stack, dim);
+            pr_log_info("Expanding size not specified, use default.\n");
+            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+        } else if (dim < linked_stack_capacity(stack)) {
+            pr_log_info("Expanding to small capacity, may lost data.\n");
         }
+
+        linked_stack_resize_internal(stack, dim);
     }
 }
 
@@ -177,7 +171,7 @@ linked_stack_full_p_internal(struct linked_stack *stack)
 {
     assert(NULL != stack);
 
-    return 0u == linked_stack_space_rest_internal(stack) ? true : false;
+    return 0u == linked_stack_rest_internal(stack) ? true : false;
 }
 
 /*
@@ -195,7 +189,7 @@ linked_stack_full_p(struct linked_stack *stack)
 }
 
 static inline uint32
-linked_stack_space_rest_internal(struct linked_stack *stack)
+linked_stack_rest_internal(struct linked_stack *stack)
 {
     uint32 rest;
     struct linked_stack_space *next;
@@ -218,12 +212,12 @@ linked_stack_space_rest_internal(struct linked_stack *stack)
  *   If NULL _ARGV_, _RETURN_ 0.
  */
 uint32
-linked_stack_space_rest(struct linked_stack *stack)
+linked_stack_rest(struct linked_stack *stack)
 {
     if (complain_null_pointer_p(stack)) {
         return 0u;
     } else {
-        return linked_stack_space_rest_internal(stack);
+        return linked_stack_rest_internal(stack);
     }
 }
 
@@ -312,7 +306,7 @@ linked_stack_push(struct linked_stack *stack, void *member)
     if (!complain_null_pointer_p(stack)) {
         if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            linked_stack_space_expand_internal(stack, EXPAND_STACK_SPACE_MIN);
+            linked_stack_resize_internal(stack, EXPAND_STACK_SPACE_MIN);
         }
 
         if (linked_stack_space_node_full_p(stack->top)) {
