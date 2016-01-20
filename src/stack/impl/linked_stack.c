@@ -1,3 +1,27 @@
+static inline void
+linked_stack_node_initial(struct linked_stack_space *node, uint32 dim)
+{
+    assert(!complain_zero_size_p(dim));
+
+    node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
+    node->space.sp = node->space.bp;
+    node->space.dim = dim;
+}
+
+static inline struct linked_stack_space *
+linked_stack_node_create(uint32 dim)
+{
+    struct linked_stack_space *node;
+
+    assert(!complain_zero_size_p(dim));
+
+    node = memory_cache_allocate(sizeof(*node));
+    doubly_linked_list_initial(&node->link);
+    linked_stack_node_initial(node, dim);
+
+    return node;
+}
+
 /*
  * _RETURN_ one instance of linked_stack.
  *   If no memory available, it never _RETURN_, export an error and exit.
@@ -8,20 +32,8 @@ linked_stack_create(void)
     struct linked_stack *stack;
 
     stack = memory_cache_allocate(sizeof(*stack));
-    stack->base = memory_cache_allocate(sizeof(*stack->base));
-    /*
-     * struct linked_space
-     */
+    stack->base = linked_stack_node_create(DEFAULT_STACK_SPACE_SIZE);
     stack->top = stack->base;
-    doubly_linked_list_initial(&stack->base->link);
-    /*
-     * struct array_stack_space
-     */
-    stack->base->space.bp = memory_cache_allocate(sizeof(void *) *
-        DEFAULT_STACK_SPACE_SIZE);
-
-    stack->base->space.dim = DEFAULT_STACK_SPACE_SIZE;
-    stack->base->space.sp = stack->base->space.bp;
 
     return stack;
 }
@@ -39,7 +51,7 @@ linked_stack_destroy(struct linked_stack **stack)
         node = (*stack)->base;
 
         while (node) {
-            node = linked_stack_space_remove_node(node);
+            node = linked_stack_node_remove(node);
         }
 
         memory_cache_free(*stack);
@@ -63,7 +75,7 @@ linked_stack_space_offset_reflect(struct doubly_linked_list *link)
  * _RETURN_ next node of linked stack space.
  */
 static inline struct linked_stack_space *
-linked_stack_space_next_node(struct linked_stack_space *node)
+linked_stack_node_next(struct linked_stack_space *node)
 {
     struct linked_stack_space *next;
     struct doubly_linked_list *tmp;
@@ -81,7 +93,7 @@ linked_stack_space_next_node(struct linked_stack_space *node)
  * _RETURN_ previous node of linked stack space.
  */
 static inline struct linked_stack_space *
-linked_stack_space_previous_node(struct linked_stack_space *node)
+linked_stack_node_previous(struct linked_stack_space *node)
 {
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
@@ -101,7 +113,7 @@ linked_stack_space_previous_node(struct linked_stack_space *node)
  *   If NULL _ARGV_, or last node, _RETURN_ NULL.
  */
 static inline struct linked_stack_space *
-linked_stack_space_remove_node(struct linked_stack_space *node)
+linked_stack_node_remove(struct linked_stack_space *node)
 {
     struct doubly_linked_list *link;
 
@@ -126,23 +138,40 @@ linked_stack_space_remove_node(struct linked_stack_space *node)
 static inline void
 linked_stack_resize_internal(struct linked_stack *stack, uint32 dim)
 {
+    uint32 capacity;
+    uint32 node_capacity;
     struct linked_stack_space *node;
     struct linked_stack_space *last;
 
-    last = linked_stack_space_previous_node(stack->base);
-
     assert(0 != dim);
-    assert(NULL != last);
     assert(NULL != stack);
 
-    node = memory_cache_allocate(sizeof(*node));
+    capacity = linked_stack_capacity(stack);
+    last = linked_stack_node_previous(stack->base);
 
-    doubly_linked_list_initial(&node->link);
-    node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
+    if (capacity < dim) {
+        dim = dim - capacity;
+        node = linked_stack_node_create(dim);
 
-    node->space.dim = dim;
-    node->space.sp = node->space.bp;
-    doubly_linked_list_insert_ptr_after(&last->link, &node->link);
+        doubly_linked_list_insert_ptr_after(&last->link, &node->link);
+    } else if (capacity > dim) {
+        node_capacity = linked_stack_node_capacity(last);
+
+        while (capacity - node_capacity >= dim) {
+            capacity -= node_capacity;
+            node = linked_stack_node_previous(last);
+            node_capacity = linked_stack_node_capacity(node);
+
+            linked_stack_node_remove(last);
+            last = node;
+        }
+
+        dim = dim - (capacity - node_capacity);
+        last->space.bp = memory_cache_re_allocate(last->space.bp,
+            sizeof(void *) * dim);
+        last->space.sp = last->space.bp;
+        last->space.dim = dim;
+    }
 }
 
 /*
@@ -158,8 +187,6 @@ linked_stack_resize(struct linked_stack *stack, uint32 dim)
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
             dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
-        } else if (dim < linked_stack_capacity(stack)) {
-            pr_log_info("Expanding to small capacity, may lost data.\n");
         }
 
         linked_stack_resize_internal(stack, dim);
@@ -196,12 +223,12 @@ linked_stack_rest_internal(struct linked_stack *stack)
 
     assert(NULL != stack);
 
-    rest = linked_stack_space_node_space_rest(stack->top);
-    next = linked_stack_space_next_node(stack->top);
+    rest = linked_stack_node_rest(stack->top);
+    next = linked_stack_node_next(stack->top);
 
     while (stack->base != next) {
         rest += next->space.dim;
-        next = linked_stack_space_next_node(next);
+        next = linked_stack_node_next(next);
     }
 
     return rest;
@@ -238,8 +265,8 @@ linked_stack_capacity(struct linked_stack *stack)
         st = stack->base;
 
         do {
-            total += linked_stack_space_node_capacity(st);
-            st = linked_stack_space_next_node(st);
+            total += linked_stack_node_capacity(st);
+            st = linked_stack_node_next(st);
         } while (st != stack->base);
 
         return total;
@@ -247,20 +274,20 @@ linked_stack_capacity(struct linked_stack *stack)
 }
 
 static inline bool
-linked_stack_space_node_empty_p(struct linked_stack_space *node)
+linked_stack_node_empty_p(struct linked_stack_space *node)
 {
     assert(NULL != node);
 
-    return linked_stack_space_node_capacity(node)
-        == linked_stack_space_node_space_rest(node) ? true : false;
+    return linked_stack_node_capacity(node)
+        == linked_stack_node_rest(node) ? true : false;
 }
 
 static inline bool
-linked_stack_space_node_full_p(struct linked_stack_space *node)
+linked_stack_node_full_p(struct linked_stack_space *node)
 {
     assert(NULL != node);
 
-    return 0u == linked_stack_space_node_space_rest(node) ? true : false;
+    return 0u == linked_stack_node_rest(node) ? true : false;
 }
 
 /*
@@ -268,7 +295,7 @@ linked_stack_space_node_full_p(struct linked_stack_space *node)
  *   If NULL _ARGV_, return 0.
  */
 static inline uint32
-linked_stack_space_node_capacity(struct linked_stack_space *node)
+linked_stack_node_capacity(struct linked_stack_space *node)
 {
     assert(NULL != node);
 
@@ -280,7 +307,7 @@ linked_stack_space_node_capacity(struct linked_stack_space *node)
  *   If NULL _ARGV_, return 0.
  */
 static inline uint32
-linked_stack_space_node_space_rest(struct linked_stack_space *node)
+linked_stack_node_rest(struct linked_stack_space *node)
 {
     void **limit;
     void **tmp;
@@ -303,15 +330,18 @@ linked_stack_space_node_space_rest(struct linked_stack_space *node)
 void
 linked_stack_push(struct linked_stack *stack, void *member)
 {
+    uint32 dim;
+
     if (!complain_null_pointer_p(stack)) {
         if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            linked_stack_resize_internal(stack, EXPAND_STACK_SPACE_MIN);
+            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            linked_stack_resize_internal(stack, dim);
         }
 
-        if (linked_stack_space_node_full_p(stack->top)) {
+        if (linked_stack_node_full_p(stack->top)) {
             pr_log_info("Stack node is full, will move to next node.\n");
-            stack->top = linked_stack_space_next_node(stack->top);
+            stack->top = linked_stack_node_next(stack->top);
         }
 
         *stack->top->space.sp++ = member;
@@ -331,9 +361,9 @@ linked_stack_pop(struct linked_stack *stack)
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
         return NULL;
     } else {
-        if (linked_stack_space_node_empty_p(stack->top)) {
+        if (linked_stack_node_empty_p(stack->top)) {
             pr_log_info("Stack node is empty, will move to previous node.\n");
-            stack->top = linked_stack_space_previous_node(stack->top);
+            stack->top = linked_stack_node_previous(stack->top);
         }
 
         return *(--stack->top->space.sp);
@@ -347,8 +377,7 @@ linked_stack_empty_p_internal(struct linked_stack *stack)
 
     if (stack->base != stack->top) {
         return false;
-    } else if (stack->top->space.dim
-        == linked_stack_space_node_space_rest(stack->top)) {
+    } else if (stack->top->space.dim == linked_stack_node_rest(stack->top)) {
         return true;
     } else {
         return false;
@@ -385,7 +414,7 @@ linked_stack_cleanup(struct linked_stack *stack)
         do {
             memset(iter->space.bp, 0, sizeof(void *) * iter->space.dim);
             iter->space.sp = iter->space.bp;
-            iter = linked_stack_space_next_node(iter);
+            iter = linked_stack_node_next(iter);
         } while (iter != stack->base);
     }
 }
@@ -402,11 +431,11 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
 
     if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(handler)) {
         node = stack->top;
-        limit = linked_stack_space_previous_node(stack->base);
+        limit = linked_stack_node_previous(stack->base);
 
         do {
-            linked_stack_space_iterate_node(node, handler);
-            node = linked_stack_space_next_node(node);
+            linked_stack_node_iterate(node, handler);
+            node = linked_stack_node_next(node);
         } while (node != limit);
     }
 }
@@ -416,7 +445,7 @@ linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *))
  *   If NULL stack, nothing will be done.
  */
 static inline void
-linked_stack_space_iterate_node(struct linked_stack_space *node,
+linked_stack_node_iterate(struct linked_stack_space *node,
     void (*handler)(void *))
 {
     register void **iter;

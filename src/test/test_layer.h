@@ -490,7 +490,7 @@ static const struct test_layer_table linked_stack[] = {
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
             &utest_linked_stack_resize,
