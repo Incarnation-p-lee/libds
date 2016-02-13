@@ -212,6 +212,7 @@ utest_skip_linked_list_remove_and_destroy(void)
     skip_linked_list_remove_and_destroy(&list, 0);
     list = test_skip_linked_list_sample(0x15f0, 0x103f);
 
+    skip_linked_list_key_set(list, list->key - 1);
     key = list->key;
     skip_linked_list_remove_and_destroy(&list, key);
     RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, key), &pass);
