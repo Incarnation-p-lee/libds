@@ -8,7 +8,7 @@ AFLAG        =-rc
 
 DFLAG        =-shared -fPIC
 
-CFLAG        =-Wall -Werror -c -fPIC
+CFLAG        =-Wall -Werror -c
 #CFLAG        =-c
 CFLAG        +=$(ARGV_CFG)
 
