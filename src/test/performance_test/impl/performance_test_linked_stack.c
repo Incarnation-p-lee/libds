@@ -1,211 +1,49 @@
-static void
-performance_test_linked_stack_create(uint32 count)
-{
-    struct linked_stack *stack;
+#define STACK                  linked_stack
+#define STACK_sid              linked_stack_sid
+#define STACK_sid_set          linked_stack_sid_set
+#define TEST_STACK_legal_p     utest_linked_stack_struct_legal_p
 
-    PERFORMANCE_TEST_CHECKPOINT;
+#define STACK_create           linked_stack_create
+#define STACK_destroy          linked_stack_destroy
+#define STACK_resize           linked_stack_resize
+#define STACK_full_p           linked_stack_full_p
+#define STACK_capacity         linked_stack_capacity
+#define STACK_rest             linked_stack_rest
+#define STACK_push             linked_stack_push
+#define STACK_pop              linked_stack_pop
+#define STACK_empty_p          linked_stack_empty_p
+#define STACK_cleanup          linked_stack_cleanup
+#define STACK_iterate          linked_stack_iterate
 
-    while (count--) {
-        stack = linked_stack_create();
-        linked_stack_destroy(&stack);
-    }
+#include "../performance_test_stack.h"
 
-    PERFORMANCE_TEST_ENDPOINT;
+PT_STACK_create(linked)
+PT_STACK_destroy(linked)
+PT_STACK_resize(linked)
+PT_STACK_full_p(linked)
+PT_STACK_capacity(linked)
+PT_STACK_rest(linked)
+PT_STACK_push(linked)
+PT_STACK_pop(linked)
+PT_STACK_empty_p(linked)
+PT_STACK_cleanup(linked)
+PT_STACK_iterate(linked)
 
-    PERFORMANCE_TEST_RESULT(linked_stack_create);
-}
+#undef STACK
+#undef STACK_sid
+#undef STACK_sid_set
+#undef TEST_STACK_legal_p
 
-static void
-performance_test_linked_stack_destroy(uint32 count)
-{
-    struct linked_stack *stack;
+#undef STACK_create
+#undef STACK_destroy
+#undef STACK_resize
+#undef STACK_full_p
+#undef STACK_capacity
+#undef STACK_rest
+#undef STACK_push
+#undef STACK_pop
+#undef STACK_empty_p
+#undef STACK_cleanup
+#undef STACK_iterate
 
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        stack = linked_stack_create();
-        linked_stack_destroy(&stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(linked_stack_destroy);
-}
-
-static void
-performance_test_linked_stack_space_expand(uint32 count)
-{
-    struct linked_stack *stack;
-
-    count = count >> 4;
-    count = 0 == count ? 1000 : count;
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_resize(stack, 1u);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_space_expand);
-}
-
-static void
-performance_test_linked_stack_full_p(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_full_p(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_full_p);
-}
-
-static void
-performance_test_linked_stack_space_rest(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_rest(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_space_rest);
-}
-
-static void
-performance_test_linked_stack_capacity(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_capacity(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_capacity);
-}
-
-static void
-performance_test_linked_stack_push(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_push(stack, stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_push);
-}
-
-static void
-performance_test_linked_stack_pop(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_push(stack, stack);
-        linked_stack_pop(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_pop);
-}
-
-static void
-performance_test_linked_stack_empty_p(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_empty_p(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_empty_p);
-}
-
-static void
-performance_test_linked_stack_cleanup(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_cleanup(stack);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_cleanup);
-}
-
-static void
-performance_test_linked_stack_iterate(uint32 count)
-{
-    struct linked_stack *stack;
-
-    stack = linked_stack_create();
-    while (linked_stack_full_p(stack)) {
-        linked_stack_push(stack, stack);
-    }
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        linked_stack_iterate(stack, &stack_iterate_handler);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    linked_stack_destroy(&stack);
-    PERFORMANCE_TEST_RESULT(linked_stack_iterate);
-}
 
