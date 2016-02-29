@@ -562,10 +562,14 @@ struct leftist_heap {
 #define min_max_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->alias, index))
 
-#define min_max_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->alias, index))
-#define min_max_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+#define min_max_heap_val(heap, index) \
+    (assert(heap), HEAP_VAL(heap->alias, index))
+#define min_max_heap_val_set(heap, index, val) \
+    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+
+#define min_max_heap_index_last(heap) \
+    (assert(heap), INDEX_LAST(heap->alias))
+
 
 /* LEFTIST HEAP */
 #define leftist_heap_nice(heap) \

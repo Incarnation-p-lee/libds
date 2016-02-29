@@ -1,16 +1,16 @@
 static inline void
 performance_test_min_max_heap_struct_field(uint32 count)
 {
-    uint32 index;
+    // uint32 index;
     struct min_max_heap *heap;
 
-    index = INDEX_ROOT;
+    // index = INDEX_ROOT;
     heap = test_min_max_heap_sample(0x2310, 0x1230);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        min_max_heap_link_set(heap, index, min_max_heap_link(heap, index));
+        // min_max_heap_link_set(heap, index, min_max_heap_link(heap, index));
     }
 
     PERFORMANCE_TEST_ENDPOINT;
