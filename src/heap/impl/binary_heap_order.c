@@ -139,8 +139,6 @@ binary_heap_range_ordered_p(struct binary_heap *heap, uint32 up_index,
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, up_index));
     assert(binary_heap_index_legal_p(heap, down_index));
-    assert(nice != HEAP_NICE(heap, up_index));
-    assert(nice != HEAP_NICE(heap, down_index));
 
     if (HEAP_NICE(heap, down_index) > nice) {
         if (tgt_index) {
@@ -167,10 +165,10 @@ binary_heap_min_max_root_ordered_p(struct binary_heap *heap,
 
     assert(binary_heap_structure_legal_p(heap));
 
-    grandson = binary_heap_grandchild_small_nice_index(heap, INDEX_ROOT);
+    grandson = binary_heap_grandchild_min_nice_index(heap, INDEX_ROOT);
 
     if ((INDEX_INVALID == grandson)
-        || (HEAP_NICE(heap, grandson) > nice)) {
+        || (HEAP_NICE(heap, grandson) >= nice)) {
         return true;
     } else if (tgt_index) {
         *tgt_index = grandson;
@@ -190,12 +188,10 @@ binary_heap_min_max_root_parent_ordered_p(struct binary_heap *heap,
     assert(INDEX_ROOT == INDEX_PARENT(index));
 
     parent = INDEX_ROOT;
-    grandson = binary_heap_grandchild_big_nice_index(heap, index);
+    grandson = binary_heap_grandchild_max_nice_index(heap, index);
 
-    assert(nice != HEAP_NICE(heap, parent));
-
-    if ((INDEX_INVALID == grandson && HEAP_NICE(heap, parent) < nice)
-        || (INDEX_INVALID != grandson && HEAP_NICE(heap, grandson) < nice)) {
+    if ((INDEX_INVALID == grandson && HEAP_NICE(heap, parent) <= nice)
+        || (INDEX_INVALID != grandson && HEAP_NICE(heap, grandson) <= nice)) {
         return true;
     } else if (INDEX_INVALID == grandson && tgt_index) {
         *tgt_index = INDEX_ROOT;
@@ -216,8 +212,8 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
 {
     uint32 depth;
     uint32 parent;
-    uint32 up_idx;
-    uint32 down_idx;
+    uint32 up_index;
+    uint32 down_index;
     uint32 grandparent;
 
     assert(binary_heap_structure_legal_p(heap));
@@ -229,65 +225,93 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
     grandparent = INDEX_GD_PARENT(index);
     depth = binary_heap_depth(index);
 
-    assert(nice != HEAP_NICE(heap, parent));
-    assert(nice != HEAP_NICE(heap, grandparent));
-
     if (0x1u == UINT32_IDX_BIT(depth, 0)) {
         /*
          * index located at odd depth
          *     heap-ordered should be: parent < index < grandparent
          */
-        up_idx = grandparent;
-        down_idx = parent;
+        up_index = grandparent;
+        down_index = parent;
     } else {
         /*
          * index located at even depth
          *     heap-ordered should be: grandparent < index < parent
          */
-        up_idx = parent;
-        down_idx = grandparent;
+        up_index = parent;
+        down_index = grandparent;
     }
 
-    return binary_heap_range_ordered_p(heap, up_idx, down_idx, nice, tgt_index);
+    return binary_heap_range_ordered_p(heap, up_index, down_index, nice, tgt_index);
 }
 
 static inline uint32
-binary_heap_min_max_ordered_target_index(struct binary_heap *heap,
-    uint32 grandparent, sint64 nice, uint32 grandson)
+binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index,
+    sint64 nice, uint32 grandson)
 {
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, grandparent));
-    assert(binary_heap_index_legal_p(heap, grandson));
+    uint32 grandparent;
+    sint64 gap_up;
+    sint64 gap_down;
 
-    /*
-     * percolate to less distance node.
-     */
-    if (SINT64_ABS(HEAP_NICE(heap, grandparent) - nice)
-        < SINT64_ABS(HEAP_NICE(heap, grandson) - nice)) {
-        return grandparent;
-    } else {
+    assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    grandparent = INDEX_GD_PARENT(index);
+    gap_up = SINT64_ABS(HEAP_NICE(heap, grandparent) - nice);
+    gap_down = SINT64_ABS(HEAP_NICE(heap, grandson) - nice);
+
+    if (gap_up > gap_down) {
         return grandson;
+    } else {
+        return grandparent;
     }
 }
 
 static inline bool
-binary_heap_min_max_nice_ordered_p(struct binary_heap *heap, sint64 nice,
-    uint32 up_index, uint32 down_index, uint32 grandson, uint32 depth)
+binary_heap_min_max_ordered_p_internal(struct binary_heap *heap,
+    uint32 index, sint64 nice, uint32 *tgt_index)
 {
+    uint32 depth;
+    uint32 up_index;
+    uint32 down_index;
+    uint32 grandson;
+
     assert(binary_heap_structure_legal_p(heap));
+    assert(binary_heap_index_legal_p(heap, index));
+
+    depth = binary_heap_depth(index);
+
+    if (0x1u == UINT32_IDX_BIT(depth, 0)) {
+        up_index = INDEX_GD_PARENT(index);
+        down_index = INDEX_PARENT(index);
+        grandson = binary_heap_grandchild_max_nice_index(heap, index);
+    } else {
+        up_index = INDEX_PARENT(index);
+        down_index = INDEX_GD_PARENT(index);
+        grandson = binary_heap_grandchild_min_nice_index(heap, index);
+    }
+
+    assert(binary_heap_index_legal_p(heap, index));
     assert(binary_heap_index_legal_p(heap, up_index));
     assert(binary_heap_index_legal_p(heap, down_index));
-    assert(binary_heap_index_legal_p(heap, grandson));
+    assert(HEAP_NICE(heap, grandson) >= HEAP_NICE(heap, down_index));
+    assert(HEAP_NICE(heap, grandson) <= HEAP_NICE(heap, up_index));
 
     if (!binary_heap_range_ordered_p(heap, up_index, down_index, nice, NULL)) {
+        if (tgt_index) {
+            *tgt_index = binary_heap_min_max_ordered_target_index(heap,
+                index, nice, grandson);
+        }
+
         return false;
-    } else if (UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) > nice) {
-        return false;
-    } else if (!UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) < nice) {
-        return false;
-    } else {
+    } else if (UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) <= nice) {
         return true;
+    } else if (!UINT32_IDX_BIT(depth, 0) && HEAP_NICE(heap, grandson) >= nice) {
+        return true;
+    } else if (tgt_index) {
+        *tgt_index = grandson;
     }
+
+    return false;
 }
 
 /*
@@ -299,13 +323,6 @@ static inline bool
 binary_heap_min_max_ordered_p(struct binary_heap *heap,
     uint32 index, sint64 nice, uint32 *tgt_index)
 {
-    uint32 depth;
-    uint32 parent;
-    uint32 grandparent;
-    uint32 grandson;
-    uint32 up_idx;
-    uint32 down_idx;
-
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
@@ -318,33 +335,8 @@ binary_heap_min_max_ordered_p(struct binary_heap *heap,
         return binary_heap_min_max_no_child_ordered_p(heap, index, nice,
             tgt_index);
     } else {
-        depth = binary_heap_depth(index);
-        parent = INDEX_PARENT(index);
-        grandparent = INDEX_GD_PARENT(index);
-
-        if (0x1u == UINT32_IDX_BIT(depth, 0)) {
-            up_idx = grandparent;
-            down_idx = parent;
-            grandson = binary_heap_grandchild_big_nice_index(heap, index);
-        } else {
-            up_idx = parent;
-            down_idx = grandparent;
-            grandson = binary_heap_grandchild_small_nice_index(heap, index);
-        }
-
-        assert(HEAP_NICE(heap, grandson) > HEAP_NICE(heap, down_idx));
-        assert(HEAP_NICE(heap, grandson) < HEAP_NICE(heap, up_idx));
-        assert(HEAP_NICE(heap, grandson) != nice);
-
-        if (binary_heap_min_max_nice_ordered_p(heap, nice, up_idx, down_idx,
-            grandson, depth)) {
-            return true;
-        } else {
-            *tgt_index = binary_heap_min_max_ordered_target_index(heap,
-                grandparent, nice, grandson);
-            assert(binary_heap_index_legal_p(heap, *tgt_index));
-            return false;
-        }
+        return binary_heap_min_max_ordered_p_internal(heap, index, nice,
+            tgt_index);
     }
 }
 

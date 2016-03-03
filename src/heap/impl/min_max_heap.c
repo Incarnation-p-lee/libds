@@ -160,7 +160,7 @@ min_max_heap_remove(struct min_max_heap *heap, uint32 index)
 {
     if (complain_null_pointer_p(heap)) {
         return NULL;
-    } else if (!binary_heap_index_legal_p(heap->alias,index)) {
+    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return NULL;
     } else {
         return min_max_heap_remove_internal(heap, index);

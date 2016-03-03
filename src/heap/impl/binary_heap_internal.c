@@ -198,7 +198,7 @@ binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_grandchild_min_nice_index(struct binary_heap *heap, uint32 index)
 {
     uint32 begin;
     uint32 ret_index;
@@ -225,7 +225,7 @@ binary_heap_grandchild_small_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_grandchild_big_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_grandchild_max_nice_index(struct binary_heap *heap, uint32 index)
 {
     uint32 begin;
     uint32 ret_index;

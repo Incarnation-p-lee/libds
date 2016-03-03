@@ -69,7 +69,7 @@ utest_##name##_heap_empty_p(void)                        \
                                                          \
     RESULT_CHECK_bool(false, HEAP_empty_p(heap), &pass); \
                                                          \
-    heap = TEST_HEAP_sample(0x2234, 0x1234);             \
+    heap = TEST_HEAP_sample(0x2234, 0x142);              \
     RESULT_CHECK_bool(false, HEAP_empty_p(heap), &pass); \
     HEAP_destroy(&heap);                                 \
                                                          \
@@ -115,7 +115,7 @@ utest_##name##_heap_cleanup(void)                       \
                                                         \
     HEAP_cleanup(heap);                                 \
                                                         \
-    heap = TEST_HEAP_sample(0x3345, 0x204E);            \
+    heap = TEST_HEAP_sample(0x3345, 0x104E);            \
     HEAP_cleanup(heap);                                 \
                                                         \
     RESULT_CHECK_bool(false, HEAP_full_p(heap), &pass); \
@@ -211,7 +211,19 @@ utest_##name##_heap_remove(void)                                 \
     heap = TEST_HEAP_sample(0x942, 0x73a);                       \
     RESULT_CHECK_pointer(NULL, HEAP_remove(heap, index), &pass); \
                                                                  \
-    index = 0x123;                                               \
+    index = 0x2;                                                 \
+    val = HEAP_val(heap, index);                                 \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
+                                                                 \
+    index = 0x323;                                               \
+    val = HEAP_val(heap, index);                                 \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
+                                                                 \
+    index = 0x423;                                               \
+    val = HEAP_val(heap, index);                                 \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
+                                                                 \
+    index = 0x6;                                                 \
     val = HEAP_val(heap, index);                                 \
     RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
                                                                  \
@@ -236,7 +248,7 @@ utest_##name##_heap_remove_min(void)                         \
                                                              \
     HEAP_remove_min(heap);                                   \
                                                              \
-    heap = TEST_HEAP_sample(0x1435, 0x1D4E);                 \
+    heap = TEST_HEAP_sample(0x1435, 0x104E);                 \
     tmp = HEAP_get_min(heap);                                \
     RESULT_CHECK_pointer(tmp, HEAP_remove_min(heap), &pass); \
                                                              \
