@@ -83,23 +83,30 @@ static inline void
 utest_min_max_heap_decrease_nice(void)
 {
     bool pass;
-    pass = true;
-#if 0
     uint32 count;
     uint32 offset;
-    sint64 nice;
+    void *val;
     struct min_max_heap *heap;
-    struct doubly_linked_list *tmp;
 
     pass = true;
-    count = 0x12;
     heap = NULL;
-    offset = 0;
 
-    min_max_heap_decrease_nice(heap, 0, offset);
+    heap = test_min_max_heap_sample(0x3d21, 0x102a);
+
+    min_max_heap_decrease_nice(NULL, 0, 0);
+    min_max_heap_decrease_nice(heap, 1, 0);
+    min_max_heap_decrease_nice(heap, 0, 1);
+
+    count = 0x12;
+    offset = 0x4321;
+    while (count-- > 1) {
+        val = min_max_heap_val(heap, count);
+        min_max_heap_decrease_nice(heap, count, offset);
+        RESULT_CHECK_pointer(min_max_heap_get_min(heap), val, &pass);
+        offset <<= 1;
+    }
 
     min_max_heap_destroy(&heap);
-#endif
     UNIT_TEST_RESULT(min_max_heap_decrease_nice, pass);
 }
 
@@ -107,23 +114,30 @@ static inline void
 utest_min_max_heap_increase_nice(void)
 {
     bool pass;
-    pass = true;
-#if 0
     uint32 count;
     uint32 offset;
-    sint64 nice;
+    void *val;
     struct min_max_heap *heap;
-    struct doubly_linked_list *tmp;
 
     pass = true;
-    count = 0x32;
     heap = NULL;
-    offset = 0;
 
-    min_max_heap_increase_nice(heap, 0, offset);
+    heap = test_min_max_heap_sample(0x3d21, 0x102a);
+
+    min_max_heap_increase_nice(NULL, 0, 0);
+    min_max_heap_increase_nice(heap, 1, 0);
+    min_max_heap_increase_nice(heap, 0, 1);
+
+    count = 0x12;
+    offset = 0x4321;
+    while (count-- > 1) {
+        val = min_max_heap_val(heap, count);
+        min_max_heap_increase_nice(heap, count, offset);
+        RESULT_CHECK_pointer(min_max_heap_get_max(heap), val, &pass);
+        offset <<= 1;
+    }
 
     min_max_heap_destroy(&heap);
-#endif
     UNIT_TEST_RESULT(min_max_heap_increase_nice, pass);
 }
 

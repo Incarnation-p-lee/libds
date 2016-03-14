@@ -48,7 +48,6 @@ static inline uint32 binary_heap_child_small_nice_index(struct binary_heap *heap
 static inline uint32 binary_heap_depth(uint32 index);
 static inline uint32 binary_heap_grandchild_max_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_grandchild_min_nice_index(struct binary_heap *heap, uint32 index);
-static inline uint32 binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index, sint64 nice, uint32 grandson);
 static inline uint32 binary_heap_reorder(struct binary_heap *heap, uint32 index, sint64 nice, void *heap_order);
 static inline uint32 binary_heap_serial_big_nice_index(struct binary_heap *heap, uint32 index, uint32 count);
 static inline uint32 binary_heap_serial_small_nice_index(struct binary_heap *heap, uint32 index, uint32 count);
@@ -61,6 +60,7 @@ static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline void binary_heap_cleanup(struct binary_heap *heap);
 static inline void binary_heap_destroy(struct binary_heap **heap);
 static inline void binary_heap_insert(struct binary_heap *heap, void *val, sint64 nice, void *ordering);
+static inline void binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index, sint64 nice, uint32 grandson, uint32 *tgt_index);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline void leftist_heap_destroy_internal(struct leftist_heap *heap);
 static inline void leftist_heap_node_child_swap(struct leftist_heap *node);

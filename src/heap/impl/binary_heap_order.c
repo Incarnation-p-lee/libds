@@ -244,14 +244,15 @@ binary_heap_min_max_no_child_ordered_p(struct binary_heap *heap,
     return binary_heap_range_ordered_p(heap, up_index, down_index, nice, tgt_index);
 }
 
-static inline uint32
+static inline void
 binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index,
-    sint64 nice, uint32 grandson)
+    sint64 nice, uint32 grandson, uint32 *tgt_index)
 {
     uint32 grandparent;
     sint64 gap_up;
     sint64 gap_down;
 
+    assert(!complain_null_pointer_p(tgt_index));
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
 
@@ -260,9 +261,9 @@ binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index,
     gap_down = SINT64_ABS(HEAP_NICE(heap, grandson) - nice);
 
     if (gap_up > gap_down) {
-        return grandson;
+        *tgt_index = grandson;
     } else {
-        return grandparent;
+        *tgt_index = grandparent;
     }
 }
 
@@ -298,8 +299,8 @@ binary_heap_min_max_ordered_p_internal(struct binary_heap *heap,
 
     if (!binary_heap_range_ordered_p(heap, up_index, down_index, nice, NULL)) {
         if (tgt_index) {
-            *tgt_index = binary_heap_min_max_ordered_target_index(heap,
-                index, nice, grandson);
+             binary_heap_min_max_ordered_target_index(heap,
+                index, nice, grandson, tgt_index);
         }
 
         return false;
