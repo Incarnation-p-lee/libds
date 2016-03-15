@@ -51,7 +51,6 @@ static struct performance_test_reference performance_reference[] = {
     {"skip_linked_list_iterate",                         0x0u, 0x0u},
     {"skip_linked_list_merge",                           0x0u, 0x0u},
 
-    {"array_stack_struct_field",                         0x0u, 0x0u},
     {"array_stack_create",                               0x0u, 0x0u},
     {"array_stack_destroy",                              0x0u, 0x0u},
     {"array_stack_resize",                               0x0u, 0x0u},
@@ -64,11 +63,10 @@ static struct performance_test_reference performance_reference[] = {
     {"array_stack_cleanup",                              0x0u, 0x0u},
     {"array_stack_iterate",                              0x0u, 0x0u},
 
-    {"linked_stack_struct_field",                        0x0u, 0x0u},
     {"linked_stack_create",                              0x0u, 0x0u},
     {"linked_stack_destroy",                             0x0u, 0x0u},
-    {"linked_stack_space_expand",                        0x0u, 0x0u},
-    {"linked_stack_space_rest",                          0x0u, 0x0u},
+    {"linked_stack_resize",                              0x0u, 0x0u},
+    {"linked_stack_rest",                                0x0u, 0x0u},
     {"linked_stack_full_p",                              0x0u, 0x0u},
     {"linked_stack_capacity",                            0x0u, 0x0u},
     {"linked_stack_push",                                0x0u, 0x0u},
