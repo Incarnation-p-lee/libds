@@ -1553,7 +1553,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_create,
-            // &performance_test_min_max_heap_create,
+            &ptest_min_max_heap_create,
         },
     },
     {
@@ -1561,7 +1561,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_destroy,
-            // &performance_test_min_max_heap_destroy,
+            &ptest_min_max_heap_destroy,
         },
     },
     {
@@ -1569,7 +1569,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_empty_p,
-            // &performance_test_min_max_heap_empty_p,
+            &ptest_min_max_heap_empty_p,
         },
     },
     {
@@ -1577,7 +1577,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_full_p,
-            // &performance_test_min_max_heap_full_p,
+            &ptest_min_max_heap_full_p,
         },
     },
     {
@@ -1585,7 +1585,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_cleanup,
-            // &performance_test_min_max_heap_cleanup,
+            &ptest_min_max_heap_cleanup,
         },
     },
     {
@@ -1593,7 +1593,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_get_min,
-            // &performance_test_min_max_heap_node_find_min,
+            &ptest_min_max_heap_get_min,
         },
     },
     {
@@ -1601,7 +1601,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_get_max,
-            // &performance_test_min_max_heap_node_find_max,
+            &ptest_min_max_heap_get_max,
         },
     },
     {
@@ -1609,7 +1609,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_insert,
-            // &performance_test_min_max_heap_node_insert,
+            &ptest_min_max_heap_insert,
         },
     },
     {
@@ -1617,7 +1617,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_depth,
-            // &performance_test_min_max_heap_node_depth,
+            &ptest_min_max_heap_depth,
         },
     },
     {
@@ -1625,7 +1625,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_remove_min,
-            // &performance_test_min_max_heap_node_remove_min,
+            &ptest_min_max_heap_remove_min,
         },
     },
     {
@@ -1633,7 +1633,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_remove_max,
-            // &performance_test_min_max_heap_node_remove_max,
+            &ptest_min_max_heap_remove_max,
         },
     },
     {
@@ -1641,7 +1641,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_remove,
-            // &performance_test_min_max_heap_node_remove,
+            &ptest_min_max_heap_remove,
         },
     },
     {
@@ -1649,7 +1649,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_decrease_nice,
-            // &performance_test_min_max_heap_node_decrease_nice,
+            &ptest_min_max_heap_decrease_nice,
         },
     },
     {
@@ -1657,7 +1657,7 @@ static const struct test_layer_table min_max_heap[] = {
         NULL,
         {
             &utest_min_max_heap_increase_nice,
-            // &performance_test_min_max_heap_node_increase_nice,
+            &ptest_min_max_heap_increase_nice,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},

@@ -60,7 +60,6 @@ static inline void binary_heap_capacity_extend(struct binary_heap *heap);
 static inline void binary_heap_cleanup(struct binary_heap *heap);
 static inline void binary_heap_destroy(struct binary_heap **heap);
 static inline void binary_heap_insert(struct binary_heap *heap, void *val, sint64 nice, void *ordering);
-static inline void binary_heap_min_max_ordered_target_index(struct binary_heap *heap, uint32 index, sint64 nice, uint32 grandson, uint32 *tgt_index);
 static inline void binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index, sint64 nice, void *val);
 static inline void leftist_heap_destroy_internal(struct leftist_heap *heap);
 static inline void leftist_heap_node_child_swap(struct leftist_heap *node);
