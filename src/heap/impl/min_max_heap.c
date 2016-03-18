@@ -79,9 +79,9 @@ min_max_heap_get_max(struct min_max_heap *heap)
     } else if (INDEX_ROOT == INDEX_LAST(heap->alias)) {
         return HEAP_VAL(heap->alias, INDEX_ROOT);
     } else {
-        index = binary_heap_child_big_nice_index(heap->alias, INDEX_ROOT);
-
+        index = binary_heap_child_max_nice_index(heap->alias, INDEX_ROOT);
         assert(INDEX_INVALID != index);
+
         return HEAP_VAL(heap->alias, index);
     }
 }
@@ -89,11 +89,14 @@ min_max_heap_get_max(struct min_max_heap *heap)
 void
 min_max_heap_insert(struct min_max_heap *heap, void *val, sint64 nice)
 {
+    struct binary_heap *alias;
+
     if (complain_null_pointer_p(heap)) {
         return;
     } else if (binary_heap_nice_legal_p(nice)) {
-        binary_heap_insert(heap->alias, val, nice,
-            &binary_heap_min_max_ordered_p);
+        alias = heap->alias;
+        binary_heap_insert(alias, val, nice, &binary_heap_min_max_up_ordered_p);
+        assert(min_max_heap_ordered_p(heap));
     }
 }
 
@@ -112,14 +115,19 @@ min_max_heap_depth(struct min_max_heap *heap, uint32 index)
 void *
 min_max_heap_remove_min(struct min_max_heap *heap)
 {
+    void *retval;
+
     if (complain_null_pointer_p(heap)) {
         return NULL;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
         return NULL;
     } else {
-        return binary_heap_remove_root(heap->alias,
-            &binary_heap_min_max_ordered_p);
+        retval = binary_heap_remove_root(heap->alias,
+            &binary_heap_min_max_down_ordered_p);
+        assert(min_max_heap_ordered_p(heap));
+
+        return retval;
     }
 }
 
@@ -127,6 +135,7 @@ static inline void *
 min_max_heap_remove_internal(struct min_max_heap *heap, uint32 index)
 {
     sint64 nice;
+    void *retval;
     struct heap_data *tmp;
     struct binary_heap *alias;
 
@@ -146,13 +155,17 @@ min_max_heap_remove_internal(struct min_max_heap *heap, uint32 index)
     /*
      * percolate current index node to root, then remove the root.
      */
-    index = binary_heap_reorder(alias, index, nice, &binary_heap_min_max_ordered_p);
+    index = binary_heap_reorder(alias, index, nice,
+        &binary_heap_min_max_up_ordered_p);
 
     assert(INDEX_ROOT == index);
     assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
 
     HEAP_DATA(alias, INDEX_ROOT) = tmp;
-    return binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
+    retval = binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
+    assert(min_max_heap_ordered_p(heap));
+
+    return retval;
 }
 
 struct doubly_linked_list *
@@ -170,6 +183,7 @@ min_max_heap_remove(struct min_max_heap *heap, uint32 index)
 static inline void *
 min_max_heap_remove_max_internal(struct min_max_heap *heap)
 {
+    void *retval;
     uint32 max_index;
     struct binary_heap *alias;
 
@@ -177,12 +191,14 @@ min_max_heap_remove_max_internal(struct min_max_heap *heap)
     assert(binary_heap_structure_legal_p(heap->alias));
 
     alias = heap->alias;
-    max_index = binary_heap_child_big_nice_index(alias, INDEX_ROOT);
+    max_index = binary_heap_child_max_nice_index(alias, INDEX_ROOT);
 
     if (INDEX_INVALID == max_index) {
         return binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
     } else {
-        return min_max_heap_remove_internal(heap, max_index);
+        retval = min_max_heap_remove_internal(heap, max_index);
+
+        return retval;
     }
 }
 

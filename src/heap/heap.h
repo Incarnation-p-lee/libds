@@ -58,6 +58,8 @@ static void *heap_order_func[] = {
     &binary_heap_minimal_ordered_p,
     &binary_heap_maximal_ordered_p,
     &binary_heap_min_max_ordered_p,
+    &binary_heap_min_max_up_ordered_p,
+    &binary_heap_min_max_down_ordered_p,
 };
 
 #endif

@@ -164,7 +164,7 @@ binary_heap_child_exist_p(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_child_min_nice_index(struct binary_heap *heap, uint32 index)
 {
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
@@ -181,7 +181,7 @@ binary_heap_child_small_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_child_big_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_child_max_nice_index(struct binary_heap *heap, uint32 index)
 {
     assert(binary_heap_structure_legal_p(heap));
     assert(binary_heap_index_legal_p(heap, index));
@@ -210,7 +210,7 @@ binary_heap_grandchild_min_nice_index(struct binary_heap *heap, uint32 index)
     if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
-        return binary_heap_child_small_nice_index(heap, index);
+        return binary_heap_child_min_nice_index(heap, index);
     } else {
         begin = INDEX_LL_CHILD(index);
         ret_index = binary_heap_serial_small_nice_index(heap, begin, 4);
@@ -237,7 +237,7 @@ binary_heap_grandchild_max_nice_index(struct binary_heap *heap, uint32 index)
     if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
     } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
-        return binary_heap_child_big_nice_index(heap, index);
+        return binary_heap_child_max_nice_index(heap, index);
     } else {
         begin = INDEX_LL_CHILD(index);
         ret_index = binary_heap_serial_big_nice_index(heap, begin, 4);

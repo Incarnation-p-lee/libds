@@ -74,6 +74,33 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
 }
 
 static inline bool
+min_max_heap_ordered_p(struct min_max_heap *heap)
+{
+    sint64 nice;
+    uint32 index;
+    struct binary_heap *alias;
+
+    assert(!complain_null_pointer_p(heap));
+    assert(!complain_null_pointer_p(heap->alias));
+
+    index = INDEX_ROOT;
+    alias = heap->alias;
+
+    while (index <= INDEX_LAST(alias)) {
+        nice = HEAP_NICE(alias, index);
+        if (!binary_heap_min_max_up_ordered_p(alias, index, nice, NULL)) {
+            return false;
+        } else if (!binary_heap_min_max_down_ordered_p(alias, index, nice,
+            NULL)) {
+            return false;
+        }
+        index++;
+    }
+
+    return true;
+}
+
+static inline bool
 leftist_heap_structure_legal_p(struct leftist_heap *heap)
 {
     if (NULL == heap) {
