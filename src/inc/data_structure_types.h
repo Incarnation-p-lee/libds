@@ -166,11 +166,11 @@ struct splay_tree {
  *     One kind of data structure provding efficient method
  * for prefix sum of an array values. It provides:
  *     sum(index);
+ *     range_sum(index);
  *     add(index, val);
  *     sub(index, val);
- *     read(index)
- *     scaling();
- *     find(value);
+ *     create();
+ *     destroy();
  * with log(N) time cost.
  *
  * For example:

@@ -207,6 +207,33 @@ struct splay_tree {
     struct binary_search_tree alias;
 };
 
+/*
+ * binary indexed tree
+ *     One kind of data structure provding efficient method
+ * for prefix sum of an array values. It provides:
+ *     sum(index);
+ *     range_sum(index);
+ *     add(index, val);
+ *     sub(index, val);
+ *     create();
+ *     destroy();
+ * with log(N) time cost.
+ *
+ * For example:
+ * A[1] -> C[1] = A[1]
+ * A[2] -> C[2] = A[1] + A[2]
+ * A[3] -> C[3] = A[3]
+ * A[4] -> C[4] = A[1] + A[2] + A[3] + A[4]
+ * A[5] -> C[5] = A[5]
+ * A[6] -> C[6] = A[5] + A[6]
+ * A[7] -> C[7] = A[7]
+ * A[8] -> C[8] = A[1] + A[2] + A[3] + A[4] + A[5] + A[6] + A[7] + A[8]
+ */
+struct binary_indexed_tree {
+    sint64 *data;
+    uint32 size;
+};
+
 struct hashing_table {
     void       **space;
     uint32     size;
@@ -830,6 +857,8 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
+#define TREE_INDEX_INVALID  0
+#define TREE_SUM_INVALID    (sint64)0x8000000000000000
 #define TREE_NICE_PLUS_LMT  0x7fffffffffffffff
 #define TREE_NICE_MINUS_LMT (-TREE_NICE_PLUS_LMT - 1)
 
@@ -850,6 +879,8 @@ extern bool binary_search_tree_node_contains_p(struct binary_search_tree *tree, 
 extern bool splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node);
 extern sint32 binary_search_tree_height(struct binary_search_tree *tree);
 extern sint32 splay_tree_height(struct splay_tree *tree);
+extern sint64 binary_indexed_tree_range_sum(struct binary_indexed_tree *tree, uint32 nmbr_s, uint32 nmbr_e);
+extern sint64 binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number);
 extern struct avl_tree * avl_tree_create(void);
 extern struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
 extern struct avl_tree * avl_tree_node_find(struct avl_tree *tree, sint64 nice);
@@ -858,6 +889,7 @@ extern struct avl_tree * avl_tree_node_find_min(struct avl_tree *tree);
 extern struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl_tree *node);
 extern struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
 extern struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
+extern struct binary_indexed_tree * binary_indexed_tree_create(sint64 *data, uint32 size);
 extern struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
 extern struct binary_search_tree * binary_search_tree_create(void);
 extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
@@ -879,6 +911,9 @@ extern void avl_tree_initial(struct avl_tree *tree);
 extern void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 extern void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
 extern void avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice);
+extern void binary_indexed_tree_add(struct binary_indexed_tree *tree, uint32 number, sint64 val);
+extern void binary_indexed_tree_destroy(struct binary_indexed_tree **tree);
+extern void binary_indexed_tree_sub(struct binary_indexed_tree *tree, uint32 number, sint64 val);
 extern void binary_search_tree_destroy(struct binary_search_tree **tree);
 extern void binary_search_tree_initial(struct binary_search_tree *tree);
 extern void binary_search_tree_iterate(struct binary_search_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
