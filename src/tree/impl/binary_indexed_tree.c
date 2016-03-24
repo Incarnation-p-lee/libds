@@ -35,9 +35,7 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
 
         while (i <= size) {
             tree->data[i] = data[i - 1];
-            if (i % 2) {
-                i++;
-            } else {
+            if (0 == i % 2) {
                 base = i - 1;
                 mask = 0xfffffffe;
 
@@ -47,6 +45,7 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
                     mask = mask << 1;
                 }
             }
+            i++;
         }
 
         return tree;
@@ -62,6 +61,7 @@ binary_indexed_tree_destroy(struct binary_indexed_tree **tree)
         return;
     } else if (binary_indexed_tree_structure_legal_p(*tree)) {
         tmp = *tree;
+        *tree = NULL;
 
         memory_cache_free(tmp->data);
         memory_cache_free(tmp);
