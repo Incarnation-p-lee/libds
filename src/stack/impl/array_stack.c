@@ -57,9 +57,7 @@ array_stack_resize_internal(struct array_stack *stack, uint32 dim)
 void
 array_stack_resize(struct array_stack *stack, uint32 dim)
 {
-    if (complain_null_pointer_p(stack)) {
-        return;
-    } else {
+    if (!complain_null_pointer_p(stack)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
             dim = stack->space.dim * 2 + EXPAND_STACK_SPACE_MIN;

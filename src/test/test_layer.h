@@ -686,10 +686,10 @@ static const struct test_layer_table stacked_queue[] = {
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
-            &unit_test_stacked_queue_space_expand,
+            &unit_test_stacked_queue_resize,
             &performance_test_stacked_queue_space_expand,
         },
     },

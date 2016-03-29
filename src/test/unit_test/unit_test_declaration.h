@@ -123,7 +123,7 @@ static void unit_test_stacked_queue_enter(void);
 static void unit_test_stacked_queue_full_p(void);
 static void unit_test_stacked_queue_iterate(void);
 static void unit_test_stacked_queue_leave(void);
-static void unit_test_stacked_queue_space_expand(void);
+static void unit_test_stacked_queue_resize(void);
 static void unit_test_stacked_queue_space_rest(void);
 static void unit_test_stacked_queue_struct_field(void);
 static void utest_skip_linked_list_find_key(void);

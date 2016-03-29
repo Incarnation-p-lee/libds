@@ -22,7 +22,7 @@ static inline void array_queue_space_expand_chunk_fixup(struct array_queue *queu
 static inline void array_queue_space_expand_internal(struct array_queue *queue, uint32 increment);
 static inline void doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue);
 static inline void doubly_end_queue_last_node_clean(struct doubly_end_queue *queue);
-static inline void stacked_queue_space_expand_internal(struct stacked_queue *queue, uint32 increment);
+static inline void stacked_queue_resize_internal(struct stacked_queue *queue, uint32 dim);
 static inline void stacked_queue_stack_dump(struct array_stack *from, struct array_stack *to);
 struct array_queue * array_queue_create(void);
 struct doubly_end_queue * doubly_end_queue_create(void);
@@ -50,6 +50,6 @@ void stacked_queue_cleanup(struct stacked_queue *queue);
 void stacked_queue_destroy(struct stacked_queue **queue);
 void stacked_queue_enter(struct stacked_queue *queue, void *member);
 void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
-void stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra);
+void stacked_queue_resize(struct stacked_queue *queue, uint32 dim);
 
 #endif

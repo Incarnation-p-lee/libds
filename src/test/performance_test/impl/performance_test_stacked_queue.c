@@ -61,7 +61,7 @@ performance_test_stacked_queue_space_expand(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        stacked_queue_space_expand(queue, 1u);
+        stacked_queue_resize(queue, 1u);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

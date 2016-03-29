@@ -59,7 +59,9 @@ performance_test_execution_interface(const struct test_layer_table *interface,
 
     while (interface->name) {
         if (test_case_filter_match_p(interface, tmp)) {
-            interface->entity.performance(info->count);
+            if (interface->entity.performance) {
+                interface->entity.performance(info->count);
+            }
         }
         interface++;
     }
