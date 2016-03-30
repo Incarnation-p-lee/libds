@@ -1237,6 +1237,38 @@ static const struct test_layer_table binary_indexed_tree[] = {
             NULL,
         },
     },
+    {
+        "add",
+        NULL,
+        {
+            &utest_binary_indexed_tree_add,
+            NULL,
+        },
+    },
+    {
+        "sub",
+        NULL,
+        {
+            &utest_binary_indexed_tree_sub,
+            NULL,
+        },
+    },
+    {
+        "sum",
+        NULL,
+        {
+            &utest_binary_indexed_tree_sum,
+            NULL,
+        },
+    },
+    {
+        "range_sum",
+        NULL,
+        {
+            &utest_binary_indexed_tree_range_sum,
+            NULL,
+        },
+    },
     {NULL,                      NULL, {NULL,},},
 };
 

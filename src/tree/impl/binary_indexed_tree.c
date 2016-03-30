@@ -73,7 +73,7 @@ binary_indexed_tree_number_legal_p(struct binary_indexed_tree *tree, uint32 numb
 {
     assert(!complain_null_pointer_p(tree));
 
-    if (number == TREE_INDEX_INVALID) {
+    if (number == TREE_NUMBER_INVALID) {
         return false;
     } else if (number > tree->size) {
         return false;
@@ -162,12 +162,12 @@ binary_indexed_tree_sum_internal(struct binary_indexed_tree *tree,
     uint32 base;
 
     assert(binary_indexed_tree_structure_legal_p(tree));
-    assert(!binary_indexed_tree_number_legal_p(tree, number));
+    assert(binary_indexed_tree_number_legal_p(tree, number));
 
     retval = 0;
     base = number;
 
-    while (!base) {
+    while (base) {
         retval += tree->data[base];
         base = base & (base - 1);
     }
@@ -181,7 +181,7 @@ binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number)
     if (!binary_indexed_tree_structure_legal_p(tree)) {
         return TREE_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, number)) {
-        return TREE_SUM_INVALID;
+        return 0;
     } else {
         return binary_indexed_tree_sum_internal(tree, number);
     }
@@ -200,10 +200,16 @@ binary_indexed_tree_range_sum(struct binary_indexed_tree *tree,
         return TREE_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, nmbr_e)) {
         return TREE_SUM_INVALID;
+    } else if (nmbr_s > nmbr_e) {
+        pr_log_warn("Invalid start number and end number of range.\n");
+        return TREE_SUM_INVALID;
     } else {
-        tmp = binary_indexed_tree_sum_internal(tree, nmbr_s - 1);
         retval = binary_indexed_tree_sum_internal(tree, nmbr_e);
-        tmp = nmbr_e == 1 ? 0 : tmp;
+        if (nmbr_s == 1) {
+            tmp = 0;
+        } else {
+            tmp = binary_indexed_tree_sum_internal(tree, nmbr_s - 1);
+        }
 
         return retval - tmp;
     }

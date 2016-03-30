@@ -865,10 +865,10 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
-#define TREE_INDEX_INVALID  0
-#define TREE_SUM_INVALID    (sint64)0x8000000000000000
-#define TREE_NICE_PLUS_LMT  0x7fffffffffffffff
-#define TREE_NICE_MINUS_LMT (-TREE_NICE_PLUS_LMT - 1)
+#define TREE_NUMBER_INVALID   0
+#define TREE_SUM_INVALID      (sint64)0x8000000000000000
+#define TREE_NICE_PLUS_LMT    0x7fffffffffffffff
+#define TREE_NICE_MINUS_LMT   (-TREE_NICE_PLUS_LMT - 1)
 
 #define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 

@@ -34,17 +34,19 @@ array_stack_destroy(struct array_stack **stack)
 static inline void
 array_stack_resize_internal(struct array_stack *stack, uint32 dim)
 {
-    ptrdiff_t offset;
-    void **new_addr;
+    uint32 offset;
 
     assert(NULL != stack);
     assert(0 != dim);
 
-    offset = (ptrdiff_t)(stack->space.sp - stack->space.bp);
-    new_addr = memory_cache_re_allocate(stack->space.bp,
-        sizeof(void *) * dim);
+    offset = (uint32)((uint64)stack->space.sp - (uint64)stack->space.bp);
+    if (offset > stack->space.dim) {
+        pr_log_warn("Stack overflow, will truncate to the top of stack.\n");
+        offset = stack->space.dim;
+    }
 
-    stack->space.bp = new_addr;
+    stack->space.bp = memory_cache_re_allocate(stack->space.bp,
+        sizeof(void *) * dim);
     stack->space.sp = stack->space.bp + offset;
     stack->space.dim = dim;
 }
