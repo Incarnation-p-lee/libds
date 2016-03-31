@@ -95,6 +95,11 @@ performance_test_leftist_heap_insert(uint32 count)
     struct leftist_heap *heap;
 
     heap = leftist_heap_create();
+    /*
+     * For sometime too deep nested loop may reach the limit of stack 8KB.
+     */
+    count = count >> 2;
+    count = count == 0 ? 10000 : count;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
