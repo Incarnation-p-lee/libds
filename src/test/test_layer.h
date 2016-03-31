@@ -1226,7 +1226,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_create,
-            NULL,
+            &ptest_binary_indexed_tree_create,
         },
     },
     {
@@ -1234,7 +1234,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_destroy,
-            NULL,
+            &ptest_binary_indexed_tree_destroy,
         },
     },
     {
@@ -1242,7 +1242,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_add,
-            NULL,
+            &ptest_binary_indexed_tree_add,
         },
     },
     {
@@ -1250,7 +1250,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_sub,
-            NULL,
+            &ptest_binary_indexed_tree_sub,
         },
     },
     {
@@ -1258,7 +1258,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_sum,
-            NULL,
+            &ptest_binary_indexed_tree_sum,
         },
     },
     {
@@ -1266,7 +1266,7 @@ static const struct test_layer_table binary_indexed_tree[] = {
         NULL,
         {
             &utest_binary_indexed_tree_range_sum,
-            NULL,
+            &ptest_binary_indexed_tree_range_sum,
         },
     },
     {NULL,                      NULL, {NULL,},},
