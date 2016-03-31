@@ -68,7 +68,7 @@ minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice)
     }
 }
 
-static inline struct doubly_linked_list *
+static inline void *
 minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
 {
     sint64 nice;

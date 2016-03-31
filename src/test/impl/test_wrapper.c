@@ -19,6 +19,5 @@ free_wrap(void *ptr)
 {
     free_cnt++;
     free(ptr);
-
-    return;
 }
+

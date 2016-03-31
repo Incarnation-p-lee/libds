@@ -136,6 +136,8 @@ min_max_heap_remove_internal(struct min_max_heap *heap, uint32 index)
 {
     sint64 nice;
     void *retval;
+    uint32 index_final;
+    uint32 index_last;
     struct heap_data *tmp;
     struct binary_heap *alias;
 
@@ -145,26 +147,22 @@ min_max_heap_remove_internal(struct min_max_heap *heap, uint32 index)
     assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
+    index_last = INDEX_LAST(alias);
+    retval = binary_heap_destroy_node(alias, index);
 
-    tmp = HEAP_DATA(alias, index);
-    HEAP_DATA(alias, index) = NULL;
+    tmp = HEAP_DATA(alias, index_last);
+    nice = HEAP_NICE(alias, index_last);
+    index_final = binary_heap_reorder(alias, index, nice,
+        &binary_heap_min_max_down_ordered_p);
+    HEAP_DATA(alias, index_final) = tmp;
 
-    nice = HEAP_NICE(alias, INDEX_ROOT) - 1;
-    assert(nice != HEAP_NICE_LOWER_LMT);
-
-    /*
-     * percolate current index node to root, then remove the root.
-     */
-    index = binary_heap_reorder(alias, index, nice,
+    tmp = HEAP_DATA(alias, index_final);
+    nice = HEAP_NICE(alias, index_final);
+    index = binary_heap_reorder(alias, index_final, nice,
         &binary_heap_min_max_up_ordered_p);
+    HEAP_DATA(alias, index) = tmp;
 
-    assert(INDEX_ROOT == index);
-    assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
-
-    HEAP_DATA(alias, INDEX_ROOT) = tmp;
-    retval = binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
     assert(min_max_heap_ordered_p(heap));
-
     return retval;
 }
 
@@ -194,12 +192,13 @@ min_max_heap_remove_max_internal(struct min_max_heap *heap)
     max_index = binary_heap_child_max_nice_index(alias, INDEX_ROOT);
 
     if (INDEX_INVALID == max_index) {
-        return binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
+        retval = binary_heap_remove_root(alias, &binary_heap_min_max_ordered_p);
     } else {
         retval = min_max_heap_remove_internal(heap, max_index);
-
-        return retval;
     }
+
+    assert(min_max_heap_ordered_p(heap));
+    return retval;
 }
 
 void *
