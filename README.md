@@ -17,19 +17,12 @@
 
 ### Design
 
-    This project export sorts of API of data structure with libds.so or libds.a. Some convention should notify for operation of exported APIs.
-    1. remove operation never free the memory allocated of one element, just strip out of data structure.
-    2. remove and destroy operation will free the memory.
-    3. contains operation operates on pointers of element exist in data structure or not.
-    4. find operation operates on sorted data structure who has priority of node/element of data structure.
-    5. distinguish node and data structure itself only if necessary.
-    6. No head node for all linked list linked data structure.
-    7. To be continue...
+    This project export sorts of API of data structure with libds.so or libds.a.
 
 ### list
 
     The following data structure implemented in this project.
-    1. linked_list
+    1. linked list
         a. single linked list
         b. doubly linked list
         c. skip linked list.
@@ -44,6 +37,7 @@
         a. binary search tree
         b. avl tree
         c. splay tree
+        d. binary indexed tree
     5. hash
         a. separate chain hash
         b. open addressing hash
@@ -51,5 +45,5 @@
         a. minimal heap
         b. maximal heap
         c. min_max heap
-        d. leftist_heap
+        d. leftist heap
 
