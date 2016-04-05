@@ -593,10 +593,14 @@ struct leftist_heap {
 #define min_max_heap_nice(heap, index) \
     (assert(heap), HEAP_NICE(heap->alias, index))
 
-#define min_max_heap_link(heap, index) \
-    (assert(heap), HEAP_LINK(heap->alias, index))
-#define min_max_heap_link_set(heap, index, link) \
-    (assert(heap), HEAP_LINK(heap->alias, index) = (link))
+#define min_max_heap_val(heap, index) \
+    (assert(heap), HEAP_VAL(heap->alias, index))
+#define min_max_heap_val_set(heap, index, val) \
+    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+
+#define min_max_heap_index_last(heap) \
+    (assert(heap), INDEX_LAST(heap->alias))
+
 
 /* LEFTIST HEAP */
 #define leftist_heap_nice(heap) \
@@ -1028,6 +1032,7 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 extern bool maximal_heap_empty_p(struct maximal_heap *heap);
 extern bool maximal_heap_full_p(struct maximal_heap *heap);
 extern bool min_max_heap_empty_p(struct min_max_heap *heap);
+extern bool min_max_heap_empty_p_internal(struct min_max_heap *heap);
 extern bool min_max_heap_full_p(struct min_max_heap *heap);
 extern bool minimal_heap_empty_p(struct minimal_heap *heap);
 extern bool minimal_heap_full_p(struct minimal_heap *heap);

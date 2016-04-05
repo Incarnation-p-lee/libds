@@ -68,7 +68,7 @@ maximal_heap_insert(struct maximal_heap *heap, void *val, sint64 nice)
     }
 }
 
-static inline struct doubly_linked_list *
+static inline void *
 maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
 {
     sint64 nice;

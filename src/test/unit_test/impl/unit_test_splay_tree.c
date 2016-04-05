@@ -410,6 +410,7 @@ unit_test_splay_tree_iterate(void)
 
     pass = true;
     cnt = 0xC72D;
+    tree = NULL;
 
     splay_tree_iterate(NULL, &tree_iterate_handler, ORDER_PRE);
 

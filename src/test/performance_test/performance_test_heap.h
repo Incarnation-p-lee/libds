@@ -96,6 +96,25 @@ ptest_##name##_heap_cleanup(uint32 count)         \
     PERFORMANCE_TEST_RESULT(name##_heap_cleanup); \
 }
 
+#define PT_HEAP_depth(name)                     \
+static inline void                              \
+ptest_##name##_heap_depth(uint32 count)         \
+{                                               \
+    struct HEAP *heap;                          \
+                                                \
+    heap = TEST_HEAP_sample(0x334a, 0x1fd8);    \
+                                                \
+    PERFORMANCE_TEST_CHECKPOINT;                \
+                                                \
+    while (count--) {                           \
+        HEAP_depth(heap, HEAP_size(heap) - 1);  \
+    }                                           \
+                                                \
+    PERFORMANCE_TEST_ENDPOINT;                  \
+                                                \
+    PERFORMANCE_TEST_RESULT(name##_heap_depth); \
+}
+
 #define PT_HEAP_get_min(name)                     \
 static inline void                                \
 ptest_##name##_heap_get_min(uint32 count)         \
@@ -194,6 +213,7 @@ ptest_##name##_heap_remove_max(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                     \
                                                      \
     while (count--) {                                \
+        printf("%d\n", count);                       \
         HEAP_remove_max(heap);                       \
     }                                                \
                                                      \

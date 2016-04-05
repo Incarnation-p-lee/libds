@@ -242,7 +242,6 @@ test_maximal_heap_sample(uint64 range, uint32 size)
 static inline struct min_max_heap *
 test_min_max_heap_sample(uint64 range, uint32 size)
 {
-#if 0
     struct min_max_heap *heap;
     sint64 nice;
     uint32 i;
@@ -253,14 +252,11 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     i = 0;
     while (i < size) {
         nice = (sint64)((rand() % range) - (range / 2));
-        min_max_heap_node_insert(heap, &heap, nice);
-        assert(NULL != min_max_heap_node_find(heap, nice));
+        min_max_heap_insert(heap, &heap, nice);
         i++;
     }
 
     return heap;
-#endif
-    return NULL;
 }
 
 static inline struct leftist_heap *
