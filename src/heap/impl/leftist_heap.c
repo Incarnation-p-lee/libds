@@ -96,7 +96,7 @@ leftist_heap_node_npl_update(struct leftist_heap *node)
     npl_l = leftist_heap_npl_internal(node->left);
     npl_r = leftist_heap_npl_internal(node->right);
 
-    leftist_heap_npl_set(node, MIN_S(npl_l, npl_r) + 1);
+    leftist_heap_npl_set(node, MIN_S32(npl_l, npl_r) + 1);
 }
 
 static inline bool

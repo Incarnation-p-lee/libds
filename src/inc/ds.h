@@ -144,7 +144,6 @@ struct array_queue_space {
  * array queue
  */
 struct array_queue {
-    uint32                   sid;
     struct array_queue_space space;
 };
 
@@ -432,16 +431,13 @@ struct leftist_heap {
     (assert(stack), (stack)->sid = (v))
 
 /* ARRAY QUEUE */
-#define array_queue_sid(queue) \
-    (assert(queue), (queue)->sid)
-#define array_queue_sid_set(queue, v) \
-    (assert(queue), (queue)->sid = (v))
-
-#define array_queue_rest(queue) \
+#define array_queue_rest_m(queue) \
     (assert(queue), (queue)->space.rest)
 
-#define array_queue_dim(queue) \
+#define array_queue_dim_m(queue) \
     (assert(queue), (queue)->space.dim)
+#define array_queue_dim_set_m(queue, size) \
+    (assert(queue), (queue)->space.dim = (size))
 
 /* STACKED QUEUE */
 #define stacked_queue_sid(queue) \
@@ -662,9 +658,10 @@ struct leftist_heap {
     } while (0);
 
 
-#define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
-#define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
-#define MIN_S(x, y) ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
+#define MAX_U32(x, y)    ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
+#define MIN_U32(x, y)    ((uint32)(x) < (uint32)(y) ? (uint32)(x) : (uint32)(y))
+#define MAX_S32(x, y)    ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
+#define MIN_S32(x, y)    ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 #define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))
@@ -764,6 +761,8 @@ extern void skip_linked_list_remove_and_destroy(struct skip_linked_list **list, 
 
 #define DEFAULT_QUEUE_SPACE_SIZE   1024
 #define EXPAND_QUEUE_SPACE_MIN     32
+#define REST_INVALID               0xffffffff
+#define CAPACITY_INVALID           0xffffffff
 
 
 #endif
@@ -783,7 +782,7 @@ extern struct array_queue * array_queue_create(void);
 extern struct doubly_end_queue * doubly_end_queue_create(void);
 extern struct stacked_queue * stacked_queue_create(void);
 extern uint32 array_queue_capacity(struct array_queue *queue);
-extern uint32 array_queue_space_rest(struct array_queue *queue);
+extern uint32 array_queue_rest(struct array_queue *queue);
 extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
 extern uint32 stacked_queue_space_rest(struct stacked_queue *queue);
@@ -795,7 +794,7 @@ extern void array_queue_cleanup(struct array_queue *queue);
 extern void array_queue_destroy(struct array_queue **queue);
 extern void array_queue_enter(struct array_queue *queue, void *member);
 extern void array_queue_iterate(struct array_queue *queue, void (*handler)(void *));
-extern void array_queue_space_expand(struct array_queue *queue, uint32 extra);
+extern void array_queue_resize(struct array_queue *queue, uint32 size);
 extern void doubly_end_queue_cleanup(struct doubly_end_queue *queue);
 extern void doubly_end_queue_destroy(struct doubly_end_queue **queue);
 extern void doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);

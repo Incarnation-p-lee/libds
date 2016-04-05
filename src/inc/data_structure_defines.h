@@ -99,16 +99,13 @@
     (assert(stack), (stack)->sid = (v))
 
 /* ARRAY QUEUE */
-#define array_queue_sid(queue) \
-    (assert(queue), (queue)->sid)
-#define array_queue_sid_set(queue, v) \
-    (assert(queue), (queue)->sid = (v))
-
-#define array_queue_rest(queue) \
+#define array_queue_rest_m(queue) \
     (assert(queue), (queue)->space.rest)
 
-#define array_queue_dim(queue) \
+#define array_queue_dim_m(queue) \
     (assert(queue), (queue)->space.dim)
+#define array_queue_dim_set_m(queue, size) \
+    (assert(queue), (queue)->space.dim = (size))
 
 /* STACKED QUEUE */
 #define stacked_queue_sid(queue) \

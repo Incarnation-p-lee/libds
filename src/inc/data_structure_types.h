@@ -98,7 +98,6 @@ struct array_queue_space {
  * array queue
  */
 struct array_queue {
-    uint32                   sid;
     struct array_queue_space space;
 };
 

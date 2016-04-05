@@ -54,9 +54,10 @@
     } while (0);
 
 
-#define MAX_U(x, y) ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
-#define MAX_S(x, y) ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
-#define MIN_S(x, y) ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
+#define MAX_U32(x, y)    ((uint32)(x) > (uint32)(y) ? (uint32)(x) : (uint32)(y))
+#define MIN_U32(x, y)    ((uint32)(x) < (uint32)(y) ? (uint32)(x) : (uint32)(y))
+#define MAX_S32(x, y)    ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
+#define MIN_S32(x, y)    ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 #define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))

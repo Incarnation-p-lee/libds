@@ -170,7 +170,7 @@ unit_test_splay_tree_height(void)
 
     RESULT_CHECK_sint32(-1, splay_tree_height(NULL), &pass);
 
-    child = MAX_S(splay_tree_height(splay_tree_child_left(tree)),
+    child = MAX_S32(splay_tree_height(splay_tree_child_left(tree)),
         splay_tree_height(splay_tree_child_right(tree)));
     RESULT_CHECK_sint32(child + 1, splay_tree_height(tree), &pass);
 
