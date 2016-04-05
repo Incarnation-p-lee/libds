@@ -686,10 +686,10 @@ static const struct test_layer_table stacked_queue[] = {
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
-            &unit_test_stacked_queue_space_expand,
+            &unit_test_stacked_queue_resize,
             &performance_test_stacked_queue_space_expand,
         },
     },
@@ -1215,6 +1215,58 @@ static const struct test_layer_table splay_tree[] = {
         {
             &unit_test_splay_tree_iterate,
             &performance_test_splay_tree_iterate,
+        },
+    },
+    {NULL,                      NULL, {NULL,},},
+};
+
+static const struct test_layer_table binary_indexed_tree[] = {
+    {
+        "create",
+        NULL,
+        {
+            &utest_binary_indexed_tree_create,
+            &ptest_binary_indexed_tree_create,
+        },
+    },
+    {
+        "destroy",
+        NULL,
+        {
+            &utest_binary_indexed_tree_destroy,
+            &ptest_binary_indexed_tree_destroy,
+        },
+    },
+    {
+        "add",
+        NULL,
+        {
+            &utest_binary_indexed_tree_add,
+            &ptest_binary_indexed_tree_add,
+        },
+    },
+    {
+        "sub",
+        NULL,
+        {
+            &utest_binary_indexed_tree_sub,
+            &ptest_binary_indexed_tree_sub,
+        },
+    },
+    {
+        "sum",
+        NULL,
+        {
+            &utest_binary_indexed_tree_sum,
+            &ptest_binary_indexed_tree_sum,
+        },
+    },
+    {
+        "range_sum",
+        NULL,
+        {
+            &utest_binary_indexed_tree_range_sum,
+            &ptest_binary_indexed_tree_range_sum,
         },
     },
     {NULL,                      NULL, {NULL,},},
@@ -1770,9 +1822,10 @@ static const struct test_layer_table test_queue_implement[] = {
 };
 
 static const struct test_layer_table test_tree_implement[] = {
-    {"binary_search", binary_search_tree, {NULL, NULL},},
-    {"avl",           avl_tree,           {NULL, NULL},},
-    {"splay",         splay_tree,         {NULL, NULL},},
+    {"binary_search",  binary_search_tree,  {NULL, NULL},},
+    {"avl",            avl_tree,            {NULL, NULL},},
+    {"splay",          splay_tree,          {NULL, NULL},},
+    {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,            NULL,               {NULL, NULL},},
 };

@@ -55,32 +55,33 @@ unit_test_stacked_queue_destroy(void)
 }
 
 static void
-unit_test_stacked_queue_space_expand(void)
+unit_test_stacked_queue_resize(void)
 {
     bool pass;
     struct stacked_queue *queue;
     uint32 capacity;
-    uint32 extra;
+    uint32 dim;
 
     pass = true;
-    extra = 1023;
-    stacked_queue_space_expand(NULL, extra);
+    dim = 0x1023;
+    stacked_queue_resize(NULL, dim);
 
     queue = stacked_queue_create();
     capacity = stacked_queue_capacity(queue);
-    stacked_queue_space_expand(queue, extra);
-    RESULT_CHECK_uint32(capacity + extra, stacked_queue_capacity(queue), &pass);
+    stacked_queue_resize(queue, dim);
+    RESULT_CHECK_uint32(dim, stacked_queue_capacity(queue), &pass);
 
-    extra = 0;
+    dim = 0;
     capacity = stacked_queue_capacity(queue);
-    stacked_queue_space_expand(queue, extra);
-    RESULT_CHECK_uint32(capacity * 2, stacked_queue_capacity(queue), &pass);
+    stacked_queue_resize(queue, dim);
+    capacity = capacity * 2 + EXPAND_QUEUE_SPACE_MIN;
+    RESULT_CHECK_uint32(capacity, stacked_queue_capacity(queue), &pass);
 
-    extra = 1;
-    stacked_queue_space_expand(queue, extra);
+    dim = 1;
+    stacked_queue_resize(queue, dim);
 
     stacked_queue_destroy(&queue);
-    UNIT_TEST_RESULT(stacked_queue_space_expand, pass);
+    UNIT_TEST_RESULT(stacked_queue_resize, pass);
 }
 
 static void
@@ -96,7 +97,7 @@ unit_test_stacked_queue_capacity(void)
     RESULT_CHECK_uint32(stacked_queue_dim(queue),
         stacked_queue_capacity(queue), &pass);
 
-    stacked_queue_space_expand(queue, 0);
+    stacked_queue_resize(queue, 0);
     RESULT_CHECK_uint32(stacked_queue_dim(queue),
         stacked_queue_capacity(queue), &pass);
 
@@ -194,9 +195,10 @@ unit_test_stacked_queue_enter(void)
 
     capacity = stacked_queue_capacity(queue);
     stacked_queue_enter(queue, queue);
-    RESULT_CHECK_uint32(capacity * 2, stacked_queue_capacity(queue), &pass);
+    capacity = capacity * 2;
+    RESULT_CHECK_uint32(capacity, stacked_queue_capacity(queue), &pass);
 
-    stacked_queue_space_expand(queue, 1);
+    stacked_queue_resize(queue, capacity + 1);
     stacked_queue_enter(queue, queue);
 
     stacked_queue_destroy(&queue);
@@ -213,7 +215,7 @@ unit_test_stacked_queue_leave(void)
     pass = true;
 
     RESULT_CHECK_pointer(NULL, stacked_queue_leave(NULL), &pass);
-    stacked_queue_space_expand(queue, 0u);
+    stacked_queue_resize(queue, 0u);
 
     do {
         stacked_queue_enter(queue, queue);

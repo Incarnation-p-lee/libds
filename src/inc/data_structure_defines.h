@@ -183,6 +183,14 @@
 #define splay_tree_node_link(tree) \
     (assert(tree), (tree)->alias.chain.link)
 
+
+/* BINARY INDEXED TREE */
+#define binary_indexed_tree_size(tree) \
+    (assert(tree), (tree)->size)
+
+#define binary_indexed_tree_value(tree, number) \
+    (assert(tree), assert(number), (tree)->data[number])
+
 /* HASHING TABLE */
 #define hashing_table_size(hash) \
     (assert(hash), (hash)->size)

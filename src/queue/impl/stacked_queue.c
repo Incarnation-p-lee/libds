@@ -28,30 +28,26 @@ stacked_queue_destroy(struct stacked_queue **queue)
 }
 
 static inline void
-stacked_queue_space_expand_internal(struct stacked_queue *queue, uint32 increment)
+stacked_queue_resize_internal(struct stacked_queue *queue, uint32 dim)
 {
     assert(NULL != queue);
-    assert(0 != increment);
+    assert(0 != dim);
 
-    array_stack_resize(queue->enter, increment);
-    array_stack_resize(queue->leave, increment);
+    array_stack_resize(queue->enter, dim);
+    array_stack_resize(queue->leave, dim);
     queue->dim = array_stack_capacity(queue->enter);
 }
 
 void
-stacked_queue_space_expand(struct stacked_queue *queue, uint32 extra)
+stacked_queue_resize(struct stacked_queue *queue, uint32 dim)
 {
-    uint32 increment;
-
     if (!complain_null_pointer_p(queue)) {
-        if (!extra) {
-            increment = queue->dim;
+        if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-        } else {
-            increment = extra;
+            dim = queue->dim * 2 + EXPAND_QUEUE_SPACE_MIN;
         }
 
-        stacked_queue_space_expand_internal(queue, increment);
+        stacked_queue_resize_internal(queue, dim);
     }
 }
 
@@ -145,7 +141,7 @@ stacked_queue_enter(struct stacked_queue *queue, void *member)
             stacked_queue_stack_dump(queue->enter, queue->leave);
         } else if (array_stack_full_p(queue->enter)) {
             pr_log_info("Fail to dump enter stack, will expand enter space.\n");
-            stacked_queue_space_expand_internal(queue, queue->dim);
+            stacked_queue_resize_internal(queue, queue->dim * 2);
         }
 
         array_stack_push(queue->enter, member);

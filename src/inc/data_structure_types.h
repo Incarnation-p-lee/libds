@@ -161,6 +161,33 @@ struct splay_tree {
     struct binary_search_tree alias;
 };
 
+/*
+ * binary indexed tree
+ *     One kind of data structure provding efficient method
+ * for prefix sum of an array values. It provides:
+ *     sum(index);
+ *     range_sum(index);
+ *     add(index, val);
+ *     sub(index, val);
+ *     create();
+ *     destroy();
+ * with log(N) time cost.
+ *
+ * For example:
+ * A[1] -> C[1] = A[1]
+ * A[2] -> C[2] = A[1] + A[2]
+ * A[3] -> C[3] = A[3]
+ * A[4] -> C[4] = A[1] + A[2] + A[3] + A[4]
+ * A[5] -> C[5] = A[5]
+ * A[6] -> C[6] = A[5] + A[6]
+ * A[7] -> C[7] = A[7]
+ * A[8] -> C[8] = A[1] + A[2] + A[3] + A[4] + A[5] + A[6] + A[7] + A[8]
+ */
+struct binary_indexed_tree {
+    sint64 *data;
+    uint32 size;
+};
+
 struct hashing_table {
     void       **space;
     uint32     size;

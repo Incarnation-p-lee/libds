@@ -161,6 +161,13 @@ static struct performance_test_reference performance_reference[] = {
     {"splay_tree_node_remove_and_destroy",               0x0u, 0x0u},
     {"splay_tree_iterate",                               0x0u, 0x0u},
 
+    {"binary_indexed_tree_create",                       0x0u, 0x0u},
+    {"binary_indexed_tree_destroy",                      0x0u, 0x0u},
+    {"binary_indexed_tree_add",                          0x0u, 0x0u},
+    {"binary_indexed_tree_sub",                          0x0u, 0x0u},
+    {"binary_indexed_tree_sum",                          0x0u, 0x0u},
+    {"binary_indexed_tree_range_sum",                    0x0u, 0x0u},
+
     {"separate_chain_hash_struct_field",                 0x0u, 0x0u},
     {"separate_chain_hash_create",                       0x0u, 0x0u},
     {"separate_chain_hash_destroy",                      0x0u, 0x0u},

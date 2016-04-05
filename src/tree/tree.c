@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include "types.h"
 #include "defines.h"
@@ -19,3 +20,4 @@
 #include "impl/binary_search_tree.c"
 #include "impl/avl_tree.c"
 #include "impl/splay_tree.c"
+#include "impl/binary_indexed_tree.c"

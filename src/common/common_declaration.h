@@ -5,6 +5,7 @@
 bool complain_no_memory_p(void *ptr);
 bool complain_null_pointer_p(void *ptr);
 bool complain_zero_size_p(uint32 size);
+sint64 random_sint64(void);
 static inline FILE * memory_maps_proc_read(void);
 static inline bool memory_cache_add_entry_p(void *addr, uint32 size);
 static inline bool memory_cache_find_entry_greater_size_p(void **addr, uint32 size);
