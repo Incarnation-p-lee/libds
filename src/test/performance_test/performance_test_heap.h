@@ -209,7 +209,6 @@ ptest_##name##_heap_remove_max(uint32 count)         \
     count = count >> 6;                              \
     count = 0 == count ? 1000 : count;               \
     heap = TEST_HEAP_sample(count * 4, count * 2);   \
-    printf("AAA %d\n", count); \
                                                      \
     PERFORMANCE_TEST_CHECKPOINT;                     \
                                                      \
