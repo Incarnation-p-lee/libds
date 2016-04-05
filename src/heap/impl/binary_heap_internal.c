@@ -326,19 +326,14 @@ binary_heap_insert(struct binary_heap *heap, void *val, sint64 nice,
 }
 
 static inline void *
-binary_heap_destroy_node(struct binary_heap *heap, uint32 index)
+binary_heap_data_destroy(struct heap_data *data)
 {
     void * retval;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert(!complain_null_pointer_p(data));
 
-    retval = HEAP_VAL(heap, index);
-
-    memory_cache_free(HEAP_DATA(heap, index));
-    HEAP_DATA(heap, index) = NULL;
-    heap->size--;
+    retval = data->val;
+    memory_cache_free(data);
 
     return retval;
 }
@@ -357,7 +352,8 @@ binary_heap_remove_root(struct binary_heap *heap, void *order)
     assert(binary_heap_valid_ordered_func_ptr_p(order));
 
     index_last = INDEX_LAST(heap);
-    retval = binary_heap_destroy_node(heap, INDEX_ROOT);
+    retval = binary_heap_data_destroy(HEAP_DATA(heap, INDEX_ROOT));
+    heap->size--;
 
     if (INDEX_ROOT != index_last) {
         nice = HEAP_NICE(heap, index_last);
@@ -409,6 +405,20 @@ binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
 
     if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
         pr_log_warn("Illegal index value of heap.\n");
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+binary_heap_structure_legal_p(struct binary_heap *heap)
+{
+    if (complain_null_pointer_p(heap)) {
+        return false;
+    } else if (complain_null_pointer_p(heap->base)) {
+        return false;
+    } else if (complain_zero_size_p(heap->capacity)) {
         return false;
     } else {
         return true;

@@ -990,6 +990,7 @@ extern void separate_chain_hash_insert(struct separate_chain_hash **hash, void *
 extern bool maximal_heap_empty_p(struct maximal_heap *heap);
 extern bool maximal_heap_full_p(struct maximal_heap *heap);
 extern bool min_max_heap_empty_p(struct min_max_heap *heap);
+extern bool min_max_heap_empty_p_internal(struct min_max_heap *heap);
 extern bool min_max_heap_full_p(struct min_max_heap *heap);
 extern bool minimal_heap_empty_p(struct minimal_heap *heap);
 extern bool minimal_heap_full_p(struct minimal_heap *heap);

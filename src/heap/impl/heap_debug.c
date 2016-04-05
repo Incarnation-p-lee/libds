@@ -16,16 +16,6 @@ binary_heap_valid_ordered_func_ptr_p(void *func_ptr)
 }
 
 static inline bool
-binary_heap_structure_legal_p(struct binary_heap *heap)
-{
-    if (NULL != heap && NULL != heap->base) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-static inline bool
 binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
