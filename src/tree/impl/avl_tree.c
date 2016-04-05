@@ -214,7 +214,7 @@ avl_tree_height_update(struct avl_tree *tree)
     left = avl_tree_height_internal(avl_tree_left(tree));
     right = avl_tree_height_internal(avl_tree_right(tree));
 
-    tree->height = MAX_S(left, right) + 1;
+    tree->height = MAX_S32(left, right) + 1;
 }
 
 /*

@@ -36,7 +36,6 @@ static void performance_test_array_queue_iterate(uint32 count);
 static void performance_test_array_queue_leave(uint32 count);
 static void performance_test_array_queue_space_expand(uint32 count);
 static void performance_test_array_queue_space_rest(uint32 count);
-static void performance_test_array_queue_struct_field(uint32 count);
 static void performance_test_avl_tree_balanced_p(uint32 count);
 static void performance_test_avl_tree_create(uint32 count);
 static void performance_test_avl_tree_destroy(uint32 count);

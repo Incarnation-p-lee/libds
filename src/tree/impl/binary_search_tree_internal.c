@@ -120,7 +120,7 @@ binary_search_tree_height_internal(struct binary_search_tree *tree)
     } else {
         left = binary_search_tree_height_internal(tree->left);
         right = binary_search_tree_height_internal(tree->right);
-        return MAX_S(left, right) + 1;
+        return MAX_S32(left, right) + 1;
     }
 }
 

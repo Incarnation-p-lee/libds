@@ -168,7 +168,7 @@ array_queue_resize(struct array_queue *queue, uint32 size)
         return;
     } else if (size == queue->space.dim) {
         return;
-    } else if (!complain_zero_size_p(size)) {
+    } else if (complain_zero_size_p(size)) {
         size = queue->space.dim * 2 + EXPAND_QUEUE_SPACE_MIN;
         pr_log_info("Expanding size not specified, use default.\n");
     }

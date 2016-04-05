@@ -565,33 +565,25 @@ static const struct test_layer_table linked_stack[] = {
 };
 
 static const struct test_layer_table array_queue[] = {
-    {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_array_queue_struct_field,
-            &performance_test_array_queue_struct_field,
-        },
-    },
     {   "create",
         NULL,
         {
-            &unit_test_array_queue_create,
+            &utest_array_queue_create,
             &performance_test_array_queue_create,
         },
     },
     {   "destroy",
         NULL,
         {
-            &unit_test_array_queue_destroy,
+            &utest_array_queue_destroy,
             &performance_test_array_queue_destroy,
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
-            &unit_test_array_queue_space_expand,
+            &utest_array_queue_resize,
             &performance_test_array_queue_space_expand,
         },
     },
@@ -599,15 +591,15 @@ static const struct test_layer_table array_queue[] = {
         "capacity",
         NULL,
         {
-            &unit_test_array_queue_capacity,
+            &utest_array_queue_capacity,
             &performance_test_array_queue_capacity,
         },
     },
     {
-        "space_rest",
+        "rest",
         NULL,
         {
-            &unit_test_array_queue_space_rest,
+            &utest_array_queue_rest,
             &performance_test_array_queue_space_rest,
         },
     },
@@ -615,7 +607,7 @@ static const struct test_layer_table array_queue[] = {
         "full_p",
         NULL,
         {
-            &unit_test_array_queue_full_p,
+            &utest_array_queue_full_p,
             &performance_test_array_queue_full_p,
         },
     },
@@ -623,14 +615,14 @@ static const struct test_layer_table array_queue[] = {
         "enter",
         NULL,
         {
-            &unit_test_array_queue_enter,
+            &utest_array_queue_enter,
             &performance_test_array_queue_enter,
         },
     },
     {   "leave",
         NULL,
         {
-            &unit_test_array_queue_leave,
+            &utest_array_queue_leave,
             &performance_test_array_queue_leave,
         },
     },
@@ -638,7 +630,7 @@ static const struct test_layer_table array_queue[] = {
         "empty_p",
         NULL,
         {
-            &unit_test_array_queue_empty_p,
+            &utest_array_queue_empty_p,
             &performance_test_array_queue_empty_p,
         },
     },
@@ -646,7 +638,7 @@ static const struct test_layer_table array_queue[] = {
         "cleanup",
         NULL,
         {
-            &unit_test_array_queue_cleanup,
+            &utest_array_queue_cleanup,
             &performance_test_array_queue_cleanup,
         },
     },
@@ -654,7 +646,7 @@ static const struct test_layer_table array_queue[] = {
         "iterate",
         NULL,
         {
-            &unit_test_array_queue_iterate,
+            &utest_array_queue_iterate,
             &performance_test_array_queue_iterate,
         },
     },
