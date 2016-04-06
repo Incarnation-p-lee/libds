@@ -1277,7 +1277,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "struct_field",
         NULL,
         {
-            &unit_test_separate_chain_hash_struct_field,
+            NULL,
             &performance_test_separate_chain_hash_struct_field,
         },
     },
@@ -1285,7 +1285,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "create",
         NULL,
         {
-            &unit_test_separate_chain_hash_create,
+            &utest_separate_chain_hash_create,
             &performance_test_separate_chain_hash_create,
         },
     },
@@ -1293,7 +1293,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "destroy",
         NULL,
         {
-            &unit_test_separate_chain_hash_destroy,
+            &utest_separate_chain_hash_destroy,
             &performance_test_separate_chain_hash_destroy,
         },
     },
@@ -1301,7 +1301,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "load_factor_calculate",
         NULL,
         {
-            &unit_test_separate_chain_hash_load_factor_calculate,
+            &utest_separate_chain_hash_load_factor_calculate,
             &performance_test_separate_chain_hash_load_factor_calculate,
         },
     },
@@ -1309,7 +1309,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "insert",
         NULL,
         {
-            &unit_test_separate_chain_hash_insert,
+            &utest_separate_chain_hash_insert,
             &performance_test_separate_chain_hash_insert,
         },
     },
@@ -1317,7 +1317,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "remove",
         NULL,
         {
-            &unit_test_separate_chain_hash_remove,
+            &utest_separate_chain_hash_remove,
             &performance_test_separate_chain_hash_remove,
         },
     },
@@ -1325,7 +1325,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "find",
         NULL,
         {
-            &unit_test_separate_chain_hash_find,
+            &utest_separate_chain_hash_find,
             &performance_test_separate_chain_hash_find,
         },
     },
@@ -1333,7 +1333,7 @@ static const struct test_layer_table separate_chain_hash[] = {
         "rehashing",
         NULL,
         {
-            &unit_test_separate_chain_hash_rehashing,
+            &utest_separate_chain_hash_rehashing,
             &performance_test_separate_chain_hash_rehashing,
         },
     },
