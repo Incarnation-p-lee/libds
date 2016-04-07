@@ -1345,7 +1345,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "struct_field",
         NULL,
         {
-            &unit_test_open_addressing_hash_struct_field,
+            NULL,
             &performance_test_open_addressing_hash_struct_field,
         },
     },
@@ -1353,7 +1353,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "create",
         NULL,
         {
-            &unit_test_open_addressing_hash_create,
+            &utest_open_addressing_hash_create,
             &performance_test_open_addressing_hash_create,
         },
     },
@@ -1361,7 +1361,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "destroy",
         NULL,
         {
-            &unit_test_open_addressing_hash_destroy,
+            &utest_open_addressing_hash_destroy,
             &performance_test_open_addressing_hash_destroy,
         },
     },
@@ -1369,7 +1369,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "load_factor_calculate",
         NULL,
         {
-            &unit_test_open_addressing_hash_load_factor_calculate,
+            &utest_open_addressing_hash_load_factor_calculate,
             &performance_test_open_addressing_hash_load_factor_calculate,
         },
     },
@@ -1377,14 +1377,14 @@ static const struct test_layer_table open_addressing_hash[] = {
         "insert",
         NULL,
         {
-            &unit_test_open_addressing_hash_insert,
+            &utest_open_addressing_hash_insert,
             &performance_test_open_addressing_hash_insert,
         },},
     {
         "remove",
         NULL,
         {
-            &unit_test_open_addressing_hash_remove,
+            &utest_open_addressing_hash_remove,
             &performance_test_open_addressing_hash_remove,
         },
     },
@@ -1392,7 +1392,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "find",
         NULL,
         {
-            &unit_test_open_addressing_hash_find,
+            &utest_open_addressing_hash_find,
             &performance_test_open_addressing_hash_find,
         },
     },
@@ -1400,7 +1400,7 @@ static const struct test_layer_table open_addressing_hash[] = {
         "rehashing",
         NULL,
         {
-            &unit_test_open_addressing_hash_rehashing,
+            &utest_open_addressing_hash_rehashing,
             &performance_test_open_addressing_hash_rehashing,
         },
     },

@@ -15,7 +15,7 @@ utest_##name##_hash_create(void)                             \
     hash = HASH_create(tmp);                                 \
     tmp = DEFAULT_CHAIN_HASH_SIZE;                           \
     RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);        \
-    tmp = DEFAULT_LOAD_FACTOR;                               \
+    tmp = LOAD_FACTOR;                                       \
     RESULT_CHECK_uint32(tmp, HASH_load_factor(hash), &pass); \
     HASH_destroy(&hash);                                     \
                                                              \
@@ -25,7 +25,7 @@ utest_##name##_hash_create(void)                             \
                                                              \
     hash = HASH_create(tmp);                                 \
     RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);        \
-    tmp = DEFAULT_LOAD_FACTOR;                               \
+    tmp = LOAD_FACTOR;                                       \
     RESULT_CHECK_uint32(tmp, HASH_load_factor(hash), &pass); \
                                                              \
     HASH_destroy(&hash);                                     \
@@ -74,7 +74,7 @@ utest_##name##_hash_load_factor_calculate(void)                \
         HASH_load_factor_calculate(hash), &pass);              \
                                                                \
     hash = TEST_HASH_sample(tmp);                              \
-    tmp = DEFAULT_LOAD_FACTOR;                                 \
+    tmp = LOAD_FACTOR;                                         \
     RESULT_CHECK_NOT_LESS_uint32(tmp,                          \
         HASH_load_factor_calculate(hash), &pass);              \
     HASH_destroy(&hash);                                       \

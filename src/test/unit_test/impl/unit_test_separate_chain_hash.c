@@ -1,5 +1,6 @@
 #define HASH                       separate_chain_hash
 #define HASH_size                  separate_chain_hash_size
+#define LOAD_FACTOR                DEFAULT_LOAD_FACTOR
 #define HASH_load_factor           separate_chain_hash_load_factor
 #define TEST_HASH_sample           test_separate_chain_hash_sample
 
@@ -23,6 +24,7 @@ UT_HASH_rehashing(separate_chain)
 
 #undef HASH
 #undef HASH_size
+#undef LOAD_FACTOR
 #undef HASH_load_factor
 #undef TEST_HASH_sample
 
