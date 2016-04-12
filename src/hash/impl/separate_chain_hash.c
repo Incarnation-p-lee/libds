@@ -86,7 +86,6 @@ separate_chain_hash_chain_head(struct separate_chain_hash *hash, uint32 index)
     assert(separate_chain_hash_structure_legal_p(hash));
 
     table = hash->table;
-
     return table->space[index];
 }
 
@@ -270,7 +269,6 @@ separate_chain_hash_rehashing(struct separate_chain_hash **hash)
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
         return NULL;
     } else {
-        new = NULL;
         resize = prime_numeral_next(separate_chain_hash_size(*hash) + 1);
         new = separate_chain_hash_create(resize);
 
