@@ -137,11 +137,16 @@ struct collision_chain {
     sint64                    nice;
 };
 
+struct nv_data {
+    sint64 nice;
+    void   *val;
+};
+
 /*
  * binary search tree
  */
 struct binary_search_tree {
-    struct collision_chain    chain;
+    struct nv_data            *data;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
 };

@@ -126,25 +126,25 @@
     (assert(queue), (queue)->sid = (v))
 
 /* BINARY SEARCH TREE */
-#define binary_search_tree_node_nice(tree) \
-    (assert(tree), (tree)->chain.nice)
-#define binary_search_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->chain.nice = (v))
+#define binary_search_tree_nice(tree) \
+    (assert(tree), (tree)->data->nice)
+#define binary_search_tree_nice_set(tree, v) \
+    (assert(tree), (tree)->data->nice = (v))
 
-#define binary_search_tree_child_left(tree) \
+#define binary_search_tree_left(tree) \
     (assert(tree), (tree)->left)
-#define binary_search_tree_child_left_set(tree, v) \
+#define binary_search_tree_left_set(tree, v) \
     (assert(tree), (tree)->left = (v))
 
-#define binary_search_tree_child_right(tree) \
+#define binary_search_tree_right(tree) \
     (assert(tree), (tree)->right)
-#define binary_search_tree_child_right_set(tree, v) \
+#define binary_search_tree_right_set(tree, v) \
     (assert(tree), (tree)->right = (v))
 
-#define binary_search_tree_node_link(tree) \
-    (assert(tree), ((tree)->chain).link)
-#define binary_search_tree_child_link_set(tree, v) \
-    (assert(tree), ((tree)->chain).link = (v))
+#define binary_search_tree_val(tree) \
+    (assert(tree), (tree)->data->val)
+#define binary_search_tree_link_set(tree, v) \
+    (assert(tree), (tree)->data->val = (v))
 
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \
