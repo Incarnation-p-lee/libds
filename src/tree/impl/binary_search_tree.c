@@ -84,9 +84,9 @@ binary_search_tree_remove(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
     if (complain_null_pointer_p(tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else if (!binary_search_tree_structure_legal_p(*tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else {
         return binary_search_tree_remove_internal(tree, node);
     }
