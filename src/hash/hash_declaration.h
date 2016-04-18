@@ -2,6 +2,9 @@
 #define HASH_DECLARATION_H
 
 
+static inline bool hashing_table_structure_legal_p(struct hashing_table *hash);
+static inline bool open_addressing_hash_structure_legal_p(struct open_addressing_hash *hash);
+static inline bool separate_chain_hash_structure_legal_p(struct separate_chain_hash *hash);
 static inline struct doubly_linked_list * separate_chain_hash_chain_head(struct separate_chain_hash *hash, uint32 index);
 static inline struct doubly_linked_list ** separate_chain_hash_space(struct separate_chain_hash *hash);
 static inline struct hashing_table * hashing_table_create(uint32 size);

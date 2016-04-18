@@ -3,15 +3,31 @@ hashing_table_create(uint32 size)
 {
     struct hashing_table *hash;
 
-    hash = memory_cache_allocate(sizeof(*hash));
-    if (!complain_no_memory_p(hash)) {
-        assert(0 != size);
+    assert(!complain_zero_size_p(size));
 
-        hash->size = size;
-        hashing_table_initial(hash);
-    }
+    hash = memory_cache_allocate(sizeof(*hash));
+    hash->size = size;
+    hashing_table_initial(hash);
 
     return hash;
+}
+
+static inline bool
+hashing_table_structure_legal_p(struct hashing_table *hash)
+{
+    if (complain_null_pointer_p(hash)) {
+        return false;
+    } else if (complain_null_pointer_p(hash->space)) {
+        return false;
+    } else if (complain_null_pointer_p(hash->func)) {
+        return false;
+    } else if (complain_zero_size_p(hash->size)) {
+        return false;
+    } else if (hash->load_factor > 100) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 static inline void
@@ -19,22 +35,21 @@ hashing_table_initial(struct hashing_table *hash)
 {
     void **iter;
 
-    assert(NULL != hash);
+    assert(!complain_null_pointer_p(hash));
 
     hash->space = memory_cache_allocate(sizeof(*hash->space) * hash->size);
-    if (!complain_no_memory_p(hash->space)) {
-        iter = hash->space;
-        while (iter < hash->space + hash->size) {
-            *iter++ = NULL;
-        }
+
+    iter = hash->space;
+    while (iter < hash->space + hash->size) {
+        *iter++ = NULL;
     }
 }
 
 static inline void
 hashing_table_hash_function_set(struct hashing_table *hash, void *func)
 {
-    assert(NULL != hash);
-    assert(NULL != func);
+    assert(!complain_null_pointer_p(func));
+    assert(!complain_null_pointer_p(hash));
 
     hash->func = func;
 }
@@ -42,8 +57,7 @@ hashing_table_hash_function_set(struct hashing_table *hash, void *func)
 static inline void **
 hashing_table_space(struct hashing_table *hash)
 {
-    assert(NULL != hash);
-    assert(NULL != hash->space);
+    assert(hashing_table_structure_legal_p(hash));
 
     return hash->space;
 }
@@ -51,9 +65,8 @@ hashing_table_space(struct hashing_table *hash)
 static inline void
 hashing_table_destroy(struct hashing_table **hash)
 {
-    assert(NULL != hash);
-    assert(NULL != *hash);
-    assert(NULL != (*hash)->space);
+    assert(!complain_null_pointer_p(hash));
+    assert(hashing_table_structure_legal_p(*hash));
 
     memory_cache_free((*hash)->space);
     memory_cache_free((*hash));
@@ -63,11 +76,10 @@ hashing_table_destroy(struct hashing_table **hash)
 static inline uint32
 hashing_table_load_factor_calculate(struct hashing_table *hash)
 {
-    register uint32 retval;
-    register void **iter;
+    uint32 retval;
+    void **iter;
 
-    assert(NULL != hash);
-    assert(NULL != hash->space);
+    assert(hashing_table_structure_legal_p(hash));
 
     retval = 0u;
     iter = hash->space;

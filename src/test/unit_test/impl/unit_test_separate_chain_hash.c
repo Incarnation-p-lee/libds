@@ -1,224 +1,38 @@
-static void
-unit_test_separate_chain_hash_struct_field(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
+#define HASH                       separate_chain_hash
+#define HASH_size                  separate_chain_hash_size
+#define LOAD_FACTOR                DEFAULT_LOAD_FACTOR
+#define HASH_load_factor           separate_chain_hash_load_factor
+#define TEST_HASH_sample           test_separate_chain_hash_sample
 
-    tmp = 0x3u;
-    pass = true;
+#define HASH_create                separate_chain_hash_create
+#define HASH_destroy               separate_chain_hash_destroy
+#define HASH_load_factor_calculate separate_chain_hash_load_factor_calculate
+#define HASH_insert                separate_chain_hash_insert
+#define HASH_remove                separate_chain_hash_remove
+#define HASH_find                  separate_chain_hash_find
+#define HASH_rehashing             separate_chain_hash_rehashing
 
-    hash = separate_chain_hash_create(tmp);
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_size(hash), &pass);
+#include "../unit_test_hash.h"
 
-    tmp = 100u;
-    separate_chain_hash_load_factor_set(hash, tmp);
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_load_factor(hash), &pass);
+UT_HASH_create(separate_chain)
+UT_HASH_destroy(separate_chain)
+UT_HASH_load_factor_calculate(separate_chain)
+UT_HASH_insert(separate_chain)
+UT_HASH_remove(separate_chain)
+UT_HASH_find(separate_chain)
+UT_HASH_rehashing(separate_chain)
 
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_struct_field, pass);
-}
+#undef HASH
+#undef HASH_size
+#undef LOAD_FACTOR
+#undef HASH_load_factor
+#undef TEST_HASH_sample
 
-static void
-unit_test_separate_chain_hash_create(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    tmp = 0;
-    pass = true;
-
-    hash = separate_chain_hash_create(tmp);
-    tmp = DEFAULT_CHAIN_HASH_SIZE;
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_size(hash), &pass);
-    tmp = DEFAULT_LOAD_FACTOR;
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_load_factor(hash), &pass);
-    separate_chain_hash_destroy(&hash);
-
-    tmp = 11u;
-    hash = separate_chain_hash_create(tmp);
-    separate_chain_hash_destroy(&hash);
-
-    hash = separate_chain_hash_create(tmp);
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_size(hash), &pass);
-    tmp = DEFAULT_LOAD_FACTOR;
-    RESULT_CHECK_uint32(tmp, separate_chain_hash_load_factor(hash), &pass);
-
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_create, pass);
-}
-
-static void
-unit_test_separate_chain_hash_destroy(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    pass = true;
-    hash = NULL;
-    separate_chain_hash_destroy(&hash);
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-
-    tmp = 0xfu;
-    hash = separate_chain_hash_create(tmp);
-    separate_chain_hash_destroy(&hash);
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-
-    tmp = 0xafu;
-    hash = test_separate_chain_hash_sample(tmp);
-    separate_chain_hash_destroy(&hash);
-
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-    UNIT_TEST_RESULT(separate_chain_hash_destroy, pass);
-}
-
-static void
-unit_test_separate_chain_hash_load_factor_calculate(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    tmp = 0xfadeu;
-    pass = true;
-
-    hash = NULL;
-    RESULT_CHECK_NOT_LESS_uint32(0x0u,
-        separate_chain_hash_load_factor_calculate(hash), &pass);
-
-    hash = test_separate_chain_hash_sample(tmp);
-    tmp = DEFAULT_LOAD_FACTOR;
-    RESULT_CHECK_NOT_LESS_uint32(tmp,
-        separate_chain_hash_load_factor_calculate(hash), &pass);
-    separate_chain_hash_destroy(&hash);
-
-    tmp = 0x0u;
-    hash = test_separate_chain_hash_sample(tmp);
-    separate_chain_hash_load_factor_calculate(hash);
-
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_load_factor_calculate, pass);
-}
-
-static void
-unit_test_separate_chain_hash_insert(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    tmp = 0xdeadu;
-    pass = true;
-
-    hash = NULL;
-    separate_chain_hash_insert(&hash, &pass);
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-
-    hash = test_separate_chain_hash_sample(0x7);
-    separate_chain_hash_destroy(&hash);
-
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-    hash = test_separate_chain_hash_sample(tmp);
-    separate_chain_hash_insert(&hash, &pass);
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
-
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_insert, pass);
-}
-
-static void
-unit_test_separate_chain_hash_remove(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    tmp = 0x0u;
-    pass = true;
-    hash = NULL;
-
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_remove(hash, NULL), &pass);
-
-    hash = separate_chain_hash_create(tmp);
-    separate_chain_hash_insert(&hash, &pass);
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_remove(hash, &pass), &pass);
-    separate_chain_hash_destroy(&hash);
-
-    hash = test_separate_chain_hash_sample(0x7);
-    separate_chain_hash_insert(&hash, &pass);
-    separate_chain_hash_destroy(&hash);
-
-    tmp = 0xfu;
-    hash = test_separate_chain_hash_sample(tmp);
-    separate_chain_hash_insert(&hash, &pass);
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_remove(hash, NULL), &pass);
-
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_remove(hash, &pass), &pass);
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_remove, pass);
-}
-
-static void
-unit_test_separate_chain_hash_find(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-
-    pass = true;
-    hash = NULL;
-
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-
-    tmp = 0x0u;
-    hash = separate_chain_hash_create(tmp);
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-    separate_chain_hash_destroy(&hash);
-
-    tmp = 0xfadebu;
-    hash = test_separate_chain_hash_sample(tmp);
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_find(hash, &pass), &pass);
-    separate_chain_hash_insert(&hash, &pass);
-
-    RESULT_CHECK_pointer(&pass, separate_chain_hash_find(hash, &pass), &pass);
-
-    separate_chain_hash_destroy(&hash);
-    UNIT_TEST_RESULT(separate_chain_hash_find, pass);
-}
-
-static void
-unit_test_separate_chain_hash_rehashing(void)
-{
-    bool pass;
-    uint32 tmp;
-    struct separate_chain_hash *hash;
-    struct separate_chain_hash *new;
-
-    tmp = 0x0u;
-    pass = true;
-
-    hash = NULL;
-    RESULT_CHECK_pointer(NULL, separate_chain_hash_rehashing(&hash), &pass);
-
-    hash = test_separate_chain_hash_sample(tmp);
-    tmp = separate_chain_hash_size(hash);
-    new = separate_chain_hash_rehashing(&hash);
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-    RESULT_CHECK_uint32(prime_numeral_next(tmp + 1),
-        separate_chain_hash_size(new), &pass);
-
-    hash = separate_chain_hash_rehashing(&new);
-    RESULT_CHECK_pointer(NULL, new, &pass);
-    new = separate_chain_hash_rehashing(&hash);
-    RESULT_CHECK_pointer(NULL, hash, &pass);
-
-    separate_chain_hash_destroy(&new);
-    UNIT_TEST_RESULT(separate_chain_hash_rehashing, pass);
-}
+#undef HASH_create
+#undef HASH_destroy
+#undef HASH_load_factor_calculate
+#undef HASH_insert
+#undef HASH_remove
+#undef HASH_find
+#undef HASH_rehashing
 
