@@ -213,7 +213,6 @@ ptest_##name##_heap_remove_max(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                     \
                                                      \
     while (count--) {                                \
-        printf("%d\n", count);                       \
         HEAP_remove_max(heap);                       \
     }                                                \
                                                      \
