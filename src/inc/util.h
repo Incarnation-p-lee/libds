@@ -32,8 +32,16 @@ extern void memory_maps_obtain(void);
 extern void test_parameter_parser(uint32 argc, char **argv);
 extern void test_execution_start(void);
 extern void memory_cache_cleanup(void);
-
+extern bool complain_no_memory_p(void *ptr);
+extern bool complain_null_pointer_p(void *ptr);
+extern bool complain_zero_size_p(uint32 size);
+extern void * memory_cache_allocate(uint32 size);
+extern void memory_cache_free(void *addr);
+extern void * memory_cache_re_allocate(void *addr, uint32 size);
+extern uint32 random_uint32_with_limit(uint32 lmt);
+extern sint64 random_sint64(void);
 
 /* END OF GLOBAL EXPORTED INTERFACE */
 
 #endif
+

@@ -701,8 +701,8 @@ struct leftist_heap {
 #define SKIP_LIST_MAX_LVL     LEVEL_LIMIT
 #define SKIP_LIST_MAX_LVL_IDX SKIP_LIST_MAX_LVL - 1
 
-
 #endif
+
 /* END of ./src/linked_list/linked_list.h */
 
 /* BEGIN of ./src/linked_list/linked_list_declaration.h */
@@ -877,6 +877,7 @@ enum ITER_ORDER {
 
 
 #endif
+
 /* END of ./src/tree/tree.h */
 
 /* BEGIN of ./src/tree/tree_declaration.h */

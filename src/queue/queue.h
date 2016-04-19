@@ -6,12 +6,6 @@
 #define REST_INVALID               0xffffffff
 #define CAPACITY_INVALID           0xffffffff
 
-extern void * memory_cache_allocate(uint32 size);
-extern void memory_cache_free(void *addr);
-extern void * memory_cache_re_allocate(void *addr, uint32 size);
-extern bool complain_no_memory_p(void *ptr);
-extern bool complain_null_pointer_p(void *ptr);
-extern bool complain_zero_size_p(uint32 size);
 extern bool array_stack_full_p(struct array_stack *stack);
 extern bool array_stack_empty_p(struct array_stack *stack);
 extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
