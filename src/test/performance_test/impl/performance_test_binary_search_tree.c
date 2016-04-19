@@ -8,9 +8,9 @@ performance_test_binary_search_tree_struct_field(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_nice_set(tree, 0);
-        binary_search_tree_child_left_set(tree, NULL);
-        binary_search_tree_child_right_set(tree, NULL);
+        binary_search_tree_nice_set(tree, 0);
+        binary_search_tree_left_set(tree, NULL);
+        binary_search_tree_right_set(tree, NULL);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -39,13 +39,13 @@ performance_test_binary_search_tree_create(uint32 count)
 static void
 performance_test_binary_search_tree_node_create(uint32 count)
 {
-    struct binary_search_tree *tree;
+    // struct binary_search_tree *tree;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tree = binary_search_tree_node_create(NULL, 0x23);
-        binary_search_tree_destroy(&tree);
+        // tree = binary_search_tree_node_create(NULL, 0x23);
+        // binary_search_tree_destroy(&tree);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -63,7 +63,7 @@ performance_test_binary_search_tree_initial(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_initial(tree);
+        binary_search_tree_initial(tree, 0, tree);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -82,7 +82,7 @@ performance_test_binary_search_tree_node_initial(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_initial(tree, NULL, 0x39);
+        // binary_search_tree_node_initial(tree, NULL, 0x39);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -112,15 +112,15 @@ static void
 performance_test_binary_search_tree_node_find(uint32 count)
 {
     struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
+    // struct binary_search_tree *tmp;
 
     tree = test_binary_search_tree_sample(0x93915, 0x7282d);
-    tmp = binary_search_tree_node_find_max(tree);
+    // tmp = binary_search_tree_find_max(tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_find(tree, binary_search_tree_node_nice(tmp));
+        // binary_search_tree_node_find(tree, binary_search_tree_node_nice(tmp));
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -139,7 +139,7 @@ performance_test_binary_search_tree_node_find_min(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_find_min(tree);
+        // binary_search_tree_node_find_min(tree);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -158,7 +158,7 @@ performance_test_binary_search_tree_node_find_max(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_find_max(tree);
+        // binary_search_tree_node_find_max(tree);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -177,7 +177,7 @@ performance_test_binary_search_tree_height(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_height(tree);
+        // binary_search_tree_height(tree);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -190,15 +190,15 @@ static void
 performance_test_binary_search_tree_node_contains_p(uint32 count)
 {
     struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
+    // struct binary_search_tree *tmp;
 
     tree = test_binary_search_tree_sample(0xf2a32, 0xae12d);
-    tmp = binary_search_tree_node_find_max(tree);
+    // tmp = binary_search_tree_find_max(tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        binary_search_tree_node_contains_p(tree, tmp);
+        // binary_search_tree_node_contains_p(tree, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -211,18 +211,18 @@ static void
 performance_test_binary_search_tree_node_insert(uint32 count)
 {
     struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
+    // struct binary_search_tree *tmp;
 
     count = count >> 6;
     count = 0 == count ? 1000 : count;
     tree = binary_search_tree_create();
-    binary_search_tree_node_initial(tree, NULL, -0xfade);
+    binary_search_tree_initial(tree, -0xfade, NULL);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = binary_search_tree_node_create(NULL, count);
-        binary_search_tree_node_insert(tree, tmp);
+        // tmp = binary_search_tree_node_create(NULL, count);
+        // binary_search_tree_node_insert(tree, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -235,22 +235,22 @@ static void
 performance_test_binary_search_tree_node_remove(uint32 count)
 {
     struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
-    sint64 nice;
+    // struct binary_search_tree *tmp;
+    // sint64 nice;
 
     tree = test_binary_search_tree_sample(0xa3d3, 0x3f82);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = binary_search_tree_node_find_max(tree);
-        nice = binary_search_tree_node_nice(tmp);
+        // tmp = binary_search_tree_node_find_max(tree);
+        // nice = binary_search_tree_node_nice(tmp);
 
-        tmp = binary_search_tree_node_remove(&tree, nice);
-        binary_search_tree_destroy(&tmp);
+        // tmp = binary_search_tree_node_remove(&tree, nice);
+        // binary_search_tree_destroy(&tmp);
 
-        tmp = binary_search_tree_node_create(NULL, nice + 1);
-        binary_search_tree_node_insert(tree, tmp);
+        // tmp = binary_search_tree_node_create(NULL, nice + 1);
+        // binary_search_tree_node_insert(tree, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
@@ -263,21 +263,21 @@ static void
 performance_test_binary_search_tree_node_remove_and_destroy(uint32 count)
 {
     struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
-    sint64 nice;
+    // struct binary_search_tree *tmp;
+    // sint64 nice;
 
     tree = test_binary_search_tree_sample(0x93d3, 0x4f82);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        tmp = binary_search_tree_node_find_max(tree);
-        nice = binary_search_tree_node_nice(tmp);
+        // tmp = binary_search_tree_node_find_max(tree);
+        // nice = binary_search_tree_node_nice(tmp);
 
-        binary_search_tree_node_remove_and_destroy(&tree, nice);
+        // binary_search_tree_node_remove_and_destroy(&tree, nice);
 
-        tmp = binary_search_tree_node_create(NULL, nice + 1);
-        binary_search_tree_node_insert(tree, tmp);
+        // tmp = binary_search_tree_node_create(NULL, nice + 1);
+        // binary_search_tree_node_insert(tree, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

@@ -183,11 +183,16 @@ struct collision_chain {
     sint64                    nice;
 };
 
+struct nv_data {
+    sint64 nice;
+    void   *val;
+};
+
 /*
  * binary search tree
  */
 struct binary_search_tree {
-    struct collision_chain    chain;
+    struct nv_data            *data;
     struct binary_search_tree *left;
     struct binary_search_tree *right;
 };
@@ -459,25 +464,25 @@ struct leftist_heap {
     (assert(queue), (queue)->sid = (v))
 
 /* BINARY SEARCH TREE */
-#define binary_search_tree_node_nice(tree) \
-    (assert(tree), (tree)->chain.nice)
-#define binary_search_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->chain.nice = (v))
+#define binary_search_tree_nice(tree) \
+    (assert(tree), (tree)->data->nice)
+#define binary_search_tree_nice_set(tree, v) \
+    (assert(tree), (tree)->data->nice = (v))
 
-#define binary_search_tree_child_left(tree) \
+#define binary_search_tree_left(tree) \
     (assert(tree), (tree)->left)
-#define binary_search_tree_child_left_set(tree, v) \
+#define binary_search_tree_left_set(tree, v) \
     (assert(tree), (tree)->left = (v))
 
-#define binary_search_tree_child_right(tree) \
+#define binary_search_tree_right(tree) \
     (assert(tree), (tree)->right)
-#define binary_search_tree_child_right_set(tree, v) \
+#define binary_search_tree_right_set(tree, v) \
     (assert(tree), (tree)->right = (v))
 
-#define binary_search_tree_node_link(tree) \
-    (assert(tree), ((tree)->chain).link)
-#define binary_search_tree_child_link_set(tree, v) \
-    (assert(tree), ((tree)->chain).link = (v))
+#define binary_search_tree_val(tree) \
+    (assert(tree), (tree)->data->val)
+#define binary_search_tree_val_set(tree, v) \
+    (assert(tree), (tree)->data->val = (v))
 
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \
@@ -654,6 +659,7 @@ struct leftist_heap {
 
 #define NAME_LEN             256
 #define CONTENT_LEN          NAME_LEN
+#define INVALID_PTR          (void *)((unsigned long)-1)
 
 
 #define CONTAINER_OF(ptr, type, member) \
@@ -887,7 +893,7 @@ enum ITER_ORDER {
 
 extern bool avl_tree_balanced_p(struct avl_tree *tree);
 extern bool avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node);
-extern bool binary_search_tree_node_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
+extern bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern bool splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node);
 extern sint32 binary_search_tree_height(struct binary_search_tree *tree);
 extern sint32 splay_tree_height(struct splay_tree *tree);
@@ -902,13 +908,11 @@ extern struct avl_tree * avl_tree_node_insert(struct avl_tree **tree, struct avl
 extern struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
 extern struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
 extern struct binary_indexed_tree * binary_indexed_tree_create(sint64 *data, uint32 size);
-extern struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
+extern struct binary_search_tree  * binary_search_tree_find_min(struct binary_search_tree *tree);
 extern struct binary_search_tree * binary_search_tree_create(void);
-extern struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
-extern struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *tree, sint64 nice);
-extern struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *tree);
-extern struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *tree, struct binary_search_tree *node);
-extern struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **tree, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_find(struct binary_search_tree *tree, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_find_max(struct binary_search_tree *tree);
+extern struct binary_search_tree * binary_search_tree_insert(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern struct splay_tree * splay_tree_create(void);
 extern struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 extern struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);
@@ -918,6 +922,7 @@ extern struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, stru
 extern struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
 extern struct splay_tree * splay_tree_node_remove_internal(struct splay_tree **tree, sint64 nice);
 extern struct splay_tree * splay_tree_ptr_container_of(struct binary_search_tree *node);
+extern void * binary_search_tree_remove(struct binary_search_tree **tree, struct binary_search_tree *node);
 extern void avl_tree_destroy(struct avl_tree **tree);
 extern void avl_tree_initial(struct avl_tree *tree);
 extern void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
@@ -927,10 +932,8 @@ extern void binary_indexed_tree_add(struct binary_indexed_tree *tree, uint32 num
 extern void binary_indexed_tree_destroy(struct binary_indexed_tree **tree);
 extern void binary_indexed_tree_sub(struct binary_indexed_tree *tree, uint32 number, sint64 val);
 extern void binary_search_tree_destroy(struct binary_search_tree **tree);
-extern void binary_search_tree_initial(struct binary_search_tree *tree);
+extern void binary_search_tree_initial(struct binary_search_tree *tree, sint64 nice, void *val);
 extern void binary_search_tree_iterate(struct binary_search_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
-extern void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
-extern void binary_search_tree_node_remove_and_destroy(struct binary_search_tree **tree, sint64 nice);
 extern void splay_tree_destroy(struct splay_tree **tree);
 extern void splay_tree_initial(struct splay_tree *tree);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);

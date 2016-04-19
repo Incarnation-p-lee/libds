@@ -19,7 +19,7 @@
 
 #define NAME_LEN             256
 #define CONTENT_LEN          NAME_LEN
-#define INVALID_PTR          ((unsigned long)-1)
+#define INVALID_PTR          (void *)((unsigned long)-1)
 
 #ifdef DEBUG
     #define malloc_ds            malloc_wrap

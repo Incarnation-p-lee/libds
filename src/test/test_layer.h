@@ -857,7 +857,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "struct_field",
         NULL,
         {
-            &unit_test_binary_search_tree_struct_field,
+            NULL,
             &performance_test_binary_search_tree_struct_field,
         },
     },
@@ -865,7 +865,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "create",
         NULL,
         {
-            &unit_test_binary_search_tree_create,
+            &utest_binary_search_tree_create,
             &performance_test_binary_search_tree_create,
         },
     },
@@ -873,7 +873,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "node_create",
         NULL,
         {
-            &unit_test_binary_search_tree_node_create,
+            NULL,
             &performance_test_binary_search_tree_node_create,
         },
     },
@@ -881,7 +881,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "initial",
         NULL,
         {
-            &unit_test_binary_search_tree_initial,
+            &utest_binary_search_tree_initial,
             &performance_test_binary_search_tree_initial,
         },
     },
@@ -889,7 +889,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "node_initial",
         NULL,
         {
-            &unit_test_binary_search_tree_node_initial,
+            NULL,
             &performance_test_binary_search_tree_node_initial,
         },
     },
@@ -897,31 +897,31 @@ static const struct test_layer_table binary_search_tree[] = {
         "destroy",
         NULL,
         {
-            &unit_test_binary_search_tree_destroy,
+            &utest_binary_search_tree_destroy,
             &performance_test_binary_search_tree_destroy,
         },
     },
     {
-        "node_find",
+        "find",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find,
+            &utest_binary_search_tree_find,
             &performance_test_binary_search_tree_node_find,
         },
     },
     {
-        "node_find_min",
+        "find_min",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find_min,
+            &utest_binary_search_tree_find_min,
             &performance_test_binary_search_tree_node_find_min,
         },
     },
     {
-        "node_find_max",
+        "find_max",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find_max,
+            &utest_binary_search_tree_find_max,
             &performance_test_binary_search_tree_node_find_max,
         },
     },
@@ -929,31 +929,31 @@ static const struct test_layer_table binary_search_tree[] = {
         "height",
         NULL,
         {
-            &unit_test_binary_search_tree_height,
+            &utest_binary_search_tree_height,
             &performance_test_binary_search_tree_height,
         },
     },
     {
-        "node_contains_p",
+        "contains_p",
         NULL,
         {
-            &unit_test_binary_search_tree_node_contains_p,
+            &utest_binary_search_tree_contains_p,
             &performance_test_binary_search_tree_node_contains_p,
         },
     },
     {
-        "node_insert",
+        "insert",
         NULL,
         {
-            &unit_test_binary_search_tree_node_insert,
+            &utest_binary_search_tree_insert,
             &performance_test_binary_search_tree_node_insert,
         },
     },
     {
-        "node_remove",
+        "remove",
         NULL,
         {
-            &unit_test_binary_search_tree_node_remove,
+            &utest_binary_search_tree_remove,
             &performance_test_binary_search_tree_node_remove,
         },
     },
@@ -961,7 +961,7 @@ static const struct test_layer_table binary_search_tree[] = {
         "node_remove_and_destroy",
         NULL,
         {
-            &unit_test_binary_search_tree_node_remove_and_destroy,
+            NULL,
             &performance_test_binary_search_tree_node_remove_and_destroy,
         },
     },
@@ -969,12 +969,13 @@ static const struct test_layer_table binary_search_tree[] = {
         "iterate",
         NULL,
         {
-            &unit_test_binary_search_tree_iterate,
+            &utest_binary_search_tree_iterate,
             &performance_test_binary_search_tree_iterate,
         },},
     {NULL,                      NULL, {NULL, NULL},},
 };
 
+/*
 static const struct test_layer_table avl_tree[] = {
     {
         "struct_field",
@@ -1219,6 +1220,7 @@ static const struct test_layer_table splay_tree[] = {
     },
     {NULL,                      NULL, {NULL,},},
 };
+*/
 
 static const struct test_layer_table binary_indexed_tree[] = {
     {
@@ -1807,9 +1809,9 @@ static const struct test_layer_table test_queue_implement[] = {
 
 static const struct test_layer_table test_tree_implement[] = {
     {"binary_search",  binary_search_tree,  {NULL, NULL},},
-    {"avl",            avl_tree,            {NULL, NULL},},
-    {"splay",          splay_tree,          {NULL, NULL},},
-    {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
+    // {"avl",            avl_tree,            {NULL, NULL},},
+    // {"splay",          splay_tree,          {NULL, NULL},},
+    // {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,            NULL,               {NULL, NULL},},
 };

@@ -143,7 +143,7 @@
 
 #define binary_search_tree_val(tree) \
     (assert(tree), (tree)->data->val)
-#define binary_search_tree_link_set(tree, v) \
+#define binary_search_tree_val_set(tree, v) \
     (assert(tree), (tree)->data->val = (v))
 
 /* AVL TREE */

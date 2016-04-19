@@ -1,4 +1,30 @@
 static inline bool
+binary_search_tree_ordered_p(struct binary_search_tree *tree)
+{
+    struct binary_search_tree *left;
+    struct binary_search_tree *right;
+
+    if (!tree) {
+        return true;
+    } else {
+        left = binary_search_tree_left(tree);
+        right = binary_search_tree_right(tree);
+
+        if (left && tree->data->nice < left->data->nice) {
+            return false;
+        } else if (right && tree->data->nice > right->data->nice) {
+            return false;
+        } else {
+            if (!binary_search_tree_ordered_p(left)) {
+                return false;
+            } else {
+                return binary_search_tree_ordered_p(right);
+            }
+        }
+    }
+}
+
+static inline bool
 avl_tree_height_sync_with_calculated_p(struct avl_tree *node,
     sint32 left, sint32 right)
 {

@@ -84,14 +84,14 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
     uint32 i;
 
     tree = binary_search_tree_create();
-    binary_search_tree_node_initial(tree, &reference, 0);
+    binary_search_tree_initial(tree, 0, &reference);
     i = 1;
 
     while (i < count) {
         nice = (sint64)((rand() % range) - (range / 2));
-        tmp = binary_search_tree_node_create(NULL, 0x0);
-        binary_search_tree_node_initial(tmp, &reference, nice);
-        if (tmp != binary_search_tree_node_insert(tree, tmp)) {
+        tmp = binary_search_tree_create();
+        binary_search_tree_initial(tmp, nice, &reference);
+        if (tmp != binary_search_tree_insert(tree, tmp)) {
             binary_search_tree_destroy(&tmp);
         }
         i++;
