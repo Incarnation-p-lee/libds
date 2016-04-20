@@ -1081,6 +1081,24 @@ extern void minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nic
 #endif
 /* END of ./src/heap/heap_declaration.h */
 
+/* BEGIN of ./src/sort/sort.h */
+#ifndef HAVE_DEFINED_SORT_H
+#define HAVE_DEFINED_SORT_H
+
+#endif
+
+/* END of ./src/sort/sort.h */
+
+/* BEGIN of ./src/sort/sort_declaration.h */
+#ifndef SORT_DECLARATION_H
+#define SORT_DECLARATION_H
+
+
+extern void sort_insertion(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+
+#endif
+/* END of ./src/sort/sort_declaration.h */
+
 /* BEGIN of ./src/log/log.h */
 #ifndef LOG_OF_LIBDS_H
 #define LOG_OF_LIBDS_H

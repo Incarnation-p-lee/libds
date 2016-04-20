@@ -3,14 +3,14 @@
 
 SHELL        =/bin/sh
 CC           =gcc
-# CC           =clang-3.5
+#CC           =clang-3.5
 AR           =ar
 AFLAG        =-rc
 
 DFLAG        =-shared -fPIC
 
 CFLAG        =-Wall -Werror -c -fPIC
-#CFLAG        =-c
+# CFLAG        =-c
 CFLAG        +=$(ARGV_CFG)
 
 LFLAG        =

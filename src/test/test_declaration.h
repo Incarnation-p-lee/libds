@@ -33,6 +33,7 @@ static inline struct single_linked_list * test_single_linked_list_sample(uint32 
 static inline struct skip_linked_list * test_skip_linked_list_sample(uint32 range, uint32 count);
 static inline struct splay_tree * test_splay_tree_sample(uint64 range, uint32 node_count);
 static inline struct test_case_filter * test_case_filter_initial(void);
+static inline uint32 * test_uint32_data_array(uint32 size);
 static inline void test_binary_heap_data_randomization(struct heap_data **hd_array, uint32 last);
 static inline void test_case_filter_obtain_internal(char *dest, char *arg, uint32 len);
 static inline void test_case_list(struct test_extra_info *info, char *content);

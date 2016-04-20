@@ -39,6 +39,23 @@ test_sint64_data_array(uint32 size)
     return retval;
 }
 
+static inline uint32 *
+test_uint32_data_array(uint32 size)
+{
+    uint32 i;
+    uint32 *retval;
+
+    assert(!complain_zero_size_p(size));
+
+    i = 0;
+    retval = memory_cache_allocate(sizeof(*retval) * size);
+
+    while (i < size) {
+        retval[i++] = random_uint32_with_limit(0xF);
+    }
+
+    return retval;
+}
 
 static inline sint64
 test_sint64_data_sum(sint64 *data, int m, int n, int size)

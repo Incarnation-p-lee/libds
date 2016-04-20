@@ -23,6 +23,9 @@ my @export = ("$incdir/types.h",
               "$srcdir/hash/hash_declaration.h",
               "$srcdir/heap/heap.h",
               "$srcdir/heap/heap_declaration.h",
+              "$srcdir/sort/sort.h",
+              "$srcdir/sort/sort_declaration.h",
+              # log
               "$srcdir/log/log.h",);
 my $out = "$base/src/inc/ds.h";
 

@@ -46,10 +46,10 @@ sort_insertion(void *base, uint32 size, uint32 csize,
         return;
     } else {
         i = 1;
-        tmp = memory_cache_allocate(size);
+        tmp = memory_cache_allocate(csize);
 
         while (i < size) {
-            sort_cell_copy(tmp, base + i * size, csize);
+            sort_cell_copy(tmp, base + i * csize, csize);
             j = i;
 
             while (j > 0 && compare(base + (j - 1) * csize, tmp) > 0) {
@@ -57,7 +57,7 @@ sort_insertion(void *base, uint32 size, uint32 csize,
                 j--;
             }
 
-            sort_cell_copy(base + i * csize, tmp, size);
+            sort_cell_copy(base + j * csize, tmp, csize);
             i++;
         }
 
