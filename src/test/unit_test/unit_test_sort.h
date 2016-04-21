@@ -12,7 +12,7 @@ utest_##name##_sort(void)                                                    \
     void *compare;                                                           \
                                                                              \
     pass = true;                                                             \
-    size = 0x8;                                                           \
+    size = 0x1ed8;                                                           \
     data = test_uint32_data_array(size);                                     \
     compare = &utest_sort_compare_u32;                                       \
                                                                              \
@@ -23,7 +23,7 @@ utest_##name##_sort(void)                                                    \
                                                                              \
     csize = sizeof(uint32);                                                  \
     SORT(data, size, csize, compare);                                        \
-    RESULT_CHECK_bool(true, utest_sort_sorted_p(data, size, csize, compare), \
+    RESULT_CHECK_bool(true, sort_data_sorted_p(data, size, csize, compare),  \
         &pass);                                                              \
     memory_cache_free(data);                                                 \
                                                                              \
@@ -31,15 +31,15 @@ utest_##name##_sort(void)                                                    \
     csize = sizeof(struct utest_sort_data);                                  \
     compare = &utest_sort_compare_struct;                                    \
     SORT(data, size, csize, compare);                                        \
-    RESULT_CHECK_bool(true, utest_sort_sorted_p(data, size, csize, compare), \
+    RESULT_CHECK_bool(true, sort_data_sorted_p(data, size, csize, compare),  \
         &pass);                                                              \
     memory_cache_free(data);                                                 \
                                                                              \
-    data = utest_sort_data_array(size);                                      \
+    data = utest_sort_data_ptr_array(size);                                  \
     csize = sizeof(struct utest_sort_data *);                                \
     compare = &utest_sort_compare_ptr;                                       \
     SORT(data, size, csize, compare);                                        \
-    RESULT_CHECK_bool(true, utest_sort_sorted_p(data, size, csize, compare), \
+    RESULT_CHECK_bool(true, sort_data_sorted_p(data, size, csize, compare),  \
         &pass);                                                              \
     utest_sort_data_ptr_array_destroy(data, size);                           \
                                                                              \

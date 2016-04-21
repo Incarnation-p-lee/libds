@@ -51,7 +51,7 @@ test_uint32_data_array(uint32 size)
     retval = memory_cache_allocate(sizeof(*retval) * size);
 
     while (i < size) {
-        retval[i++] = random_uint32_with_limit(0xF);
+        retval[i++] = random_uint32_with_limit(0x7FFFFF);
     }
 
     return retval;

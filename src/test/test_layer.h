@@ -1767,7 +1767,7 @@ static const struct test_layer_table leftist_heap[] = {
     {NULL,                          NULL, {NULL, NULL},},
 };
 
-static const struct test_layer_table insertion_sort[] = {
+static const struct test_layer_table sort_insertion[] = {
     {
         "*",
         NULL,
@@ -1835,7 +1835,7 @@ static const struct test_layer_table test_heap_implement[] = {
 };
 
 static const struct test_layer_table test_sort_implement[] = {
-    {"insertion", insertion_sort, {NULL, NULL},},
+    {"insertion", sort_insertion, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,        NULL,           {NULL, NULL},},
 };

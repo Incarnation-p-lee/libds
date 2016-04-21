@@ -1,23 +1,3 @@
-static inline void
-sort_cell_copy(void *to, void *from, uint32 size)
-{
-    assert(!complain_null_pointer_p(to));
-    assert(!complain_null_pointer_p(from));
-    assert(!complain_zero_size_p(size));
-
-    if (sizeof(uint64) == size) {
-        *(uint64 *)to = *(uint64 *)from;
-    } else if (sizeof(uint32) == size) {
-        *(uint32 *)to = *(uint32 *)from;
-    } else if (sizeof(uint16) == size) {
-        *(uint16 *)to = *(uint16 *)from;
-    } else if (sizeof(uint8) == size) {
-        *(uint8 *)to = *(uint8 *)from;
-    } else {
-        memcpy(to, from, size);
-    }
-}
-
 /*
  *
  * 1,2,4,6,7,[5]
@@ -29,7 +9,7 @@ sort_cell_copy(void *to, void *from, uint32 size)
  *
  */
 void
-sort_insertion(void *base, uint32 size, uint32 csize,
+insertion_sort(void *base, uint32 size, uint32 csize,
     sint32 (*compare)(const void *, const void *))
 {
     uint32 i;
@@ -62,6 +42,7 @@ sort_insertion(void *base, uint32 size, uint32 csize,
         }
 
         memory_cache_free(tmp);
+        assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 

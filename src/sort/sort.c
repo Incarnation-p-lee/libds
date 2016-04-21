@@ -9,5 +9,6 @@
 #include "sort.h"
 #include "sort_declaration.h"
 
+#include "impl/sort_internal.c"
 #include "impl/insertion_sort.c"
 

@@ -1,4 +1,4 @@
-#define SORT                   sort_insertion
+#define SORT                   insertion_sort
 
 #include "../unit_test_sort.h"
 

@@ -10,7 +10,7 @@ utest_sort_data_array(uint32 size)
 
     i = 0;
     while (i < size) {
-        retval[i].val = random_uint32_with_limit(0x7FFFFFF);
+        retval[i].val = random_uint32_with_limit(0x7FFFFF);
         i++;
     }
 
@@ -30,7 +30,7 @@ utest_sort_data_ptr_array(uint32 size)
     i = 0;
     while (i < size) {
         retval[i] = memory_cache_allocate(sizeof(retval[i]));
-        retval[i]->val = random_uint32_with_limit(0x7FFFFFF);
+        retval[i]->val = random_uint32_with_limit(0x7FFFFF);
         i++;
     }
 
@@ -115,32 +115,5 @@ utest_sort_compare_ptr(const void *a, const void *b)
     } else {
         return 0;
     }
-}
-
-static inline bool
-utest_sort_sorted_p(void *data, uint32 size, uint32 csize,
-    sint32 (*compare)(const void *, const void *))
-{
-    void *a;
-    void *b;
-    uint32 i;
-
-    assert(!complain_null_pointer_p(data));
-    assert(!complain_null_pointer_p(compare));
-    assert(!complain_zero_size_p(size));
-    assert(!complain_zero_size_p(csize));
-
-    i = 1;
-    while (i < size) {
-        a = data + (i - 1) * csize;
-        b = data + i * csize;
-
-        if (compare(a, b) > 0) {
-            return false;
-        }
-        i++;
-    }
-
-    return true;
 }
 

@@ -9,7 +9,6 @@ static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
 static inline bool utest_single_linked_list_node_legal_p(struct single_linked_list *node);
 static inline bool utest_skip_linked_list_node_legal_p(struct skip_linked_list *node);
-static inline bool utest_sort_sorted_p(void *data, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 static inline sint32 utest_sort_compare_ptr(const void *a, const void *b);
 static inline sint32 utest_sort_compare_struct(const void *a, const void *b);
 static inline sint32 utest_sort_compare_u32(const void *a, const void *b);
