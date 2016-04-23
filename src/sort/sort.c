@@ -11,4 +11,5 @@
 
 #include "impl/sort_internal.c"
 #include "impl/insertion_sort.c"
+#include "impl/shell_sort.c"
 

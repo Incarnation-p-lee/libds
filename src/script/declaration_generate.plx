@@ -89,6 +89,7 @@ sub file_scan() {
         next if /:$/;
         next if /^UT_/;
         next if /^PT_/;
+        next if /\[\]/; # exclude array.
 
         if (/^\w/) {
             $body = 0;

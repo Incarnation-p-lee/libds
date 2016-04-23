@@ -1096,6 +1096,7 @@ extern void minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nic
 
 extern bool sort_data_sorted_p(void *data, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void insertion_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+extern void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 
 #endif
 /* END of ./src/sort/sort_declaration.h */
