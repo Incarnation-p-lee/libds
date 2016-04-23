@@ -1773,7 +1773,7 @@ static const struct test_layer_table sort_insertion[] = {
         NULL,
         {
             &utest_insertion_sort,
-            NULL,
+            &ptest_insertion_sort,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},

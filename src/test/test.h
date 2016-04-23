@@ -49,6 +49,12 @@ struct test_extra_info performance_attr = {
     DEFAULT_ITERATION_CNT,
 };
 
+struct test_sort_data {
+    uint32 val;
+    char   *n;
+};
+
+
 static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
 static inline void performance_test_execution_start(struct test_extra_info *entry, char *content);
