@@ -1785,7 +1785,7 @@ static const struct test_layer_table sort_shell[] = {
         NULL,
         {
             &utest_shell_sort,
-            NULL, // &ptest_insertion_sort,
+            &ptest_shell_sort,
         },
     },
     {NULL,                          NULL, {NULL, NULL},},
@@ -1848,7 +1848,7 @@ static const struct test_layer_table test_heap_implement[] = {
 
 static const struct test_layer_table test_sort_implement[] = {
     {"insertion", sort_insertion, {NULL, NULL},},
-    {"shell",         sort_shell, {NULL, NULL},},
+    {"shell",     sort_shell,     {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,        NULL,           {NULL, NULL},},
 };

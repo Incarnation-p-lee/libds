@@ -28,9 +28,9 @@ shell_sort(void *base, uint32 size, uint32 csize,
                 sort_cell_copy(tmp, base + i * csize, csize);
                 j = i;
 
-                while (j > 0 && compare(base + (j - inc) * csize, tmp) > 0) {
+                while (j >= inc && compare(base + (j - inc) * csize, tmp) > 0) {
                     sort_cell_copy(base + j * csize, base + (j - inc) * csize, csize);
-                    j -= csize;
+                    j -= inc;
                 }
 
                 sort_cell_copy(base + j * csize, tmp, csize);
