@@ -1767,29 +1767,34 @@ static const struct test_layer_table leftist_heap[] = {
     {NULL,                          NULL, {NULL, NULL},},
 };
 
-static const struct test_layer_table sort_insertion[] = {
+static const struct test_layer_table sort_collection[] = {
     {
-        "*",
+        "insertion",
         NULL,
         {
             &utest_insertion_sort,
             &ptest_insertion_sort,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
-};
-
-static const struct test_layer_table sort_shell[] = {
     {
-        "*",
+        "shell",
         NULL,
         {
             &utest_shell_sort,
             &ptest_shell_sort,
         },
     },
+    {
+        "heap",
+        NULL,
+        {
+            &utest_heap_sort,
+            &ptest_heap_sort,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1847,10 +1852,9 @@ static const struct test_layer_table test_heap_implement[] = {
 };
 
 static const struct test_layer_table test_sort_implement[] = {
-    {"insertion", sort_insertion, {NULL, NULL},},
-    {"shell",     sort_shell,     {NULL, NULL},},
+    {"sort", sort_collection, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
-    {NULL,        NULL,           {NULL, NULL},},
+    {NULL,   NULL,            {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */

@@ -45,3 +45,21 @@ sort_cell_copy(void *to, void *from, uint32 size)
     }
 }
 
+static inline void
+sort_cell_swap(void *a, void *b, uint32 size)
+{
+    void *tmp;
+
+    assert(!complain_null_pointer_p(a));
+    assert(!complain_null_pointer_p(b));
+    assert(!complain_zero_size_p(size));
+
+    tmp = memory_cache_allocate(size);
+
+    sort_cell_copy(tmp, a, size);
+    sort_cell_copy(a, b, size);
+    sort_cell_copy(b, tmp, size);
+
+    memory_cache_free(tmp);
+}
+
