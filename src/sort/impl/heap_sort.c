@@ -4,15 +4,7 @@ heap_sort(void *base, uint32 size, uint32 csize,
 {
     uint32 index;
 
-    if (complain_null_pointer_p(base)) {
-        return;
-    } else if (complain_null_pointer_p(compare)) {
-        return;
-    } else if (complain_zero_size_p(size)) {
-        return;
-    } else if (complain_zero_size_p(csize)) {
-        return;
-    } else {
+    if (sort_parameters_legal_p(base, size, csize, compare)) {
         heap_sort_build_heap(base, size, csize, compare);
 
         // Put the max one from heap top to tail of array
@@ -33,10 +25,7 @@ heap_sort_build_heap(void *base, uint32 size, uint32 csize,
 {
     sint32 index;
 
-    assert(!complain_null_pointer_p(base));
-    assert(!complain_null_pointer_p(compare));
-    assert(!complain_zero_size_p(size));
-    assert(!complain_zero_size_p(csize));
+    assert(sort_parameters_legal_p(base, size, csize, compare));
 
     index = (sint32)(size >> 1);
 
@@ -56,10 +45,8 @@ heap_sort_percolate_down(void *base, uint32 size, uint32 csize, uint32 index,
     void *tmp;
     uint32 child;
 
-    assert(!complain_null_pointer_p(base));
-    assert(!complain_null_pointer_p(compare));
-    assert(!complain_zero_size_p(size));
-    assert(!complain_zero_size_p(csize));
+    assert(sort_parameters_legal_p(base, size, csize, compare));
+    assert(index < size);
 
     tmp = memory_cache_allocate(csize);
     sort_cell_copy(tmp, base + index * csize, csize);

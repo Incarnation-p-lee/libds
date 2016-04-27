@@ -63,3 +63,20 @@ sort_cell_swap(void *a, void *b, uint32 size)
     memory_cache_free(tmp);
 }
 
+static inline bool
+sort_parameters_legal_p(void *base, uint32 size, uint32 csize,
+    sint32 (*compare)(const void *, const void *))
+{
+    if (complain_null_pointer_p(base)) {
+        return false;
+    } else if (complain_null_pointer_p(compare)) {
+        return false;
+    } else if (complain_zero_size_p(size)) {
+        return false;
+    } else if (complain_zero_size_p(csize)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+

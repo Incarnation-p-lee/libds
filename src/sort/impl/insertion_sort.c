@@ -16,15 +16,7 @@ insertion_sort(void *base, uint32 size, uint32 csize,
     uint32 j;
     void *tmp;
 
-    if (complain_null_pointer_p(base)) {
-        return;
-    } else if (complain_null_pointer_p(compare)) {
-        return;
-    } else if (complain_zero_size_p(size)) {
-        return;
-    } else if (complain_zero_size_p(csize)) {
-        return;
-    } else {
+    if (sort_parameters_legal_p(base, size, csize, compare)) {
         i = 1;
         tmp = memory_cache_allocate(csize);
 

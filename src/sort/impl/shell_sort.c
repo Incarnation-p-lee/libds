@@ -8,15 +8,7 @@ shell_sort(void *base, uint32 size, uint32 csize,
     void *tmp;
     uint32 inc;
 
-    if (complain_null_pointer_p(base)) {
-        return;
-    } else if (complain_null_pointer_p(compare)) {
-        return;
-    } else if (complain_zero_size_p(size)) {
-        return;
-    } else if (complain_zero_size_p(csize)) {
-        return;
-    } else {
+    if (sort_parameters_legal_p(base, size, csize, compare)) {
         tmp = memory_cache_allocate(csize);
         k = shell_sort_exponet_get(size);
 

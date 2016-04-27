@@ -3,6 +3,7 @@
 
 
 bool sort_data_sorted_p(void *data, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+static inline bool sort_parameters_legal_p(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 static inline uint32 shell_sort_exponet_get(uint32 size);
 static inline uint32 shell_sort_hibbard_increment_seq(uint32 k);
 static inline void heap_sort_build_heap(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
