@@ -44,6 +44,10 @@
     6. heap
         a. minimal heap
         b. maximal heap
-        c. min_max heap
+        c. min-max heap
         d. leftist heap
+    7. sort
+        a. insertion sort
+        b. shell sort
+        c. heap sort
 
