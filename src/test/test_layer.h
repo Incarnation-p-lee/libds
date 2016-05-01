@@ -1792,6 +1792,14 @@ static const struct test_layer_table sort_collection[] = {
             &ptest_heap_sort,
         },
     },
+    {
+        "merge",
+        NULL,
+        {
+            &utest_merge_sort,
+            &ptest_merge_sort,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 
