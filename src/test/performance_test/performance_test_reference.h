@@ -241,6 +241,7 @@ static struct performance_test_reference performance_reference[] = {
     {"shell_sort",                                       0x0u, 0x0u},
     {"heap_sort",                                        0x0u, 0x0u},
     {"merge_sort",                                       0x0u, 0x0u},
+    {"quick_sort",                                       0x0u, 0x0u},
     {NULL,                                               0x0u, 0x0u},
 };
 

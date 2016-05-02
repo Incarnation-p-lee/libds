@@ -14,4 +14,5 @@
 #include "impl/shell_sort.c"
 #include "impl/heap_sort.c"
 #include "impl/merge_sort.c"
+#include "impl/quick_sort.c"
 

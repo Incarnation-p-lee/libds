@@ -1098,6 +1098,7 @@ extern bool sort_data_sorted_p(void *data, uint32 size, uint32 csize, sint32 (*c
 extern void heap_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void insertion_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void merge_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+extern void quick_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 
 #endif

@@ -1800,6 +1800,14 @@ static const struct test_layer_table sort_collection[] = {
             &ptest_merge_sort,
         },
     },
+    {
+        "quick",
+        NULL,
+        {
+            &utest_quick_sort,
+            &ptest_quick_sort,
+        },
+    },
     {NULL,                          NULL, {NULL, NULL},},
 };
 
