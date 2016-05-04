@@ -50,4 +50,6 @@
         a. insertion sort
         b. shell sort
         c. heap sort
+        d. merge sort
+        e. quick sort
 
