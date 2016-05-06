@@ -50,11 +50,12 @@ queue_iterate_handler(void *ptr)
 static void
 tree_iterate_handler(void *ptr)
 {
-    uint32 *tmp;
+    reference++;
+}
 
-    if (ptr) {
-        tmp = ptr;
-        *tmp += 1;
-    }
+static void
+test_iterate_reference_clean(void)
+{
+    reference = 0;
 }
 

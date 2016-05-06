@@ -47,6 +47,7 @@ static void queue_iterate_handler(void *ptr);
 static void stack_iterate_handler(void *ptr);
 static void test_case_filter_destroy(struct test_case_filter **filter);
 static void test_case_filter_parser(struct test_case_filter *filter, char *arg);
+static void test_iterate_reference_clean(void);
 static void tree_iterate_handler(void *ptr);
 void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);

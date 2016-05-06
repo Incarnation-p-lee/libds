@@ -127,9 +127,9 @@
 
 /* BINARY SEARCH TREE */
 #define binary_search_tree_nice(tree) \
-    (assert(tree), (tree)->data->nice)
+    (assert(tree), (tree)->nice)
 #define binary_search_tree_nice_set(tree, v) \
-    (assert(tree), (tree)->data->nice = (v))
+    (assert(tree), (tree)->nice = (v))
 
 #define binary_search_tree_left(tree) \
     (assert(tree), (tree)->left)
@@ -140,11 +140,6 @@
     (assert(tree), (tree)->right)
 #define binary_search_tree_right_set(tree, v) \
     (assert(tree), (tree)->right = (v))
-
-#define binary_search_tree_val(tree) \
-    (assert(tree), (tree)->data->val)
-#define binary_search_tree_val_set(tree, v) \
-    (assert(tree), (tree)->data->val = (v))
 
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \

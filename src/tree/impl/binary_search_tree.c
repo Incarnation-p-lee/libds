@@ -5,11 +5,10 @@ binary_search_tree_create(void)
 }
 
 void
-binary_search_tree_initial(struct binary_search_tree *tree,
-    sint64 nice, void *val)
+binary_search_tree_initial(struct binary_search_tree *tree, sint64 nice)
 {
-    if (!complain_null_pointer_p(tree)) {
-        binary_search_tree_initial_internal(tree, nice, val);
+    if (binary_search_tree_structure_legal_p(tree)) {
+        binary_search_tree_initial_internal(tree, nice);
     }
 }
 

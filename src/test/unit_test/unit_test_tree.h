@@ -12,7 +12,6 @@ utest_##name##_tree_create(void)                               \
     tree = TREE_create();                                      \
                                                                \
     RESULT_CHECK_NOT_EQUAL_pointer(NULL, tree, &pass);         \
-    RESULT_CHECK_NOT_EQUAL_pointer(NULL, tree->data, &pass);   \
                                                                \
     TREE_destroy(&tree);                                       \
     UNIT_TEST_RESULT(name##_tree_create, pass);                \
@@ -29,12 +28,11 @@ utest_##name##_tree_initial(void)                              \
     pass = true;                                               \
     nice = 0xfade;                                             \
     tree = TREE_create();                                      \
-    TREE_initial(tree, nice, &pass);                           \
+    TREE_initial(tree, nice);                                  \
                                                                \
     RESULT_CHECK_pointer(NULL, TREE_left(tree), &pass);        \
     RESULT_CHECK_pointer(NULL, TREE_right(tree), &pass);       \
     RESULT_CHECK_sint64(nice, TREE_nice(tree), &pass);         \
-    RESULT_CHECK_pointer(&pass, TREE_val(tree), &pass);        \
                                                                \
     TREE_destroy(&tree);                                       \
     UNIT_TEST_RESULT(name##_tree_initial, pass);               \
@@ -66,6 +64,7 @@ utest_##name##_tree_find(void)                                           \
     struct TREE *tree;                                                   \
     struct TREE *tmp;                                                    \
                                                                          \
+    pass = true;                                                         \
     tree = TEST_tree_sample(0x2234, 0x3DEF);                             \
                                                                          \
     RESULT_CHECK_pointer(NULL, TREE_find(NULL, TREE_nice(tree)), &pass); \
@@ -159,7 +158,7 @@ utest_##name##_tree_contains_p(void)                              \
     pass = true;                                                  \
     tree = TEST_tree_sample(0x2FD7, 0x3A1D);                      \
     tmp = TREE_create();                                          \
-    TREE_initial(tmp, 0x1234, &pass);                             \
+    TREE_initial(tmp, 0x1234);                                    \
                                                                   \
     RESULT_CHECK_bool(false, TREE_contains_p(tree, NULL), &pass); \
     RESULT_CHECK_bool(false, TREE_contains_p(NULL, NULL), &pass); \
@@ -170,7 +169,7 @@ utest_##name##_tree_contains_p(void)                              \
     RESULT_CHECK_bool(true, TREE_contains_p(tree, tmp), &pass);   \
                                                                   \
     fake = TREE_create();                                         \
-    TREE_initial(fake, TREE_nice(tmp), tmp);                      \
+    TREE_initial(fake, TREE_nice(tmp));                           \
     RESULT_CHECK_bool(false, TREE_contains_p(tree, fake), &pass); \
                                                                   \
     TREE_destroy(&fake);                                          \
@@ -189,7 +188,7 @@ utest_##name##_tree_insert(void)                                       \
     pass = true;                                                       \
     tree = TEST_tree_sample(0x3321, 0x3A2B);                           \
     tmp = TREE_create();                                               \
-    TREE_initial(tmp, 0xFFFDEA, &pass);                                \
+    TREE_initial(tmp, 0xFFFDEA);                                       \
                                                                        \
     RESULT_CHECK_pointer(NULL, TREE_insert(tree, NULL), &pass);        \
     RESULT_CHECK_pointer(tmp, TREE_insert(tree, tmp), &pass);          \
@@ -197,7 +196,7 @@ utest_##name##_tree_insert(void)                                       \
     RESULT_CHECK_pointer(tmp, TREE_insert(tree, tmp), &pass);          \
                                                                        \
     tmp = TREE_create();                                               \
-    TREE_initial(tmp, 0xFFFDEA, &pass);                                \
+    TREE_initial(tmp, 0xFFFDEA);                                       \
     RESULT_CHECK_pointer(tmp, TREE_insert(tree, tmp), &pass);          \
                                                                        \
     TREE_destroy(&tree);                                               \
@@ -209,7 +208,6 @@ static void                                                             \
 utest_##name##_tree_remove(void)                                        \
 {                                                                       \
     bool pass;                                                          \
-    void *val;                                                          \
     struct TREE *tmp;                                                   \
     struct TREE *tree;                                                  \
                                                                         \
@@ -223,22 +221,23 @@ utest_##name##_tree_remove(void)                                        \
     RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(NULL, NULL), &pass);  \
     RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(&tree, NULL), &pass); \
                                                                         \
-    val = TREE_val(tree);                                               \
-    RESULT_CHECK_pointer(val, TREE_remove(&tree, tree), &pass);         \
+    tmp = tree;                                                         \
+    RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tree), &pass);         \
+    TREE_destroy(&tmp);                                                 \
                                                                         \
     tmp = TREE_find_min(tree);                                          \
-    val = TREE_val(tmp);                                                \
-    RESULT_CHECK_pointer(val, TREE_remove(&tree, tmp), &pass);          \
+    RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tmp), &pass);          \
+    TREE_destroy(&tmp);                                                 \
                                                                         \
     tmp = TREE_find_max(tree);                                          \
-    val = TREE_val(tmp);                                                \
-    RESULT_CHECK_pointer(val, TREE_remove(&tree, tmp), &pass);          \
+    RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tmp), &pass);          \
+    TREE_destroy(&tmp);                                                 \
                                                                         \
     tmp = TREE_create();                                                \
-    TREE_initial(tmp, 0x7FFFFFFF, tmp);                                 \
+    TREE_initial(tmp, 0x7FFFFFFF);                                      \
     RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(&tree, tmp), &pass);  \
-                                                                        \
     TREE_destroy(&tmp);                                                 \
+                                                                        \
     TREE_destroy(&tree);                                                \
     UNIT_TEST_RESULT(name##_tree_remove, pass);                         \
 }
@@ -255,20 +254,21 @@ utest_##name##_tree_iterate(void)                          \
     cnt = 0x2C7D;                                          \
     TREE_iterate(NULL, &tree_iterate_handler, ORDER_PRE);  \
                                                            \
-    reference = 0;                                         \
     tree = TEST_tree_sample(0x2A28, cnt);                  \
                                                            \
+    test_iterate_reference_clean();                        \
     TREE_iterate(tree, &tree_iterate_handler, ORDER_PRE);  \
     RESULT_CHECK_uint32(reference, cnt, &pass);            \
                                                            \
-    reference = 0;                                         \
+    test_iterate_reference_clean();                        \
     TREE_iterate(tree, &tree_iterate_handler, ORDER_END);  \
     RESULT_CHECK_uint32(0x0u, reference, &pass);           \
                                                            \
+    test_iterate_reference_clean();                        \
     TREE_iterate(tree, &tree_iterate_handler, ORDER_IN);   \
     RESULT_CHECK_uint32(reference, cnt, &pass);            \
                                                            \
-    reference = 0;                                         \
+    test_iterate_reference_clean();                        \
     TREE_iterate(tree, &tree_iterate_handler, ORDER_POST); \
     RESULT_CHECK_uint32(reference, cnt, &pass);            \
                                                            \

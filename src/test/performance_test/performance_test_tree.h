@@ -30,7 +30,7 @@ ptest_##name##_tree_initial(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
     while (count--) {                             \
-        TREE_initial(tree, 0, tree);              \
+        TREE_initial(tree, 0);                    \
     }                                             \
                                                   \
     PERFORMANCE_TEST_ENDPOINT;                    \
@@ -175,7 +175,7 @@ ptest_##name##_tree_insert(uint32 count)         \
                                                  \
     while (count--) {                            \
         tmp = TREE_create();                     \
-        TREE_initial(tmp, count, tmp);           \
+        TREE_initial(tmp, count);                \
         TREE_insert(tree, tmp);                  \
     }                                            \
                                                  \
