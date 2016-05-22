@@ -3,7 +3,7 @@ leftist_heap_create_internal(void *val, sint32 npl, sint64 nice)
 {
     struct leftist_heap *heap;
 
-    assert(NPL_NULL != npl);
+    dp_assert(NPL_NULL != npl);
 
     heap = memory_cache_allocate(sizeof(*heap));
 
@@ -38,7 +38,7 @@ leftist_heap_destroy_internal(struct leftist_heap *heap)
         leftist_heap_destroy_internal(leftist_heap_left(heap));
         leftist_heap_destroy_internal(leftist_heap_right(heap));
 
-        memory_cache_free(heap);
+        memory_cache_dp_free(heap);
     }
 }
 
@@ -54,7 +54,7 @@ leftist_heap_destroy(struct leftist_heap **heap)
 static inline void *
 leftist_heap_get_min_internal(struct leftist_heap *heap)
 {
-    assert(leftist_heap_structure_legal_p(heap));
+    dp_assert(leftist_heap_structure_legal_p(heap));
 
     return heap->data.val;
 }
@@ -91,7 +91,7 @@ leftist_heap_node_npl_update(struct leftist_heap *node)
     sint32 npl_l;
     sint32 npl_r;
 
-    assert(leftist_heap_structure_legal_p(node));
+    dp_assert(leftist_heap_structure_legal_p(node));
 
     npl_l = leftist_heap_npl_internal(node->left);
     npl_r = leftist_heap_npl_internal(node->right);
@@ -102,7 +102,7 @@ leftist_heap_node_npl_update(struct leftist_heap *node)
 static inline bool
 leftist_heap_node_npl_ordered_p(struct leftist_heap *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     if (leftist_heap_npl_internal(node->left)
         >= leftist_heap_npl_internal(node->right)) {
@@ -117,7 +117,7 @@ leftist_heap_node_child_swap(struct leftist_heap *node)
 {
     struct leftist_heap *tmp;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     tmp = node->left;
     node->left = node->right;
@@ -133,8 +133,8 @@ leftist_heap_merge_from_right(struct leftist_heap *heap,
     struct leftist_heap **major;
     struct leftist_heap *minor;
 
-    assert(leftist_heap_structure_legal_p(heap));
-    assert(leftist_heap_structure_legal_p(merge));
+    dp_assert(leftist_heap_structure_legal_p(heap));
+    dp_assert(leftist_heap_structure_legal_p(merge));
 
     if (leftist_heap_nice(heap) <= leftist_heap_nice(merge)) {
         retval = heap;
@@ -181,15 +181,15 @@ leftist_heap_merge_internal(struct leftist_heap *heap,
 {
     struct leftist_heap *retval;
 
-    assert(NULL != heap);
-    assert(NULL != merge);
-    assert(leftist_heap_validity_p(heap));
-    assert(leftist_heap_validity_p(merge));
+    dp_assert(NULL != heap);
+    dp_assert(NULL != merge);
+    dp_assert(leftist_heap_validity_p(heap));
+    dp_assert(leftist_heap_validity_p(merge));
 
     retval = leftist_heap_merge_from_right(heap, merge);
     leftist_heap_reorder_from_right(retval);
 
-    assert(leftist_heap_validity_p(retval));
+    dp_assert(leftist_heap_validity_p(retval));
 
     return retval;
 }
@@ -218,8 +218,8 @@ leftist_heap_remove_min_internal(struct leftist_heap **heap)
     struct leftist_heap *left;
     struct leftist_heap *right;
 
-    assert(heap);
-    assert(leftist_heap_structure_legal_p(*heap));
+    dp_assert(heap);
+    dp_assert(leftist_heap_structure_legal_p(*heap));
 
     removed = *heap;
     left = removed->left;
@@ -255,7 +255,7 @@ void
 leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
-        memory_cache_free(leftist_heap_remove_min_internal(heap));
+        memory_cache_dp_free(leftist_heap_remove_min_internal(heap));
     }
 }
 
@@ -265,7 +265,7 @@ leftist_heap_npl_internal(struct leftist_heap *node)
     sint32 npl;
 
     leftist_heap_npl_optimize(node, npl);
-    assert(leftist_heap_npl_optimize_validity_p(node, npl));
+    dp_assert(leftist_heap_npl_optimize_validity_p(node, npl));
 
     return npl;
 }

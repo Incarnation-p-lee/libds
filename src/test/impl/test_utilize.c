@@ -1,23 +1,23 @@
 void
 memory_trace_print(void)
 {
-    printf("  >> Memory Usage Summary <<\n");
-    printf("    . Malloc  %10"U64_MDF_U"\n", malloc_cnt);
-    printf("    . Realloc %10"U64_MDF_U"\n", realloc_cnt);
-    printf("    . Free    %10"U64_MDF_U"\n", free_cnt);
-    printf("  >> Memory End <<\n\n");
+    dp_printf("  >> Memory Usage Summary <<\n");
+    dp_printf("    . Malloc  %10"U64_MDF_U"\n", malloc_cnt);
+    dp_printf("    . Realloc %10"U64_MDF_U"\n", realloc_cnt);
+    dp_printf("    . Free    %10"U64_MDF_U"\n", free_cnt);
+    dp_printf("  >> Memory End <<\n\n");
 
     if (free_cnt != malloc_cnt) {
-        printf("Memory leak at malloc %10"U64_MDF_U" <=> free %10"U64_MDF_U"\n",
+        dp_printf("Memory leak at dp_malloc %10"U64_MDF_U" <=> dp_free %10"U64_MDF_U"\n",
             malloc_cnt, free_cnt);
-        exit(1);
+        dp_exit(1);
     }
 }
 
 void
 end_of_report_print(void)
 {
-    printf("  >> End of Data Structure Library <<\n\n");
+    dp_printf("  >> End of Data Structure Library <<\n\n");
 }
 
 static void

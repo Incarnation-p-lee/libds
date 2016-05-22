@@ -63,15 +63,15 @@ binary_indexed_tree_destroy(struct binary_indexed_tree **tree)
         tmp = *tree;
         *tree = NULL;
 
-        memory_cache_free(tmp->data);
-        memory_cache_free(tmp);
+        memory_cache_dp_free(tmp->data);
+        memory_cache_dp_free(tmp);
     }
 }
 
 static inline bool
 binary_indexed_tree_number_legal_p(struct binary_indexed_tree *tree, uint32 number)
 {
-    assert(!complain_null_pointer_p(tree));
+    dp_assert(!complain_null_pointer_p(tree));
 
     if (number == TREE_NUMBER_INVALID) {
         return false;
@@ -102,9 +102,9 @@ binary_indexed_tree_add_internal(struct binary_indexed_tree *tree,
 {
     uint32 base;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(binary_indexed_tree_number_legal_p(tree, number));
-    assert(binary_indexed_tree_structure_legal_p(tree));
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(binary_indexed_tree_number_legal_p(tree, number));
+    dp_assert(binary_indexed_tree_structure_legal_p(tree));
 
     base = ((number - 1) ^ number) & number;
     tree->data[number] += val;
@@ -161,8 +161,8 @@ binary_indexed_tree_sum_internal(struct binary_indexed_tree *tree,
     sint64 retval;
     uint32 base;
 
-    assert(binary_indexed_tree_structure_legal_p(tree));
-    assert(binary_indexed_tree_number_legal_p(tree, number));
+    dp_assert(binary_indexed_tree_structure_legal_p(tree));
+    dp_assert(binary_indexed_tree_number_legal_p(tree, number));
 
     retval = 0;
     base = number;

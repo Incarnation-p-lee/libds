@@ -2,7 +2,7 @@ static inline bool
 avl_tree_height_sync_with_calculated_p(struct avl_tree *node,
     sint32 left, sint32 right)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     if (left != binary_search_tree_height_internal(node->alias.left)) {
         goto MISS_MATCH;
@@ -28,8 +28,8 @@ avl_tree_single_rotate_left_precondition_p(struct binary_search_tree *k1)
 
     k2 = k1->left;
 
-    assert(NULL != k1);
-    assert(NULL != k2);
+    dp_assert(NULL != k1);
+    dp_assert(NULL != k2);
 
     left = avl_tree_height_internal(avl_tree_ptr_to_avl(k2->left));
     right = avl_tree_height_internal(avl_tree_ptr_to_avl(k2->right));
@@ -48,8 +48,8 @@ avl_tree_single_rotate_right_precondition_p(struct binary_search_tree *k1)
     sint32 right;
     struct binary_search_tree *k2;
 
-    assert(NULL != k1);
-    assert(NULL != k1->right);
+    dp_assert(NULL != k1);
+    dp_assert(NULL != k1->right);
 
     k2 = k1->right;
 
@@ -70,8 +70,8 @@ avl_tree_doubly_rotate_left_precondition_p(struct binary_search_tree *k1)
     sint32 right;
     struct binary_search_tree *k2;
 
-    assert(NULL != k1);
-    assert(NULL != k1->left);
+    dp_assert(NULL != k1);
+    dp_assert(NULL != k1->left);
 
     k2 = k1->left;
 
@@ -92,8 +92,8 @@ avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
     sint32 right;
     struct binary_search_tree *k2;
 
-    assert(NULL != k1);
-    assert(NULL != k1->right);
+    dp_assert(NULL != k1);
+    dp_assert(NULL != k1->right);
 
     k2 = k1->right;
 
@@ -103,8 +103,8 @@ avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
     if (left > right) {
         return true;
     } else {
-        fprintf(stdout, "[32mleft [0m: %d\n", left);
-        fprintf(stdout, "[31mright[0m: %d\n", right);
+        dp_fprintf(stdout, "[32mleft [0m: %d\n", left);
+        dp_fprintf(stdout, "[31mright[0m: %d\n", right);
         return false;
     }
 }
@@ -120,8 +120,8 @@ avl_tree_ptr_to_avl_optimize_validity_p(struct binary_search_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -137,8 +137,8 @@ avl_tree_left_optimize_validity_p(struct avl_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -154,8 +154,8 @@ avl_tree_right_optimize_validity_p(struct avl_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
+        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -181,8 +181,8 @@ avl_tree_height_optimize_validity_p(struct avl_tree *tree,
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %d\n", expected);
-        fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
+        dp_fprintf(stdout, "[32mexpected[0m: %d\n", expected);
+        dp_fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
         return false;
     }
 }
@@ -197,9 +197,9 @@ avl_tree_node_balanced_optimize_validity_p(struct avl_tree *node, bool expected)
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %s\n",
+        dp_fprintf(stdout, "[32mexpected[0m: %s\n",
             expected == true ? "true" : "false");
-        fprintf(stdout, "[31mcomputed[0m: %s\n",
+        dp_fprintf(stdout, "[31mcomputed[0m: %s\n",
             computed == true ? "true" : "false");
         return false;
     }

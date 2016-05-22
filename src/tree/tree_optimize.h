@@ -18,8 +18,8 @@
             :"=&r"(height)                                  \
             :"r"(node))
             /*
-             * &: means earlyclobber operand, will be modified before
-             *    instruction finished. Therefore, this operand cannot
+             * &: means earlyclobber opedp_rand, will be modified before
+             *    instruction finished. Therefore, this opedp_rand cannot
              *    be lie in an input operand.
              */
 

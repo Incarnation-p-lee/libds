@@ -25,7 +25,7 @@ utest_##name##_sort(void)                                                   \
     SORT(data, size, csize, compare);                                       \
     RESULT_CHECK_bool(true, sort_data_sorted_p(data, size, csize, compare), \
         &pass);                                                             \
-    memory_cache_free(data);                                                \
+    memory_cache_dp_free(data);                                                \
                                                                             \
     data = test_sort_data_array(size);                                      \
     csize = sizeof(struct test_sort_data);                                  \
@@ -33,7 +33,7 @@ utest_##name##_sort(void)                                                   \
     SORT(data, size, csize, compare);                                       \
     RESULT_CHECK_bool(true, sort_data_sorted_p(data, size, csize, compare), \
         &pass);                                                             \
-    memory_cache_free(data);                                                \
+    memory_cache_dp_free(data);                                                \
                                                                             \
     data = test_sort_data_ptr_array(size);                                  \
     csize = sizeof(struct test_sort_data *);                                \

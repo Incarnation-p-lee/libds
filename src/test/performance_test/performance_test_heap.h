@@ -305,21 +305,21 @@ ptest_##name##_heap_build(uint32 count)                              \
                                                                      \
     hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));    \
     hd_array[0] = NULL;                                              \
-    memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0])); \
+    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0])); \
     PERFORMANCE_TEST_CHECKPOINT;                                     \
                                                                      \
     while (count--) {                                                \
-        test_binary_heap_data_randomization(hd_array,                \
+        test_binary_heap_data_dp_randomization(hd_array,                \
             INDEX_LAST(heap->alias));                                \
         build = HEAP_build(hd_array, size);                          \
                                                                      \
-        memory_cache_free(build->alias);                             \
-        memory_cache_free(build);                                    \
+        memory_cache_dp_free(build->alias);                             \
+        memory_cache_dp_free(build);                                    \
     }                                                                \
                                                                      \
     PERFORMANCE_TEST_ENDPOINT;                                       \
                                                                      \
-    memory_cache_free(hd_array);                                     \
+    memory_cache_dp_free(hd_array);                                     \
     HEAP_destroy(&heap);                                             \
     PERFORMANCE_TEST_RESULT(name##_heap_build);                      \
 }

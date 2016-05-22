@@ -1,4 +1,4 @@
-include ./src/base.Makefile
+include ./src/Makefile.int
 
 INCDIR  =./src/inc
 SRC     =src/common/common.c

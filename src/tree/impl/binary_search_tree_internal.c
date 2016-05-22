@@ -31,7 +31,7 @@ static inline void
 binary_search_tree_node_initial_internal(struct binary_search_tree *node,
     void *val, sint64 nice)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     node->left = NULL;
     node->right = NULL;
@@ -45,10 +45,10 @@ binary_search_tree_node_initial_internal(struct binary_search_tree *node,
 static inline void
 binary_search_tree_node_destroy(struct binary_search_tree *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     doubly_linked_list_destroy(&node->chain.link);
-    memory_cache_free(node);
+    memory_cache_dp_free(node);
 }
 
 static inline void
@@ -88,7 +88,7 @@ binary_search_tree_node_find_internal(struct binary_search_tree *tree,
 static inline struct binary_search_tree *
 binary_search_tree_node_find_min_internal(struct binary_search_tree *tree)
 {
-    assert(NULL != tree);
+    dp_assert(NULL != tree);
 
     if (!tree->left) {
         return tree;
@@ -100,7 +100,7 @@ binary_search_tree_node_find_min_internal(struct binary_search_tree *tree)
 static inline struct binary_search_tree *
 binary_search_tree_node_find_max_internal(struct binary_search_tree *tree)
 {
-    assert(NULL != tree);
+    dp_assert(NULL != tree);
 
     if (!tree->right) {
         return tree;
@@ -130,8 +130,8 @@ binary_search_tree_node_contains_p_internal(struct binary_search_tree *tree,
 {
     register struct binary_search_tree **iter;
 
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     iter = &tree;
     while (*iter) {
@@ -168,8 +168,8 @@ binary_search_tree_node_insert_internal(struct binary_search_tree *tree,
 {
     register struct binary_search_tree **iter;
 
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     iter = &tree;
     while (*iter) {
@@ -193,9 +193,9 @@ static inline void
 binary_search_tree_node_chain_copy(struct collision_chain *tgt,
     struct collision_chain *node)
 {
-    assert(NULL != tgt);
-    assert(NULL != node);
-    assert(tgt != node);
+    dp_assert(NULL != tgt);
+    dp_assert(NULL != node);
+    dp_assert(tgt != node);
 
     tgt->nice = node->nice;
     tgt->link = node->link;
@@ -207,9 +207,9 @@ binary_search_tree_node_chain_swap(struct collision_chain *m,
 {
     struct collision_chain tmp;
 
-    assert(NULL != m);
-    assert(NULL != n);
-    assert(m!= n);
+    dp_assert(NULL != m);
+    dp_assert(NULL != n);
+    dp_assert(m!= n);
 
     binary_search_tree_node_chain_copy(&tmp, n);
     binary_search_tree_node_chain_copy(n, m);
@@ -219,7 +219,7 @@ binary_search_tree_node_chain_swap(struct collision_chain *m,
 static inline bool
 binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     if (node->left && node->right) {
         return true;
@@ -231,7 +231,7 @@ binary_search_tree_node_child_doubly_p(struct binary_search_tree *node)
 static inline bool
 binary_search_tree_node_leaf_p(struct binary_search_tree *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     if (NULL == node->left && NULL == node->right) {
         return true;
@@ -253,8 +253,8 @@ binary_search_tree_node_find_ptr_to_max(struct binary_search_tree **tree)
     max = tree;
     node = *max;
 
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     while (NULL != node->right) {
         max = &node->right;
@@ -277,8 +277,8 @@ binary_search_tree_node_find_ptr_to_min(struct binary_search_tree **tree)
     min = tree;
     node = *min;
 
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     while (NULL != node->left) {
         min = &node->left;
@@ -292,9 +292,9 @@ static inline void
 binary_search_tree_node_child_lt_doubly_strip(struct binary_search_tree **pre,
     struct binary_search_tree *node)
 {
-    assert(NULL != node);
-    assert(NULL != pre);
-    assert(!binary_search_tree_child_doubly_p(node));
+    dp_assert(NULL != node);
+    dp_assert(NULL != pre);
+    dp_assert(!binary_search_tree_child_doubly_p(node));
 
     if (NULL != node->left) {
         *pre = node->left;
@@ -316,9 +316,9 @@ binary_search_tree_node_child_doubly_strip(struct binary_search_tree **pre,
     struct binary_search_tree **min_ptr;
     sint64 nice_bk;
 
-    assert(NULL != node);
-    assert(NULL != pre);
-    assert(binary_search_tree_child_doubly_p(node));
+    dp_assert(NULL != node);
+    dp_assert(NULL != pre);
+    dp_assert(binary_search_tree_child_doubly_p(node));
 
     min_ptr = binary_search_tree_node_find_ptr_to_min(&node->right);
     min = *min_ptr;
@@ -343,9 +343,9 @@ static inline void
 binary_search_tree_node_collision_chain_copy(struct collision_chain *tgt,
     struct collision_chain *node)
 {
-    assert(NULL != tgt);
-    assert(NULL != node);
-    assert(tgt != node);
+    dp_assert(NULL != tgt);
+    dp_assert(NULL != node);
+    dp_assert(tgt != node);
 
     tgt->nice = node->nice;
     tgt->link = node->link;
@@ -357,9 +357,9 @@ binary_search_tree_node_collision_chain_swap(struct collision_chain *m_node,
 {
     struct collision_chain tmp;
 
-    assert(NULL != m_node);
-    assert(NULL != n_node);
-    assert(m_node != n_node);
+    dp_assert(NULL != m_node);
+    dp_assert(NULL != n_node);
+    dp_assert(m_node != n_node);
 
     binary_search_tree_node_collision_chain_copy(&tmp, n_node);
     binary_search_tree_node_collision_chain_copy(n_node, m_node);
@@ -369,7 +369,7 @@ binary_search_tree_node_collision_chain_swap(struct collision_chain *m_node,
 static inline bool
 binary_search_tree_child_doubly_p(struct binary_search_tree *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     if (NULL != node->left && NULL != node->right) {
         return true;
@@ -381,7 +381,7 @@ binary_search_tree_child_doubly_p(struct binary_search_tree *node)
 static inline void
 binary_search_tree_node_child_clean(struct binary_search_tree *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     node->left = NULL;
     node->right = NULL;
@@ -394,8 +394,8 @@ binary_search_tree_node_remove_internal(struct binary_search_tree **tree,
     register struct binary_search_tree *iter;
     register struct binary_search_tree **pre;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
 
     iter = *tree;
     pre = tree;
@@ -421,7 +421,7 @@ static inline void
 binary_search_tree_iterate_internal(struct binary_search_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    assert(LEGAL_ORDER_P(order));
+    dp_assert(LEGAL_ORDER_P(order));
 
     if (tree && handle) {
         if (ORDER_PRE == order) {
@@ -447,8 +447,8 @@ binary_search_tree_left_child_find_max(struct binary_search_tree *tree)
 {
     struct binary_search_tree *left;
 
-    assert(NULL != tree);
-    assert(NULL != tree->left);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != tree->left);
 
     left = tree->left;
 
@@ -464,8 +464,8 @@ binary_search_tree_right_child_find_min(struct binary_search_tree *tree)
 {
     struct binary_search_tree *right;
 
-    assert(NULL != tree);
-    assert(NULL != tree->right);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != tree->right);
 
     right = tree->right;
 

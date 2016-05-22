@@ -1,8 +1,19 @@
 #ifndef HAVE_TEST_H
 #define HAVE_TEST_H
 
-#define FILTER_LEN                     32
-#define DEFAULT_ITERATION_CNT          1000000u
+#define FILTER_LEN             32
+#define DEFAULT_ITERATION_CNT  1000000u
+#define MAP_ENTRY_MAX          128
+
+#define M_UKNW                 (0x1u << 0)
+#define M_READ                 (0x1u << 1)
+#define M_WRITE                (0x1u << 2)
+#define M_EXECUTE              (0x1u << 3)
+#define M_SHARED               (0x1u << 4)
+#define M_PRIVATE              (0x1u << 5)
+
+#define LOG_FNAME              "libds.log"
+
 #define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
     SYM_2_STR(symbol), pass)
 
@@ -72,10 +83,18 @@ static struct test_suite suite = {
 
 static const struct test_layer_table test_category[];
 
+/*
+ * section info of binary
+ */
+static struct memory_maps mmaps[MAP_ENTRY_MAX] = {
+    {},
+};
+
 static uint64 malloc_cnt = 0;
 static uint64 free_cnt = 0;
 static uint64 realloc_cnt = 0;
 static uint32 reference = 0;
+static FILE *logfile;
 
 #endif
 

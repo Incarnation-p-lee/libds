@@ -45,8 +45,8 @@ static inline struct leftist_heap * leftist_heap_remove_min_internal(struct left
 static inline uint32 binary_heap_child_max_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_child_min_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_depth(uint32 index);
-static inline uint32 binary_heap_grandchild_max_nice_index(struct binary_heap *heap, uint32 index);
-static inline uint32 binary_heap_grandchild_min_nice_index(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_gdp_randchild_max_nice_index(struct binary_heap *heap, uint32 index);
+static inline uint32 binary_heap_gdp_randchild_min_nice_index(struct binary_heap *heap, uint32 index);
 static inline uint32 binary_heap_reorder(struct binary_heap *heap, uint32 index, sint64 nice, void *heap_order);
 static inline uint32 binary_heap_serial_big_nice_index(struct binary_heap *heap, uint32 index, uint32 count);
 static inline uint32 binary_heap_serial_small_nice_index(struct binary_heap *heap, uint32 index, uint32 count);

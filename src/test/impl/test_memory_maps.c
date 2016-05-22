@@ -5,7 +5,7 @@ memory_maps_obtain(void)
 
     maps = memory_maps_proc_read();
     memory_maps_filter_process(maps);
-    fclose(maps);
+    dp_fclose(maps);
 }
 
 struct memory_maps *
@@ -19,7 +19,7 @@ memory_maps_entry_find(char *name)
     } else {
         iter = mmaps;
         while (iter < mmaps + MAP_ENTRY_MAX) {
-            if (!strncmp(name, iter->name, strlen(name))) {
+            if (!dp_strncmp(name, iter->name, dp_strlen(name))) {
                 break;
             }
             iter++;
@@ -35,8 +35,8 @@ memory_maps_proc_read(void)
     char ffname[NAME_LEN];
     FILE *maps;
 
-    sprintf(ffname, "/proc/%u/maps", (uint32)getpid());
-    maps = fopen(ffname, "r");
+    dp_sprintf(ffname, "/proc/%u/maps", (uint32)dp_getpid());
+    maps = dp_fopen(ffname, "r");
 
     return maps;
 }
@@ -46,10 +46,10 @@ memory_maps_filter_process(FILE *maps)
 {
     char line[NAME_LEN];
 
-    memset(line, 0, sizeof(line));
-    while (fgets(line, NAME_LEN, maps)) {
-        memory_maps_one_line_process(line, strlen(line));
-        memset(line, 0, sizeof(line));
+    dp_memset(line, 0, sizeof(line));
+    while (dp_fgets(line, NAME_LEN, maps)) {
+        memory_maps_one_line_process(line, dp_strlen(line));
+        dp_memset(line, 0, sizeof(line));
     }
 }
 
@@ -59,14 +59,14 @@ memory_maps_one_line_process(char *line, uint32 len)
     static struct memory_maps *start = mmaps;
     char *name;
 
-    assert(len <= NAME_LEN);
+    dp_assert(len <= NAME_LEN);
     if ((uint32)(start - mmaps) == MAP_ENTRY_MAX) {
         pr_log_err("Touch the end of the array, may override.\n");
     }
 
     name = memory_maps_one_line_map_name(line);
     if (name) {
-        strncpy(start->name, name, strlen(name));
+        dp_strncpy(start->name, name, dp_strlen(name));
         start->authority = memory_maps_one_line_map_authority(line);
         memory_maps_one_line_map_boundary(line, start);
     }
@@ -80,9 +80,9 @@ memory_maps_one_line_map_name(char *line)
 {
     char *tmp;
 
-    tmp = strchr(line, '/');
+    tmp = dp_strchr(line, '/');
     if (!tmp) { /* For [stack] */
-        tmp = strchr(line, '[');
+        tmp = dp_strchr(line, '[');
     }
 
     return tmp;
@@ -94,7 +94,7 @@ memory_maps_one_line_map_authority(char *line)
     char *tmp;
     uint32 retval;
 
-    tmp = strchr(line, ' ');
+    tmp = dp_strchr(line, ' ');
     tmp++;
 
     retval = 0u;
@@ -128,5 +128,6 @@ static inline void
 memory_maps_one_line_map_boundary(char *line, struct memory_maps *map)
 {
    /* %lx can handle both 32 adn 64 bits with long type */
-   sscanf(line, "%lx-%lx ", &map->b_val, &map->e_val);
+   dp_sscanf(line, "%lx-%lx ", &map->b_val, &map->e_val);
 }
+

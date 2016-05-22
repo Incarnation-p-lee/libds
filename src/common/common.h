@@ -24,12 +24,5 @@ const uint32 fixed_prime[] = {
 
 #define FIXED_PRIME_MAX fixed_prime[array_sizeof(fixed_prime) - 1]
 
-/*
- * section info of binary
- */
-static struct memory_maps mmaps[MAP_ENTRY_MAX] = {
-    {},
-};
-
 
 #endif

@@ -9,8 +9,8 @@ merge_sort(void *base, uint32 size, uint32 csize,
 
         merge_sort_recursive(base, tmp, 0, size - 1, csize, compare);
 
-        memory_cache_free(tmp);
-        assert(sort_data_sorted_p(base, size, csize, compare));
+        memory_cache_dp_free(tmp);
+        dp_assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 
@@ -20,10 +20,10 @@ merge_sort_recursive(void *base, void *tmp, uint32 left, uint32 right,
 {
     uint32 med;
 
-    assert(!complain_null_pointer_p(base));
-    assert(!complain_null_pointer_p(tmp));
-    assert(!complain_null_pointer_p(compare));
-    assert(!complain_zero_size_p(csize));
+    dp_assert(!complain_null_pointer_p(base));
+    dp_assert(!complain_null_pointer_p(tmp));
+    dp_assert(!complain_null_pointer_p(compare));
+    dp_assert(!complain_zero_size_p(csize));
 
     if (left < right) {
         med = (left + right) / 2;
@@ -42,11 +42,11 @@ merge_sort_divide_merge(void *base, void *tmp, uint32 left, uint32 med, uint32 r
     void *p1, *p1_lmt;
     void *p2, *p2_lmt;
 
-    assert(!complain_null_pointer_p(base));
-    assert(!complain_null_pointer_p(compare));
-    assert(!complain_null_pointer_p(tmp));
-    assert(!complain_zero_size_p(csize));
-    assert(left <= med && med <= right);
+    dp_assert(!complain_null_pointer_p(base));
+    dp_assert(!complain_null_pointer_p(compare));
+    dp_assert(!complain_null_pointer_p(tmp));
+    dp_assert(!complain_zero_size_p(csize));
+    dp_assert(left <= med && med <= right);
 
     p1 = base + left * csize;
     p1_lmt = base + med * csize;
@@ -78,7 +78,7 @@ merge_sort_divide_merge(void *base, void *tmp, uint32 left, uint32 med, uint32 r
     }
 
     limit = tmp + right * csize;
-    assert(start == limit + csize);
+    dp_assert(start == limit + csize);
     start = tmp + left * csize;
     p1 = base + left * csize;
 

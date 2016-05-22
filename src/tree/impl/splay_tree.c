@@ -61,12 +61,12 @@ splay_tree_ptr_container_of(struct binary_search_tree *node)
 static inline void
 splay_tree_node_destroy(struct splay_tree *node)
 {
-    assert(NULL != node);
-    assert(NULL == splay_tree_child_left(node));
-    assert(NULL == splay_tree_child_right(node));
+    dp_assert(NULL != node);
+    dp_assert(NULL == splay_tree_child_left(node));
+    dp_assert(NULL == splay_tree_child_right(node));
 
     doubly_linked_list_destroy(&node->alias.chain.link);
-    memory_cache_free(node);
+    memory_cache_dp_free(node);
 }
 
 static inline void
@@ -153,8 +153,8 @@ splay_tree_node_find_min_internal(struct binary_search_tree **tree,
     struct binary_search_tree *min;
     struct binary_search_tree *node;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
 
     node = *tree;
 
@@ -168,7 +168,7 @@ splay_tree_node_find_min_internal(struct binary_search_tree **tree,
         } else if (node == root) {
             splay_tree_balance_root_splaying_left(tree);
         } else {
-            assert(min == node->left);
+            dp_assert(min == node->left);
             /*
              *       / 
              *     node
@@ -179,7 +179,7 @@ splay_tree_node_find_min_internal(struct binary_search_tree **tree,
             return min;
         }
 
-        assert(*tree == min);
+        dp_assert(*tree == min);
         return min;
     }
 }
@@ -207,8 +207,8 @@ splay_tree_node_find_max_internal(struct binary_search_tree **tree,
     struct binary_search_tree *max;
     struct binary_search_tree *node;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
 
     node = *tree;
 
@@ -222,7 +222,7 @@ splay_tree_node_find_max_internal(struct binary_search_tree **tree,
         } else if (node == root) {
             splay_tree_balance_root_splaying_right(tree);
         } else {
-            assert(max == node->right);
+            dp_assert(max == node->right);
             /*
              *       / 
              *     node
@@ -233,7 +233,7 @@ splay_tree_node_find_max_internal(struct binary_search_tree **tree,
             return max;
         }
 
-        assert(*tree == max);
+        dp_assert(*tree == max);
         return max;
     }
 }
@@ -261,11 +261,11 @@ splay_tree_balance_splaying_left(struct binary_search_tree **tree,
 {
     struct binary_search_tree *node;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
-    assert(NULL != (*tree)->left);
-    assert(NULL != root);
-    assert(NULL != target);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
+    dp_assert(NULL != (*tree)->left);
+    dp_assert(NULL != root);
+    dp_assert(NULL != target);
 
     node = *tree;
 
@@ -281,11 +281,11 @@ splay_tree_balance_splaying_left(struct binary_search_tree **tree,
     } else if (node->left->right == target) {
         splay_tree_balance_doubly_splaying_left(tree);
     } else {
-        assert(target == node->left);
+        dp_assert(target == node->left);
         return;
     }
 
-    assert(target == *tree);
+    dp_assert(target == *tree);
 }
 
 static inline void
@@ -295,11 +295,11 @@ splay_tree_balance_splaying_right(struct binary_search_tree **tree,
 {
     struct binary_search_tree *node;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
-    assert(NULL != (*tree)->right);
-    assert(NULL != root);
-    assert(NULL != target);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
+    dp_assert(NULL != (*tree)->right);
+    dp_assert(NULL != root);
+    dp_assert(NULL != target);
 
     node = *tree;
 
@@ -315,11 +315,11 @@ splay_tree_balance_splaying_right(struct binary_search_tree **tree,
     } else if (node->right->right == target) {
         splay_tree_balance_single_splaying_right(tree);
     } else {
-        assert(target == node->right);
+        dp_assert(target == node->right);
         return;
     }
 
-    assert(target == *tree);
+    dp_assert(target == *tree);
 }
 
 static void inline
@@ -328,9 +328,9 @@ splay_tree_balance_root_splaying_left(struct binary_search_tree **tree)
     struct binary_search_tree *k1;
     struct binary_search_tree *k2;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
-    assert(NULL != (*tree)->left);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
+    dp_assert(NULL != (*tree)->left);
 
     k1 = *tree;
     k2 = k1->left;
@@ -353,9 +353,9 @@ splay_tree_balance_root_splaying_right(struct binary_search_tree **tree)
     struct binary_search_tree *k1;
     struct binary_search_tree *k2;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
-    assert(NULL != (*tree)->right);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
+    dp_assert(NULL != (*tree)->right);
 
     k1 = *tree;
     k2 = k1->right;
@@ -379,10 +379,10 @@ splay_tree_balance_single_splaying_left(struct binary_search_tree **tree)
     struct binary_search_tree *k2;
     struct binary_search_tree *k3;
 
-    assert(NULL != tree);
-    assert(NULL != (*tree));
-    assert(NULL != (*tree)->left);
-    assert(NULL != (*tree)->left->left);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != (*tree));
+    dp_assert(NULL != (*tree)->left);
+    dp_assert(NULL != (*tree)->left->left);
 
     k1 = *tree;
     k2 = k1->left;
@@ -412,10 +412,10 @@ splay_tree_balance_single_splaying_right(struct binary_search_tree **tree)
     struct binary_search_tree *k3;
 
 
-    assert(NULL != tree);
-    assert(NULL != (*tree));
-    assert(NULL != (*tree)->right);
-    assert(NULL != (*tree)->right->right);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != (*tree));
+    dp_assert(NULL != (*tree)->right);
+    dp_assert(NULL != (*tree)->right->right);
 
     k1 = *tree;
     k2 = k1->right;
@@ -444,10 +444,10 @@ splay_tree_balance_doubly_splaying_left(struct binary_search_tree **tree)
     struct binary_search_tree *k2;
     struct binary_search_tree *k3;
 
-    assert(NULL != tree);
-    assert(NULL != (*tree));
-    assert(NULL != (*tree)->left);
-    assert(NULL != (*tree)->left->right);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != (*tree));
+    dp_assert(NULL != (*tree)->left);
+    dp_assert(NULL != (*tree)->left->right);
 
     k1 = *tree;
     k2 = k1->left;
@@ -476,10 +476,10 @@ splay_tree_balance_doubly_splaying_right(struct binary_search_tree **tree)
     struct binary_search_tree *k2;
     struct binary_search_tree *k3;
 
-    assert(NULL != tree);
-    assert(NULL != (*tree));
-    assert(NULL != (*tree)->right);
-    assert(NULL != (*tree)->right->left);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != (*tree));
+    dp_assert(NULL != (*tree)->right);
+    dp_assert(NULL != (*tree)->right->left);
 
     k1 = *tree;
     k2 = k1->right;
@@ -583,8 +583,8 @@ splay_tree_node_remove_internal(struct splay_tree **tree, sint64 nice)
     struct binary_search_tree *tmp;
     struct binary_search_tree *removed;
 
-    assert(NULL != tree);
-    assert(NULL != *tree);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != *tree);
 
     tmp = &(*tree)->alias;
     removed = binary_search_tree_node_remove_internal(&tmp, nice);

@@ -2,6 +2,7 @@
 #define TEST_DECLARATION_H
 
 
+static inline FILE * memory_maps_proc_read(void);
 static inline bool test_case_filter_match_p(const struct test_layer_table *category, char *name);
 static inline bool test_result_check_bool_p(bool expect, bool get, bool *pass);
 static inline bool test_result_check_double_p(double expect, double get, bool *pass);
@@ -17,6 +18,7 @@ static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *p
 static inline bool test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *pass);
 static inline bool test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass);
+static inline char * memory_maps_one_line_map_name(char *line);
 static inline sint32 test_sort_compare_ptr(const void *a, const void *b);
 static inline sint32 test_sort_compare_struct(const void *a, const void *b);
 static inline sint32 test_sort_compare_u32(const void *a, const void *b);
@@ -39,7 +41,11 @@ static inline struct test_case_filter * test_case_filter_initial(void);
 static inline struct test_sort_data * test_sort_data_array(uint32 size);
 static inline struct test_sort_data ** test_sort_data_ptr_array(uint32 size);
 static inline uint32 * test_uint32_data_array(uint32 size);
-static inline void test_binary_heap_data_randomization(struct heap_data **hd_array, uint32 last);
+static inline uint32 memory_maps_one_line_map_authority(char *line);
+static inline void memory_maps_filter_process(FILE *maps);
+static inline void memory_maps_one_line_map_boundary(char *line, struct memory_maps *map);
+static inline void memory_maps_one_line_process(char *line, uint32 len);
+static inline void test_binary_heap_data_dp_randomization(struct heap_data **hd_array, uint32 last);
 static inline void test_case_filter_obtain_internal(char *dest, char *arg, uint32 len);
 static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void test_case_list_category(const struct test_layer_table *category, struct test_case_filter *filter);
@@ -55,10 +61,15 @@ static void stack_iterate_handler(void *ptr);
 static void test_case_filter_destroy(struct test_case_filter **filter);
 static void test_case_filter_parser(struct test_case_filter *filter, char *arg);
 static void tree_iterate_handler(void *ptr);
+struct memory_maps * memory_maps_entry_find(char *name);
 void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);
 void end_of_report_print(void);
 void free_wrap(void *ptr);
+void libds_log_file_close(void);
+void libds_log_file_create(void);
+void libds_log_print(enum log_level lvl, const char *msg);
+void memory_maps_obtain(void);
 void memory_trace_print(void);
 void test_execution_start(void);
 void test_parameter_parser(uint32 argc, char **argv);

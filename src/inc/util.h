@@ -15,9 +15,9 @@ struct memory_maps {
 };
 
 #ifdef DEBUG
-    extern void * malloc_wrap(size_t size);
+    extern void * dp_malloc_wrap(size_t size);
     extern void * realloc_wrap(void *ptr, size_t size);
-    extern void free_wrap(void *ptr);
+    extern void dp_free_wrap(void *ptr);
     extern void memory_trace_print(void);
     extern void libds_log_file_create(void);
     extern void libds_log_file_close(void);
@@ -36,10 +36,10 @@ extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern bool complain_zero_size_p(uint32 size);
 extern void * memory_cache_allocate(uint32 size);
-extern void memory_cache_free(void *addr);
+extern void memory_cache_dp_free(void *addr);
 extern void * memory_cache_re_allocate(void *addr, uint32 size);
-extern uint32 random_uint32_with_limit(uint32 lmt);
-extern sint64 random_sint64(void);
+extern uint32 dp_random_uint32_with_limit(uint32 lmt);
+extern sint64 dp_random_sint64(void);
 
 /* END OF GLOBAL EXPORTED INTERFACE */
 

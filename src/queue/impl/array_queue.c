@@ -20,8 +20,8 @@ void
 array_queue_destroy(struct array_queue **queue)
 {
     if (!complain_null_pointer_p(queue) && array_queue_structure_legal_p(*queue)) {
-        memory_cache_free((*queue)->space.base);
-        memory_cache_free(*queue);
+        memory_cache_dp_free((*queue)->space.base);
+        memory_cache_dp_free(*queue);
         *queue = NULL;
     }
 }
@@ -47,7 +47,7 @@ array_queue_structure_legal_p(struct array_queue *queue)
 static inline bool
 array_queue_resize_front_to_rear_p(struct array_queue *queue)
 {
-    assert(array_queue_structure_legal_p(queue));
+    dp_assert(array_queue_structure_legal_p(queue));
 
     if (queue->space.front < queue->space.rear) {
         return false;
@@ -65,27 +65,27 @@ array_queue_resize_expand(struct array_queue *queue, uint32 size,
     uint32 counted;
     uint32 chunk_size;
 
-    assert(!complain_null_pointer_p(addr));
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size > array_queue_dim_m(queue));
+    dp_assert(!complain_null_pointer_p(addr));
+    dp_assert(!complain_zero_size_p(size));
+    dp_assert(array_queue_structure_legal_p(queue));
+    dp_assert(size > array_queue_dim_m(queue));
 
     if (queue->space.front < queue->space.rear) {
         counted = queue->space.rear - queue->space.front;
-        memcpy(addr, queue->space.front, sizeof(void *) * counted);
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
     } else if (array_queue_resize_front_to_rear_p(queue)) {
         chunk_size = queue->space.front - queue->space.base;
         counted = array_queue_dim_m(queue) - chunk_size;
-        memcpy(addr, queue->space.front, sizeof(void *) * counted);
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
 
         chunk_size = queue->space.rear - queue->space.base;
-        memcpy(addr + counted, queue->space.base, chunk_size);
+        dp_memcpy(addr + counted, queue->space.base, chunk_size);
         counted += chunk_size;
     } else {
         counted = 0;
     }
 
-    memory_cache_free(queue->space.base);
+    memory_cache_dp_free(queue->space.base);
     queue->space.base = addr;
     queue->space.front = addr;
     queue->space.rear = addr + counted;
@@ -101,10 +101,10 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
     uint32 part_size;
     uint32 chunk_size;
 
-    assert(!complain_null_pointer_p(addr));
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size < array_queue_dim_m(queue));
+    dp_assert(!complain_null_pointer_p(addr));
+    dp_assert(!complain_zero_size_p(size));
+    dp_assert(array_queue_structure_legal_p(queue));
+    dp_assert(size < array_queue_dim_m(queue));
 
     if (queue->space.front < queue->space.rear) {
         chunk_size = queue->space.rear - queue->space.front;
@@ -115,27 +115,27 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
             counted = chunk_size;
         }
 
-        memcpy(addr, queue->space.front, sizeof(void *) * counted);
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
     } else if (array_queue_resize_front_to_rear_p(queue)) {
         part_size = queue->space.front - queue->space.base;
         chunk_size = array_queue_dim_m(queue) - part_size;
 
         counted = MIN_U32(part_size, chunk_size);
-        memcpy(addr, queue->space.front, sizeof(void *) * counted);
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
 
         if (chunk_size < size) {
             part_size = size - counted;
             chunk_size = queue->space.rear - queue->space.base;
             chunk_size = MIN_U32(part_size, chunk_size);
 
-            memcpy(addr + counted, queue->space.base, sizeof(void *) * chunk_size);
+            dp_memcpy(addr + counted, queue->space.base, sizeof(void *) * chunk_size);
             counted += chunk_size;
         }
     } else {
         counted = 0;
     }
 
-    memory_cache_free(queue->space.base);
+    memory_cache_dp_free(queue->space.base);
     queue->space.base = addr;
     queue->space.front = addr;
     queue->space.rest = size - counted;
@@ -148,9 +148,9 @@ array_queue_resize_internal(struct array_queue *queue, uint32 size)
 {
     void **addr;
 
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size != queue->space.dim);
+    dp_assert(!complain_zero_size_p(size));
+    dp_assert(array_queue_structure_legal_p(queue));
+    dp_assert(size != queue->space.dim);
 
     addr = memory_cache_allocate(sizeof(void *) * size);
 
@@ -202,7 +202,7 @@ array_queue_rest(struct array_queue *queue)
 static inline bool
 array_queue_full_p_internal(struct array_queue *queue)
 {
-    assert(NULL != queue);
+    dp_assert(NULL != queue);
 
     return 0u == array_queue_rest_m(queue) ? true : false;
 }
@@ -226,7 +226,7 @@ array_queue_empty_p_internal(struct array_queue *queue)
     uint32 capacity;
     uint32 rest;
 
-    assert(NULL != queue);
+    dp_assert(NULL != queue);
 
     capacity = array_queue_dim_m(queue);
     rest = array_queue_rest_m(queue);

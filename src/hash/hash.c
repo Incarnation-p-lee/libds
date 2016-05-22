@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <assert.h>
+#include "depends.h"
 #include "types.h"
 #include "defines.h"
 #include "util.h"

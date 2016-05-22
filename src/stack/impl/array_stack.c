@@ -25,8 +25,8 @@ void
 array_stack_destroy(struct array_stack **stack)
 {
     if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
-        memory_cache_free((*stack)->space.bp);
-        memory_cache_free(*stack);
+        memory_cache_dp_free((*stack)->space.bp);
+        memory_cache_dp_free(*stack);
         *stack = NULL;
     }
 }
@@ -36,8 +36,8 @@ array_stack_resize_internal(struct array_stack *stack, uint32 dim)
 {
     uint32 offset;
 
-    assert(NULL != stack);
-    assert(0 != dim);
+    dp_assert(NULL != stack);
+    dp_assert(0 != dim);
 
     offset = (uint32)((uint64)stack->space.sp - (uint64)stack->space.bp);
     if (offset > stack->space.dim) {
@@ -72,7 +72,7 @@ array_stack_resize(struct array_stack *stack, uint32 dim)
 static inline bool
 array_stack_full_p_internal(struct array_stack *stack)
 {
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     return 0u == array_stack_rest_internal(stack) ? true : false;
 }
@@ -111,7 +111,7 @@ array_stack_rest_internal(struct array_stack *stack)
     void **limit;
     void **tmp;
 
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     tmp = stack->space.sp;
     limit = stack->space.bp + stack->space.dim;
@@ -178,8 +178,8 @@ array_stack_pop(struct array_stack *stack)
 static inline bool
 array_stack_empty_p_internal(struct array_stack *stack)
 {
-    assert(NULL != stack);
-    assert((sint32)(stack->space.sp - stack->space.bp) >= 0);
+    dp_assert(NULL != stack);
+    dp_assert((sint32)(stack->space.sp - stack->space.bp) >= 0);
 
     return stack->space.bp == stack->space.sp ? true : false;
 }

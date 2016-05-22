@@ -57,12 +57,12 @@ avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice)
 static inline void
 avl_tree_node_destroy(struct avl_tree *node)
 {
-    assert(NULL != node);
-    assert(NULL == avl_tree_left(node));
-    assert(NULL == avl_tree_right(node));
+    dp_assert(NULL != node);
+    dp_assert(NULL == avl_tree_left(node));
+    dp_assert(NULL == avl_tree_right(node));
 
     doubly_linked_list_destroy(&node->alias.chain.link);
-    memory_cache_free(node);
+    memory_cache_dp_free(node);
 }
 
 static inline void
@@ -160,11 +160,11 @@ avl_tree_node_balanced_default_p(struct avl_tree *node)
     sint32 left;
     sint32 right;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     left = avl_tree_height_internal(avl_tree_left(node));
     right = avl_tree_height_internal(avl_tree_right(node));
-    assert(avl_tree_height_sync_with_calculated_p(node, left, right));
+    dp_assert(avl_tree_height_sync_with_calculated_p(node, left, right));
 
     if (abs_sint32(left - right) > 1) {
         return false;
@@ -209,7 +209,7 @@ avl_tree_height_update(struct avl_tree *tree)
     sint32 left;
     sint32 right;
 
-    assert(NULL != tree);
+    dp_assert(NULL != tree);
 
     left = avl_tree_height_internal(avl_tree_left(tree));
     right = avl_tree_height_internal(avl_tree_right(tree));
@@ -233,13 +233,13 @@ avl_tree_balance_single_rotate_left(struct binary_search_tree *k1)
 {
     struct binary_search_tree *k2;
 
-    assert(NULL != k1);
+    dp_assert(NULL != k1);
 
     k2 = k1->left;
 
-    assert(NULL != k2);
-    assert(NULL != k2->left);
-    assert(avl_tree_single_rotate_left_precondition_p(k1));
+    dp_assert(NULL != k2);
+    dp_assert(NULL != k2->left);
+    dp_assert(avl_tree_single_rotate_left_precondition_p(k1));
 
     k1->left = k2->right;
     k2->right = k1;
@@ -266,13 +266,13 @@ avl_tree_balance_single_rotate_right(struct binary_search_tree *k1)
 {
     struct binary_search_tree *k2;
 
-    assert(NULL != k1);
+    dp_assert(NULL != k1);
 
     k2 = k1->right;
 
-    assert(NULL != k2);
-    assert(NULL != k2->right);
-    assert(avl_tree_single_rotate_right_precondition_p(k1));
+    dp_assert(NULL != k2);
+    dp_assert(NULL != k2->right);
+    dp_assert(avl_tree_single_rotate_right_precondition_p(k1));
 
     k1->right = k2->left;
     k2->left = k1;
@@ -300,14 +300,14 @@ avl_tree_balance_doubly_rotate_left(struct binary_search_tree *k1)
     struct binary_search_tree *k2;
     struct binary_search_tree *k3;
 
-    assert(NULL != k1);
+    dp_assert(NULL != k1);
 
     k2 = k1->left;
     k3 = k2->right;
 
-    assert(NULL != k2);
-    assert(NULL != k3);
-    assert(avl_tree_doubly_rotate_left_precondition_p(k1));
+    dp_assert(NULL != k2);
+    dp_assert(NULL != k3);
+    dp_assert(avl_tree_doubly_rotate_left_precondition_p(k1));
 
     k2->right = k3->left;
     k1->left = k3->right;
@@ -339,14 +339,14 @@ avl_tree_balance_doubly_rotate_right(struct binary_search_tree *k1)
     struct binary_search_tree *k2;
     struct binary_search_tree *k3;
 
-    assert(NULL != k1);
+    dp_assert(NULL != k1);
 
     k2 = k1->right;
     k3 = k2->left;
 
-    assert(NULL != k2);
-    assert(NULL != k3);
-    assert(avl_tree_doubly_rotate_right_precondition_p(k1));
+    dp_assert(NULL != k2);
+    dp_assert(NULL != k3);
+    dp_assert(avl_tree_doubly_rotate_right_precondition_p(k1));
 
     k2->left = k3->right;
     k1->right = k3->left;
@@ -367,9 +367,9 @@ avl_tree_balance_remove_rotate_right(struct binary_search_tree **tree,
 {
     struct avl_tree *tmp;
 
-    assert(NULL != tree);
-    assert(NULL != node);
-    assert(!binary_search_tree_node_leaf_p(node->right));
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
+    dp_assert(!binary_search_tree_node_leaf_p(node->right));
 
     tmp = avl_tree_ptr_to_avl(node->right);
 
@@ -497,8 +497,8 @@ static inline struct binary_search_tree *
 avl_tree_node_insert_internal(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     if (node->chain.nice < (*tree)->chain.nice) {
         if (!(*tree)->left) {
@@ -583,9 +583,9 @@ avl_tree_balance_remove_rotate_left(struct binary_search_tree **tree,
 {
     struct avl_tree *tmp;
 
-    assert(NULL != tree);
-    assert(NULL != node->left);
-    assert(!binary_search_tree_node_leaf_p(node->left));
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node->left);
+    dp_assert(!binary_search_tree_node_leaf_p(node->left));
 
     tmp = avl_tree_ptr_to_avl(node->left);
 
@@ -618,8 +618,8 @@ static inline void
 avl_tree_balance_insert_rotate_left(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     if (node->chain.nice < (*tree)->left->chain.nice) {
         /*
@@ -646,8 +646,8 @@ static inline void
 avl_tree_balance_insert_rotate_right(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
-    assert(NULL != tree);
-    assert(NULL != node);
+    dp_assert(NULL != tree);
+    dp_assert(NULL != node);
 
     if (node->chain.nice > (*tree)->right->chain.nice) {
         /*
@@ -675,7 +675,7 @@ avl_tree_balance_child_doubly_strip(struct binary_search_tree *node)
 {
     struct avl_tree *tmp;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     tmp = avl_tree_ptr_to_avl(node);
 
@@ -698,7 +698,7 @@ avl_tree_balance_child_doubly_strip_from_max(struct binary_search_tree *node)
 {
     struct binary_search_tree *max;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     max = binary_search_tree_left_child_find_max(node);
 
@@ -717,7 +717,7 @@ avl_tree_balance_child_doubly_strip_from_min(struct binary_search_tree *node)
 {
     struct binary_search_tree *min;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     min = binary_search_tree_right_child_find_min(node);
 
@@ -737,7 +737,7 @@ avl_tree_ptr_to_avl(struct binary_search_tree *node)
     struct avl_tree *avl;
 
     avl_tree_ptr_binary_to_avl_optimize(node, avl);
-    assert(avl_tree_ptr_to_avl_optimize_validity_p(node, avl));
+    dp_assert(avl_tree_ptr_to_avl_optimize_validity_p(node, avl));
 
     return avl;
 }
@@ -748,7 +748,7 @@ avl_tree_left(struct avl_tree *node)
     struct avl_tree *left;
 
     avl_tree_left_optimize(node, left);
-    assert(avl_tree_left_optimize_validity_p(node, left));
+    dp_assert(avl_tree_left_optimize_validity_p(node, left));
 
     return left;
 }
@@ -759,7 +759,7 @@ avl_tree_right(struct avl_tree *node)
     struct avl_tree *right;
 
     avl_tree_right_optimize(node, right);
-    assert(avl_tree_right_optimize_validity_p(node, right));
+    dp_assert(avl_tree_right_optimize_validity_p(node, right));
 
     return right;
 }
@@ -770,7 +770,7 @@ avl_tree_height_internal(struct avl_tree *tree)
     sint32 height;
 
     avl_tree_height_internal_optimize(tree, height);
-    assert(avl_tree_height_optimize_validity_p(tree, height));
+    dp_assert(avl_tree_height_optimize_validity_p(tree, height));
 
     return height;
 }
@@ -780,10 +780,10 @@ avl_tree_node_balanced_p(struct avl_tree *node)
 {
     bool balanced;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     avl_tree_node_balanced_optimize(node, balanced);
-    assert(avl_tree_node_balanced_optimize_validity_p(node, balanced));
+    dp_assert(avl_tree_node_balanced_optimize_validity_p(node, balanced));
 
     return balanced;
 }

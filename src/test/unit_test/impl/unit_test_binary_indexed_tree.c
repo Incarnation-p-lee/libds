@@ -17,7 +17,7 @@ utest_binary_indexed_tree_create(void)
     RESULT_CHECK_uint32(size, binary_indexed_tree_size(tree), &pass);
     RESULT_CHECK_sint64(data[0], binary_indexed_tree_value(tree, 1), &pass);
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     binary_indexed_tree_destroy(&tree);
     UNIT_TEST_RESULT(binary_indexed_tree_create, pass);
 }
@@ -39,7 +39,7 @@ utest_binary_indexed_tree_destroy(void)
     binary_indexed_tree_destroy(&tree);
     RESULT_CHECK_pointer(NULL, tree, &pass);
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     UNIT_TEST_RESULT(binary_indexed_tree_destroy, pass);
 }
 
@@ -73,7 +73,7 @@ utest_binary_indexed_tree_add(void)
         number--;
     }
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     binary_indexed_tree_destroy(&ref);
     binary_indexed_tree_destroy(&tree);
     UNIT_TEST_RESULT(binary_indexed_tree_add, pass);
@@ -109,7 +109,7 @@ utest_binary_indexed_tree_sub(void)
         number--;
     }
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     binary_indexed_tree_destroy(&ref);
     binary_indexed_tree_destroy(&tree);
     UNIT_TEST_RESULT(binary_indexed_tree_sub, pass);
@@ -140,7 +140,7 @@ utest_binary_indexed_tree_sum(void)
         number++;
     }
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     binary_indexed_tree_destroy(&tree);
     UNIT_TEST_RESULT(binary_indexed_tree_sum, pass);
 }
@@ -181,7 +181,7 @@ utest_binary_indexed_tree_range_sum(void)
         number_s++;
     }
 
-    memory_cache_free(data);
+    memory_cache_dp_free(data);
     binary_indexed_tree_destroy(&tree);
     UNIT_TEST_RESULT(binary_indexed_tree_range_sum, pass);
 }

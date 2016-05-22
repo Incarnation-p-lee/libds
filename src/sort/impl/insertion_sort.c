@@ -33,8 +33,8 @@ insertion_sort(void *base, uint32 size, uint32 csize,
             i++;
         }
 
-        memory_cache_free(tmp);
-        assert(sort_data_sorted_p(base, size, csize, compare));
+        memory_cache_dp_free(tmp);
+        dp_assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 

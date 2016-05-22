@@ -7,7 +7,7 @@ utest_##name##_heap_structure_legal_p(struct name##_heap *heap)       \
 {                                                                     \
     bool result;                                                      \
                                                                       \
-    assert(!complain_null_pointer_p(heap));                           \
+    dp_assert(!complain_null_pointer_p(heap));                           \
                                                                       \
     result = true;                                                    \
                                                                       \
@@ -299,16 +299,16 @@ utest_##name##_heap_build(void)                                             \
     hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));           \
                                                                             \
     hd_array[0] = NULL;                                                     \
-    memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0]));        \
+    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0]));        \
                                                                             \
-    test_binary_heap_data_randomization(hd_array, INDEX_LAST(heap->alias)); \
+    test_binary_heap_data_dp_randomization(hd_array, INDEX_LAST(heap->alias)); \
     build = HEAP_build(hd_array, size);                                     \
                                                                             \
     RESULT_CHECK_bool(true, TEST_HEAP_ordered_p(build), &pass);             \
                                                                             \
-    memory_cache_free(build->alias);                                        \
-    memory_cache_free(build);                                               \
-    memory_cache_free(hd_array);                                            \
+    memory_cache_dp_free(build->alias);                                        \
+    memory_cache_dp_free(build);                                               \
+    memory_cache_dp_free(hd_array);                                            \
     HEAP_destroy(&heap);                                                    \
     UNIT_TEST_RESULT(name##_heap_build, pass);                              \
 }

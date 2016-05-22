@@ -3,7 +3,7 @@ binary_heap_valid_ordered_func_ptr_p(void *func_ptr)
 {
     void **iter;
 
-    assert(NULL != func_ptr);
+    dp_assert(NULL != func_ptr);
 
     iter = heap_order_func;
     while (iter < heap_order_func + array_sizeof(heap_order_func)) {
@@ -20,8 +20,8 @@ binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
 
@@ -33,8 +33,8 @@ binary_heap_depth_odd_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
 
@@ -47,8 +47,8 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
     uint32 index;
     bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_valid_ordered_func_ptr_p(heap_order));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_valid_ordered_func_ptr_p(heap_order));
 
     index = INDEX_ROOT;
     order = heap_order;
@@ -70,8 +70,8 @@ min_max_heap_ordered_p(struct min_max_heap *heap)
     uint32 index;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(!complain_null_pointer_p(heap->alias));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(!complain_null_pointer_p(heap->alias));
 
     index = INDEX_ROOT;
     alias = heap->alias;
@@ -123,8 +123,8 @@ leftist_heap_npl_optimize_validity_p(struct leftist_heap *node,
     if (computed == expected) {
         return true;
     } else {
-        fprintf(stdout, "[32mexpected[0m: %d\n", expected);
-        fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
+        dp_fprintf(stdout, "[32mexpected[0m: %d\n", expected);
+        dp_fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
         return false;
     }
 }

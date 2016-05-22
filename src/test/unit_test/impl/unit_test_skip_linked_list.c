@@ -42,7 +42,7 @@ UT_LINKED_LIST_iterate(skip)
 static inline bool
 utest_skip_linked_list_node_legal_p(struct skip_linked_list *node)
 {
-    assert(!complain_null_pointer_p(node));
+    dp_assert(!complain_null_pointer_p(node));
 
     if (NULL != skip_linked_list_val(node)) {
         return false;

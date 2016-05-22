@@ -24,9 +24,8 @@ my @export = ("$incdir/types.h",
               "$srcdir/heap/heap.h",
               "$srcdir/heap/heap_declaration.h",
               "$srcdir/sort/sort.h",
-              "$srcdir/sort/sort_declaration.h",
-              # log
-              "$srcdir/log/log.h",);
+              "$srcdir/sort/sort_declaration.h",);
+
 my $out = "$base/src/inc/ds.h";
 
 open OUT, '>', $out or

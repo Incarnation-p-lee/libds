@@ -39,7 +39,7 @@ open_addressing_hash_destroy(struct open_addressing_hash **hash)
         return;
     } else if (open_addressing_hash_structure_legal_p(*hash)) {
         hashing_table_destroy(&(*hash)->table);
-        memory_cache_free(*hash);
+        memory_cache_dp_free(*hash);
 
         *hash = NULL;
     }
@@ -61,7 +61,7 @@ open_addressing_hash_index_calculate(struct open_addressing_hash *hash,
 {
     struct hashing_table *table;
 
-    assert(open_addressing_hash_structure_legal_p(hash));
+    dp_assert(open_addressing_hash_structure_legal_p(hash));
 
     table = hash->table;
     return table->open_addressing(key, table->size, iter);
@@ -72,8 +72,8 @@ open_addressing_hash_node(struct open_addressing_hash *hash, uint32 index)
 {
     struct hashing_table *table;
 
-    assert(open_addressing_hash_structure_legal_p(hash));
-    assert(index < hash->table->size);
+    dp_assert(open_addressing_hash_structure_legal_p(hash));
+    dp_assert(index < hash->table->size);
 
     table = hash->table;
     return table->space[index];
@@ -85,8 +85,8 @@ open_addressing_hash_node_set(struct open_addressing_hash *hash,
 {
     struct hashing_table *table;
 
-    assert(open_addressing_hash_structure_legal_p(hash));
-    assert(index < hash->table->size);
+    dp_assert(open_addressing_hash_structure_legal_p(hash));
+    dp_assert(index < hash->table->size);
 
     table = hash->table;
     table->space[index] = val;
@@ -111,7 +111,7 @@ open_addressing_hash_insert(struct open_addressing_hash **hash, void *key)
 
         iter = 0;
         do {
-            assert(iter < open_addressing_hash_limit(*hash));
+            dp_assert(iter < open_addressing_hash_limit(*hash));
             index = open_addressing_hash_index_calculate(*hash, key, iter++);
             node = open_addressing_hash_node(*hash, index);
         } while (!complain_null_pointer_p(node));
@@ -136,7 +136,7 @@ open_addressing_hash_remove(struct open_addressing_hash *hash, void *key)
         retval = NULL;
 
         do {
-            assert(iter < open_addressing_hash_limit(hash));
+            dp_assert(iter < open_addressing_hash_limit(hash));
             index = open_addressing_hash_index_calculate(hash, key, iter++);
             retval = open_addressing_hash_node(hash, index);
 
@@ -170,7 +170,7 @@ open_addressing_hash_find(struct open_addressing_hash *hash, void *key)
     } else {
         iter = 0;
         do {
-            assert(iter < open_addressing_hash_limit(hash));
+            dp_assert(iter < open_addressing_hash_limit(hash));
             index = open_addressing_hash_index_calculate(hash, key, iter++);
             retval = open_addressing_hash_node(hash, index);
 
@@ -191,7 +191,7 @@ open_addressing_hash_find(struct open_addressing_hash *hash, void *key)
 static inline void **
 open_addressing_hash_space(struct open_addressing_hash *hash)
 {
-    assert(open_addressing_hash_structure_legal_p(hash));
+    dp_assert(open_addressing_hash_structure_legal_p(hash));
 
     return hashing_table_space(hash->table);
 }
@@ -202,10 +202,10 @@ open_addressing_hash_space_rehashing(struct open_addressing_hash *to,
 {
     void **iter;
 
-    assert(!complain_null_pointer_p(to));
-    assert(!complain_null_pointer_p(from));
-    assert(!complain_null_pointer_p(open_addressing_hash_space(to)));
-    assert(!complain_null_pointer_p(open_addressing_hash_space(from)));
+    dp_assert(!complain_null_pointer_p(to));
+    dp_assert(!complain_null_pointer_p(from));
+    dp_assert(!complain_null_pointer_p(open_addressing_hash_space(to)));
+    dp_assert(!complain_null_pointer_p(open_addressing_hash_space(from)));
 
     iter = open_addressing_hash_space(from);
 

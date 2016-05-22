@@ -11,8 +11,8 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     small_child = binary_heap_child_min_nice_index(heap, index);
@@ -46,8 +46,8 @@ binary_heap_minimal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 small_child;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     small_child = binary_heap_child_min_nice_index(heap, index);
 
@@ -78,8 +78,8 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     big_child = binary_heap_child_max_nice_index(heap, index);
@@ -113,8 +113,8 @@ binary_heap_maximal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 big_child;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     big_child = binary_heap_child_max_nice_index(heap, index);
 
@@ -139,28 +139,28 @@ binary_heap_min_max_up_ordered_p(struct binary_heap *heap,
     uint32 tgt;
     uint32 depth;
     uint32 parent;
-    uint32 grandparent;
+    uint32 gdp_randparent;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
-    grandparent = INDEX_GD_PARENT(index);
+    gdp_randparent = INDEX_GD_PARENT(index);
 
     if (INDEX_INVALID == parent) {
         return true;
-    } else if (INDEX_INVALID == grandparent
+    } else if (INDEX_INVALID == gdp_randparent
         && HEAP_NICE(heap, INDEX_ROOT) <= nice) {
         return true;
-    } else if (INDEX_INVALID == grandparent
+    } else if (INDEX_INVALID == gdp_randparent
         && HEAP_NICE(heap, INDEX_ROOT) > nice) {
         tgt = INDEX_ROOT;
     } else {
         depth = binary_heap_depth(index);
         if (depth % 2) {
             // max level;
-            if (nice > HEAP_NICE(heap, grandparent)) {
-                tgt = grandparent;
+            if (nice > HEAP_NICE(heap, gdp_randparent)) {
+                tgt = gdp_randparent;
             } else if (nice < HEAP_NICE(heap, parent)) {
                 tgt = parent;
             } else {
@@ -168,8 +168,8 @@ binary_heap_min_max_up_ordered_p(struct binary_heap *heap,
             }
         } else {
             // min level;
-            if (nice < HEAP_NICE(heap, grandparent)) {
-                tgt = grandparent;
+            if (nice < HEAP_NICE(heap, gdp_randparent)) {
+                tgt = gdp_randparent;
             } else if (nice > HEAP_NICE(heap, parent)) {
                 tgt = parent;
             } else {
@@ -193,8 +193,8 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
     uint32 depth;
     uint32 child_index;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    dp_assert(binary_heap_structure_legal_p(heap));
+    dp_assert(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
 
@@ -203,7 +203,7 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
     } else {
         if (depth % 2) {
             // max level
-            child_index = binary_heap_grandchild_max_nice_index(heap, index);
+            child_index = binary_heap_gdp_randchild_max_nice_index(heap, index);
             if (nice < HEAP_NICE(heap, child_index)) {
                 tgt = child_index;
             } else {
@@ -211,7 +211,7 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
             }
         } else {
             // min level
-            child_index = binary_heap_grandchild_min_nice_index(heap, index);
+            child_index = binary_heap_gdp_randchild_min_nice_index(heap, index);
             if (nice > HEAP_NICE(heap, child_index)) {
                 tgt = child_index;
             } else {

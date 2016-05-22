@@ -40,15 +40,15 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     sint32 key;
     uint32 i;
 
-    assert(0 != range);
-    assert(0 != count);
+    dp_assert(0 != range);
+    dp_assert(0 != count);
 
     list = skip_linked_list_create();
     skip_linked_list_initial(list);
 
     i = 1;
     while (i < count) {
-        key = (sint32)(rand() % range) - (sint32)range / 2;
+        key = (sint32)(dp_rand() % range) - (sint32)range / 2;
         tmp = skip_linked_list_node_create(NULL, key);
 
         skip_linked_list_val_set(tmp, tmp);
@@ -64,7 +64,7 @@ test_doubly_end_queue_sample(uint32 count)
 {
     struct doubly_end_queue *queue;
 
-    assert(0 != count);
+    dp_assert(0 != count);
 
     queue = doubly_end_queue_create();
 
@@ -88,7 +88,7 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
     i = 1;
 
     while (i < count) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         tmp = binary_search_tree_node_create(NULL, 0x0);
         binary_search_tree_node_initial(tmp, &reference, nice);
         if (tmp != binary_search_tree_node_insert(tree, tmp)) {
@@ -113,7 +113,7 @@ test_avl_tree_sample(uint64 range, uint32 count)
     i = 1;
 
     while (i < count) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         tmp = avl_tree_node_create(NULL, 0x0);
         avl_tree_node_initial(tmp, &reference, nice);
         if (tmp != avl_tree_node_insert(&tree, tmp)) {
@@ -138,7 +138,7 @@ test_splay_tree_sample(uint64 range, uint32 node_count)
     i = 1;
 
     while (i < node_count) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         tmp = splay_tree_node_create(NULL, 0x0);
         splay_tree_node_initial(tmp, &reference, nice);
         if (tmp != splay_tree_node_insert(&tree, tmp)) {
@@ -161,8 +161,8 @@ test_open_addressing_hash_sample(uint32 count)
     hash = open_addressing_hash_create(0);
     heap = memory_maps_entry_find("[heap]");
 
-    assert(NULL != hash);
-    assert(NULL != heap);
+    dp_assert(NULL != hash);
+    dp_assert(NULL != heap);
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
@@ -186,8 +186,8 @@ test_separate_chain_hash_sample(uint32 count)
     hash = separate_chain_hash_create(0x11u);
     heap = memory_maps_entry_find("[heap]");
 
-    assert(NULL != hash);
-    assert(NULL != heap);
+    dp_assert(NULL != hash);
+    dp_assert(NULL != heap);
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
@@ -206,12 +206,12 @@ test_minimal_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    dp_assert(0 != size);
 
     heap = minimal_heap_create(size);
     i = 0;
     while (i < size) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         minimal_heap_insert(heap, &heap, nice);
         i++;
     }
@@ -226,12 +226,12 @@ test_maximal_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    dp_assert(0 != size);
 
     heap = maximal_heap_create(size);
     i = 0;
     while (i < size) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         maximal_heap_insert(heap, &heap, nice);
         i++;
     }
@@ -246,12 +246,12 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    dp_assert(0 != size);
 
     heap = min_max_heap_create(size);
     i = 0;
     while (i < size) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         min_max_heap_insert(heap, &heap, nice);
         i++;
     }
@@ -266,12 +266,12 @@ test_leftist_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    dp_assert(0 != size);
 
     heap = leftist_heap_create();
     i = 0;
     while (i < size) {
-        nice = (sint64)((rand() % range) - (range / 2));
+        nice = (sint64)((dp_rand() % range) - (range / 2));
         heap = leftist_heap_insert(heap, &heap, nice);
         i++;
     }

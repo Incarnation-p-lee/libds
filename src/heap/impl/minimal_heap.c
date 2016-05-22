@@ -14,7 +14,7 @@ minimal_heap_destroy(struct minimal_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
-        memory_cache_free(*heap);
+        memory_cache_dp_free(*heap);
         *heap = NULL;
     }
 }
@@ -75,10 +75,10 @@ minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(!binary_heap_empty_p(heap->alias));
-    assert(binary_heap_structure_legal_p(heap->alias));
-    assert(binary_heap_index_legal_p(heap->alias, index));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(!binary_heap_empty_p(heap->alias));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
 
@@ -91,8 +91,8 @@ minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
      */
     index = binary_heap_reorder(alias, index, nice, &binary_heap_minimal_ordered_p);
 
-    assert(INDEX_ROOT == index);
-    assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
+    dp_assert(INDEX_ROOT == index);
+    dp_assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
 
     HEAP_DATA(alias, INDEX_ROOT) = tmp;
     return binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
@@ -134,9 +134,9 @@ minimal_heap_nice_alter(struct minimal_heap *heap, uint32 index,
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(binary_heap_structure_legal_p(heap->alias));
-    assert(binary_heap_index_legal_p(heap->alias, index));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
     tmp = HEAP_DATA(alias, index);
@@ -144,7 +144,7 @@ minimal_heap_nice_alter(struct minimal_heap *heap, uint32 index,
 
     index = binary_heap_reorder(alias, index, new_nice,
         &binary_heap_minimal_ordered_p);
-    assert(NULL == HEAP_DATA(alias, index));
+    dp_assert(NULL == HEAP_DATA(alias, index));
 
     tmp->nice = new_nice;
     HEAP_DATA(alias, index) = tmp;
@@ -195,9 +195,9 @@ minimal_heap_build_internal(struct minimal_heap *heap)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(binary_heap_full_p(heap->alias));
-    assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(binary_heap_full_p(heap->alias));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
 
     alias = heap->alias;
     iter = HEAP_SIZE(alias) / 2;
@@ -211,7 +211,7 @@ minimal_heap_build_internal(struct minimal_heap *heap)
         index = binary_heap_reorder(alias, index, nice,
             &binary_heap_minimal_percolate_down);
 
-        assert(NULL == HEAP_DATA(alias, index));
+        dp_assert(NULL == HEAP_DATA(alias, index));
         HEAP_DATA(alias, index) = tmp;
 
         iter--;

@@ -292,8 +292,8 @@ struct maximal_heap {
 
 /*
  * min-max heap, root have 0 depth
- *     for even depth node, < fater, > grandfater
- *     for odd  depth node, > fater, < grandfater
+ *     for even depth node, < fater, > gdp_randfater
+ *     for odd  depth node, > fater, < gdp_randfater
  */
 struct min_max_heap {
     struct binary_heap *alias;
@@ -346,19 +346,19 @@ struct leftist_heap {
     } while (false)
 
 #define doubly_linked_list_val(node) \
-    (assert(node), (node)->val)
+    (dp_assert(node), (node)->val)
 #define doubly_linked_list_val_set(node, v) \
-    (assert(node), (node)->val = (v))
+    (dp_assert(node), (node)->val = (v))
 
 #define doubly_linked_list_next(node) \
-    (assert(node), (node)->next)
+    (dp_assert(node), (node)->next)
 #define doubly_linked_list_next_set(node, v) \
-    (assert(node), (node)->next = (v))
+    (dp_assert(node), (node)->next = (v))
 
 #define doubly_linked_list_previous(node) \
-    (assert(node), (node)->previous)
+    (dp_assert(node), (node)->previous)
 #define doubly_linked_list_previous_set(node, v) \
-    (assert(node), (node)->previous = (v))
+    (dp_assert(node), (node)->previous = (v))
 
 
 /* SINGLE LINKED LIST */
@@ -369,14 +369,14 @@ struct leftist_heap {
     } while (false)
 
 #define single_linked_list_val(node) \
-    (assert(node), (node)->val)
+    (dp_assert(node), (node)->val)
 #define single_linked_list_val_set(node, v) \
-    (assert(node), (node)->val = (v))
+    (dp_assert(node), (node)->val = (v))
 
 #define single_linked_list_next(node) \
-    (assert(node), (node)->next)
+    (dp_assert(node), (node)->next)
 #define single_linked_list_next_set(node, v) \
-    (assert(node), (node)->next = (v))
+    (dp_assert(node), (node)->next = (v))
 
 /*
  * Single linked list previous set not supported.
@@ -386,19 +386,19 @@ struct leftist_heap {
 
 /* SKIP LINKED LIST */
 #define skip_linked_list_key(node) \
-    (assert(node), (node)->key)
+    (dp_assert(node), (node)->key)
 #define skip_linked_list_key_set(node, k) \
-    (assert(node), (node)->key = (k))
+    (dp_assert(node), (node)->key = (k))
 
 #define skip_linked_list_val(node) \
-    (assert(node), (node)->val)
+    (dp_assert(node), (node)->val)
 #define skip_linked_list_val_set(node, v) \
-    (assert(node), (node)->val = (v))
+    (dp_assert(node), (node)->val = (v))
 
 #define skip_linked_list_next(node) \
-    (assert(node), (node)->next)
+    (dp_assert(node), (node)->next)
 #define skip_linked_list_next_set(node, n) \
-    (assert(node), (node)->next = (n))
+    (dp_assert(node), (node)->next = (n))
 
 /*
  * Skip linked list previous not supported.
@@ -415,214 +415,214 @@ struct leftist_heap {
     /* We do check sp, bp field here, they should not export to user */
 
 #define array_stack_sid(stack) \
-    (assert(stack), (stack)->sid)
+    (dp_assert(stack), (stack)->sid)
 #define array_stack_sid_set(stack, v) \
-    (assert(stack), (stack)->sid = (v))
+    (dp_assert(stack), (stack)->sid = (v))
 
 #define array_stack_space_dim(stack) \
-    (assert(stack), (stack)->space.dim)
+    (dp_assert(stack), (stack)->space.dim)
 #define array_stack_space_dim_set(stack, v) \
-    (assert(stack), (stack)->space.dim = (v))
+    (dp_assert(stack), (stack)->space.dim = (v))
 
 /* LINKED STACK */
 #define linked_stack_sid(stack) \
-    (assert(stack), (stack)->sid)
+    (dp_assert(stack), (stack)->sid)
 #define linked_stack_sid_set(stack, v) \
-    (assert(stack), (stack)->sid = (v))
+    (dp_assert(stack), (stack)->sid = (v))
 
 /* ARRAY QUEUE */
 #define array_queue_rest_m(queue) \
-    (assert(queue), (queue)->space.rest)
+    (dp_assert(queue), (queue)->space.rest)
 
 #define array_queue_dim_m(queue) \
-    (assert(queue), (queue)->space.dim)
+    (dp_assert(queue), (queue)->space.dim)
 #define array_queue_dim_set_m(queue, size) \
-    (assert(queue), (queue)->space.dim = (size))
+    (dp_assert(queue), (queue)->space.dim = (size))
 
 /* STACKED QUEUE */
 #define stacked_queue_sid(queue) \
-    (assert(queue), (queue)->sid)
+    (dp_assert(queue), (queue)->sid)
 #define stacked_queue_sid_set(queue, v) \
-    (assert(queue), (queue)->sid = (v))
+    (dp_assert(queue), (queue)->sid = (v))
 
 #define stacked_queue_dim(queue) \
-    (assert(queue), (queue)->dim)
+    (dp_assert(queue), (queue)->dim)
 
 /* DOUBLY END QUEUE */
 #define doubly_end_queue_sid(queue) \
-    (assert(queue), (queue)->sid)
+    (dp_assert(queue), (queue)->sid)
 #define doubly_end_queue_sid_set(queue, v) \
-    (assert(queue), (queue)->sid = (v))
+    (dp_assert(queue), (queue)->sid = (v))
 
 /* BINARY SEARCH TREE */
 #define binary_search_tree_node_nice(tree) \
-    (assert(tree), (tree)->chain.nice)
+    (dp_assert(tree), (tree)->chain.nice)
 #define binary_search_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->chain.nice = (v))
+    (dp_assert(tree), (tree)->chain.nice = (v))
 
 #define binary_search_tree_child_left(tree) \
-    (assert(tree), (tree)->left)
+    (dp_assert(tree), (tree)->left)
 #define binary_search_tree_child_left_set(tree, v) \
-    (assert(tree), (tree)->left = (v))
+    (dp_assert(tree), (tree)->left = (v))
 
 #define binary_search_tree_child_right(tree) \
-    (assert(tree), (tree)->right)
+    (dp_assert(tree), (tree)->right)
 #define binary_search_tree_child_right_set(tree, v) \
-    (assert(tree), (tree)->right = (v))
+    (dp_assert(tree), (tree)->right = (v))
 
 #define binary_search_tree_node_link(tree) \
-    (assert(tree), ((tree)->chain).link)
+    (dp_assert(tree), ((tree)->chain).link)
 #define binary_search_tree_child_link_set(tree, v) \
-    (assert(tree), ((tree)->chain).link = (v))
+    (dp_assert(tree), ((tree)->chain).link = (v))
 
 /* AVL TREE */
 #define avl_tree_node_nice(tree) \
-    (assert(tree), (tree)->alias.chain.nice)
+    (dp_assert(tree), (tree)->alias.chain.nice)
 #define avl_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->alias.chain.nice = (v))
+    (dp_assert(tree), (tree)->alias.chain.nice = (v))
 
 #define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
+    (dp_assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
 
 #define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
+    (dp_assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
 
 #define avl_tree_node_link(tree) \
-    (assert(tree), (tree)->alias.chain.link)
+    (dp_assert(tree), (tree)->alias.chain.link)
 #define avl_tree_node_link_set(tree, v) \
-    (assert(tree), (tree)->alias.chain.link = (v))
+    (dp_assert(tree), (tree)->alias.chain.link = (v))
 
 #define avl_tree_height(tree) \
-    (assert(tree), (tree)->height)
+    (dp_assert(tree), (tree)->height)
 #define avl_tree_height_set(tree, v) \
-    (assert(tree), (tree)->height = (v))
+    (dp_assert(tree), (tree)->height = (v))
 
 /* SPLAY TREE */
 #define splay_tree_node_nice(tree) \
-    (assert(tree), (tree)->alias.chain.nice)
+    (dp_assert(tree), (tree)->alias.chain.nice)
 #define splay_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->alias.chain.nice = (v))
+    (dp_assert(tree), (tree)->alias.chain.nice = (v))
 
 #define splay_tree_child_left(tree) \
-    (assert(tree), splay_tree_ptr_container_of(tree->alias.left))
+    (dp_assert(tree), splay_tree_ptr_container_of(tree->alias.left))
 
 #define splay_tree_child_right(tree) \
-    (assert(tree), splay_tree_ptr_container_of(tree->alias.right))
+    (dp_assert(tree), splay_tree_ptr_container_of(tree->alias.right))
 
 #define splay_tree_node_link(tree) \
-    (assert(tree), (tree)->alias.chain.link)
+    (dp_assert(tree), (tree)->alias.chain.link)
 
 
 /* BINARY INDEXED TREE */
 #define binary_indexed_tree_size(tree) \
-    (assert(tree), (tree)->size)
+    (dp_assert(tree), (tree)->size)
 
 #define binary_indexed_tree_value(tree, number) \
-    (assert(tree), assert(number), (tree)->data[number])
+    (dp_assert(tree), dp_assert(number), (tree)->data[number])
 
 /* HASHING TABLE */
 #define hashing_table_size(hash) \
-    (assert(hash), (hash)->size)
+    (dp_assert(hash), (hash)->size)
 
 #define hashing_table_load_factor(hash) \
-    (assert(hash), (hash)->load_factor)
+    (dp_assert(hash), (hash)->load_factor)
 #define hashing_table_load_factor_set(hash, factor) \
-    (assert(hash), (hash)->load_factor = (factor))
+    (dp_assert(hash), (hash)->load_factor = (factor))
 
 /* SEPARATE CHAIN HASHING */
 #define separate_chain_hash_size(hash) \
-    (assert(hash), hashing_table_size((hash)->table))
+    (dp_assert(hash), hashing_table_size((hash)->table))
 
 #define separate_chain_hash_load_factor(hash) \
-    (assert(hash), hashing_table_load_factor((hash)->table))
+    (dp_assert(hash), hashing_table_load_factor((hash)->table))
 #define separate_chain_hash_load_factor_set(hash, factor) \
-    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
+    (dp_assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
 /* OPEN ADDRESSING HASHING */
 #define open_addressing_hash_size(hash) \
-    (assert(hash), hashing_table_size((hash)->table))
+    (dp_assert(hash), hashing_table_size((hash)->table))
 
 #define open_addressing_hash_load_factor(hash) \
-    (assert(hash), hashing_table_load_factor((hash)->table))
+    (dp_assert(hash), hashing_table_load_factor((hash)->table))
 #define open_addressing_hash_load_factor_set(hash, factor) \
-    (assert(hash), hashing_table_load_factor_set((hash)->table, factor))
+    (dp_assert(hash), hashing_table_load_factor_set((hash)->table, factor))
 
 /* MINIMAL HEAP */
 #define minimal_heap_size(heap) \
-    (assert(heap), (heap)->alias->size)
+    (dp_assert(heap), (heap)->alias->size)
 
 #define minimal_heap_capacity(heap) \
-    (assert(heap), (heap)->alias->capacity)
+    (dp_assert(heap), (heap)->alias->capacity)
 
 #define minimal_heap_nice(heap, index) \
-    (assert(heap), HEAP_NICE(heap->alias, index))
+    (dp_assert(heap), HEAP_NICE(heap->alias, index))
 
 #define minimal_heap_val(heap, index) \
-    (assert(heap), HEAP_VAL(heap->alias, index))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index))
 #define minimal_heap_val_set(heap, index, val) \
-    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index) = (val))
 
 #define minimal_heap_index_last(heap) \
-    (assert(heap), INDEX_LAST(heap->alias))
+    (dp_assert(heap), INDEX_LAST(heap->alias))
 
 /* MAXIMAL HEAP */
 #define maximal_heap_size(heap) \
-    (assert(heap), (heap)->alias->size)
+    (dp_assert(heap), (heap)->alias->size)
 
 #define maximal_heap_capacity(heap) \
-    (assert(heap), (heap)->alias->capacity)
+    (dp_assert(heap), (heap)->alias->capacity)
 
 #define maximal_heap_nice(heap, index) \
-    (assert(heap), HEAP_NICE(heap->alias, index))
+    (dp_assert(heap), HEAP_NICE(heap->alias, index))
 
 #define maximal_heap_val(heap, index) \
-    (assert(heap), HEAP_VAL(heap->alias, index))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index))
 #define maximal_heap_val_set(heap, index, val) \
-    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index) = (val))
 
 #define maximal_heap_index_last(heap) \
-    (assert(heap), INDEX_LAST(heap->alias))
+    (dp_assert(heap), INDEX_LAST(heap->alias))
 
 /* MIN_MAX HEAP */
 #define min_max_heap_size(heap) \
-    (assert(heap), (heap)->alias->size)
+    (dp_assert(heap), (heap)->alias->size)
 
 #define min_max_heap_capacity(heap) \
-    (assert(heap), (heap)->alias->capacity)
+    (dp_assert(heap), (heap)->alias->capacity)
 
 #define min_max_heap_nice(heap, index) \
-    (assert(heap), HEAP_NICE(heap->alias, index))
+    (dp_assert(heap), HEAP_NICE(heap->alias, index))
 
 #define min_max_heap_val(heap, index) \
-    (assert(heap), HEAP_VAL(heap->alias, index))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index))
 #define min_max_heap_val_set(heap, index, val) \
-    (assert(heap), HEAP_VAL(heap->alias, index) = (val))
+    (dp_assert(heap), HEAP_VAL(heap->alias, index) = (val))
 
 #define min_max_heap_index_last(heap) \
-    (assert(heap), INDEX_LAST(heap->alias))
+    (dp_assert(heap), INDEX_LAST(heap->alias))
 
 
 /* LEFTIST HEAP */
 #define leftist_heap_nice(heap) \
-    (assert(heap), (heap)->data.nice)
+    (dp_assert(heap), (heap)->data.nice)
 #define leftist_heap_nice_set(heap, v) \
-    (assert(heap), (heap)->data.nice = (v))
+    (dp_assert(heap), (heap)->data.nice = (v))
 
 #define leftist_heap_left(heap) \
-    (assert(heap), (heap)->left)
+    (dp_assert(heap), (heap)->left)
 
 #define leftist_heap_right(heap) \
-    (assert(heap), (heap)->right)
+    (dp_assert(heap), (heap)->right)
 
 #define leftist_heap_npl(heap) \
-    (assert(heap), (heap)->npl)
+    (dp_assert(heap), (heap)->npl)
 #define leftist_heap_npl_set(heap, v) \
-    (assert(heap), (heap)->npl = (v))
+    (dp_assert(heap), (heap)->npl = (v))
 
 #define leftist_heap_val(heap) \
-    (assert(heap), (heap)->data.val)
+    (dp_assert(heap), (heap)->data.val)
 #define leftist_heap_val_set(heap, v) \
-    (assert(heap), (heap)->data.val = (v))
+    (dp_assert(heap), (heap)->data.val = (v))
 
 #endif
 
@@ -632,11 +632,11 @@ struct leftist_heap {
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-#define true                 1
-#define false                0
+#define true                       1
+#define false                      0
 
-#define SYM_2_STR(symbol)    (#symbol)
-#define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
+#define SYM_2_STR(symbol)          (#symbol)
+#define array_sizeof(a)            (sizeof(a) / sizeof(a[0]))
 
 /*
  * abs without if-else
@@ -644,21 +644,21 @@ struct leftist_heap {
  *     z = y + x, x eq x - 1 or unchanged
  *     abs = z ^ x, x eq -x or unchanged.
  */
-#define abs_in_width(x, n)   ((((x) >> ((n) - 1)) + (x)) ^ ((x) >> ((n) - 1)))
-#define abs_sint32(x)        abs_in_width((sint32)x, 32)
-#define abs_sint64(x)        abs_in_width((sint64)x, 64)
+#define abs_in_width(x, n)         ((((x) >> ((n) - 1)) + (x)) ^ ((x) >> ((n) - 1)))
+#define abs_sint32(x)              abs_in_width((sint32)x, 32)
+#define abs_sint64(x)              abs_in_width((sint64)x, 64)
 
-#define NAME_LEN             256
-#define CONTENT_LEN          NAME_LEN
+#define NAME_LEN                   256
+#define CONTENT_LEN                NAME_LEN
 
 
 #define CONTAINER_OF(ptr, type, member) \
-    (assert(ptr), (type *)((void *)(ptr) - (void *)(&((type *)0)->member)))
+    (dp_assert(ptr), (type *)((void *)(ptr) - (void *)(&((type *)0)->member)))
 
-#define pr_log_err(msg)             \
-    do {                            \
-        libds_log_print(ERRR, msg); \
-        exit(1);                    \
+#define pr_log_err(msg)                                         \
+    do {                                                        \
+        dp_printf("ERRR: %s\n  at function %s:%d in file %s\n", \
+        dp_exit(1);                                             \
     } while (0);
 
 
@@ -687,7 +687,6 @@ struct leftist_heap {
     #define S64_MDF_D            "lld"
     #define S64_MDF_X            "llx"
 #endif
-
 
 #endif
 
@@ -1103,13 +1102,4 @@ extern void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(
 
 #endif
 /* END of ./src/sort/sort_declaration.h */
-
-/* BEGIN of ./src/log/log.h */
-#ifndef LOG_OF_LIBDS_H
-#define LOG_OF_LIBDS_H
-
-#define LOG_FNAME "libds.log"
-
-#endif
-/* END of ./src/log/log.h */
 #endif /* END OF FILE */

@@ -19,7 +19,7 @@ ptest_##name##_sort(uint32 count)                       \
                                                         \
     PERFORMANCE_TEST_ENDPOINT;                          \
                                                         \
-    memory_cache_free(data);                            \
+    memory_cache_dp_free(data);                            \
     PERFORMANCE_TEST_RESULT(name##_sort);               \
 }
 

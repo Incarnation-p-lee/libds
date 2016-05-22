@@ -21,7 +21,7 @@ test_case_filter_parser(struct test_case_filter *filter, char *arg)
     char *tmp;
     uint32 dist;
 
-    tmp = strchr(arg, '.');
+    tmp = dp_strchr(arg, '.');
     if (!tmp) {
         goto INVFMT;
     } else {
@@ -29,7 +29,7 @@ test_case_filter_parser(struct test_case_filter *filter, char *arg)
         test_case_filter_obtain_internal(filter->category, arg, dist);
 
         arg = ++tmp;
-        tmp = strchr(arg, '.');
+        tmp = dp_strchr(arg, '.');
         if (!tmp) {
             goto INVFMT;
         } else {
@@ -55,10 +55,10 @@ INVFMT:
 static inline void
 test_case_filter_obtain_internal(char *dest, char *arg, uint32 len)
 {
-    assert(NULL != arg);
-    assert(NULL != dest);
+    dp_assert(NULL != arg);
+    dp_assert(NULL != dest);
 
-    memcpy(dest, arg, len);
+    dp_memcpy(dest, arg, len);
 }
 
 static inline struct test_case_filter *
@@ -78,9 +78,9 @@ test_case_filter_initial(void)
 static void
 test_case_filter_destroy(struct test_case_filter **filter)
 {
-    assert(NULL != filter);
+    dp_assert(NULL != filter);
 
-    memory_cache_free(*filter);
+    memory_cache_dp_free(*filter);
     *filter = NULL;
 }
 

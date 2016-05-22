@@ -35,7 +35,7 @@ else
 fi
 
 cat << EOF > $mkfile
-include ../$srcdir/base.Makefile
+include ../$srcdir/Makefile.int
 
 .phony:lib stlib dylib
 

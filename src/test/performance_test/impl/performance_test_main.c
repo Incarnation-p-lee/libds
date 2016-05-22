@@ -3,12 +3,12 @@ performance_test_execution_start(struct test_extra_info *info, char *content)
 {
     struct test_case_filter *filter;
 
-    assert(NULL != content);
+    dp_assert(NULL != content);
 
     performance_test_reference_golden_prepare(PERFORMANCE_TEST_GOLDEN);
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "  >> PERFORMANCE TEST << \n");
+    dp_fprintf(stdout, "  >> PERFORMANCE TEST << \n");
     performance_test_execution_category(test_category, filter, info);
 
     test_case_filter_destroy(&filter);
@@ -46,7 +46,7 @@ performance_test_execution_implement(const struct test_layer_table *implement,
         implement++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline void
@@ -66,7 +66,7 @@ performance_test_execution_interface(const struct test_layer_table *interface,
         interface++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline void
@@ -84,11 +84,11 @@ performance_test_result_print(char *name, sint64 period)
     variance = variance * 100.0;
 
     if (-VARIANCE_LIMIT < variance && variance < VARIANCE_LIMIT) {
-        fprintf(stdout, "    . %08.3f%% .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
+        dp_fprintf(stdout, "    . %08.3f%% .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
     } else if (-VARIANCE_LIMIT > variance) {
-        fprintf(stdout, "    . [35m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", -variance, period, name);
+        dp_fprintf(stdout, "    . [35m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", -variance, period, name);
     } else {
-        fprintf(stdout, "    . [36m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
+        dp_fprintf(stdout, "    . [36m%08.3f%%[0m .. %#012"S64_MDF_X" ms .. %s\n", variance, period, name);
     }
 }
 

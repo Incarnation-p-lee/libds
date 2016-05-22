@@ -16,7 +16,6 @@ my @modules = ("$srcdir/linked_list",
                "$srcdir/sort",
                "$srcdir/test/unit_test",
                "$srcdir/test/performance_test",
-               "$srcdir/log",
                "$srcdir/common",
            );
 

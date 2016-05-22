@@ -137,7 +137,7 @@ function generate_makfile {
   tmp=${1#src/}
   module=${tmp%/}
   cat > $1Makefile << EOF
-include ./src/base.Makefile
+include ./src/Makefile.int
 
 INCDIR  =./src/inc
 SRC     =$1$module.c

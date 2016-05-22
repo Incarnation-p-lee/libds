@@ -80,7 +80,7 @@ UT_LINKED_LIST_merge(single)
 static inline bool
 utest_single_linked_list_node_legal_p(struct single_linked_list *node)
 {
-    assert(!complain_null_pointer_p(node));
+    dp_assert(!complain_null_pointer_p(node));
 
     if (node != single_linked_list_next(node)) {
         return false;

@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <sys/time.h>
+#include "depends.h"
 #include "types.h"
 #include "defines.h"
 #include "util.h"
@@ -26,4 +22,6 @@
 #include "impl/test_parameter.c"
 #include "impl/test_case_filter.c"
 #include "impl/test_common.c"
+#include "impl/test_memory_maps.c"
+#include "impl/test_log_print.c"
 
