@@ -3,6 +3,7 @@
 cc_config="-fPIC"
 ld_config="-fPIC"
 binary_config="ALL"
+debug_mode=
 
 if [ $# == 0 ]
 then
@@ -34,8 +35,10 @@ do
             cc_config="$cc_config -m32 -DX86_32 -fno-stack-protector"
             ld_config="$ld_config -m elf_i386" ;;
         "DEBUG")
+            debug_mode=1
             cc_config="$cc_config -g3 -DDEBUG" ;;
         "RELEASE")
+            debug_mode=0
             cc_config="$cc_config -o3 -ofast -DNDEBUG" ;;
         "LIBC")
             cc_config="$cc_config -DLIBC" ;;
@@ -59,7 +62,7 @@ mkdir -p $bindir
 perl script/export_api_include.plx
 cp src/inc/ds.h $bindir
 perl script/produce_compile_makefile.pl $src_dir
-perl script/declaration_generate.plx $debug
+perl script/declaration_generate.plx $debug_mode
 
 ## compiling object file function ##
 function obj_compile() {

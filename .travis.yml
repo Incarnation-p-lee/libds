@@ -4,10 +4,10 @@ compiler:
   - clang
 script: 
   - ulimit -s unlimited
-  - bash src/script/build.sh DEBUG=1
-  - bash src/script/run_unit_test.sh
-  - bash src/script/build.sh DEBUG=0 OPT_HOT=1
-  - bash src/script/run_performance_test.sh
+  - bash ./script/build.sh DEBUG X86_64 LIBC
+  - bash ./script/run_unit_test.sh
+  - bash ./script/build.sh RELEASE X86_64 LIBC
+  - bash ./script/run_performance_test.sh
 notifications:
   email:
     - incarnation.p.lee@outlook.com
