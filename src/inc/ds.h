@@ -23,17 +23,19 @@ typedef unsigned char uint8;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
     typedef unsigned long      ulint32;
+    typedef unsigned int       ptr_t;
     #define M32
     #define NUMERAL ulint32
 #endif
 
 #if defined X86_64
-    typedef signed short   sint16;
-    typedef unsigned short uint16;
-    typedef signed int     sint32;
-    typedef unsigned int   uint32;
-    typedef signed long    sint64;
-    typedef unsigned long  uint64;
+    typedef signed short       sint16;
+    typedef unsigned short     uint16;
+    typedef signed int         sint32;
+    typedef unsigned int       uint32;
+    typedef signed long        sint64;
+    typedef unsigned long      uint64;
+    typedef unsigned long      ptr_t;
     #define M64
     #define NUMERAL uint64
 #endif

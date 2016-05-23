@@ -39,7 +39,7 @@ array_stack_resize_internal(struct array_stack *stack, uint32 dim)
     dp_assert(NULL != stack);
     dp_assert(0 != dim);
 
-    offset = (uint32)((uint64)stack->space.sp - (uint64)stack->space.bp);
+    offset = (uint32)((ptr_t)stack->space.sp - (ptr_t)stack->space.bp);
     if (offset > stack->space.dim) {
         pr_log_warn("Stack overflow, will truncate to the top of stack.\n");
         offset = stack->space.dim;

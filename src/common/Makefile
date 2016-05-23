@@ -1,10 +1,8 @@
-include ./src/Makefile.int
+include ../Makefile.in
+CFLAG += -I/home/pli/workspace/libds/src/inc
 
-INCDIR  =./src/inc
-SRC     =src/common/common.c
-OBJ     =$(patsubst %.c, %.o, $(SRC))
-INC     +=-I$(INCDIR)
+TARGET = common.o
+all:$(TARGET)
 
-$(OBJ):%.o:%.c
-	$(CC) $(CFLAG) $(INC) -o $@ $<
-
+.c.o:
+	$(CC) $(CFLAG) -o $@ $<

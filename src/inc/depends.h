@@ -1,9 +1,7 @@
 #ifndef HAVE_DEFINED_DEPENDS_H
 #define HAVE_DEFINED_DEPENDS_H
 
-#define __LIBC__
-
-#if defined __LIBC__
+#if defined LIBC
 #include <unistd.h>
 #include <limits.h>
 #include <assert.h>
