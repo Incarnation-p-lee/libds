@@ -1,8 +1,8 @@
-include ../Makefile.in
+include /home/pli/workspace/libds/src/Makefile.in
 CFLAG += -I/home/pli/workspace/libds/src/inc
 
-TARGET = common.o
-all:$(TARGET)
+all:common.o
 
-.c.o:
+common.o:/home/pli/workspace/libds/src/common/common.c
 	$(CC) $(CFLAG) -o $@ $<
+

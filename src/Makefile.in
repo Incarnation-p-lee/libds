@@ -4,11 +4,11 @@
 SHELL        =/bin/sh
 AR           =ar
 CC           =gcc
-LD           =ld
+LD           =gcc
 #CC           =clang-3.5
 
-AFLAG        =-rc
-LFLAG        =-shared
+AFLAG        =-rcv
+LFLAG        =-Wl,--warn-common
 CFLAG        =-Wall -Werror -c
 CFLAG        +=$(cc_config)
 LFLAG        +=$(ld_config)
@@ -16,5 +16,5 @@ LFLAG        +=$(ld_config)
 ELF_TARGET   =ds.elf
 OBJ_TARGET   =libds.a
 DYN_TARGET   =libds.so
-EXTLIB       =-lm
+LD_LIBRARY   =$(ld_library)
 

@@ -3,7 +3,9 @@ use strict;
 use 5.010;
 
 my $work_dir = shift @ARGV;
-my $include_dir = "$ENV{'PWD'}/src/inc";
+my $current_dir = "$ENV{'PWD'}";
+my $source_dir = "$current_dir/src";
+my $include_dir = "$source_dir/inc";
 
 if ($work_dir eq "") {
     say "Please specify the work directory for makefile producing";
@@ -45,15 +47,11 @@ sub visit_workspace {
 sub create_compile_makefile {
     my $dir;
     my $file;
-    my $make_in;
 
     $dir = shift @_;
     $dir =~ /\w+/ or
         die "Script DO NOT know how to make one makefile without a module name.";
 
-    $make_in = ".";
-    $make_in = $1 if $dir =~ /\/?\w+\/(.+)/;
-    $make_in =~ s/\w+/../g;
     $file = $1 if $dir =~ /\/?(\w+)$/;
 
     ## handle main.c Makefile ##
@@ -62,12 +60,11 @@ sub create_compile_makefile {
     open MAKEFILE, '>', "$dir/Makefile" or
         die "Failed to create makefile, $?\n";
 
-    printf MAKEFILE "include $make_in/Makefile.in\n";
+    printf MAKEFILE "include $source_dir/Makefile.in\n";
     printf MAKEFILE "CFLAG += -I$include_dir\n\n";
-    printf MAKEFILE "TARGET = $file.o\n";
-    printf MAKEFILE 'all:$(TARGET)' ."\n\n";
-    printf MAKEFILE ".c.o:\n";
-    printf MAKEFILE "\t" . '$(CC) $(CFLAG) -o $@ $<' . "\n";
+    printf MAKEFILE "all:$file.o\n\n";
+    printf MAKEFILE "$file.o:$current_dir/$dir/$file.c\n";
+    printf MAKEFILE "\t" . '$(CC) $(CFLAG) -o $@ $<' . "\n\n";
 
     close MAKEFILE;
 }

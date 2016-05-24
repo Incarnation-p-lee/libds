@@ -1,9 +1,10 @@
 #!/bin/sh
 ## addition cc and ld config ##
 cc_config="-fPIC"
-ld_config="-fPIC"
-binary_config="ALL"
+ld_config="-Wl,--stats"
+ld_library=
 debug_mode=
+target=
 
 if [ $# == 0 ]
 then
@@ -12,9 +13,9 @@ Build Script Usage:
     sh src/script/build.sh DEBUG/RELEASE
                            X86_64/X86_32
                            LIBC
+                           ELF/OBJ/DYN
                            PROFILE         -optional
                            CODE_COVERAGE   -optional
-                           ALL/ELF/OBJ/DYN -optional
 EOF
     exit 1
 fi
@@ -30,24 +31,27 @@ do
     case $pm in
         "X86_64")
             cc_config="$cc_config -m64 -DX86_64"
-            ld_config="$ld_config -m elf_x86_64" ;;
+            ld_config="$ld_config -m64" ;;
         "X86_32")
             cc_config="$cc_config -m32 -DX86_32 -fno-stack-protector"
-            ld_config="$ld_config -m elf_i386" ;;
+            ld_config="$ld_config -m32" ;;
         "DEBUG")
             debug_mode=1
             cc_config="$cc_config -g3 -DDEBUG" ;;
         "RELEASE")
             debug_mode=0
-            cc_config="$cc_config -o3 -ofast -DNDEBUG" ;;
+            cc_config="$cc_config -o3 -ofast -DNDEBUG"
+            ld_config="$ld_config -Wl,-O3" ;;
         "LIBC")
-            cc_config="$cc_config -DLIBC" ;;
+            cc_config="$cc_config -DLIBC"
+            ld_library="-lc -lm" ;;
         "ELF")
-            binary_config="ELF" ;;
+            target=elf ;;
         "OBJ")
-            binary_config="OBJ" ;;
+            target=obj ;;
         "DYN")
-            binary_config="DYN" ;;
+            target=dyn
+            ld_config="$ld_config -shared -fPIC" ;;
     esac
 done
 
@@ -66,12 +70,12 @@ perl script/declaration_generate.plx $debug_mode
 
 ## compiling object file function ##
 function obj_compile() {
-    make -C $1 "cc_config=$cc_config"
+    make "cc_config=$cc_config" -f $1/Makefile
     if [ "$?" != 0 ]
     then
         exit 3
     else
-        mv $1/*.o $objdir
+        mv *.o $objdir
     fi
 }
 
@@ -92,12 +96,13 @@ perl script/produce_link_makefile.pl
 
 ## link final target ##
 cp $src_dir/Makefile.in $objdir && cd $objdir
-make "ld_config=$ld_config"
+make "ld_config=$ld_config" "ld_library=$ld_library" $target
+
 if [ "$?" != 0 ]
 then
     exit 4
 else
-    mv *.so *.elf *.a $bindir && cd - > /dev/null
+    cd - > /dev/null
 fi
 
 ## Update tags and cleanup log ##

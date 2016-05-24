@@ -1,8 +1,8 @@
-include ../Makefile.in
+include /home/pli/workspace/libds/src/Makefile.in
 CFLAG += -I/home/pli/workspace/libds/src/inc
 
-TARGET = hash.o
-all:$(TARGET)
+all:hash.o
 
-.c.o:
+hash.o:/home/pli/workspace/libds/src/hash/hash.c
 	$(CC) $(CFLAG) -o $@ $<
+

@@ -1,8 +1,8 @@
-include ../Makefile.in
+include /home/pli/workspace/libds/src/Makefile.in
 CFLAG += -I/home/pli/workspace/libds/src/inc
 
-TARGET = queue.o
-all:$(TARGET)
+all:queue.o
 
-.c.o:
+queue.o:/home/pli/workspace/libds/src/queue/queue.c
 	$(CC) $(CFLAG) -o $@ $<
+

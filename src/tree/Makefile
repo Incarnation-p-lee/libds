@@ -1,8 +1,8 @@
-include ../Makefile.in
+include /home/pli/workspace/libds/src/Makefile.in
 CFLAG += -I/home/pli/workspace/libds/src/inc
 
-TARGET = tree.o
-all:$(TARGET)
+all:tree.o
 
-.c.o:
+tree.o:/home/pli/workspace/libds/src/tree/tree.c
 	$(CC) $(CFLAG) -o $@ $<
+

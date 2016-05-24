@@ -1,4 +1,4 @@
 #!/bin/bash
 
-exec ./obj_out/out/ds.elf -u *.*.*
+exec ./output/out/ds.elf -u *.*.*
 

@@ -1,8 +1,8 @@
-include ../Makefile.in
+include /home/pli/workspace/libds/src/Makefile.in
 CFLAG += -I/home/pli/workspace/libds/src/inc
 
-TARGET = sort.o
-all:$(TARGET)
+all:sort.o
 
-.c.o:
+sort.o:/home/pli/workspace/libds/src/sort/sort.c
 	$(CC) $(CFLAG) -o $@ $<
+
