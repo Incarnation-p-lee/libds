@@ -1,5 +1,5 @@
-#include "depends.h"
 #include "types.h"
+#include "depends.h"
 #include "defines.h"
 #include "util.h"
 

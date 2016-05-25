@@ -49,7 +49,7 @@
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \
-    (dp_assert(ptr), (type *)((void *)(ptr) - (void *)(&((type *)0)->member)))
+    (dp_assert(NULL != ptr), (type *)((void *)(ptr) - (void *)(&((type *)0)->member)))
 
 #define pr_log_err(msg)                                         \
     do {                                                        \

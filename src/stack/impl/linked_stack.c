@@ -318,9 +318,9 @@ linked_stack_node_rest(struct linked_stack_space *node)
     limit = node->space.bp + node->space.dim;
     if ((sint32)(tmp - limit) > 0) {
         pr_log_err("Array stack overflow.");
-    } else {
-        return (uint32)(limit - tmp);
     }
+
+    return (uint32)(limit - tmp);
 }
 
 /*

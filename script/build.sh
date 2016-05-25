@@ -12,7 +12,7 @@ then
 Build Script Usage:
     sh src/script/build.sh DEBUG/RELEASE
                            X86_64/X86_32
-                           LIBC
+                           LIBC/KERNEL
                            ELF/OBJ/DYN
                            PROFILE         -optional
                            CODE_COVERAGE   -optional
@@ -45,6 +45,8 @@ do
         "LIBC")
             cc_config="$cc_config -DLIBC"
             ld_library="-lc -lm" ;;
+        "KERNEL")
+            cc_config="$cc_config -DKERNEL -nostdlib -nostdinc -fno-builtin" ;;
         "ELF")
             target=elf ;;
         "OBJ")
@@ -79,12 +81,19 @@ function obj_compile() {
     fi
 }
 
-## compile main.o ##
-obj_compile $src_dir
+## compile main.o for elf target ##
+if [ "$target" == "elf" ]
+then
+    obj_compile $src_dir
+fi
 
-## compiling all other subdir .o file##
+## compiling all other subdir .o file ##
 for dir in `ls -d src/*/`
 do
+    if [ "$target" != "elf" ] && [ "$dir" == "src/test/" ]
+    then
+        continue
+    fi
     case $dir in
         "src/inc/") continue ;;
     esac

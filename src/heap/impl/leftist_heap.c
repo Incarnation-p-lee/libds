@@ -218,7 +218,7 @@ leftist_heap_remove_min_internal(struct leftist_heap **heap)
     struct leftist_heap *left;
     struct leftist_heap *right;
 
-    dp_assert(heap);
+    dp_assert(NULL != heap);
     dp_assert(leftist_heap_structure_legal_p(*heap));
 
     removed = *heap;

@@ -103,8 +103,8 @@ avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1)
     if (left > right) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mleft [0m: %d\n", left);
-        dp_fprintf(stdout, "[31mright[0m: %d\n", right);
+        dp_printf("[32mleft [0m: %d\n", left);
+        dp_printf("[31mright[0m: %d\n", right);
         return false;
     }
 }
@@ -120,8 +120,8 @@ avl_tree_ptr_to_avl_optimize_validity_p(struct binary_search_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_printf("[32mexpected[0m: %p\n", expected);
+        dp_printf("[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -137,8 +137,8 @@ avl_tree_left_optimize_validity_p(struct avl_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_printf("[32mexpected[0m: %p\n", expected);
+        dp_printf("[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -154,8 +154,8 @@ avl_tree_right_optimize_validity_p(struct avl_tree *node,
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %p\n", expected);
-        dp_fprintf(stdout, "[31mcomputed[0m: %p\n", computed);
+        dp_printf("[32mexpected[0m: %p\n", expected);
+        dp_printf("[31mcomputed[0m: %p\n", computed);
         return false;
     }
 }
@@ -181,8 +181,8 @@ avl_tree_height_optimize_validity_p(struct avl_tree *tree,
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %d\n", expected);
-        dp_fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
+        dp_printf("[32mexpected[0m: %d\n", expected);
+        dp_printf("[31mcomputed[0m: %d\n", computed);
         return false;
     }
 }
@@ -197,9 +197,9 @@ avl_tree_node_balanced_optimize_validity_p(struct avl_tree *node, bool expected)
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %s\n",
+        dp_printf("[32mexpected[0m: %s\n",
             expected == true ? "true" : "false");
-        dp_fprintf(stdout, "[31mcomputed[0m: %s\n",
+        dp_printf("[31mcomputed[0m: %s\n",
             computed == true ? "true" : "false");
         return false;
     }

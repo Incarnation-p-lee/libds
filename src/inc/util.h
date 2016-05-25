@@ -15,9 +15,9 @@ struct memory_maps {
 };
 
 #ifdef DEBUG
-    extern void * dp_malloc_wrap(size_t size);
+    extern void * malloc_wrap(size_t size);
     extern void * realloc_wrap(void *ptr, size_t size);
-    extern void dp_free_wrap(void *ptr);
+    extern void free_wrap(void *ptr);
     extern void memory_trace_print(void);
     extern void libds_log_file_create(void);
     extern void libds_log_file_close(void);

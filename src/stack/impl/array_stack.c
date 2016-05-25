@@ -118,9 +118,9 @@ array_stack_rest_internal(struct array_stack *stack)
 
     if ((sint32)(tmp - limit) > 0) {
         pr_log_err("Array stack overflow.\n");
-    } else {
-        return (uint32)(limit - tmp);
     }
+
+    return (uint32)(limit - tmp);
 }
 
 /*
@@ -195,9 +195,9 @@ array_stack_empty_p(struct array_stack *stack)
         return false;
     } else if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
         pr_log_err("Array stack overflow.");
-    } else {
-        return array_stack_empty_p_internal(stack);
     }
+
+    return array_stack_empty_p_internal(stack);
 }
 
 /*

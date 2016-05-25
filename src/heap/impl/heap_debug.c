@@ -123,8 +123,8 @@ leftist_heap_npl_optimize_validity_p(struct leftist_heap *node,
     if (computed == expected) {
         return true;
     } else {
-        dp_fprintf(stdout, "[32mexpected[0m: %d\n", expected);
-        dp_fprintf(stdout, "[31mcomputed[0m: %d\n", computed);
+        dp_printf("[32mexpected[0m: %d\n", expected);
+        dp_printf("[31mcomputed[0m: %d\n", computed);
         return false;
     }
 }

@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include "defines.h"
 #include "types.h"
+#include "depends.h"
+#include "defines.h"
 #include "util.h"
 
 int

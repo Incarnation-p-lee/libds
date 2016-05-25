@@ -217,7 +217,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
 static inline void
 doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
 {
-    dp_assert(queue);
+    dp_assert(NULL != queue);
     dp_assert(queue->head == queue->tail);
 
     memory_cache_dp_free(queue->head);
