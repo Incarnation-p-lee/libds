@@ -176,7 +176,7 @@ ptest_##name##_tree_insert(uint32 count)         \
     while (count--) {                            \
         tmp = TREE_create();                     \
         TREE_initial(tmp, count);                \
-        TREE_insert(tree, tmp);                  \
+        TREE_insert(&tree, tmp);                 \
     }                                            \
                                                  \
     PERFORMANCE_TEST_ENDPOINT;                   \

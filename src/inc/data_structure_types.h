@@ -150,8 +150,10 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
-    sint32                    height;
-    struct binary_search_tree alias;
+    sint32          height;
+    sint64          nice;
+    struct avl_tree *left;
+    struct avl_tree *right;
 };
 
 /*

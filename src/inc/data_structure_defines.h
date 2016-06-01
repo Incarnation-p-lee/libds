@@ -142,25 +142,20 @@
     (assert(tree), (tree)->right = (v))
 
 /* AVL TREE */
-#define avl_tree_node_nice(tree) \
-    (assert(tree), (tree)->alias.chain.nice)
-#define avl_tree_node_nice_set(tree, v) \
-    (assert(tree), (tree)->alias.chain.nice = (v))
+#define avl_tree_nice(tree) \
+    (assert(tree), (tree)->nice)
+#define avl_tree_nice_set(tree, v) \
+    (assert(tree), (tree)->nice = (v))
 
-#define avl_tree_child_left(tree) \
-    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.left))
+#define avl_tree_left(tree) \
+    (assert(tree), (tree)->left)
 
-#define avl_tree_child_right(tree) \
-    (assert(tree), avl_tree_ptr_binary_to_avl(tree->alias.right))
+#define avl_tree_right(tree) \
+    (assert(tree), (tree)->right)
 
-#define avl_tree_node_link(tree) \
-    (assert(tree), (tree)->alias.chain.link)
-#define avl_tree_node_link_set(tree, v) \
-    (assert(tree), (tree)->alias.chain.link = (v))
-
-#define avl_tree_height(tree) \
+#define avl_tree_height_m(tree) \
     (assert(tree), (tree)->height)
-#define avl_tree_height_set(tree, v) \
+#define avl_tree_height_m_set(tree, v) \
     (assert(tree), (tree)->height = (v))
 
 /* SPLAY TREE */
