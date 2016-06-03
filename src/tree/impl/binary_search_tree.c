@@ -175,7 +175,7 @@ binary_search_tree_height_internal(struct binary_search_tree *tree)
 sint32
 binary_search_tree_height(struct binary_search_tree *tree)
 {
-    if (binary_search_tree_structure_legal_p(tree)) {
+    if (!binary_search_tree_structure_legal_p(tree)) {
         return -1;
     } else {
         return binary_search_tree_height_internal(tree);
@@ -470,12 +470,13 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
 
     assert(!complain_null_pointer_p(tree));
     assert(binary_search_tree_structure_legal_p(*tree));
+    assert(binary_search_tree_ordered_p(*tree));
     assert(binary_search_tree_structure_legal_p(node));
 
     pre = tree;
     n = *pre;
     nice = node->nice;
-    val = INVALID_PTR;
+    val = NULL;
 
     while (n) {
         if (nice > n->nice) {
@@ -486,7 +487,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
             if (n->left && nice == n->left->nice) {
                 val = binary_search_tree_remove_internal(&n->left, node);
             }
-            if (INVALID_PTR == val && n->right && nice == n->right->nice) {
+            if (NULL == val && n->right && nice == n->right->nice) {
                 val = binary_search_tree_remove_internal(&n->right, node);
             }
             break;
@@ -500,7 +501,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
         n = *pre;
     }
 
-    if (INVALID_PTR == val) {
+    if (NULL == val) {
         pr_log_warn("Failed to find the node in given tree.\n");
     }
 

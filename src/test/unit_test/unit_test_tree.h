@@ -235,7 +235,7 @@ utest_##name##_tree_remove(void)                                        \
                                                                         \
     tmp = TREE_create();                                                \
     TREE_initial(tmp, 0x7FFFFFFF);                                      \
-    RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(&tree, tmp), &pass);  \
+    RESULT_CHECK_pointer(NULL, TREE_remove(&tree, tmp), &pass);         \
     TREE_destroy(&tmp);                                                 \
                                                                         \
     TREE_destroy(&tree);                                                \
