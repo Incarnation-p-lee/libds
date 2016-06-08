@@ -160,7 +160,9 @@ struct avl_tree {
  * splay tree
  */
 struct splay_tree {
-    struct binary_search_tree alias;
+    sint64            nice;
+    struct splay_tree *left;
+    struct splay_tree *right;
 };
 
 /*

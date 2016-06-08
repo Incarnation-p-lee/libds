@@ -1,5 +1,5 @@
-static inline struct binary_search_tree *
-binary_search_tree_create_internal(void)
+struct binary_search_tree *
+binary_search_tree_create(void)
 {
     struct binary_search_tree *tree;
 
@@ -18,12 +18,6 @@ binary_search_tree_initial_internal(struct binary_search_tree *tree,
     tree->left = NULL;
     tree->right = NULL;
     tree->nice = nice;
-}
-
-struct binary_search_tree *
-binary_search_tree_create(void)
-{
-    return binary_search_tree_create_internal();
 }
 
 void
@@ -447,6 +441,7 @@ binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
 
     assert(!complain_null_pointer_p(node_pre));
     assert(binary_search_tree_structure_legal_p(*node_pre));
+    assert(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
     left_h = binary_search_tree_height_internal(binary->left);
@@ -465,7 +460,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
 {
     sint64 nice;
     struct binary_search_tree *n;
-    struct binary_search_tree *val;
+    struct binary_search_tree *removed;
     struct binary_search_tree **pre;
 
     assert(!complain_null_pointer_p(tree));
@@ -476,7 +471,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
     pre = tree;
     n = *pre;
     nice = node->nice;
-    val = NULL;
+    removed = NULL;
 
     while (n) {
         if (nice > n->nice) {
@@ -485,10 +480,10 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
             pre = &n->left;
         } else if (node != n) {
             if (n->left && nice == n->left->nice) {
-                val = binary_search_tree_remove_internal(&n->left, node);
+                removed = binary_search_tree_remove_internal(&n->left, node);
             }
-            if (NULL == val && n->right && nice == n->right->nice) {
-                val = binary_search_tree_remove_internal(&n->right, node);
+            if (NULL == removed && n->right && nice == n->right->nice) {
+                removed = binary_search_tree_remove_internal(&n->right, node);
             }
             break;
         } else if (binary_search_tree_doubly_child_p(n)) {
@@ -501,12 +496,12 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
         n = *pre;
     }
 
-    if (NULL == val) {
+    if (NULL == removed) {
         pr_log_warn("Failed to find the node in given tree.\n");
     }
 
     assert(binary_search_tree_ordered_p(*tree));
-    return val;
+    return removed;
 }
 
 struct binary_search_tree *
@@ -529,8 +524,9 @@ binary_search_tree_iterate_internal(struct binary_search_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
     assert(LEGAL_ORDER_P(order));
+    assert(!complain_null_pointer_p(handle));
 
-    if (tree && handle) {
+    if (tree) {
         if (ORDER_PRE == order) {
             handle(tree);
         }

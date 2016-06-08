@@ -130,16 +130,14 @@ test_splay_tree_sample(uint64 range, uint32 node_count)
     uint32 i;
 
     tree = splay_tree_create();
-    splay_tree_node_initial(tree, &reference, 0);
+    splay_tree_node_initial(tree, 0);
     i = 1;
 
     while (i < node_count) {
         nice = (sint64)((rand() % range) - (range / 2));
-        tmp = splay_tree_node_create(NULL, 0x0);
-        splay_tree_node_initial(tmp, &reference, nice);
-        if (tmp != splay_tree_node_insert(&tree, tmp)) {
-            splay_tree_destroy(&tmp);
-        }
+        tmp = splay_tree_create();
+        splay_tree_initial(tmp, nice);
+        splay_tree_insert(&tree, tmp);
         i++;
     }
 
