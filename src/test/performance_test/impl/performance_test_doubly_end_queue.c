@@ -8,7 +8,7 @@ performance_test_doubly_end_queue_struct_field(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        doubly_end_queue_sid_set(queue, 0x32);
+        // doubly_end_queue_sid_set(queue, 0x32);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

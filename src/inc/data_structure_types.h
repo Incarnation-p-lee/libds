@@ -1,6 +1,45 @@
 #ifndef DATA_STRUCTURE_TYPES_H
 #define DATA_STRUCTURE_TYPES_H
 
+enum ITER_ORDER {
+    ORDER_START,
+    ORDER_PRE,
+    ORDER_IN,
+    ORDER_POST,
+    ORDER_END,
+};
+
+#define SIZE_INVALID           0xffffffff
+#define SKIP_LVL_LMT           8          // skip linked list level limitation
+#define SKIP_KEY_INVALID       (sint32)0x80000000
+#define SPT_CHN_HASH_SIZE_DFT  11u        // separate chain hash default size
+#define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
+#define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
+#define HASH_SIZE_INVALID      SIZE_INVALID
+#define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
+#define HEAP_SIZE_INVALID      SIZE_INVALID
+#define HEAP_CPCT_INVALID      SIZE_INVALID
+#define HEAP_NICE_INVALID      (sint64)(1ull << 63)
+#define HEAP_CPCT_DFT          4097u      // heap default capacity
+#define HEAP_IDX_INVALID       0u         // heap invalid index
+#define HEAP_IDX_ROOT          1u         // heap root index
+#define HEAP_NPL_NULL          -1         // heap NPL value of NULL
+#define HEAP_DEPTH_INVALID     SIZE_INVALID
+#define QUEUE_SIZE_DFT         1024       // queue size default
+#define QUEUE_EXPD_SIZE_MIN    128        // queue expand size minimal
+#define QUEUE_REST_INVALID     SIZE_INVALID
+#define QUEUE_CPCT_INVALID     SIZE_INVALID
+#define QUEUE_SIZE_INVALID     SIZE_INVALID
+#define STACK_SIZE_DFT         1024       // stack size default
+#define STACK_EXPD_SIZE_MIN    128        // stack expand size minimal
+#define STACK_SIZE_INVALID     SIZE_INVALID
+#define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
+#define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
+#define PTR_INVALID            (void *)-1 // invalid pointer
+
+#define HEAP_IDX_CHILD_L(x)    ((x) * 2)
+#define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
+
 /*
  *   Implement the unify single_linked_list interface
  * All other linked list will involved this structure
@@ -37,14 +76,12 @@ struct doubly_linked_list {
  * | Level 0 head  0 -> 3 -> 7 -> 9 -> 10 -> 22 -> 34 -> NULL |
  * ------------------------------------------------------------
  */
-#define LEVEL_LIMIT 8
-
 struct skip_linked_list {
     sint32 key;
     void   *val;
     union {
         struct skip_linked_list *next;
-        struct skip_linked_list *layer[LEVEL_LIMIT];
+        struct skip_linked_list *layer[SKIP_LVL_LMT];
     };
 };
 
@@ -190,7 +227,7 @@ struct binary_indexed_tree {
 struct hashing_table {
     void       **space;
     uint32     size;
-    uint32     load_factor; /* load_factor % */
+    uint32     load_factor;
     union {
         void   *func;
         uint32 (*separate_chain)(void *, uint32);

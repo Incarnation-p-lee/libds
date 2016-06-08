@@ -13,7 +13,7 @@ utest_##name##_hash_create(void)                             \
     pass = true;                                             \
                                                              \
     hash = HASH_create(tmp);                                 \
-    tmp = DEFAULT_CHAIN_HASH_SIZE;                           \
+    tmp = SPT_CHN_HASH_SIZE_DFT;                           \
     RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);        \
     tmp = LOAD_FACTOR;                                       \
     RESULT_CHECK_uint32(tmp, HASH_load_factor(hash), &pass); \

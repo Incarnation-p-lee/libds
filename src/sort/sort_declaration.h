@@ -1,6 +1,5 @@
-#ifndef SORT_DECLARATION_H
-#define SORT_DECLARATION_H
-
+#ifndef HAVE_DEFINED_sort_H
+#define HAVE_DEFINED_sort_H
 
 bool sort_data_sorted_p(void *data, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 static inline bool sort_parameters_legal_p(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
@@ -21,3 +20,4 @@ void quick_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const v
 void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 
 #endif
+

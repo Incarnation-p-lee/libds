@@ -14,12 +14,6 @@ memory_trace_print(void)
     }
 }
 
-void
-end_of_report_print(void)
-{
-    dp_printf("  >> End of Data Structure Library <<\n\n");
-}
-
 static void
 linked_list_iterate_handler(void *node)
 {

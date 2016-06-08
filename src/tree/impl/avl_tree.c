@@ -1,3 +1,52 @@
+void
+avl_tree_node_nice_set(struct avl_tree *tree, sint64 nice)
+{
+    tree->alias.chain.nice = nice;
+}
+
+sint64
+avl_tree_node_nice(struct avl_tree *tree)
+{
+    return tree->alias.chain.nice;
+}
+
+struct avl_tree *
+avl_tree_child_left(struct avl_tree *tree)
+{
+    return avl_tree_ptr_binary_to_avl(tree->alias.left);
+}
+
+struct avl_tree *
+avl_tree_child_right(struct avl_tree *tree)
+{
+    return avl_tree_ptr_binary_to_avl(tree->alias.right);
+}
+
+struct doubly_linked_list *
+avl_tree_node_link(struct avl_tree *tree)
+{
+    return tree->alias.chain.link;
+}
+
+void
+avl_tree_node_link_set(struct avl_tree *tree,
+    struct doubly_linked_list *link)
+{
+    tree->alias.chain.link = link;
+}
+
+void
+avl_tree_height_set(struct avl_tree *tree, sint32 height)
+{
+    tree->height = height;
+}
+
+sint32
+avl_tree_height(struct avl_tree *tree)
+{
+    return tree->height;
+}
+
 struct avl_tree *
 avl_tree_create(void)
 {

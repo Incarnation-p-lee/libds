@@ -8,8 +8,9 @@ enum log_level {
     ERRR,
 };
 
-typedef signed char   sint8;
-typedef unsigned char uint8;
+typedef signed char            sint8;
+typedef unsigned char          uint8;
+typedef unsigned int           bool;
 
 #if defined X86_32
     typedef signed short       sint16;
@@ -21,7 +22,7 @@ typedef unsigned char uint8;
     typedef unsigned long      ulint32;
     typedef unsigned int       ptr_t;
     #define M32
-    #define NUMERAL ulint32
+    #define NUMERAL            ulint32
 #endif
 
 #if defined X86_64
@@ -33,9 +34,8 @@ typedef unsigned char uint8;
     typedef unsigned long      uint64;
     typedef unsigned long      ptr_t;
     #define M64
-    #define NUMERAL uint64
+    #define NUMERAL            uint64
 #endif
 
-typedef unsigned int bool;
 
 #endif

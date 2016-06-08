@@ -1,11 +1,9 @@
 #include "types.h"
 #include "depends.h"
 #include "defines.h"
-#include "util.h"
-#include "data_structure_types.h"
-#include "data_structure_defines.h"
+#include "data_structure_interface.h"
+#include "universal.h"
 
-#include "ds.h"
 #include "test.h"
 #include "test_result_check.h"
 #include "test_declaration.h"

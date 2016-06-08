@@ -1,6 +1,5 @@
-#ifndef STACK_DECLARATION_H
-#define STACK_DECLARATION_H
-
+#ifndef HAVE_DEFINED_stack_H
+#define HAVE_DEFINED_stack_H
 
 bool array_stack_empty_p(struct array_stack *stack);
 bool array_stack_full_p(struct array_stack *stack);
@@ -28,6 +27,7 @@ static inline void linked_stack_resize_internal(struct linked_stack *stack, uint
 struct array_stack * array_stack_create(void);
 struct linked_stack * linked_stack_create(void);
 uint32 array_stack_capacity(struct array_stack *stack);
+uint32 array_stack_dim(struct array_stack *stack);
 uint32 array_stack_rest(struct array_stack *stack);
 uint32 linked_stack_capacity(struct linked_stack *stack);
 uint32 linked_stack_rest(struct linked_stack *stack);
@@ -45,3 +45,4 @@ void linked_stack_push(struct linked_stack *stack, void *member);
 void linked_stack_resize(struct linked_stack *stack, uint32 dim);
 
 #endif
+

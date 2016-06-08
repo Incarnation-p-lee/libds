@@ -1,6 +1,5 @@
-#ifndef HASH_DECLARATION_H
-#define HASH_DECLARATION_H
-
+#ifndef HAVE_DEFINED_hash_H
+#define HAVE_DEFINED_hash_H
 
 static inline bool hashing_table_structure_legal_p(struct hashing_table *hash);
 static inline bool open_addressing_hash_structure_legal_p(struct open_addressing_hash *hash);
@@ -31,8 +30,12 @@ struct separate_chain_hash * separate_chain_hash_create(uint32 size);
 struct separate_chain_hash * separate_chain_hash_rehashing(struct separate_chain_hash **hash);
 uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 iter);
 uint32 hashing_function_polynomial(void *key, uint32 size);
+uint32 open_addressing_hash_load_factor(struct open_addressing_hash *hash);
 uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
+uint32 open_addressing_hash_size(struct open_addressing_hash *hash);
+uint32 separate_chain_hash_load_factor(struct separate_chain_hash *hash);
 uint32 separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash);
+uint32 separate_chain_hash_size(struct separate_chain_hash *hash);
 void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
 void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
 void * separate_chain_hash_find(struct separate_chain_hash *hash, void *key);
@@ -43,3 +46,4 @@ void separate_chain_hash_destroy(struct separate_chain_hash **hash);
 void separate_chain_hash_insert(struct separate_chain_hash **hash, void *key);
 
 #endif
+

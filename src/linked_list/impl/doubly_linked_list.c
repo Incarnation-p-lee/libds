@@ -1,3 +1,59 @@
+void *
+doubly_linked_list_val(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+doubly_linked_list_val_set(struct doubly_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+struct doubly_linked_list *
+doubly_linked_list_next(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+doubly_linked_list_next_set(struct doubly_linked_list *list,
+    struct doubly_linked_list *next)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = next;
+    }
+}
+
+struct doubly_linked_list *
+doubly_linked_list_previous(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->previous;
+    }
+}
+
+void
+doubly_linked_list_previous_set(struct doubly_linked_list *list,
+    struct doubly_linked_list *previous)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->previous = previous;
+    }
+}
+
 struct doubly_linked_list *
 doubly_linked_list_create(void)
 {
@@ -92,7 +148,7 @@ doubly_linked_list_insert_ptr_before_internal(struct doubly_linked_list *list,
     dp_assert(!complain_null_pointer_p(node));
     dp_assert(!doubly_linked_list_contains_p_internal(list, node));
 
-    prev = doubly_linked_list_previous(list);
+    prev = list->previous;
     dp_assert(NULL != prev);
 
     doubly_linked_list_insert_ptr_after_internal(prev, node);
@@ -127,7 +183,7 @@ doubly_linked_list_insert_before_internal(struct doubly_linked_list *list,
 
     dp_assert(!complain_null_pointer_p(list));
 
-    prev = doubly_linked_list_previous(list);
+    prev = list->previous;
     dp_assert(NULL != prev);
 
     doubly_linked_list_insert_after_internal(prev, val);
@@ -324,7 +380,7 @@ doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void
         node = list;
 
         do {
-            (*handler)(doubly_linked_list_val(node));
+            (*handler)(node->val);
             node = node->next;
         } while (node != list);
     }

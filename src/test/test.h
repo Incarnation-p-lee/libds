@@ -14,8 +14,34 @@
 
 #define LOG_FNAME              "libds.log"
 
+#define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
+    do {                                                               \
+        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
+        RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
+        RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
+    } while (false)
+
+#define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
+    do {                                                               \
+        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
+        RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
+    } while (false)
+
 #define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
     SYM_2_STR(symbol), pass)
+
+struct memory_maps {
+    char        name[NAME_LEN];
+    uint32      authority;
+    union {
+        void    *begin;
+        NUMERAL b_val;
+    };
+    union {
+        void    *end;
+        NUMERAL e_val;
+    };
+};
 
 struct test_case_filter {
     char category[FILTER_LEN];

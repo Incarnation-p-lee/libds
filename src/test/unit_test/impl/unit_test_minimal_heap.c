@@ -1,4 +1,5 @@
 #define HEAP                   minimal_heap
+#define INDEX_LAST             minimal_heap_index_last
 #define HEAP_val               minimal_heap_val
 #define HEAP_nice              minimal_heap_nice
 #define HEAP_size              minimal_heap_size
@@ -32,6 +33,7 @@ UT_HEAP_remove_min(minimal)
 UT_HEAP_build(minimal)
 
 #undef HEAP
+#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
@@ -61,12 +63,12 @@ utest_minimal_heap_ordered_p(struct minimal_heap *heap)
 
     dp_assert(utest_minimal_heap_structure_legal_p(heap));
 
-    index = INDEX_ROOT;
+    index = HEAP_IDX_ROOT;
     index_last = minimal_heap_index_last(heap);
 
     while (index <= index_last) {
-        index_left = INDEX_L_CHILD(index);
-        index_right = INDEX_R_CHILD(index);
+        index_left = HEAP_IDX_CHILD_L(index);
+        index_right = HEAP_IDX_CHILD_R(index);
 
         if (index_left <= index_last &&
             minimal_heap_nice(heap, index) > minimal_heap_nice(heap, index_left)) {
@@ -107,7 +109,7 @@ utest_minimal_heap_decrease_nice(void)
     nice = minimal_heap_nice(heap, index);
 
     minimal_heap_decrease_nice(heap, index, offset);
-    RESULT_CHECK_sint64(nice - offset, minimal_heap_nice(heap, INDEX_ROOT),
+    RESULT_CHECK_sint64(nice - offset, minimal_heap_nice(heap, HEAP_IDX_ROOT),
         &pass);
 
     minimal_heap_destroy(&heap);

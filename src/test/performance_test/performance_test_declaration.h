@@ -1,6 +1,5 @@
-#ifndef PERFORMANCE_TEST_DECLARATION_H
-#define PERFORMANCE_TEST_DECLARATION_H
-
+#ifndef HAVE_DEFINED_performance_test_H
+#define HAVE_DEFINED_performance_test_H
 
 static inline double performance_test_reference_variance_calculate(char *name, sint64 period);
 static inline sint64 performance_test_time_stamp_period(void);
@@ -119,3 +118,4 @@ static void ptest_skip_linked_list_remove(uint32 count);
 static void ptest_skip_linked_list_remove_and_destroy(uint32 count);
 
 #endif
+

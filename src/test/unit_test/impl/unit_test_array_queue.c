@@ -1,5 +1,5 @@
 #define QUEUE                  array_queue
-#define QUEUE_dim              array_queue_dim_m
+#define QUEUE_dim              array_queue_dim
 
 #define QUEUE_create           array_queue_create
 #define QUEUE_destroy          array_queue_destroy

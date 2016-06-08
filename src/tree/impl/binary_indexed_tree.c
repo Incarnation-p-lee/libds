@@ -1,3 +1,15 @@
+uint32
+binary_indexed_tree_size(struct binary_indexed_tree *tree)
+{
+    return tree->size;
+}
+
+sint64
+binary_indexed_tree_value(struct binary_indexed_tree *tree, uint32 number)
+{
+    return tree->data[number];
+}
+
 /*
  * Generate tree->data with DP.
  * For example: number 24 = 11000B
@@ -73,7 +85,7 @@ binary_indexed_tree_number_legal_p(struct binary_indexed_tree *tree, uint32 numb
 {
     dp_assert(!complain_null_pointer_p(tree));
 
-    if (number == TREE_NUMBER_INVALID) {
+    if (number == BIN_IDXED_NMBR_INVALID) {
         return false;
     } else if (number > tree->size) {
         return false;
@@ -179,7 +191,7 @@ sint64
 binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number)
 {
     if (!binary_indexed_tree_structure_legal_p(tree)) {
-        return TREE_SUM_INVALID;
+        return BIN_IDXED_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, number)) {
         return 0;
     } else {
@@ -195,14 +207,14 @@ binary_indexed_tree_range_sum(struct binary_indexed_tree *tree,
     sint64 tmp;
 
     if (!binary_indexed_tree_structure_legal_p(tree)) {
-        return TREE_SUM_INVALID;
+        return BIN_IDXED_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, nmbr_s)) {
-        return TREE_SUM_INVALID;
+        return BIN_IDXED_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, nmbr_e)) {
-        return TREE_SUM_INVALID;
+        return BIN_IDXED_SUM_INVALID;
     } else if (nmbr_s > nmbr_e) {
         pr_log_warn("Invalid start number and end number of range.\n");
-        return TREE_SUM_INVALID;
+        return BIN_IDXED_SUM_INVALID;
     } else {
         retval = binary_indexed_tree_sum_internal(tree, nmbr_e);
         if (nmbr_s == 1) {

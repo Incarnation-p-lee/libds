@@ -1,7 +1,6 @@
 #include "types.h"
 #include "depends.h"
 #include "defines.h"
-#include "util.h"
 
 #include "common.h"
 #include "common_declaration.h"

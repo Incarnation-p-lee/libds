@@ -3,7 +3,7 @@
 cc_config="-fPIC"
 ld_config="-Wl,--stats"
 ld_library=
-debug_mode=
+debug="Yes"
 target=
 
 if [ $# == 0 ]
@@ -25,7 +25,9 @@ src_dir=$base/src
 objdir=$base/output
 bindir=$objdir/out
 
+#######################
 ## parameters handle ##
+#######################
 for pm in "$@"
 do
     case $pm in
@@ -36,10 +38,10 @@ do
             cc_config="$cc_config -m32 -DX86_32 -fno-stack-protector"
             ld_config="$ld_config -m32" ;;
         "DEBUG")
-            debug_mode=1
+            debug_mode="Yes"
             cc_config="$cc_config -g3 -DDEBUG" ;;
         "RELEASE")
-            debug_mode=0
+            debug_mode="No"
             cc_config="$cc_config -o3 -ofast -DNDEBUG"
             ld_config="$ld_config -Wl,-O3" ;;
         "LIBC")
@@ -57,20 +59,26 @@ do
     esac
 done
 
+#############################
 ## create output directory ##
+#############################
 if [ -d $objdir ]
 then
     rm -rf $objdir
 fi
 mkdir -p $bindir
 
-## update head file ds.h, makefile and declarations ##
-perl script/export_api_include.plx
-cp src/inc/ds.h $bindir
+###########################################
+## update some header files and makefile ##
+###########################################
+perl script/produce_module_declaration_h.pl $debug
+perl script/produce_universal_h.pl
+perl script/produce_data_structure_interface_h.pl
 perl script/produce_compile_makefile.pl $src_dir
-perl script/declaration_generate.plx $debug_mode
 
+####################################
 ## compiling object file function ##
+####################################
 function obj_compile() {
     make "cc_config=$cc_config" -f $1/Makefile
     if [ "$?" != 0 ]
@@ -81,13 +89,17 @@ function obj_compile() {
     fi
 }
 
+###################################
 ## compile main.o for elf target ##
+###################################
 if [ "$target" == "elf" ]
 then
     obj_compile $src_dir
 fi
 
+########################################
 ## compiling all other subdir .o file ##
+########################################
 for dir in `ls -d src/*/`
 do
     if [ "$target" != "elf" ] && [ "$dir" == "src/test/" ]
@@ -100,10 +112,14 @@ do
     obj_compile $dir
 done
 
+###############################
 ## generate linking Makefile ##
+###############################
 perl script/produce_link_makefile.pl
 
+#######################
 ## link final target ##
+#######################
 cp $src_dir/Makefile.in $objdir && cd $objdir
 make "ld_config=$ld_config" "ld_library=$ld_library" $target
 
@@ -114,8 +130,12 @@ else
     cd - > /dev/null
 fi
 
+#################################
 ## Update tags and cleanup log ##
+#################################
 ctags -R src && rm -vf libds.log
 
+########################################
 ## End of build script execution flow ##
+########################################
 

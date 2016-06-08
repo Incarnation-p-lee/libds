@@ -137,10 +137,10 @@ leftist_heap_node_heap_ordered_p(struct leftist_heap *node)
     } else if (NULL == node->left && NULL == node->right) {
         return true;
     } else if (NULL != node->left
-        && leftist_heap_nice(node) > leftist_heap_nice(node->left)) {
+        && node->data.nice > node->left->data.nice) {
         return false;
     } else if (NULL != node->right
-        && leftist_heap_nice(node) > leftist_heap_nice(node->right)) {
+        && node->data.nice > node->right->data.nice) {
         return false;
     } else {
         return true;

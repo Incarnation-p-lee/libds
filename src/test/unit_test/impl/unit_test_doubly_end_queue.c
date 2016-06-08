@@ -2,15 +2,10 @@ static void
 unit_test_doubly_end_queue_struct_field(void)
 {
     bool pass;
-    uint32 sid;
     struct doubly_end_queue *queue;
 
     pass = true;
-    sid = 0xfadeu;
     queue = doubly_end_queue_create();
-
-    doubly_end_queue_sid_set(queue, sid);
-    RESULT_CHECK_uint32(sid, doubly_end_queue_sid(queue), &pass);
 
     doubly_end_queue_destroy(&queue);
     UNIT_TEST_RESULT(doubly_end_queue_struct_field, pass);
@@ -25,7 +20,6 @@ unit_test_doubly_end_queue_create(void)
     pass = true;
     queue = doubly_end_queue_create();
 
-    RESULT_CHECK_uint32(0x0u, doubly_end_queue_sid(queue), &pass);
     RESULT_CHECK_bool(true, doubly_end_queue_empty_p(queue), &pass);
 
     doubly_end_queue_destroy(&queue);

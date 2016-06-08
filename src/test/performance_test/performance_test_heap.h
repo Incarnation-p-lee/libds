@@ -252,7 +252,7 @@ ptest_##name##_heap_decrease_nice(uint32 count)         \
     uint32 index;                                       \
     struct HEAP *heap;                                  \
                                                         \
-    index = INDEX_ROOT;                                 \
+    index = HEAP_IDX_ROOT;                              \
     count = count >> 6;                                 \
     count = 0 == count ? 1000 : count;                  \
     heap = TEST_HEAP_sample(count * 4, count * 2);      \
@@ -309,8 +309,8 @@ ptest_##name##_heap_build(uint32 count)                              \
     PERFORMANCE_TEST_CHECKPOINT;                                     \
                                                                      \
     while (count--) {                                                \
-        test_binary_heap_data_dp_randomization(hd_array,                \
-            INDEX_LAST(heap->alias));                                \
+        test_binary_heap_data_randomization(hd_array,                \
+            INDEX_LAST(heap));                                      \
         build = HEAP_build(hd_array, size);                          \
                                                                      \
         memory_cache_dp_free(build->alias);                             \

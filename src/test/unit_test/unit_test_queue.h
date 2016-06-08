@@ -56,7 +56,7 @@ utest_##name##_queue_resize(void)                         \
     size = QUEUE_dim(queue);                              \
     QUEUE_resize(queue, size);                            \
                                                           \
-    size = QUEUE_dim(queue) * 2 + EXPAND_QUEUE_SPACE_MIN; \
+    size = QUEUE_dim(queue) * 2 + QUEUE_EXPD_SIZE_MIN; \
     QUEUE_resize(queue, 0);                               \
     RESULT_CHECK_uint32(size, QUEUE_dim(queue), &pass);   \
                                                           \
@@ -103,7 +103,7 @@ utest_##name##_queue_capacity(void)                                      \
     pass = true;                                                         \
     queue = NULL;                                                        \
                                                                          \
-    RESULT_CHECK_uint32(CAPACITY_INVALID, QUEUE_capacity(queue), &pass); \
+    RESULT_CHECK_uint32(QUEUE_CPCT_INVALID, QUEUE_capacity(queue), &pass); \
                                                                          \
     queue = QUEUE_create();                                              \
     RESULT_CHECK_uint32(QUEUE_dim(queue), QUEUE_capacity(queue), &pass); \
@@ -122,7 +122,7 @@ utest_##name##_queue_rest(void)                                          \
     pass = true;                                                         \
     queue = NULL;                                                        \
                                                                          \
-    RESULT_CHECK_uint32(REST_INVALID, QUEUE_rest(queue), &pass);         \
+    RESULT_CHECK_uint32(QUEUE_REST_INVALID, QUEUE_rest(queue), &pass);         \
                                                                          \
     queue = QUEUE_create();                                              \
     RESULT_CHECK_uint32(QUEUE_dim(queue), QUEUE_rest(queue), &pass);     \

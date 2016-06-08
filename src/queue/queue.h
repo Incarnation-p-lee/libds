@@ -1,11 +1,6 @@
 #ifndef HAVE_QUEUE_H
 #define HAVE_QUEUE_H
 
-#define DEFAULT_QUEUE_SPACE_SIZE   1024
-#define EXPAND_QUEUE_SPACE_MIN     32
-#define REST_INVALID               0xffffffff
-#define CAPACITY_INVALID           0xffffffff
-
 extern bool array_stack_full_p(struct array_stack *stack);
 extern bool array_stack_empty_p(struct array_stack *stack);
 extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
@@ -23,3 +18,4 @@ extern struct array_stack * array_stack_create(void);
 extern struct doubly_linked_list * doubly_linked_list_remove(struct doubly_linked_list **node);
 
 #endif
+

@@ -1,6 +1,5 @@
-#ifndef HEAP_DECLARATION_H
-#define HEAP_DECLARATION_H
-
+#ifndef HAVE_DEFINED_heap_H
+#define HAVE_DEFINED_heap_H
 
 bool maximal_heap_empty_p(struct maximal_heap *heap);
 bool maximal_heap_full_p(struct maximal_heap *heap);
@@ -9,6 +8,11 @@ bool min_max_heap_empty_p_internal(struct min_max_heap *heap);
 bool min_max_heap_full_p(struct min_max_heap *heap);
 bool minimal_heap_empty_p(struct minimal_heap *heap);
 bool minimal_heap_full_p(struct minimal_heap *heap);
+sint32 leftist_heap_npl(struct leftist_heap *heap);
+sint64 leftist_heap_nice(struct leftist_heap *heap);
+sint64 maximal_heap_nice(struct maximal_heap *heap, uint32 index);
+sint64 min_max_heap_nice(struct min_max_heap *heap, uint32 index);
+sint64 minimal_heap_nice(struct minimal_heap *heap, uint32 index);
 static inline bool binary_heap_child_exist_p(struct binary_heap *heap, uint32 index);
 static inline bool binary_heap_depth_even_p(struct binary_heap *heap, uint32 index);
 static inline bool binary_heap_depth_odd_p(struct binary_heap *heap, uint32 index);
@@ -75,28 +79,46 @@ static inline void minimal_heap_nice_alter(struct minimal_heap *heap, uint32 ind
 struct doubly_linked_list * min_max_heap_remove(struct min_max_heap *heap, uint32 index);
 struct leftist_heap * leftist_heap_create(void);
 struct leftist_heap * leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice);
+struct leftist_heap * leftist_heap_left(struct leftist_heap *heap);
 struct leftist_heap * leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge);
 struct leftist_heap * leftist_heap_node_create(void *val, sint32 nlp, sint64 nice);
 struct leftist_heap * leftist_heap_remove_min(struct leftist_heap **heap);
+struct leftist_heap * leftist_heap_right(struct leftist_heap *heap);
 struct maximal_heap * maximal_heap_build(struct heap_data **hd_array, uint32 size);
 struct maximal_heap * maximal_heap_create(uint32 capacity);
 struct min_max_heap * min_max_heap_create(uint32 capacity);
 struct minimal_heap * minimal_heap_build(struct heap_data **hd_array, uint32 size);
 struct minimal_heap * minimal_heap_create(uint32 capacity);
+uint32 maximal_heap_index_last(struct maximal_heap *heap);
+uint32 maximal_heap_index_limit(struct maximal_heap *heap);
+uint32 maximal_heap_size(struct maximal_heap *heap);
 uint32 min_max_heap_depth(struct min_max_heap *heap, uint32 index);
+uint32 min_max_heap_index_last(struct min_max_heap *heap);
+uint32 min_max_heap_index_limit(struct min_max_heap *heap);
+uint32 min_max_heap_size(struct min_max_heap *heap);
+uint32 minimal_heap_index_last(struct minimal_heap *heap);
+uint32 minimal_heap_index_limit(struct minimal_heap *heap);
+uint32 minimal_heap_size(struct minimal_heap *heap);
 void * leftist_heap_get_min(struct leftist_heap *heap);
+void * leftist_heap_val(struct leftist_heap *heap);
 void * maximal_heap_get_max(struct maximal_heap *heap);
 void * maximal_heap_remove(struct maximal_heap *heap, uint32 index);
 void * maximal_heap_remove_max(struct maximal_heap *heap);
+void * maximal_heap_val(struct maximal_heap *heap, uint32 index);
 void * min_max_heap_get_max(struct min_max_heap *heap);
 void * min_max_heap_get_min(struct min_max_heap *heap);
 void * min_max_heap_remove_max(struct min_max_heap *heap);
 void * min_max_heap_remove_min(struct min_max_heap *heap);
+void * min_max_heap_val(struct min_max_heap *heap, uint32 index);
 void * minimal_heap_get_min(struct minimal_heap *heap);
 void * minimal_heap_remove(struct minimal_heap *heap, uint32 index);
 void * minimal_heap_remove_min(struct minimal_heap *heap);
+void * minimal_heap_val(struct minimal_heap *heap, uint32 index);
 void leftist_heap_destroy(struct leftist_heap **heap);
+void leftist_heap_nice_set(struct leftist_heap *heap, sint64 nice);
+void leftist_heap_npl_set(struct leftist_heap *heap, sint32 npl);
 void leftist_heap_remove_min_and_destroy(struct leftist_heap **heap);
+void leftist_heap_val_set(struct leftist_heap *heap, void *val);
 void maximal_heap_cleanup(struct maximal_heap *heap);
 void maximal_heap_decrease_nice(struct maximal_heap *heap, uint32 index, uint32 offset);
 void maximal_heap_destroy(struct maximal_heap **heap);
@@ -114,3 +136,4 @@ void minimal_heap_increase_nice(struct minimal_heap *heap, uint32 index, uint32 
 void minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice);
 
 #endif
+

@@ -1,6 +1,6 @@
 #define HASH                       open_addressing_hash
 #define HASH_size                  open_addressing_hash_size
-#define LOAD_FACTOR                OPEN_ADDRESSING_HASH_LOAD_FACTOR
+#define LOAD_FACTOR                OPN_ADDR_HASH_LOAD_FTR
 #define HASH_load_factor           open_addressing_hash_load_factor
 #define TEST_HASH_sample           test_open_addressing_hash_sample
 

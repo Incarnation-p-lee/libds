@@ -32,7 +32,7 @@ linked_stack_create(void)
     struct linked_stack *stack;
 
     stack = memory_cache_allocate(sizeof(*stack));
-    stack->base = linked_stack_node_create(DEFAULT_STACK_SPACE_SIZE);
+    stack->base = linked_stack_node_create(STACK_SIZE_DFT);
     stack->top = stack->base;
 
     return stack;
@@ -81,9 +81,9 @@ linked_stack_node_next(struct linked_stack_space *node)
     struct doubly_linked_list *tmp;
 
     dp_assert(NULL != node);
-    dp_assert(NULL != doubly_linked_list_next(&node->link));
+    dp_assert(NULL != (&node->link)->next);
 
-    tmp = doubly_linked_list_next(&node->link);
+    tmp = (&node->link)->next;
     next = linked_stack_space_offset_reflect(tmp);
 
     return next;
@@ -98,7 +98,7 @@ linked_stack_node_previous(struct linked_stack_space *node)
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
 
-    tmp = doubly_linked_list_previous(&node->link);
+    tmp = (&node->link)->previous;
 
     dp_assert(NULL != node);
     dp_assert(NULL != tmp);
@@ -186,7 +186,7 @@ linked_stack_resize(struct linked_stack *stack, uint32 dim)
     } else {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = linked_stack_capacity(stack) * 2 + STACK_EXPD_SIZE_MIN;
         }
 
         linked_stack_resize_internal(stack, dim);
@@ -335,7 +335,7 @@ linked_stack_push(struct linked_stack *stack, void *member)
     if (!complain_null_pointer_p(stack)) {
         if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = linked_stack_capacity(stack) * 2 + STACK_EXPD_SIZE_MIN;
             linked_stack_resize_internal(stack, dim);
         }
 

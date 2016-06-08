@@ -1,3 +1,23 @@
+uint32
+open_addressing_hash_size(struct open_addressing_hash *hash)
+{
+    if (!open_addressing_hash_structure_legal_p(hash)) {
+        return HASH_SIZE_INVALID;
+    } else {
+        return hash->table->size;
+    }
+}
+
+uint32
+open_addressing_hash_load_factor(struct open_addressing_hash *hash)
+{
+    if (!open_addressing_hash_structure_legal_p(hash)) {
+        return HASH_LD_FTR_INVALID;
+    } else {
+        return hash->table->load_factor;
+    }
+}
+
 struct open_addressing_hash *
 open_addressing_hash_create(uint32 size)
 {
@@ -6,7 +26,7 @@ open_addressing_hash_create(uint32 size)
 
     hash = memory_cache_allocate(sizeof(*hash));
     if (complain_zero_size_p(size)) {
-        size = DEFAULT_CHAIN_HASH_SIZE;
+        size = SPT_CHN_HASH_SIZE_DFT;
         pr_log_warn("Hash table size not specified, use default size.\n");
     }
 
@@ -14,9 +34,8 @@ open_addressing_hash_create(uint32 size)
      * open addressing requires prime table size.
      */
     table = hashing_table_create(prime_numeral_next(size));
-    hashing_table_load_factor_set(table, OPEN_ADDRESSING_HASH_LOAD_FACTOR);
-    hashing_table_hash_function_set(table, hashing_function_open_addressing);
-
+    table->load_factor = OPN_ADDR_HASH_LOAD_FTR;
+    table->func = &hashing_function_open_addressing;
     hash->table = table;
 
     return hash;

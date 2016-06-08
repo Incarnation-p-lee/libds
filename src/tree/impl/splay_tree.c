@@ -1,3 +1,33 @@
+sint64
+splay_tree_node_nice(struct splay_tree *tree)
+{
+    return tree->alias.chain.nice;
+}
+
+void
+splay_tree_node_nice_set(struct splay_tree *tree, sint64 nice)
+{
+    tree->alias.chain.nice = nice;
+}
+
+struct splay_tree *
+splay_tree_child_left(struct splay_tree *tree)
+{
+    return splay_tree_ptr_container_of(tree->alias.left);
+}
+
+struct splay_tree *
+splay_tree_child_right(struct splay_tree *tree)
+{
+    return splay_tree_ptr_container_of(tree->alias.right);
+}
+
+struct doubly_linked_list *
+splay_tree_node_link(struct splay_tree *tree)
+{
+    return (tree)->alias.chain.link;
+}
+
 struct splay_tree *
 splay_tree_create(void)
 {

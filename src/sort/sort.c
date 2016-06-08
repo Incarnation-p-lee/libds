@@ -1,7 +1,7 @@
 #include "types.h"
 #include "depends.h"
 #include "defines.h"
-#include "util.h"
+#include "universal.h"
 
 #include "sort.h"
 #include "sort_declaration.h"

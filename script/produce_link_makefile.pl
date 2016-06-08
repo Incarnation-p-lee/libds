@@ -6,9 +6,13 @@ my $output = "output";
 my $obj_list = "";
 my $obj_part = "";
 
+say "produce link Makefile";
+
 die "Failed to find output directory, $output." unless -d -e $output;
 
+##############################################
 ## Collecting all objective files in output ##
+##############################################
 opendir OUTPUT, $output or
     die "Failed to open output directory $output, $?\n";
 
@@ -22,7 +26,9 @@ while(readdir(OUTPUT)) {
 chop $obj_list;
 closedir OUTPUT;
 
+######################################
 ## Generate link Makefile in output ##
+######################################
 open MAKEFILE, '>', "$output/Makefile" or
     die "Failed to create makefile, $?\n";
 

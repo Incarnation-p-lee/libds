@@ -21,6 +21,7 @@
 #define CONTENT_LEN                NAME_LEN
 
 #ifdef DEBUG
+    extern void libds_log_print(enum log_level lvl, const char *msg);
     extern void * malloc_wrap(size_t size);
     extern void * realloc_wrap(void *ptr, size_t size);
     extern void free_wrap(void *ptr);
@@ -32,9 +33,6 @@
     #define pr_log_warn(msg)       libds_log_print(WARN, msg)
     #define pr_log_debug(msg)      libds_log_print(DBUG, msg)
     #define assert_not_reached()   dp_assert(false)
-    #define LIBDS_LOGFILE_CREATE   libds_log_file_create()
-    #define LIBDS_LOGFILE_CLOSE    libds_log_file_close()
-    #define MEMORY_STAT            memory_trace_print()
 #else
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
@@ -43,9 +41,6 @@
     #define pr_log_warn(msg)
     #define pr_log_debug(msg)
     #define assert_not_reached()  ((*(uint32 *)0) = 0xdeadu)
-    #define LIBDS_LOGFILE_CREATE
-    #define LIBDS_LOGFILE_CLOSE
-    #define MEMORY_STAT
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \

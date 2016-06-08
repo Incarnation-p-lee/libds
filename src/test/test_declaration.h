@@ -1,6 +1,5 @@
-#ifndef TEST_DECLARATION_H
-#define TEST_DECLARATION_H
-
+#ifndef HAVE_DEFINED_test_H
+#define HAVE_DEFINED_test_H
 
 static inline FILE * memory_maps_proc_read(void);
 static inline bool test_case_filter_match_p(const struct test_layer_table *category, char *name);
@@ -45,7 +44,7 @@ static inline uint32 memory_maps_one_line_map_authority(char *line);
 static inline void memory_maps_filter_process(FILE *maps);
 static inline void memory_maps_one_line_map_boundary(char *line, struct memory_maps *map);
 static inline void memory_maps_one_line_process(char *line, uint32 len);
-static inline void test_binary_heap_data_dp_randomization(struct heap_data **hd_array, uint32 last);
+static inline void test_binary_heap_data_randomization(struct heap_data **hd_array, uint32 last);
 static inline void test_case_filter_obtain_internal(char *dest, char *arg, uint32 len);
 static inline void test_case_list(struct test_extra_info *info, char *content);
 static inline void test_case_list_category(const struct test_layer_table *category, struct test_case_filter *filter);
@@ -64,7 +63,6 @@ static void tree_iterate_handler(void *ptr);
 struct memory_maps * memory_maps_entry_find(char *name);
 void * malloc_wrap(size_t size);
 void * realloc_wrap(void *ptr, size_t size);
-void end_of_report_print(void);
 void free_wrap(void *ptr);
 void libds_log_file_close(void);
 void libds_log_file_create(void);
@@ -75,3 +73,4 @@ void test_execution_start(void);
 void test_parameter_parser(uint32 argc, char **argv);
 
 #endif
+

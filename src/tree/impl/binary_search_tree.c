@@ -1,3 +1,54 @@
+void
+binary_search_tree_node_nice_set(struct binary_search_tree *tree, sint64 nice)
+{
+    tree->chain.nice = nice;
+}
+
+sint64
+binary_search_tree_node_nice(struct binary_search_tree *tree)
+{
+    return tree->chain.nice;
+}
+
+struct binary_search_tree *
+binary_search_tree_child_left(struct binary_search_tree *tree)
+{
+    return tree->left;
+}
+
+struct binary_search_tree *
+binary_search_tree_child_right(struct binary_search_tree *tree)
+{
+    return tree->right;
+}
+
+struct doubly_linked_list *
+binary_search_tree_node_link(struct binary_search_tree *tree)
+{
+    return tree->chain.link;
+}
+
+void
+binary_search_tree_node_link_set(struct binary_search_tree *tree,
+    struct doubly_linked_list *link)
+{
+    tree->chain.link = link;
+}
+
+void
+binary_search_tree_child_left_set(struct binary_search_tree *tree,
+    struct binary_search_tree *left)
+{
+    tree->left = left;
+}
+
+void
+binary_search_tree_child_right_set(struct binary_search_tree *tree,
+    struct binary_search_tree *right)
+{
+    tree->right = right;
+}
+
 struct binary_search_tree *
 binary_search_tree_create(void)
 {

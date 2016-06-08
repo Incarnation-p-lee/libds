@@ -1,3 +1,13 @@
+uint32
+stacked_queue_dim(struct stacked_queue *queue)
+{
+    if (!queue) {
+        return QUEUE_CPCT_INVALID;
+    } else {
+        return queue->dim;
+    }
+}
+
 struct stacked_queue *
 stacked_queue_create(void)
 {
@@ -44,7 +54,7 @@ stacked_queue_resize(struct stacked_queue *queue, uint32 dim)
     if (!complain_null_pointer_p(queue)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-            dim = queue->dim * 2 + EXPAND_QUEUE_SPACE_MIN;
+            dim = queue->dim * 2 + QUEUE_EXPD_SIZE_MIN;
         }
 
         stacked_queue_resize_internal(queue, dim);
@@ -63,7 +73,7 @@ stacked_queue_capacity(struct stacked_queue *queue)
     if (complain_null_pointer_p(queue)) {
         return 0;
     } else {
-        return stacked_queue_dim(queue);
+        return queue->dim;
     }
 }
 

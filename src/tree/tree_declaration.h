@@ -1,15 +1,19 @@
-#ifndef TREE_DECLARATION_H
-#define TREE_DECLARATION_H
-
+#ifndef HAVE_DEFINED_tree_H
+#define HAVE_DEFINED_tree_H
 
 bool avl_tree_balanced_p(struct avl_tree *tree);
 bool avl_tree_node_contains_p(struct avl_tree *tree, struct avl_tree *node);
 bool binary_search_tree_node_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 bool splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node);
+sint32 avl_tree_height(struct avl_tree *tree);
 sint32 binary_search_tree_height(struct binary_search_tree *tree);
 sint32 splay_tree_height(struct splay_tree *tree);
+sint64 avl_tree_node_nice(struct avl_tree *tree);
 sint64 binary_indexed_tree_range_sum(struct binary_indexed_tree *tree, uint32 nmbr_s, uint32 nmbr_e);
 sint64 binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number);
+sint64 binary_indexed_tree_value(struct binary_indexed_tree *tree, uint32 number);
+sint64 binary_search_tree_node_nice(struct binary_search_tree *tree);
+sint64 splay_tree_node_nice(struct splay_tree *tree);
 static inline bool avl_tree_balanced_internal_p(struct avl_tree *tree);
 static inline bool avl_tree_doubly_rotate_left_precondition_p(struct binary_search_tree *k1);
 static inline bool avl_tree_doubly_rotate_right_precondition_p(struct binary_search_tree *k1);
@@ -90,6 +94,8 @@ static void inline splay_tree_balance_root_splaying_left(struct binary_search_tr
 static void inline splay_tree_balance_root_splaying_right(struct binary_search_tree **tree);
 static void inline splay_tree_balance_single_splaying_left(struct binary_search_tree **tree);
 static void inline splay_tree_balance_single_splaying_right(struct binary_search_tree **tree);
+struct avl_tree * avl_tree_child_left(struct avl_tree *tree);
+struct avl_tree * avl_tree_child_right(struct avl_tree *tree);
 struct avl_tree * avl_tree_create(void);
 struct avl_tree * avl_tree_node_create(void *val, sint64 nice);
 struct avl_tree * avl_tree_node_find(struct avl_tree *tree, sint64 nice);
@@ -100,12 +106,19 @@ struct avl_tree * avl_tree_node_remove(struct avl_tree **tree, sint64 nice);
 struct avl_tree * avl_tree_ptr_binary_to_avl(struct binary_search_tree *node);
 struct binary_indexed_tree * binary_indexed_tree_create(sint64 *data, uint32 size);
 struct binary_search_tree  * binary_search_tree_node_find_min(struct binary_search_tree *tree);
+struct binary_search_tree * binary_search_tree_child_left(struct binary_search_tree *tree);
+struct binary_search_tree * binary_search_tree_child_right(struct binary_search_tree *tree);
 struct binary_search_tree * binary_search_tree_create(void);
 struct binary_search_tree * binary_search_tree_node_create(void *val, sint64 nice);
 struct binary_search_tree * binary_search_tree_node_find(struct binary_search_tree *tree, sint64 nice);
 struct binary_search_tree * binary_search_tree_node_find_max(struct binary_search_tree *tree);
 struct binary_search_tree * binary_search_tree_node_insert(struct binary_search_tree *tree, struct binary_search_tree *node);
 struct binary_search_tree * binary_search_tree_node_remove(struct binary_search_tree **tree, sint64 nice);
+struct doubly_linked_list * avl_tree_node_link(struct avl_tree *tree);
+struct doubly_linked_list * binary_search_tree_node_link(struct binary_search_tree *tree);
+struct doubly_linked_list * splay_tree_node_link(struct splay_tree *tree);
+struct splay_tree * splay_tree_child_left(struct splay_tree *tree);
+struct splay_tree * splay_tree_child_right(struct splay_tree *tree);
 struct splay_tree * splay_tree_create(void);
 struct splay_tree * splay_tree_node_create(void *val, sint64 nice);
 struct splay_tree * splay_tree_node_find(struct splay_tree **tree, sint64 nice);
@@ -115,23 +128,33 @@ struct splay_tree * splay_tree_node_insert(struct splay_tree **tree, struct spla
 struct splay_tree * splay_tree_node_remove(struct splay_tree **tree, sint64 nice);
 struct splay_tree * splay_tree_node_remove_internal(struct splay_tree **tree, sint64 nice);
 struct splay_tree * splay_tree_ptr_container_of(struct binary_search_tree *node);
+uint32 binary_indexed_tree_size(struct binary_indexed_tree *tree);
 void avl_tree_destroy(struct avl_tree **tree);
+void avl_tree_height_set(struct avl_tree *tree, sint32 height);
 void avl_tree_initial(struct avl_tree *tree);
 void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 void avl_tree_node_initial(struct avl_tree *node, void *val, sint64 nice);
+void avl_tree_node_link_set(struct avl_tree *tree, struct doubly_linked_list *link);
+void avl_tree_node_nice_set(struct avl_tree *tree, sint64 nice);
 void avl_tree_node_remove_and_destroy(struct avl_tree **tree, sint64 nice);
 void binary_indexed_tree_add(struct binary_indexed_tree *tree, uint32 number, sint64 val);
 void binary_indexed_tree_destroy(struct binary_indexed_tree **tree);
 void binary_indexed_tree_sub(struct binary_indexed_tree *tree, uint32 number, sint64 val);
+void binary_search_tree_child_left_set(struct binary_search_tree *tree, struct binary_search_tree *left);
+void binary_search_tree_child_right_set(struct binary_search_tree *tree, struct binary_search_tree *right);
 void binary_search_tree_destroy(struct binary_search_tree **tree);
 void binary_search_tree_initial(struct binary_search_tree *tree);
 void binary_search_tree_iterate(struct binary_search_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 void binary_search_tree_node_initial(struct binary_search_tree *node, void *val, sint64 nice);
+void binary_search_tree_node_link_set(struct binary_search_tree *tree, struct doubly_linked_list *link);
+void binary_search_tree_node_nice_set(struct binary_search_tree *tree, sint64 nice);
 void binary_search_tree_node_remove_and_destroy(struct binary_search_tree **tree, sint64 nice);
 void splay_tree_destroy(struct splay_tree **tree);
 void splay_tree_initial(struct splay_tree *tree);
 void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 void splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice);
+void splay_tree_node_nice_set(struct splay_tree *tree, sint64 nice);
 void splay_tree_node_remove_and_destroy(struct splay_tree **tree, sint64 nice);
 
 #endif
+

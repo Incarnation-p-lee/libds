@@ -2,19 +2,12 @@ static void
 unit_test_stacked_queue_struct_field(void)
 {
     bool pass;
-    uint32 sid;
-    uint32 capacity;
     struct stacked_queue *queue;
 
     pass = true;
-    sid = 0xfadeu;
     queue = stacked_queue_create();
 
-    stacked_queue_sid_set(queue, sid);
-    RESULT_CHECK_uint32(sid, stacked_queue_sid(queue), &pass);
-
-    capacity = stacked_queue_capacity(queue);
-    RESULT_CHECK_uint32(capacity, stacked_queue_dim(queue), &pass);
+    stacked_queue_capacity(queue);
 
     stacked_queue_destroy(&queue);
     UNIT_TEST_RESULT(stacked_queue_struct_field, pass);
@@ -31,7 +24,6 @@ unit_test_stacked_queue_create(void)
 
     pass = true;
     queue = stacked_queue_create();
-    RESULT_CHECK_uint32(0x0u, stacked_queue_sid(queue), &pass);
 
     stacked_queue_destroy(&queue);
     UNIT_TEST_RESULT(stacked_queue_create, pass);
@@ -74,7 +66,7 @@ unit_test_stacked_queue_resize(void)
     dim = 0;
     capacity = stacked_queue_capacity(queue);
     stacked_queue_resize(queue, dim);
-    capacity = capacity * 2 + EXPAND_QUEUE_SPACE_MIN;
+    capacity = capacity * 2 + QUEUE_EXPD_SIZE_MIN;
     RESULT_CHECK_uint32(capacity, stacked_queue_capacity(queue), &pass);
 
     dim = 1;

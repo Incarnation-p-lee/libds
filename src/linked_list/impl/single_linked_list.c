@@ -1,3 +1,40 @@
+void *
+single_linked_list_val(struct single_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+single_linked_list_val_set(struct single_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+struct single_linked_list *
+single_linked_list_next(struct single_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+single_linked_list_next_set(struct single_linked_list *list,
+    struct single_linked_list *next)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = next;
+    }
+}
+
 struct single_linked_list *
 single_linked_list_create(void)
 {
@@ -344,7 +381,7 @@ single_linked_list_iterate(struct single_linked_list *list,
         node = list;
 
         do {
-            (*handler)(single_linked_list_val(node));
+            (*handler)(node->val);
             node = node->next;
         } while (node != list);
     }

@@ -8,7 +8,7 @@ performance_test_stacked_queue_struct_field(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        stacked_queue_sid_set(queue, 0x32);
+        // stacked_queue_sid_set(queue, 0x32);
     }
 
     PERFORMANCE_TEST_ENDPOINT;

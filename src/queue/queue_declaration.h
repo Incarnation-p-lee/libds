@@ -1,6 +1,5 @@
-#ifndef QUEUE_DECLARATION_H
-#define QUEUE_DECLARATION_H
-
+#ifndef HAVE_DEFINED_queue_H
+#define HAVE_DEFINED_queue_H
 
 bool array_queue_empty_p(struct array_queue *queue);
 bool array_queue_full_p(struct array_queue *queue);
@@ -28,9 +27,11 @@ struct array_queue * array_queue_create(void);
 struct doubly_end_queue * doubly_end_queue_create(void);
 struct stacked_queue * stacked_queue_create(void);
 uint32 array_queue_capacity(struct array_queue *queue);
+uint32 array_queue_dim(struct array_queue *queue);
 uint32 array_queue_rest(struct array_queue *queue);
 uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 uint32 stacked_queue_capacity(struct stacked_queue *queue);
+uint32 stacked_queue_dim(struct stacked_queue *queue);
 uint32 stacked_queue_space_rest(struct stacked_queue *queue);
 void * array_queue_leave(struct array_queue *queue);
 void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
@@ -53,3 +54,4 @@ void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *))
 void stacked_queue_resize(struct stacked_queue *queue, uint32 dim);
 
 #endif
+

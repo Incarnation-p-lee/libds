@@ -1,22 +1,25 @@
 static inline void
-test_binary_heap_data_dp_randomization(struct heap_data **hd_array,
+test_binary_heap_data_randomization(struct heap_data **hd_array,
     uint32 last)
 {
     uint32 idx;
-    uint32 dp_rand_idx;
+    uint32 rand_idx;
     struct heap_data *bk;
 
     dp_assert(NULL != hd_array);
     dp_assert(NULL == hd_array[0]);
 
-    idx = INDEX_ROOT;
+    idx = HEAP_IDX_ROOT;
 
     while (idx <= last) {
-        dp_rand_idx = dp_rand() % idx;
-        dp_rand_idx = INDEX_INVALID == dp_rand_idx ? INDEX_ROOT : dp_rand_idx;
+        rand_idx = dp_rand() % idx;
 
-        bk = hd_array[dp_rand_idx];
-        hd_array[dp_rand_idx] = hd_array[idx];
+        if (HEAP_IDX_INVALID == rand_idx) {
+            rand_idx = HEAP_IDX_ROOT;
+        }
+
+        bk = hd_array[rand_idx];
+        hd_array[rand_idx] = hd_array[idx];
         hd_array[idx++] = bk;
     }
 }
@@ -33,7 +36,7 @@ test_sint64_data_array(uint32 size)
     retval = memory_cache_allocate(sizeof(*retval) * size);
 
     while (i < size) {
-        retval[i++] = dp_random_sint64();
+        retval[i++] = random_sint64();
     }
 
     return retval;
@@ -51,7 +54,7 @@ test_uint32_data_array(uint32 size)
     retval = memory_cache_allocate(sizeof(*retval) * size);
 
     while (i < size) {
-        retval[i++] = dp_random_uint32_with_limit(0x7FFFFF);
+        retval[i++] = random_uint32_with_limit(0x7FFFFF);
     }
 
     return retval;
@@ -89,7 +92,7 @@ test_sort_data_array(uint32 size)
 
     i = 0;
     while (i < size) {
-        retval[i].val = dp_random_uint32_with_limit(0x7FFFFF);
+        retval[i].val = random_uint32_with_limit(0x7FFFFF);
         i++;
     }
 
@@ -109,7 +112,7 @@ test_sort_data_ptr_array(uint32 size)
     i = 0;
     while (i < size) {
         retval[i] = memory_cache_allocate(sizeof(retval[i]));
-        retval[i]->val = dp_random_uint32_with_limit(0x7FFFFF);
+        retval[i]->val = random_uint32_with_limit(0x7FFFFF);
         i++;
     }
 

@@ -1,16 +1,7 @@
 #ifndef HAVE_COMMON_H
 #define HAVE_COMMON_H
 
-#define MAP_ENTRY_MAX 128
-
-#define M_UKNW        0x1u << 0
-#define M_READ        0x1u << 1
-#define M_WRITE       0x1u << 2
-#define M_EXECUTE     0x1u << 3
-#define M_SHARED      0x1u << 4
-#define M_PRIVATE     0x1u << 5
-
-const uint32 fixed_prime[] = {
+static const uint32 fixed_prime[] = {
     3,             7,      11,      17,      23,      29,      37,      47,
     59,           71,      89,     107,     131,     163,     197,     239,
     293,         353,     431,     521,     631,     761,     919,    1103,
@@ -23,6 +14,5 @@ const uint32 fixed_prime[] = {
 };
 
 #define FIXED_PRIME_MAX fixed_prime[array_sizeof(fixed_prime) - 1]
-
 
 #endif

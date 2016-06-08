@@ -1,6 +1,4 @@
 #define STACK                  array_stack
-#define STACK_sid              array_stack_sid
-#define STACK_sid_set          array_stack_sid_set
 #define TEST_STACK_legal_p     utest_array_stack_struct_legal_p
 
 #define STACK_create           array_stack_create
@@ -30,8 +28,6 @@ UT_STACK_cleanup(array)
 UT_STACK_iterate(array)
 
 #undef STACK
-#undef STACK_sid
-#undef STACK_sid_set
 #undef TEST_STACK_legal_p
 
 #undef STACK_create
@@ -51,7 +47,7 @@ utest_array_stack_struct_legal_p(struct array_stack *stack)
 {
     dp_assert(!complain_null_pointer_p(stack));
 
-    if (DEFAULT_STACK_SPACE_SIZE != array_stack_space_dim(stack)) {
+    if (STACK_SIZE_DFT != array_stack_dim(stack)) {
         return false;
     } else if (complain_null_pointer_p(stack->space.sp)) {
         return false;

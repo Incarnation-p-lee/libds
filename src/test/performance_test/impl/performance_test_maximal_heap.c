@@ -1,4 +1,5 @@
 #define HEAP                   maximal_heap
+#define INDEX_LAST             maximal_heap_index_last
 #define HEAP_val               maximal_heap_val
 #define HEAP_nice              maximal_heap_nice
 #define HEAP_size              maximal_heap_size
@@ -33,6 +34,7 @@ PT_HEAP_increase_nice(maximal)
 PT_HEAP_build(maximal)
 
 #undef HEAP
+#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size

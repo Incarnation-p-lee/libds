@@ -1,4 +1,58 @@
 struct skip_linked_list *
+skip_linked_list_next(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+skip_linked_list_next_set(struct skip_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = val;
+    }
+}
+
+void *
+skip_linked_list_val(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+skip_linked_list_val_set(struct skip_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+sint32
+skip_linked_list_key(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return SKIP_KEY_INVALID;
+    } else {
+        return list->key;
+    }
+}
+
+void
+skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->key = key;
+    }
+}
+
+struct skip_linked_list *
 skip_linked_list_create(void)
 {
     return skip_linked_list_node_create(NULL, 0);
@@ -200,7 +254,7 @@ skip_linked_list_insert_internal(struct skip_linked_list **list,
 
                 if (SKIP_LIST_BOTTOM_IDX == lvl) {
                     skip_linked_list_insert_update_with_lvl(tgt, prev_list,
-                        dp_random_uint32_with_limit(SKIP_LIST_MAX_LVL));
+                        random_uint32_with_limit(SKIP_LIST_MAX_LVL));
 
                     dp_assert(skip_linked_list_ordering_p(*list));
                     return tgt;

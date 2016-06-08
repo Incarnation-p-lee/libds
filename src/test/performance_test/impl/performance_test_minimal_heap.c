@@ -1,4 +1,5 @@
 #define HEAP                   minimal_heap
+#define INDEX_LAST             minimal_heap_index_last
 #define HEAP_val               minimal_heap_val
 #define HEAP_nice              minimal_heap_nice
 #define HEAP_size              minimal_heap_size
@@ -33,6 +34,7 @@ PT_HEAP_increase_nice(minimal)
 PT_HEAP_build(minimal)
 
 #undef HEAP
+#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size

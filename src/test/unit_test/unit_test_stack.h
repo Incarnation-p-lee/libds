@@ -52,7 +52,7 @@ utest_##name##_stack_resize(void)                                  \
     STACK_resize(NULL, 0);                                         \
     STACK_resize(stack, 0);                                        \
                                                                    \
-    stk_size = stk_size * 2 + EXPAND_STACK_SPACE_MIN;              \
+    stk_size = stk_size * 2 + STACK_EXPD_SIZE_MIN;              \
     RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);   \
                                                                    \
     stk_size = STACK_capacity(stack);                              \
@@ -170,7 +170,7 @@ utest_##name##_stack_push(void)                             \
     tmp = STACK_capacity(stack);                            \
     STACK_push(stack, mem);                                 \
                                                             \
-    tmp = tmp * 2 + EXPAND_STACK_SPACE_MIN;                 \
+    tmp = tmp * 2 + STACK_EXPD_SIZE_MIN;                 \
     RESULT_CHECK_uint32(tmp, STACK_capacity(stack), &pass); \
                                                             \
     STACK_push(stack, mem);                                 \

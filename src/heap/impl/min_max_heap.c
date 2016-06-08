@@ -1,3 +1,53 @@
+uint32
+min_max_heap_index_limit(struct min_max_heap *heap)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_CPCT_INVALID;
+    } else {
+        return heap->alias->capacity;
+    }
+}
+
+uint32
+min_max_heap_index_last(struct min_max_heap *heap)
+{
+    return heap->alias->size;
+}
+
+uint32
+min_max_heap_size(struct min_max_heap *heap)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_SIZE_INVALID;
+    } else {
+        return heap->alias->size;
+    }
+}
+
+sint64
+min_max_heap_nice(struct min_max_heap *heap, uint32 index)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_NICE_INVALID;
+    } else if (index == HEAP_IDX_INVALID || index >= min_max_heap_index_limit(heap)) {
+        return HEAP_NICE_INVALID;
+    } else {
+        return heap->alias->base[index]->nice;
+    }
+}
+
+void *
+min_max_heap_val(struct min_max_heap *heap, uint32 index)
+{
+    if (complain_null_pointer_p(heap)) {
+        return PTR_INVALID;
+    } else if (index == HEAP_IDX_INVALID || index >= min_max_heap_index_limit(heap)) {
+        return PTR_INVALID;
+    } else {
+        return heap->alias->base[index]->val;
+    }
+}
+
 struct min_max_heap *
 min_max_heap_create(uint32 capacity)
 {

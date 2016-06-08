@@ -1,6 +1,5 @@
-#ifndef UNIT_TEST_DECLARATION_H
-#define UNIT_TEST_DECLARATION_H
-
+#ifndef HAVE_DEFINED_unit_test_H
+#define HAVE_DEFINED_unit_test_H
 
 static inline bool utest_array_stack_struct_legal_p(struct array_stack *stack);
 static inline bool utest_doubly_linked_list_node_legal_p(struct doubly_linked_list *node);
@@ -22,6 +21,9 @@ static inline void utest_binary_indexed_tree_sub(void);
 static inline void utest_binary_indexed_tree_sum(void);
 static inline void utest_maximal_heap_decrease_nice(void);
 static inline void utest_maximal_heap_increase_nice(void);
+static inline void utest_min_max_heap_decrease_nice(void);
+static inline void utest_min_max_heap_depth(void);
+static inline void utest_min_max_heap_increase_nice(void);
 static inline void utest_minimal_heap_decrease_nice(void);
 static inline void utest_minimal_heap_increase_nice(void);
 static void unit_test_avl_tree_balanced_p(void);
@@ -110,3 +112,4 @@ static void utest_skip_linked_list_remove(void);
 static void utest_skip_linked_list_remove_and_destroy(void);
 
 #endif
+

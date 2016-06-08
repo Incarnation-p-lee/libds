@@ -1,11 +1,14 @@
 #!/usr/bin/perl
 use strict;
+use warnings;
 use 5.010;
 
 my $work_dir = shift @ARGV;
 my $current_dir = "$ENV{'PWD'}";
 my $source_dir = "$current_dir/src";
 my $include_dir = "$source_dir/inc";
+
+say "produce compile Makefile";
 
 if ($work_dir eq "") {
     say "Please specify the work directory for makefile producing";
@@ -26,7 +29,6 @@ sub visit_workspace {
         my @work_list = readdir(WORKSPACE);
 
         foreach my $entry (@work_list) {
-            chomp;
             next if $entry =~ /^\.$/;
             next if $entry =~ /^\.\.$/;
             next if $entry =~ /^inc$/;

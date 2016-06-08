@@ -20,6 +20,54 @@ leftist_heap_create_internal(void *val, sint32 npl, sint64 nice)
 }
 
 struct leftist_heap *
+leftist_heap_left(struct leftist_heap *heap)
+{
+    return heap->left;
+}
+
+struct leftist_heap *
+leftist_heap_right(struct leftist_heap *heap)
+{
+    return heap->right;
+}
+
+void
+leftist_heap_nice_set(struct leftist_heap *heap, sint64 nice)
+{
+    heap->data.nice = nice;
+}
+
+void
+leftist_heap_npl_set(struct leftist_heap *heap, sint32 npl)
+{
+    heap->npl = npl;
+}
+
+sint64
+leftist_heap_nice(struct leftist_heap *heap)
+{
+    return heap->data.nice;
+}
+
+sint32
+leftist_heap_npl(struct leftist_heap *heap)
+{
+    return heap->npl;
+}
+
+void *
+leftist_heap_val(struct leftist_heap *heap)
+{
+    return heap->data.val;
+}
+
+void
+leftist_heap_val_set(struct leftist_heap *heap, void *val)
+{
+    heap->data.val = val;
+}
+
+struct leftist_heap *
 leftist_heap_create(void)
 {
     return leftist_heap_create_internal(NULL, 0, 0);
@@ -35,8 +83,8 @@ static inline void
 leftist_heap_destroy_internal(struct leftist_heap *heap)
 {
     if (heap) {
-        leftist_heap_destroy_internal(leftist_heap_left(heap));
-        leftist_heap_destroy_internal(leftist_heap_right(heap));
+        leftist_heap_destroy_internal(heap->left);
+        leftist_heap_destroy_internal(heap->right);
 
         memory_cache_dp_free(heap);
     }
@@ -96,7 +144,7 @@ leftist_heap_node_npl_update(struct leftist_heap *node)
     npl_l = leftist_heap_npl_internal(node->left);
     npl_r = leftist_heap_npl_internal(node->right);
 
-    leftist_heap_npl_set(node, MIN_S32(npl_l, npl_r) + 1);
+    node->npl = MIN_S32(npl_l, npl_r) + 1;
 }
 
 static inline bool
@@ -136,7 +184,7 @@ leftist_heap_merge_from_right(struct leftist_heap *heap,
     dp_assert(leftist_heap_structure_legal_p(heap));
     dp_assert(leftist_heap_structure_legal_p(merge));
 
-    if (leftist_heap_nice(heap) <= leftist_heap_nice(merge)) {
+    if (heap->data.nice <= merge->data.nice) {
         retval = heap;
         major = &heap;
         minor = merge;
@@ -150,7 +198,7 @@ leftist_heap_merge_from_right(struct leftist_heap *heap,
         if (!*major) {
             *major = minor;
             break;
-        } else if (leftist_heap_nice(*major) <= leftist_heap_nice(minor)) {
+        } else if ((*major)->data.nice <= minor->data.nice) {
             major = &(*major)->right;
         } else {
             tmp = *major;
@@ -167,7 +215,7 @@ static inline void
 leftist_heap_reorder_from_right(struct leftist_heap *heap)
 {
     if (heap) {
-        leftist_heap_reorder_from_right(leftist_heap_right(heap));
+        leftist_heap_reorder_from_right(heap->right);
         leftist_heap_node_npl_update(heap);
         if (!leftist_heap_node_npl_ordered_p(heap)) {
             leftist_heap_node_child_swap(heap);
