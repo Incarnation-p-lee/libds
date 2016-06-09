@@ -221,7 +221,7 @@ separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
         } else {
             iter = head;
             do {
-                if (key == iter->next) {
+                if (key == iter->val) {
                     retval = key;
                     break;
                 }

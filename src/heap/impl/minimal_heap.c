@@ -4,7 +4,7 @@ minimal_heap_index_limit(struct minimal_heap *heap)
     if (complain_null_pointer_p(heap)) {
         return HEAP_CPCT_INVALID;
     } else {
-        return heap->alias->capacity;
+        return heap->alias->capacity + 1;
     }
 }
 
