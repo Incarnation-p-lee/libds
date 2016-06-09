@@ -3,7 +3,7 @@
 cc_config="-fPIC"
 ld_config="-Wl,--stats"
 ld_library=
-debug="Yes"
+debug_mode="Yes"
 target=
 
 if [ $# == 0 ]
@@ -71,7 +71,7 @@ mkdir -p $bindir
 ###########################################
 ## update some header files and makefile ##
 ###########################################
-perl script/produce_module_declaration_h.pl $debug
+perl script/produce_module_declaration_h.pl $debug_mode
 perl script/produce_universal_h.pl
 perl script/produce_data_structure_interface_h.pl
 perl script/produce_compile_makefile.pl $src_dir

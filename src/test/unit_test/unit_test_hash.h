@@ -66,7 +66,7 @@ utest_##name##_hash_load_factor_calculate(void)                \
     uint32 tmp;                                                \
     struct HASH *hash;                                         \
                                                                \
-    tmp = 0xfadeu;                                             \
+    tmp = 0x2adeu;                                             \
     pass = true;                                               \
                                                                \
     hash = NULL;                                               \
@@ -95,7 +95,7 @@ utest_##name##_hash_insert(void)                                \
     uint32 tmp;                                                 \
     struct HASH *hash;                                          \
                                                                 \
-    tmp = 0xdeadu;                                              \
+    tmp = 0x2eadu;                                              \
     pass = true;                                                \
                                                                 \
     hash = NULL;                                                \
@@ -169,7 +169,7 @@ utest_##name##_hash_find(void)                                  \
     RESULT_CHECK_pointer(NULL, HASH_find(hash, &pass), &pass);  \
     HASH_destroy(&hash);                                        \
                                                                 \
-    tmp = 0xfadebu;                                             \
+    tmp = 0x1debu;                                             \
     hash = TEST_HASH_sample(tmp);                               \
     RESULT_CHECK_pointer(NULL, HASH_find(hash, &pass), &pass);  \
     HASH_insert(&hash, &pass);                                  \
