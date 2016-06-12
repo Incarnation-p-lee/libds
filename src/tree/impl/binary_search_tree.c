@@ -400,14 +400,22 @@ binary_search_tree_child_strip_from_max(struct binary_search_tree **node_pre)
     assert(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
-    max_pre = binary_search_tree_find_ptr_to_max(&binary->left);
-    max = *max_pre;
 
-    binary_search_tree_swap_child(binary, max);
-    *max_pre = binary;
-    *node_pre = max;
+    if (!binary->left->right) {
+        // short cut here
+        *node_pre = binary->left;
+        binary->left->right = binary->right;
+        binary->left = binary->right = NULL;
+    } else {
+        max_pre = binary_search_tree_find_ptr_to_max(&binary->left);
+        max = *max_pre;
 
-    binary_search_tree_lt_doubly_child_strip(max_pre, binary);
+        binary_search_tree_swap_child(binary, max);
+        *max_pre = binary;
+        *node_pre = max;
+
+        binary_search_tree_lt_doubly_child_strip(max_pre, binary);
+    }
 }
 
 static inline void
@@ -422,14 +430,22 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
     assert(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
-    min_pre = binary_search_tree_find_ptr_to_min(&binary->right);
-    min = *min_pre;
 
-    binary_search_tree_swap_child(binary, min);
-    *min_pre = binary;
-    *node_pre = min;
+    if (!binary->right->left) {
+        // short cut here
+        *node_pre = binary->right;
+        binary->right->left = binary->left;
+        binary->left = binary->right = NULL;
+    } else {
+        min_pre = binary_search_tree_find_ptr_to_min(&binary->right);
+        min = *min_pre;
 
-    binary_search_tree_lt_doubly_child_strip(min_pre, binary);
+        binary_search_tree_swap_child(binary, min);
+        *min_pre = binary;
+        *node_pre = min;
+
+        binary_search_tree_lt_doubly_child_strip(min_pre, binary);
+    }
 }
 
 static inline void
@@ -465,6 +481,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
 
     assert(!complain_null_pointer_p(tree));
     assert(binary_search_tree_structure_legal_p(*tree));
+    assert(binary_search_tree_ordered_p(*tree));
     assert(binary_search_tree_ordered_p(*tree));
     assert(binary_search_tree_structure_legal_p(node));
 

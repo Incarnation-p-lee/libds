@@ -1043,131 +1043,97 @@ static const struct test_layer_table avl_tree[] = {
     {NULL,                      NULL, {NULL,},},
 };
 
-/*
 static const struct test_layer_table splay_tree[] = {
-    {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_splay_tree_struct_field,
-            &performance_test_splay_tree_struct_field,
-        },
-    },
     {
         "create",
         NULL,
         {
-            &unit_test_splay_tree_create,
-            &performance_test_splay_tree_create,
-        },
-    },
-    {
-        "node_create",
-        NULL,
-        {
-            &unit_test_splay_tree_node_create,
-            &performance_test_splay_tree_node_create,
+            &utest_splay_tree_create,
+            NULL,
         },
     },
     {
         "initial",
         NULL,
         {
-            &unit_test_splay_tree_initial,
-            &performance_test_splay_tree_initial,
-        },
-    },
-    {
-        "node_initial",
-        NULL,
-        {
-            &unit_test_splay_tree_node_initial,
-            &performance_test_splay_tree_node_initial,
+            &utest_splay_tree_initial,
+            NULL,
         },
     },
     {
         "destroy",
         NULL,
         {
-            &unit_test_splay_tree_destroy,
-            &performance_test_splay_tree_destroy,
+            &utest_splay_tree_destroy,
+            NULL,
         },
     },
     {
-        "node_find",
+        "find",
         NULL,
         {
-            &unit_test_splay_tree_node_find,
-            &performance_test_splay_tree_node_find,
+            &utest_splay_tree_find,
+            NULL,
         },
     },
     {
-        "node_find_min",
+        "find_min",
         NULL,
         {
-            &unit_test_splay_tree_node_find_min,
-            &performance_test_splay_tree_node_find_min,
+            &utest_splay_tree_find_min,
+            NULL,
         },
     },
     {
-        "node_find_max",
+        "find_max",
         NULL,
         {
-            &unit_test_splay_tree_node_find_max,
-            &performance_test_splay_tree_node_find_max,
+            &utest_splay_tree_find_max,
+            NULL,
         },
     },
     {
         "height",
         NULL,
         {
-            &unit_test_splay_tree_height,
-            &performance_test_splay_tree_height,
+            &utest_splay_tree_height,
+            NULL,
         },
     },
     {
-        "node_contains_p",
+        "contains_p",
         NULL,
         {
-            &unit_test_splay_tree_node_contains_p,
-            &performance_test_splay_tree_node_contains_p,
+            &utest_splay_tree_contains_p,
+            NULL,
         },
     },
     {
-        "node_insert",
+        "insert",
         NULL,
         {
-            &unit_test_splay_tree_node_insert,
-            &performance_test_splay_tree_node_insert,
+            &utest_splay_tree_insert,
+            NULL,
         },
     },
     {
-        "node_remove",
+        "remove",
         NULL,
         {
-            &unit_test_splay_tree_node_remove,
-            &performance_test_splay_tree_node_remove,
-        },
-    },
-    {
-        "node_remove_and_destroy",
-        NULL,
-        {
-            &unit_test_splay_tree_node_remove_and_destroy,
-            &performance_test_splay_tree_node_remove_and_destroy,
+            &utest_splay_tree_remove,
+            NULL,
         },
     },
     {
         "iterate",
         NULL,
         {
-            &unit_test_splay_tree_iterate,
-            &performance_test_splay_tree_iterate,
+            &utest_splay_tree_iterate,
+            NULL,
         },
     },
     {NULL,                      NULL, {NULL,},},
 };
-*/
 
 static const struct test_layer_table binary_indexed_tree[] = {
     {
@@ -1757,7 +1723,7 @@ static const struct test_layer_table test_queue_implement[] = {
 static const struct test_layer_table test_tree_implement[] = {
     {"binary_search",  binary_search_tree,  {NULL, NULL},},
     {"avl",            avl_tree,            {NULL, NULL},},
-    // {"splay",          splay_tree,          {NULL, NULL},},
+    {"splay",          splay_tree,          {NULL, NULL},},
     // {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,            NULL,               {NULL, NULL},},

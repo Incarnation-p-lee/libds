@@ -202,6 +202,25 @@ avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node)
 }
 
 static inline bool
+avl_tree_height_balanced_p(struct avl_tree *tree)
+{
+    sint32 left;
+    sint32 right;
+
+    assert(avl_tree_structure_legal_p(tree));
+
+    left = avl_tree_height_internal(tree->left);
+    right = avl_tree_height_internal(tree->right);
+    assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
+
+    if (abs_sint32(left - right) > 1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
 avl_tree_node_balanced_p(struct avl_tree *node)
 {
     bool balanced;
@@ -705,6 +724,7 @@ avl_tree_find_ptr_to_min(struct avl_tree **tree)
 static inline void
 avl_tree_doubly_child_strip_from_max(struct avl_tree **node_pre)
 {
+    void *tmp;
     struct avl_tree *avl;
     struct avl_tree *max;
     struct avl_tree **max_pre;
@@ -714,12 +734,23 @@ avl_tree_doubly_child_strip_from_max(struct avl_tree **node_pre)
     assert(avl_tree_doubly_child_p(*node_pre));
 
     avl = *node_pre;
-    max_pre = avl_tree_find_ptr_to_max(&avl->left);
-    max = *max_pre;
 
-    avl_tree_swap_child(avl, max);
-    *max_pre = avl;
-    *node_pre = max;
+    if (!avl->left->right) {
+         *node_pre = avl->left;
+         tmp = avl->left->left;
+         avl->left->right = avl->right;
+         avl->left->left = avl;
+
+         avl->left = tmp;
+         avl->right = NULL;
+    } else {
+         max_pre = avl_tree_find_ptr_to_max(&avl->left);
+         max = *max_pre;
+
+         avl_tree_swap_child(avl, max);
+         *max_pre = avl;
+         *node_pre = max;
+    }
 
     avl_tree_remove_internal(&max->left, avl);
 }
@@ -727,6 +758,7 @@ avl_tree_doubly_child_strip_from_max(struct avl_tree **node_pre)
 static inline void
 avl_tree_doubly_child_strip_from_min(struct avl_tree **node_pre)
 {
+    void *tmp;
     struct avl_tree *avl;
     struct avl_tree *min;
     struct avl_tree **min_pre;
@@ -736,12 +768,23 @@ avl_tree_doubly_child_strip_from_min(struct avl_tree **node_pre)
     assert(avl_tree_doubly_child_p(*node_pre));
 
     avl = *node_pre;
-    min_pre = avl_tree_find_ptr_to_min(&avl->right);
-    min = *min_pre;
 
-    avl_tree_swap_child(avl, min);
-    *min_pre = avl;
-    *node_pre = min;
+    if (!avl->right->left) {
+         *node_pre = avl->right;
+         tmp = avl->right->right;
+         avl->right->left = avl->left;
+         avl->right->right = avl;
+
+         avl->right = tmp;
+         avl->left = NULL;
+    } else {
+         min_pre = avl_tree_find_ptr_to_min(&avl->right);
+         min = *min_pre;
+
+         avl_tree_swap_child(avl, min);
+         *min_pre = avl;
+         *node_pre = min;
+    }
 
     avl_tree_remove_internal(&min->right, avl);
 }

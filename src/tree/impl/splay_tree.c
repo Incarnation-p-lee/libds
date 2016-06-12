@@ -150,9 +150,9 @@ struct splay_tree *
 splay_tree_find(struct splay_tree **tree, sint64 nice)
 {
     if (complain_null_pointer_p(tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else if (!splay_tree_structure_legal_p(*tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else {
         return splay_tree_find_internal(tree, nice, *tree);
     }
@@ -201,9 +201,9 @@ struct splay_tree *
 splay_tree_find_min(struct splay_tree **tree)
 {
     if (complain_null_pointer_p(tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else if (!splay_tree_structure_legal_p(*tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else {
         return splay_tree_find_min_internal(tree, *tree);
     }
@@ -252,9 +252,9 @@ struct splay_tree *
 splay_tree_find_max(struct splay_tree **tree)
 {
     if (complain_null_pointer_p(tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else if (!splay_tree_structure_legal_p(*tree)) {
-        return NULL;
+        return INVALID_PTR;
     } else {
         return splay_tree_find_max_internal(tree, *tree);
     }
@@ -590,7 +590,6 @@ splay_tree_insert_internal(struct splay_tree **tree,
     struct splay_tree *inserted;
 
     assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
     assert(splay_tree_ordered_p(*tree));
     assert(splay_tree_structure_legal_p(node));
     assert(splay_tree_structure_legal_p(root));
@@ -624,9 +623,9 @@ splay_tree_insert(struct splay_tree **tree, struct splay_tree *node)
 {
     if (complain_null_pointer_p(tree)) {
         return INVALID_PTR;
-    } else if (splay_tree_structure_legal_p(*tree)) {
+    } else if (!splay_tree_structure_legal_p(*tree)) {
         return INVALID_PTR;
-    } else if (splay_tree_structure_legal_p(node)) {
+    } else if (!splay_tree_structure_legal_p(node)) {
         return INVALID_PTR;
     } else {
         return splay_tree_insert_internal(tree, node, *tree);
@@ -714,14 +713,22 @@ splay_tree_doubly_child_strip(struct splay_tree **pre)
     assert(splay_tree_doubly_child_p(*pre));
 
     splay = *pre;
-    min_pre = splay_tree_find_ptr_to_min(&splay->right);
-    min = *min_pre;
 
-    splay_tree_swap_child(splay, min);
-    *min_pre = splay;
-    *pre = min;
+    if (!splay->right->left) {
+        // short cut here
+        *pre = splay->right;
+        splay->right->left = splay->left;
+        splay->left = splay->right = NULL;
+    } else {
+        min_pre = splay_tree_find_ptr_to_min(&splay->right);
+        min = *min_pre;
 
-    splay_tree_lt_doubly_child_strip(min_pre, splay);
+        splay_tree_swap_child(splay, min);
+        *min_pre = splay;
+        *pre = min;
+
+        splay_tree_lt_doubly_child_strip(min_pre, splay);
+    }
 }
 
 static inline struct splay_tree *

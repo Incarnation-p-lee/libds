@@ -204,24 +204,25 @@ avl_tree_height_optimize_validity_p(struct avl_tree *tree,
     }
 }
 
-static inline bool
-avl_tree_height_balanced_p(struct avl_tree *tree)
-{
-    sint32 left;
-    sint32 right;
-
-    assert(avl_tree_structure_legal_p(tree));
-
-    left = avl_tree_height_internal(tree->left);
-    right = avl_tree_height_internal(tree->right);
-    assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
-
-    if (abs_sint32(left - right) > 1) {
-        return false;
-    } else {
-        return true;
-    }
-}
+// Move to avl_tree.c temporay
+// static inline bool
+// avl_tree_height_balanced_p(struct avl_tree *tree)
+// {
+//     sint32 left;
+//     sint32 right;
+// 
+//     assert(avl_tree_structure_legal_p(tree));
+// 
+//     left = avl_tree_height_internal(tree->left);
+//     right = avl_tree_height_internal(tree->right);
+//     assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
+// 
+//     if (abs_sint32(left - right) > 1) {
+//         return false;
+//     } else {
+//         return true;
+//     }
+// }
 
 static inline bool
 avl_tree_node_balanced_optimize_validity_p(struct avl_tree *tree, bool expected)

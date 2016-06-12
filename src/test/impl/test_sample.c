@@ -130,7 +130,7 @@ test_splay_tree_sample(uint64 range, uint32 node_count)
     uint32 i;
 
     tree = splay_tree_create();
-    splay_tree_node_initial(tree, 0);
+    splay_tree_initial(tree, 0);
     i = 1;
 
     while (i < node_count) {
