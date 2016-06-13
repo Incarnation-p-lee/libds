@@ -1724,7 +1724,7 @@ static const struct test_layer_table test_tree_implement[] = {
     {"binary_search",  binary_search_tree,  {NULL, NULL},},
     {"avl",            avl_tree,            {NULL, NULL},},
     {"splay",          splay_tree,          {NULL, NULL},},
-    // {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
+    {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,            NULL,               {NULL, NULL},},
 };
