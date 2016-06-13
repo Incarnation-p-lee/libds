@@ -42,8 +42,8 @@ PT_TREE_iterate(binary_search)
 #undef TREE_initial
 #undef TREE_destroy
 #undef TREE_find
-#undef TREE_min
-#undef TREE_max
+#undef TREE_find_min
+#undef TREE_find_max
 #undef TREE_height
 #undef TREE_contains_p
 #undef TREE_insert

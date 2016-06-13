@@ -1,200 +1,61 @@
+#define TREE                   avl_tree
+#define TREE_nice              avl_tree_nice
+#define TREE_val               avl_tree_val
+#define TREE_left              avl_tree_left
+#define TREE_right             avl_tree_right
+#define TEST_tree_sample       test_avl_tree_sample
+
+#define TREE_create            avl_tree_create
+#define TREE_initial           avl_tree_initial
+#define TREE_destroy           avl_tree_destroy
+#define TREE_find              avl_tree_find
+#define TREE_find_min          avl_tree_find_min
+#define TREE_find_max          avl_tree_find_max
+#define TREE_height            avl_tree_height
+#define TREE_contains_p        avl_tree_contains_p
+#define TREE_insert            avl_tree_insert
+#define TREE_remove            avl_tree_remove
+#define TREE_iterate           avl_tree_iterate
+
+#include "../performance_test_tree.h"
+
+PT_TREE_create(avl)
+PT_TREE_initial(avl)
+PT_TREE_destroy(avl)
+PT_TREE_find(avl)
+PT_TREE_find_min(avl)
+PT_TREE_find_max(avl)
+PT_TREE_height(avl)
+PT_TREE_contains_p(avl)
+PT_TREE_insert(avl)
+PT_TREE_remove(avl)
+PT_TREE_iterate(avl)
+
+#undef TREE
+#undef TREE_nice
+#undef TREE_val
+#undef TREE_left
+#undef TREE_right
+#undef TEST_tree_sample
+
+#undef TREE_create
+#undef TREE_initial
+#undef TREE_destroy
+#undef TREE_find
+#undef TREE_find_min
+#undef TREE_find_max
+#undef TREE_height
+#undef TREE_contains_p
+#undef TREE_insert
+#undef TREE_remove
+#undef TREE_iterate
+
 static void
-performance_test_avl_tree_struct_field(uint32 count)
+ptest_avl_tree_balanced_p(uint32 count)
 {
     struct avl_tree *tree;
 
-    tree = avl_tree_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_nice_set(tree, 0);
-        avl_tree_height_set(tree, 0);
-        avl_tree_node_link_set(tree, avl_tree_node_link(tree));
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_struct_field);
-}
-
-static void
-performance_test_avl_tree_create(uint32 count)
-{
-    struct avl_tree *tree;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tree = avl_tree_create();
-        avl_tree_destroy(&tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(avl_tree_create);
-}
-
-static void
-performance_test_avl_tree_node_create(uint32 count)
-{
-    struct avl_tree *tree;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tree = avl_tree_node_create(NULL, 0);
-        avl_tree_destroy(&tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(avl_tree_node_create);
-}
-
-static void
-performance_test_avl_tree_initial(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = avl_tree_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_initial(tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_initial);
-}
-
-static void
-performance_test_avl_tree_node_initial(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = avl_tree_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_initial(tree, NULL, 0xdfe);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_initial);
-}
-
-static void
-performance_test_avl_tree_destroy(uint32 count)
-{
-    struct avl_tree *tree;
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tree = test_avl_tree_sample(0x12, 0x7);
-        avl_tree_destroy(&tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(avl_tree_destroy);
-}
-
-static void
-performance_test_avl_tree_node_find(uint32 count)
-{
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-
-    tree = test_avl_tree_sample(0x12a49, 0x5233);
-    tmp = avl_tree_node_find_max(tree);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_find(tree, avl_tree_node_nice(tmp));
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_find);
-}
-
-static void
-performance_test_avl_tree_node_find_min(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = test_avl_tree_sample(0x62a49, 0x4233);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_find_min(tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_find_min);
-}
-
-static void
-performance_test_avl_tree_node_find_max(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = test_avl_tree_sample(0x62a49, 0x5233);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_find_max(tree);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_find_max);
-}
-
-static void
-performance_test_avl_tree_node_contains_p(uint32 count)
-{
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-
-    count = count << 2;
-    tree = test_avl_tree_sample(0x62a49, 0x6233);
-    tmp = avl_tree_node_find_max(tree);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_node_contains_p(tree, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_contains_p);
-}
-
-static void
-performance_test_avl_tree_balanced_p(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = test_avl_tree_sample(0xa9, 0x33);
+    tree = test_avl_tree_sample(0xa9, 0x43);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -206,102 +67,5 @@ performance_test_avl_tree_balanced_p(uint32 count)
 
     avl_tree_destroy(&tree);
     PERFORMANCE_TEST_RESULT(avl_tree_balanced_p);
-}
-
-static void
-performance_test_avl_tree_node_insert(uint32 count)
-{
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-
-    tree = avl_tree_node_create(NULL, -0x1f2);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = avl_tree_node_create(NULL, count);
-        avl_tree_node_insert(&tree, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_insert);
-}
-
-static void
-performance_test_avl_tree_node_remove(uint32 count)
-{
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-    sint64 nice;
-
-    tree = test_avl_tree_sample(0x2352, 0x21f2);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = avl_tree_node_find_max(tree);
-        nice = avl_tree_node_nice(tmp);
-
-        tmp = avl_tree_node_remove(&tree, nice);
-        avl_tree_destroy(&tmp);
-
-        tmp = avl_tree_node_create(NULL, nice + 1);
-        avl_tree_node_insert(&tree, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_remove);
-}
-
-static void
-performance_test_avl_tree_node_remove_and_destroy(uint32 count)
-{
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-    sint64 nice;
-
-    tree = test_avl_tree_sample(0x2352, 0x21f2);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        tmp = avl_tree_node_find_max(tree);
-        nice = avl_tree_node_nice(tmp);
-
-        avl_tree_node_remove_and_destroy(&tree, nice);
-
-        tmp = avl_tree_node_create(NULL, nice + 1);
-        avl_tree_node_insert(&tree, tmp);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_node_remove_and_destroy);
-}
-
-static void
-performance_test_avl_tree_iterate(uint32 count)
-{
-    struct avl_tree *tree;
-
-    tree = test_avl_tree_sample(0xa2, 0x32);
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        avl_tree_iterate(tree, &tree_iterate_handler, ORDER_IN);
-        avl_tree_iterate(tree, &tree_iterate_handler, ORDER_PRE);
-        avl_tree_iterate(tree, &tree_iterate_handler, ORDER_POST);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    avl_tree_destroy(&tree);
-    PERFORMANCE_TEST_RESULT(avl_tree_iterate);
 }
 

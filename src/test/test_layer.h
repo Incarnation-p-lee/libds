@@ -949,7 +949,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_create,
-            NULL,//&performance_test_avl_tree_create,
+            &ptest_avl_tree_create,
         },
     },
     {
@@ -957,7 +957,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_initial,
-            NULL,//performance_test_avl_tree_initial,
+            &ptest_avl_tree_initial,
         },
     },
     {
@@ -965,7 +965,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_destroy,
-            NULL,//&performance_test_avl_tree_destroy,
+            &ptest_avl_tree_destroy,
         },
     },
     {
@@ -973,7 +973,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_find,
-            NULL,//&performance_test_avl_tree_node_find,
+            &ptest_avl_tree_find,
         },
     },
     {
@@ -981,7 +981,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_find_min,
-            NULL,//&performance_test_avl_tree_node_find_min,
+            &ptest_avl_tree_find_min,
         },
     },
     {
@@ -989,7 +989,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_find_max,
-            NULL,//&performance_test_avl_tree_node_find_max,
+            &ptest_avl_tree_find_max,
         },
     },
     {
@@ -997,7 +997,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_height,
-            NULL,
+            &ptest_avl_tree_height,
         },
     },
     {
@@ -1005,7 +1005,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_contains_p,
-            NULL,//&performance_test_avl_tree_node_contains_p,
+            &ptest_avl_tree_contains_p,
         },
     },
     {
@@ -1013,7 +1013,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_balanced_p,
-            NULL,//&performance_test_avl_tree_balanced_p,
+            &ptest_avl_tree_balanced_p,
         },
     },
     {
@@ -1021,7 +1021,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_insert,
-            NULL,//&performance_test_avl_tree_node_insert,
+            &ptest_avl_tree_insert,
         },
     },
     {
@@ -1029,7 +1029,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_remove,
-            NULL,//&performance_test_avl_tree_node_remove,
+            &ptest_avl_tree_remove,
         },
     },
     {
@@ -1037,7 +1037,7 @@ static const struct test_layer_table avl_tree[] = {
         NULL,
         {
             &utest_avl_tree_iterate,
-            NULL,// &performance_test_avl_tree_iterate,
+            &ptest_avl_tree_iterate,
         },
     },
     {NULL,                      NULL, {NULL,},},
