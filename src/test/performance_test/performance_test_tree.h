@@ -217,7 +217,7 @@ ptest_##name##_tree_iterate(uint32 count)                      \
 {                                                              \
     struct TREE *tree;                                         \
                                                                \
-    tree = TEST_tree_sample(0xd3, 0xf2);                       \
+    tree = TEST_tree_sample(0xd3, 0x82);                       \
                                                                \
     PERFORMANCE_TEST_CHECKPOINT;                               \
                                                                \

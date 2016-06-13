@@ -26,4 +26,7 @@ extern void doubly_linked_list_iterate(struct doubly_linked_list *head, void (*h
 extern void * memory_cache_allocate(uint32 size);
 extern void memory_cache_free(void *addr);
 
+static sint32 direct = 0;
+
 #endif
+

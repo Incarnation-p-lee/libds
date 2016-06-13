@@ -236,8 +236,6 @@ static inline struct binary_search_tree *
 binary_search_tree_insert_internal(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
-    sint32 left_h;
-    sint32 right_h;
     sint64 nice;
     struct binary_search_tree **iter;
     struct binary_search_tree *binary;
@@ -252,14 +250,14 @@ binary_search_tree_insert_internal(struct binary_search_tree **tree,
     while (*iter) {
         if (nice > (*iter)->nice) {
             iter = &(*iter)->right;
+            direct++;
         } else if (nice < (*iter)->nice) {
             iter = &(*iter)->left;
+            direct--;
         } else if (node != *iter) {
             binary = *iter;
-            left_h = binary_search_tree_height_internal(binary->left);
-            right_h = binary_search_tree_height_internal(binary->right);
 
-            if (left_h < right_h) {
+            if (direct > 0) { // If right is heavy, inserted to left.
                 node->left = binary;
                 node->right = binary->right;
                 binary->right = NULL;
@@ -270,6 +268,8 @@ binary_search_tree_insert_internal(struct binary_search_tree **tree,
                 binary->left = NULL;
                 *iter = node;
             }
+
+            direct = 0;
             break;
         } else {
             pr_log_warn("Insert node exist, nothing will be done.\n");
@@ -453,8 +453,6 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
 static inline void
 binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
 {
-    sint32 left_h;
-    sint32 right_h;
     struct binary_search_tree *binary;
 
     assert(!complain_null_pointer_p(node_pre));
@@ -462,14 +460,14 @@ binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
     assert(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
-    left_h = binary_search_tree_height_internal(binary->left);
-    right_h = binary_search_tree_height_internal(binary->right);
 
-    if (left_h > right_h) {
+    if (direct > 0) {
         binary_search_tree_child_strip_from_max(node_pre);
     } else {
         binary_search_tree_child_strip_from_min(node_pre);
     }
+
+    direct = 0;
 }
 
 static inline struct binary_search_tree *
@@ -495,8 +493,10 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
     while (n) {
         if (nice > n->nice) {
             pre = &n->right;
+            direct++;
         } else if (nice < n->nice) {
             pre = &n->left;
+            direct--;
         } else if (node != n) {
             if (n->left && nice == n->left->nice) {
                 removed = binary_search_tree_remove_internal(&n->left, node);

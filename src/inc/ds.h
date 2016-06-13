@@ -872,7 +872,10 @@ enum ITER_ORDER {
 #define LEGAL_ORDER_P(x) ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 
 
+static sint32 direct = 0;
+
 #endif
+
 /* END of ./src/tree/tree.h */
 
 /* BEGIN of ./src/tree/tree_declaration.h */
