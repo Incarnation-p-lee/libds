@@ -35,6 +35,8 @@ splay_tree_structure_legal_p(struct splay_tree *tree)
         return false;
     } else if (tree->left == tree->right && NULL != tree->left) {
         return false;
+    } else if (tree->left == tree || tree->right == tree) {
+        return false;
     } else {
         return true;
     }
