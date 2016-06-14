@@ -7,6 +7,8 @@
 #define SYM_2_STR(symbol)    (#symbol)
 #define array_sizeof(a)      (sizeof(a) / sizeof(a[0]))
 
+#define attr_always_inline   __attribute__((always_inline))
+
 /*
  * abs without if-else
  *     y = x >> 31, x eq 0xffffffff or 0x0

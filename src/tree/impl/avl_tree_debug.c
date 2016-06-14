@@ -189,8 +189,18 @@ avl_tree_right_optimize_validity_p(struct avl_tree *node,
     }
 }
 
+static inline sint32
+avl_tree_height_internal(struct avl_tree *tree)
+{
+    if (!tree) {
+        return -1;
+    } else {
+        return tree->height;
+    }
+}
+
 static inline bool
-avl_tree_height_optimize_validity_p(struct avl_tree *tree,
+avl_tree_height_opt_validity_p(struct avl_tree *tree,
     sint32 expected)
 {
     sint32 computed;

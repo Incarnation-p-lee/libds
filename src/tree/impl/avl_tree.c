@@ -211,8 +211,8 @@ avl_tree_height_balanced_p(struct avl_tree *tree)
 
     assert(avl_tree_structure_legal_p(tree));
 
-    left = avl_tree_height_internal(tree->left);
-    right = avl_tree_height_internal(tree->right);
+    left = avl_tree_height_opt(tree->left);
+    right = avl_tree_height_opt(tree->right);
     assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
 
     if (abs_sint32(left - right) > 1) {
@@ -281,20 +281,8 @@ avl_tree_height(struct avl_tree *tree)
     if (!avl_tree_structure_legal_p(tree)) {
         return -1; // Fix-Me
     } else {
-        return avl_tree_height_internal(tree);
+        return avl_tree_height_opt(tree);
     }
-}
-
-static inline sint32
-avl_tree_height_internal(struct avl_tree *tree)
-{
-    if (!tree) {
-        return -1;
-    } else {
-        return tree->height;
-    }
-    // avl_tree_height_internal_optimize(tree, height);
-    // assert(avl_tree_height_optimize_validity_p(tree, height));
 }
 
 static inline void
@@ -305,8 +293,8 @@ avl_tree_height_update(struct avl_tree *tree)
 
     assert(avl_tree_structure_legal_p(tree));
 
-    left = avl_tree_height_internal(tree->left);
-    right = avl_tree_height_internal(tree->right);
+    left = avl_tree_height_opt(tree->left);
+    right = avl_tree_height_opt(tree->right);
 
     tree->height = MAX_S(left, right) + 1;
 }
@@ -473,8 +461,8 @@ avl_tree_rotate_left(struct avl_tree **tree)
     assert(avl_tree_structure_legal_p((*tree)->left));
 
     left = (*tree)->left;
-    l_ht = avl_tree_height_internal(left->left);
-    r_ht = avl_tree_height_internal(left->right);
+    l_ht = avl_tree_height_opt(left->left);
+    r_ht = avl_tree_height_opt(left->right);
 
     if (l_ht >= r_ht) {
         /*
@@ -509,8 +497,8 @@ avl_tree_rotate_right(struct avl_tree **tree)
     assert(avl_tree_structure_legal_p((*tree)->right));
 
     right = (*tree)->right;
-    l_ht = avl_tree_height_internal(right->left);
-    r_ht = avl_tree_height_internal(right->right);
+    l_ht = avl_tree_height_opt(right->left);
+    r_ht = avl_tree_height_opt(right->right);
 
     if (r_ht >= l_ht) {
         /*
@@ -649,8 +637,8 @@ avl_tree_doubly_child_strip(struct avl_tree **node_pre)
     assert(avl_tree_structure_legal_p(*node_pre));
 
     avl = *node_pre;
-    l_ht = avl_tree_height_internal(avl->left);
-    r_ht = avl_tree_height_internal(avl->right);
+    l_ht = avl_tree_height_opt(avl->left);
+    r_ht = avl_tree_height_opt(avl->right);
 
     if (l_ht < r_ht) {
         avl_tree_doubly_child_strip_from_max(node_pre);

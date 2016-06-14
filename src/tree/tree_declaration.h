@@ -18,7 +18,7 @@ static inline bool avl_tree_doubly_child_p(struct avl_tree *tree);
 static inline bool avl_tree_doubly_rotate_left_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_height_balanced_p(struct avl_tree *tree);
-static inline bool avl_tree_height_optimize_validity_p(struct avl_tree *tree, sint32 expected);
+static inline bool avl_tree_height_opt_validity_p(struct avl_tree *tree, sint32 expected);
 static inline bool avl_tree_height_sync_with_calculated_p(struct avl_tree *tree, sint32 left, sint32 right);
 static inline bool avl_tree_left_optimize_validity_p(struct avl_tree *node, void *expected);
 static inline bool avl_tree_node_balanced_optimize_validity_p(struct avl_tree *tree, bool expected);
@@ -38,6 +38,8 @@ static inline bool splay_tree_contains_p_internal(struct splay_tree *tree, struc
 static inline bool splay_tree_doubly_child_p(struct splay_tree *node);
 static inline bool splay_tree_ordered_p(struct splay_tree *tree);
 static inline bool splay_tree_structure_legal_p(struct splay_tree *tree);
+static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
+static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
 static inline sint32 avl_tree_height_calculate(struct avl_tree *tree);
 static inline sint32 avl_tree_height_internal(struct avl_tree *tree);
 static inline sint32 binary_search_tree_height_internal(struct binary_search_tree *tree);

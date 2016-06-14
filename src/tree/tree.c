@@ -18,6 +18,7 @@
     #include "impl/splay_tree_debug.c"
 #endif
 
+#include "impl/tree_optimize.c"
 #include "impl/binary_search_tree.c"
 #include "impl/avl_tree.c"
 #include "impl/splay_tree.c"
