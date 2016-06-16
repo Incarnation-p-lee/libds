@@ -81,8 +81,8 @@ static inline void
 splay_tree_node_destroy(struct splay_tree *node)
 {
     dp_assert(splay_tree_structure_legal_p(node));
-    dp_assert(!complain_null_pointer_p(node->left));
-    dp_assert(!complain_null_pointer_p(node->right));
+    dp_assert(complain_null_pointer_p(node->left));
+    dp_assert(complain_null_pointer_p(node->right));
 
     memory_cache_free(node);
 }
