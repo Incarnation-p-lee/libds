@@ -31,7 +31,7 @@ prime_numeral_calculate_next(uint32 prime)
     next = prime + 2;
     while (next != UINT_MAX) {
         start = 3;
-        limit = (uint32)sqrt(next);
+        limit = (uint32)dp_sqrt(next);
         while (start < limit) {
             if (0u == next % start) {
                 break;

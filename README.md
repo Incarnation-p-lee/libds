@@ -3,17 +3,17 @@
 ##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
 ### build
-    1. sh src/script/build.sh [options]
-       DEBUG=0/1
-       PROFILE=0/1
-       CODE_COVERAGE=0/1
-       LIB=0/1
-       X86_64=0/1
-       STATIC=0/1
-    2. Output obj_out/out/ds.elf
-              obj_out/out/ds.h
-              obj_out/out/libds.a
-              obj_out/out/libds.so
+    1. sh src/script/build.sh DEBUG/RELEASE
+                              X86_64/X86_32
+                              LIBC
+                              ELF/OBJ/DYN
+                              PROFILE         -optional
+                              CODE_COVERAGE   -optional
+
+    2. Output output/out/ds.elf
+              output/out/ds.h
+              output/out/libds.a
+              output/out/libds.so
 
 ### Design
 
@@ -44,6 +44,12 @@
     6. heap
         a. minimal heap
         b. maximal heap
-        c. min_max heap
+        c. min-max heap
         d. leftist heap
+    7. sort
+        a. insertion sort
+        b. shell sort
+        c. heap sort
+        d. merge sort
+        e. quick sort
 

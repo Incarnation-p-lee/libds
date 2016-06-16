@@ -58,7 +58,7 @@ doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link)
 {
     void *offset;
 
-    assert(NULL != link);
+    dp_assert(NULL != link);
 
     offset = &((struct doubly_end_queue_list *)0)->link;
 
@@ -68,7 +68,7 @@ doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link)
 static inline struct doubly_end_queue_list *
 doubly_end_queue_list_next(struct doubly_end_queue_list *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     return doubly_end_queue_list_offset_reflect(node->link.next);
 }
@@ -76,7 +76,7 @@ doubly_end_queue_list_next(struct doubly_end_queue_list *node)
 static inline struct doubly_end_queue_list *
 doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     return doubly_end_queue_list_offset_reflect(node->link.previous);
 }
@@ -84,7 +84,7 @@ doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
 static inline bool
 doubly_end_queue_empty_p_internal(struct doubly_end_queue *queue)
 {
-    assert(NULL != queue);
+    dp_assert(NULL != queue);
 
     if (NULL == queue->head && NULL == queue->tail) {
         return true;
@@ -217,8 +217,8 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
 static inline void
 doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
 {
-    assert(queue);
-    assert(queue->head == queue->tail);
+    dp_assert(NULL != queue);
+    dp_assert(queue->head == queue->tail);
 
     memory_cache_free(queue->head);
     queue->head = NULL;
@@ -232,8 +232,8 @@ doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
     struct doubly_end_queue_list *next;
     struct doubly_linked_list *link;
 
-    assert(NULL != queue);
-    assert(NULL != queue->head);
+    dp_assert(NULL != queue);
+    dp_assert(NULL != queue->head);
 
     tmp = queue->head;
 

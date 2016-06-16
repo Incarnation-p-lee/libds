@@ -1,3 +1,59 @@
+void *
+doubly_linked_list_val(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+doubly_linked_list_val_set(struct doubly_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+struct doubly_linked_list *
+doubly_linked_list_next(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+doubly_linked_list_next_set(struct doubly_linked_list *list,
+    struct doubly_linked_list *next)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = next;
+    }
+}
+
+struct doubly_linked_list *
+doubly_linked_list_previous(struct doubly_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->previous;
+    }
+}
+
+void
+doubly_linked_list_previous_set(struct doubly_linked_list *list,
+    struct doubly_linked_list *previous)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->previous = previous;
+    }
+}
+
 struct doubly_linked_list *
 doubly_linked_list_create(void)
 {
@@ -7,7 +63,7 @@ doubly_linked_list_create(void)
 static inline void
 doubly_linked_list_initial_internal(struct doubly_linked_list *list, void *val)
 {
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     list->next = list;
     list->previous = list;
@@ -45,7 +101,7 @@ doubly_linked_list_insert_after_internal(struct doubly_linked_list *list,
 {
     struct doubly_linked_list *node;
 
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     node = doubly_linked_list_node_create_internal(val);
 
@@ -59,9 +115,9 @@ static inline void
 doubly_linked_list_insert_ptr_after_internal(struct doubly_linked_list *list,
     struct doubly_linked_list *node)
 {
-    assert(!complain_null_pointer_p(list));
-    assert(!complain_null_pointer_p(list));
-    assert(!doubly_linked_list_contains_p_internal(list, node));
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(!doubly_linked_list_contains_p_internal(list, node));
 
     list->next->previous = node;
     node->next = list->next;
@@ -88,12 +144,12 @@ doubly_linked_list_insert_ptr_before_internal(struct doubly_linked_list *list,
 {
     struct doubly_linked_list *prev;
 
-    assert(!complain_null_pointer_p(list));
-    assert(!complain_null_pointer_p(node));
-    assert(!doubly_linked_list_contains_p_internal(list, node));
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(node));
+    dp_assert(!doubly_linked_list_contains_p_internal(list, node));
 
-    prev = doubly_linked_list_previous(list);
-    assert(NULL != prev);
+    prev = list->previous;
+    dp_assert(NULL != prev);
 
     doubly_linked_list_insert_ptr_after_internal(prev, node);
 }
@@ -125,10 +181,10 @@ doubly_linked_list_insert_before_internal(struct doubly_linked_list *list,
 {
     struct doubly_linked_list *prev;
 
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
-    prev = doubly_linked_list_previous(list);
-    assert(NULL != prev);
+    prev = list->previous;
+    dp_assert(NULL != prev);
 
     doubly_linked_list_insert_after_internal(prev, val);
 }
@@ -185,7 +241,7 @@ doubly_linked_list_length_internal(struct doubly_linked_list *list)
     uint32 len;
     register struct doubly_linked_list *node;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     len = 0;
     node = list;
@@ -241,8 +297,8 @@ doubly_linked_list_contains_p_internal(struct doubly_linked_list *list,
 {
     register struct doubly_linked_list *iter;
 
-    assert(NULL != list);
-    assert(NULL != node);
+    dp_assert(NULL != list);
+    dp_assert(NULL != node);
 
     iter = list;
 
@@ -273,8 +329,8 @@ doubly_linked_list_remove_internal(struct doubly_linked_list **node)
 {
     struct doubly_linked_list *removed;
 
-    assert(NULL != node);
-    assert(NULL != *node);
+    dp_assert(NULL != node);
+    dp_assert(NULL != *node);
 
     removed = *node;
 
@@ -324,7 +380,7 @@ doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void
         node = list;
 
         do {
-            (*handler)(doubly_linked_list_val(node));
+            (*handler)(node->val);
             node = node->next;
         } while (node != list);
     }

@@ -1,4 +1,5 @@
 #define HEAP                   min_max_heap
+#define INDEX_LAST             min_max_heap_index_last
 #define HEAP_val               min_max_heap_val
 #define HEAP_nice              min_max_heap_nice
 #define HEAP_size              min_max_heap_size
@@ -33,6 +34,7 @@ UT_HEAP_remove_min(min_max)
 UT_HEAP_remove_max(min_max)
 
 #undef HEAP
+#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
@@ -63,14 +65,14 @@ utest_min_max_heap_depth(void)
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
 
     heap = test_min_max_heap_sample(0x1345, 0x104E);
-    index = INDEX_INVALID;
-    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    index = HEAP_IDX_INVALID;
+    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
 
-    index = INDEX_LAST(heap->alias) + 1;
-    RESULT_CHECK_uint32(DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    index = min_max_heap_index_last(heap) + 1;
+    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
 
     index = 1 << 7;
     RESULT_CHECK_uint32(7, min_max_heap_depth(heap, index), &pass);

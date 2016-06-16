@@ -40,7 +40,7 @@ avl_tree_height_calculate(struct avl_tree *tree)
         left = avl_tree_height_calculate(tree->left);
         right = avl_tree_height_calculate(tree->right);
 
-        return MAX_S(left, right) + 1;
+        return MAX_S32(left, right) + 1;
     }
 }
 

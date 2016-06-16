@@ -6,8 +6,8 @@ single_linked_list_remove_internal_optimize(
     struct single_linked_list *removed;
     struct single_linked_list copy;
 
-    assert(NULL != node);
-    assert(NULL != *node);
+    dp_assert(NULL != node);
+    dp_assert(NULL != *node);
 
     removed = *node;
     next = (*node)->next;

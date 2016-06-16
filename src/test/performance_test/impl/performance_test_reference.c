@@ -4,22 +4,22 @@ performance_test_reference_golden_prepare(const char *fname)
     FILE *golden;
     char line[PERORMANCE_ENTRY_MAX_SIZE];
 
-    assert(NULL != fname);
+    dp_assert(NULL != fname);
 
-    memset(line, 0, sizeof(line));
-    golden = fopen(fname, "r");
+    dp_memset(line, 0, sizeof(line));
+    golden = dp_fopen(fname, "r");
 
     if (!golden) {
         pr_log_warn("Failed to open Test Reference File.\n");
         return;
     } else {
-        while (fgets(line, PERORMANCE_ENTRY_MAX_SIZE, golden)) {
+        while (dp_fgets(line, PERORMANCE_ENTRY_MAX_SIZE, golden)) {
             performance_test_reference_update(line, performance_reference);
-            memset(line, 0, sizeof(line));
+            dp_memset(line, 0, sizeof(line));
         }
     }
 
-    fclose(golden);
+    dp_fclose(golden);
 }
 
 static inline void
@@ -29,19 +29,19 @@ performance_test_reference_update(char *raw, struct performance_test_reference *
     char *name;
     uint32 last;
 
-    assert(NULL != raw);
+    dp_assert(NULL != raw);
 
-    raw[strlen(raw) - 1] = '\0';
-    name = strchr(raw, (int)'=');
+    raw[dp_strlen(raw) - 1] = '\0';
+    name = dp_strchr(raw, (int)'=');
     if (!name) {
         pr_log_warn("Unknown format of Test Reference File.\n");
     } else {
         *name++ = '\0';
-        last = (uint32)atoll(raw);
+        last = (uint32)dp_atoll(raw);
 
         iter = ref;
         while (iter->name) {
-            if (!strncmp(iter->name, name, strlen(iter->name) + 1)) {
+            if (!dp_strncmp(iter->name, name, dp_strlen(iter->name) + 1)) {
                 iter->ref = last;
                 break;
             }
@@ -57,11 +57,11 @@ performance_test_reference_entry_find_by_name(char *name)
 {
     struct performance_test_reference *iter;
 
-    assert(NULL != name);
+    dp_assert(NULL != name);
 
     iter = performance_reference;
     while (iter->name) {
-        if (!strncmp(iter->name, name, strlen(iter->name) + 1)) {
+        if (!dp_strncmp(iter->name, name, dp_strlen(iter->name) + 1)) {
             return iter;
         }
         iter++;
@@ -75,11 +75,11 @@ performance_test_reference_variance_calculate(char *name, sint64 period)
 {
     struct performance_test_reference *entry;
 
-    assert(NULL != name);
-    assert(0 != period);
+    dp_assert(NULL != name);
+    dp_assert(0 != period);
 
     entry = performance_test_reference_entry_find_by_name(name);
-    assert(NULL != entry);
+    dp_assert(NULL != entry);
 
     entry->now = period;
     /*
@@ -100,9 +100,9 @@ performance_test_reference_new_writeback(const char *fname)
     struct performance_test_reference *iter;
     char line[PERORMANCE_ENTRY_MAX_SIZE];
 
-    assert(NULL != fname);
+    dp_assert(NULL != fname);
 
-    golden = fopen(fname, "w");
+    golden = dp_fopen(fname, "w");
 
     if (!golden) {
         pr_log_warn("Failed to open Test New File.\n");
@@ -110,13 +110,13 @@ performance_test_reference_new_writeback(const char *fname)
     } else {
         iter = performance_reference;
         while (iter->name) {
-            memset(line, 0, sizeof(line));
-            sprintf(line, "%016"U64_MDF_U"=%s\n", iter->now, iter->name);
-            fwrite(line, strlen(line), 1, golden);
+            dp_memset(line, 0, sizeof(line));
+            dp_sprintf(line, "%016"U64_MDF_U"=%s\n", iter->now, iter->name);
+            dp_fwrite(line, dp_strlen(line), 1, golden);
             iter++;
         }
     }
 
-    fclose(golden);
+    dp_fclose(golden);
 }
 

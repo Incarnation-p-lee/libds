@@ -3,11 +3,11 @@ test_case_list(struct test_extra_info *info, char *content)
 {
     struct test_case_filter *filter;
 
-    assert(NULL != content);
+    dp_assert(NULL != content);
 
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "  >> TEST CASE LIST << \n");
+    dp_fprintf(stdout, "  >> TEST CASE LIST << \n");
     test_case_list_category(test_category, filter);
     test_case_filter_destroy(&filter);
 }
@@ -43,7 +43,7 @@ test_case_list_implement(const struct test_layer_table *implement,
         implement++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline void
@@ -52,28 +52,28 @@ test_case_list_interface(const struct test_layer_table *interface,
 {
     char *tmp;
 
-    assert(NULL != filter);
-    assert(NULL != category);
-    assert(NULL != implement);
+    dp_assert(NULL != filter);
+    dp_assert(NULL != category);
+    dp_assert(NULL != implement);
 
     tmp = filter->interface;
 
     while (interface->name) {
         if (test_case_filter_match_p(interface, tmp)) {
-            fprintf(stdout, "    . [36m%s.%s.%s[0m\n", category, implement, interface->name);
+            dp_fprintf(stdout, "    . [36m%s.%s.%s[0m\n", category, implement, interface->name);
         }
         interface++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline bool
 test_case_filter_match_p(const struct test_layer_table *category, char *name)
 {
-    if (!strncmp("*", name, 1)) {
+    if (!dp_strncmp("*", name, 1)) {
         return true;
-    } else if (!strncmp(category->name, name, strlen(category->name) + 1)) { /* compare the last \0 */
+    } else if (!dp_strncmp(category->name, name, strlen(category->name) + 1)) { /* compare the last \0 */
         return true;
     } else {
         return false;

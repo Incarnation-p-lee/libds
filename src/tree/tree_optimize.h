@@ -18,8 +18,8 @@
             :"=&r"(height)                                  \
             :"r"(node))
             /*
-             * &: means earlyclobber operand, will be modified before
-             *    instruction finished. Therefore, this operand cannot
+             * &: means earlyclobber opedp_rand, will be modified before
+             *    instruction finished. Therefore, this opedp_rand cannot
              *    be lie in an input operand.
              */
 
@@ -174,18 +174,18 @@
      */
     #define avl_tree_node_balanced_optimize(node, balanced) \
         asm volatile (                                      \
-            /* left node height in %%edx */                 \
-            "mov       0x10(%1), %%ebx\n\t"                 \
-            "cmp           $0x0, %%ebx\n\t"                 \
+            /* left node height in %%esi */                 \
+            "mov       0x10(%1), %%esi\n\t"                 \
+            "cmp           $0x0, %%esi\n\t"                 \
             "mov    $0xffffffff, %%edx\n\t"                 \
-            "cmove        %%esp, %%ebx\n\t"                 \
-            "cmovne -0x4(%%ebx), %%edx\n\t"                 \
+            "cmove        %%esp, %%esi\n\t"                 \
+            "cmovne -0x4(%%esi), %%edx\n\t"                 \
             /* right node height in %%ecx */                \
-            "mov       0x14(%1), %%ebx\n\t"                 \
-            "cmp           $0x0, %%ebx\n\t"                 \
+            "mov       0x14(%1), %%esi\n\t"                 \
+            "cmp           $0x0, %%esi\n\t"                 \
             "mov    $0xffffffff, %%ecx\n\t"                 \
-            "cmove        %%esp, %%ebx\n\t"                 \
-            "cmovne -0x4(%%ebx), %%ecx\n\t"                 \
+            "cmove        %%esp, %%esi\n\t"                 \
+            "cmovne -0x4(%%esi), %%ecx\n\t"                 \
             /* abs(left - right) */                         \
             "sub          %%ecx, %%edx\n\t"                 \
             "mov          %%edx, %%ecx\n\t"                 \
@@ -199,7 +199,7 @@
             "cmovg        %%ecx, %0\n\t"                    \
             :"=r"(balanced)                                 \
             :"r"(node)                                      \
-            :"ebx", "edx", "ecx")
+            :"esi", "edx", "ecx")
 
     /*
      * if (NULL == node) {
@@ -213,7 +213,7 @@
             "lea -0x4(%1), %%edx\n\t"                      \
             "cmp     $0x4, %%edx\n\t"                      \
             "mov     $0x0, %0\n\t"                         \
-            "cmovg  %%rdx, %0\n\t"                         \
+            "cmovg   %%edx, %0\n\t"                        \
             :"=r"(avl)                                     \
             :"r"(node)                                     \
             :"edx")

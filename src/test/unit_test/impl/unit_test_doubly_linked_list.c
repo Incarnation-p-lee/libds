@@ -79,7 +79,7 @@ UT_LINKED_LIST_merge(doubly)
 static inline bool
 utest_doubly_linked_list_node_legal_p(struct doubly_linked_list *node)
 {
-    assert(!complain_null_pointer_p(node));
+    dp_assert(!complain_null_pointer_p(node));
 
     if (node != doubly_linked_list_next(node)) {
         return false;

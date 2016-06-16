@@ -7,7 +7,7 @@ utest_##name##_heap_structure_legal_p(struct name##_heap *heap)       \
 {                                                                     \
     bool result;                                                      \
                                                                       \
-    assert(!complain_null_pointer_p(heap));                           \
+    dp_assert(!complain_null_pointer_p(heap));                           \
                                                                       \
     result = true;                                                    \
                                                                       \
@@ -139,7 +139,7 @@ utest_##name##_heap_get_min(void)                          \
     RESULT_CHECK_pointer(NULL, HEAP_get_min(heap), &pass); \
                                                            \
     heap = TEST_HEAP_sample(0x1345, 0x104E);               \
-    val = HEAP_val(heap, INDEX_ROOT);                      \
+    val = HEAP_val(heap, HEAP_IDX_ROOT);                   \
     RESULT_CHECK_pointer(val, HEAP_get_min(heap), &pass);  \
                                                            \
     HEAP_destroy(&heap);                                   \
@@ -160,7 +160,7 @@ utest_##name##_heap_get_max(void)                          \
     RESULT_CHECK_pointer(NULL, HEAP_get_max(heap), &pass); \
                                                            \
     heap = TEST_HEAP_sample(0x1345, 0x104E);               \
-    val = HEAP_val(heap, INDEX_ROOT);                      \
+    val = HEAP_val(heap, HEAP_IDX_ROOT);                      \
     RESULT_CHECK_pointer(val, HEAP_get_max(heap), &pass);  \
                                                            \
     HEAP_destroy(&heap);                                   \
@@ -299,9 +299,9 @@ utest_##name##_heap_build(void)                                             \
     hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));           \
                                                                             \
     hd_array[0] = NULL;                                                     \
-    memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0]));        \
+    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0]));        \
                                                                             \
-    test_binary_heap_data_randomization(hd_array, INDEX_LAST(heap->alias)); \
+    test_binary_heap_data_randomization(hd_array, INDEX_LAST(heap)); \
     build = HEAP_build(hd_array, size);                                     \
                                                                             \
     RESULT_CHECK_bool(true, TEST_HEAP_ordered_p(build), &pass);             \

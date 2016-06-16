@@ -229,6 +229,12 @@ static struct performance_test_reference performance_reference[] = {
     {"leftist_heap_merge",                               0x0u, 0x0u},
     {"leftist_heap_remove_min",                          0x0u, 0x0u},
     {"leftist_heap_remove_min_and_destroy",              0x0u, 0x0u},
+
+    {"insertion_sort",                                   0x0u, 0x0u},
+    {"shell_sort",                                       0x0u, 0x0u},
+    {"heap_sort",                                        0x0u, 0x0u},
+    {"merge_sort",                                       0x0u, 0x0u},
+    {"quick_sort",                                       0x0u, 0x0u},
     {NULL,                                               0x0u, 0x0u},
 };
 

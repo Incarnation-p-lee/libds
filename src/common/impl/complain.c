@@ -14,9 +14,9 @@ complain_no_memory_p(void *ptr)
 {
     if (NULL == ptr) {
         pr_log_err("Fail to get memory from system.\n");
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 bool

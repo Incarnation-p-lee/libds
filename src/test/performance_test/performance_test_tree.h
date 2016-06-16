@@ -146,7 +146,11 @@ ptest_##name##_tree_contains_p(uint32 count)         \
     struct TREE *tmp;                                \
                                                      \
     tree = TEST_tree_sample(0xf2a32, 0xae12d);       \
-    tmp = TREE_find_min(tree);                       \
+                                                     \
+    tmp = tree;                                      \
+    while (tmp->left) {                              \
+        tmp = tmp->left;                             \
+    }                                                \
                                                      \
     PERFORMANCE_TEST_CHECKPOINT;                     \
                                                      \

@@ -1,4 +1,58 @@
 struct skip_linked_list *
+skip_linked_list_next(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+skip_linked_list_next_set(struct skip_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = val;
+    }
+}
+
+void *
+skip_linked_list_val(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+skip_linked_list_val_set(struct skip_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+sint32
+skip_linked_list_key(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return SKIP_KEY_INVALID;
+    } else {
+        return list->key;
+    }
+}
+
+void
+skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->key = key;
+    }
+}
+
+struct skip_linked_list *
 skip_linked_list_create(void)
 {
     return skip_linked_list_node_create(NULL, 0);
@@ -28,7 +82,7 @@ static inline void
 skip_linked_list_initial_internal(struct skip_linked_list *list,
     void *val, sint32 key)
 {
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     list->key = key;
     list->val = val;
@@ -60,7 +114,7 @@ skip_linked_list_length_internal(struct skip_linked_list *list)
     uint32 retval;
     register struct skip_linked_list *node;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     retval = 0u;
     node = list;
@@ -100,8 +154,8 @@ skip_linked_list_find_key_internal(struct skip_linked_list *list,
 {
     struct skip_linked_list **head;
 
-    assert(NULL != list);
-    assert(SKIP_LIST_MAX_LVL > lvl);
+    dp_assert(NULL != list);
+    dp_assert(SKIP_LIST_MAX_LVL > lvl);
 
     while (true) {
         head = &list->layer[lvl];
@@ -128,7 +182,7 @@ skip_linked_list_key_contains_p_internal(struct skip_linked_list *list, sint32 k
 {
     struct skip_linked_list *tmp;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     tmp = skip_linked_list_find_key_internal(list, key,
         SKIP_LIST_MAX_LVL_IDX);
@@ -152,9 +206,9 @@ skip_linked_list_insert_before_head(struct skip_linked_list *list,
 {
     uint32 lvl;
 
-    assert(NULL != tgt);
-    assert(NULL != list);
-    assert(tgt->key < list->key);
+    dp_assert(NULL != tgt);
+    dp_assert(NULL != list);
+    dp_assert(tgt->key < list->key);
 
     lvl = SKIP_LIST_MAX_LVL_IDX;
 
@@ -178,9 +232,9 @@ skip_linked_list_insert_internal(struct skip_linked_list **list,
     register struct skip_linked_list **head;
     struct skip_linked_list *prev_list[SKIP_LIST_MAX_LVL];
 
-    assert(NULL != list);
-    assert(NULL != *list);
-    assert(NULL != tgt);
+    dp_assert(NULL != list);
+    dp_assert(NULL != *list);
+    dp_assert(NULL != tgt);
 
     lvl = SKIP_LIST_MAX_LVL_IDX;
     head = list;
@@ -202,7 +256,7 @@ skip_linked_list_insert_internal(struct skip_linked_list **list,
                     skip_linked_list_insert_update_with_lvl(tgt, prev_list,
                         random_uint32_with_limit(SKIP_LIST_MAX_LVL));
 
-                    assert(skip_linked_list_ordering_p(*list));
+                    dp_assert(skip_linked_list_ordering_p(*list));
                     return tgt;
                 } else {
                     lvl--;
@@ -240,9 +294,9 @@ static inline void
 skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt,
     struct skip_linked_list **prev_list, uint32 lvl)
 {
-    assert(NULL != prev_list);
-    assert(NULL != tgt);
-    assert(SKIP_LIST_MAX_LVL > lvl);
+    dp_assert(NULL != prev_list);
+    dp_assert(NULL != tgt);
+    dp_assert(SKIP_LIST_MAX_LVL > lvl);
 
     do {
         tgt->layer[lvl] = prev_list[lvl]->layer[lvl];
@@ -281,7 +335,7 @@ skip_linked_list_node_clean(struct skip_linked_list *list)
 {
     uint32 lvl;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     lvl = SKIP_LIST_BOTTOM_IDX;
 
@@ -296,7 +350,7 @@ skip_linked_list_remove_head(struct skip_linked_list *list)
     struct skip_linked_list *next;
     uint32 lvl;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     next = list->next;
 
@@ -318,9 +372,9 @@ static inline struct skip_linked_list *
 skip_linked_list_remove_with_previous_list(struct skip_linked_list *tgt,
     struct skip_linked_list **pre_list, uint32 lvl)
 {
-    assert(NULL != pre_list);
-    assert(NULL != tgt);
-    assert(lvl < SKIP_LIST_MAX_LVL);
+    dp_assert(NULL != pre_list);
+    dp_assert(NULL != tgt);
+    dp_assert(lvl < SKIP_LIST_MAX_LVL);
 
     do {
         pre_list[lvl]->layer[lvl] = tgt->layer[lvl];
@@ -337,13 +391,13 @@ skip_linked_list_remove_on_level(struct skip_linked_list *list,
 {
     struct skip_linked_list *iter;
 
-    assert(NULL != removed);
-    assert(NULL != list);
-    assert(SKIP_LIST_MAX_LVL > level);
+    dp_assert(NULL != removed);
+    dp_assert(NULL != list);
+    dp_assert(SKIP_LIST_MAX_LVL > level);
 
     do {
         iter = list;
-        assert(skip_linked_list_exist_on_level(list, removed, level));
+        dp_assert(skip_linked_list_exist_on_level(list, removed, level));
 
         while (iter->layer[level] != removed) {
             iter = iter->layer[level];
@@ -365,8 +419,8 @@ skip_linked_list_remove_internal(struct skip_linked_list **list,
     struct skip_linked_list *removed;
     uint32 lvl;
 
-    assert(NULL != list);
-    assert(NULL != *list);
+    dp_assert(NULL != list);
+    dp_assert(NULL != *list);
 
     if ((*list)->key == key) {
         removed = *list;

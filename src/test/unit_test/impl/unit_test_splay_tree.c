@@ -49,7 +49,7 @@ utest_splay_tree_find(void)
     tree = test_splay_tree_sample(0x13FA, 0x143A);
 
     nice = splay_tree_nice(tree);
-    RESULT_CHECK_pointer(INVALID_PTR, splay_tree_find(NULL, nice), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_find(NULL, nice), &pass);
     RESULT_CHECK_pointer(tree, splay_tree_find(&tree, nice), &pass);
     RESULT_CHECK_pointer(NULL, splay_tree_find(&tree, 0xFFFFFFF), &pass);
 
@@ -77,7 +77,7 @@ utest_splay_tree_find_min(void)
     pass = true;
     tree = test_splay_tree_sample(0xF1C2, 0xD482);
 
-    RESULT_CHECK_pointer(INVALID_PTR, splay_tree_find_min(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_find_min(NULL), &pass);
     tmp = splay_tree_find_min(&tree);
 
     RESULT_CHECK_pointer(tmp, tree, &pass);
@@ -97,7 +97,7 @@ utest_splay_tree_find_max(void)
     pass = true;
     tree = test_splay_tree_sample(0xF2E4, 0x9B2A);
 
-    RESULT_CHECK_pointer(INVALID_PTR, splay_tree_find_max(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_find_max(NULL), &pass);
     tmp = splay_tree_find_max(&tree);
 
     RESULT_CHECK_pointer(tmp, tree, &pass);
@@ -148,7 +148,7 @@ utest_splay_tree_remove(void)
     pass = true;
     tree = NULL;
 
-    RESULT_CHECK_pointer(INVALID_PTR, splay_tree_remove(&tree, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_remove(&tree, NULL), &pass);
 
     tree = test_splay_tree_sample(0x2421, 0x32CD);
     tmp = tree;

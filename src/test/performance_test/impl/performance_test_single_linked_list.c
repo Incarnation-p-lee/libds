@@ -4,7 +4,7 @@
 #define LINKED_LIST_next               single_linked_list_next
 #define LINKED_LIST_next_set           single_linked_list_next_set
 #define LINKED_LIST_previous           single_linked_list_previous
-#define LINKED_LIST_previous_set       single_linked_list_previous_set
+#define LINKED_LIST_previous_set(l, v)
 #define LINKED_LIST_val                single_linked_list_val
 #define LINKED_LIST_val_set            single_linked_list_val_set
 

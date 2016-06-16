@@ -1,25 +1,25 @@
 void
 libds_log_print(enum log_level lvl, const char *msg)
 {
-    assert(NULL != logfile);
+    dp_assert(NULL != logfile);
 
     if (msg) {
         switch (lvl) {
             case INFO:
-                fprintf(logfile, " >> %4s: %s", SYM_2_STR(INFO), msg);
+                dp_fprintf(logfile, " >> %4s: %s", SYM_2_STR(INFO), msg);
                 break;
             case WARN:
-                fprintf(logfile, " >> %4s: %s", SYM_2_STR(WARN), msg);
+                dp_fprintf(logfile, " >> %4s: %s", SYM_2_STR(WARN), msg);
                 break;
             case DBUG:
-                fprintf(logfile, " >> %4s: %s", SYM_2_STR(DBUG), msg);
+                dp_fprintf(logfile, " >> %4s: %s", SYM_2_STR(DBUG), msg);
                 break;
             case ERRR:
-                fprintf(stdout,  " >> %4s: %s", SYM_2_STR(ERRR), msg);
+                dp_fprintf(stdout,  " >> %4s: %s", SYM_2_STR(ERRR), msg);
                 break;
             default:
                 msg = "Unknown enum value of enum log_level.\n";
-                fprintf(logfile, " >> %4s: %s", SYM_2_STR(WARN), msg);
+                dp_fprintf(logfile, " >> %4s: %s", SYM_2_STR(WARN), msg);
                 break;
         }
     }
@@ -28,7 +28,7 @@ libds_log_print(enum log_level lvl, const char *msg)
 void
 libds_log_file_create(void)
 {
-    logfile = fopen(LOG_FNAME, "w");
+    logfile = dp_fopen(LOG_FNAME, "w");
 
     if (!logfile) {
         pr_log_err("Failed to create logfile.\n");
@@ -39,7 +39,7 @@ void
 libds_log_file_close(void)
 {
     if (logfile) {
-        fclose(logfile);
+        dp_fclose(logfile);
     }
 }
 

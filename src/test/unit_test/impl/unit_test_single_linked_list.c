@@ -2,7 +2,7 @@
 #define LINKED_LIST_next               single_linked_list_next
 #define LINKED_LIST_next_set           single_linked_list_next_set
 #define LINKED_LIST_previous           single_linked_list_previous
-#define LINKED_LIST_previous_set       single_linked_list_previous_set
+#define LINKED_LIST_previous_set(l, v)
 #define LINKED_LIST_val                single_linked_list_val
 #define LINKED_LIST_val_set            single_linked_list_val_set
 
@@ -80,7 +80,7 @@ UT_LINKED_LIST_merge(single)
 static inline bool
 utest_single_linked_list_node_legal_p(struct single_linked_list *node)
 {
-    assert(!complain_null_pointer_p(node));
+    dp_assert(!complain_null_pointer_p(node));
 
     if (node != single_linked_list_next(node)) {
         return false;

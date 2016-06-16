@@ -3,11 +3,11 @@ unit_test_execution_start(struct test_extra_info *entry, char *content)
 {
     struct test_case_filter *filter;
 
-    assert(NULL != content);
+    dp_assert(NULL != content);
 
     filter = test_case_filter_obtain(content);
 
-    fprintf(stdout, "  >> UNIT TEST << \n");
+    dp_fprintf(stdout, "  >> UNIT TEST << \n");
     unit_test_execution_category(test_category, filter);
 
     test_case_filter_destroy(&filter);
@@ -44,7 +44,7 @@ unit_test_execution_implement(const struct test_layer_table *implement,
         implement++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline void
@@ -64,7 +64,7 @@ unit_test_execution_interface(const struct test_layer_table *interface,
         interface++;
     }
 
-    fprintf(stdout, "\n");
+    dp_fprintf(stdout, "\n");
 }
 
 static inline void
@@ -76,9 +76,9 @@ unit_test_result_print(char *name, bool passed)
     }
 
     if (passed) {
-        fprintf(stdout, "    . [32mPass[0m .. %s\n", name);
+        dp_fprintf(stdout, "    . [32mPass[0m .. %s\n", name);
     } else {
-        fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
+        dp_fprintf(stdout, "    . [31mFail[0m .. %s\n", name);
     }
 }
 

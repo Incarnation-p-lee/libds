@@ -565,33 +565,25 @@ static const struct test_layer_table linked_stack[] = {
 };
 
 static const struct test_layer_table array_queue[] = {
-    {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_array_queue_struct_field,
-            &performance_test_array_queue_struct_field,
-        },
-    },
     {   "create",
         NULL,
         {
-            &unit_test_array_queue_create,
+            &utest_array_queue_create,
             &performance_test_array_queue_create,
         },
     },
     {   "destroy",
         NULL,
         {
-            &unit_test_array_queue_destroy,
+            &utest_array_queue_destroy,
             &performance_test_array_queue_destroy,
         },
     },
     {
-        "space_expand",
+        "resize",
         NULL,
         {
-            &unit_test_array_queue_space_expand,
+            &utest_array_queue_resize,
             &performance_test_array_queue_space_expand,
         },
     },
@@ -599,15 +591,15 @@ static const struct test_layer_table array_queue[] = {
         "capacity",
         NULL,
         {
-            &unit_test_array_queue_capacity,
+            &utest_array_queue_capacity,
             &performance_test_array_queue_capacity,
         },
     },
     {
-        "space_rest",
+        "rest",
         NULL,
         {
-            &unit_test_array_queue_space_rest,
+            &utest_array_queue_rest,
             &performance_test_array_queue_space_rest,
         },
     },
@@ -615,7 +607,7 @@ static const struct test_layer_table array_queue[] = {
         "full_p",
         NULL,
         {
-            &unit_test_array_queue_full_p,
+            &utest_array_queue_full_p,
             &performance_test_array_queue_full_p,
         },
     },
@@ -623,14 +615,14 @@ static const struct test_layer_table array_queue[] = {
         "enter",
         NULL,
         {
-            &unit_test_array_queue_enter,
+            &utest_array_queue_enter,
             &performance_test_array_queue_enter,
         },
     },
     {   "leave",
         NULL,
         {
-            &unit_test_array_queue_leave,
+            &utest_array_queue_leave,
             &performance_test_array_queue_leave,
         },
     },
@@ -638,7 +630,7 @@ static const struct test_layer_table array_queue[] = {
         "empty_p",
         NULL,
         {
-            &unit_test_array_queue_empty_p,
+            &utest_array_queue_empty_p,
             &performance_test_array_queue_empty_p,
         },
     },
@@ -646,7 +638,7 @@ static const struct test_layer_table array_queue[] = {
         "cleanup",
         NULL,
         {
-            &unit_test_array_queue_cleanup,
+            &utest_array_queue_cleanup,
             &performance_test_array_queue_cleanup,
         },
     },
@@ -654,7 +646,7 @@ static const struct test_layer_table array_queue[] = {
         "iterate",
         NULL,
         {
-            &unit_test_array_queue_iterate,
+            &utest_array_queue_iterate,
             &performance_test_array_queue_iterate,
         },
     },
@@ -1049,7 +1041,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_create,
-            NULL,
+            &ptest_splay_tree_create,
         },
     },
     {
@@ -1057,7 +1049,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_initial,
-            NULL,
+            &ptest_splay_tree_initial,
         },
     },
     {
@@ -1065,7 +1057,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_destroy,
-            NULL,
+            &ptest_splay_tree_destroy,
         },
     },
     {
@@ -1073,7 +1065,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_find,
-            NULL,
+            &ptest_splay_tree_find,
         },
     },
     {
@@ -1081,7 +1073,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_find_min,
-            NULL,
+            &ptest_splay_tree_find_min,
         },
     },
     {
@@ -1089,7 +1081,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_find_max,
-            NULL,
+            &ptest_splay_tree_find_max,
         },
     },
     {
@@ -1097,7 +1089,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_height,
-            NULL,
+            &ptest_splay_tree_height,
         },
     },
     {
@@ -1105,7 +1097,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_contains_p,
-            NULL,
+            &ptest_splay_tree_contains_p,
         },
     },
     {
@@ -1113,7 +1105,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_insert,
-            NULL,
+            &ptest_splay_tree_insert,
         },
     },
     {
@@ -1121,7 +1113,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_remove,
-            NULL,
+            &ptest_splay_tree_remove,
         },
     },
     {
@@ -1129,7 +1121,7 @@ static const struct test_layer_table splay_tree[] = {
         NULL,
         {
             &utest_splay_tree_iterate,
-            NULL,
+            &ptest_splay_tree_iterate,
         },
     },
     {NULL,                      NULL, {NULL,},},
@@ -1689,6 +1681,51 @@ static const struct test_layer_table leftist_heap[] = {
     },
     {NULL,                          NULL, {NULL, NULL},},
 };
+
+static const struct test_layer_table sort_collection[] = {
+    {
+        "insertion",
+        NULL,
+        {
+            &utest_insertion_sort,
+            &ptest_insertion_sort,
+        },
+    },
+    {
+        "shell",
+        NULL,
+        {
+            &utest_shell_sort,
+            &ptest_shell_sort,
+        },
+    },
+    {
+        "heap",
+        NULL,
+        {
+            &utest_heap_sort,
+            &ptest_heap_sort,
+        },
+    },
+    {
+        "merge",
+        NULL,
+        {
+            &utest_merge_sort,
+            &ptest_merge_sort,
+        },
+    },
+    {
+        "quick",
+        NULL,
+        {
+            &utest_quick_sort,
+            &ptest_quick_sort,
+        },
+    },
+    {NULL,                          NULL, {NULL, NULL},},
+};
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1744,6 +1781,12 @@ static const struct test_layer_table test_heap_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,      NULL,         {NULL, NULL},},
 };
+
+static const struct test_layer_table test_sort_implement[] = {
+    {"sort", sort_collection, {NULL, NULL},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,   NULL,            {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1759,6 +1802,7 @@ static const struct test_layer_table test_category[] = {
     {"tree",        test_tree_implement,        {NULL, NULL},},
     {"hash",        test_hash_implement,        {NULL, NULL},},
     {"heap",        test_heap_implement,        {NULL, NULL},},
+    {"sort",        test_sort_implement,        {NULL, NULL},},
     /* END POINT OF CATEGORY */
     {NULL,          NULL,                       {NULL, NULL},}
 };

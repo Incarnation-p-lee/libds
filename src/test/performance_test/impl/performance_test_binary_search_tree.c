@@ -50,4 +50,3 @@ PT_TREE_iterate(binary_search)
 #undef TREE_remove
 #undef TREE_iterate
 
-

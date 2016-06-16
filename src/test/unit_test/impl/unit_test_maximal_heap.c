@@ -1,4 +1,5 @@
 #define HEAP                   maximal_heap
+#define INDEX_LAST             maximal_heap_index_last
 #define HEAP_val               maximal_heap_val
 #define HEAP_nice              maximal_heap_nice
 #define HEAP_size              maximal_heap_size
@@ -32,6 +33,7 @@ UT_HEAP_remove_max(maximal)
 UT_HEAP_build(maximal)
 
 #undef HEAP
+#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
@@ -59,14 +61,14 @@ utest_maximal_heap_ordered_p(struct maximal_heap *heap)
     uint32 index_left;
     uint32 index_right;
 
-    assert(utest_maximal_heap_structure_legal_p(heap));
+    dp_assert(utest_maximal_heap_structure_legal_p(heap));
 
-    index = INDEX_ROOT;
+    index = HEAP_IDX_ROOT;
     index_last = maximal_heap_index_last(heap);
 
     while (index <= index_last) {
-        index_left = INDEX_L_CHILD(index);
-        index_right = INDEX_R_CHILD(index);
+        index_left = HEAP_IDX_CHILD_L(index);
+        index_right = HEAP_IDX_CHILD_R(index);
 
         if (index_left <= index_last &&
             maximal_heap_nice(heap, index) < maximal_heap_nice(heap, index_left)) {
@@ -138,7 +140,7 @@ utest_maximal_heap_increase_nice(void)
 
     maximal_heap_increase_nice(heap, index, offset);
     RESULT_CHECK_sint64(nice + offset,
-        maximal_heap_nice(heap, INDEX_ROOT), &pass);
+        maximal_heap_nice(heap, HEAP_IDX_ROOT), &pass);
 
     maximal_heap_destroy(&heap);
     UNIT_TEST_RESULT(maximal_heap_increase_nice, pass);

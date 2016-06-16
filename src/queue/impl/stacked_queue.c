@@ -1,3 +1,13 @@
+uint32
+stacked_queue_dim(struct stacked_queue *queue)
+{
+    if (!queue) {
+        return QUEUE_CPCT_INVALID;
+    } else {
+        return queue->dim;
+    }
+}
+
 struct stacked_queue *
 stacked_queue_create(void)
 {
@@ -30,8 +40,8 @@ stacked_queue_destroy(struct stacked_queue **queue)
 static inline void
 stacked_queue_resize_internal(struct stacked_queue *queue, uint32 dim)
 {
-    assert(NULL != queue);
-    assert(0 != dim);
+    dp_assert(NULL != queue);
+    dp_assert(0 != dim);
 
     array_stack_resize(queue->enter, dim);
     array_stack_resize(queue->leave, dim);
@@ -44,7 +54,7 @@ stacked_queue_resize(struct stacked_queue *queue, uint32 dim)
     if (!complain_null_pointer_p(queue)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-            dim = queue->dim * 2 + EXPAND_QUEUE_SPACE_MIN;
+            dim = queue->dim * 2 + QUEUE_EXPD_SIZE_MIN;
         }
 
         stacked_queue_resize_internal(queue, dim);
@@ -63,7 +73,7 @@ stacked_queue_capacity(struct stacked_queue *queue)
     if (complain_null_pointer_p(queue)) {
         return 0;
     } else {
-        return stacked_queue_dim(queue);
+        return queue->dim;
     }
 }
 
@@ -72,7 +82,7 @@ stacked_queue_space_rest_internal(struct stacked_queue *queue)
 {
     uint32 rest;
 
-    assert(NULL != queue);
+    dp_assert(NULL != queue);
 
     rest = array_stack_rest(queue->enter);
 
@@ -113,7 +123,7 @@ stacked_queue_full_p(struct stacked_queue *queue)
 static inline bool
 stacked_queue_empty_p_internal(struct stacked_queue *queue)
 {
-    assert(NULL != queue);
+    dp_assert(NULL != queue);
 
     return array_stack_empty_p(queue->enter) && array_stack_empty_p(queue->leave);
 }
@@ -154,9 +164,9 @@ stacked_queue_stack_dump(struct array_stack *from,
 {
     uint32 count;
 
-    assert(NULL != from);
-    assert(NULL != to);
-    assert(array_stack_capacity(from) >= array_stack_rest(from));
+    dp_assert(NULL != from);
+    dp_assert(NULL != to);
+    dp_assert(array_stack_capacity(from) >= array_stack_rest(from));
 
     count = array_stack_capacity(from) - array_stack_rest(from);
 

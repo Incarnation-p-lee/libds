@@ -1,3 +1,13 @@
+uint32
+array_stack_dim(struct array_stack *stack)
+{
+    if (complain_null_pointer_p(stack)) {
+        return STACK_SIZE_INVALID;
+    } else {
+        return stack->space.dim;
+    }
+}
+
 /*
  * _RETURN_ one instance of array_stack.
  *   If no memory available, it never _RETURN_, export an error and exit.
@@ -9,10 +19,10 @@ array_stack_create(void)
 
     stack = memory_cache_allocate(sizeof(*stack));
     stack->space.bp = memory_cache_allocate(
-        sizeof(void *) * DEFAULT_STACK_SPACE_SIZE);
+        sizeof(void *) * STACK_SIZE_DFT);
 
     stack->space.sp = stack->space.bp;
-    stack->space.dim = DEFAULT_STACK_SPACE_SIZE;
+    stack->space.dim = STACK_SIZE_DFT;
 
     return stack;
 }
@@ -36,10 +46,10 @@ array_stack_resize_internal(struct array_stack *stack, uint32 dim)
 {
     uint32 offset;
 
-    assert(NULL != stack);
-    assert(0 != dim);
+    dp_assert(NULL != stack);
+    dp_assert(0 != dim);
 
-    offset = (uint32)((uint64)stack->space.sp - (uint64)stack->space.bp);
+    offset = (uint32)((ptr_t)stack->space.sp - (ptr_t)stack->space.bp);
     if (offset > stack->space.dim) {
         pr_log_warn("Stack overflow, will truncate to the top of stack.\n");
         offset = stack->space.dim;
@@ -62,7 +72,7 @@ array_stack_resize(struct array_stack *stack, uint32 dim)
     if (!complain_null_pointer_p(stack)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-            dim = stack->space.dim * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
         }
 
         array_stack_resize_internal(stack, dim);
@@ -72,7 +82,7 @@ array_stack_resize(struct array_stack *stack, uint32 dim)
 static inline bool
 array_stack_full_p_internal(struct array_stack *stack)
 {
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     return 0u == array_stack_rest_internal(stack) ? true : false;
 }
@@ -111,16 +121,16 @@ array_stack_rest_internal(struct array_stack *stack)
     void **limit;
     void **tmp;
 
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     tmp = stack->space.sp;
     limit = stack->space.bp + stack->space.dim;
 
     if ((sint32)(tmp - limit) > 0) {
         pr_log_err("Array stack overflow.\n");
-    } else {
-        return (uint32)(limit - tmp);
     }
+
+    return (uint32)(limit - tmp);
 }
 
 /*
@@ -150,7 +160,7 @@ array_stack_push(struct array_stack *stack, void *member)
         if (array_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
 
-            dim = array_stack_space_dim(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
             array_stack_resize_internal(stack, dim);
         }
 
@@ -178,8 +188,8 @@ array_stack_pop(struct array_stack *stack)
 static inline bool
 array_stack_empty_p_internal(struct array_stack *stack)
 {
-    assert(NULL != stack);
-    assert((sint32)(stack->space.sp - stack->space.bp) >= 0);
+    dp_assert(NULL != stack);
+    dp_assert((sint32)(stack->space.sp - stack->space.bp) >= 0);
 
     return stack->space.bp == stack->space.sp ? true : false;
 }
@@ -195,9 +205,9 @@ array_stack_empty_p(struct array_stack *stack)
         return false;
     } else if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
         pr_log_err("Array stack overflow.");
-    } else {
-        return array_stack_empty_p_internal(stack);
     }
+
+    return array_stack_empty_p_internal(stack);
 }
 
 /*

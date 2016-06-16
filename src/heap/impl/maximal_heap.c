@@ -1,3 +1,53 @@
+uint32
+maximal_heap_index_last(struct maximal_heap *heap)
+{
+    return heap->alias->size;
+}
+
+uint32
+maximal_heap_index_limit(struct maximal_heap *heap)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_CPCT_INVALID;
+    } else {
+        return heap->alias->capacity + 1;
+    }
+}
+
+uint32
+maximal_heap_size(struct maximal_heap *heap)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_SIZE_INVALID;
+    } else {
+        return heap->alias->size;
+    }
+}
+
+sint64
+maximal_heap_nice(struct maximal_heap *heap, uint32 index)
+{
+    if (complain_null_pointer_p(heap)) {
+        return HEAP_NICE_INVALID;
+    } else if (index == HEAP_IDX_INVALID || index >= maximal_heap_index_limit(heap)) {
+        return HEAP_NICE_INVALID;
+    } else {
+        return heap->alias->base[index]->nice;
+    }
+}
+
+void *
+maximal_heap_val(struct maximal_heap *heap, uint32 index)
+{
+    if (complain_null_pointer_p(heap)) {
+        return PTR_INVALID;
+    } else if (index == HEAP_IDX_INVALID || index >= maximal_heap_index_limit(heap)) {
+        return PTR_INVALID;
+    } else {
+        return heap->alias->base[index]->val;
+    }
+}
+
 struct maximal_heap *
 maximal_heap_create(uint32 capacity)
 {
@@ -75,10 +125,10 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(!binary_heap_empty_p(heap->alias));
-    assert(binary_heap_structure_legal_p(heap->alias));
-    assert(binary_heap_index_legal_p(heap->alias, index));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(!binary_heap_empty_p(heap->alias));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
 
@@ -91,8 +141,8 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
      */
     index = binary_heap_reorder(alias, index, nice, &binary_heap_maximal_ordered_p);
 
-    assert(INDEX_ROOT == index);
-    assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
+    dp_assert(INDEX_ROOT == index);
+    dp_assert(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
 
     HEAP_DATA(alias, INDEX_ROOT) = tmp;
     return binary_heap_remove_root(alias, &binary_heap_maximal_ordered_p);
@@ -134,9 +184,9 @@ maximal_heap_nice_alter(struct maximal_heap *heap, uint32 index,
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(binary_heap_structure_legal_p(heap->alias));
-    assert(binary_heap_index_legal_p(heap->alias, index));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
     tmp = HEAP_DATA(alias, index);
@@ -144,7 +194,7 @@ maximal_heap_nice_alter(struct maximal_heap *heap, uint32 index,
 
     index = binary_heap_reorder(alias, index, new_nice,
         &binary_heap_maximal_ordered_p);
-    assert(NULL == HEAP_DATA(alias, index));
+    dp_assert(NULL == HEAP_DATA(alias, index));
 
     tmp->nice = new_nice;
     HEAP_DATA(alias, index) = tmp;
@@ -195,9 +245,9 @@ maximal_heap_build_internal(struct maximal_heap *heap)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert(!complain_null_pointer_p(heap));
-    assert(binary_heap_full_p(heap->alias));
-    assert(binary_heap_structure_legal_p(heap->alias));
+    dp_assert(!complain_null_pointer_p(heap));
+    dp_assert(binary_heap_full_p(heap->alias));
+    dp_assert(binary_heap_structure_legal_p(heap->alias));
 
     alias = heap->alias;
     iter = HEAP_SIZE(alias) / 2;
@@ -211,7 +261,7 @@ maximal_heap_build_internal(struct maximal_heap *heap)
         index = binary_heap_reorder(alias, index, nice,
             &binary_heap_maximal_percolate_down);
 
-        assert(NULL == HEAP_DATA(alias, index));
+        dp_assert(NULL == HEAP_DATA(alias, index));
         HEAP_DATA(alias, index) = tmp;
 
         iter--;

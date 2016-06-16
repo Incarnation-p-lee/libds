@@ -1,7 +1,7 @@
 static inline void
 linked_stack_node_initial(struct linked_stack_space *node, uint32 dim)
 {
-    assert(!complain_zero_size_p(dim));
+    dp_assert(!complain_zero_size_p(dim));
 
     node->space.bp = memory_cache_allocate(sizeof(void *) * dim);
     node->space.sp = node->space.bp;
@@ -13,7 +13,7 @@ linked_stack_node_create(uint32 dim)
 {
     struct linked_stack_space *node;
 
-    assert(!complain_zero_size_p(dim));
+    dp_assert(!complain_zero_size_p(dim));
 
     node = memory_cache_allocate(sizeof(*node));
     doubly_linked_list_initial(&node->link);
@@ -32,7 +32,7 @@ linked_stack_create(void)
     struct linked_stack *stack;
 
     stack = memory_cache_allocate(sizeof(*stack));
-    stack->base = linked_stack_node_create(DEFAULT_STACK_SPACE_SIZE);
+    stack->base = linked_stack_node_create(STACK_SIZE_DFT);
     stack->top = stack->base;
 
     return stack;
@@ -64,7 +64,7 @@ linked_stack_space_offset_reflect(struct doubly_linked_list *link)
 {
     void *offset;
 
-    assert(NULL != link);
+    dp_assert(NULL != link);
 
     offset = &((struct linked_stack_space *)0)->link;
 
@@ -80,10 +80,10 @@ linked_stack_node_next(struct linked_stack_space *node)
     struct linked_stack_space *next;
     struct doubly_linked_list *tmp;
 
-    assert(NULL != node);
-    assert(NULL != doubly_linked_list_next(&node->link));
+    dp_assert(NULL != node);
+    dp_assert(NULL != (&node->link)->next);
 
-    tmp = doubly_linked_list_next(&node->link);
+    tmp = (&node->link)->next;
     next = linked_stack_space_offset_reflect(tmp);
 
     return next;
@@ -98,10 +98,10 @@ linked_stack_node_previous(struct linked_stack_space *node)
     struct linked_stack_space *previous;
     struct doubly_linked_list *tmp;
 
-    tmp = doubly_linked_list_previous(&node->link);
+    tmp = (&node->link)->previous;
 
-    assert(NULL != node);
-    assert(NULL != tmp);
+    dp_assert(NULL != node);
+    dp_assert(NULL != tmp);
 
     previous = linked_stack_space_offset_reflect(tmp);
 
@@ -117,7 +117,7 @@ linked_stack_node_remove(struct linked_stack_space *node)
 {
     struct doubly_linked_list *link;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     link = &node->link;
 
@@ -143,8 +143,8 @@ linked_stack_resize_internal(struct linked_stack *stack, uint32 dim)
     struct linked_stack_space *node;
     struct linked_stack_space *last;
 
-    assert(0 != dim);
-    assert(NULL != stack);
+    dp_assert(0 != dim);
+    dp_assert(NULL != stack);
 
     capacity = linked_stack_capacity(stack);
     last = linked_stack_node_previous(stack->base);
@@ -186,7 +186,7 @@ linked_stack_resize(struct linked_stack *stack, uint32 dim)
     } else {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
-            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = linked_stack_capacity(stack) * 2 + STACK_EXPD_SIZE_MIN;
         }
 
         linked_stack_resize_internal(stack, dim);
@@ -196,7 +196,7 @@ linked_stack_resize(struct linked_stack *stack, uint32 dim)
 static inline bool
 linked_stack_full_p_internal(struct linked_stack *stack)
 {
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     return 0u == linked_stack_rest_internal(stack) ? true : false;
 }
@@ -221,7 +221,7 @@ linked_stack_rest_internal(struct linked_stack *stack)
     uint32 rest;
     struct linked_stack_space *next;
 
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     rest = linked_stack_node_rest(stack->top);
     next = linked_stack_node_next(stack->top);
@@ -276,7 +276,7 @@ linked_stack_capacity(struct linked_stack *stack)
 static inline bool
 linked_stack_node_empty_p(struct linked_stack_space *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     return linked_stack_node_capacity(node)
         == linked_stack_node_rest(node) ? true : false;
@@ -285,7 +285,7 @@ linked_stack_node_empty_p(struct linked_stack_space *node)
 static inline bool
 linked_stack_node_full_p(struct linked_stack_space *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     return 0u == linked_stack_node_rest(node) ? true : false;
 }
@@ -297,7 +297,7 @@ linked_stack_node_full_p(struct linked_stack_space *node)
 static inline uint32
 linked_stack_node_capacity(struct linked_stack_space *node)
 {
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     return node->space.dim;
 }
@@ -312,15 +312,15 @@ linked_stack_node_rest(struct linked_stack_space *node)
     void **limit;
     void **tmp;
 
-    assert(NULL != node);
+    dp_assert(NULL != node);
 
     tmp = node->space.sp;
     limit = node->space.bp + node->space.dim;
     if ((sint32)(tmp - limit) > 0) {
         pr_log_err("Array stack overflow.");
-    } else {
-        return (uint32)(limit - tmp);
     }
+
+    return (uint32)(limit - tmp);
 }
 
 /*
@@ -335,7 +335,7 @@ linked_stack_push(struct linked_stack *stack, void *member)
     if (!complain_null_pointer_p(stack)) {
         if (linked_stack_full_p_internal(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-            dim = linked_stack_capacity(stack) * 2 + EXPAND_STACK_SPACE_MIN;
+            dim = linked_stack_capacity(stack) * 2 + STACK_EXPD_SIZE_MIN;
             linked_stack_resize_internal(stack, dim);
         }
 
@@ -373,7 +373,7 @@ linked_stack_pop(struct linked_stack *stack)
 static inline bool
 linked_stack_empty_p_internal(struct linked_stack *stack)
 {
-    assert(NULL != stack);
+    dp_assert(NULL != stack);
 
     if (stack->base != stack->top) {
         return false;
@@ -450,8 +450,8 @@ linked_stack_node_iterate(struct linked_stack_space *node,
 {
     register void **iter;
 
-    assert(NULL != node);
-    assert(NULL != handler);
+    dp_assert(NULL != node);
+    dp_assert(NULL != handler);
 
     iter = node->space.sp;
     /*

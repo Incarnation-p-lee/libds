@@ -1,7 +1,7 @@
 #define LINKED_LIST                    skip_linked_list
 #define LINKED_LIST_next               skip_linked_list_next
 #define LINKED_LIST_next_set           skip_linked_list_next_set
-#define LINKED_LIST_previous           skip_linked_list_previous
+#define LINKED_LIST_previous(l)
 #define LINKED_LIST_val                skip_linked_list_val
 #define LINKED_LIST_val_set            skip_linked_list_val_set
 
@@ -42,7 +42,7 @@ UT_LINKED_LIST_iterate(skip)
 static inline bool
 utest_skip_linked_list_node_legal_p(struct skip_linked_list *node)
 {
-    assert(!complain_null_pointer_p(node));
+    dp_assert(!complain_null_pointer_p(node));
 
     if (NULL != skip_linked_list_val(node)) {
         return false;

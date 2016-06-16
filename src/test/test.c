@@ -1,15 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <sys/time.h>
 #include "types.h"
+#include "depends.h"
 #include "defines.h"
-#include "util.h"
-#include "data_structure_types.h"
-#include "data_structure_defines.h"
+#include "data_structure_interface.h"
+#include "universal.h"
 
-#include "ds.h"
 #include "test.h"
 #include "test_result_check.h"
 #include "test_declaration.h"
@@ -26,4 +20,6 @@
 #include "impl/test_parameter.c"
 #include "impl/test_case_filter.c"
 #include "impl/test_common.c"
+#include "impl/test_memory_maps.c"
+#include "impl/test_log_print.c"
 

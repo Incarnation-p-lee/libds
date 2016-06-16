@@ -1,3 +1,41 @@
+void
+binary_search_tree_node_nice_set(struct binary_search_tree *tree, sint64 nice)
+{
+    tree->nice = nice;
+}
+
+sint64
+binary_search_tree_nice(struct binary_search_tree *tree)
+{
+    return tree->nice;
+}
+
+struct binary_search_tree *
+binary_search_tree_left(struct binary_search_tree *tree)
+{
+    return tree->left;
+}
+
+struct binary_search_tree *
+binary_search_tree_right(struct binary_search_tree *tree)
+{
+    return tree->right;
+}
+
+void
+binary_search_tree_left_set(struct binary_search_tree *tree,
+    struct binary_search_tree *left)
+{
+    tree->left = left;
+}
+
+void
+binary_search_tree_right_set(struct binary_search_tree *tree,
+    struct binary_search_tree *right)
+{
+    tree->right = right;
+}
+
 struct binary_search_tree *
 binary_search_tree_create(void)
 {
@@ -164,7 +202,7 @@ binary_search_tree_height_internal(struct binary_search_tree *tree)
         left = binary_search_tree_height_internal(tree->left);
         right = binary_search_tree_height_internal(tree->right);
 
-        return MAX_S(left, right) + 1;
+        return MAX_S32(left, right) + 1;
     }
 }
 
@@ -290,11 +328,11 @@ binary_search_tree_insert(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
     if (complain_null_pointer_p(tree)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else if (!binary_search_tree_structure_legal_p(*tree)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else if (!binary_search_tree_structure_legal_p(node)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else {
         return binary_search_tree_insert_internal(tree, node);
     }
@@ -453,13 +491,9 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
 static inline void
 binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
 {
-    struct binary_search_tree *binary;
-
     assert(!complain_null_pointer_p(node_pre));
     assert(binary_search_tree_structure_legal_p(*node_pre));
     assert(binary_search_tree_doubly_child_p(*node_pre));
-
-    binary = *node_pre;
 
     if (direct > 0) {
         binary_search_tree_child_strip_from_max(node_pre);
@@ -528,11 +562,11 @@ binary_search_tree_remove(struct binary_search_tree **tree,
     struct binary_search_tree *node)
 {
     if (complain_null_pointer_p(tree)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else if (!binary_search_tree_structure_legal_p(*tree)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else if (!binary_search_tree_structure_legal_p(node)) {
-        return INVALID_PTR;
+        return PTR_INVALID;
     } else {
         return binary_search_tree_remove_internal(tree, node);
     }

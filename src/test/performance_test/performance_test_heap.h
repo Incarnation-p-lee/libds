@@ -213,7 +213,6 @@ ptest_##name##_heap_remove_max(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                     \
                                                      \
     while (count--) {                                \
-        printf("%d\n", count);                       \
         HEAP_remove_max(heap);                       \
     }                                                \
                                                      \
@@ -253,7 +252,7 @@ ptest_##name##_heap_decrease_nice(uint32 count)         \
     uint32 index;                                       \
     struct HEAP *heap;                                  \
                                                         \
-    index = INDEX_ROOT;                                 \
+    index = HEAP_IDX_ROOT;                              \
     count = count >> 6;                                 \
     count = 0 == count ? 1000 : count;                  \
     heap = TEST_HEAP_sample(count * 4, count * 2);      \
@@ -306,12 +305,12 @@ ptest_##name##_heap_build(uint32 count)                              \
                                                                      \
     hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));    \
     hd_array[0] = NULL;                                              \
-    memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0])); \
+    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0])); \
     PERFORMANCE_TEST_CHECKPOINT;                                     \
                                                                      \
     while (count--) {                                                \
         test_binary_heap_data_randomization(hd_array,                \
-            INDEX_LAST(heap->alias));                                \
+            INDEX_LAST(heap));                                      \
         build = HEAP_build(hd_array, size);                          \
                                                                      \
         memory_cache_free(build->alias);                             \

@@ -138,7 +138,7 @@ utest_##name##_tree_height(void)                              \
                                                               \
     RESULT_CHECK_sint32(-1, TREE_height(NULL), &pass);        \
                                                               \
-    child = MAX_S(TREE_height(TREE_left(tree)),               \
+    child = MAX_S32(TREE_height(TREE_left(tree)),             \
         TREE_height(TREE_right(tree)));                       \
     RESULT_CHECK_sint32(child + 1, TREE_height(tree), &pass); \
                                                               \
@@ -190,7 +190,7 @@ utest_##name##_tree_insert(void)                                        \
     tmp = TREE_create();                                                \
     TREE_initial(tmp, 0xFFFDEA);                                        \
                                                                         \
-    RESULT_CHECK_pointer(INVALID_PTR, TREE_insert(&tree, NULL), &pass); \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_insert(&tree, NULL), &pass); \
     RESULT_CHECK_pointer(tmp, TREE_insert(&tree, tmp), &pass);          \
     RESULT_CHECK_bool(true, TREE_contains_p(tree, tmp), &pass);         \
     RESULT_CHECK_pointer(NULL, TREE_insert(&tree, tmp), &pass);         \
@@ -214,12 +214,12 @@ utest_##name##_tree_remove(void)                                        \
     pass = true;                                                        \
     tree = NULL;                                                        \
     tmp = TREE_create();                                                \
-    RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(&tree, tmp), &pass);  \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, tmp), &pass);  \
     TREE_destroy(&tmp);                                                 \
                                                                         \
     tree = TEST_tree_sample(0x3321, 0xA2B);                            \
-    RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(NULL, NULL), &pass);  \
-    RESULT_CHECK_pointer(INVALID_PTR, TREE_remove(&tree, NULL), &pass); \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(NULL, NULL), &pass);  \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, NULL), &pass); \
                                                                         \
     tmp = tree;                                                         \
     RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tree), &pass);         \

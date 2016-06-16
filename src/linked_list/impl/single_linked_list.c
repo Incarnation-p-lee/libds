@@ -1,3 +1,40 @@
+void *
+single_linked_list_val(struct single_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+single_linked_list_val_set(struct single_linked_list *list, void *val)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->val = val;
+    }
+}
+
+struct single_linked_list *
+single_linked_list_next(struct single_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->next;
+    }
+}
+
+void
+single_linked_list_next_set(struct single_linked_list *list,
+    struct single_linked_list *next)
+{
+    if (!complain_null_pointer_p(list)) {
+        list->next = next;
+    }
+}
+
 struct single_linked_list *
 single_linked_list_create(void)
 {
@@ -7,7 +44,7 @@ single_linked_list_create(void)
 static inline void
 single_linked_list_initial_internal(struct single_linked_list *list, void *val)
 {
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     list->next = list;
     list->val = val;
@@ -44,7 +81,7 @@ single_linked_list_insert_after_internal(struct single_linked_list *list,
 {
     struct single_linked_list *node;
 
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     node = single_linked_list_node_create_internal(val);
     node->next = list->next;
@@ -58,7 +95,7 @@ single_linked_list_insert_before_internal(struct single_linked_list *list,
     struct single_linked_list *prev;
     struct single_linked_list *node;
 
-    assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(list));
 
     prev = single_linked_list_previous_internal(list);
     node = single_linked_list_node_create_internal(val);
@@ -86,9 +123,9 @@ static inline void
 single_linked_list_insert_ptr_after_internal(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    assert(!complain_null_pointer_p(list));
-    assert(!complain_null_pointer_p(node));
-    assert(!single_linked_list_contains_p_internal(list, node));
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(node));
+    dp_assert(!single_linked_list_contains_p_internal(list, node));
 
     node->next = list->next;
     list->next = node;
@@ -113,9 +150,9 @@ single_linked_list_insert_ptr_before_internal(struct single_linked_list *list,
 {
     struct single_linked_list *prev;
 
-    assert(!complain_null_pointer_p(list));
-    assert(!complain_null_pointer_p(node));
-    assert(!single_linked_list_contains_p_internal(list, node));
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(!complain_null_pointer_p(node));
+    dp_assert(!single_linked_list_contains_p_internal(list, node));
 
     prev = single_linked_list_previous(list);
 
@@ -182,7 +219,7 @@ single_linked_list_length_internal(struct single_linked_list *list)
     uint32 len;
     register struct single_linked_list *node;
 
-    assert(NULL != list);
+    dp_assert(NULL != list);
 
     len = 0u;
     node = list;
@@ -236,8 +273,8 @@ single_linked_list_contains_p_internal(struct single_linked_list *list,
 {
     register struct single_linked_list *iter;
 
-    assert(NULL != list);
-    assert(NULL != node);
+    dp_assert(NULL != list);
+    dp_assert(NULL != node);
 
     iter = list;
 
@@ -267,8 +304,8 @@ single_linked_list_previous_internal(struct single_linked_list *node)
 {
     register struct single_linked_list *prev;
 
-    assert(NULL != node);
-    assert(NULL != node->next);
+    dp_assert(NULL != node);
+    dp_assert(NULL != node->next);
 
     prev = node;
 
@@ -295,8 +332,8 @@ single_linked_list_remove_internal_default(struct single_linked_list **node)
     struct single_linked_list *removed;
     struct single_linked_list *prev;
 
-    assert(NULL != node);
-    assert(NULL != *node);
+    dp_assert(NULL != node);
+    dp_assert(NULL != *node);
 
     removed = *node;
 
@@ -344,7 +381,7 @@ single_linked_list_iterate(struct single_linked_list *list,
         node = list;
 
         do {
-            (*handler)(single_linked_list_val(node));
+            (*handler)(node->val);
             node = node->next;
         } while (node != list);
     }
