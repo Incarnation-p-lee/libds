@@ -24,8 +24,8 @@
 
 #ifdef DEBUG
     extern void libds_log_print(enum log_level lvl, const char *msg);
-    extern void * malloc_wrap(size_t size);
-    extern void * realloc_wrap(void *ptr, size_t size);
+    extern void * malloc_wrap(uint32 size);
+    extern void * realloc_wrap(void *ptr, uint32 size);
     extern void free_wrap(void *ptr);
 
     #define malloc_ds              malloc_wrap

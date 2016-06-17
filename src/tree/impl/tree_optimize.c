@@ -1,6 +1,6 @@
-#define HEIGHT_OFFSET          (uint64)(&((struct avl_tree *)0)->height)
-#define LEFT_OFFSET            (uint64)(&((struct avl_tree *)0)->left)
-#define RIGHT_OFFSET           (uint64)(&((struct avl_tree *)0)->right)
+#define HEIGHT_OFFSET          (ptr_t)(&((struct avl_tree *)0)->height)
+#define LEFT_OFFSET            (ptr_t)(&((struct avl_tree *)0)->left)
+#define RIGHT_OFFSET           (ptr_t)(&((struct avl_tree *)0)->right)
 
 #if defined X86_64
 
@@ -24,7 +24,7 @@ avl_tree_height_opt(struct avl_tree *tree)
          *    be lie in an input operand.
          */
 
-    assert(avl_tree_height_opt_validity_p(tree, height));
+    dp_assert(avl_tree_height_opt_validity_p(tree, height));
 
     return height;
 }
@@ -53,7 +53,7 @@ avl_tree_height_opt(struct avl_tree *tree)
          *    be lie in an input operand.
          */
 
-    assert(avl_tree_height_opt_validity_p(tree, height));
+    dp_assert(avl_tree_height_opt_validity_p(tree, height));
 
     return height;
 }
@@ -67,7 +67,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
     sint32 left;
     sint32 right;
 
-    assert(avl_tree_structure_legal_p(tree));
+    dp_assert(avl_tree_structure_legal_p(tree));
 
     left = avl_tree_height_opt(tree->left);
     right = avl_tree_height_opt(tree->right);
@@ -90,7 +90,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
         :"m"(left), "m"(right)
         :"eax", "ecx");
 
-    assert(avl_tree_balanced_optimize_validity_p(tree, balanced));
+    dp_assert(avl_tree_balanced_optimize_validity_p(tree, balanced));
 
     return balanced;
 }

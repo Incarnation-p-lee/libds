@@ -8,7 +8,7 @@ use scan_source_file;
 my $header = "$ENV{'PWD'}/src/inc/data_structure_interface.h";
 my $srcdir = "$ENV{'PWD'}/src";
 
-say "produce data_structure_interface.h";
+say "Produce data_structure_interface.h";
 
 #######################################
 ## Create data_structure_interface.h ##

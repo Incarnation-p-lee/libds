@@ -1,5 +1,5 @@
 void *
-malloc_wrap(size_t size)
+malloc_wrap(uint32 size)
 {
     malloc_cnt++;
 
@@ -7,7 +7,7 @@ malloc_wrap(size_t size)
 }
 
 void *
-realloc_wrap(void *ptr, size_t size)
+realloc_wrap(void *ptr, uint32 size)
 {
     realloc_cnt++;
 

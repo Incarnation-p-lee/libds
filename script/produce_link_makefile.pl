@@ -6,7 +6,7 @@ my $output = "output";
 my $obj_list = "";
 my $obj_part = "";
 
-say "produce link Makefile";
+say "Produce link Makefile";
 
 die "Failed to find output directory, $output." unless -d -e $output;
 

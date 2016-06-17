@@ -9,7 +9,7 @@ my $header = "$ENV{'PWD'}/src/inc/universal.h";
 my $source = "$ENV{'PWD'}/src/common/common_declaration.h";
 my @result = &scan_header_file_externals($source);
 
-say "produce universal.h";
+say "Produce universal.h";
 
 open UNIVERSAL, '>', $header or die "Failed to locate $header, $!\n";
 

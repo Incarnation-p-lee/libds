@@ -8,7 +8,7 @@ my $current_dir = "$ENV{'PWD'}";
 my $source_dir = "$current_dir/src";
 my $include_dir = "$source_dir/inc";
 
-say "produce compile Makefile";
+say "Produce compile Makefile";
 
 if ($work_dir eq "") {
     say "Please specify the work directory for makefile producing";

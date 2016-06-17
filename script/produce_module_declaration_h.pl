@@ -19,7 +19,7 @@ my @module = ("$srcdir/linked_list",
               "$srcdir/test/performance_test",
               "$srcdir/common",);
 
-say "produce module_declaration.h";
+say "Produce module_declaration.h";
 
 foreach (@module) {
     my $module = $1 if /\/(\w+)$/;
