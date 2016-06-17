@@ -125,7 +125,7 @@ sub scan_header_file_definition {
 
     while (<SRC_FILE>) {
         chomp;
-        if (/^#define \w+/) {
+        if (/^#define \w+(\(.*\))? /) {
             push @result, "$_\n";
             $status = "CONTINUE" if /\$/;
         } elsif ($status eq "CONTINUE") {

@@ -28,7 +28,6 @@ typedef unsigned int           bool;
     typedef unsigned long      ptr_t;
 #endif
 
-#define DATA_STRUCTURE_TYPES_H
 #define SIZE_INVALID           0xffffffff
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
