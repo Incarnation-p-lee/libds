@@ -9,7 +9,8 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
-#define SIZE_INVALID           0xffffffff
+#define SIZE_INVALID           0xffffffffu
+#define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
 #define SPT_CHN_HASH_SIZE_DFT  11u        // separate chain hash default size
@@ -54,8 +55,6 @@ enum ITER_ORDER {
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    uint32                    sid;
-    void                      *val;
     struct single_linked_list *next;
 };
 

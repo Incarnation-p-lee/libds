@@ -1,21 +1,3 @@
-void *
-single_linked_list_val(struct single_linked_list *list)
-{
-    if (complain_null_pointer_p(list)) {
-        return PTR_INVALID;
-    } else {
-        return list->val;
-    }
-}
-
-void
-single_linked_list_val_set(struct single_linked_list *list, void *val)
-{
-    if (!complain_null_pointer_p(list)) {
-        list->val = val;
-    }
-}
-
 struct single_linked_list *
 single_linked_list_next(struct single_linked_list *list)
 {
@@ -35,28 +17,39 @@ single_linked_list_next_set(struct single_linked_list *list,
     }
 }
 
+static inline bool
+single_linked_list_structure_legal_p(struct single_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return false;
+    } else if (PTR_INVALID == list->next) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 struct single_linked_list *
 single_linked_list_create(void)
 {
-    return single_linked_list_node_create_internal(NULL);
+    return single_linked_list_create_i(NULL);
 }
 
 static inline void
-single_linked_list_initial_internal(struct single_linked_list *list, void *val)
+single_linked_list_initial_i(struct single_linked_list *list);
 {
-    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(single_linked_list_structure_legal_p(list));
 
     list->next = list;
-    list->val = val;
 }
 
 static inline struct single_linked_list *
-single_linked_list_node_create_internal(void *val)
+single_linked_list_create_i(void *val)
 {
     struct single_linked_list *list;
 
     list = memory_cache_allocate(sizeof(*list));
-    single_linked_list_initial_internal(list, val);
+    single_linked_list_initial_i(list, val);
 
     return list;
 }
@@ -64,98 +57,48 @@ single_linked_list_node_create_internal(void *val)
 void
 single_linked_list_initial(struct single_linked_list *list)
 {
-    if (!complain_null_pointer_p(list)) {
-        single_linked_list_initial_internal(list, NULL);
-    }
-}
-
-struct single_linked_list *
-single_linked_list_node_create(void *val)
-{
-    return single_linked_list_node_create_internal(val);
-}
-
-static inline void
-single_linked_list_insert_after_internal(struct single_linked_list *list,
-    void *val)
-{
-    struct single_linked_list *node;
-
-    dp_assert(!complain_null_pointer_p(list));
-
-    node = single_linked_list_node_create_internal(val);
-    node->next = list->next;
-    list->next = node;
-}
-
-static inline void
-single_linked_list_insert_before_internal(struct single_linked_list *list,
-    void *val)
-{
-    struct single_linked_list *prev;
-    struct single_linked_list *node;
-
-    dp_assert(!complain_null_pointer_p(list));
-
-    prev = single_linked_list_previous_internal(list);
-    node = single_linked_list_node_create_internal(val);
-    prev->next = node;
-    node->next = list;
-}
-
-void
-single_linked_list_insert_after(struct single_linked_list *list, void *val)
-{
-    if (!complain_null_pointer_p(list)) {
-        single_linked_list_insert_after_internal(list, val);
-    }
-}
-
-void
-single_linked_list_insert_before(struct single_linked_list *list, void *val)
-{
-    if (!complain_null_pointer_p(list)) {
-        single_linked_list_insert_before_internal(list, val);
+    if (single_linked_list_structure_legal_p(list)) {
+        single_linked_list_initial_i(list, NULL);
     }
 }
 
 static inline void
-single_linked_list_insert_ptr_after_internal(struct single_linked_list *list,
+single_linked_list_insert_after_i(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    dp_assert(!complain_null_pointer_p(list));
-    dp_assert(!complain_null_pointer_p(node));
-    dp_assert(!single_linked_list_contains_p_internal(list, node));
+    dp_assert(single_linked_list_structure_legal_p(list));
+    dp_assert(single_linked_list_structure_legal_p(node));
+    dp_assert(!single_linked_list_contains_i_p(list, node));
 
     node->next = list->next;
     list->next = node;
 }
 
 void
-single_linked_list_insert_ptr_after(struct single_linked_list *list,
+single_linked_list_insert_after(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
+    if (!single_linked_list_structure_legal_p(list)
+        || !single_linked_list_structure_legal_p(node)) {
         return;
-    } else if (single_linked_list_contains_p_internal(list, node)) {
+    } else if (single_linked_list_contains_i_p(list, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
-        single_linked_list_insert_ptr_after_internal(list, node);
+        single_linked_list_insert_after_i(list, node);
     }
 }
 
 static inline void
-single_linked_list_insert_ptr_before_internal(struct single_linked_list *list,
+single_linked_list_insert_before_i(struct single_linked_list *list,
     struct single_linked_list *node)
 {
     struct single_linked_list *prev;
 
-    dp_assert(!complain_null_pointer_p(list));
-    dp_assert(!complain_null_pointer_p(node));
-    dp_assert(!single_linked_list_contains_p_internal(list, node));
+    dp_assert(single_linked_list_structure_legal_p(list));
+    dp_assert(single_linked_list_structure_legal_p(node));
+    dp_assert(!single_linked_list_contains_i_p(list, node));
 
-    prev = single_linked_list_previous(list);
-
+    prev = single_linked_list_previous_i(list);
     prev->next = node;
     node->next = list;
 }
@@ -164,12 +107,13 @@ void
 single_linked_list_insert_ptr_before(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
+    if (!single_linked_list_structure_legal_p(list)
+        || !single_linked_list_structure_legal_p(node)) {
         return;
-    } else if (single_linked_list_contains_p_internal(list, node)) {
+    } else if (single_linked_list_contains_p_i(list, node)) {
         pr_log_warn("Attempt to insert node contains already.\n");
     } else {
-        single_linked_list_insert_ptr_before_internal(list, node);
+        single_linked_list_insert_before_i(list, node);
     }
 }
 
@@ -179,10 +123,10 @@ single_linked_list_node_copy(struct single_linked_list *node)
 {
     struct single_linked_list *copy;
 
-    if (complain_null_pointer_p(node)) {
+    if (!single_linked_list_structure_legal_p(node)) {
         return NULL;
     } else {
-        copy = single_linked_list_node_create_internal(node->val);
+        copy = single_linked_list_create_i();
         copy->next = node->next;
 
         return copy;
@@ -195,7 +139,8 @@ single_linked_list_destroy(struct single_linked_list **list)
     struct single_linked_list *node;
     struct single_linked_list *next;
 
-    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
+    if (!complain_null_pointer_p(list)
+        && single_linked_list_structure_legal_p(*list)) {
         node = *list;
         /*
          * We do not use the way like douby linked list used, because
@@ -214,12 +159,12 @@ single_linked_list_destroy(struct single_linked_list **list)
 }
 
 static inline uint32
-single_linked_list_length_internal(struct single_linked_list *list)
+single_linked_list_length_i(struct single_linked_list *list)
 {
     uint32 len;
-    register struct single_linked_list *node;
+    struct single_linked_list *node;
 
-    dp_assert(NULL != list);
+    dp_assert(single_linked_list_structure_legal_p(list));
 
     len = 0u;
     node = list;
@@ -235,23 +180,23 @@ single_linked_list_length_internal(struct single_linked_list *list)
 uint32
 single_linked_list_length(struct single_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
-        return 0u;
+    if (!single_linked_list_structure_legal_p(list)) {
+        return LIST_SIZE_INVALID;
     } else {
-        return single_linked_list_length_internal(list);
+        return single_linked_list_length_i(list);
     }
 }
 
 struct single_linked_list *
 single_linked_list_node_by_index(struct single_linked_list *list, uint32 index)
 {
-    register struct single_linked_list *node;
     uint32 len;
+    struct single_linked_list *node;
 
-    if (complain_null_pointer_p(list)) {
-        return NULL;
+    if (!single_linked_list_structure_legal_p(list)) {
+        return PTR_INVALID;
     } else {
-        len = single_linked_list_length_internal(list);
+        len = single_linked_list_length_i(list);
         if (index >= len) {
             pr_log_warn("Index out of the lenght, rotated to front.\n");
             index = index % len;
@@ -268,22 +213,22 @@ single_linked_list_node_by_index(struct single_linked_list *list, uint32 index)
 }
 
 static inline bool
-single_linked_list_contains_p_internal(struct single_linked_list *list,
+single_linked_list_contains_p_i(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    register struct single_linked_list *iter;
+    struct single_linked_list *single;
 
-    dp_assert(NULL != list);
-    dp_assert(NULL != node);
+    dp_assert(single_linked_list_structure_legal_p(list));
+    dp_assert(single_linked_list_structure_legal_p(node));
 
-    iter = list;
+    single = list;
 
     do {
-        if (iter == node) {
+        if (single == node) {
             return true;
         }
-        iter = iter->next;
-    } while (iter != list);
+        single = single ->next;
+    } while (single != list);
 
     return false;
 }
@@ -292,58 +237,60 @@ bool
 single_linked_list_contains_p(struct single_linked_list *list,
     struct single_linked_list *node)
 {
-    if (complain_null_pointer_p(list) || complain_null_pointer_p(node)) {
+    if (!single_linked_list_structure_legal_p(list)) {
+        return false;
+    } else if (!single_linked_list_structure_legal_p(node)) {
         return false;
     } else {
-        return single_linked_list_contains_p_internal(list, node);
+        return single_linked_list_contains_p_i(list, node);
     }
 }
 
 static inline struct single_linked_list *
-single_linked_list_previous_internal(struct single_linked_list *node)
+single_linked_list_previous_i(struct single_linked_list *list)
 {
     register struct single_linked_list *prev;
 
-    dp_assert(NULL != node);
-    dp_assert(NULL != node->next);
+    dp_assert(single_linked_list_structure_legal_p(list));
+    dp_assert(single_linked_list_structure_legal_p(list->next));
 
-    prev = node;
+    prev = list;
 
     do {
         prev = prev->next;
-    } while (prev->next != node);
+    } while (prev->next != list);
 
     return prev;
 }
 
 struct single_linked_list *
-single_linked_list_previous(struct single_linked_list *node)
+single_linked_list_previous(struct single_linked_list *list)
 {
-    if (complain_null_pointer_p(node)) {
-        return NULL;
+    if (!single_linked_list_structure_legal_p(list)) {
+        return PTR_INVALID;
     } else {
-        return single_linked_list_previous_internal(node);
+        return single_linked_list_previous_i(list);
     }
 }
 
 static inline struct single_linked_list *
-single_linked_list_remove_internal_default(struct single_linked_list **node)
+single_linked_list_remove_i(struct single_linked_list **list)
 {
-    struct single_linked_list *removed;
     struct single_linked_list *prev;
+    struct single_linked_list *removed;
 
-    dp_assert(NULL != node);
-    dp_assert(NULL != *node);
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(single_linked_list_structure_legal_p(*list));
 
-    removed = *node;
+    removed = *list;
 
-    if (*node == removed->next) {
-        *node = NULL;
+    if (*list == removed->next) {
+        *list = NULL;
         return removed;
     } else {
-        prev = single_linked_list_previous_internal(removed);
+        prev = single_linked_list_previous_i(removed);
         prev->next = removed->next;
-        *node = removed->next;
+        *list = removed->next;
         removed->next = removed;
 
         return removed;
@@ -351,23 +298,14 @@ single_linked_list_remove_internal_default(struct single_linked_list **node)
 }
 
 struct single_linked_list *
-single_linked_list_remove(struct single_linked_list **node)
+single_linked_list_remove(struct single_linked_list **list)
 {
-    if (complain_null_pointer_p(node) || complain_null_pointer_p(*node)) {
-        return NULL;
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else if (!single_linked_list_structure_legal_p(*list)) {
+        return PTR_INVALID;
     } else {
-        return single_linked_list_remove_internal(node);
-    }
-}
-
-void
-single_linked_list_remove_and_destroy(struct single_linked_list **node)
-{
-    struct single_linked_list *removed;
-
-    if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
-        removed = single_linked_list_remove_internal(node);
-        memory_cache_free(removed);
+        return single_linked_list_remove_i(list);
     }
 }
 
@@ -375,9 +313,10 @@ void
 single_linked_list_iterate(struct single_linked_list *list,
     void (*handler)(void *))
 {
-    register struct single_linked_list *node;
+    struct single_linked_list *node;
 
-    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(handler)) {
+    if (!complain_null_pointer_p(handler)
+        && single_linked_list_structure_legal_p(list)) {
         node = list;
 
         do {
@@ -391,20 +330,25 @@ struct single_linked_list *
 single_linked_list_merge(struct single_linked_list *m,
     struct single_linked_list *n)
 {
-    register struct single_linked_list *iter;
+    struct single_linked_list *list;
 
-    if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
-        return NULL == m ? n : m;
+    if (!single_linked_list_structure_legal_p(m)
+        && !single_linked_list_structure_legal_p(n)) {
+        return PTR_INVALID;
+    } else if (!single_linked_list_structure_legal_p(m)) {
+        return n;
+    } else if (!single_linked_list_structure_legal_p(n)) {
+        return m;
     } else if (m == n) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
         return m;
     } else {
-        iter = n;
+        list = n;
 
         do {
-            single_linked_list_insert_after_internal(m, iter->val);
-            iter = iter->next;
-        } while (iter != n);
+            single_linked_list_insert_after_i(m, list->val);
+            list = list->next;
+        } while (list != n);
 
         return m;
     }
