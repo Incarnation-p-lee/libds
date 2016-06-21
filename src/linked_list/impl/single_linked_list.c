@@ -1,7 +1,7 @@
 struct single_linked_list *
 single_linked_list_next(struct single_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (!single_linked_list_structure_legal_p(list)) {
         return PTR_INVALID;
     } else {
         return list->next;
@@ -12,7 +12,7 @@ void
 single_linked_list_next_set(struct single_linked_list *list,
     struct single_linked_list *next)
 {
-    if (!complain_null_pointer_p(list)) {
+    if (!single_linked_list_structure_legal_p(list)) {
         list->next = next;
     }
 }
@@ -117,18 +117,16 @@ single_linked_list_insert_ptr_before(struct single_linked_list *list,
     }
 }
 
-
 struct single_linked_list *
 single_linked_list_node_copy(struct single_linked_list *node)
 {
     struct single_linked_list *copy;
 
     if (!single_linked_list_structure_legal_p(node)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         copy = single_linked_list_create_i();
         copy->next = node->next;
-
         return copy;
     }
 }
@@ -142,12 +140,6 @@ single_linked_list_destroy(struct single_linked_list **list)
     if (!complain_null_pointer_p(list)
         && single_linked_list_structure_legal_p(*list)) {
         node = *list;
-        /*
-         * We do not use the way like douby linked list used, because
-         * lazy remove need to get previous node. This will result in
-         * go through all node in list, which has heavy performance
-         * drop in performance test.
-         */
         do {
             next = node->next;
             memory_cache_free(node);
@@ -320,7 +312,7 @@ single_linked_list_iterate(struct single_linked_list *list,
         node = list;
 
         do {
-            (*handler)(node->val);
+            (*handler)(node);
             node = node->next;
         } while (node != list);
     }
@@ -332,6 +324,7 @@ single_linked_list_merge(struct single_linked_list *m,
 {
     struct single_linked_list *list;
 
+    // Fix-Me
     if (!single_linked_list_structure_legal_p(m)
         && !single_linked_list_structure_legal_p(n)) {
         return PTR_INVALID;
