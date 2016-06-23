@@ -1,7 +1,7 @@
 struct skip_linked_list *
 skip_linked_list_next(struct skip_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (!skip_linked_list_structure_legal_p(list)) {
         return PTR_INVALID;
     } else {
         return list->next;
@@ -9,35 +9,19 @@ skip_linked_list_next(struct skip_linked_list *list)
 }
 
 void
-skip_linked_list_next_set(struct skip_linked_list *list, void *val)
+skip_linked_list_next_set(struct skip_linked_list *list,
+    struct linked_list *next)
 {
-    if (!complain_null_pointer_p(list)) {
-        list->next = val;
-    }
-}
-
-void *
-skip_linked_list_val(struct skip_linked_list *list)
-{
-    if (complain_null_pointer_p(list)) {
-        return PTR_INVALID;
-    } else {
-        return list->val;
-    }
-}
-
-void
-skip_linked_list_val_set(struct skip_linked_list *list, void *val)
-{
-    if (!complain_null_pointer_p(list)) {
-        list->val = val;
+    if (skip_linked_list_structure_legal_p(list)
+        && skip_linked_list_structure_legal_p(next)) {
+        list->next = next;
     }
 }
 
 sint32
 skip_linked_list_key(struct skip_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (!skip_linked_list_structure_legal_p(list)) {
         return SKIP_KEY_INVALID;
     } else {
         return list->key;
@@ -47,25 +31,33 @@ skip_linked_list_key(struct skip_linked_list *list)
 void
 skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
 {
-    if (!complain_null_pointer_p(list)) {
+    if (skip_linked_list_structure_legal_p(list)) {
         list->key = key;
+    }
+}
+
+static inline bool
+skip_linked_list_structure_legal_p(struct skip_linked_list *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return false;
+    } else if (list->next == list) {
+        return false;
+    } else if (list->key == SKIP_KEY_INVALID) {
+        return false;
+    } else {
+        return true;
     }
 }
 
 struct skip_linked_list *
 skip_linked_list_create(void)
 {
-    return skip_linked_list_node_create(NULL, 0);
-}
-
-struct skip_linked_list *
-skip_linked_list_node_create(void *val, sint32 key)
-{
     struct skip_linked_list *list;
 
     list = memory_cache_allocate(sizeof(*list));
     memset(list, 0, sizeof(*list));
-    skip_linked_list_initial_internal(list, val, key);
+    skip_linked_list_initial_i(list, key);
 
     return list;
 }
@@ -74,28 +66,27 @@ void
 skip_linked_list_initial(struct skip_linked_list *list)
 {
     if (!complain_null_pointer_p(list)) {
-        skip_linked_list_initial_internal(list, NULL, 0);
+        skip_linked_list_initial_i(list, 0);
     }
 }
 
 static inline void
-skip_linked_list_initial_internal(struct skip_linked_list *list,
-    void *val, sint32 key)
+skip_linked_list_initial_i(struct skip_linked_list *list, sint32 key)
 {
     dp_assert(!complain_null_pointer_p(list));
 
     list->key = key;
-    list->val = val;
     list->next = NULL;
 }
 
 void
 skip_linked_list_destroy(struct skip_linked_list **list)
 {
-    register struct skip_linked_list *next;
-    register struct skip_linked_list *node;
+    struct skip_linked_list *next;
+    struct skip_linked_list *node;
 
-    if (!complain_null_pointer_p(*list) && !complain_null_pointer_p(list)) {
+    if (!complain_null_pointer_p(list)
+        && skip_linked_list_structure_legal_p(list)) {
         node = *list;
 
         while (node) {
@@ -109,12 +100,12 @@ skip_linked_list_destroy(struct skip_linked_list **list)
 }
 
 static inline uint32
-skip_linked_list_length_internal(struct skip_linked_list *list)
+skip_linked_list_length_i(struct skip_linked_list *list)
 {
     uint32 retval;
-    register struct skip_linked_list *node;
+    struct skip_linked_list *node;
 
-    dp_assert(NULL != list);
+    dp_assert(skip_linked_list_structure_legal_p(list));
 
     retval = 0u;
     node = list;
@@ -130,73 +121,67 @@ skip_linked_list_length_internal(struct skip_linked_list *list)
 uint32
 skip_linked_list_length(struct skip_linked_list *list)
 {
-    if (complain_null_pointer_p(list)) {
-        return 0u;
+    if (!skip_linked_list_structure_legal_p(list)) {
+        return LIST_SIZE_INVALID;
     } else {
-        return skip_linked_list_length_internal(list);
+        return skip_linked_list_length_i(list);
     }
 }
 
 struct skip_linked_list *
 skip_linked_list_find_key(struct skip_linked_list *list, sint32 key)
 {
-    if (complain_null_pointer_p(list)) {
-        return NULL;
+    if (!skip_linked_list_structure_legal_p(list)) {
+        return PTR_INVALID;
     } else {
-        return skip_linked_list_find_key_internal(list, key,
-            SKIP_LIST_MAX_LVL_IDX);
+        return skip_linked_list_find_key_i(list, key, SKIP_LIST_MAX_LVL_IDX);
     }
 }
 
 static inline struct skip_linked_list *
-skip_linked_list_find_key_internal(struct skip_linked_list *list,
-    sint32 key, uint32 lvl)
+skip_linked_list_find_key_i(struct skip_linked_list *list, sint32 key, uint32 lv)
 {
     struct skip_linked_list **head;
 
-    dp_assert(NULL != list);
-    dp_assert(SKIP_LIST_MAX_LVL > lvl);
+    dp_assert(skip_linked_list_structure_legal_p(list));
+    dp_assert(SKIP_LIST_MAX_LVL > lv);
 
     while (true) {
-        head = &list->layer[lvl];
+        head = &list->layer[lv];
 
         if (list->key == key) {
             return list;
         } else if ((!*head || (*head)->key > key)) {
-            /*
-             * end condition of find key.
-             */
-            if (SKIP_LIST_BOTTOM_IDX != lvl) {
-                lvl--;
+            if (SKIP_LIST_BOTTOM_IDX != lv) {
+                lv--;
             } else {
                 return NULL;
             }
         } else {
-            list = list->layer[lvl];
+            list = list->layer[lv];
         }
     }
 }
 
 static inline bool
-skip_linked_list_key_contains_p_internal(struct skip_linked_list *list, sint32 key)
+skip_linked_list_key_contains_i_p(struct skip_linked_list *list, sint32 key)
 {
-    struct skip_linked_list *tmp;
+    dp_assert(skip_linked_list_structure_legal_p(list));
 
-    dp_assert(NULL != list);
-
-    tmp = skip_linked_list_find_key_internal(list, key,
-        SKIP_LIST_MAX_LVL_IDX);
-
-    return NULL == tmp ? false : true;
+    if (skip_linked_list_find_key_i(list, key, SKIP_LIST_MAX_LVL_IDX)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool
 skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key)
 {
-    if (complain_null_pointer_p(list)) {
+    if (!skip_linked_list_structure_legal_p(list)) {
         return false;
     } else {
-        return skip_linked_list_key_contains_p_internal(list, key);
+        return skip_linked_list_key_contains_i_p(list, key);
     }
 }
 
@@ -204,18 +189,18 @@ static inline struct skip_linked_list *
 skip_linked_list_insert_before_head(struct skip_linked_list *list,
     struct skip_linked_list *tgt)
 {
-    uint32 lvl;
+    uint32 lv;
 
-    dp_assert(NULL != tgt);
-    dp_assert(NULL != list);
+    dp_assert(skip_linked_list_structure_legal_p(list));
+    dp_assert(skip_linked_list_structure_legal_p(tgt));
     dp_assert(tgt->key < list->key);
 
-    lvl = SKIP_LIST_MAX_LVL_IDX;
+    lv = SKIP_LIST_MAX_LVL_IDX;
 
-    while (SKIP_LIST_BOTTOM_IDX != lvl) {
-        tgt->layer[lvl] = list->layer[lvl];
-        list->layer[lvl] = NULL;
-        lvl--;
+    while (SKIP_LIST_BOTTOM_IDX != lv) {
+        tgt->layer[lv] = list->layer[lv];
+        list->layer[lv] = NULL;
+        lv--;
     }
 
     tgt->layer[SKIP_LIST_BOTTOM_IDX] = list;
@@ -224,96 +209,92 @@ skip_linked_list_insert_before_head(struct skip_linked_list *list,
 }
 
 static inline struct skip_linked_list *
-skip_linked_list_insert_internal(struct skip_linked_list **list,
+skip_linked_list_insert_i(struct skip_linked_list **list,
     struct skip_linked_list *tgt)
 {
-    uint32 lvl;
-    register struct skip_linked_list *iter;
-    register struct skip_linked_list **head;
+    uint32 lv;
+    uint32 lmt;
+    struct skip_linked_list *skip;
+    struct skip_linked_list **head;
     struct skip_linked_list *prev_list[SKIP_LIST_MAX_LVL];
 
-    dp_assert(NULL != list);
-    dp_assert(NULL != *list);
-    dp_assert(NULL != tgt);
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(skip_linked_list_ordering_p(*list));
+    dp_assert(skip_linked_list_structure_legal_p(tgt));
+    dp_assert(skip_linked_list_structure_legal_p(*list));
 
-    lvl = SKIP_LIST_MAX_LVL_IDX;
+    lv = SKIP_LIST_MAX_LVL_IDX;
     head = list;
-    iter = *head;
+    skip = *head;
 
-    if (tgt->key < iter->key) {
-        *list = skip_linked_list_insert_before_head(iter, tgt);
-        return tgt;
+    if (tgt->key < skip->key) {
+        *list = skip_linked_list_insert_before_head(skip, tgt);
     } else {
         while (true) {
-            head = &iter->layer[lvl];
+            head = &skip->layer[lv];
 
-            if (iter == tgt || *head == tgt) {
+            if (skip == tgt || *head == tgt) {
+                pr_log_warn("Insert node already existed in linked list.\n");
                 return NULL;
             } else if (!*head || (*head)->key >= tgt->key) {
-                prev_list[lvl] = iter;
+                prev_list[lv] = skip;
 
-                if (SKIP_LIST_BOTTOM_IDX == lvl) {
-                    skip_linked_list_insert_update_with_lvl(tgt, prev_list,
-                        random_uint32_with_limit(SKIP_LIST_MAX_LVL));
-
-                    dp_assert(skip_linked_list_ordering_p(*list));
-                    return tgt;
+                if (SKIP_LIST_BOTTOM_IDX == lv) {
+                    lmt = random_uint32_with_limit(SKIP_LIST_MAX_LVL);
+                    skip_linked_list_insert_update_with_lv(tgt, prev_list, lmt);
+                    break;
                 } else {
-                    lvl--;
+                    lv--;
                 }
             } else {
-                iter = iter->layer[lvl];
+                skip = skip->layer[lv];
             }
         }
     }
+
+    dp_assert(skip_linked_list_ordering_p(*list));
+    return tgt;
 }
 
-/*
- * RETURN the inserted node of linked list, or RETURN NULL.
- */
 struct skip_linked_list *
 skip_linked_list_insert(struct skip_linked_list **list,
     struct skip_linked_list *tgt)
 {
-    struct skip_linked_list *inserted;
-
-    if (complain_null_pointer_p(list) || complain_null_pointer_p(tgt)) {
-        return NULL;
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else if (skip_linked_list_structure_legal_p(*list)) {
+        return PTR_INVALID;
+    } else if (skip_linked_list_structure_legal_p(tgt)) {
+        return PTR_INVALID;
     } else {
-        inserted = skip_linked_list_insert_internal(list, tgt);
-
-        if (!inserted) {
-            pr_log_warn("Insert node already existed in linked list.\n");
-        }
-
-        return inserted;
+        return skip_linked_list_insert_i(list, tgt);
     }
 }
 
 static inline void
-skip_linked_list_insert_update_with_lvl(struct skip_linked_list *tgt,
-    struct skip_linked_list **prev_list, uint32 lvl)
+skip_linked_list_insert_update_with_lv(struct skip_linked_list *tgt,
+    struct skip_linked_list **prev_list, uint32 lv)
 {
-    dp_assert(NULL != prev_list);
-    dp_assert(NULL != tgt);
-    dp_assert(SKIP_LIST_MAX_LVL > lvl);
+    dp_assert(!complain_null_pointer_p(prev_list));
+    dp_assert(skip_linked_list_structure_legal_p(tgt));
+    dp_assert(SKIP_LIST_MAX_LVL > lv);
 
     do {
-        tgt->layer[lvl] = prev_list[lvl]->layer[lvl];
-        prev_list[lvl]->layer[lvl] = tgt;
-    } while (0 != lvl--);
+        tgt->layer[lv] = prev_list[lv]->layer[lv];
+        prev_list[lv]->layer[lv] = tgt;
+    } while (0 != lv--);
 }
 
 struct skip_linked_list *
 skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
 {
     uint32 len;
-    register struct skip_linked_list *iter;
+    struct skip_linked_list *skip;
 
-    if (complain_null_pointer_p(list)) {
-        return NULL;
+    if (!skip_linked_list_structure_legal_p(list)) {
+        return PTR_INVALID;
     } else {
-        iter = list;
+        skip = list;
         len = skip_linked_list_length(list);
 
         if (index >= len) {
@@ -322,63 +303,61 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
         }
 
         while (index) {
-            iter = iter->next;
+            skip = skip->next;
             index--;
         }
 
-        return iter;
+        return skip;
     }
 }
 
 static inline void
 skip_linked_list_node_clean(struct skip_linked_list *list)
 {
-    uint32 lvl;
+    uint32 lv;
 
-    dp_assert(NULL != list);
+    dp_assert(skip_linked_list_structure_legal_p(list));
 
-    lvl = SKIP_LIST_BOTTOM_IDX;
+    lv = SKIP_LIST_BOTTOM_IDX;
 
-    while (NULL != list->layer[lvl] && lvl < SKIP_LIST_MAX_LVL) {
-        list->layer[lvl++] = NULL;
+    while (NULL != list->layer[lv] && lv < SKIP_LIST_MAX_LVL) {
+        list->layer[lv++] = NULL;
     }
 }
 
-static inline struct skip_linked_list *
+static inline void
 skip_linked_list_remove_head(struct skip_linked_list *list)
 {
+    uint32 lv;
     struct skip_linked_list *next;
-    uint32 lvl;
 
-    dp_assert(NULL != list);
+    dp_assert(skip_linked_list_structure_legal_p(list));
 
     next = list->next;
 
     if (next) {
-        lvl = SKIP_LIST_MAX_LVL_IDX;
+        lv = SKIP_LIST_MAX_LVL_IDX;
 
-        while (NULL == next->layer[lvl] && lvl > SKIP_LIST_BOTTOM_IDX) {
-            next->layer[lvl] = list->layer[lvl];
-            lvl--;
+        while (NULL == next->layer[lv] && lv > SKIP_LIST_BOTTOM_IDX) {
+            next->layer[lv] = list->layer[lv];
+            lv--;
         }
     }
 
     skip_linked_list_node_clean(list);
-
-    return list;
 }
 
 static inline struct skip_linked_list *
 skip_linked_list_remove_with_previous_list(struct skip_linked_list *tgt,
-    struct skip_linked_list **pre_list, uint32 lvl)
+    struct skip_linked_list **pre_list, uint32 lv)
 {
-    dp_assert(NULL != pre_list);
-    dp_assert(NULL != tgt);
-    dp_assert(lvl < SKIP_LIST_MAX_LVL);
+    dp_assert(lv < SKIP_LIST_MAX_LVL);
+    dp_assert(!complain_null_pointer_p(pre_list));
+    dp_assert(skip_linked_list_structure_legal_p(tgt));
 
     do {
-        pre_list[lvl]->layer[lvl] = tgt->layer[lvl];
-    } while (0 != lvl--);
+        pre_list[lv]->layer[lv] = tgt->layer[lv];
+    } while (0 != lv--);
 
     skip_linked_list_node_clean(tgt);
 
@@ -389,21 +368,21 @@ static inline void
 skip_linked_list_remove_on_level(struct skip_linked_list *list,
     struct skip_linked_list *removed, uint32 level)
 {
-    struct skip_linked_list *iter;
+    struct skip_linked_list *skip;
 
-    dp_assert(NULL != removed);
-    dp_assert(NULL != list);
     dp_assert(SKIP_LIST_MAX_LVL > level);
+    dp_assert(skip_linked_list_structure_legal_p(list));
+    dp_assert(skip_linked_list_structure_legal_p(removed));
 
     do {
-        iter = list;
+        skip = list;
         dp_assert(skip_linked_list_exist_on_level(list, removed, level));
 
-        while (iter->layer[level] != removed) {
-            iter = iter->layer[level];
+        while (skip->layer[level] != removed) {
+            skip = skip->layer[level];
         }
 
-        iter->layer[level] = removed->layer[level];
+        skip->layer[level] = removed->layer[level];
         level--;
     } while (SKIP_LIST_MAX_LVL > level);
 
@@ -411,80 +390,66 @@ skip_linked_list_remove_on_level(struct skip_linked_list *list,
 }
 
 static inline struct skip_linked_list *
-skip_linked_list_remove_internal(struct skip_linked_list **list,
-    sint32 key)
+skip_linked_list_remove_i(struct skip_linked_list **list,
+    struct skip_linked_list *tgt)
 {
+    uint32 lv;
     struct skip_linked_list *node;
     struct skip_linked_list *head;
     struct skip_linked_list *removed;
-    uint32 lvl;
 
-    dp_assert(NULL != list);
-    dp_assert(NULL != *list);
+    dp_assert(!complain_null_pointer_p(list));
+    dp_assert(skip_linked_list_ordering_p(*list));
+    dp_assert(skip_linked_list_structure_legal_p(tgt));
+    dp_assert(skip_linked_list_structure_legal_p(*list));
 
-    if ((*list)->key == key) {
+    if ((*list)->key == tgt->key) {
         removed = *list;
         *list = removed->next;
 
-        return skip_linked_list_remove_head(removed);
+        skip_linked_list_remove_head(removed);
     } else {
         node = *list;
         head = node;
-        lvl = SKIP_LIST_MAX_LVL_IDX;
+        lv = SKIP_LIST_MAX_LVL_IDX;
 
         while (true) {
-            list = &node->layer[lvl];
+            list = &node->layer[lv];
 
-            if (!*list || (*list)->key > key) {
-                if (SKIP_LIST_BOTTOM_IDX == lvl) {
-                    return NULL;
+            if (!*list || (*list)->key > tgt->key) {
+                if (SKIP_LIST_BOTTOM_IDX == lv) {
+                    removed = NULL;
+                    pr_log_warn("The removing node do not exist in given list.\n");
+                    break;
                 } else {
-                    lvl--;
+                    lv--;
                 }
-            } else if ((*list)->key == key) {
-                removed = *list;
-                skip_linked_list_remove_on_level(head, removed, lvl);
-                return removed;
+            } else if ((*list) == tgt) {
+                removed = tgt;
+                skip_linked_list_remove_on_level(head, removed, lv);
+                break;
             } else {
-                node = node->layer[lvl];
+                node = node->layer[lv];
             }
         }
     }
-}
 
-void
-skip_linked_list_remove_and_destroy(struct skip_linked_list **list,
-    sint32 key)
-{
-    struct skip_linked_list *removed;
-
-    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(*list)) {
-        removed = skip_linked_list_remove_internal(list, key);
-
-        if (!removed) {
-            pr_log_warn("The node to be removed do not exist in given list.\n");
-        } else {
-            memory_cache_free(removed);
-        }
-    }
+    dp_assert(skip_linked_list_ordering_p(*list));
+    return removed;
 }
 
 struct skip_linked_list *
 skip_linked_list_remove(struct skip_linked_list **list,
-    sint32 key)
+    struct skip_linked_list *tgt)
 {
-    struct skip_linked_list *removed;
-
-    if (complain_null_pointer_p(list) || complain_null_pointer_p(*list)) {
-        return NULL;
+    if (complain_null_pointer_p(list)) {
+        return PTR_INVALID;
+    } else if (!skip_linked_list_structure_legal_p(*list)) {
+        return PTR_INVALID;
+    } else if (!skip_linked_list_structure_legal_p(tgt)) {
+        return PTR_INVALID;
     } else {
-        removed = skip_linked_list_remove_internal(list, key);
-
-        if (!removed) {
-            pr_log_warn("The node to be removed do not exist in given list.\n");
-        }
-
-        return removed;
+        return skip_linked_list_remove_i(list, key);
     }
 }
 
@@ -492,14 +457,14 @@ void
 skip_linked_list_iterate(struct skip_linked_list *list,
     void (*handler)(void *))
 {
-    register struct skip_linked_list *iter;
+    struct skip_linked_list *skip;
 
-    if (!complain_null_pointer_p(list) && !complain_null_pointer_p(handler)) {
-        iter = list;
-
-        while(iter) {
-            (*handler)(iter->val);
-            iter = iter->next;
+    if (!complain_null_pointer_p(handler)
+        && skip_linked_list_structure_legal_p(list)) {
+        skip = list;
+        while(skip) {
+            (*handler)(skip->val);
+            skip = skip->next;
         }
     }
 }
@@ -507,26 +472,29 @@ skip_linked_list_iterate(struct skip_linked_list *list,
 struct skip_linked_list *
 skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
 {
-    struct skip_linked_list *iter;
+    struct skip_linked_list *skip;
     struct skip_linked_list *inserted;
 
-    if (complain_null_pointer_p(m) || complain_null_pointer_p(n)) {
-        return NULL == m ? n : m;
-    } else if (m == n) {
-        pr_log_info("Merge same linked list, nothing will be done.\n");
+    if (!skip_linked_list_structure_legal_p(m)
+        && !skip_linked_list_structure_legal_p(n)) {
+        return PTR_INVALID;
+    } else if (!skip_linked_list_structure_legal_p(m)) {
+        return n;
+    } else if (!skip_linked_list_structure_legal_p(n)) {
         return m;
     } else {
-        iter = n;
+        skip = n;
 
-        while (iter) {
-            if (skip_linked_list_key_contains_p_internal(m, iter->key)) {
+        while (skip) {
+            // Fix-Me for repeated key
+            if (skip_linked_list_key_contains_p_internal(m, skip->key)) {
                 pr_log_warn("Duplicated key appears in merge list.\n");
             } else {
-                inserted = skip_linked_list_node_create(iter->val, iter->key);
+                inserted = skip_linked_list_node_create(skip->val, skip->key);
                 skip_linked_list_insert_internal(&m, inserted);
             }
 
-            iter = iter->next;
+            skip = skip->next;
         }
 
         return m;

@@ -59,7 +59,6 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    void                      *val;
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };
@@ -77,7 +76,6 @@ struct doubly_linked_list {
  */
 struct skip_linked_list {
     sint32 key;
-    void   *val;
     union {
         struct skip_linked_list *next;
         struct skip_linked_list *layer[SKIP_LVL_LMT];
