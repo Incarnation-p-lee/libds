@@ -153,7 +153,7 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
         head = separate_chain_hash_chain_head(*hash, index);
 
         if (!head) {
-            head = doubly_linked_list_node_create(key, 0x0u);
+            head = doubly_linked_list_create();
             separate_chain_hash_chain_head_set(*hash, index, head);
         } else {
             doubly_linked_list_insert_after(head, key);
@@ -183,7 +183,7 @@ separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
             do {
                 if (key == iter->val) {
                     retval = key;
-                    doubly_linked_list_remove_and_destroy(&iter);
+                    doubly_linked_list_remove(&iter);
                     break;
                 }
                 iter = iter->next;

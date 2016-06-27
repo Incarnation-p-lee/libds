@@ -14,15 +14,16 @@ memory_trace_print(void)
     }
 }
 
-static void
-linked_list_iterate_handler(void *node)
+static uint32
+test_iterate_reference(void)
 {
-    uint32 *tmp;
+    return reference;
+}
 
-    if (node) {
-        tmp = node;
-        *tmp += 1;
-    }
+static void
+linked_list_iterate_handler(void *ptr)
+{
+    reference++;
 }
 
 static void

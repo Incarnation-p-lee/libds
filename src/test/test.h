@@ -16,14 +16,12 @@
 
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
         RESULT_CHECK_pointer((aim)->previous, (ex)->previous, (pass)); \
     } while (false)
 
 #define RESULT_CHECK_single_linked_list_node(aim, ex, pass)            \
     do {                                                               \
-        RESULT_CHECK_pointer((aim)->val, (ex)->val, (pass));           \
         RESULT_CHECK_pointer((aim)->next, (ex)->next, (pass));         \
     } while (false)
 

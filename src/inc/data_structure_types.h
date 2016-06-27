@@ -59,6 +59,7 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
+    void *val;   // REMOVE ME AFTER CLEAN HASH
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };

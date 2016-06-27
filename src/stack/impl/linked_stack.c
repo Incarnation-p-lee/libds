@@ -153,7 +153,7 @@ linked_stack_resize_internal(struct linked_stack *stack, uint32 dim)
         dim = dim - capacity;
         node = linked_stack_node_create(dim);
 
-        doubly_linked_list_insert_ptr_after(&last->link, &node->link);
+        doubly_linked_list_insert_after(&last->link, &node->link);
     } else if (capacity > dim) {
         node_capacity = linked_stack_node_capacity(last);
 

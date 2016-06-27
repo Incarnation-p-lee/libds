@@ -1,14 +1,16 @@
 static inline struct single_linked_list *
 test_single_linked_list_sample(uint32 range, uint32 node_count)
 {
-    struct single_linked_list *list;
     uint32 i;
+    struct single_linked_list *list;
+    struct single_linked_list *node;
 
     list = single_linked_list_create();
 
     i = 1;
     while (i < node_count) {
-        single_linked_list_insert_after(list, list);
+        node = single_linked_list_create();
+        single_linked_list_insert_after(list, node);
         i++;
     }
 
@@ -20,12 +22,14 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 {
     uint32 i;
     struct doubly_linked_list *list;
+    struct doubly_linked_list *node;
 
     list = doubly_linked_list_create();
 
     i = 1;
     while (i < node_count) {
-        doubly_linked_list_insert_after(list, list);
+        node = doubly_linked_list_create();
+        doubly_linked_list_insert_after(list, node);
         i++;
     }
 
@@ -49,9 +53,7 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     i = 1;
     while (i < count) {
         key = (sint32)(dp_rand() % range) - (sint32)range / 2;
-        tmp = skip_linked_list_node_create(NULL, key);
-
-        skip_linked_list_val_set(tmp, tmp);
+        tmp = skip_linked_list_create_with_key(key);
         skip_linked_list_insert(&list, tmp);
         i++;
     }

@@ -122,7 +122,7 @@ doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 doubly_linked_list_initial(&queue->head->link);
             } else {
-                doubly_linked_list_insert_ptr_before(&queue->head->link, &tmp->link);
+                doubly_linked_list_insert_before(&queue->head->link, &tmp->link);
                 queue->head = tmp;
             }
         }
@@ -145,7 +145,7 @@ doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
                 queue->tail = tmp;
                 doubly_linked_list_initial(&queue->head->link);
             } else {
-                doubly_linked_list_insert_ptr_after(&queue->tail->link, &tmp->link);
+                doubly_linked_list_insert_after(&queue->tail->link, &tmp->link);
                 queue->tail = tmp;
             }
         }

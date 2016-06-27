@@ -10,7 +10,7 @@ skip_linked_list_next(struct skip_linked_list *list)
 
 void
 skip_linked_list_next_set(struct skip_linked_list *list,
-    struct linked_list *next)
+    struct skip_linked_list *next)
 {
     if (skip_linked_list_structure_legal_p(list)
         && skip_linked_list_structure_legal_p(next)) {
@@ -36,8 +36,14 @@ skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
     }
 }
 
-static inline bool
+bool
 skip_linked_list_structure_legal_p(struct skip_linked_list *list)
+{
+    return skip_linked_list_structure_legal_p(list);
+}
+
+static inline bool
+skip_linked_list_structure_legal_ip(struct skip_linked_list *list)
 {
     if (complain_null_pointer_p(list)) {
         return false;
@@ -56,7 +62,17 @@ skip_linked_list_create(void)
     struct skip_linked_list *list;
 
     list = memory_cache_allocate(sizeof(*list));
-    memset(list, 0, sizeof(*list));
+    skip_linked_list_initial_i(list, 0);
+
+    return list;
+}
+
+struct skip_linked_list *
+skip_linked_list_create_with_key(sint32 key)
+{
+    struct skip_linked_list *list;
+
+    list = memory_cache_allocate(sizeof(*list));
     skip_linked_list_initial_i(list, key);
 
     return list;
@@ -86,7 +102,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
     struct skip_linked_list *node;
 
     if (!complain_null_pointer_p(list)
-        && skip_linked_list_structure_legal_p(list)) {
+        && skip_linked_list_structure_legal_p(*list)) {
         node = *list;
 
         while (node) {
@@ -164,7 +180,7 @@ skip_linked_list_find_key_i(struct skip_linked_list *list, sint32 key, uint32 lv
 }
 
 static inline bool
-skip_linked_list_key_contains_i_p(struct skip_linked_list *list, sint32 key)
+skip_linked_list_key_contains_ip(struct skip_linked_list *list, sint32 key)
 {
     dp_assert(skip_linked_list_structure_legal_p(list));
 
@@ -181,7 +197,7 @@ skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key)
     if (!skip_linked_list_structure_legal_p(list)) {
         return false;
     } else {
-        return skip_linked_list_key_contains_i_p(list, key);
+        return skip_linked_list_key_contains_ip(list, key);
     }
 }
 
@@ -449,7 +465,7 @@ skip_linked_list_remove(struct skip_linked_list **list,
     } else if (!skip_linked_list_structure_legal_p(tgt)) {
         return PTR_INVALID;
     } else {
-        return skip_linked_list_remove_i(list, key);
+        return skip_linked_list_remove_i(list, tgt);
     }
 }
 
@@ -463,7 +479,7 @@ skip_linked_list_iterate(struct skip_linked_list *list,
         && skip_linked_list_structure_legal_p(list)) {
         skip = list;
         while(skip) {
-            (*handler)(skip->val);
+            (*handler)(skip);
             skip = skip->next;
         }
     }
@@ -487,11 +503,12 @@ skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
 
         while (skip) {
             // Fix-Me for repeated key
-            if (skip_linked_list_key_contains_p_internal(m, skip->key)) {
+            if (skip_linked_list_key_contains_ip(m, skip->key)) {
                 pr_log_warn("Duplicated key appears in merge list.\n");
             } else {
-                inserted = skip_linked_list_node_create(skip->val, skip->key);
-                skip_linked_list_insert_internal(&m, inserted);
+                inserted = skip_linked_list_create();
+                skip_linked_list_initial_i(inserted, skip->key);
+                skip_linked_list_insert_i(&m, inserted);
             }
 
             skip = skip->next;
