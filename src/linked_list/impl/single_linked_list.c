@@ -12,7 +12,8 @@ void
 single_linked_list_next_set(struct single_linked_list *list,
     struct single_linked_list *next)
 {
-    if (single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_legal_ip(list)
+        && single_linked_list_structure_legal_ip(next)) {
         list->next = next;
     }
 }

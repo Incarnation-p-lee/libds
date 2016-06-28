@@ -12,7 +12,8 @@ void
 doubly_linked_list_next_set(struct doubly_linked_list *list,
     struct doubly_linked_list *next)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_legal_ip(list)
+        && doubly_linked_list_structure_legal_ip(next)) {
         list->next = next;
     }
 }
@@ -326,6 +327,7 @@ doubly_linked_list_merge(struct doubly_linked_list *m,
     struct doubly_linked_list *n)
 {
     struct doubly_linked_list *list;
+    struct doubly_linked_list *inserted;
 
     // Fix-Me
     if (!doubly_linked_list_structure_legal_ip(m)
@@ -342,7 +344,8 @@ doubly_linked_list_merge(struct doubly_linked_list *m,
         list = n;
 
         do {
-            doubly_linked_list_insert_after_i(m, list->val);
+            inserted = doubly_linked_list_node_copy(list);
+            doubly_linked_list_insert_after_i(m, inserted);
             list = list->next;
         } while (list != n);
 

@@ -155,7 +155,7 @@ utest_##name##_linked_list_length(void)                         \
     len = LIST_SIZE_INVALID;                                    \
     RESULT_CHECK_uint32(len, LINKED_LIST_length(NULL), &pass);  \
                                                                 \
-    len = 0xde2c;                                               \
+    len = 0x2e2c;                                               \
     list = TEST_LINKED_LIST_sample(0x2e8, len);                 \
     RESULT_CHECK_uint32(len, LINKED_LIST_length(list), &pass);  \
     LINKED_LIST_destroy(&list);                                 \
