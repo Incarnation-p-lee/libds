@@ -1,5 +1,3 @@
-#if defined DEBUG
-
 static inline bool
 skip_linked_list_ordering_p(struct skip_linked_list *list)
 {
@@ -36,4 +34,3 @@ skip_linked_list_exist_on_level(struct skip_linked_list *list,
     return false;
 }
 
-#endif

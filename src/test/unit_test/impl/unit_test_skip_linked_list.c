@@ -97,7 +97,7 @@ utest_skip_linked_list_find_key(void)
     list = NULL;
     key = 0xfffff;
 
-    RESULT_CHECK_pointer(NULL, skip_linked_list_find_key(list, key), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, skip_linked_list_find_key(list, key), &pass);
     list = test_skip_linked_list_sample(0xedbf, 0x103f);
     RESULT_CHECK_pointer(NULL, skip_linked_list_find_key(list, key), &pass);
 
@@ -122,9 +122,9 @@ utest_skip_linked_list_insert(void)
     pass = true;
     list = NULL;
 
-    RESULT_CHECK_pointer(NULL, skip_linked_list_insert(&list, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, skip_linked_list_insert(&list, NULL), &pass);
     list = test_skip_linked_list_sample(0x101f0, 0x103f);
-    RESULT_CHECK_pointer(NULL, skip_linked_list_insert(&list, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, skip_linked_list_insert(&list, NULL), &pass);
 
     key = 0x1ffff;
     while (key--) {
@@ -160,7 +160,7 @@ utest_skip_linked_list_remove(void)
     list = NULL;
     count = 0x24;
 
-    RESULT_CHECK_pointer(NULL, skip_linked_list_remove(&list, 0), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, skip_linked_list_remove(&list, 0), &pass);
     list = test_skip_linked_list_sample(0x11f0, 0x103f);
 
     tmp = list;
@@ -196,7 +196,7 @@ utest_skip_linked_list_merge(void)
     lm = NULL;
 
     ln = test_skip_linked_list_sample(0x71f0, 0x103f);
-    RESULT_CHECK_pointer(NULL, skip_linked_list_merge(lm, lm), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, skip_linked_list_merge(lm, lm), &pass);
     RESULT_CHECK_pointer(ln, skip_linked_list_merge(lm, ln), &pass);
     RESULT_CHECK_pointer(ln, skip_linked_list_merge(ln, ln), &pass);
 

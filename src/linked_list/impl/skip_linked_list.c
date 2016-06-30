@@ -39,7 +39,7 @@ skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
 bool
 skip_linked_list_structure_legal_p(struct skip_linked_list *list)
 {
-    return skip_linked_list_structure_legal_p(list);
+    return skip_linked_list_structure_legal_ip(list);
 }
 
 static inline bool
@@ -62,6 +62,7 @@ skip_linked_list_create(void)
     struct skip_linked_list *list;
 
     list = memory_cache_allocate(sizeof(*list));
+    memset(list, 0, sizeof(*list));
     skip_linked_list_initial_i(list, 0);
 
     return list;
@@ -73,6 +74,7 @@ skip_linked_list_create_with_key(sint32 key)
     struct skip_linked_list *list;
 
     list = memory_cache_allocate(sizeof(*list));
+    memset(list, 0, sizeof(*list));
     skip_linked_list_initial_i(list, key);
 
     return list;
@@ -278,9 +280,9 @@ skip_linked_list_insert(struct skip_linked_list **list,
 {
     if (complain_null_pointer_p(list)) {
         return PTR_INVALID;
-    } else if (skip_linked_list_structure_legal_p(*list)) {
+    } else if (!skip_linked_list_structure_legal_p(*list)) {
         return PTR_INVALID;
-    } else if (skip_linked_list_structure_legal_p(tgt)) {
+    } else if (!skip_linked_list_structure_legal_p(tgt)) {
         return PTR_INVALID;
     } else {
         return skip_linked_list_insert_i(list, tgt);

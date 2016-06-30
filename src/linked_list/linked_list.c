@@ -8,7 +8,10 @@
 #include "linked_list.h"
 #include "linked_list_optimize.h"
 
-#include "impl/linked_list_debug.c"
+#if DEBUG
+    #include "impl/linked_list_debug.c"
+#endif
+
 #include "impl/doubly_linked_list.c"
 #include "impl/single_linked_list.c"
 #include "impl/skip_linked_list.c"
