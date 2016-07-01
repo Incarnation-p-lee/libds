@@ -9,6 +9,8 @@
 [![star this repo](http://githubbadges.com/star.svg?user=Incarnation-p-lee&repo=libds&style=default)](https://github.com/Incarnation-p-lee/libds)
 [![fork this repo](http://githubbadges.com/fork.svg?user=Incarnation-p-lee&repo=libds&style=default)](https://github.com/Incarnation-p-lee/libds/fork)
 
+[![Code Climate](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/gpa.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
+
 ##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
 ### build
