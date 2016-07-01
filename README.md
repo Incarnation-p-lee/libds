@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
 
-[![Analytics](https://ga-beacon.appspot.com/UA-80177910-1/welcome-page)](https://github.com/Incarnation-p-lee/libds)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
+
+[![Profile](https://githubbadge.appspot.com/incarnation-p-lee)](https://github.com/Incarnation-p-lee/libds/)
+
 
 ##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
