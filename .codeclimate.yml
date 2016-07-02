@@ -5,15 +5,8 @@ engines:
     enabled: true
   fixme:
     enabled: true
-      config:
-        strings:
-          - FIXME
-          - BUG
-          - CUSTOM
   gnu-complexity:
     enabled: true
-      config:
-        threshold: 100
 
 ratings:
   paths:
