@@ -3,9 +3,6 @@ engines:
     enabled: true
   duplication:
     enabled: true
-      config:
-        languages:
-          - c
   fixme:
     enabled: true
       config:
