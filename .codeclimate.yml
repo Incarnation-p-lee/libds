@@ -14,7 +14,9 @@ engines:
           - BUG
           - CUSTOM
 ratings:
-  paths: []
+  paths:
+  - src/**
+  - script/**
 exclude_paths:
   - script/
   - tool/
