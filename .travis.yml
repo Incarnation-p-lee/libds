@@ -18,8 +18,5 @@ install:
   - cd -
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - lcov --directory . --capture --output-file coverage.info
-  - lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info
-  - lcov --list coverage.info
   - coveralls-lcov coverage.info
 
