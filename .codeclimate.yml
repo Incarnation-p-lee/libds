@@ -1,7 +1,22 @@
 engines:
-  fixme:
-    enabled: true
+    rubocop: 
+        enabled: true
+    duplication:
+        enabled: true
+        config:
+            languages:
+                - c
+    fixme:
+        enabled: true
+        config:
+            strings:
+                - FIXME
+                - BUG
+                - CUSTOM
 ratings:
-  paths: []
+    paths: []
 exclude_paths:
-- script/
+    - script/
+    - tool/
+    - performance/
+
