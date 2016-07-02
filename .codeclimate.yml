@@ -3,6 +3,8 @@ engines:
     enabled: true
   fixme:
     enabled: true
+  gnu-complexity:
+    enabled: true
 ratings:
   paths:
   - "**.h"
@@ -11,4 +13,6 @@ exclude_paths:
   - script/
   - tool/
   - performance/
+script:
+  - brew update && brew upgrade codeclimate
 
