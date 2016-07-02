@@ -18,6 +18,7 @@ install:
   - cd -
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ls -l
   - lcov --add-tracefile unit_test.info --add-tracefile unit_test.info --output-file coverage.info
   - coveralls-lcov coverage.info
 
