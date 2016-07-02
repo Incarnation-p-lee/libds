@@ -60,7 +60,7 @@ sort_cell_swap(void *a, void *b, uint32 size)
     sort_cell_copy(a, b, size);
     sort_cell_copy(b, tmp, size);
 
-    memory_cache_dp_free(tmp);
+    memory_cache_free(tmp);
 }
 
 static inline bool

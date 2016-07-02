@@ -64,7 +64,7 @@ maximal_heap_destroy(struct maximal_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
-        memory_cache_dp_free(*heap);
+        memory_cache_free(*heap);
         *heap = NULL;
     }
 }

@@ -306,9 +306,9 @@ utest_##name##_heap_build(void)                                             \
                                                                             \
     RESULT_CHECK_bool(true, TEST_HEAP_ordered_p(build), &pass);             \
                                                                             \
-    memory_cache_dp_free(build->alias);                                        \
-    memory_cache_dp_free(build);                                               \
-    memory_cache_dp_free(hd_array);                                            \
+    memory_cache_free(build->alias);                                        \
+    memory_cache_free(build);                                               \
+    memory_cache_free(hd_array);                                            \
     HEAP_destroy(&heap);                                                    \
     UNIT_TEST_RESULT(name##_heap_build, pass);                              \
 }

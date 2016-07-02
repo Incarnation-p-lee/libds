@@ -80,7 +80,7 @@ test_case_filter_destroy(struct test_case_filter **filter)
 {
     dp_assert(NULL != filter);
 
-    memory_cache_dp_free(*filter);
+    memory_cache_free(*filter);
     *filter = NULL;
 }
 

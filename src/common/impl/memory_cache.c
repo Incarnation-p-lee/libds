@@ -48,7 +48,7 @@ memory_cache_re_allocate(void *addr, uint32 size)
 }
 
 void
-memory_cache_dp_free(void *addr)
+memory_cache_free(void *addr)
 {
     uint32 size;
 

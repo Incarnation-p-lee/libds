@@ -68,8 +68,8 @@ hashing_table_destroy(struct hashing_table **hash)
     dp_assert(!complain_null_pointer_p(hash));
     dp_assert(hashing_table_structure_legal_p(*hash));
 
-    memory_cache_dp_free((*hash)->space);
-    memory_cache_dp_free((*hash));
+    memory_cache_free((*hash)->space);
+    memory_cache_free((*hash));
     *hash = NULL;
 }
 

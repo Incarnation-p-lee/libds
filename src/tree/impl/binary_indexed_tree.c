@@ -75,8 +75,8 @@ binary_indexed_tree_destroy(struct binary_indexed_tree **tree)
         tmp = *tree;
         *tree = NULL;
 
-        memory_cache_dp_free(tmp->data);
-        memory_cache_dp_free(tmp);
+        memory_cache_free(tmp->data);
+        memory_cache_free(tmp);
     }
 }
 

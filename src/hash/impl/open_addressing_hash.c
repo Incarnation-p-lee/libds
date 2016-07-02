@@ -58,7 +58,7 @@ open_addressing_hash_destroy(struct open_addressing_hash **hash)
         return;
     } else if (open_addressing_hash_structure_legal_p(*hash)) {
         hashing_table_destroy(&(*hash)->table);
-        memory_cache_dp_free(*hash);
+        memory_cache_free(*hash);
 
         *hash = NULL;
     }

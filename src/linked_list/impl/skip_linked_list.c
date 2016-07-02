@@ -100,7 +100,7 @@ skip_linked_list_destroy(struct skip_linked_list **list)
 
         while (node) {
             next = node->next;
-            memory_cache_dp_free(node);
+            memory_cache_free(node);
             node = next;
         }
 
@@ -464,7 +464,7 @@ skip_linked_list_remove_and_destroy(struct skip_linked_list **list,
         if (!removed) {
             pr_log_warn("The node to be removed do not exist in given list.\n");
         } else {
-            memory_cache_dp_free(removed);
+            memory_cache_free(removed);
         }
     }
 }

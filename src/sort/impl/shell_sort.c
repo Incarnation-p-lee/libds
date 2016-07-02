@@ -32,7 +32,7 @@ shell_sort(void *base, uint32 size, uint32 csize,
             k--;
         }
 
-        memory_cache_dp_free(tmp);
+        memory_cache_free(tmp);
         dp_assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }

@@ -82,7 +82,7 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
     } else {
         separate_chain_hash_chain_destroy(*hash);
         hashing_table_destroy(&(*hash)->table);
-        memory_cache_dp_free(*hash);
+        memory_cache_free(*hash);
 
         *hash = NULL;
     }

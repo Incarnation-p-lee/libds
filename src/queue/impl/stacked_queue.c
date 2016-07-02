@@ -32,7 +32,7 @@ stacked_queue_destroy(struct stacked_queue **queue)
         array_stack_destroy(&(*queue)->enter);
         array_stack_destroy(&(*queue)->leave);
 
-        memory_cache_dp_free(*queue);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }

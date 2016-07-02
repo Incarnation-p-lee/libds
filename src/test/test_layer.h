@@ -846,243 +846,190 @@ static const struct test_layer_table doubly_end_queue[] = {
 
 static const struct test_layer_table binary_search_tree[] = {
     {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_binary_search_tree_struct_field,
-            &performance_test_binary_search_tree_struct_field,
-        },
-    },
-    {
         "create",
         NULL,
         {
-            &unit_test_binary_search_tree_create,
-            &performance_test_binary_search_tree_create,
-        },
-    },
-    {
-        "node_create",
-        NULL,
-        {
-            &unit_test_binary_search_tree_node_create,
-            &performance_test_binary_search_tree_node_create,
+            &utest_binary_search_tree_create,
+            &ptest_binary_search_tree_create,
         },
     },
     {
         "initial",
         NULL,
         {
-            &unit_test_binary_search_tree_initial,
-            &performance_test_binary_search_tree_initial,
-        },
-    },
-    {
-        "node_initial",
-        NULL,
-        {
-            &unit_test_binary_search_tree_node_initial,
-            &performance_test_binary_search_tree_node_initial,
+            &utest_binary_search_tree_initial,
+            &ptest_binary_search_tree_initial,
         },
     },
     {
         "destroy",
         NULL,
         {
-            &unit_test_binary_search_tree_destroy,
-            &performance_test_binary_search_tree_destroy,
+            &utest_binary_search_tree_destroy,
+            &ptest_binary_search_tree_destroy,
         },
     },
     {
-        "node_find",
+        "find",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find,
-            &performance_test_binary_search_tree_node_find,
+            &utest_binary_search_tree_find,
+            &ptest_binary_search_tree_find,
         },
     },
     {
-        "node_find_min",
+        "find_min",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find_min,
-            &performance_test_binary_search_tree_node_find_min,
+            &utest_binary_search_tree_find_min,
+            &ptest_binary_search_tree_find_min,
         },
     },
     {
-        "node_find_max",
+        "find_max",
         NULL,
         {
-            &unit_test_binary_search_tree_node_find_max,
-            &performance_test_binary_search_tree_node_find_max,
+            &utest_binary_search_tree_find_max,
+            &ptest_binary_search_tree_find_max,
         },
     },
     {
         "height",
         NULL,
         {
-            &unit_test_binary_search_tree_height,
-            &performance_test_binary_search_tree_height,
+            &utest_binary_search_tree_height,
+            &ptest_binary_search_tree_height,
         },
     },
     {
-        "node_contains_p",
+        "contains_p",
         NULL,
         {
-            &unit_test_binary_search_tree_node_contains_p,
-            &performance_test_binary_search_tree_node_contains_p,
+            &utest_binary_search_tree_contains_p,
+            &ptest_binary_search_tree_contains_p,
         },
     },
     {
-        "node_insert",
+        "insert",
         NULL,
         {
-            &unit_test_binary_search_tree_node_insert,
-            &performance_test_binary_search_tree_node_insert,
+            &utest_binary_search_tree_insert,
+            &ptest_binary_search_tree_insert,
         },
     },
     {
-        "node_remove",
+        "remove",
         NULL,
         {
-            &unit_test_binary_search_tree_node_remove,
-            &performance_test_binary_search_tree_node_remove,
-        },
-    },
-    {
-        "node_remove_and_destroy",
-        NULL,
-        {
-            &unit_test_binary_search_tree_node_remove_and_destroy,
-            &performance_test_binary_search_tree_node_remove_and_destroy,
+            &utest_binary_search_tree_remove,
+            &ptest_binary_search_tree_remove,
         },
     },
     {
         "iterate",
         NULL,
         {
-            &unit_test_binary_search_tree_iterate,
-            &performance_test_binary_search_tree_iterate,
+            &utest_binary_search_tree_iterate,
+            &ptest_binary_search_tree_iterate,
         },},
     {NULL,                      NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table avl_tree[] = {
     {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_avl_tree_struct_field,
-            &performance_test_avl_tree_struct_field,
-        },
-    },
-    {
         "create",
         NULL,
         {
-            &unit_test_avl_tree_create,
-            &performance_test_avl_tree_create,
-        },
-    },
-    {
-        "node_create",
-        NULL,
-        {
-            &unit_test_avl_tree_node_create,
-            &performance_test_avl_tree_node_create,
+            &utest_avl_tree_create,
+            &ptest_avl_tree_create,
         },
     },
     {
         "initial",
         NULL,
         {
-            &unit_test_avl_tree_initial,
-            &performance_test_avl_tree_initial,
-        },
-    },
-    {
-        "node_initial",
-        NULL,
-        {
-            &unit_test_avl_tree_node_initial,
-            &performance_test_avl_tree_node_initial,
+            &utest_avl_tree_initial,
+            &ptest_avl_tree_initial,
         },
     },
     {
         "destroy",
         NULL,
         {
-            &unit_test_avl_tree_destroy,
-            &performance_test_avl_tree_destroy,
-        },},
-    {
-        "node_find",
-        NULL,
-        {
-            &unit_test_avl_tree_node_find,
-            &performance_test_avl_tree_node_find,
-        },
-    },
-    {   "node_find_min",
-        NULL,
-        {
-            &unit_test_avl_tree_node_find_min,
-            &performance_test_avl_tree_node_find_min,
+            &utest_avl_tree_destroy,
+            &ptest_avl_tree_destroy,
         },
     },
     {
-        "node_find_max",
+        "find",
         NULL,
         {
-            &unit_test_avl_tree_node_find_max,
-            &performance_test_avl_tree_node_find_max,
+            &utest_avl_tree_find,
+            &ptest_avl_tree_find,
         },
     },
     {
-        "node_contains_p",
+        "find_min",
         NULL,
         {
-            &unit_test_avl_tree_node_contains_p,
-            &performance_test_avl_tree_node_contains_p,
+            &utest_avl_tree_find_min,
+            &ptest_avl_tree_find_min,
+        },
+    },
+    {
+        "find_max",
+        NULL,
+        {
+            &utest_avl_tree_find_max,
+            &ptest_avl_tree_find_max,
+        },
+    },
+    {
+        "height",
+        NULL,
+        {
+            &utest_avl_tree_height,
+            &ptest_avl_tree_height,
+        },
+    },
+    {
+        "contains_p",
+        NULL,
+        {
+            &utest_avl_tree_contains_p,
+            &ptest_avl_tree_contains_p,
         },
     },
     {
         "balanced_p",
         NULL,
         {
-            &unit_test_avl_tree_balanced_p,
-            &performance_test_avl_tree_balanced_p,
-        },},
-    {
-        "node_insert",
-        NULL,
-        {
-            &unit_test_avl_tree_node_insert,
-            &performance_test_avl_tree_node_insert,
+            &utest_avl_tree_balanced_p,
+            &ptest_avl_tree_balanced_p,
         },
     },
     {
-        "node_remove",
+        "insert",
         NULL,
         {
-            &unit_test_avl_tree_node_remove,
-            &performance_test_avl_tree_node_remove,
+            &utest_avl_tree_insert,
+            &ptest_avl_tree_insert,
         },
     },
     {
-        "node_remove_and_destroy",
+        "remove",
         NULL,
         {
-            &unit_test_avl_tree_node_remove_and_destroy,
-            &performance_test_avl_tree_node_remove_and_destroy,
+            &utest_avl_tree_remove,
+            &ptest_avl_tree_remove,
         },
     },
     {
         "iterate",
         NULL,
         {
-            &unit_test_avl_tree_iterate,
-            &performance_test_avl_tree_iterate,
+            &utest_avl_tree_iterate,
+            &ptest_avl_tree_iterate,
         },
     },
     {NULL,                      NULL, {NULL,},},
@@ -1090,123 +1037,91 @@ static const struct test_layer_table avl_tree[] = {
 
 static const struct test_layer_table splay_tree[] = {
     {
-        "struct_field",
-        NULL,
-        {
-            &unit_test_splay_tree_struct_field,
-            &performance_test_splay_tree_struct_field,
-        },
-    },
-    {
         "create",
         NULL,
         {
-            &unit_test_splay_tree_create,
-            &performance_test_splay_tree_create,
-        },
-    },
-    {
-        "node_create",
-        NULL,
-        {
-            &unit_test_splay_tree_node_create,
-            &performance_test_splay_tree_node_create,
+            &utest_splay_tree_create,
+            &ptest_splay_tree_create,
         },
     },
     {
         "initial",
         NULL,
         {
-            &unit_test_splay_tree_initial,
-            &performance_test_splay_tree_initial,
-        },
-    },
-    {
-        "node_initial",
-        NULL,
-        {
-            &unit_test_splay_tree_node_initial,
-            &performance_test_splay_tree_node_initial,
+            &utest_splay_tree_initial,
+            &ptest_splay_tree_initial,
         },
     },
     {
         "destroy",
         NULL,
         {
-            &unit_test_splay_tree_destroy,
-            &performance_test_splay_tree_destroy,
+            &utest_splay_tree_destroy,
+            &ptest_splay_tree_destroy,
         },
     },
     {
-        "node_find",
+        "find",
         NULL,
         {
-            &unit_test_splay_tree_node_find,
-            &performance_test_splay_tree_node_find,
+            &utest_splay_tree_find,
+            &ptest_splay_tree_find,
         },
     },
     {
-        "node_find_min",
+        "find_min",
         NULL,
         {
-            &unit_test_splay_tree_node_find_min,
-            &performance_test_splay_tree_node_find_min,
+            &utest_splay_tree_find_min,
+            &ptest_splay_tree_find_min,
         },
     },
     {
-        "node_find_max",
+        "find_max",
         NULL,
         {
-            &unit_test_splay_tree_node_find_max,
-            &performance_test_splay_tree_node_find_max,
+            &utest_splay_tree_find_max,
+            &ptest_splay_tree_find_max,
         },
     },
     {
         "height",
         NULL,
         {
-            &unit_test_splay_tree_height,
-            &performance_test_splay_tree_height,
+            &utest_splay_tree_height,
+            &ptest_splay_tree_height,
         },
     },
     {
-        "node_contains_p",
+        "contains_p",
         NULL,
         {
-            &unit_test_splay_tree_node_contains_p,
-            &performance_test_splay_tree_node_contains_p,
+            &utest_splay_tree_contains_p,
+            &ptest_splay_tree_contains_p,
         },
     },
     {
-        "node_insert",
+        "insert",
         NULL,
         {
-            &unit_test_splay_tree_node_insert,
-            &performance_test_splay_tree_node_insert,
+            &utest_splay_tree_insert,
+            &ptest_splay_tree_insert,
         },
     },
     {
-        "node_remove",
+        "remove",
         NULL,
         {
-            &unit_test_splay_tree_node_remove,
-            &performance_test_splay_tree_node_remove,
-        },
-    },
-    {
-        "node_remove_and_destroy",
-        NULL,
-        {
-            &unit_test_splay_tree_node_remove_and_destroy,
-            &performance_test_splay_tree_node_remove_and_destroy,
+            &utest_splay_tree_remove,
+            &ptest_splay_tree_remove,
         },
     },
     {
         "iterate",
         NULL,
         {
-            &unit_test_splay_tree_iterate,
-            &performance_test_splay_tree_iterate,
+            &utest_splay_tree_iterate,
+            &ptest_splay_tree_iterate,
         },
     },
     {NULL,                      NULL, {NULL,},},

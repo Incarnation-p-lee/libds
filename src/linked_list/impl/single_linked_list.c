@@ -205,7 +205,7 @@ single_linked_list_destroy(struct single_linked_list **list)
          */
         do {
             next = node->next;
-            memory_cache_dp_free(node);
+            memory_cache_free(node);
             node = next;
         } while (*list != node);
 
@@ -367,7 +367,7 @@ single_linked_list_remove_and_destroy(struct single_linked_list **node)
 
     if (!complain_null_pointer_p(node) && !complain_null_pointer_p(*node)) {
         removed = single_linked_list_remove_internal(node);
-        memory_cache_dp_free(removed);
+        memory_cache_free(removed);
     }
 }
 

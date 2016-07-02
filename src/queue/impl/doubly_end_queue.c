@@ -22,7 +22,7 @@ doubly_end_queue_destroy(struct doubly_end_queue **queue)
             doubly_end_queue_cleanup_internal(*queue);
         }
 
-        memory_cache_dp_free(*queue);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }
@@ -174,7 +174,7 @@ doubly_end_queue_head_leave(struct doubly_end_queue *queue)
             } else {
                 link = &queue->head->link;
                 doubly_linked_list_remove(&link);
-                memory_cache_dp_free(queue->head);
+                memory_cache_free(queue->head);
                 queue->head = tmp;
             }
 
@@ -205,7 +205,7 @@ doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
             } else {
                 link = &queue->tail->link;
                 doubly_linked_list_remove(&link);
-                memory_cache_dp_free(queue->tail);
+                memory_cache_free(queue->tail);
                 queue->tail = tmp;
             }
 
@@ -220,7 +220,7 @@ doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
     dp_assert(NULL != queue);
     dp_assert(queue->head == queue->tail);
 
-    memory_cache_dp_free(queue->head);
+    memory_cache_free(queue->head);
     queue->head = NULL;
     queue->tail = NULL;
 }
@@ -241,7 +241,7 @@ doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
         next = doubly_end_queue_list_next(tmp);
         link = &tmp->link;
         doubly_linked_list_remove(&link);
-        memory_cache_dp_free(tmp);
+        memory_cache_free(tmp);
 
         tmp = next;
     }

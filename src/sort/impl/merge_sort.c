@@ -9,7 +9,7 @@ merge_sort(void *base, uint32 size, uint32 csize,
 
         merge_sort_recursive(base, tmp, 0, size - 1, csize, compare);
 
-        memory_cache_dp_free(tmp);
+        memory_cache_free(tmp);
         dp_assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }

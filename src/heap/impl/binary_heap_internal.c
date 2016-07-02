@@ -29,8 +29,8 @@ binary_heap_destroy(struct binary_heap **heap)
     dp_assert(binary_heap_structure_legal_p(*heap));
 
     binary_heap_cleanup(*heap);
-    memory_cache_dp_free((*heap)->base);
-    memory_cache_dp_free(*heap);
+    memory_cache_free((*heap)->base);
+    memory_cache_free(*heap);
 
     *heap = NULL;
 }
@@ -61,7 +61,7 @@ binary_heap_cleanup(struct binary_heap *heap)
     index = INDEX_FIRST;
 
     while (index <= INDEX_LAST(heap)) {
-        memory_cache_dp_free(HEAP_DATA(heap, index));
+        memory_cache_free(HEAP_DATA(heap, index));
         HEAP_DATA(heap, index) = NULL;
         index++;
     }
@@ -93,7 +93,7 @@ binary_heap_capacity_extend(struct binary_heap *heap)
     dp_memcpy(new, heap->base, size);
 
     heap->capacity = heap->capacity * 2;
-    memory_cache_dp_free(heap->base);
+    memory_cache_free(heap->base);
     heap->base = new;
 
     dp_assert(binary_heap_structure_legal_p(heap));
@@ -333,7 +333,7 @@ binary_heap_data_destroy(struct heap_data *data)
     dp_assert(!complain_null_pointer_p(data));
 
     retval = data->val;
-    memory_cache_dp_free(data);
+    memory_cache_free(data);
 
     return retval;
 }

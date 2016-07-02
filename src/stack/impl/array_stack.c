@@ -35,8 +35,8 @@ void
 array_stack_destroy(struct array_stack **stack)
 {
     if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
-        memory_cache_dp_free((*stack)->space.bp);
-        memory_cache_dp_free(*stack);
+        memory_cache_free((*stack)->space.bp);
+        memory_cache_free(*stack);
         *stack = NULL;
     }
 }

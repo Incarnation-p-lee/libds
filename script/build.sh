@@ -42,7 +42,7 @@ do
             cc_config="$cc_config -g3 -DDEBUG" ;;
         "RELEASE")
             debug_mode="No"
-            cc_config="$cc_config -o3 -ofast -DNDEBUG"
+            cc_config="$cc_config -o3 -ofast"
             ld_config="$ld_config -Wl,-O3" ;;
         "LIBC")
             cc_config="$cc_config -DLIBC"
@@ -65,6 +65,7 @@ done
 if [ -d $objdir ]
 then
     rm -rf $objdir
+    echo "Remove last build directory $objdir"
 fi
 mkdir -p $bindir
 

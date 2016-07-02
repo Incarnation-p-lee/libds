@@ -86,7 +86,7 @@ leftist_heap_destroy_internal(struct leftist_heap *heap)
         leftist_heap_destroy_internal(heap->left);
         leftist_heap_destroy_internal(heap->right);
 
-        memory_cache_dp_free(heap);
+        memory_cache_free(heap);
     }
 }
 
@@ -303,7 +303,7 @@ void
 leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
 {
     if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
-        memory_cache_dp_free(leftist_heap_remove_min_internal(heap));
+        memory_cache_free(leftist_heap_remove_min_internal(heap));
     }
 }
 

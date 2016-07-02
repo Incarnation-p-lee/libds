@@ -129,11 +129,11 @@ test_sort_data_ptr_array_destroy(struct test_sort_data **data, uint32 size)
 
     i = 0;
     while (i < size) {
-        memory_cache_dp_free(data[i]);
+        memory_cache_free(data[i]);
         i++;
     }
 
-    memory_cache_dp_free(data);
+    memory_cache_free(data);
 }
 
 static inline sint32

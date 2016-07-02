@@ -30,8 +30,8 @@ void
 array_queue_destroy(struct array_queue **queue)
 {
     if (!complain_null_pointer_p(queue) && array_queue_structure_legal_p(*queue)) {
-        memory_cache_dp_free((*queue)->space.base);
-        memory_cache_dp_free(*queue);
+        memory_cache_free((*queue)->space.base);
+        memory_cache_free(*queue);
         *queue = NULL;
     }
 }
@@ -95,7 +95,7 @@ array_queue_resize_expand(struct array_queue *queue, uint32 size,
         counted = 0;
     }
 
-    memory_cache_dp_free(queue->space.base);
+    memory_cache_free(queue->space.base);
     queue->space.base = addr;
     queue->space.front = addr;
     queue->space.rear = addr + counted;
@@ -145,7 +145,7 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
         counted = 0;
     }
 
-    memory_cache_dp_free(queue->space.base);
+    memory_cache_free(queue->space.base);
     queue->space.base = addr;
     queue->space.front = addr;
     queue->space.rest = size - counted;

@@ -313,13 +313,13 @@ ptest_##name##_heap_build(uint32 count)                              \
             INDEX_LAST(heap));                                      \
         build = HEAP_build(hd_array, size);                          \
                                                                      \
-        memory_cache_dp_free(build->alias);                             \
-        memory_cache_dp_free(build);                                    \
+        memory_cache_free(build->alias);                             \
+        memory_cache_free(build);                                    \
     }                                                                \
                                                                      \
     PERFORMANCE_TEST_ENDPOINT;                                       \
                                                                      \
-    memory_cache_dp_free(hd_array);                                     \
+    memory_cache_free(hd_array);                                     \
     HEAP_destroy(&heap);                                             \
     PERFORMANCE_TEST_RESULT(name##_heap_build);                      \
 }

@@ -1,31 +1,61 @@
 sint64
-splay_tree_node_nice(struct splay_tree *tree)
+splay_tree_nice(struct splay_tree *tree)
 {
-    return tree->alias.chain.nice;
+    if (!splay_tree_structure_legal_p(tree)) {
+        return (sint64)1 << 63;
+    } else {
+        return tree->nice;
+    }
 }
 
 void
-splay_tree_node_nice_set(struct splay_tree *tree, sint64 nice)
+splay_tree_nice_set(struct splay_tree *tree, sint64 nice)
 {
-    tree->alias.chain.nice = nice;
+    tree->nice = nice;
 }
 
 struct splay_tree *
-splay_tree_child_left(struct splay_tree *tree)
+splay_tree_left(struct splay_tree *tree)
 {
-    return splay_tree_ptr_container_of(tree->alias.left);
+    if (!splay_tree_structure_legal_p(tree)) {
+        return NULL;
+    } else {
+        return tree->left;
+    }
 }
 
 struct splay_tree *
-splay_tree_child_right(struct splay_tree *tree)
+splay_tree_right(struct splay_tree *tree)
 {
-    return splay_tree_ptr_container_of(tree->alias.right);
+    if (!splay_tree_structure_legal_p(tree)) {
+        return NULL;
+    } else {
+        return tree->right;
+    }
 }
 
-struct doubly_linked_list *
-splay_tree_node_link(struct splay_tree *tree)
+static inline bool
+splay_tree_structure_legal_p(struct splay_tree *tree)
 {
-    return (tree)->alias.chain.link;
+    if (complain_null_pointer_p(tree)) {
+        return false;
+    } else if (tree->left == tree->right && NULL != tree->left) {
+        return false;
+    } else if (tree->left == tree || tree->right == tree) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline void
+splay_tree_initial_internal(struct splay_tree *tree, sint64 nice)
+{
+     dp_assert(splay_tree_structure_legal_p(tree));
+
+     tree->left = NULL;
+     tree->right = NULL;
+     tree->nice = nice;
 }
 
 struct splay_tree *
@@ -34,69 +64,27 @@ splay_tree_create(void)
     struct splay_tree *tree;
 
     tree = memory_cache_allocate(sizeof(*tree));
-    if (!complain_no_memory_p(tree)) {
-        tree->alias.chain.link = memory_cache_allocate(
-            sizeof(*tree->alias.chain.link));
-
-        if (!complain_no_memory_p(tree->alias.chain.link)) {
-            binary_search_tree_initial_internal(&tree->alias);
-        }
-    }
-
-    return tree;
-}
-
-struct splay_tree *
-splay_tree_node_create(void *val, sint64 nice)
-{
-    struct splay_tree *tree;
-
-    tree = memory_cache_allocate(sizeof(*tree));
-    if (!complain_no_memory_p(tree)) {
-        tree->alias.chain.link = memory_cache_allocate(
-            sizeof(*tree->alias.chain.link));
-
-        if (!complain_no_memory_p(tree->alias.chain.link)) {
-            binary_search_tree_node_initial_internal(&tree->alias, val, nice);
-        }
-    }
+    splay_tree_initial_internal(tree, (sint64)0);
 
     return tree;
 }
 
 void
-splay_tree_initial(struct splay_tree *tree)
+splay_tree_initial(struct splay_tree *tree, sint64 nice)
 {
-    splay_tree_node_initial(tree, NULL, (sint64)0);
-}
-
-void
-splay_tree_node_initial(struct splay_tree *node, void *val, sint64 nice)
-{
-    if (!complain_null_pointer_p(node)) {
-        binary_search_tree_node_initial(&node->alias, val, nice);
-    }
-}
-
-struct splay_tree *
-splay_tree_ptr_container_of(struct binary_search_tree *node)
-{
-    if (complain_null_pointer_p(node)) {
-        return NULL;
-    } else {
-        return CONTAINER_OF(node, struct splay_tree, alias);
+    if (splay_tree_structure_legal_p(tree)) {
+        splay_tree_initial_internal(tree, nice);
     }
 }
 
 static inline void
 splay_tree_node_destroy(struct splay_tree *node)
 {
-    dp_assert(NULL != node);
-    dp_assert(NULL == splay_tree_child_left(node));
-    dp_assert(NULL == splay_tree_child_right(node));
+    dp_assert(splay_tree_structure_legal_p(node));
+    dp_assert(complain_null_pointer_p(node->left));
+    dp_assert(complain_null_pointer_p(node->right));
 
-    doubly_linked_list_destroy(&node->alias.chain.link);
-    memory_cache_dp_free(node);
+    memory_cache_free(node);
 }
 
 static inline void
@@ -109,10 +97,12 @@ splay_tree_destroy_internal(struct splay_tree *tree)
          *     it may reach the default limitation of elf stack size, 8192KB.
          *     use ulimit -s unlimited or refine this function without nested.
          */
-        splay_tree_destroy_internal(splay_tree_child_left(tree));
-        splay_tree_destroy_internal(splay_tree_child_right(tree));
-        tree->alias.left = NULL;
-        tree->alias.right = NULL;
+        splay_tree_destroy_internal(tree->left);
+        splay_tree_destroy_internal(tree->right);
+
+        tree->left = NULL;
+        tree->right = NULL;
+
         splay_tree_node_destroy(tree);
     }
 }
@@ -120,39 +110,44 @@ splay_tree_destroy_internal(struct splay_tree *tree)
 void
 splay_tree_destroy(struct splay_tree **tree)
 {
-    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
+    if (complain_null_pointer_p(tree)) {
+        return;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return;
+    } else {
         splay_tree_destroy_internal(*tree);
         *tree = NULL;
     }
-
 }
 
-static inline struct binary_search_tree *
-splay_tree_node_find_internal(struct binary_search_tree **tree, sint64 nice,
-    struct binary_search_tree *root)
+static inline struct splay_tree *
+splay_tree_find_internal(struct splay_tree **tree, sint64 nice,
+    struct splay_tree *root)
 {
-    struct binary_search_tree *node;
-    struct binary_search_tree *found;
+    struct splay_tree *splay;
+    struct splay_tree *found;
 
-    node = *tree;
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(root));
 
-    if (complain_null_pointer_p(node)) {
+    found = NULL;
+    splay = *tree;
+
+    if (complain_null_pointer_p(splay)) {
         return NULL;
     } else {
-        if (nice < node->chain.nice) {
-            found = splay_tree_node_find_internal(&node->left, nice, root);
-
+        if (nice < splay->nice) {
+            found = splay_tree_find_internal(&splay->left, nice, root);
             if (NULL != found) {
                 splay_tree_balance_splaying_left(tree, root, found);
             }
-        } else if (nice > node->chain.nice) {
-            found = splay_tree_node_find_internal(&node->right, nice, root);
-
+        } else if (nice > splay->nice) {
+            found = splay_tree_find_internal(&splay->right, nice, root);
             if (NULL != found) {
                 splay_tree_balance_splaying_right(tree, root, found);
             }
         } else {
-            found = node;
+            found = splay;
         }
 
         return found;
@@ -160,38 +155,34 @@ splay_tree_node_find_internal(struct binary_search_tree **tree, sint64 nice,
 }
 
 struct splay_tree *
-splay_tree_node_find(struct splay_tree **tree, sint64 nice)
+splay_tree_find(struct splay_tree **tree, sint64 nice)
 {
-    struct binary_search_tree *root;
-    struct binary_search_tree *found;
-
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
-        return NULL;
+    if (complain_null_pointer_p(tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return PTR_INVALID;
     } else {
-        root = &(*tree)->alias;
-        found = splay_tree_node_find_internal(&root, nice, root);
-        *tree = splay_tree_ptr_container_of(root);
-
-        return splay_tree_ptr_container_of(found);
+        return splay_tree_find_internal(tree, nice, *tree);
     }
 }
 
-static inline struct binary_search_tree *
-splay_tree_node_find_min_internal(struct binary_search_tree **tree,
-    struct binary_search_tree *root)
+static inline struct splay_tree *
+splay_tree_find_min_internal(struct splay_tree **tree,
+    struct splay_tree *root)
 {
-    struct binary_search_tree *min;
-    struct binary_search_tree *node;
+    struct splay_tree *min;
+    struct splay_tree *node;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(root));
 
     node = *tree;
 
     if (NULL == node->left) {
         return node;
     } else {
-        min = splay_tree_node_find_min_internal(&node->left, root);
+        min = splay_tree_find_min_internal(&node->left, root);
 
         if (node->left->left) {
             splay_tree_balance_single_splaying_left(tree);
@@ -215,37 +206,34 @@ splay_tree_node_find_min_internal(struct binary_search_tree **tree,
 }
 
 struct splay_tree *
-splay_tree_node_find_min(struct splay_tree **tree)
+splay_tree_find_min(struct splay_tree **tree)
 {
-    struct binary_search_tree *root;
-
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
-        return NULL;
+    if (complain_null_pointer_p(tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return PTR_INVALID;
     } else {
-        root = &(*tree)->alias;
-        root = splay_tree_node_find_min_internal(&root, root);
-        *tree = splay_tree_ptr_container_of(root);
-
-        return *tree;
+        return splay_tree_find_min_internal(tree, *tree);
     }
 }
 
-static inline struct binary_search_tree *
-splay_tree_node_find_max_internal(struct binary_search_tree **tree,
-    struct binary_search_tree *root)
+static inline struct splay_tree *
+splay_tree_find_max_internal(struct splay_tree **tree,
+    struct splay_tree *root)
 {
-    struct binary_search_tree *max;
-    struct binary_search_tree *node;
+    struct splay_tree *max;
+    struct splay_tree *node;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(root));
 
     node = *tree;
 
     if (NULL == node->right) {
         return node;
     } else {
-        max = splay_tree_node_find_max_internal(&node->right, root);
+        max = splay_tree_find_max_internal(&node->right, root);
 
         if (node->right->right) {
             splay_tree_balance_single_splaying_right(tree);
@@ -269,33 +257,28 @@ splay_tree_node_find_max_internal(struct binary_search_tree **tree,
 }
 
 struct splay_tree *
-splay_tree_node_find_max(struct splay_tree **tree)
+splay_tree_find_max(struct splay_tree **tree)
 {
-    struct binary_search_tree *root;
-
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
-        return NULL;
+    if (complain_null_pointer_p(tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return PTR_INVALID;
     } else {
-        root = &(*tree)->alias;
-        root = splay_tree_node_find_max_internal(&root, root);
-        *tree = splay_tree_ptr_container_of(root);
-
-        return *tree;
+        return splay_tree_find_max_internal(tree, *tree);
     }
 }
 
 static inline void
-splay_tree_balance_splaying_left(struct binary_search_tree **tree,
-    struct binary_search_tree *root,
-    struct binary_search_tree *target)
+splay_tree_balance_splaying_left(struct splay_tree **tree,
+    struct splay_tree *root, struct splay_tree *target)
 {
-    struct binary_search_tree *node;
+    struct splay_tree *node;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
-    dp_assert(NULL != (*tree)->left);
-    dp_assert(NULL != root);
-    dp_assert(NULL != target);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(root));
+    dp_assert(splay_tree_structure_legal_p(target));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left));
 
     node = *tree;
 
@@ -319,17 +302,16 @@ splay_tree_balance_splaying_left(struct binary_search_tree **tree,
 }
 
 static inline void
-splay_tree_balance_splaying_right(struct binary_search_tree **tree,
-    struct binary_search_tree *root,
-    struct binary_search_tree *target)
+splay_tree_balance_splaying_right(struct splay_tree **tree,
+    struct splay_tree *root, struct splay_tree *target)
 {
-    struct binary_search_tree *node;
+    struct splay_tree *node;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
-    dp_assert(NULL != (*tree)->right);
-    dp_assert(NULL != root);
-    dp_assert(NULL != target);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(root));
+    dp_assert(splay_tree_structure_legal_p(target));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right));
 
     node = *tree;
 
@@ -352,80 +334,83 @@ splay_tree_balance_splaying_right(struct binary_search_tree **tree,
     dp_assert(target == *tree);
 }
 
+/*
+ *     k1          k2
+ *    /  \        /  \
+ *   k2   c  =>  a    k1
+ *  /  \             /  \
+ * a    b           b    c
+ */
 static void inline
-splay_tree_balance_root_splaying_left(struct binary_search_tree **tree)
+splay_tree_balance_root_splaying_left(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
-    dp_assert(NULL != (*tree)->left);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left));
 
     k1 = *tree;
     k2 = k1->left;
-    /*
-     *     k1          k2
-     *    /  \        /  \
-     *   k2   c  =>  a    k1
-     *  /  \             /  \
-     * a    b           b    c
-     */
+
     k1->left = k2->right;
     k2->right = k1;
 
     *tree = k2;
 }
 
+/*
+ *   k1               k2
+ *  /  \             /  \
+ * a    k2    =>    k1   c
+ *     /  \        /  \
+ *    b    c      a    b
+ */
 static void inline
-splay_tree_balance_root_splaying_right(struct binary_search_tree **tree)
+splay_tree_balance_root_splaying_right(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
-    dp_assert(NULL != (*tree)->right);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right));
 
     k1 = *tree;
     k2 = k1->right;
-    /*
-     *   k1               k2
-     *  /  \             /  \
-     * a    k2    =>    k1   c
-     *     /  \        /  \
-     *    b    c      a    b
-     */
+
     k1->right = k2->left;
     k2->left = k1;
 
     *tree = k2;
 }
 
+/*
+ *        k1            k3
+ *       /  \          /  \
+ *      k2   d   =>   a    k2
+ *     /  \               /  \
+ *    k3   c             b    k1
+ *   /  \                    /  \
+ *  a    b                  c    d
+ */
 static void inline
-splay_tree_balance_single_splaying_left(struct binary_search_tree **tree)
+splay_tree_balance_single_splaying_left(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
-    struct binary_search_tree *k3;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
+    struct splay_tree *k3;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != (*tree));
-    dp_assert(NULL != (*tree)->left);
-    dp_assert(NULL != (*tree)->left->left);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left->left));
 
     k1 = *tree;
     k2 = k1->left;
     k3 = k2->left;
-    /*
-     *        k1            k3
-     *       /  \          /  \
-     *      k2   d   =>   a    k2
-     *     /  \               /  \
-     *    k3   c             b    k1
-     *   /  \                    /  \
-     *  a    b                  c    d
-     */
+
     k1->left = k2->right;
     k2->left = k3->right;
     k2->right = k1;
@@ -434,31 +419,31 @@ splay_tree_balance_single_splaying_left(struct binary_search_tree **tree)
     *tree = k3;
 }
 
+/*
+ *     k1                 k3
+ *    / \                /  \
+ *   a   k2      =>     k2   d
+ *      /  \           /  \
+ *     b    k3        k1   c
+ *         /  \      /  \
+ *        c    d    a    b
+ */
 static void inline
-splay_tree_balance_single_splaying_right(struct binary_search_tree **tree)
+splay_tree_balance_single_splaying_right(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
-    struct binary_search_tree *k3;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
+    struct splay_tree *k3;
 
-
-    dp_assert(NULL != tree);
-    dp_assert(NULL != (*tree));
-    dp_assert(NULL != (*tree)->right);
-    dp_assert(NULL != (*tree)->right->right);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right->right));
 
     k1 = *tree;
     k2 = k1->right;
     k3 = k2->right;
-    /*
-     *     k1                 k3
-     *    / \                /  \
-     *   a   k2      =>     k2   d
-     *      /  \           /  \
-     *     b    k3        k1   c
-     *         /  \      /  \
-     *        c    d    a    b
-     */
+
     k1->right = k2->left;
     k2->right = k3->left;
     k2->left = k1;
@@ -467,30 +452,31 @@ splay_tree_balance_single_splaying_right(struct binary_search_tree **tree)
     *tree = k3;
 }
 
+/*
+ *     k1            k3
+ *    /  \          /  \
+ *   k2   d  =>    k2   k1
+ *  / \           / \   / \
+ * a   k3        a   b c   d
+ *    /  \
+ *   b    c
+ */
 static void inline
-splay_tree_balance_doubly_splaying_left(struct binary_search_tree **tree)
+splay_tree_balance_doubly_splaying_left(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
-    struct binary_search_tree *k3;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
+    struct splay_tree *k3;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != (*tree));
-    dp_assert(NULL != (*tree)->left);
-    dp_assert(NULL != (*tree)->left->right);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left));
+    dp_assert(splay_tree_structure_legal_p((*tree)->left->right));
 
     k1 = *tree;
     k2 = k1->left;
     k3 = k2->right;
-    /*
-     *     k1            k3
-     *    /  \          /  \
-     *   k2   d  =>    k2   k1
-     *  / \           / \   / \
-     * a   k3        a   b c   d
-     *    /  \
-     *   b    c
-     */
+
     k1->left = k3->right;
     k2->right = k3->left;
     k3->left = k2;
@@ -499,30 +485,31 @@ splay_tree_balance_doubly_splaying_left(struct binary_search_tree **tree)
     *tree = k3;
 }
 
+/*
+ *    k1              k3
+ *   / \             /  \
+ *  a   k2    =>    k1   k2
+ *     /  \        / \   / \
+ *    k3   c      a   b c   d
+ *   /  \
+ *  b    c
+ */
 static void inline
-splay_tree_balance_doubly_splaying_right(struct binary_search_tree **tree)
+splay_tree_balance_doubly_splaying_right(struct splay_tree **tree)
 {
-    struct binary_search_tree *k1;
-    struct binary_search_tree *k2;
-    struct binary_search_tree *k3;
+    struct splay_tree *k1;
+    struct splay_tree *k2;
+    struct splay_tree *k3;
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != (*tree));
-    dp_assert(NULL != (*tree)->right);
-    dp_assert(NULL != (*tree)->right->left);
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right));
+    dp_assert(splay_tree_structure_legal_p((*tree)->right->left));
 
     k1 = *tree;
     k2 = k1->right;
     k3 = k2->left;
-    /*
-     *    k1              k3
-     *   / \             /  \
-     *  a   k2    =>    k1   k2
-     *     /  \        / \   / \
-     *    k3   c      a   b c   d
-     *   /  \
-     *  b    c
-     */
+
     k1->right = k3->left;
     k2->left = k3->right;
     k3->left = k1;
@@ -531,136 +518,317 @@ splay_tree_balance_doubly_splaying_right(struct binary_search_tree **tree)
     *tree = k3;
 }
 
+static inline sint32
+splay_tree_height_internal(struct splay_tree *tree)
+{
+    sint32 left;
+    sint32 right;
+
+    if (!tree) {
+        return -1;
+    } else {
+        left = splay_tree_height_internal(tree->left);
+        right = splay_tree_height_internal(tree->right);
+
+        return MAX_S32(left, right) + 1;
+    }
+}
+
 sint32
 splay_tree_height(struct splay_tree *tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (!splay_tree_structure_legal_p(tree)) {
         return -1;
     } else {
-        return binary_search_tree_height_internal(&tree->alias);
+        return splay_tree_height_internal(tree);
     }
+}
+
+static inline bool
+splay_tree_contains_p_internal(struct splay_tree *tree, struct splay_tree *node)
+{
+    bool retval;
+    sint64 nice;
+    struct splay_tree *left;
+    struct splay_tree *right;
+
+    dp_assert(splay_tree_structure_legal_p(tree));
+    dp_assert(splay_tree_structure_legal_p(node));
+
+    retval = false;
+    nice = node->nice;
+
+    while (tree) {
+        if (node == tree) {
+            return true;
+        } else if (nice > tree->nice) {
+            tree = tree->right;
+        } else if (nice < tree->nice) {
+            tree = tree->left;
+        } else {
+            left = tree->left;
+            right = tree->right;
+
+            // Handle repeated nice
+            if (left && nice == left->nice) {
+                retval = splay_tree_contains_p_internal(left, node);
+            }
+            if (!retval && right && nice == right->nice) {
+                retval = splay_tree_contains_p_internal(right, node);
+            }
+
+            return retval;
+        }
+    }
+
+    return false;
 }
 
 bool
-splay_tree_node_contains_p(struct splay_tree *tree, struct splay_tree *node)
+splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node)
 {
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(node)) {
+    if (!splay_tree_structure_legal_p(tree)) {
+        return false;
+    } else if (!splay_tree_structure_legal_p(node)) {
         return false;
     } else {
-        return binary_search_tree_node_contains_p_internal(&tree->alias,
-            &node->alias);
+        return splay_tree_contains_p_internal(tree, node);
     }
 }
 
-static inline struct binary_search_tree *
-splay_tree_node_insert_internal(struct binary_search_tree **tree,
-    struct binary_search_tree *node,
-    struct binary_search_tree *root)
+static inline struct splay_tree *
+splay_tree_insert_internal(struct splay_tree **tree,
+    struct splay_tree *node, struct splay_tree *root)
 {
-    struct binary_search_tree *tmp;
-    struct binary_search_tree *inserted;
+    struct splay_tree *splay;
+    struct splay_tree *inserted;
 
-    tmp = *tree;
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_ordered_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(node));
+    dp_assert(splay_tree_structure_legal_p(root));
 
-    if (!tmp) {
-        *tree = node;
-        return node;
+    if (!*tree) {
+        return *tree = node;
     } else {
-        if (node->chain.nice < tmp->chain.nice) {
-            inserted = splay_tree_node_insert_internal(&tmp->left, node, root);
+        splay = *tree;
+        if (node->nice < splay->nice) {
+            inserted = splay_tree_insert_internal(&splay->left, node, root);
             splay_tree_balance_splaying_left(tree, root, inserted);
-        } else if (node->chain.nice > tmp->chain.nice) {
-            inserted = splay_tree_node_insert_internal(&tmp->right, node, root);
+        } else if (node->nice > splay->nice) {
+            inserted = splay_tree_insert_internal(&splay->right, node, root);
+            splay_tree_balance_splaying_right(tree, root, inserted);
+        } else if (splay != node) {
+            // Repeated nice, insert it to right
+            inserted = splay_tree_insert_internal(&splay->right, node, root);
             splay_tree_balance_splaying_right(tree, root, inserted);
         } else {
-            doubly_linked_list_merge(tmp->chain.link, node->chain.link);
-            inserted = tmp;
+            pr_log_warn("Insert node exist, nothing will be done.\n");
+            return NULL;
         }
 
+        dp_assert(splay_tree_ordered_p(*tree));
         return inserted;
     }
 }
 
-/*
- * insert one node into given tree splay tree
- * @tree: the pointer of given tree
- * @node: the pointer of the node
- *
- * RETURN the pointer of inserted node of the binary search tree
- *        If tree is NULL or node is NULL, RETURN NULL.
- */
 struct splay_tree *
-splay_tree_node_insert(struct splay_tree **tree, struct splay_tree *node)
+splay_tree_insert(struct splay_tree **tree, struct splay_tree *node)
 {
-    struct binary_search_tree *tmp;
-    struct binary_search_tree *inserted;
-
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)
-        || complain_null_pointer_p(node)) {
-        return NULL;
+    if (complain_null_pointer_p(tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(node)) {
+        return PTR_INVALID;
     } else {
-        tmp = &(*tree)->alias;
-        inserted = splay_tree_node_insert_internal(&tmp, &node->alias, tmp);
-        *tree = splay_tree_ptr_container_of(tmp);
-
-        return splay_tree_ptr_container_of(inserted);
+        return splay_tree_insert_internal(tree, node, *tree);
     }
 }
 
-struct splay_tree *
-splay_tree_node_remove_internal(struct splay_tree **tree, sint64 nice)
+static inline bool
+splay_tree_doubly_child_p(struct splay_tree *node)
 {
-    struct binary_search_tree *tmp;
-    struct binary_search_tree *removed;
+    dp_assert(splay_tree_structure_legal_p(node));
 
-    dp_assert(NULL != tree);
-    dp_assert(NULL != *tree);
-
-    tmp = &(*tree)->alias;
-    removed = binary_search_tree_node_remove_internal(&tmp, nice);
-    *tree = splay_tree_ptr_container_of(tmp);
-
-    return removed ? splay_tree_ptr_container_of(removed) : NULL;
+    if (node->left && node->right) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-/*
- * remove one node if given tree splay tree
- * @tree: the pointer of given tree
- * @nice: the nice value of the node
- *
- * RETURN the pointer of the removed node, if NULL or no such nice
- *    RETURN NULL.
- */
-struct splay_tree *
-splay_tree_node_remove(struct splay_tree **tree, sint64 nice)
+static inline void
+splay_tree_lt_doubly_child_strip(struct splay_tree **pre,
+    struct splay_tree *node)
 {
-    struct splay_tree *removed;
+    dp_assert(!complain_null_pointer_p(pre));
+    dp_assert(splay_tree_structure_legal_p(node));
+    dp_assert(splay_tree_structure_legal_p(*pre));
+    dp_assert(!splay_tree_doubly_child_p(node));
+    dp_assert(*pre == node);
 
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(*tree)) {
-        return NULL;
+    if (NULL != node->left) {
+        *pre = node->left;
     } else {
-        removed = splay_tree_node_remove_internal(tree, nice);
+        *pre = node->right;
+    }
 
-        if (NULL == removed) {
-            pr_log_warn("Failed to find the node in given tree.\n");
+    node->left = NULL;
+    node->right = NULL;
+}
+
+static inline struct splay_tree **
+splay_tree_find_ptr_to_min(struct splay_tree **tree)
+{
+    struct splay_tree **min;
+    struct splay_tree *splay;
+
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+
+    min = tree;
+    splay = *min;
+
+    while (splay->left) {
+        min = &splay->left;
+        splay = *min;
+    }
+
+    return min;
+}
+
+static inline void
+splay_tree_swap_child(struct splay_tree *a, struct splay_tree *b)
+{
+    void *tmp;
+
+    dp_assert(splay_tree_structure_legal_p(a));
+    dp_assert(splay_tree_structure_legal_p(b));
+
+    tmp = a->left;
+    a->left = b->left;
+    b->left = tmp;
+
+    tmp = a->right;
+    a->right = b->right;
+    b->right = tmp;
+}
+
+static inline void
+splay_tree_doubly_child_strip(struct splay_tree **pre)
+{
+    struct splay_tree *splay;
+    struct splay_tree *min;
+    struct splay_tree **min_pre;
+
+    dp_assert(!complain_null_pointer_p(pre));
+    dp_assert(splay_tree_structure_legal_p(*pre));
+    dp_assert(splay_tree_doubly_child_p(*pre));
+
+    splay = *pre;
+
+    if (!splay->right->left) {
+        // short cut here
+        *pre = splay->right;
+        splay->right->left = splay->left;
+        splay->left = splay->right = NULL;
+    } else {
+        min_pre = splay_tree_find_ptr_to_min(&splay->right);
+        min = *min_pre;
+
+        splay_tree_swap_child(splay, min);
+        *min_pre = splay;
+        *pre = min;
+
+        splay_tree_lt_doubly_child_strip(min_pre, splay);
+    }
+}
+
+static inline struct splay_tree *
+splay_tree_remove_internal(struct splay_tree **tree,
+    struct splay_tree *node)
+{
+    struct splay_tree *splay;
+    struct splay_tree *removed;
+    struct splay_tree **pre;
+
+    dp_assert(!complain_null_pointer_p(tree));
+    dp_assert(splay_tree_structure_legal_p(*tree));
+    dp_assert(splay_tree_ordered_p(*tree));
+    dp_assert(splay_tree_structure_legal_p(node));
+
+    pre = tree;
+    splay = *pre;
+    removed = NULL;
+
+    while (splay) {
+        if (node->nice > splay->nice) {
+            pre = &splay->right;
+        } else if (node->nice < splay->nice) {
+            pre = &splay->left;
+        } else if (splay != node) {
+            if (splay->left && node->nice == splay->left->nice) {
+                removed = splay_tree_remove_internal(&splay->left, node);
+            }
+            if (!removed && splay->right && node->nice == splay->right->nice) {
+                removed = splay_tree_remove_internal(&splay->right, node);
+            }
+            break;
+        } else if (splay_tree_doubly_child_p(splay)) {
+            splay_tree_doubly_child_strip(pre);
+            return splay;
+        } else {
+            splay_tree_lt_doubly_child_strip(pre, splay);
+            return splay;
+        }
+        splay = *pre;
+    }
+
+    if (NULL == removed) {
+        pr_log_warn("Failed to find the node in given tree.\n");
+    }
+
+    dp_assert(splay_tree_ordered_p(*tree));
+    return removed;
+}
+
+struct splay_tree *
+splay_tree_remove(struct splay_tree **tree, struct splay_tree *node)
+{
+    if (complain_null_pointer_p(tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(*tree)) {
+        return PTR_INVALID;
+    } else if (!splay_tree_structure_legal_p(node)) {
+        return PTR_INVALID;
+    } else {
+        return splay_tree_remove_internal(tree, node);
+    }
+}
+
+static inline void
+splay_tree_iterate_internal(struct splay_tree *tree,
+    void (*handle)(void *), enum ITER_ORDER order)
+{
+    dp_assert(LEGAL_ORDER_P(order));
+    dp_assert(!complain_null_pointer_p(handle));
+
+    if (tree) {
+        if (ORDER_PRE == order) {
+            handle(tree);
         }
 
-        return removed;
-    }
-}
+        splay_tree_iterate_internal(tree->left, handle, order);
 
-void
-splay_tree_node_remove_and_destroy(struct splay_tree **tree, sint64 nice)
-{
-    struct splay_tree *removed;
+        if (ORDER_IN == order) {
+            handle(tree);
+        }
 
-    if (!complain_null_pointer_p(tree) && !complain_null_pointer_p(*tree)) {
-        removed = splay_tree_node_remove_internal(tree, nice);
+        splay_tree_iterate_internal(tree->right, handle, order);
 
-        if (NULL == removed) {
-            pr_log_warn("Failed to find the node in given tree.\n");
-        } else {
-            splay_tree_node_destroy(removed);
+        if (ORDER_POST == order) {
+            handle(tree);
         }
     }
 }
@@ -674,7 +842,7 @@ splay_tree_iterate(struct splay_tree *tree,
     } else if (!LEGAL_ORDER_P(order)) {
         pr_log_warn("illegal oder type of iterate.\n");
     } else {
-        binary_search_tree_iterate_internal(&tree->alias, handle, order);
+        splay_tree_iterate_internal(tree, handle, order);
     }
 }
 

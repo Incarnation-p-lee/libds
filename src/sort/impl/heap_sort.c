@@ -68,7 +68,7 @@ heap_sort_percolate_down(void *base, uint32 size, uint32 csize, uint32 index,
     }
 
     sort_cell_copy(base + i * csize, tmp, csize);
-    memory_cache_dp_free(tmp);
+    memory_cache_free(tmp);
 }
 
 #undef HEAP_LEFT

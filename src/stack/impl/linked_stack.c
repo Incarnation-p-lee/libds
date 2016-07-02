@@ -54,7 +54,7 @@ linked_stack_destroy(struct linked_stack **stack)
             node = linked_stack_node_remove(node);
         }
 
-        memory_cache_dp_free(*stack);
+        memory_cache_free(*stack);
         *stack = NULL;
     }
 }
@@ -122,8 +122,8 @@ linked_stack_node_remove(struct linked_stack_space *node)
     link = &node->link;
 
     doubly_linked_list_remove(&link);
-    memory_cache_dp_free(node->space.bp);
-    memory_cache_dp_free(node);
+    memory_cache_free(node->space.bp);
+    memory_cache_free(node);
 
     if (NULL == link) {
         /*
