@@ -20,8 +20,8 @@ engines:
 
 ratings:
   paths:
-  - src/**
-  - script/**
+  - "**.h"
+  - "**.c"
 exclude_paths:
   - script/
   - tool/
