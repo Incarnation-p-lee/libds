@@ -4,11 +4,13 @@ compiler:
   - clang
 script: 
   - ulimit -s unlimited
-  - bash ./script/build.sh DEBUG X86_64 LIBC ELF
+  - bash ./script/build.sh DEBUG X86_64 LIBC ELF COVERAGE
   - bash ./script/run_unit_test.sh
   - bash ./script/build.sh RELEASE X86_64 LIBC ELF
   - bash ./script/run_performance_test.sh
 notifications:
   email:
     - incarnation.p.lee@outlook.com
+after_sucess:
+  - bash <(curl -s https://codecov.io/bash)
 
