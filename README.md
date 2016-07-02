@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
 [![Issue Count](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/issue_count.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
 [![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
-[![Code Climate](https://codeclimate.com/repos/57773ecfe0b9810064002c07/badges/a93677443febc8ace1b4/gpa.svg)](https://codeclimate.com/repos/57773ecfe0b9810064002c07/feed)
+[![Code Climate](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/gpa.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
 
