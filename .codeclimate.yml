@@ -5,9 +5,6 @@ engines:
     enabled: true
   fixme:
     enabled: true
-  gnu-complexity:
-    enabled: true
-
 ratings:
   paths:
   - "**.h"
