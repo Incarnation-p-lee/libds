@@ -9,5 +9,6 @@ bash ./script/build.sh RELEASE X86_64 LIBC ELF COVERAGE
 lcov --directory . --capture --output-file performance_test.info
 
 lcov --add-tracefile unit_test.info --add-tracefile performance_test.info --output-file coverage.info
+cp -v coverage.info /tmp/coverage.info
 rm -v *.gcno
 

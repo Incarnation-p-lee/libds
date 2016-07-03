@@ -5,7 +5,6 @@ compiler:
 script: 
   - ulimit -s unlimited
   - bash ./script/run_unit_test.sh
-  - coveralls-lcov coverage.info
   - bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
@@ -18,5 +17,6 @@ install:
   - gem install coveralls-lcov
   - cd -
 after_success:
+  - coveralls-lcov /tmp/coverage.info
   - bash ./script/run_performance_test.sh
 
