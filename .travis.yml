@@ -18,7 +18,6 @@ install:
   - cd -
   
 after_success:
-  - rm -v *.gcno
   - bash <(curl -s https://codecov.io/bash)
   - coveralls-lcov coverage.info
 
