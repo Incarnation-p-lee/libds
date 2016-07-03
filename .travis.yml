@@ -15,12 +15,10 @@ install:
   - tar xf lcov_1.11.orig.tar.gz
   - sudo make -C lcov-1.11/ install
   - gem install coveralls-lcov
-  - npm install codecov --save
   - cd -
   
 after_success:
-  - cat coverage.info | codecov
-  - npm run codecov
+  - rm -v *.gcno
+  - bash <(curl -s https://codecov.io/bash)
   - coveralls-lcov coverage.info
-# bash <(curl -s https://codecov.io/bash)
 
