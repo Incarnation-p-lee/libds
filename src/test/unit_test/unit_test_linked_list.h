@@ -294,37 +294,36 @@ utest_##name##_linked_list_iterate(void)                          \
     UNIT_TEST_RESULT(name##_linked_list_iterate, pass);           \
 }
 
-#define UT_LINKED_LIST_merge(name)                                             \
-static void                                                                    \
-utest_##name##_linked_list_merge(void)                                         \
-{                                                                              \
-    bool pass;                                                                 \
-    uint32 length;                                                             \
-    struct LINKED_LIST *list_m;                                                \
-    struct LINKED_LIST *list_n;                                                \
-    struct LINKED_LIST *list;                                                  \
-                                                                               \
-    pass = true;                                                               \
-    list_m = TEST_LINKED_LIST_sample(0x1F2, 0x381);                            \
-    list_n = TEST_LINKED_LIST_sample(0x231, 0x4e2);                            \
-                                                                               \
-    RESULT_CHECK_pointer(PTR_INVALID, LINKED_LIST_merge(NULL, NULL), &pass);   \
-    RESULT_CHECK_pointer(list_m, LINKED_LIST_merge(list_m, NULL), &pass);      \
-    RESULT_CHECK_pointer(list_m, LINKED_LIST_merge(NULL, list_m), &pass);      \
-                                                                               \
-    length = LINKED_LIST_length(list_m) + LINKED_LIST_length(list_n);          \
-    list_m = LINKED_LIST_merge(list_m, list_n);                                \
-    RESULT_CHECK_uint32(length, LINKED_LIST_length(list_m), &pass);            \
-                                                                               \
-    list = list_n;                                                             \
-    do {                                                                       \
-        RESULT_CHECK_bool(false, LINKED_LIST_contains_p(list_m, list), &pass); \
-        list = list->next;                                                     \
-    } while (list != list_n);                                                  \
-                                                                               \
-    LINKED_LIST_destroy(&list_m);                                              \
-    LINKED_LIST_destroy(&list_n);                                              \
-    UNIT_TEST_RESULT(name##_linked_list_merge, pass);                          \
+#define UT_LINKED_LIST_merge(name)                                            \
+static void                                                                   \
+utest_##name##_linked_list_merge(void)                                        \
+{                                                                             \
+    bool pass;                                                                \
+    uint32 length;                                                            \
+    struct LINKED_LIST *list_m;                                               \
+    struct LINKED_LIST *list_n;                                               \
+    struct LINKED_LIST *list;                                                 \
+                                                                              \
+    pass = true;                                                              \
+    list_m = TEST_LINKED_LIST_sample(0x1F2, 0x381);                           \
+    list_n = TEST_LINKED_LIST_sample(0x231, 0x4e2);                           \
+                                                                              \
+    RESULT_CHECK_pointer(PTR_INVALID, LINKED_LIST_merge(NULL, NULL), &pass);  \
+    RESULT_CHECK_pointer(list_m, LINKED_LIST_merge(list_m, NULL), &pass);     \
+    RESULT_CHECK_pointer(list_m, LINKED_LIST_merge(NULL, list_m), &pass);     \
+                                                                              \
+    length = LINKED_LIST_length(list_m) + LINKED_LIST_length(list_n);         \
+    list_m = LINKED_LIST_merge(list_m, list_n);                               \
+    RESULT_CHECK_uint32(length, LINKED_LIST_length(list_m), &pass);           \
+                                                                              \
+    list = list_n;                                                            \
+    do {                                                                      \
+        RESULT_CHECK_bool(true, LINKED_LIST_contains_p(list_m, list), &pass); \
+        list = list->next;                                                    \
+    } while (list != list_n);                                                 \
+                                                                              \
+    LINKED_LIST_destroy(&list_m);                                             \
+    UNIT_TEST_RESULT(name##_linked_list_merge, pass);                         \
 }
 
 #endif

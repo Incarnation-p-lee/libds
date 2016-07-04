@@ -325,14 +325,30 @@ single_linked_list_iterate(struct single_linked_list *list,
     }
 }
 
+static inline struct single_linked_list *
+single_linked_list_merge_i(struct single_linked_list *m,
+    struct single_linked_list *n)
+{
+    struct single_linked_list *m_prev;
+    struct single_linked_list *n_prev;
+
+    dp_assert(single_linked_list_structure_legal_p(m));
+    dp_assert(single_linked_list_structure_legal_p(n));
+    dp_assert(!single_linked_list_contains_ip(m, n));
+
+    m_prev = single_linked_list_previous_i(m);
+    n_prev = single_linked_list_previous_i(n);
+
+    m_prev->next = n;
+    n_prev->next = m;
+
+    return m;
+}
+
 struct single_linked_list *
 single_linked_list_merge(struct single_linked_list *m,
     struct single_linked_list *n)
 {
-    struct single_linked_list *list;
-    struct single_linked_list *inserted;
-
-    // Fix-Me
     if (!single_linked_list_structure_legal_ip(m)
         && !single_linked_list_structure_legal_ip(n)) {
         return PTR_INVALID;
@@ -340,19 +356,11 @@ single_linked_list_merge(struct single_linked_list *m,
         return n;
     } else if (!single_linked_list_structure_legal_ip(n)) {
         return m;
-    } else if (m == n) {
+    } else if (single_linked_list_contains_ip(m, n)) {
         pr_log_info("Merge same linked list, nothing will be done.\n");
         return m;
     } else {
-        list = n;
-
-        do {
-            inserted = single_linked_list_node_copy(list);
-            single_linked_list_insert_after_i(m, inserted);
-            list = list->next;
-        } while (list != n);
-
-        return m;
+        return single_linked_list_merge_i(m, n);
     }
 }
 

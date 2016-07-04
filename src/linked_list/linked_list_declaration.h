@@ -19,8 +19,10 @@ static inline bool skip_linked_list_exist_on_level(struct skip_linked_list *list
 static inline bool skip_linked_list_ordering_p(struct skip_linked_list *list);
 static inline bool skip_linked_list_structure_legal_ip(struct skip_linked_list *list);
 static inline struct doubly_linked_list * doubly_linked_list_create_i();
+static inline struct doubly_linked_list * doubly_linked_list_merge_i(struct doubly_linked_list *m, struct doubly_linked_list *n);
 static inline struct doubly_linked_list * doubly_linked_list_remove_i(struct doubly_linked_list **list);
 static inline struct single_linked_list * single_linked_list_create_i(void);
+static inline struct single_linked_list * single_linked_list_merge_i(struct single_linked_list *m, struct single_linked_list *n);
 static inline struct single_linked_list * single_linked_list_previous_i(struct single_linked_list *list);
 static inline struct single_linked_list * single_linked_list_remove_i(struct single_linked_list **list);
 static inline struct skip_linked_list * skip_linked_list_find_key_i(struct skip_linked_list *list, sint32 key, uint32 lv);
