@@ -7,15 +7,15 @@ bool doubly_linked_list_contains_p(struct doubly_linked_list *list, struct doubl
 bool doubly_linked_list_structure_legal_p(struct doubly_linked_list *list);
 bool single_linked_list_contains_p(struct single_linked_list *list, struct single_linked_list *node);
 bool single_linked_list_structure_legal_p(struct single_linked_list *list);
-bool skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key);
+bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *node);
 bool skip_linked_list_structure_legal_p(struct skip_linked_list *list);
 sint32 skip_linked_list_key(struct skip_linked_list *list);
 static inline bool doubly_linked_list_contains_ip(struct doubly_linked_list *list, struct doubly_linked_list *node);
 static inline bool doubly_linked_list_structure_legal_ip(struct doubly_linked_list *list);
 static inline bool single_linked_list_contains_ip(struct single_linked_list *list, struct single_linked_list *node);
 static inline bool single_linked_list_structure_legal_ip(struct single_linked_list *list);
+static inline bool skip_linked_list_contains_ip(struct skip_linked_list *list, struct skip_linked_list *node);
 static inline bool skip_linked_list_exist_on_level(struct skip_linked_list *list, struct skip_linked_list *node, uint32 level);
-static inline bool skip_linked_list_key_contains_ip(struct skip_linked_list *list, sint32 key);
 static inline bool skip_linked_list_ordering_p(struct skip_linked_list *list);
 static inline bool skip_linked_list_structure_legal_ip(struct skip_linked_list *list);
 static inline struct doubly_linked_list * doubly_linked_list_create_i();

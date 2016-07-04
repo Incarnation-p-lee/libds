@@ -219,7 +219,7 @@ extern bool doubly_linked_list_contains_p(struct doubly_linked_list *list, struc
 extern bool doubly_linked_list_structure_legal_p(struct doubly_linked_list *list);
 extern bool single_linked_list_contains_p(struct single_linked_list *list, struct single_linked_list *node);
 extern bool single_linked_list_structure_legal_p(struct single_linked_list *list);
-extern bool skip_linked_list_key_contains_p(struct skip_linked_list *list, sint32 key);
+extern bool skip_linked_list_contains_p(struct skip_linked_list *list, struct skip_linked_list *node);
 extern bool skip_linked_list_structure_legal_p(struct skip_linked_list *list);
 extern sint32 skip_linked_list_key(struct skip_linked_list *list);
 extern struct doubly_linked_list * doubly_linked_list_create(void);

@@ -259,11 +259,11 @@ static const struct test_layer_table skip_linked_list_interface[] = {
         },
     },
     {
-        "key_contains_p",
+        "contains_p",
         NULL,
         {
-            &utest_skip_linked_list_key_contains_p,
-            &ptest_skip_linked_list_key_contains_p,
+            &utest_skip_linked_list_contains_p,
+            &ptest_skip_linked_list_contains_p,
         },
     },
     {

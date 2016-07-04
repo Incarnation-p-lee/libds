@@ -57,7 +57,7 @@ utest_skip_linked_list_create_with_key(void)
 }
 
 static void
-utest_skip_linked_list_key_contains_p(void)
+utest_skip_linked_list_contains_p(void)
 {
     bool pass;
     sint32 key;
@@ -68,20 +68,24 @@ utest_skip_linked_list_key_contains_p(void)
     list = NULL;
     key = 0xfffff;
 
-    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, 0), &pass);
+    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, NULL), &pass);
     list = test_skip_linked_list_sample(0xedbf, 0x103f);
+    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, NULL), &pass);
+
     tmp = skip_linked_list_create_with_key(0x2233);
-    RESULT_CHECK_bool(false, skip_linked_list_key_contains_p(list, tmp->key), &pass);
+    RESULT_CHECK_bool(false, skip_linked_list_contains_p(list, tmp), &pass);
     skip_linked_list_destroy(&tmp);
 
     key = 0xfff;
-    tmp = skip_linked_list_find_key(list, key--);
-    if (tmp) {
-        RESULT_CHECK_bool(true, skip_linked_list_key_contains_p(list, tmp->key), &pass);
+    while (key--) {
+        tmp = skip_linked_list_find_key(list, key);
+        if (tmp) {
+            RESULT_CHECK_bool(true, skip_linked_list_contains_p(list, tmp), &pass);
+        }
     }
 
     skip_linked_list_destroy(&list);
-    UNIT_TEST_RESULT(skip_linked_list_key_contains_p, pass);
+    UNIT_TEST_RESULT(skip_linked_list_contains_p, pass);
 }
 
 

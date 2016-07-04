@@ -78,7 +78,7 @@ ptest_skip_linked_list_find_key(uint32 count)
 }
 
 static void
-ptest_skip_linked_list_key_contains_p(uint32 count)
+ptest_skip_linked_list_contains_p(uint32 count)
 {
     struct skip_linked_list *list;
     struct skip_linked_list *tmp;
@@ -91,14 +91,14 @@ ptest_skip_linked_list_key_contains_p(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        skip_linked_list_key_contains_p(list, tmp->key);
+        skip_linked_list_contains_p(list, tmp);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     skip_linked_list_destroy(&tmp);
     skip_linked_list_destroy(&list);
-    PERFORMANCE_TEST_RESULT(skip_linked_list_key_contains_p);
+    PERFORMANCE_TEST_RESULT(skip_linked_list_contains_p);
 }
 
 static void
