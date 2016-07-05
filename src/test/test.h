@@ -28,6 +28,8 @@
 #define UNIT_TEST_RESULT(symbol, pass) unit_test_result_print( \
     SYM_2_STR(symbol), pass)
 
+#define UNIT_TEST_BEGIN(symbol) unit_test_begin_print(SYM_2_STR(symbol))
+
 struct memory_maps {
     char        name[NAME_LEN];
     uint32      authority;

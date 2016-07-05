@@ -24,6 +24,7 @@
 #define dp_fclose              fclose
 #define dp_fopen               fopen
 #define dp_fprintf             fprintf
+#define dp_fflush              fflush
 #define dp_fgets               fgets
 #define dp_free                free
 #define dp_fwrite              fwrite

@@ -7,6 +7,7 @@ static inline bool utest_array_stack_struct_legal_p(struct array_stack *stack);
 static inline bool utest_linked_stack_struct_legal_p(struct linked_stack *stack);
 static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
+static inline void unit_test_begin_print(char *name);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);

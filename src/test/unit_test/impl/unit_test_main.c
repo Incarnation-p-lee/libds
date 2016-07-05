@@ -68,6 +68,17 @@ unit_test_execution_interface(const struct test_layer_table *interface,
 }
 
 static inline void
+unit_test_begin_print(char *name)
+{
+    if (!name) {
+        pr_log_warn("Unknow Test Function Name, nothing will be done.\n");
+    } else {
+        dp_fprintf(stdout, "    . Hold .. %s\r", name);
+        dp_fflush(stdout);
+    }
+}
+
+static inline void
 unit_test_result_print(char *name, bool passed)
 {
     if (!name) {

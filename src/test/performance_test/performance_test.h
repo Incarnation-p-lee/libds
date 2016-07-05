@@ -5,6 +5,7 @@
 #define PERFORMANCE_TEST_GOLDEN         "./performance/performance.golden.ref"
 #define PERFORMANCE_TEST_RESULT(symbol) performance_test_result_print( \
     SYM_2_STR(symbol), performance_test_time_stamp_period())
+#define PERFORMANCE_TEST_BEGIN(symbol) performance_test_begin_print(SYM_2_STR(symbol))
 
 struct performance_test_reference {
     char   *name;

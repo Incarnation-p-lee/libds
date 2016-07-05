@@ -70,6 +70,17 @@ performance_test_execution_interface(const struct test_layer_table *interface,
 }
 
 static inline void
+performance_test_begin_print(char *name)
+{
+    if (!name) {
+        pr_log_warn("Unknow Test Function Name, nothing will be done.\n");
+    } else {
+        dp_fprintf(stdout, "    . Holding   .. 0xxxxxxxxxxx micro-seconds .. %s\r", name);
+        dp_fflush(stdout);
+    }
+}
+
+static inline void
 performance_test_result_print(char *name, sint64 period)
 {
     double variance;

@@ -75,7 +75,7 @@ ptest_##name##_linked_list_insert_before(uint32 count)         \
     while (count--) {                                          \
         tmp = LINKED_LIST_create();                            \
         LINKED_LIST_insert_before(list, tmp);                  \
-        LINKED_LIST_remove(&list);                             \
+        tmp = LINKED_LIST_remove(&list);                       \
         LINKED_LIST_destroy(&tmp);                             \
     }                                                          \
                                                                \
@@ -101,7 +101,7 @@ ptest_##name##_linked_list_insert_after(uint32 count)         \
     while (count--) {                                         \
         tmp = LINKED_LIST_create();                           \
         LINKED_LIST_insert_after(list, tmp);                  \
-        LINKED_LIST_remove(&list);                            \
+        tmp = LINKED_LIST_remove(&list);                      \
         LINKED_LIST_destroy(&tmp);                            \
     }                                                         \
                                                               \
@@ -268,6 +268,7 @@ ptest_##name##_linked_list_merge(uint32 count)         \
     struct LINKED_LIST *list;                          \
     struct LINKED_LIST *head;                          \
                                                        \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_merge);  \
     PERFORMANCE_TEST_CHECKPOINT;                       \
                                                        \
     while (count--) {                                  \
