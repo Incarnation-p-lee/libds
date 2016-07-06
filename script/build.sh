@@ -14,8 +14,8 @@ Build Script Usage:
                            X86_64/X86_32
                            LIBC/KERNEL
                            ELF/OBJ/DYN
-                           PROFILE         -optional
-                           CODE_COVERAGE   -optional
+                           PROFILE       -optional
+                           COVERAGE      -optional
 EOF
     exit 1
 fi
@@ -56,6 +56,9 @@ do
         "DYN")
             target=dyn
             ld_config="$ld_config -shared -fPIC" ;;
+        "COVERAGE")
+            cc_config="$cc_config --coverage"
+            ld_config="$ld_config --coverage" ;;
     esac
 done
 

@@ -1,0 +1,18 @@
+engines:
+  rubocop: 
+    enabled: true
+  fixme:
+    enabled: true
+  gnu-complexity:
+    enabled: true
+ratings:
+  paths:
+  - "**.h"
+  - "**.c"
+exclude_paths:
+  - script/
+  - tool/
+  - performance/
+script:
+  - brew update && brew upgrade codeclimate
+
