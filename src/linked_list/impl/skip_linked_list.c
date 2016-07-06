@@ -434,7 +434,6 @@ skip_linked_list_remove_i(struct skip_linked_list **list,
     if ((*list)->key == tgt->key) {
         removed = *list;
         *list = removed->next;
-
         skip_linked_list_remove_head(removed);
     } else {
         node = *list;
@@ -460,9 +459,10 @@ skip_linked_list_remove_i(struct skip_linked_list **list,
                 node = node->layer[lv];
             }
         }
+
+        dp_assert(skip_linked_list_ordering_p(head));
     }
 
-    dp_assert(skip_linked_list_ordering_p(*list));
     return removed;
 }
 

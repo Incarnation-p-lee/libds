@@ -7,6 +7,7 @@ ptest_##name##_linked_list_create(uint32 count)         \
 {                                                       \
     struct LINKED_LIST *list;                           \
                                                         \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_create);  \
     PERFORMANCE_TEST_CHECKPOINT;                        \
                                                         \
     while (count--) {                                   \
@@ -27,6 +28,7 @@ ptest_##name##_linked_list_initial(uint32 count)         \
                                                          \
     list = LINKED_LIST_create();                         \
                                                          \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_initial);  \
     PERFORMANCE_TEST_CHECKPOINT;                         \
                                                          \
     while (count--) {                                    \
@@ -45,6 +47,7 @@ ptest_##name##_linked_list_previous(uint32 count)         \
 {                                                         \
     struct LINKED_LIST *list;                             \
                                                           \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_previous);  \
     list = TEST_LINKED_LIST_sample(0x22, 0x12);           \
                                                           \
     PERFORMANCE_TEST_CHECKPOINT;                          \
@@ -70,6 +73,7 @@ ptest_##name##_linked_list_insert_before(uint32 count)         \
     count = 0u == count ? 1000 : count;                        \
     list = TEST_LINKED_LIST_sample(0x722, 0x342);              \
                                                                \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_insert_before);  \
     PERFORMANCE_TEST_CHECKPOINT;                               \
                                                                \
     while (count--) {                                          \
@@ -96,6 +100,7 @@ ptest_##name##_linked_list_insert_after(uint32 count)         \
     count = 0u == count ? 1000 : count;                       \
     list = TEST_LINKED_LIST_sample(0x722, 0x342);             \
                                                               \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_insert_after);  \
     PERFORMANCE_TEST_CHECKPOINT;                              \
                                                               \
     while (count--) {                                         \
@@ -117,6 +122,7 @@ ptest_##name##_linked_list_destroy(uint32 count)         \
 {                                                        \
     struct LINKED_LIST *list;                            \
                                                          \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_destroy);  \
     PERFORMANCE_TEST_CHECKPOINT;                         \
                                                          \
     while (count--) {                                    \
@@ -137,6 +143,7 @@ ptest_##name##_linked_list_length(uint32 count)         \
                                                         \
     list = TEST_LINKED_LIST_sample(0xe3e, 0x9a7);       \
                                                         \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_length);  \
     PERFORMANCE_TEST_CHECKPOINT;                        \
                                                         \
     while (count--) {                                   \
@@ -160,6 +167,7 @@ ptest_##name##_linked_list_node_by_index(uint32 count)         \
     length = LINKED_LIST_length(list);                         \
     length /= 2;                                               \
                                                                \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_node_by_index);  \
     PERFORMANCE_TEST_CHECKPOINT;                               \
                                                                \
     while (count--) {                                          \
@@ -181,6 +189,7 @@ ptest_##name##_linked_list_contains_p(uint32 count)         \
     list = TEST_LINKED_LIST_sample(0xfde, 0x4af);           \
     list = list;                                            \
                                                             \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_contains_p);  \
     PERFORMANCE_TEST_CHECKPOINT;                            \
                                                             \
     while (count--) {                                       \
@@ -203,6 +212,7 @@ ptest_##name##_linked_list_node_copy(uint32 count)         \
                                                            \
     list = LINKED_LIST_create();                           \
                                                            \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_node_copy);  \
     PERFORMANCE_TEST_CHECKPOINT;                           \
                                                            \
     while (count--) {                                      \
@@ -227,6 +237,7 @@ ptest_##name##_linked_list_remove(uint32 count)         \
                                                         \
     list = TEST_LINKED_LIST_sample(0xe0d, 0x493);       \
                                                         \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_remove);  \
     PERFORMANCE_TEST_CHECKPOINT;                        \
                                                         \
     while (count--) {                                   \
@@ -249,6 +260,7 @@ ptest_##name##_linked_list_iterate(uint32 count)                 \
     list = TEST_LINKED_LIST_sample(0xe0d, 0x493);                \
     test_iterate_reference_clean();                              \
                                                                  \
+    PERFORMANCE_TEST_BEGIN(name##_linked_list_iterate);          \
     PERFORMANCE_TEST_CHECKPOINT;                                 \
                                                                  \
     while (count--) {                                            \
