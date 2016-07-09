@@ -3,7 +3,7 @@ test_case_list(struct test_extra_info *info, char *content)
 {
     struct test_case_filter *filter;
 
-    dp_assert(NULL != content);
+    assert(NULL != content);
 
     filter = test_case_filter_obtain(content);
 
@@ -52,9 +52,9 @@ test_case_list_interface(const struct test_layer_table *interface,
 {
     char *tmp;
 
-    dp_assert(NULL != filter);
-    dp_assert(NULL != category);
-    dp_assert(NULL != implement);
+    assert(NULL != filter);
+    assert(NULL != category);
+    assert(NULL != implement);
 
     tmp = filter->interface;
 

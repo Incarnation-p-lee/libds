@@ -59,7 +59,7 @@ memory_maps_one_line_process(char *line, uint32 len)
     static struct memory_maps *start = mmaps;
     char *name;
 
-    dp_assert(len <= NAME_LEN);
+    assert(len <= NAME_LEN);
     if ((uint32)(start - mmaps) == MAP_ENTRY_MAX) {
         pr_log_err("Touch the end of the array, may override.\n");
     }

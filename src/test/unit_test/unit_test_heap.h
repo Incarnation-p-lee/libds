@@ -7,7 +7,7 @@ utest_##name##_heap_structure_legal_p(struct name##_heap *heap)       \
 {                                                                     \
     bool result;                                                      \
                                                                       \
-    dp_assert(!complain_null_pointer_p(heap));                           \
+    assert(!complain_null_pointer_p(heap));                           \
                                                                       \
     result = true;                                                    \
                                                                       \

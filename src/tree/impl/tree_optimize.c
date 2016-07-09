@@ -24,7 +24,7 @@ avl_tree_height_opt(struct avl_tree *tree)
          *    be lie in an input operand.
          */
 
-    dp_assert(avl_tree_height_opt_validity_p(tree, height));
+    assert(avl_tree_height_opt_validity_p(tree, height));
 
     return height;
 }
@@ -53,7 +53,7 @@ avl_tree_height_opt(struct avl_tree *tree)
          *    be lie in an input operand.
          */
 
-    dp_assert(avl_tree_height_opt_validity_p(tree, height));
+    assert(avl_tree_height_opt_validity_p(tree, height));
 
     return height;
 }
@@ -67,7 +67,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
     sint32 left;
     sint32 right;
 
-    dp_assert(avl_tree_structure_legal_p(tree));
+    assert(avl_tree_structure_legal_p(tree));
 
     left = avl_tree_height_opt(tree->left);
     right = avl_tree_height_opt(tree->right);
@@ -90,7 +90,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
         :"m"(left), "m"(right)
         :"eax", "ecx");
 
-    dp_assert(avl_tree_balanced_optimize_validity_p(tree, balanced));
+    assert(avl_tree_balanced_optimize_validity_p(tree, balanced));
 
     return balanced;
 }

@@ -13,7 +13,7 @@ performance_test_time_stamp_end(void)
 static inline sint64
 performance_test_time_stamp_timeval_unpack(struct timeval *tv)
 {
-    dp_assert(NULL != tv);
+    assert(NULL != tv);
 
     return (sint64)(tv->tv_sec * 1000000 + tv->tv_usec);
 }
@@ -26,7 +26,7 @@ performance_test_time_stamp_period(void)
 
     end = performance_test_time_stamp_timeval_unpack(&chk_pnt_end);
     bgn = performance_test_time_stamp_timeval_unpack(&chk_pnt_bgn);
-    dp_assert(end > bgn);
+    assert(end > bgn);
 
     return end - bgn;
 }

@@ -31,7 +31,9 @@
     #define pr_log_info(msg)       libds_log_print(INFO, msg)
     #define pr_log_warn(msg)       libds_log_print(WARN, msg)
     #define pr_log_debug(msg)      libds_log_print(DBUG, msg)
-    #define assert_not_reached()   dp_assert(false)
+    #define assert(exp)            complain_assert(#exp, __FILE__, __FUNCTION__, \
+                                   __LINE__, exp)
+    #define assert_not_reached()   assert(false)
 #else
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
@@ -39,6 +41,7 @@
     #define pr_log_info(msg)
     #define pr_log_warn(msg)
     #define pr_log_debug(msg)
+    #define assert(exp)
     #define assert_not_reached()  ((*(uint32 *)0) = 0xdeadu)
 #endif
 

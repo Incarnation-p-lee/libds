@@ -49,7 +49,7 @@ UT_STACK_iterate(linked)
 static inline bool
 utest_linked_stack_struct_legal_p(struct linked_stack *stack)
 {
-    dp_assert(!complain_null_pointer_p(stack));
+    assert(!complain_null_pointer_p(stack));
 
     if (stack->base != stack->top) {
         return false;

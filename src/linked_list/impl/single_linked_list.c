@@ -45,7 +45,7 @@ single_linked_list_create(void)
 static inline void
 single_linked_list_initial_i(s_single_linked_list_t *list)
 {
-    dp_assert(!complain_null_pointer_p(list));
+    assert(!complain_null_pointer_p(list));
 
     list->next = list;
 }
@@ -73,9 +73,9 @@ static inline void
 single_linked_list_insert_after_i(s_single_linked_list_t *list,
     s_single_linked_list_t *node)
 {
-    dp_assert(single_linked_list_structure_legal_ip(list));
-    dp_assert(single_linked_list_structure_legal_ip(node));
-    dp_assert(!single_linked_list_contains_ip(list, node));
+    assert(single_linked_list_structure_legal_ip(list));
+    assert(single_linked_list_structure_legal_ip(node));
+    assert(!single_linked_list_contains_ip(list, node));
 
     node->next = list->next;
     list->next = node;
@@ -101,9 +101,9 @@ single_linked_list_insert_before_i(s_single_linked_list_t *list,
 {
     s_single_linked_list_t *prev;
 
-    dp_assert(single_linked_list_structure_legal_ip(list));
-    dp_assert(single_linked_list_structure_legal_ip(node));
-    dp_assert(!single_linked_list_contains_ip(list, node));
+    assert(single_linked_list_structure_legal_ip(list));
+    assert(single_linked_list_structure_legal_ip(node));
+    assert(!single_linked_list_contains_ip(list, node));
 
     prev = single_linked_list_previous_i(list);
     prev->next = node;
@@ -163,7 +163,7 @@ single_linked_list_length_i(s_single_linked_list_t *list)
     uint32 len;
     s_single_linked_list_t *node;
 
-    dp_assert(single_linked_list_structure_legal_ip(list));
+    assert(single_linked_list_structure_legal_ip(list));
 
     len = 0u;
     node = list;
@@ -217,8 +217,8 @@ single_linked_list_contains_ip(s_single_linked_list_t *list,
 {
     s_single_linked_list_t *single;
 
-    dp_assert(single_linked_list_structure_legal_ip(list));
-    dp_assert(single_linked_list_structure_legal_ip(node));
+    assert(single_linked_list_structure_legal_ip(list));
+    assert(single_linked_list_structure_legal_ip(node));
 
     single = list;
 
@@ -250,8 +250,8 @@ single_linked_list_previous_i(s_single_linked_list_t *list)
 {
     register s_single_linked_list_t *prev;
 
-    dp_assert(single_linked_list_structure_legal_ip(list));
-    dp_assert(single_linked_list_structure_legal_ip(list->next));
+    assert(single_linked_list_structure_legal_ip(list));
+    assert(single_linked_list_structure_legal_ip(list->next));
 
     prev = list;
 
@@ -278,8 +278,8 @@ single_linked_list_remove_i(s_single_linked_list_t **list)
     s_single_linked_list_t *prev;
     s_single_linked_list_t *removed;
 
-    dp_assert(!complain_null_pointer_p(list));
-    dp_assert(single_linked_list_structure_legal_ip(*list));
+    assert(!complain_null_pointer_p(list));
+    assert(single_linked_list_structure_legal_ip(*list));
 
     removed = *list;
 
@@ -332,9 +332,9 @@ single_linked_list_merge_i(s_single_linked_list_t *m,
     s_single_linked_list_t *m_prev;
     s_single_linked_list_t *n_prev;
 
-    dp_assert(single_linked_list_structure_legal_p(m));
-    dp_assert(single_linked_list_structure_legal_p(n));
-    dp_assert(!single_linked_list_contains_ip(m, n));
+    assert(single_linked_list_structure_legal_p(m));
+    assert(single_linked_list_structure_legal_p(n));
+    assert(!single_linked_list_contains_ip(m, n));
 
     m_prev = single_linked_list_previous_i(m);
     n_prev = single_linked_list_previous_i(n);

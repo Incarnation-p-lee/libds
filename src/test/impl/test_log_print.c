@@ -1,7 +1,7 @@
 void
 libds_log_print(enum log_level lvl, const char *msg)
 {
-    dp_assert(NULL != logfile);
+    assert(NULL != logfile);
 
     if (msg) {
         switch (lvl) {

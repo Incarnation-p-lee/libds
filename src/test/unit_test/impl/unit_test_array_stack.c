@@ -45,7 +45,7 @@ UT_STACK_iterate(array)
 static inline bool
 utest_array_stack_struct_legal_p(struct array_stack *stack)
 {
-    dp_assert(!complain_null_pointer_p(stack));
+    assert(!complain_null_pointer_p(stack));
 
     if (STACK_SIZE_DFT != array_stack_dim(stack)) {
         return false;

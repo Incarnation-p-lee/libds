@@ -30,3 +30,15 @@ complain_zero_size_p(uint32 size)
     }
 }
 
+void
+complain_assert(char *msg, const char *fname, const char *func,
+    uint32 line, bool cond)
+{
+    if (msg && fname && func && !cond) {
+        dp_printf("COMPLAIN ASSERTION: => < %s > Fail ... \n"
+                  "  In function %s\n"
+                  "  At file %s +%d\n", msg, func, fname, line);
+        *(uint32 *)0 = 0;
+    }
+}
+

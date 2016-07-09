@@ -3,7 +3,7 @@ hashing_table_create(uint32 size)
 {
     struct hashing_table *hash;
 
-    dp_assert(!complain_zero_size_p(size));
+    assert(!complain_zero_size_p(size));
 
     hash = memory_cache_allocate(sizeof(*hash));
     hash->size = size;
@@ -35,7 +35,7 @@ hashing_table_initial(struct hashing_table *hash)
 {
     void **iter;
 
-    dp_assert(!complain_null_pointer_p(hash));
+    assert(!complain_null_pointer_p(hash));
 
     hash->space = memory_cache_allocate(sizeof(*hash->space) * hash->size);
 
@@ -48,8 +48,8 @@ hashing_table_initial(struct hashing_table *hash)
 static inline void
 hashing_table_hash_function_set(struct hashing_table *hash, void *func)
 {
-    dp_assert(!complain_null_pointer_p(func));
-    dp_assert(!complain_null_pointer_p(hash));
+    assert(!complain_null_pointer_p(func));
+    assert(!complain_null_pointer_p(hash));
 
     hash->func = func;
 }
@@ -57,7 +57,7 @@ hashing_table_hash_function_set(struct hashing_table *hash, void *func)
 static inline void **
 hashing_table_space(struct hashing_table *hash)
 {
-    dp_assert(hashing_table_structure_legal_p(hash));
+    assert(hashing_table_structure_legal_p(hash));
 
     return hash->space;
 }
@@ -65,8 +65,8 @@ hashing_table_space(struct hashing_table *hash)
 static inline void
 hashing_table_destroy(struct hashing_table **hash)
 {
-    dp_assert(!complain_null_pointer_p(hash));
-    dp_assert(hashing_table_structure_legal_p(*hash));
+    assert(!complain_null_pointer_p(hash));
+    assert(hashing_table_structure_legal_p(*hash));
 
     memory_cache_free((*hash)->space);
     memory_cache_free((*hash));
@@ -79,7 +79,7 @@ hashing_table_load_factor_calculate(struct hashing_table *hash)
     uint32 retval;
     void **iter;
 
-    dp_assert(hashing_table_structure_legal_p(hash));
+    assert(hashing_table_structure_legal_p(hash));
 
     retval = 0u;
     iter = hash->space;

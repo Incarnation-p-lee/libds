@@ -55,8 +55,8 @@ INVFMT:
 static inline void
 test_case_filter_obtain_internal(char *dest, char *arg, uint32 len)
 {
-    dp_assert(NULL != arg);
-    dp_assert(NULL != dest);
+    assert(NULL != arg);
+    assert(NULL != dest);
 
     dp_memcpy(dest, arg, len);
 }
@@ -78,7 +78,7 @@ test_case_filter_initial(void)
 static void
 test_case_filter_destroy(struct test_case_filter **filter)
 {
-    dp_assert(NULL != filter);
+    assert(NULL != filter);
 
     memory_cache_free(*filter);
     *filter = NULL;

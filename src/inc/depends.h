@@ -5,19 +5,12 @@
 
 #include <unistd.h>
 #include <limits.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <stddef.h>
 #include <sys/time.h>
-
-#if defined DEBUG
-    #define dp_assert              assert
-#else
-    #define dp_assert(x)
-#endif
 
 #define dp_atoll               atoll
 #define dp_exit                exit
@@ -71,9 +64,9 @@ extern void kfree(void *);
 #define dp_free                kfree
 
 #if defined DEBUG
-    #define dp_assert              kassert
+    #define assert              kassert
 #else
-    #define dp_assert(x)
+    #define assert(x)
 #endif
 
 #endif

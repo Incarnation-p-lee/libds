@@ -4,7 +4,7 @@ quick_sort(void *base, uint32 size, uint32 csize,
 {
     if (sort_parameters_legal_p(base, size, csize, compare)) {
         quick_sort_recursive(base, 0, size - 1, csize, compare);
-        dp_assert(sort_data_sorted_p(base, size, csize, compare));
+        assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 
@@ -17,7 +17,7 @@ quick_sort_recursive(void *base, uint32 left, uint32 right,
     void *ptr_m;
     uint32 median;
 
-    dp_assert(sort_parameters_legal_p(base, csize, csize, compare));
+    assert(sort_parameters_legal_p(base, csize, csize, compare));
 
     ptr_l = base + left * csize;
     ptr_r = base + right * csize;
@@ -64,7 +64,7 @@ quick_sort_obtain_median(void *base, uint32 left, uint32 right, uint32 csize,
     void *ptr_r;
     void *ptr_m;
 
-    dp_assert(sort_parameters_legal_p(base, csize, csize, compare));
+    assert(sort_parameters_legal_p(base, csize, csize, compare));
 
     ptr_l = base + left * csize;
     ptr_r = base + right * csize;

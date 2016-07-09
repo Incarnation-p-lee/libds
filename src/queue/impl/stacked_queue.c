@@ -40,8 +40,8 @@ stacked_queue_destroy(struct stacked_queue **queue)
 static inline void
 stacked_queue_resize_internal(struct stacked_queue *queue, uint32 dim)
 {
-    dp_assert(NULL != queue);
-    dp_assert(0 != dim);
+    assert(NULL != queue);
+    assert(0 != dim);
 
     array_stack_resize(queue->enter, dim);
     array_stack_resize(queue->leave, dim);
@@ -82,7 +82,7 @@ stacked_queue_space_rest_internal(struct stacked_queue *queue)
 {
     uint32 rest;
 
-    dp_assert(NULL != queue);
+    assert(NULL != queue);
 
     rest = array_stack_rest(queue->enter);
 
@@ -123,7 +123,7 @@ stacked_queue_full_p(struct stacked_queue *queue)
 static inline bool
 stacked_queue_empty_p_internal(struct stacked_queue *queue)
 {
-    dp_assert(NULL != queue);
+    assert(NULL != queue);
 
     return array_stack_empty_p(queue->enter) && array_stack_empty_p(queue->leave);
 }
@@ -164,9 +164,9 @@ stacked_queue_stack_dump(struct array_stack *from,
 {
     uint32 count;
 
-    dp_assert(NULL != from);
-    dp_assert(NULL != to);
-    dp_assert(array_stack_capacity(from) >= array_stack_rest(from));
+    assert(NULL != from);
+    assert(NULL != to);
+    assert(array_stack_capacity(from) >= array_stack_rest(from));
 
     count = array_stack_capacity(from) - array_stack_rest(from);
 

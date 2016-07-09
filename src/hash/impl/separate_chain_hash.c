@@ -50,7 +50,7 @@ separate_chain_hash_structure_legal_p(struct separate_chain_hash *hash)
 static inline struct doubly_linked_list **
 separate_chain_hash_space(struct separate_chain_hash *hash)
 {
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
+    assert(separate_chain_hash_structure_legal_p(hash));
 
     return (struct doubly_linked_list **)hashing_table_space(hash->table);
 }
@@ -60,7 +60,7 @@ separate_chain_hash_chain_destroy(struct separate_chain_hash *hash)
 {
     struct doubly_linked_list **iter;
 
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
+    assert(separate_chain_hash_structure_legal_p(hash));
 
     iter = separate_chain_hash_space(hash);
     while (iter < separate_chain_hash_space(hash) +
@@ -103,7 +103,7 @@ separate_chain_hash_chain_head(struct separate_chain_hash *hash, uint32 index)
 {
     struct hashing_table *table;
 
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
+    assert(separate_chain_hash_structure_legal_p(hash));
 
     table = hash->table;
     return table->space[index];
@@ -115,8 +115,8 @@ separate_chain_hash_chain_head_set(struct separate_chain_hash *hash,
 {
     struct hashing_table *table;
 
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
-    dp_assert(index < hash->table->size);
+    assert(separate_chain_hash_structure_legal_p(hash));
+    assert(index < hash->table->size);
 
     table = hash->table;
     table->space[index] = val;
@@ -127,7 +127,7 @@ separate_chain_hash_index_calculate(struct separate_chain_hash *hash, void *key)
 {
     struct hashing_table *table;
 
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
+    assert(separate_chain_hash_structure_legal_p(hash));
 
     table = hash->table;
     return table->separate_chain(key, table->size);
@@ -245,8 +245,8 @@ separate_chain_hash_chain_rehashing(struct doubly_linked_list *link,
     void *tmp;
     struct doubly_linked_list *iter;
 
-    dp_assert(!complain_null_pointer_p(link));
-    dp_assert(separate_chain_hash_structure_legal_p(hash));
+    assert(!complain_null_pointer_p(link));
+    assert(separate_chain_hash_structure_legal_p(hash));
 
     iter = link;
     do {
@@ -263,10 +263,10 @@ separate_chain_hash_space_rehashing(struct separate_chain_hash *to,
     uint32 size;
     struct doubly_linked_list **iter;
 
-    dp_assert(!complain_null_pointer_p(to));
-    dp_assert(!complain_null_pointer_p(from));
-    dp_assert(!complain_null_pointer_p(separate_chain_hash_space(to)));
-    dp_assert(!complain_null_pointer_p(separate_chain_hash_space(from)));
+    assert(!complain_null_pointer_p(to));
+    assert(!complain_null_pointer_p(from));
+    assert(!complain_null_pointer_p(separate_chain_hash_space(to)));
+    assert(!complain_null_pointer_p(separate_chain_hash_space(from)));
 
     iter = separate_chain_hash_space(from);
     size = separate_chain_hash_size(from);

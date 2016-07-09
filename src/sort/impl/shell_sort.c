@@ -33,7 +33,7 @@ shell_sort(void *base, uint32 size, uint32 csize,
         }
 
         memory_cache_free(tmp);
-        dp_assert(sort_data_sorted_p(base, size, csize, compare));
+        assert(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 
@@ -47,7 +47,7 @@ shell_sort_exponet_get(uint32 size)
 {
     uint32 retval;
 
-    dp_assert(size > 1);
+    assert(size > 1);
 
     retval = 0;
     while (size) {
@@ -71,8 +71,8 @@ static const uint32 hibbard_sequence[] = {
 static inline uint32
 shell_sort_hibbard_increment_seq(uint32 k)
 {
-    dp_assert(!complain_zero_size_p(k));
-    dp_assert(k < array_sizeof(hibbard_sequence));
+    assert(!complain_zero_size_p(k));
+    assert(k < array_sizeof(hibbard_sequence));
 
     return hibbard_sequence[k];
 }

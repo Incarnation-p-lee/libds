@@ -6,10 +6,10 @@ sort_data_sorted_p(void *data, uint32 size, uint32 csize,
     void *b;
     uint32 i;
 
-    dp_assert(!complain_null_pointer_p(data));
-    dp_assert(!complain_null_pointer_p(compare));
-    dp_assert(!complain_zero_size_p(size));
-    dp_assert(!complain_zero_size_p(csize));
+    assert(!complain_null_pointer_p(data));
+    assert(!complain_null_pointer_p(compare));
+    assert(!complain_zero_size_p(size));
+    assert(!complain_zero_size_p(csize));
 
     i = 1;
     while (i < size) {
@@ -28,9 +28,9 @@ sort_data_sorted_p(void *data, uint32 size, uint32 csize,
 static inline void
 sort_cell_copy(void *to, void *from, uint32 size)
 {
-    dp_assert(!complain_null_pointer_p(to));
-    dp_assert(!complain_null_pointer_p(from));
-    dp_assert(!complain_zero_size_p(size));
+    assert(!complain_null_pointer_p(to));
+    assert(!complain_null_pointer_p(from));
+    assert(!complain_zero_size_p(size));
 
     if (sizeof(uint64) == size) {
         *(uint64 *)to = *(uint64 *)from;
@@ -50,9 +50,9 @@ sort_cell_swap(void *a, void *b, uint32 size)
 {
     void *tmp;
 
-    dp_assert(!complain_null_pointer_p(a));
-    dp_assert(!complain_null_pointer_p(b));
-    dp_assert(!complain_zero_size_p(size));
+    assert(!complain_null_pointer_p(a));
+    assert(!complain_null_pointer_p(b));
+    assert(!complain_zero_size_p(size));
 
     tmp = memory_cache_allocate(size);
 

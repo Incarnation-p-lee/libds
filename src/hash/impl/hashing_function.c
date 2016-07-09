@@ -26,7 +26,7 @@ hashing_function_polynomial(void *key, uint32 size)
 static inline uint32
 hashing_function_square(uint32 iter)
 {
-    dp_assert(iter < 0x10000);
+    assert(iter < 0x10000);
 
     return iter * iter;
 }
