@@ -1,5 +1,5 @@
-struct doubly_linked_list *
-doubly_linked_list_next(struct doubly_linked_list *list)
+s_doubly_linked_list_t *
+doubly_linked_list_next(s_doubly_linked_list_t *list)
 {
     if (!doubly_linked_list_structure_legal_ip(list)) {
         return PTR_INVALID;
@@ -9,8 +9,8 @@ doubly_linked_list_next(struct doubly_linked_list *list)
 }
 
 void
-doubly_linked_list_next_set(struct doubly_linked_list *list,
-    struct doubly_linked_list *next)
+doubly_linked_list_next_set(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *next)
 {
     if (doubly_linked_list_structure_legal_ip(list)
         && doubly_linked_list_structure_legal_ip(next)) {
@@ -19,13 +19,13 @@ doubly_linked_list_next_set(struct doubly_linked_list *list,
 }
 
 bool
-doubly_linked_list_structure_legal_p(struct doubly_linked_list *list)
+doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list)
 {
     return doubly_linked_list_structure_legal_ip(list);
 }
 
 static inline bool
-doubly_linked_list_structure_legal_ip(struct doubly_linked_list *list)
+doubly_linked_list_structure_legal_ip(s_doubly_linked_list_t *list)
 {
     if (complain_null_pointer_p(list)) {
         return false;
@@ -36,8 +36,8 @@ doubly_linked_list_structure_legal_ip(struct doubly_linked_list *list)
     }
 }
 
-struct doubly_linked_list *
-doubly_linked_list_previous(struct doubly_linked_list *list)
+s_doubly_linked_list_t *
+doubly_linked_list_previous(s_doubly_linked_list_t *list)
 {
     if (!doubly_linked_list_structure_legal_ip(list)) {
         return PTR_INVALID;
@@ -47,8 +47,8 @@ doubly_linked_list_previous(struct doubly_linked_list *list)
 }
 
 void
-doubly_linked_list_previous_set(struct doubly_linked_list *list,
-    struct doubly_linked_list *previous)
+doubly_linked_list_previous_set(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *previous)
 {
     if (doubly_linked_list_structure_legal_ip(list)
         && doubly_linked_list_structure_legal_ip(previous)) {
@@ -56,14 +56,14 @@ doubly_linked_list_previous_set(struct doubly_linked_list *list,
     }
 }
 
-struct doubly_linked_list *
+s_doubly_linked_list_t *
 doubly_linked_list_create(void)
 {
     return doubly_linked_list_create_i(NULL);
 }
 
 static inline void
-doubly_linked_list_initial_i(struct doubly_linked_list *list)
+doubly_linked_list_initial_i(s_doubly_linked_list_t *list)
 {
     dp_assert(doubly_linked_list_structure_legal_ip(list));
 
@@ -72,17 +72,17 @@ doubly_linked_list_initial_i(struct doubly_linked_list *list)
 }
 
 void
-doubly_linked_list_initial(struct doubly_linked_list *list)
+doubly_linked_list_initial(s_doubly_linked_list_t *list)
 {
     if (doubly_linked_list_structure_legal_ip(list)) {
         doubly_linked_list_initial_i(list);
     }
 }
 
-static inline struct doubly_linked_list *
+static inline s_doubly_linked_list_t *
 doubly_linked_list_create_i()
 {
-    struct doubly_linked_list *list;
+    s_doubly_linked_list_t *list;
 
     list = memory_cache_allocate(sizeof(*list));
     doubly_linked_list_initial_i(list);
@@ -91,8 +91,8 @@ doubly_linked_list_create_i()
 }
 
 static inline void
-doubly_linked_list_insert_after_i(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_insert_after_i(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
     dp_assert(doubly_linked_list_structure_legal_ip(list));
     dp_assert(doubly_linked_list_structure_legal_ip(node));
@@ -105,8 +105,8 @@ doubly_linked_list_insert_after_i(struct doubly_linked_list *list,
 }
 
 void
-doubly_linked_list_insert_after(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_insert_after(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
     if (!doubly_linked_list_structure_legal_ip(list)
         || !doubly_linked_list_structure_legal_ip(node)) {
@@ -119,8 +119,8 @@ doubly_linked_list_insert_after(struct doubly_linked_list *list,
 }
 
 static inline void
-doubly_linked_list_insert_before_i(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_insert_before_i(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
     dp_assert(doubly_linked_list_structure_legal_ip(list));
     dp_assert(doubly_linked_list_structure_legal_ip(node));
@@ -130,8 +130,8 @@ doubly_linked_list_insert_before_i(struct doubly_linked_list *list,
 }
 
 void
-doubly_linked_list_insert_before(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_insert_before(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
     if (!doubly_linked_list_structure_legal_ip(list)
         || !doubly_linked_list_structure_legal_ip(node)) {
@@ -143,10 +143,10 @@ doubly_linked_list_insert_before(struct doubly_linked_list *list,
     }
 }
 
-struct doubly_linked_list *
-doubly_linked_list_node_copy(struct doubly_linked_list *node)
+s_doubly_linked_list_t *
+doubly_linked_list_node_copy(s_doubly_linked_list_t *node)
 {
-    struct doubly_linked_list *copy;
+    s_doubly_linked_list_t *copy;
 
     if (!doubly_linked_list_structure_legal_ip(node)) {
         return PTR_INVALID;
@@ -159,10 +159,10 @@ doubly_linked_list_node_copy(struct doubly_linked_list *node)
 }
 
 void
-doubly_linked_list_destroy(struct doubly_linked_list **list)
+doubly_linked_list_destroy(s_doubly_linked_list_t **list)
 {
-    struct doubly_linked_list *node;
-    struct doubly_linked_list *next;
+    s_doubly_linked_list_t *node;
+    s_doubly_linked_list_t *next;
 
     if (!complain_null_pointer_p(list)
         && doubly_linked_list_structure_legal_ip(*list)) {
@@ -178,10 +178,10 @@ doubly_linked_list_destroy(struct doubly_linked_list **list)
 }
 
 static inline uint32
-doubly_linked_list_length_i(struct doubly_linked_list *list)
+doubly_linked_list_length_i(s_doubly_linked_list_t *list)
 {
     uint32 len;
-    register struct doubly_linked_list *node;
+    register s_doubly_linked_list_t *node;
 
     dp_assert(doubly_linked_list_structure_legal_ip(list));
 
@@ -197,7 +197,7 @@ doubly_linked_list_length_i(struct doubly_linked_list *list)
 }
 
 uint32
-doubly_linked_list_length(struct doubly_linked_list *list)
+doubly_linked_list_length(s_doubly_linked_list_t *list)
 {
     if (!doubly_linked_list_structure_legal_ip(list)) {
         return LIST_SIZE_INVALID;
@@ -206,12 +206,12 @@ doubly_linked_list_length(struct doubly_linked_list *list)
     }
 }
 
-struct doubly_linked_list *
-doubly_linked_list_node_by_index(struct doubly_linked_list *list,
+s_doubly_linked_list_t *
+doubly_linked_list_node_by_index(s_doubly_linked_list_t *list,
     uint32 index)
 {
     uint32 len;
-    struct doubly_linked_list *node;
+    s_doubly_linked_list_t *node;
 
     if (!doubly_linked_list_structure_legal_ip(list)) {
         return PTR_INVALID;
@@ -234,10 +234,10 @@ doubly_linked_list_node_by_index(struct doubly_linked_list *list,
 }
 
 static inline bool
-doubly_linked_list_contains_ip(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_contains_ip(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
-    struct doubly_linked_list *doubly;
+    s_doubly_linked_list_t *doubly;
 
     dp_assert(doubly_linked_list_structure_legal_ip(list));
     dp_assert(doubly_linked_list_structure_legal_ip(node));
@@ -256,8 +256,8 @@ doubly_linked_list_contains_ip(struct doubly_linked_list *list,
 }
 
 bool
-doubly_linked_list_contains_p(struct doubly_linked_list *list,
-    struct doubly_linked_list *node)
+doubly_linked_list_contains_p(s_doubly_linked_list_t *list,
+    s_doubly_linked_list_t *node)
 {
     if (!doubly_linked_list_structure_legal_ip(list)) {
         return false;
@@ -268,10 +268,10 @@ doubly_linked_list_contains_p(struct doubly_linked_list *list,
     }
 }
 
-static inline struct doubly_linked_list *
-doubly_linked_list_remove_i(struct doubly_linked_list **list)
+static inline s_doubly_linked_list_t *
+doubly_linked_list_remove_i(s_doubly_linked_list_t **list)
 {
-    struct doubly_linked_list *removed;
+    s_doubly_linked_list_t *removed;
 
     dp_assert(!complain_null_pointer_p(list));
     dp_assert(doubly_linked_list_structure_legal_ip(*list));
@@ -294,8 +294,8 @@ doubly_linked_list_remove_i(struct doubly_linked_list **list)
     }
 }
 
-struct doubly_linked_list *
-doubly_linked_list_remove(struct doubly_linked_list **list)
+s_doubly_linked_list_t *
+doubly_linked_list_remove(s_doubly_linked_list_t **list)
 {
     if (complain_null_pointer_p(list)) {
         return PTR_INVALID;
@@ -307,9 +307,9 @@ doubly_linked_list_remove(struct doubly_linked_list **list)
 }
 
 void
-doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void *))
+doubly_linked_list_iterate(s_doubly_linked_list_t *list, void (*handler)(void *))
 {
-    struct doubly_linked_list *node;
+    s_doubly_linked_list_t *node;
 
     if (!complain_null_pointer_p(handler)
         && doubly_linked_list_structure_legal_ip(list)) {
@@ -322,11 +322,11 @@ doubly_linked_list_iterate(struct doubly_linked_list *list, void (*handler)(void
     }
 }
 
-static inline struct doubly_linked_list *
-doubly_linked_list_merge_i(struct doubly_linked_list *m,
-    struct doubly_linked_list *n)
+static inline s_doubly_linked_list_t *
+doubly_linked_list_merge_i(s_doubly_linked_list_t *m,
+    s_doubly_linked_list_t *n)
 {
-    struct doubly_linked_list *n_prev;
+    s_doubly_linked_list_t *n_prev;
 
     dp_assert(doubly_linked_list_structure_legal_p(m));
     dp_assert(doubly_linked_list_structure_legal_p(n));
@@ -342,9 +342,9 @@ doubly_linked_list_merge_i(struct doubly_linked_list *m,
     return m;
 }
 
-struct doubly_linked_list *
-doubly_linked_list_merge(struct doubly_linked_list *m,
-    struct doubly_linked_list *n)
+s_doubly_linked_list_t *
+doubly_linked_list_merge(s_doubly_linked_list_t *m,
+    s_doubly_linked_list_t *n)
 {
     if (!doubly_linked_list_structure_legal_ip(m)
         && !doubly_linked_list_structure_legal_ip(n)) {

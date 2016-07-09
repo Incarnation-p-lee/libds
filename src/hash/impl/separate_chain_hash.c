@@ -156,6 +156,7 @@ separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
             head = doubly_linked_list_create();
             separate_chain_hash_chain_head_set(*hash, index, head);
         } else {
+            // Fix-Me, bug here.
             doubly_linked_list_insert_after(head, key);
         }
     }

@@ -1,5 +1,5 @@
 static inline bool
-skip_linked_list_ordering_p(struct skip_linked_list *list)
+skip_linked_list_ordering_p(s_skip_linked_list_t *list)
 {
     dp_assert(skip_linked_list_structure_legal_ip(list));
 
@@ -14,10 +14,10 @@ skip_linked_list_ordering_p(struct skip_linked_list *list)
 }
 
 static inline bool
-skip_linked_list_exist_on_level(struct skip_linked_list *list,
-    struct skip_linked_list *node, uint32 level)
+skip_linked_list_exist_on_level(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *node, uint32 level)
 {
-    struct skip_linked_list *iter;
+    s_skip_linked_list_t *iter;
 
     dp_assert(SKIP_LIST_MAX_LVL > level);
     dp_assert(skip_linked_list_structure_legal_ip(list));

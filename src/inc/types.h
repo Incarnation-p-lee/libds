@@ -12,6 +12,9 @@ typedef signed char            sint8;
 typedef unsigned char          uint8;
 typedef unsigned int           bool;
 
+#define true                   1
+#define false                  0
+
 #if defined X86_32
     typedef signed short       sint16;
     typedef unsigned short     uint16;
@@ -39,3 +42,4 @@ typedef unsigned int           bool;
 
 
 #endif
+

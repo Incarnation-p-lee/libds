@@ -41,6 +41,10 @@ enum ITER_ORDER {
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
 
+typedef struct single_linked_list s_single_linked_list_t;
+typedef struct doubly_linked_list s_doubly_linked_list_t;
+typedef struct skip_linked_list   s_skip_linked_list_t;
+
 /*
  *   Implement the unify single_linked_list interface
  * All other linked list will involved this structure

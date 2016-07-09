@@ -1,5 +1,5 @@
-struct skip_linked_list *
-skip_linked_list_next(struct skip_linked_list *list)
+s_skip_linked_list_t *
+skip_linked_list_next(s_skip_linked_list_t *list)
 {
     if (!skip_linked_list_structure_legal_p(list)) {
         return PTR_INVALID;
@@ -9,8 +9,8 @@ skip_linked_list_next(struct skip_linked_list *list)
 }
 
 void
-skip_linked_list_next_set(struct skip_linked_list *list,
-    struct skip_linked_list *next)
+skip_linked_list_next_set(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *next)
 {
     if (skip_linked_list_structure_legal_p(list)
         && skip_linked_list_structure_legal_p(next)) {
@@ -19,7 +19,7 @@ skip_linked_list_next_set(struct skip_linked_list *list,
 }
 
 sint32
-skip_linked_list_key(struct skip_linked_list *list)
+skip_linked_list_key(s_skip_linked_list_t *list)
 {
     if (!skip_linked_list_structure_legal_p(list)) {
         return SKIP_KEY_INVALID;
@@ -29,7 +29,7 @@ skip_linked_list_key(struct skip_linked_list *list)
 }
 
 void
-skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
+skip_linked_list_key_set(s_skip_linked_list_t *list, sint32 key)
 {
     if (skip_linked_list_structure_legal_p(list)) {
         list->key = key;
@@ -37,13 +37,13 @@ skip_linked_list_key_set(struct skip_linked_list *list, sint32 key)
 }
 
 bool
-skip_linked_list_structure_legal_p(struct skip_linked_list *list)
+skip_linked_list_structure_legal_p(s_skip_linked_list_t *list)
 {
     return skip_linked_list_structure_legal_ip(list);
 }
 
 static inline bool
-skip_linked_list_structure_legal_ip(struct skip_linked_list *list)
+skip_linked_list_structure_legal_ip(s_skip_linked_list_t *list)
 {
     if (complain_null_pointer_p(list)) {
         return false;
@@ -56,10 +56,10 @@ skip_linked_list_structure_legal_ip(struct skip_linked_list *list)
     }
 }
 
-struct skip_linked_list *
+s_skip_linked_list_t *
 skip_linked_list_create(void)
 {
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *list;
 
     list = memory_cache_allocate(sizeof(*list));
     memset(list, 0, sizeof(*list));
@@ -68,10 +68,10 @@ skip_linked_list_create(void)
     return list;
 }
 
-struct skip_linked_list *
+s_skip_linked_list_t *
 skip_linked_list_create_with_key(sint32 key)
 {
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *list;
 
     list = memory_cache_allocate(sizeof(*list));
     memset(list, 0, sizeof(*list));
@@ -81,7 +81,7 @@ skip_linked_list_create_with_key(sint32 key)
 }
 
 void
-skip_linked_list_initial(struct skip_linked_list *list)
+skip_linked_list_initial(s_skip_linked_list_t *list)
 {
     if (!complain_null_pointer_p(list)) {
         skip_linked_list_initial_i(list, 0);
@@ -89,7 +89,7 @@ skip_linked_list_initial(struct skip_linked_list *list)
 }
 
 static inline void
-skip_linked_list_initial_i(struct skip_linked_list *list, sint32 key)
+skip_linked_list_initial_i(s_skip_linked_list_t *list, sint32 key)
 {
     dp_assert(!complain_null_pointer_p(list));
 
@@ -98,10 +98,10 @@ skip_linked_list_initial_i(struct skip_linked_list *list, sint32 key)
 }
 
 void
-skip_linked_list_destroy(struct skip_linked_list **list)
+skip_linked_list_destroy(s_skip_linked_list_t **list)
 {
-    struct skip_linked_list *next;
-    struct skip_linked_list *node;
+    s_skip_linked_list_t *next;
+    s_skip_linked_list_t *node;
 
     if (!complain_null_pointer_p(list)
         && skip_linked_list_structure_legal_p(*list)) {
@@ -118,10 +118,10 @@ skip_linked_list_destroy(struct skip_linked_list **list)
 }
 
 static inline uint32
-skip_linked_list_length_i(struct skip_linked_list *list)
+skip_linked_list_length_i(s_skip_linked_list_t *list)
 {
     uint32 retval;
-    struct skip_linked_list *node;
+    s_skip_linked_list_t *node;
 
     dp_assert(skip_linked_list_structure_legal_p(list));
 
@@ -137,7 +137,7 @@ skip_linked_list_length_i(struct skip_linked_list *list)
 }
 
 uint32
-skip_linked_list_length(struct skip_linked_list *list)
+skip_linked_list_length(s_skip_linked_list_t *list)
 {
     if (!skip_linked_list_structure_legal_p(list)) {
         return LIST_SIZE_INVALID;
@@ -146,8 +146,8 @@ skip_linked_list_length(struct skip_linked_list *list)
     }
 }
 
-struct skip_linked_list *
-skip_linked_list_find_key(struct skip_linked_list *list, sint32 key)
+s_skip_linked_list_t *
+skip_linked_list_find_key(s_skip_linked_list_t *list, sint32 key)
 {
     if (!skip_linked_list_structure_legal_p(list)) {
         return PTR_INVALID;
@@ -156,10 +156,10 @@ skip_linked_list_find_key(struct skip_linked_list *list, sint32 key)
     }
 }
 
-static inline struct skip_linked_list *
-skip_linked_list_find_key_i(struct skip_linked_list *list, sint32 key, uint32 lv)
+static inline s_skip_linked_list_t *
+skip_linked_list_find_key_i(s_skip_linked_list_t *list, sint32 key, uint32 lv)
 {
-    struct skip_linked_list **head;
+    s_skip_linked_list_t **head;
 
     dp_assert(skip_linked_list_structure_legal_p(list));
     dp_assert(SKIP_LIST_MAX_LVL > lv);
@@ -182,10 +182,10 @@ skip_linked_list_find_key_i(struct skip_linked_list *list, sint32 key, uint32 lv
 }
 
 static inline bool
-skip_linked_list_contains_ip(struct skip_linked_list *list,
-    struct skip_linked_list *node)
+skip_linked_list_contains_ip(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *node)
 {
-    struct skip_linked_list *skip;
+    s_skip_linked_list_t *skip;
 
     dp_assert(skip_linked_list_structure_legal_p(list));
     dp_assert(skip_linked_list_structure_legal_p(node));
@@ -202,8 +202,8 @@ skip_linked_list_contains_ip(struct skip_linked_list *list,
 }
 
 bool
-skip_linked_list_contains_p(struct skip_linked_list *list,
-    struct skip_linked_list *node)
+skip_linked_list_contains_p(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *node)
 {
     if (!skip_linked_list_structure_legal_p(list)) {
         return false;
@@ -214,9 +214,9 @@ skip_linked_list_contains_p(struct skip_linked_list *list,
     }
 }
 
-static inline struct skip_linked_list *
-skip_linked_list_insert_before_head(struct skip_linked_list *list,
-    struct skip_linked_list *tgt)
+static inline s_skip_linked_list_t *
+skip_linked_list_insert_before_head(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *tgt)
 {
     uint32 lv;
 
@@ -237,15 +237,15 @@ skip_linked_list_insert_before_head(struct skip_linked_list *list,
     return tgt;
 }
 
-static inline struct skip_linked_list *
-skip_linked_list_insert_i(struct skip_linked_list **list,
-    struct skip_linked_list *tgt)
+static inline s_skip_linked_list_t *
+skip_linked_list_insert_i(s_skip_linked_list_t **list,
+    s_skip_linked_list_t *tgt)
 {
     uint32 lv;
     uint32 lmt;
-    struct skip_linked_list *skip;
-    struct skip_linked_list **head;
-    struct skip_linked_list *prev_list[SKIP_LIST_MAX_LVL];
+    s_skip_linked_list_t *skip;
+    s_skip_linked_list_t **head;
+    s_skip_linked_list_t *prev_list[SKIP_LIST_MAX_LVL];
 
     dp_assert(!complain_null_pointer_p(list));
     dp_assert(skip_linked_list_ordering_p(*list));
@@ -284,9 +284,9 @@ skip_linked_list_insert_i(struct skip_linked_list **list,
     return tgt;
 }
 
-struct skip_linked_list *
-skip_linked_list_insert(struct skip_linked_list **list,
-    struct skip_linked_list *tgt)
+s_skip_linked_list_t *
+skip_linked_list_insert(s_skip_linked_list_t **list,
+    s_skip_linked_list_t *tgt)
 {
     if (complain_null_pointer_p(list)) {
         return PTR_INVALID;
@@ -300,8 +300,8 @@ skip_linked_list_insert(struct skip_linked_list **list,
 }
 
 static inline void
-skip_linked_list_insert_update_with_lv(struct skip_linked_list *tgt,
-    struct skip_linked_list **prev_list, uint32 lv)
+skip_linked_list_insert_update_with_lv(s_skip_linked_list_t *tgt,
+    s_skip_linked_list_t **prev_list, uint32 lv)
 {
     dp_assert(!complain_null_pointer_p(prev_list));
     dp_assert(skip_linked_list_structure_legal_p(tgt));
@@ -313,11 +313,11 @@ skip_linked_list_insert_update_with_lv(struct skip_linked_list *tgt,
     } while (0 != lv--);
 }
 
-struct skip_linked_list *
-skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
+s_skip_linked_list_t *
+skip_linked_list_node_by_index(s_skip_linked_list_t *list, uint32 index)
 {
     uint32 len;
-    struct skip_linked_list *skip;
+    s_skip_linked_list_t *skip;
 
     if (!skip_linked_list_structure_legal_p(list)) {
         return PTR_INVALID;
@@ -340,7 +340,7 @@ skip_linked_list_node_by_index(struct skip_linked_list *list, uint32 index)
 }
 
 static inline void
-skip_linked_list_node_clean(struct skip_linked_list *list)
+skip_linked_list_node_clean(s_skip_linked_list_t *list)
 {
     uint32 lv;
 
@@ -354,10 +354,10 @@ skip_linked_list_node_clean(struct skip_linked_list *list)
 }
 
 static inline void
-skip_linked_list_remove_head(struct skip_linked_list *list)
+skip_linked_list_remove_head(s_skip_linked_list_t *list)
 {
     uint32 lv;
-    struct skip_linked_list *next;
+    s_skip_linked_list_t *next;
 
     dp_assert(skip_linked_list_structure_legal_p(list));
 
@@ -375,9 +375,9 @@ skip_linked_list_remove_head(struct skip_linked_list *list)
     skip_linked_list_node_clean(list);
 }
 
-static inline struct skip_linked_list *
-skip_linked_list_remove_with_previous_list(struct skip_linked_list *tgt,
-    struct skip_linked_list **pre_list, uint32 lv)
+static inline s_skip_linked_list_t *
+skip_linked_list_remove_with_previous_list(s_skip_linked_list_t *tgt,
+    s_skip_linked_list_t **pre_list, uint32 lv)
 {
     dp_assert(lv < SKIP_LIST_MAX_LVL);
     dp_assert(!complain_null_pointer_p(pre_list));
@@ -393,10 +393,10 @@ skip_linked_list_remove_with_previous_list(struct skip_linked_list *tgt,
 }
 
 static inline void
-skip_linked_list_remove_on_level(struct skip_linked_list *list,
-    struct skip_linked_list *removed, uint32 level)
+skip_linked_list_remove_on_level(s_skip_linked_list_t *list,
+    s_skip_linked_list_t *removed, uint32 level)
 {
-    struct skip_linked_list *skip;
+    s_skip_linked_list_t *skip;
 
     dp_assert(SKIP_LIST_MAX_LVL > level);
     dp_assert(skip_linked_list_structure_legal_p(list));
@@ -417,14 +417,14 @@ skip_linked_list_remove_on_level(struct skip_linked_list *list,
     skip_linked_list_node_clean(removed);
 }
 
-static inline struct skip_linked_list *
-skip_linked_list_remove_i(struct skip_linked_list **list,
-    struct skip_linked_list *tgt)
+static inline s_skip_linked_list_t *
+skip_linked_list_remove_i(s_skip_linked_list_t **list,
+    s_skip_linked_list_t *tgt)
 {
     uint32 lv;
-    struct skip_linked_list *node;
-    struct skip_linked_list *head;
-    struct skip_linked_list *removed;
+    s_skip_linked_list_t *node;
+    s_skip_linked_list_t *head;
+    s_skip_linked_list_t *removed;
 
     dp_assert(!complain_null_pointer_p(list));
     dp_assert(skip_linked_list_ordering_p(*list));
@@ -466,9 +466,9 @@ skip_linked_list_remove_i(struct skip_linked_list **list,
     return removed;
 }
 
-struct skip_linked_list *
-skip_linked_list_remove(struct skip_linked_list **list,
-    struct skip_linked_list *tgt)
+s_skip_linked_list_t *
+skip_linked_list_remove(s_skip_linked_list_t **list,
+    s_skip_linked_list_t *tgt)
 {
     if (complain_null_pointer_p(list)) {
         return PTR_INVALID;
@@ -482,10 +482,10 @@ skip_linked_list_remove(struct skip_linked_list **list,
 }
 
 void
-skip_linked_list_iterate(struct skip_linked_list *list,
+skip_linked_list_iterate(s_skip_linked_list_t *list,
     void (*handler)(void *))
 {
-    struct skip_linked_list *skip;
+    s_skip_linked_list_t *skip;
 
     if (!complain_null_pointer_p(handler)
         && skip_linked_list_structure_legal_p(list)) {
@@ -497,11 +497,11 @@ skip_linked_list_iterate(struct skip_linked_list *list,
     }
 }
 
-struct skip_linked_list *
-skip_linked_list_merge(struct skip_linked_list *m, struct skip_linked_list *n)
+s_skip_linked_list_t *
+skip_linked_list_merge(s_skip_linked_list_t *m, s_skip_linked_list_t *n)
 {
-    struct skip_linked_list *skip;
-    struct skip_linked_list *inserted;
+    s_skip_linked_list_t *skip;
+    s_skip_linked_list_t *inserted;
 
     if (!skip_linked_list_structure_legal_p(m)
         && !skip_linked_list_structure_legal_p(n)) {

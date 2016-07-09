@@ -1,9 +1,6 @@
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
-#define true                       1
-#define false                      0
-
 #define SYM_2_STR(symbol)          (#symbol)
 #define array_sizeof(a)            (sizeof(a) / sizeof(a[0]))
 
