@@ -168,6 +168,19 @@ array_stack_push(struct array_stack *stack, void *member)
     }
 }
 
+void *
+array_stack_top(struct array_stack *stack)
+{
+    if (complain_null_pointer_p(stack)) {
+        return NULL;
+    } else if (array_stack_empty_p_internal(stack)) {
+        pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
+        return NULL;
+    } else {
+        return *(stack->space.sp - 1);
+    }
+}
+
 /*
  * _RETURN_ one void pointer from stack
  *  If NULL _ARGV_, _RETURN_ NULL.

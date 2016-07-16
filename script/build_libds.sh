@@ -10,12 +10,12 @@ if [ $# == 0 ]
 then
     cat << EOF
 Build Script Usage:
-    sh src/script/build.sh DEBUG/RELEASE
-                           X86_64/X86_32
-                           LIBC/KERNEL
-                           ELF/OBJ/DYN
-                           PROFILE       -optional
-                           COVERAGE      -optional
+    sh src/script/build_libds.sh DEBUG/RELEASE
+                                 X86_64/X86_32
+                                 LIBC/KERNEL
+                                 ELF/OBJ/DYN
+                                 PROFILE       -optional
+                                 COVERAGE      -optional
 EOF
     exit 1
 fi

@@ -325,6 +325,7 @@ extern uint32 array_stack_rest(struct array_stack *stack);
 extern uint32 linked_stack_capacity(struct linked_stack *stack);
 extern uint32 linked_stack_rest(struct linked_stack *stack);
 extern void * array_stack_pop(struct array_stack *stack);
+extern void * array_stack_top(struct array_stack *stack);
 extern void * linked_stack_pop(struct linked_stack *stack);
 extern void array_stack_cleanup(struct array_stack *stack);
 extern void array_stack_destroy(struct array_stack **stack);

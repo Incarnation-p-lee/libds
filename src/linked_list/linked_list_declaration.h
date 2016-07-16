@@ -37,6 +37,8 @@ static inline bool doubly_linked_list_structure_legal_ip(s_doubly_linked_list_t 
 static inline bool single_linked_list_contains_ip(s_single_linked_list_t *list, s_single_linked_list_t *node);
 static inline bool single_linked_list_structure_legal_ip(s_single_linked_list_t *list);
 static inline bool skip_linked_list_contains_ip(s_skip_linked_list_t *list, s_skip_linked_list_t *node);
+static inline bool skip_linked_list_exist_on_level(s_skip_linked_list_t *list, s_skip_linked_list_t *node, uint32 level);
+static inline bool skip_linked_list_ordering_p(s_skip_linked_list_t *list);
 static inline bool skip_linked_list_structure_legal_ip(s_skip_linked_list_t *list);
 static inline s_doubly_linked_list_t * doubly_linked_list_create_i();
 static inline s_doubly_linked_list_t * doubly_linked_list_merge_i(s_doubly_linked_list_t *m, s_doubly_linked_list_t *n);

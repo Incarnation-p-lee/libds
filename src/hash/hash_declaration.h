@@ -18,6 +18,7 @@ static inline struct hashing_table * hashing_table_create(uint32 size);
 static inline uint32 hashing_function_square(uint32 iter);
 static inline uint32 hashing_table_load_factor_calculate(struct hashing_table *hash);
 static inline uint32 open_addressing_hash_index_calculate(struct open_addressing_hash *hash, void *key, uint32 iter);
+static inline uint32 open_addressing_hash_limit(struct open_addressing_hash *hash);
 static inline uint32 separate_chain_hash_index_calculate(s_separate_chain_hash_t *hash, void *key);
 static inline void * open_addressing_hash_node(struct open_addressing_hash *hash, uint32 index);
 static inline void ** hashing_table_space(struct hashing_table *hash);
