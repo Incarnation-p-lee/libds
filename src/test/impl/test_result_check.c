@@ -3,7 +3,7 @@ test_result_check_pointer_p(void *expect, void *get, bool *pass)
 {
     bool tmp;
 
-    assert(NULL != pass);
+    assert_exit(NULL != pass);
 
     tmp = (expect == get);
 
@@ -22,7 +22,7 @@ test_result_check_not_equal_pointer_p(void *expect, void *get, bool *pass)
 {
     bool tmp;
 
-    assert(NULL != pass);
+    assert_exit(NULL != pass);
 
     tmp = (expect != get);
 

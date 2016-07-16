@@ -29,8 +29,8 @@ test_parameter_default_entry_set(struct test_suite *suite)
 {
     struct test_entry_list *list;
 
-    assert(NULL != suite);
-    assert(NULL != suite->list);
+    assert_exit(NULL != suite);
+    assert_exit(NULL != suite->list);
 
     list = suite->list;
 
@@ -51,9 +51,9 @@ test_parameter_parser_internal(struct test_suite *suite, char *arg)
     uint32 len;
     struct test_entry_list *list;
 
-    assert(NULL != arg);
-    assert(NULL != suite);
-    assert(NULL != suite->list);
+    assert_exit(NULL != arg);
+    assert_exit(NULL != suite);
+    assert_exit(NULL != suite->list);
 
     list = suite->list;
 
@@ -83,7 +83,7 @@ test_parameter_parser_internal(struct test_suite *suite, char *arg)
         }
     } else {
         len = strlen(arg);
-        assert(len < CONTENT_LEN);
+        assert_exit(len < CONTENT_LEN);
 
         strncpy(suite->content, arg, len);
         suite->content[len] = '\0';

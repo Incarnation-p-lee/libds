@@ -65,7 +65,7 @@ doubly_linked_list_create(void)
 static inline void
 doubly_linked_list_initial_i(s_doubly_linked_list_t *list)
 {
-    assert(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(list));
 
     list->next = list;
     list->previous = list;
@@ -94,9 +94,9 @@ static inline void
 doubly_linked_list_insert_after_i(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
-    assert(doubly_linked_list_structure_legal_ip(list));
-    assert(doubly_linked_list_structure_legal_ip(node));
-    assert(!doubly_linked_list_contains_ip(list, node));
+    assert_exit(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(node));
+    assert_exit(!doubly_linked_list_contains_ip(list, node));
 
     list->next->previous = node;
     node->next = list->next;
@@ -122,9 +122,9 @@ static inline void
 doubly_linked_list_insert_before_i(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
-    assert(doubly_linked_list_structure_legal_ip(list));
-    assert(doubly_linked_list_structure_legal_ip(node));
-    assert(!doubly_linked_list_contains_ip(list, node));
+    assert_exit(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(node));
+    assert_exit(!doubly_linked_list_contains_ip(list, node));
 
     doubly_linked_list_insert_after_i(list->previous, node);
 }
@@ -183,7 +183,7 @@ doubly_linked_list_length_i(s_doubly_linked_list_t *list)
     uint32 len;
     register s_doubly_linked_list_t *node;
 
-    assert(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(list));
 
     len = 0;
     node = list;
@@ -239,8 +239,8 @@ doubly_linked_list_contains_ip(s_doubly_linked_list_t *list,
 {
     s_doubly_linked_list_t *doubly;
 
-    assert(doubly_linked_list_structure_legal_ip(list));
-    assert(doubly_linked_list_structure_legal_ip(node));
+    assert_exit(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(node));
 
     doubly = list;
 
@@ -273,8 +273,8 @@ doubly_linked_list_remove_i(s_doubly_linked_list_t **list)
 {
     s_doubly_linked_list_t *removed;
 
-    assert(!complain_null_pointer_p(list));
-    assert(doubly_linked_list_structure_legal_ip(*list));
+    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(doubly_linked_list_structure_legal_ip(*list));
 
     removed = *list;
 
@@ -328,9 +328,9 @@ doubly_linked_list_merge_i(s_doubly_linked_list_t *m,
 {
     s_doubly_linked_list_t *n_prev;
 
-    assert(doubly_linked_list_structure_legal_p(m));
-    assert(doubly_linked_list_structure_legal_p(n));
-    assert(!doubly_linked_list_contains_ip(m, n));
+    assert_exit(doubly_linked_list_structure_legal_p(m));
+    assert_exit(doubly_linked_list_structure_legal_p(n));
+    assert_exit(!doubly_linked_list_contains_ip(m, n));
 
     m->previous->next = n;
     n->previous->next = m;

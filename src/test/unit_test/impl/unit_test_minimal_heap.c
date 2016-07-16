@@ -61,7 +61,7 @@ utest_minimal_heap_ordered_p(struct minimal_heap *heap)
     uint32 index_left;
     uint32 index_right;
 
-    assert(utest_minimal_heap_structure_legal_p(heap));
+    assert_exit(utest_minimal_heap_structure_legal_p(heap));
 
     index = HEAP_IDX_ROOT;
     index_last = minimal_heap_index_last(heap);

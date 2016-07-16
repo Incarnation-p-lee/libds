@@ -3,7 +3,7 @@ unit_test_execution_start(struct test_extra_info *entry, char *content)
 {
     struct test_case_filter *filter;
 
-    assert(NULL != content);
+    assert_exit(NULL != content);
 
     filter = test_case_filter_obtain(content);
 

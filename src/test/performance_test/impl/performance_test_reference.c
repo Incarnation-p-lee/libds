@@ -4,7 +4,7 @@ performance_test_reference_golden_prepare(const char *fname)
     FILE *golden;
     char line[PERORMANCE_ENTRY_MAX_SIZE];
 
-    assert(NULL != fname);
+    assert_exit(NULL != fname);
 
     dp_memset(line, 0, sizeof(line));
     golden = dp_fopen(fname, "r");
@@ -29,7 +29,7 @@ performance_test_reference_update(char *raw, struct performance_test_reference *
     char *name;
     uint32 last;
 
-    assert(NULL != raw);
+    assert_exit(NULL != raw);
 
     raw[dp_strlen(raw) - 1] = '\0';
     name = dp_strchr(raw, (int)'=');
@@ -57,7 +57,7 @@ performance_test_reference_entry_find_by_name(char *name)
 {
     struct performance_test_reference *iter;
 
-    assert(NULL != name);
+    assert_exit(NULL != name);
 
     iter = performance_reference;
     while (iter->name) {
@@ -75,11 +75,11 @@ performance_test_reference_variance_calculate(char *name, sint64 period)
 {
     struct performance_test_reference *entry;
 
-    assert(NULL != name);
-    assert(0 != period);
+    assert_exit(NULL != name);
+    assert_exit(0 != period);
 
     entry = performance_test_reference_entry_find_by_name(name);
-    assert(NULL != entry);
+    assert_exit(NULL != entry);
 
     entry->now = period;
     /*
@@ -100,7 +100,7 @@ performance_test_reference_new_writeback(const char *fname)
     struct performance_test_reference *iter;
     char line[PERORMANCE_ENTRY_MAX_SIZE];
 
-    assert(NULL != fname);
+    assert_exit(NULL != fname);
 
     golden = dp_fopen(fname, "w");
 

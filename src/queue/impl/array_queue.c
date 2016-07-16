@@ -57,7 +57,7 @@ array_queue_structure_legal_p(struct array_queue *queue)
 static inline bool
 array_queue_resize_front_to_rear_p(struct array_queue *queue)
 {
-    assert(array_queue_structure_legal_p(queue));
+    assert_exit(array_queue_structure_legal_p(queue));
 
     if (queue->space.front < queue->space.rear) {
         return false;
@@ -75,10 +75,10 @@ array_queue_resize_expand(struct array_queue *queue, uint32 size,
     uint32 counted;
     uint32 chunk_size;
 
-    assert(!complain_null_pointer_p(addr));
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size > queue->space.dim);
+    assert_exit(!complain_null_pointer_p(addr));
+    assert_exit(!complain_zero_size_p(size));
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(size > queue->space.dim);
 
     if (queue->space.front < queue->space.rear) {
         counted = queue->space.rear - queue->space.front;
@@ -111,10 +111,10 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
     uint32 part_size;
     uint32 chunk_size;
 
-    assert(!complain_null_pointer_p(addr));
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size < queue->space.dim);
+    assert_exit(!complain_null_pointer_p(addr));
+    assert_exit(!complain_zero_size_p(size));
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(size < queue->space.dim);
 
     if (queue->space.front < queue->space.rear) {
         chunk_size = queue->space.rear - queue->space.front;
@@ -158,9 +158,9 @@ array_queue_resize_internal(struct array_queue *queue, uint32 size)
 {
     void **addr;
 
-    assert(!complain_zero_size_p(size));
-    assert(array_queue_structure_legal_p(queue));
-    assert(size != queue->space.dim);
+    assert_exit(!complain_zero_size_p(size));
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(size != queue->space.dim);
 
     addr = memory_cache_allocate(sizeof(void *) * size);
 
@@ -212,7 +212,7 @@ array_queue_rest(struct array_queue *queue)
 static inline bool
 array_queue_full_p_internal(struct array_queue *queue)
 {
-    assert(NULL != queue);
+    assert_exit(NULL != queue);
 
     return 0u == queue->space.rest ? true : false;
 }
@@ -236,7 +236,7 @@ array_queue_empty_p_internal(struct array_queue *queue)
     uint32 capacity;
     uint32 rest;
 
-    assert(NULL != queue);
+    assert_exit(NULL != queue);
 
     capacity = queue->space.dim;
     rest = queue->space.rest;

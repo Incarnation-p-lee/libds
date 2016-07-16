@@ -6,8 +6,8 @@ test_binary_heap_data_randomization(struct heap_data **hd_array,
     uint32 rand_idx;
     struct heap_data *bk;
 
-    assert(NULL != hd_array);
-    assert(NULL == hd_array[0]);
+    assert_exit(NULL != hd_array);
+    assert_exit(NULL == hd_array[0]);
 
     idx = HEAP_IDX_ROOT;
 
@@ -30,7 +30,7 @@ test_sint64_data_array(uint32 size)
     uint32 i;
     sint64 *retval;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     i = 0;
     retval = memory_cache_allocate(sizeof(*retval) * size);
@@ -48,7 +48,7 @@ test_uint32_data_array(uint32 size)
     uint32 i;
     uint32 *retval;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     i = 0;
     retval = memory_cache_allocate(sizeof(*retval) * size);
@@ -66,9 +66,9 @@ test_sint64_data_sum(sint64 *data, int m, int n, int size)
     uint32 i;
     sint64 retval;
 
-    assert(m <= n && n < size);
-    assert(!complain_zero_size_p(size));
-    assert(!complain_null_pointer_p(data));
+    assert_exit(m <= n && n < size);
+    assert_exit(!complain_zero_size_p(size));
+    assert_exit(!complain_null_pointer_p(data));
 
     i = m;
     retval = 0;
@@ -86,7 +86,7 @@ test_sort_data_array(uint32 size)
     uint32 i;
     struct test_sort_data *retval;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     retval = memory_cache_allocate(sizeof(*retval) * size);
 
@@ -105,7 +105,7 @@ test_sort_data_ptr_array(uint32 size)
     uint32 i;
     struct test_sort_data **retval;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     retval = memory_cache_allocate(sizeof(*retval) * size);
 
@@ -124,8 +124,8 @@ test_sort_data_ptr_array_destroy(struct test_sort_data **data, uint32 size)
 {
     uint32 i;
 
-    assert(!complain_null_pointer_p(data));
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_null_pointer_p(data));
+    assert_exit(!complain_zero_size_p(size));
 
     i = 0;
     while (i < size) {
@@ -142,8 +142,8 @@ test_sort_compare_u32(const void *a, const void *b)
     uint32 *ua;
     uint32 *ub;
 
-    assert(!complain_null_pointer_p((void *)a));
-    assert(!complain_null_pointer_p((void *)b));
+    assert_exit(!complain_null_pointer_p((void *)a));
+    assert_exit(!complain_null_pointer_p((void *)b));
 
     ua = (void *)a;
     ub = (void *)b;
@@ -163,8 +163,8 @@ test_sort_compare_struct(const void *a, const void *b)
     struct test_sort_data *pa;
     struct test_sort_data *pb;
 
-    assert(!complain_null_pointer_p((void *)a));
-    assert(!complain_null_pointer_p((void *)b));
+    assert_exit(!complain_null_pointer_p((void *)a));
+    assert_exit(!complain_null_pointer_p((void *)b));
 
     pa = (void *)a;
     pb = (void *)b;
@@ -184,8 +184,8 @@ test_sort_compare_ptr(const void *a, const void *b)
     struct test_sort_data *sa;
     struct test_sort_data *sb;
 
-    assert(!complain_null_pointer_p((void *)a));
-    assert(!complain_null_pointer_p((void *)b));
+    assert_exit(!complain_null_pointer_p((void *)a));
+    assert_exit(!complain_null_pointer_p((void *)b));
 
     sa = *(struct test_sort_data **)a;
     sb = *(struct test_sort_data **)b;

@@ -16,7 +16,8 @@ uint32 prime_numeral_next(uint32 prime);
 uint32 random_uint32_with_limit(uint32 lmt);
 void * memory_cache_allocate(uint32 size);
 void * memory_cache_re_allocate(void *addr, uint32 size);
-void complain_assert(char *msg, const char *fname, const char *func, uint32 line, bool cond);
+void complain_assert_caution(char *msg, const char *fname, const char *func, uint32 line);
+void complain_assert_exit(char *msg, const char *fname, const char *func, uint32 line);
 void memory_cache_cleanup(void);
 void memory_cache_free(void *addr);
 

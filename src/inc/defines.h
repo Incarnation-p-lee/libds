@@ -19,6 +19,16 @@
 #define NAME_LEN                   256
 #define CONTENT_LEN                NAME_LEN
 
+#define assert_not_reached(msg)    do {                                                             \
+                                       complain_assert_exit(msg, __FILE__, __FUNCTION__, __LINE__); \
+                                   } while (false)
+
+#define assert_caution(exp)        do {                                                                     \
+                                       if (!(exp)) {                                                        \
+                                           complain_assert_caution(#exp, __FILE__, __FUNCTION__, __LINE__); \
+                                       }                                                                    \
+                                   } while (false)
+
 #ifdef DEBUG
     extern void libds_log_print(enum log_level lvl, const char *msg);
     extern void * malloc_wrap(uint32 size);
@@ -31,9 +41,11 @@
     #define pr_log_info(msg)       libds_log_print(INFO, msg)
     #define pr_log_warn(msg)       libds_log_print(WARN, msg)
     #define pr_log_debug(msg)      libds_log_print(DBUG, msg)
-    #define assert(exp)            complain_assert(#exp, __FILE__, __FUNCTION__, \
-                                   __LINE__, exp)
-    #define assert_not_reached()   assert(false)
+    #define assert_exit(exp)       do {                                                                  \
+                                       if (!(exp)) {                                                     \
+                                           complain_assert_exit(#exp, __FILE__, __FUNCTION__, __LINE__); \
+                                       }                                                                 \
+                                   } while (false)
 #else
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
@@ -41,8 +53,7 @@
     #define pr_log_info(msg)
     #define pr_log_warn(msg)
     #define pr_log_debug(msg)
-    #define assert(exp)
-    #define assert_not_reached()  ((*(uint32 *)0) = 0xdeadu)
+    #define assert_exit(exp)
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \

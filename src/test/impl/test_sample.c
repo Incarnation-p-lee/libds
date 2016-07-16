@@ -44,8 +44,8 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     sint32 key;
     uint32 i;
 
-    assert(0 != range);
-    assert(0 != count);
+    assert_exit(0 != range);
+    assert_exit(0 != count);
 
     list = skip_linked_list_create();
     skip_linked_list_initial(list);
@@ -66,7 +66,7 @@ test_doubly_end_queue_sample(uint32 count)
 {
     struct doubly_end_queue *queue;
 
-    assert(0 != count);
+    assert_exit(0 != count);
 
     queue = doubly_end_queue_create();
 
@@ -157,8 +157,8 @@ test_open_addressing_hash_sample(uint32 count)
     hash = open_addressing_hash_create(0);
     heap = memory_maps_entry_find("[heap]");
 
-    assert(NULL != hash);
-    assert(NULL != heap);
+    assert_exit(NULL != hash);
+    assert_exit(NULL != heap);
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
@@ -182,8 +182,8 @@ test_separate_chain_hash_sample(uint32 count)
     hash = separate_chain_hash_create(0x11u);
     heap = memory_maps_entry_find("[heap]");
 
-    assert(NULL != hash);
-    assert(NULL != heap);
+    assert_exit(NULL != hash);
+    assert_exit(NULL != heap);
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
@@ -202,7 +202,7 @@ test_minimal_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    assert_exit(0 != size);
 
     heap = minimal_heap_create(size);
     i = 0;
@@ -222,7 +222,7 @@ test_maximal_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    assert_exit(0 != size);
 
     heap = maximal_heap_create(size);
     i = 0;
@@ -242,7 +242,7 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    assert_exit(0 != size);
 
     heap = min_max_heap_create(size);
     i = 0;
@@ -262,7 +262,7 @@ test_leftist_heap_sample(uint64 range, uint32 size)
     sint64 nice;
     uint32 i;
 
-    assert(0 != size);
+    assert_exit(0 != size);
 
     heap = leftist_heap_create();
     i = 0;

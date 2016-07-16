@@ -15,7 +15,7 @@ heap_sort(void *base, uint32 size, uint32 csize,
             index--;
         }
 
-        assert(sort_data_sorted_p(base, size, csize, compare));
+        assert_exit(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 
@@ -25,7 +25,7 @@ heap_sort_build_heap(void *base, uint32 size, uint32 csize,
 {
     sint32 index;
 
-    assert(sort_parameters_legal_p(base, size, csize, compare));
+    assert_exit(sort_parameters_legal_p(base, size, csize, compare));
 
     index = (sint32)(size >> 1);
 
@@ -45,8 +45,8 @@ heap_sort_percolate_down(void *base, uint32 size, uint32 csize, uint32 index,
     void *tmp;
     uint32 child;
 
-    assert(sort_parameters_legal_p(base, size, csize, compare));
-    assert(index < size);
+    assert_exit(sort_parameters_legal_p(base, size, csize, compare));
+    assert_exit(index < size);
 
     tmp = memory_cache_allocate(csize);
     sort_cell_copy(tmp, base + index * csize, csize);

@@ -51,7 +51,7 @@ splay_tree_structure_legal_p(struct splay_tree *tree)
 static inline void
 splay_tree_initial_internal(struct splay_tree *tree, sint64 nice)
 {
-     assert(splay_tree_structure_legal_p(tree));
+     assert_exit(splay_tree_structure_legal_p(tree));
 
      tree->left = NULL;
      tree->right = NULL;
@@ -80,9 +80,9 @@ splay_tree_initial(struct splay_tree *tree, sint64 nice)
 static inline void
 splay_tree_node_destroy(struct splay_tree *node)
 {
-    assert(splay_tree_structure_legal_p(node));
-    assert(complain_null_pointer_p(node->left));
-    assert(complain_null_pointer_p(node->right));
+    assert_exit(splay_tree_structure_legal_p(node));
+    assert_exit(complain_null_pointer_p(node->left));
+    assert_exit(complain_null_pointer_p(node->right));
 
     memory_cache_free(node);
 }
@@ -127,8 +127,8 @@ splay_tree_find_internal(struct splay_tree **tree, sint64 nice,
     struct splay_tree *splay;
     struct splay_tree *found;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(root));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(root));
 
     found = NULL;
     splay = *tree;
@@ -173,9 +173,9 @@ splay_tree_find_min_internal(struct splay_tree **tree,
     struct splay_tree *min;
     struct splay_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p(root));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(root));
 
     node = *tree;
 
@@ -189,7 +189,7 @@ splay_tree_find_min_internal(struct splay_tree **tree,
         } else if (node == root) {
             splay_tree_balance_root_splaying_left(tree);
         } else {
-            assert(min == node->left);
+            assert_exit(min == node->left);
             /*
              *       / 
              *     node
@@ -200,7 +200,7 @@ splay_tree_find_min_internal(struct splay_tree **tree,
             return min;
         }
 
-        assert(*tree == min);
+        assert_exit(*tree == min);
         return min;
     }
 }
@@ -224,9 +224,9 @@ splay_tree_find_max_internal(struct splay_tree **tree,
     struct splay_tree *max;
     struct splay_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p(root));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(root));
 
     node = *tree;
 
@@ -240,7 +240,7 @@ splay_tree_find_max_internal(struct splay_tree **tree,
         } else if (node == root) {
             splay_tree_balance_root_splaying_right(tree);
         } else {
-            assert(max == node->right);
+            assert_exit(max == node->right);
             /*
              *       / 
              *     node
@@ -251,7 +251,7 @@ splay_tree_find_max_internal(struct splay_tree **tree,
             return max;
         }
 
-        assert(*tree == max);
+        assert_exit(*tree == max);
         return max;
     }
 }
@@ -274,11 +274,11 @@ splay_tree_balance_splaying_left(struct splay_tree **tree,
 {
     struct splay_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p(root));
-    assert(splay_tree_structure_legal_p(target));
-    assert(splay_tree_structure_legal_p((*tree)->left));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(root));
+    assert_exit(splay_tree_structure_legal_p(target));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left));
 
     node = *tree;
 
@@ -294,11 +294,11 @@ splay_tree_balance_splaying_left(struct splay_tree **tree,
     } else if (node->left->right == target) {
         splay_tree_balance_doubly_splaying_left(tree);
     } else {
-        assert(target == node->left);
+        assert_exit(target == node->left);
         return;
     }
 
-    assert(target == *tree);
+    assert_exit(target == *tree);
 }
 
 static inline void
@@ -307,11 +307,11 @@ splay_tree_balance_splaying_right(struct splay_tree **tree,
 {
     struct splay_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p(root));
-    assert(splay_tree_structure_legal_p(target));
-    assert(splay_tree_structure_legal_p((*tree)->right));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(root));
+    assert_exit(splay_tree_structure_legal_p(target));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right));
 
     node = *tree;
 
@@ -327,11 +327,11 @@ splay_tree_balance_splaying_right(struct splay_tree **tree,
     } else if (node->right->right == target) {
         splay_tree_balance_single_splaying_right(tree);
     } else {
-        assert(target == node->right);
+        assert_exit(target == node->right);
         return;
     }
 
-    assert(target == *tree);
+    assert_exit(target == *tree);
 }
 
 /*
@@ -347,9 +347,9 @@ splay_tree_balance_root_splaying_left(struct splay_tree **tree)
     struct splay_tree *k1;
     struct splay_tree *k2;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->left));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left));
 
     k1 = *tree;
     k2 = k1->left;
@@ -373,9 +373,9 @@ splay_tree_balance_root_splaying_right(struct splay_tree **tree)
     struct splay_tree *k1;
     struct splay_tree *k2;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->right));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right));
 
     k1 = *tree;
     k2 = k1->right;
@@ -402,10 +402,10 @@ splay_tree_balance_single_splaying_left(struct splay_tree **tree)
     struct splay_tree *k2;
     struct splay_tree *k3;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->left));
-    assert(splay_tree_structure_legal_p((*tree)->left->left));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left->left));
 
     k1 = *tree;
     k2 = k1->left;
@@ -435,10 +435,10 @@ splay_tree_balance_single_splaying_right(struct splay_tree **tree)
     struct splay_tree *k2;
     struct splay_tree *k3;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->right));
-    assert(splay_tree_structure_legal_p((*tree)->right->right));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right->right));
 
     k1 = *tree;
     k2 = k1->right;
@@ -468,10 +468,10 @@ splay_tree_balance_doubly_splaying_left(struct splay_tree **tree)
     struct splay_tree *k2;
     struct splay_tree *k3;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->left));
-    assert(splay_tree_structure_legal_p((*tree)->left->right));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left));
+    assert_exit(splay_tree_structure_legal_p((*tree)->left->right));
 
     k1 = *tree;
     k2 = k1->left;
@@ -501,10 +501,10 @@ splay_tree_balance_doubly_splaying_right(struct splay_tree **tree)
     struct splay_tree *k2;
     struct splay_tree *k3;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_structure_legal_p((*tree)->right));
-    assert(splay_tree_structure_legal_p((*tree)->right->left));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right));
+    assert_exit(splay_tree_structure_legal_p((*tree)->right->left));
 
     k1 = *tree;
     k2 = k1->right;
@@ -552,8 +552,8 @@ splay_tree_contains_p_internal(struct splay_tree *tree, struct splay_tree *node)
     struct splay_tree *left;
     struct splay_tree *right;
 
-    assert(splay_tree_structure_legal_p(tree));
-    assert(splay_tree_structure_legal_p(node));
+    assert_exit(splay_tree_structure_legal_p(tree));
+    assert_exit(splay_tree_structure_legal_p(node));
 
     retval = false;
     nice = node->nice;
@@ -603,10 +603,10 @@ splay_tree_insert_internal(struct splay_tree **tree,
     struct splay_tree *splay;
     struct splay_tree *inserted;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_ordered_p(*tree));
-    assert(splay_tree_structure_legal_p(node));
-    assert(splay_tree_structure_legal_p(root));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_ordered_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(node));
+    assert_exit(splay_tree_structure_legal_p(root));
 
     if (!*tree) {
         return *tree = node;
@@ -627,7 +627,7 @@ splay_tree_insert_internal(struct splay_tree **tree,
             return NULL;
         }
 
-        assert(splay_tree_ordered_p(*tree));
+        assert_exit(splay_tree_ordered_p(*tree));
         return inserted;
     }
 }
@@ -649,7 +649,7 @@ splay_tree_insert(struct splay_tree **tree, struct splay_tree *node)
 static inline bool
 splay_tree_doubly_child_p(struct splay_tree *node)
 {
-    assert(splay_tree_structure_legal_p(node));
+    assert_exit(splay_tree_structure_legal_p(node));
 
     if (node->left && node->right) {
         return true;
@@ -662,11 +662,11 @@ static inline void
 splay_tree_lt_doubly_child_strip(struct splay_tree **pre,
     struct splay_tree *node)
 {
-    assert(!complain_null_pointer_p(pre));
-    assert(splay_tree_structure_legal_p(node));
-    assert(splay_tree_structure_legal_p(*pre));
-    assert(!splay_tree_doubly_child_p(node));
-    assert(*pre == node);
+    assert_exit(!complain_null_pointer_p(pre));
+    assert_exit(splay_tree_structure_legal_p(node));
+    assert_exit(splay_tree_structure_legal_p(*pre));
+    assert_exit(!splay_tree_doubly_child_p(node));
+    assert_exit(*pre == node);
 
     if (NULL != node->left) {
         *pre = node->left;
@@ -684,8 +684,8 @@ splay_tree_find_ptr_to_min(struct splay_tree **tree)
     struct splay_tree **min;
     struct splay_tree *splay;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
 
     min = tree;
     splay = *min;
@@ -703,8 +703,8 @@ splay_tree_swap_child(struct splay_tree *a, struct splay_tree *b)
 {
     void *tmp;
 
-    assert(splay_tree_structure_legal_p(a));
-    assert(splay_tree_structure_legal_p(b));
+    assert_exit(splay_tree_structure_legal_p(a));
+    assert_exit(splay_tree_structure_legal_p(b));
 
     tmp = a->left;
     a->left = b->left;
@@ -722,9 +722,9 @@ splay_tree_doubly_child_strip(struct splay_tree **pre)
     struct splay_tree *min;
     struct splay_tree **min_pre;
 
-    assert(!complain_null_pointer_p(pre));
-    assert(splay_tree_structure_legal_p(*pre));
-    assert(splay_tree_doubly_child_p(*pre));
+    assert_exit(!complain_null_pointer_p(pre));
+    assert_exit(splay_tree_structure_legal_p(*pre));
+    assert_exit(splay_tree_doubly_child_p(*pre));
 
     splay = *pre;
 
@@ -753,10 +753,10 @@ splay_tree_remove_internal(struct splay_tree **tree,
     struct splay_tree *removed;
     struct splay_tree **pre;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(splay_tree_structure_legal_p(*tree));
-    assert(splay_tree_ordered_p(*tree));
-    assert(splay_tree_structure_legal_p(node));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+    assert_exit(splay_tree_ordered_p(*tree));
+    assert_exit(splay_tree_structure_legal_p(node));
 
     pre = tree;
     splay = *pre;
@@ -789,7 +789,7 @@ splay_tree_remove_internal(struct splay_tree **tree,
         pr_log_warn("Failed to find the node in given tree.\n");
     }
 
-    assert(splay_tree_ordered_p(*tree));
+    assert_exit(splay_tree_ordered_p(*tree));
     return removed;
 }
 
@@ -811,8 +811,8 @@ static inline void
 splay_tree_iterate_internal(struct splay_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    assert(LEGAL_ORDER_P(order));
-    assert(!complain_null_pointer_p(handle));
+    assert_exit(LEGAL_ORDER_P(order));
+    assert_exit(!complain_null_pointer_p(handle));
 
     if (tree) {
         if (ORDER_PRE == order) {

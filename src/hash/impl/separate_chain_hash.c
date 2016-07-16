@@ -1,5 +1,5 @@
 uint32
-separate_chain_hash_size(struct separate_chain_hash *hash)
+separate_chain_hash_size(s_separate_chain_hash_t *hash)
 {
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return HASH_SIZE_INVALID;
@@ -9,7 +9,7 @@ separate_chain_hash_size(struct separate_chain_hash *hash)
 }
 
 uint32
-separate_chain_hash_load_factor(struct separate_chain_hash *hash)
+separate_chain_hash_load_factor(s_separate_chain_hash_t *hash)
 {
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return HASH_LD_FTR_INVALID;
@@ -18,11 +18,11 @@ separate_chain_hash_load_factor(struct separate_chain_hash *hash)
     }
 }
 
-struct separate_chain_hash *
+s_separate_chain_hash_t *
 separate_chain_hash_create(uint32 size)
 {
-    struct hashing_table *table;
-    struct separate_chain_hash *hash;
+    s_hashing_table_t *table;
+    s_separate_chain_hash_t *hash;
 
     hash = memory_cache_allocate(sizeof(*hash));
     if (complain_zero_size_p(size)) {
@@ -38,7 +38,7 @@ separate_chain_hash_create(uint32 size)
 }
 
 static inline bool
-separate_chain_hash_structure_legal_p(struct separate_chain_hash *hash)
+separate_chain_hash_structure_legal_p(s_separate_chain_hash_t *hash)
 {
     if (complain_null_pointer_p(hash)) {
         return false;
@@ -47,33 +47,98 @@ separate_chain_hash_structure_legal_p(struct separate_chain_hash *hash)
     }
 }
 
-static inline struct doubly_linked_list **
-separate_chain_hash_space(struct separate_chain_hash *hash)
+static inline s_separate_chain_t **
+separate_chain_hash_space(s_separate_chain_hash_t *hash)
 {
-    assert(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(separate_chain_hash_structure_legal_p(hash));
 
-    return (struct doubly_linked_list **)hashing_table_space(hash->table);
+    return (s_separate_chain_t **)hashing_table_space(hash->table);
+}
+
+static inline s_separate_chain_t *
+separate_chain_create(void *val)
+{
+    s_separate_chain_t *chain;
+
+    chain = memory_cache_allocate(sizeof(*chain));
+    chain->val = val;
+
+    doubly_linked_list_initial(&chain->list);
+    return chain;
+}
+
+static inline bool
+separate_chain_structure_legal_p(s_separate_chain_t *chain)
+{
+    if (complain_null_pointer_p(chain)) {
+        return false;
+    } else if (!doubly_linked_list_structure_legal_p(&chain->list)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline s_separate_chain_t *
+separate_chain_next(s_separate_chain_t *chain)
+{
+    ptr_t offset;
+
+    if (!chain) {
+        return NULL;
+    } else {
+        offset = (ptr_t)&chain->list - (ptr_t)chain;
+        return (void *)((ptr_t)chain->list.next - offset);
+    }
+}
+
+static inline s_separate_chain_t *
+separate_chain_ptr_to_chain(s_doubly_linked_list_t *node)
+{
+    if (!node) {
+        return NULL;
+    } else {
+        return CONTAINER_OF(node, s_separate_chain_t, list);
+    }
 }
 
 static inline void
-separate_chain_hash_chain_destroy(struct separate_chain_hash *hash)
+separate_chain_destroy(s_separate_chain_t *chain)
 {
-    struct doubly_linked_list **iter;
+    s_separate_chain_t *tmp;
+    s_separate_chain_t *next;
 
-    assert(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(separate_chain_structure_legal_p(chain));
 
-    iter = separate_chain_hash_space(hash);
-    while (iter < separate_chain_hash_space(hash) +
-        separate_chain_hash_size(hash)) {
-        if (*iter) {
-           doubly_linked_list_destroy(iter);
+    tmp = chain;
+
+    do {
+        next = separate_chain_next(tmp);
+        memory_cache_free(tmp);
+        tmp = next;
+    } while (tmp != chain);
+}
+
+static inline void
+separate_chain_hash_chain_destroy(s_separate_chain_hash_t *hash)
+{
+    s_separate_chain_t *chain;
+    s_separate_chain_t **chain_array;
+
+    assert_exit(separate_chain_hash_structure_legal_p(hash));
+
+    chain_array = separate_chain_hash_space(hash);
+    while (chain_array < separate_chain_hash_space(hash) + hash->table->size) {
+        chain = *chain_array;
+        if (chain) {
+            separate_chain_destroy(chain);
         }
-        iter++;
+        chain_array++;
     }
 }
 
 void
-separate_chain_hash_destroy(struct separate_chain_hash **hash)
+separate_chain_hash_destroy(s_separate_chain_hash_t **hash)
 {
     if (complain_null_pointer_p(hash)) {
         return;
@@ -89,7 +154,7 @@ separate_chain_hash_destroy(struct separate_chain_hash **hash)
 }
 
 uint32
-separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
+separate_chain_hash_load_factor_calculate(s_separate_chain_hash_t *hash)
 {
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return 0u;
@@ -98,197 +163,177 @@ separate_chain_hash_load_factor_calculate(struct separate_chain_hash *hash)
     }
 }
 
-static inline struct doubly_linked_list *
-separate_chain_hash_chain_head(struct separate_chain_hash *hash, uint32 index)
+static inline s_separate_chain_t *
+separate_chain_hash_head(s_separate_chain_hash_t *hash, uint32 index)
 {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 
-    assert(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(index < hash->table->size);
 
     table = hash->table;
     return table->space[index];
 }
 
 static inline void
-separate_chain_hash_chain_head_set(struct separate_chain_hash *hash,
-    uint32 index, struct doubly_linked_list *val)
+separate_chain_hash_head_set(s_separate_chain_hash_t *hash,
+    uint32 index, s_separate_chain_t *val)
 {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 
-    assert(separate_chain_hash_structure_legal_p(hash));
-    assert(index < hash->table->size);
+    assert_exit(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(index < hash->table->size);
 
     table = hash->table;
     table->space[index] = val;
 }
 
 static inline uint32
-separate_chain_hash_index_calculate(struct separate_chain_hash *hash, void *key)
+separate_chain_hash_index_calculate(s_separate_chain_hash_t *hash, void *key)
 {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 
-    assert(separate_chain_hash_structure_legal_p(hash));
+    assert_exit(separate_chain_hash_structure_legal_p(hash));
 
     table = hash->table;
     return table->separate_chain(key, table->size);
 }
 
-void
-separate_chain_hash_insert(struct separate_chain_hash **hash, void *key)
+void *
+separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key)
 {
-    uint32 factor;
     uint32 index;
-    struct doubly_linked_list *head;
+    uint32 factor;
+    s_separate_chain_t *tmp;
+    s_separate_chain_t *head;
 
     if (complain_null_pointer_p(hash)) {
-        return;
-    } else if (separate_chain_hash_structure_legal_p(*hash)) {
+        return PTR_INVALID;
+    } else if (!separate_chain_hash_structure_legal_p(*hash)) {
+        return PTR_INVALID;
+    } else {
         factor = separate_chain_hash_load_factor_calculate(*hash);
-        if (factor >= separate_chain_hash_load_factor(*hash)) {
+        if (factor >= (*hash)->table->load_factor) {
             pr_log_info("Reach the load factor limit, will rehashing.\n");
             *hash = separate_chain_hash_rehashing(hash);
         }
 
+        tmp = separate_chain_create(key);
         index = separate_chain_hash_index_calculate(*hash, key);
-        head = separate_chain_hash_chain_head(*hash, index);
+        head = separate_chain_hash_head(*hash, index);
 
         if (!head) {
-            head = doubly_linked_list_create();
-            separate_chain_hash_chain_head_set(*hash, index, head);
+            separate_chain_hash_head_set(*hash, index, tmp);
         } else {
-            // Fix-Me, bug here.
-            doubly_linked_list_insert_after(head, key);
+            doubly_linked_list_insert_after(&head->list, &tmp->list);
         }
+
+        return key;
     }
 }
 
 void *
-separate_chain_hash_remove(struct separate_chain_hash *hash, void *key)
+separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key)
 {
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *iter;
     void *retval;
     uint32 index;
+    s_doubly_linked_list_t *removed, *list;
+    s_separate_chain_t *head, *chain, *next;
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
-        retval = NULL;
+        list = retval = NULL;
         index = separate_chain_hash_index_calculate(hash, key);
-        head = separate_chain_hash_chain_head(hash, index);
+        head = separate_chain_hash_head(hash, index);
 
-        if (!head) {
-            return NULL;
-        } else {
-            iter = head;
+        if (head) {
+            chain = head;
             do {
-                if (key == iter->val) {
+                next = separate_chain_next(chain);
+                if (key == chain->val) {
                     retval = key;
-                    doubly_linked_list_remove(&iter);
-                    break;
+                    list = &chain->list;
+                    removed = doubly_linked_list_remove(&list);
+                    memory_cache_free(separate_chain_ptr_to_chain(removed));
+
+                    chain = separate_chain_ptr_to_chain(list);
+                    separate_chain_hash_head_set(hash, index, chain);
+                    return retval;
                 }
-                iter = iter->next;
-            } while (iter != head);
-
-            separate_chain_hash_chain_head_set(hash, index, iter);
+                chain = next;
+            } while (chain != head);
         }
 
-        if (NULL == retval) {
-            pr_log_info("Not such a key in given hash.\n");
-        }
-
-        return retval;
+        pr_log_warn("Failed to find key in hash table.\n");
+        return NULL;
     }
 }
 
 void *
-separate_chain_hash_find(struct separate_chain_hash *hash, void *key)
+separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key)
 {
-    struct doubly_linked_list *head;
-    struct doubly_linked_list *iter;
-    void *retval;
     uint32 index;
-
-    retval = NULL;
+    s_separate_chain_t *head;
+    s_separate_chain_t *chain;
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         index = separate_chain_hash_index_calculate(hash, key);
-        head = separate_chain_hash_chain_head(hash, index);
+        head = separate_chain_hash_head(hash, index);
 
-        if (!head) {
-            return NULL;
-        } else {
-            iter = head;
+        if (head) {
+            chain = head;
             do {
-                if (key == iter->val) {
-                    retval = key;
-                    break;
+                if (key == chain->val) {
+                    return key;
                 }
-                iter = iter->next;
-            } while (iter != head);
+                chain = separate_chain_next(chain);
+            } while (chain != head);
         }
 
-        if (NULL == retval) {
-            pr_log_info("Not such a key in given hash.\n");
-        }
-
-        return retval;
+        pr_log_info("Not such a key in given hash.\n");
+        return NULL;
     }
 }
 
 static inline void
-separate_chain_hash_chain_rehashing(struct doubly_linked_list *link,
-    struct separate_chain_hash *hash)
-{
-    void *tmp;
-    struct doubly_linked_list *iter;
-
-    assert(!complain_null_pointer_p(link));
-    assert(separate_chain_hash_structure_legal_p(hash));
-
-    iter = link;
-    do {
-        tmp = iter->val;
-        separate_chain_hash_insert(&hash, tmp);
-        iter = iter->next;
-    } while (iter != link);
-}
-
-static inline void
-separate_chain_hash_space_rehashing(struct separate_chain_hash *to,
-    struct separate_chain_hash *from)
+separate_chain_hash_space_rehashing(s_separate_chain_hash_t *to,
+    s_separate_chain_hash_t *from)
 {
     uint32 size;
-    struct doubly_linked_list **iter;
+    s_separate_chain_t **chain;
+    s_separate_chain_t *head, *list;;
 
-    assert(!complain_null_pointer_p(to));
-    assert(!complain_null_pointer_p(from));
-    assert(!complain_null_pointer_p(separate_chain_hash_space(to)));
-    assert(!complain_null_pointer_p(separate_chain_hash_space(from)));
+    assert_exit(separate_chain_hash_structure_legal_p(to));
+    assert_exit(separate_chain_hash_structure_legal_p(from));
 
-    iter = separate_chain_hash_space(from);
-    size = separate_chain_hash_size(from);
+    size = from->table->size;
+    chain = separate_chain_hash_space(from);
 
-    while (iter < separate_chain_hash_space(from) + size) {
-        if (*iter) {
-            separate_chain_hash_chain_rehashing(*iter, to);
+    while (chain < separate_chain_hash_space(from) + size) {
+        if (*chain) {
+            head = list = *chain;
+            do {
+                separate_chain_hash_insert(&to, list->val);
+                list = separate_chain_next(list);
+            } while (head != list);
         }
-        iter++;
+        chain++;
     }
 }
 
-struct separate_chain_hash *
-separate_chain_hash_rehashing(struct separate_chain_hash **hash)
+s_separate_chain_hash_t *
+separate_chain_hash_rehashing(s_separate_chain_hash_t **hash)
 {
     uint32 resize;
-    struct separate_chain_hash *new;
+    s_separate_chain_hash_t *new;
 
     if (complain_null_pointer_p(hash)) {
-        return NULL;
+        return PTR_INVALID;
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         resize = prime_numeral_next(separate_chain_hash_size(*hash) + 1);
         new = separate_chain_hash_create(resize);

@@ -11,8 +11,8 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     small_child = binary_heap_child_min_nice_index(heap, index);
@@ -46,8 +46,8 @@ binary_heap_minimal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 small_child;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     small_child = binary_heap_child_min_nice_index(heap, index);
 
@@ -78,8 +78,8 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     big_child = binary_heap_child_max_nice_index(heap, index);
@@ -113,8 +113,8 @@ binary_heap_maximal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 big_child;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     big_child = binary_heap_child_max_nice_index(heap, index);
 
@@ -141,8 +141,8 @@ binary_heap_min_max_up_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 gdp_randparent;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
     gdp_randparent = INDEX_GD_PARENT(index);
@@ -193,8 +193,8 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
     uint32 depth;
     uint32 child_index;
 
-    assert(binary_heap_structure_legal_p(heap));
-    assert(binary_heap_index_legal_p(heap, index));
+    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
 

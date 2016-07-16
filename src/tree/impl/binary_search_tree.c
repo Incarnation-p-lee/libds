@@ -51,7 +51,7 @@ static inline void
 binary_search_tree_initial_internal(struct binary_search_tree *tree,
     sint64 nice)
 {
-    assert(!complain_null_pointer_p(tree));
+    assert_exit(!complain_null_pointer_p(tree));
 
     tree->left = NULL;
     tree->right = NULL;
@@ -83,7 +83,7 @@ binary_search_tree_structure_legal_p(struct binary_search_tree *tree)
 static inline void
 binary_search_tree_node_destroy(struct binary_search_tree *node)
 {
-    assert(binary_search_tree_structure_legal_p(node));
+    assert_exit(binary_search_tree_structure_legal_p(node));
 
     memory_cache_free(node);
 }
@@ -149,7 +149,7 @@ binary_search_tree_find(struct binary_search_tree *tree, sint64 nice)
 static inline struct binary_search_tree *
 binary_search_tree_find_min_internal(struct binary_search_tree *tree)
 {
-    assert(binary_search_tree_structure_legal_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(tree));
 
     while (tree->left) {
         tree = tree->left;
@@ -171,7 +171,7 @@ binary_search_tree_find_min(struct binary_search_tree *tree)
 static inline struct binary_search_tree *
 binary_search_tree_find_max_internal(struct binary_search_tree *tree)
 {
-    assert(binary_search_tree_structure_legal_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(tree));
 
     while (tree->right) {
         tree = tree->right;
@@ -225,8 +225,8 @@ binary_search_tree_contains_p_internal(struct binary_search_tree *tree,
     struct binary_search_tree *left;
     struct binary_search_tree *right;
 
-    assert(binary_search_tree_structure_legal_p(tree));
-    assert(binary_search_tree_structure_legal_p(node));
+    assert_exit(binary_search_tree_structure_legal_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(node));
 
     retval = false;
     nice = node->nice;
@@ -278,10 +278,10 @@ binary_search_tree_insert_internal(struct binary_search_tree **tree,
     struct binary_search_tree **iter;
     struct binary_search_tree *binary;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(binary_search_tree_ordered_p(*tree));
-    assert(binary_search_tree_structure_legal_p(*tree));
-    assert(binary_search_tree_structure_legal_p(node));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(binary_search_tree_ordered_p(*tree));
+    assert_exit(binary_search_tree_structure_legal_p(*tree));
+    assert_exit(binary_search_tree_structure_legal_p(node));
 
     iter = tree;
     nice = node->nice;
@@ -320,7 +320,7 @@ binary_search_tree_insert_internal(struct binary_search_tree **tree,
         *iter = node;
     }
 
-    assert(binary_search_tree_ordered_p(*tree));
+    assert_exit(binary_search_tree_ordered_p(*tree));
     return node;
 }
 
@@ -342,7 +342,7 @@ binary_search_tree_insert(struct binary_search_tree **tree,
 static inline bool
 binary_search_tree_doubly_child_p(struct binary_search_tree *node)
 {
-    assert(binary_search_tree_structure_legal_p(node));
+    assert_exit(binary_search_tree_structure_legal_p(node));
 
     if (node->left && node->right) {
         return true;
@@ -357,8 +357,8 @@ binary_search_tree_find_ptr_to_max(struct binary_search_tree **tree)
     struct binary_search_tree **max;
     struct binary_search_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(binary_search_tree_structure_legal_p(*tree));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(*tree));
 
     max = tree;
     node = *max;
@@ -377,8 +377,8 @@ binary_search_tree_find_ptr_to_min(struct binary_search_tree **tree)
     struct binary_search_tree **min;
     struct binary_search_tree *node;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(binary_search_tree_structure_legal_p(*tree));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(*tree));
 
     min = tree;
     node = *min;
@@ -397,8 +397,8 @@ binary_search_tree_swap_child(struct binary_search_tree *a,
 {
     void *tmp;
 
-    assert(binary_search_tree_structure_legal_p(a));
-    assert(binary_search_tree_structure_legal_p(b));
+    assert_exit(binary_search_tree_structure_legal_p(a));
+    assert_exit(binary_search_tree_structure_legal_p(b));
 
     tmp = a->left;
     a->left = b->left;
@@ -413,11 +413,11 @@ static inline void
 binary_search_tree_lt_doubly_child_strip(struct binary_search_tree **pre,
     struct binary_search_tree *node)
 {
-    assert(!complain_null_pointer_p(pre));
-    assert(binary_search_tree_structure_legal_p(node));
-    assert(binary_search_tree_structure_legal_p(*pre));
-    assert(!binary_search_tree_doubly_child_p(node));
-    assert(*pre == node);
+    assert_exit(!complain_null_pointer_p(pre));
+    assert_exit(binary_search_tree_structure_legal_p(node));
+    assert_exit(binary_search_tree_structure_legal_p(*pre));
+    assert_exit(!binary_search_tree_doubly_child_p(node));
+    assert_exit(*pre == node);
 
     if (NULL != node->left) {
         *pre = node->left;
@@ -436,9 +436,9 @@ binary_search_tree_child_strip_from_max(struct binary_search_tree **node_pre)
     struct binary_search_tree *max;
     struct binary_search_tree **max_pre;
 
-    assert(!complain_null_pointer_p(node_pre));
-    assert(binary_search_tree_structure_legal_p(*node_pre));
-    assert(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
+    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
 
@@ -466,9 +466,9 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
     struct binary_search_tree *min;
     struct binary_search_tree **min_pre;
 
-    assert(!complain_null_pointer_p(node_pre));
-    assert(binary_search_tree_structure_legal_p(*node_pre));
-    assert(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
+    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
 
@@ -492,9 +492,9 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
 static inline void
 binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
 {
-    assert(!complain_null_pointer_p(node_pre));
-    assert(binary_search_tree_structure_legal_p(*node_pre));
-    assert(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
+    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
 
     if (direct > 0) {
         binary_search_tree_child_strip_from_max(node_pre);
@@ -514,11 +514,11 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
     struct binary_search_tree *removed;
     struct binary_search_tree **pre;
 
-    assert(!complain_null_pointer_p(tree));
-    assert(binary_search_tree_structure_legal_p(*tree));
-    assert(binary_search_tree_ordered_p(*tree));
-    assert(binary_search_tree_ordered_p(*tree));
-    assert(binary_search_tree_structure_legal_p(node));
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(binary_search_tree_structure_legal_p(*tree));
+    assert_exit(binary_search_tree_ordered_p(*tree));
+    assert_exit(binary_search_tree_ordered_p(*tree));
+    assert_exit(binary_search_tree_structure_legal_p(node));
 
     pre = tree;
     n = *pre;
@@ -554,7 +554,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
         pr_log_warn("Failed to find the node in given tree.\n");
     }
 
-    assert(binary_search_tree_ordered_p(*tree));
+    assert_exit(binary_search_tree_ordered_p(*tree));
     return removed;
 }
 
@@ -577,8 +577,8 @@ static inline void
 binary_search_tree_iterate_internal(struct binary_search_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    assert(LEGAL_ORDER_P(order));
-    assert(!complain_null_pointer_p(handle));
+    assert_exit(LEGAL_ORDER_P(order));
+    assert_exit(!complain_null_pointer_p(handle));
 
     if (tree) {
         if (ORDER_PRE == order) {

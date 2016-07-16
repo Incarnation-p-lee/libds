@@ -1,7 +1,3 @@
-/*
- * This file should be included under
- * #if defined DEBUG
- */
 static inline bool
 avl_tree_ordered_p(struct avl_tree *tree)
 {
@@ -48,7 +44,7 @@ static inline bool
 avl_tree_height_sync_with_calculated_p(struct avl_tree *tree,
     sint32 left, sint32 right)
 {
-    assert(avl_tree_structure_legal_p(tree));
+    assert_exit(avl_tree_structure_legal_p(tree));
 
     if (left == avl_tree_height_calculate(tree->left)
         && right == avl_tree_height_calculate(tree->right)) {
@@ -67,8 +63,8 @@ avl_tree_single_rotate_left_precondition_p(struct avl_tree *node)
     struct avl_tree *k1;
     struct avl_tree *k2;
 
-    assert(avl_tree_structure_legal_p(node));
-    assert(avl_tree_structure_legal_p(node->left));
+    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node->left));
 
     k1 = node;
     k2 = k1->left;
@@ -91,8 +87,8 @@ avl_tree_single_rotate_right_precondition_p(struct avl_tree *node)
     struct avl_tree *k1;
     struct avl_tree *k2;
 
-    assert(avl_tree_structure_legal_p(node));
-    assert(avl_tree_structure_legal_p(node->right));
+    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node->right));
 
     k1 = node;
     k2 = k1->right;
@@ -115,8 +111,8 @@ avl_tree_doubly_rotate_left_precondition_p(struct avl_tree *node)
     struct avl_tree *k1;
     struct avl_tree *k2;
 
-    assert(avl_tree_structure_legal_p(node));
-    assert(avl_tree_structure_legal_p(node->left));
+    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node->left));
 
     k1 = node;
     k2 = k1->left;
@@ -139,8 +135,8 @@ avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *node)
     struct avl_tree *k1;
     struct avl_tree *k2;
 
-    assert(avl_tree_structure_legal_p(node));
-    assert(avl_tree_structure_legal_p(node->right));
+    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node->right));
 
     k1 = node;
     k2 = k1->right;
@@ -161,7 +157,7 @@ avl_tree_left_optimize_validity_p(struct avl_tree *node,
 {
     void *computed;
 
-    assert(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node));
 
     computed = node->left;
 
@@ -178,7 +174,7 @@ avl_tree_right_optimize_validity_p(struct avl_tree *node,
 {
     void *computed;
 
-    assert(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(node));
 
     computed = node->right;
 
@@ -220,11 +216,11 @@ avl_tree_height_balanced_p(struct avl_tree *tree)
     sint32 left;
     sint32 right;
 
-    assert(avl_tree_structure_legal_p(tree));
+    assert_exit(avl_tree_structure_legal_p(tree));
 
     left = avl_tree_height_opt(tree->left);
     right = avl_tree_height_opt(tree->right);
-    assert(avl_tree_height_sync_with_calculated_p(tree, left, right));
+    assert_exit(avl_tree_height_sync_with_calculated_p(tree, left, right));
 
     if (abs_sint32(left - right) > 1) {
         return false;
@@ -238,7 +234,7 @@ avl_tree_balanced_optimize_validity_p(struct avl_tree *tree, bool expected)
 {
     bool computed;
 
-    assert(avl_tree_structure_legal_p(tree));
+    assert_exit(avl_tree_structure_legal_p(tree));
 
     computed = avl_tree_height_balanced_p(tree);
 

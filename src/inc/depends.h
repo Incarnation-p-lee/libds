@@ -39,7 +39,7 @@
 
 #elif defined KERNEL
 
-extern void kassert(bool);
+extern void kassert_exit(bool);
 extern void kexit(uint32);
 extern void * kmalloc(uint32);
 extern void kmemcpy(void *, void *, uint32);
@@ -66,7 +66,7 @@ extern void kfree(void *);
 #if defined DEBUG
     #define assert              kassert
 #else
-    #define assert(x)
+    #define assert_exit(x)
 #endif
 
 #endif

@@ -91,7 +91,7 @@ skip_linked_list_initial(s_skip_linked_list_t *list)
 static inline void
 skip_linked_list_initial_i(s_skip_linked_list_t *list, sint32 key)
 {
-    assert(!complain_null_pointer_p(list));
+    assert_exit(!complain_null_pointer_p(list));
 
     list->key = key;
     list->next = NULL;
@@ -123,7 +123,7 @@ skip_linked_list_length_i(s_skip_linked_list_t *list)
     uint32 retval;
     s_skip_linked_list_t *node;
 
-    assert(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(list));
 
     retval = 0u;
     node = list;
@@ -161,8 +161,8 @@ skip_linked_list_find_key_i(s_skip_linked_list_t *list, sint32 key, uint32 lv)
 {
     s_skip_linked_list_t **head;
 
-    assert(skip_linked_list_structure_legal_p(list));
-    assert(SKIP_LIST_MAX_LVL > lv);
+    assert_exit(skip_linked_list_structure_legal_p(list));
+    assert_exit(SKIP_LIST_MAX_LVL > lv);
 
     while (true) {
         head = &list->layer[lv];
@@ -187,8 +187,8 @@ skip_linked_list_contains_ip(s_skip_linked_list_t *list,
 {
     s_skip_linked_list_t *skip;
 
-    assert(skip_linked_list_structure_legal_p(list));
-    assert(skip_linked_list_structure_legal_p(node));
+    assert_exit(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(node));
 
     skip = list;
     while (NULL != skip) {
@@ -220,9 +220,9 @@ skip_linked_list_insert_before_head(s_skip_linked_list_t *list,
 {
     uint32 lv;
 
-    assert(skip_linked_list_structure_legal_p(list));
-    assert(skip_linked_list_structure_legal_p(tgt));
-    assert(tgt->key < list->key);
+    assert_exit(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(tgt));
+    assert_exit(tgt->key < list->key);
 
     lv = SKIP_LIST_MAX_LVL_IDX;
 
@@ -247,10 +247,10 @@ skip_linked_list_insert_i(s_skip_linked_list_t **list,
     s_skip_linked_list_t **head;
     s_skip_linked_list_t *prev_list[SKIP_LIST_MAX_LVL];
 
-    assert(!complain_null_pointer_p(list));
-    assert(skip_linked_list_ordering_p(*list));
-    assert(skip_linked_list_structure_legal_p(tgt));
-    assert(skip_linked_list_structure_legal_p(*list));
+    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(skip_linked_list_ordering_p(*list));
+    assert_exit(skip_linked_list_structure_legal_p(tgt));
+    assert_exit(skip_linked_list_structure_legal_p(*list));
 
     lv = SKIP_LIST_MAX_LVL_IDX;
     head = list;
@@ -280,7 +280,7 @@ skip_linked_list_insert_i(s_skip_linked_list_t **list,
         }
     }
 
-    assert(skip_linked_list_ordering_p(*list));
+    assert_exit(skip_linked_list_ordering_p(*list));
     return tgt;
 }
 
@@ -303,9 +303,9 @@ static inline void
 skip_linked_list_insert_update_with_lv(s_skip_linked_list_t *tgt,
     s_skip_linked_list_t **prev_list, uint32 lv)
 {
-    assert(!complain_null_pointer_p(prev_list));
-    assert(skip_linked_list_structure_legal_p(tgt));
-    assert(SKIP_LIST_MAX_LVL > lv);
+    assert_exit(!complain_null_pointer_p(prev_list));
+    assert_exit(skip_linked_list_structure_legal_p(tgt));
+    assert_exit(SKIP_LIST_MAX_LVL > lv);
 
     do {
         tgt->layer[lv] = prev_list[lv]->layer[lv];
@@ -344,7 +344,7 @@ skip_linked_list_node_clean(s_skip_linked_list_t *list)
 {
     uint32 lv;
 
-    assert(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(list));
 
     lv = SKIP_LIST_BOTTOM_IDX;
 
@@ -359,7 +359,7 @@ skip_linked_list_remove_head(s_skip_linked_list_t *list)
     uint32 lv;
     s_skip_linked_list_t *next;
 
-    assert(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(list));
 
     next = list->next;
 
@@ -379,9 +379,9 @@ static inline s_skip_linked_list_t *
 skip_linked_list_remove_with_previous_list(s_skip_linked_list_t *tgt,
     s_skip_linked_list_t **pre_list, uint32 lv)
 {
-    assert(lv < SKIP_LIST_MAX_LVL);
-    assert(!complain_null_pointer_p(pre_list));
-    assert(skip_linked_list_structure_legal_p(tgt));
+    assert_exit(lv < SKIP_LIST_MAX_LVL);
+    assert_exit(!complain_null_pointer_p(pre_list));
+    assert_exit(skip_linked_list_structure_legal_p(tgt));
 
     do {
         pre_list[lv]->layer[lv] = tgt->layer[lv];
@@ -398,13 +398,13 @@ skip_linked_list_remove_on_level(s_skip_linked_list_t *list,
 {
     s_skip_linked_list_t *skip;
 
-    assert(SKIP_LIST_MAX_LVL > level);
-    assert(skip_linked_list_structure_legal_p(list));
-    assert(skip_linked_list_structure_legal_p(removed));
+    assert_exit(SKIP_LIST_MAX_LVL > level);
+    assert_exit(skip_linked_list_structure_legal_p(list));
+    assert_exit(skip_linked_list_structure_legal_p(removed));
 
     do {
         skip = list;
-        assert(skip_linked_list_exist_on_level(list, removed, level));
+        assert_exit(skip_linked_list_exist_on_level(list, removed, level));
 
         while (skip->layer[level] != removed) {
             skip = skip->layer[level];
@@ -426,10 +426,10 @@ skip_linked_list_remove_i(s_skip_linked_list_t **list,
     s_skip_linked_list_t *head;
     s_skip_linked_list_t *removed;
 
-    assert(!complain_null_pointer_p(list));
-    assert(skip_linked_list_ordering_p(*list));
-    assert(skip_linked_list_structure_legal_p(tgt));
-    assert(skip_linked_list_structure_legal_p(*list));
+    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(skip_linked_list_ordering_p(*list));
+    assert_exit(skip_linked_list_structure_legal_p(tgt));
+    assert_exit(skip_linked_list_structure_legal_p(*list));
 
     if ((*list)->key == tgt->key) {
         removed = *list;
@@ -460,7 +460,7 @@ skip_linked_list_remove_i(s_skip_linked_list_t **list,
             }
         }
 
-        assert(skip_linked_list_ordering_p(head));
+        assert_exit(skip_linked_list_ordering_p(head));
     }
 
     return removed;

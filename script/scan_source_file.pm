@@ -135,6 +135,8 @@ sub scan_header_file_definition {
             $status = "END" unless /\$/;
         } elsif (/^typedef /) {
             push @result, "$_\n";
+        } elsif (/\/\/ New-Line /) {
+            push @result, "\n";
         }
     }
 

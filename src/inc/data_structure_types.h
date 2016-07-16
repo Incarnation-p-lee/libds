@@ -37,13 +37,19 @@ enum ITER_ORDER {
 #define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
 #define PTR_INVALID            (void *)-1 // invalid pointer
+// New-Line
 
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
+// New-Line
 
-typedef struct single_linked_list s_single_linked_list_t;
-typedef struct doubly_linked_list s_doubly_linked_list_t;
-typedef struct skip_linked_list   s_skip_linked_list_t;
+typedef struct single_linked_list   s_single_linked_list_t;
+typedef struct doubly_linked_list   s_doubly_linked_list_t;
+typedef struct skip_linked_list     s_skip_linked_list_t;
+typedef struct separate_chain_hash  s_separate_chain_hash_t;
+typedef struct open_addressing_hash s_open_addressing_hash_t;
+typedef struct hashing_table        s_hashing_table_t;
+typedef struct separate_chain       s_separate_chain_t;
 
 /*
  *   Implement the unify single_linked_list interface
@@ -239,6 +245,11 @@ struct hashing_table {
         uint32 (*separate_chain)(void *, uint32);
         uint32 (*open_addressing)(void *, uint32, uint32);
     };
+};
+
+struct separate_chain {
+    void                   *val;
+    s_doubly_linked_list_t list;
 };
 
 /*

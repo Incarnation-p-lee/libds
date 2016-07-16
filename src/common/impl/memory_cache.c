@@ -35,7 +35,7 @@ memory_cache_re_allocate(void *addr, uint32 size)
         return memory_cache_allocate(size);
     } else {
         old_size = *(uint32 *)MEM_TO_REAL(addr);
-        assert(0 != old_size);
+        assert_exit(0 != old_size);
 
         if (size <= old_size) {
             return addr;
@@ -54,7 +54,7 @@ memory_cache_free(void *addr)
 
     if (!complain_null_pointer_p(addr)) {
         size = *(uint32 *)(MEM_TO_REAL(addr));
-        assert(0 != size);
+        assert_exit(0 != size);
 
         if (!memory_cache_add_entry_p(addr, size)) {
             free_ds(MEM_TO_REAL(addr));
@@ -65,7 +65,7 @@ memory_cache_free(void *addr)
 static inline void
 memory_cache_remove_entry_by_index(uint32 index)
 {
-    assert(index < MEM_ENTRY_CNT);
+    assert_exit(index < MEM_ENTRY_CNT);
 
     mem_cc_set.list[index].addr = NULL;
     mem_cc_set.list[index].size = MEM_ENTRY_NULL;
@@ -77,8 +77,8 @@ memory_cache_add_entry_p(void *addr, uint32 size)
     uint32 index_start;
     struct memory_cache_entry *cache;
 
-    assert(NULL != addr);
-    assert(!complain_zero_size_p(size));
+    assert_exit(NULL != addr);
+    assert_exit(!complain_zero_size_p(size));
 
     index_start = mem_cc_set.index;
     cache = mem_cc_set.list;
@@ -104,7 +104,7 @@ memory_cache_find_entry_of_size_p(void **addr, uint32 size)
 {
     uint32 index_start;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     index_start = mem_cc_set.index;
 
@@ -127,7 +127,7 @@ memory_cache_find_entry_greater_size_p(void **addr, uint32 size)
 {
     uint32 index_start;
 
-    assert(!complain_zero_size_p(size));
+    assert_exit(!complain_zero_size_p(size));
 
     index_start = mem_cc_set.index;
 

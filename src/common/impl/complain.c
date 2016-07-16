@@ -31,14 +31,21 @@ complain_zero_size_p(uint32 size)
 }
 
 void
-complain_assert(char *msg, const char *fname, const char *func,
-    uint32 line, bool cond)
+complain_assert_caution(char *msg, const char *fname, const char *func,
+    uint32 line)
 {
-    if (msg && fname && func && !cond) {
-        dp_printf("COMPLAIN ASSERTION: => < %s > Fail ... \n"
+    if (msg && fname && func) {
+        dp_printf("COMPLAIN ASSERTION: => [33m%s[0m [31mFail[0m ... \n"
                   "  In function %s\n"
                   "  At file %s +%d\n", msg, func, fname, line);
-        *(uint32 *)0 = 0;
     }
+}
+
+void
+complain_assert_exit(char *msg, const char *fname, const char *func,
+    uint32 line)
+{
+    complain_assert_caution(msg, fname, func, line);
+    *(uint32 *)0 = 0;
 }
 

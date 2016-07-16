@@ -34,7 +34,7 @@ insertion_sort(void *base, uint32 size, uint32 csize,
         }
 
         memory_cache_free(tmp);
-        assert(sort_data_sorted_p(base, size, csize, compare));
+        assert_exit(sort_data_sorted_p(base, size, csize, compare));
     }
 }
 
