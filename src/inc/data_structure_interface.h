@@ -323,6 +323,7 @@ extern struct linked_stack * linked_stack_create(void);
 extern uint32 array_stack_capacity(struct array_stack *stack);
 extern uint32 array_stack_dim(struct array_stack *stack);
 extern uint32 array_stack_rest(struct array_stack *stack);
+extern uint32 array_stack_size(struct array_stack *stack);
 extern uint32 linked_stack_capacity(struct linked_stack *stack);
 extern uint32 linked_stack_rest(struct linked_stack *stack);
 extern void * array_stack_pop(struct array_stack *stack);

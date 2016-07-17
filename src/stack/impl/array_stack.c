@@ -8,6 +8,16 @@ array_stack_dim(struct array_stack *stack)
     }
 }
 
+uint32
+array_stack_size(struct array_stack *stack)
+{
+    if (complain_null_pointer_p(stack)) {
+        return STACK_SIZE_INVALID;
+    } else {
+        return (uint32)(stack->space.sp - stack->space.bp);
+    }
+}
+
 /*
  * _RETURN_ one instance of array_stack.
  *   If no memory available, it never _RETURN_, export an error and exit.

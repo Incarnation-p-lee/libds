@@ -375,6 +375,14 @@ static const struct test_layer_table array_stack[] = {
         },
     },
     {
+        "top",
+        NULL,
+        {
+            &utest_array_stack_top,
+            NULL,
+        },
+    },
+    {
         "empty_p",
         NULL,
         {

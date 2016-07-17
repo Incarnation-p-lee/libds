@@ -203,6 +203,27 @@ utest_##name##_stack_pop(void)                            \
     UNIT_TEST_RESULT(name##_stack_pop, pass);             \
 }
 
+#define UT_STACK_top(name)                               \
+static void                                              \
+utest_##name##_stack_top(void)                           \
+{                                                        \
+    bool pass;                                           \
+    void *tmp;                                           \
+    struct STACK *stack;                                 \
+                                                         \
+    stack = STACK_create();                              \
+    pass = true;                                         \
+                                                         \
+    RESULT_CHECK_pointer(NULL, STACK_top(NULL), &pass);  \
+    RESULT_CHECK_pointer(NULL, STACK_top(stack), &pass); \
+                                                         \
+    tmp = STACK_top(stack);                              \
+    RESULT_CHECK_pointer(tmp, STACK_pop(stack), &pass);  \
+                                                         \
+    STACK_destroy(&stack);                               \
+    UNIT_TEST_RESULT(name##_stack_top, pass);            \
+}
+
 #define UT_STACK_empty_p(name)                             \
 static void                                                \
 utest_##name##_stack_empty_p(void)                         \
