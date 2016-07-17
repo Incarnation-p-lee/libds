@@ -17,6 +17,7 @@ enum ITER_ORDER {
 #define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
 #define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
 #define HASH_SIZE_INVALID      SIZE_INVALID
+#define HASH_IDX_INVALID       0xffffffffu
 #define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
 #define HEAP_SIZE_INVALID      SIZE_INVALID
 #define HEAP_CPCT_INVALID      SIZE_INVALID
@@ -50,6 +51,7 @@ typedef struct separate_chain_hash  s_separate_chain_hash_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
+typedef struct open_addressing_hash s_open_addressing_hash_t;
 
 /*
  *   Implement the unify single_linked_list interface
@@ -69,7 +71,6 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    void *val;   // REMOVE ME AFTER CLEAN HASH
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };

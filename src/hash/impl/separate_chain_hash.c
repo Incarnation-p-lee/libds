@@ -18,10 +18,9 @@ separate_chain_hash_load_factor(s_separate_chain_hash_t *hash)
     }
 }
 
-s_separate_chain_hash_t *
-separate_chain_hash_create(uint32 size)
+static inline s_separate_chain_hash_t *
+separate_chain_hash_create_i(uint32 size)
 {
-    s_hashing_table_t *table;
     s_separate_chain_hash_t *hash;
 
     hash = memory_cache_allocate(sizeof(*hash));
@@ -29,12 +28,18 @@ separate_chain_hash_create(uint32 size)
         size = SPT_CHN_HASH_SIZE_DFT;
     }
 
-    table = hashing_table_create(size);
-    table->load_factor = SPT_CHN_HASH_LOAD_FTR;
-    table->func = &hashing_function_polynomial;
-    hash->table = table;
+    hash->table = hashing_table_create(size);
+    hash->table->load_factor = SPT_CHN_HASH_LOAD_FTR;
+    hash->table->func = &hashing_function_polynomial;
 
     return hash;
+}
+
+
+s_separate_chain_hash_t *
+separate_chain_hash_create(uint32 size)
+{
+    return separate_chain_hash_create_i(size);
 }
 
 static inline bool
@@ -45,14 +50,6 @@ separate_chain_hash_structure_legal_p(s_separate_chain_hash_t *hash)
     } else {
         return hashing_table_structure_legal_p(hash->table);
     }
-}
-
-static inline s_separate_chain_t **
-separate_chain_hash_space(s_separate_chain_hash_t *hash)
-{
-    assert_exit(separate_chain_hash_structure_legal_p(hash));
-
-    return (s_separate_chain_t **)hashing_table_space(hash->table);
 }
 
 static inline s_separate_chain_t *
@@ -111,7 +108,6 @@ separate_chain_destroy(s_separate_chain_t *chain)
     assert_exit(separate_chain_structure_legal_p(chain));
 
     tmp = chain;
-
     do {
         next = separate_chain_next(tmp);
         memory_cache_free(tmp);
@@ -122,13 +118,13 @@ separate_chain_destroy(s_separate_chain_t *chain)
 static inline void
 separate_chain_hash_chain_destroy(s_separate_chain_hash_t *hash)
 {
-    s_separate_chain_t *chain;
-    s_separate_chain_t **chain_array;
+    void *chain;
+    void **chain_array;
 
     assert_exit(separate_chain_hash_structure_legal_p(hash));
 
-    chain_array = separate_chain_hash_space(hash);
-    while (chain_array < separate_chain_hash_space(hash) + hash->table->size) {
+    chain_array = hash->table->space;
+    while (chain_array < hash->table->space + hash->table->size) {
         chain = *chain_array;
         if (chain) {
             separate_chain_destroy(chain);
@@ -163,72 +159,58 @@ separate_chain_hash_load_factor_calculate(s_separate_chain_hash_t *hash)
     }
 }
 
-static inline s_separate_chain_t *
-separate_chain_hash_head(s_separate_chain_hash_t *hash, uint32 index)
-{
-    s_hashing_table_t *table;
-
-    assert_exit(separate_chain_hash_structure_legal_p(hash));
-    assert_exit(index < hash->table->size);
-
-    table = hash->table;
-    return table->space[index];
-}
-
-static inline void
-separate_chain_hash_head_set(s_separate_chain_hash_t *hash,
-    uint32 index, s_separate_chain_t *val)
-{
-    s_hashing_table_t *table;
-
-    assert_exit(separate_chain_hash_structure_legal_p(hash));
-    assert_exit(index < hash->table->size);
-
-    table = hash->table;
-    table->space[index] = val;
-}
-
 static inline uint32
 separate_chain_hash_index_calculate(s_separate_chain_hash_t *hash, void *key)
 {
-    s_hashing_table_t *table;
+    uint32 index;
 
     assert_exit(separate_chain_hash_structure_legal_p(hash));
 
-    table = hash->table;
-    return table->separate_chain(key, table->size);
+    index = hash->table->separate_chain(key, hash->table->size);
+
+    assert_exit(index < hash->table->size);
+    return index;
 }
 
-void *
-separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key)
+static inline void *
+separate_chain_hash_insert_i(s_separate_chain_hash_t **hash, void *key)
 {
     uint32 index;
     uint32 factor;
     s_separate_chain_t *tmp;
     s_separate_chain_t *head;
 
+    assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(separate_chain_hash_structure_legal_p(*hash));
+
+    factor = separate_chain_hash_load_factor_calculate(*hash);
+    if (factor >= (*hash)->table->load_factor) {
+        pr_log_info("Reach the load factor limit, will rehashing.\n");
+        *hash = separate_chain_hash_rehashing(hash);
+    }
+
+    tmp = separate_chain_create(key);
+    index = separate_chain_hash_index_calculate(*hash, key);
+    head = (*hash)->table->space[index];
+
+    if (!head) {
+        (*hash)->table->space[index] = tmp;
+    } else {
+        doubly_linked_list_insert_after(&head->list, &tmp->list);
+    }
+
+    return key;
+}
+
+void *
+separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key)
+{
     if (complain_null_pointer_p(hash)) {
         return PTR_INVALID;
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
         return PTR_INVALID;
     } else {
-        factor = separate_chain_hash_load_factor_calculate(*hash);
-        if (factor >= (*hash)->table->load_factor) {
-            pr_log_info("Reach the load factor limit, will rehashing.\n");
-            *hash = separate_chain_hash_rehashing(hash);
-        }
-
-        tmp = separate_chain_create(key);
-        index = separate_chain_hash_index_calculate(*hash, key);
-        head = separate_chain_hash_head(*hash, index);
-
-        if (!head) {
-            separate_chain_hash_head_set(*hash, index, tmp);
-        } else {
-            doubly_linked_list_insert_after(&head->list, &tmp->list);
-        }
-
-        return key;
+        return separate_chain_hash_insert_i(hash, key);
     }
 }
 
@@ -245,7 +227,7 @@ separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key)
     } else {
         list = retval = NULL;
         index = separate_chain_hash_index_calculate(hash, key);
-        head = separate_chain_hash_head(hash, index);
+        head = hash->table->space[index];
 
         if (head) {
             chain = head;
@@ -258,7 +240,7 @@ separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key)
                     memory_cache_free(separate_chain_ptr_to_chain(removed));
 
                     chain = separate_chain_ptr_to_chain(list);
-                    separate_chain_hash_head_set(hash, index, chain);
+                    hash->table->space[index] = chain;
                     return retval;
                 }
                 chain = next;
@@ -281,7 +263,7 @@ separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key)
         return PTR_INVALID;
     } else {
         index = separate_chain_hash_index_calculate(hash, key);
-        head = separate_chain_hash_head(hash, index);
+        head = hash->table->space[index];
 
         if (head) {
             chain = head;
@@ -302,17 +284,15 @@ static inline void
 separate_chain_hash_space_rehashing(s_separate_chain_hash_t *to,
     s_separate_chain_hash_t *from)
 {
-    uint32 size;
-    s_separate_chain_t **chain;
+    void **chain;
     s_separate_chain_t *head, *list;;
 
     assert_exit(separate_chain_hash_structure_legal_p(to));
     assert_exit(separate_chain_hash_structure_legal_p(from));
 
-    size = from->table->size;
-    chain = separate_chain_hash_space(from);
+    chain = from->table->space;
 
-    while (chain < separate_chain_hash_space(from) + size) {
+    while (chain < from->table->space + from->table->size) {
         if (*chain) {
             head = list = *chain;
             do {
@@ -335,8 +315,8 @@ separate_chain_hash_rehashing(s_separate_chain_hash_t **hash)
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
         return PTR_INVALID;
     } else {
-        resize = prime_numeral_next(separate_chain_hash_size(*hash) + 1);
-        new = separate_chain_hash_create(resize);
+        resize = prime_numeral_next((*hash)->table->size + 1);
+        new = separate_chain_hash_create_i(resize);
 
         separate_chain_hash_space_rehashing(new, *hash);
         separate_chain_hash_destroy(hash);

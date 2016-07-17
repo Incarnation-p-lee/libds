@@ -32,12 +32,12 @@ hashing_function_square(uint32 iter)
 }
 
 uint32
-hashing_function_open_addressing(void *key, uint32 size, uint32 iter)
+hashing_function_open_addressing(void *key, uint32 size, uint32 counter)
 {
     uint64 retval;
 
     retval = hashing_function_polynomial(key, size);
-    retval = (retval + hashing_function_square(iter)) % size;
+    retval = (retval + hashing_function_square(counter)) % size;
 
     return (uint32)retval;
 }

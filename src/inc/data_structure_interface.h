@@ -36,6 +36,7 @@ typedef unsigned int           bool;
 #define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
 #define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
 #define HASH_SIZE_INVALID      SIZE_INVALID
+#define HASH_IDX_INVALID       0xffffffffu
 #define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
 #define HEAP_SIZE_INVALID      SIZE_INVALID
 #define HEAP_CPCT_INVALID      SIZE_INVALID
@@ -65,6 +66,7 @@ typedef struct separate_chain_hash  s_separate_chain_hash_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
+typedef struct open_addressing_hash s_open_addressing_hash_t;
 
 enum ITER_ORDER {
     ORDER_START,
@@ -79,7 +81,6 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
-    void *val;   // REMOVE ME AFTER CLEAN HASH
     struct doubly_linked_list *next;
     struct doubly_linked_list *previous;
 };
@@ -396,25 +397,26 @@ extern void splay_tree_initial(struct splay_tree *tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 
+extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
+extern s_open_addressing_hash_t * open_addressing_hash_rehashing(s_open_addressing_hash_t **hash);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_rehashing(s_separate_chain_hash_t **hash);
-extern struct open_addressing_hash * open_addressing_hash_create(uint32 size);
-extern struct open_addressing_hash * open_addressing_hash_rehashing(struct open_addressing_hash **hash);
-extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 iter);
+extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 counter);
 extern uint32 hashing_function_polynomial(void *key, uint32 size);
-extern uint32 open_addressing_hash_load_factor(struct open_addressing_hash *hash);
-extern uint32 open_addressing_hash_load_factor_calculate(struct open_addressing_hash *hash);
-extern uint32 open_addressing_hash_size(struct open_addressing_hash *hash);
+extern uint32 open_addressing_hash_load_factor(s_open_addressing_hash_t *hash);
+extern uint32 open_addressing_hash_load_factor_calculate(s_open_addressing_hash_t *hash);
+extern uint32 open_addressing_hash_size(s_open_addressing_hash_t *hash);
 extern uint32 separate_chain_hash_load_factor(s_separate_chain_hash_t *hash);
 extern uint32 separate_chain_hash_load_factor_calculate(s_separate_chain_hash_t *hash);
 extern uint32 separate_chain_hash_size(s_separate_chain_hash_t *hash);
-extern void * open_addressing_hash_find(struct open_addressing_hash *hash, void *key);
-extern void * open_addressing_hash_remove(struct open_addressing_hash *hash, void *key);
+extern void * open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key);
+extern void * open_addressing_hash_insert(s_open_addressing_hash_t **hash, void *key);
+extern void * open_addressing_hash_insert_i(s_open_addressing_hash_t **hash, void *key);
+extern void * open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key);
 extern void * separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key);
 extern void * separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key);
 extern void * separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key);
-extern void open_addressing_hash_destroy(struct open_addressing_hash **hash);
-extern void open_addressing_hash_insert(struct open_addressing_hash **hash, void *key);
+extern void open_addressing_hash_destroy(s_open_addressing_hash_t **hash);
 extern void separate_chain_hash_destroy(s_separate_chain_hash_t **hash);
 
 extern bool maximal_heap_empty_p(struct maximal_heap *heap);
