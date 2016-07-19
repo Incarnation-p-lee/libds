@@ -1,5 +1,5 @@
 uint32
-array_queue_dim(struct array_queue *queue)
+array_queue_capacity(struct array_queue *queue)
 {
     if (!array_queue_structure_legal_p(queue)) {
         return QUEUE_SIZE_INVALID;
@@ -184,16 +184,6 @@ array_queue_resize(struct array_queue *queue, uint32 size)
     }
 
     array_queue_resize_internal(queue, size);
-}
-
-uint32
-array_queue_capacity(struct array_queue *queue)
-{
-    if (!array_queue_structure_legal_p(queue)) {
-        return QUEUE_CPCT_INVALID;
-    } else {
-        return queue->space.dim;
-    }
 }
 
 /*

@@ -288,7 +288,6 @@ extern struct array_queue * array_queue_create(void);
 extern struct doubly_end_queue * doubly_end_queue_create(void);
 extern struct stacked_queue * stacked_queue_create(void);
 extern uint32 array_queue_capacity(struct array_queue *queue);
-extern uint32 array_queue_dim(struct array_queue *queue);
 extern uint32 array_queue_rest(struct array_queue *queue);
 extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 extern uint32 stacked_queue_capacity(struct stacked_queue *queue);

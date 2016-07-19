@@ -1,5 +1,4 @@
 #define QUEUE                  array_queue
-#define QUEUE_dim              array_queue_dim
 
 #define QUEUE_create           array_queue_create
 #define QUEUE_destroy          array_queue_destroy
@@ -28,7 +27,6 @@ UT_QUEUE_cleanup(array)
 UT_QUEUE_iterate(array)
 
 #undef QUEUE
-#undef QUEUE_dim
 
 #undef QUEUE_create
 #undef QUEUE_destroy
