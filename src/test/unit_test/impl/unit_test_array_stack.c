@@ -50,7 +50,7 @@ utest_array_stack_struct_legal_p(struct array_stack *stack)
 {
     assert_exit(!complain_null_pointer_p(stack));
 
-    if (STACK_SIZE_DFT != array_stack_dim(stack)) {
+    if (STACK_SIZE_DFT != array_stack_capacity(stack)) {
         return false;
     } else if (complain_null_pointer_p(stack->space.sp)) {
         return false;
