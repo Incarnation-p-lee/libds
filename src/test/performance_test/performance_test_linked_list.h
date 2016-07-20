@@ -5,7 +5,7 @@
 static void                                             \
 ptest_##name##_linked_list_create(uint32 count)         \
 {                                                       \
-    struct LINKED_LIST *list;                           \
+    LINKED_LIST *list;                                  \
                                                         \
     PERFORMANCE_TEST_BEGIN(name##_linked_list_create);  \
     PERFORMANCE_TEST_CHECKPOINT;                        \
@@ -24,7 +24,7 @@ ptest_##name##_linked_list_create(uint32 count)         \
 static void                                              \
 ptest_##name##_linked_list_initial(uint32 count)         \
 {                                                        \
-    struct LINKED_LIST *list;                            \
+    LINKED_LIST *list;                                   \
                                                          \
     list = LINKED_LIST_create();                         \
                                                          \
@@ -45,7 +45,7 @@ ptest_##name##_linked_list_initial(uint32 count)         \
 static void                                               \
 ptest_##name##_linked_list_previous(uint32 count)         \
 {                                                         \
-    struct LINKED_LIST *list;                             \
+    LINKED_LIST *list;                                    \
                                                           \
     PERFORMANCE_TEST_BEGIN(name##_linked_list_previous);  \
     list = TEST_LINKED_LIST_sample(0x22, 0x12);           \
@@ -66,8 +66,8 @@ ptest_##name##_linked_list_previous(uint32 count)         \
 static void                                                    \
 ptest_##name##_linked_list_insert_before(uint32 count)         \
 {                                                              \
-    struct LINKED_LIST *list;                                  \
-    struct LINKED_LIST *tmp;                                   \
+    LINKED_LIST *list;                                         \
+    LINKED_LIST *tmp;                                          \
                                                                \
     count = count >> 6;                                        \
     count = 0u == count ? 1000 : count;                        \
@@ -93,8 +93,8 @@ ptest_##name##_linked_list_insert_before(uint32 count)         \
 static void                                                   \
 ptest_##name##_linked_list_insert_after(uint32 count)         \
 {                                                             \
-    struct LINKED_LIST *list;                                 \
-    struct LINKED_LIST *tmp;                                  \
+    LINKED_LIST *list;                                        \
+    LINKED_LIST *tmp;                                         \
                                                               \
     count = count >> 6;                                       \
     count = 0u == count ? 1000 : count;                       \
@@ -120,7 +120,7 @@ ptest_##name##_linked_list_insert_after(uint32 count)         \
 static void                                              \
 ptest_##name##_linked_list_destroy(uint32 count)         \
 {                                                        \
-    struct LINKED_LIST *list;                            \
+    LINKED_LIST *list;                                   \
                                                          \
     PERFORMANCE_TEST_BEGIN(name##_linked_list_destroy);  \
     PERFORMANCE_TEST_CHECKPOINT;                         \
@@ -139,7 +139,7 @@ ptest_##name##_linked_list_destroy(uint32 count)         \
 static void                                             \
 ptest_##name##_linked_list_length(uint32 count)         \
 {                                                       \
-    struct LINKED_LIST *list;                           \
+    LINKED_LIST *list;                                  \
                                                         \
     list = TEST_LINKED_LIST_sample(0xe3e, 0x9a7);       \
                                                         \
@@ -160,7 +160,7 @@ ptest_##name##_linked_list_length(uint32 count)         \
 static void                                                    \
 ptest_##name##_linked_list_node_by_index(uint32 count)         \
 {                                                              \
-    struct LINKED_LIST *list;                                  \
+    LINKED_LIST *list;                                         \
     uint32 length;                                             \
                                                                \
     list = TEST_LINKED_LIST_sample(0xfde, 0x4af);              \
@@ -184,7 +184,7 @@ ptest_##name##_linked_list_node_by_index(uint32 count)         \
 static void                                                 \
 ptest_##name##_linked_list_contains_p(uint32 count)         \
 {                                                           \
-    struct LINKED_LIST *list;                               \
+    LINKED_LIST *list;                                      \
                                                             \
     list = TEST_LINKED_LIST_sample(0xfde, 0x4af);           \
     list = list;                                            \
@@ -207,8 +207,8 @@ ptest_##name##_linked_list_contains_p(uint32 count)         \
 static void                                                \
 ptest_##name##_linked_list_node_copy(uint32 count)         \
 {                                                          \
-    struct LINKED_LIST *list;                              \
-    struct LINKED_LIST *tmp;                               \
+    LINKED_LIST *list;                                     \
+    LINKED_LIST *tmp;                                      \
                                                            \
     list = LINKED_LIST_create();                           \
                                                            \
@@ -232,8 +232,8 @@ ptest_##name##_linked_list_node_copy(uint32 count)         \
 static void                                             \
 ptest_##name##_linked_list_remove(uint32 count)         \
 {                                                       \
-    struct LINKED_LIST *list;                           \
-    struct LINKED_LIST *removed;                        \
+    LINKED_LIST *list;                                  \
+    LINKED_LIST *removed;                               \
                                                         \
     list = TEST_LINKED_LIST_sample(0xe0d, 0x493);       \
                                                         \
@@ -255,7 +255,7 @@ ptest_##name##_linked_list_remove(uint32 count)         \
 static void                                                      \
 ptest_##name##_linked_list_iterate(uint32 count)                 \
 {                                                                \
-    struct LINKED_LIST *list;                                    \
+    LINKED_LIST *list;                                           \
                                                                  \
     list = TEST_LINKED_LIST_sample(0xe0d, 0x493);                \
     test_iterate_reference_clean();                              \
@@ -277,8 +277,8 @@ ptest_##name##_linked_list_iterate(uint32 count)                 \
 static void                                            \
 ptest_##name##_linked_list_merge(uint32 count)         \
 {                                                      \
-    struct LINKED_LIST *list;                          \
-    struct LINKED_LIST *head;                          \
+    LINKED_LIST *list;                                 \
+    LINKED_LIST *head;                                 \
                                                        \
     PERFORMANCE_TEST_BEGIN(name##_linked_list_merge);  \
     PERFORMANCE_TEST_CHECKPOINT;                       \

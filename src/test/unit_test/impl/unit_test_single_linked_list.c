@@ -1,4 +1,4 @@
-#define LINKED_LIST                    single_linked_list
+#define LINKED_LIST                    s_single_linked_list_t
 #define LINKED_LIST_next               single_linked_list_next
 #define LINKED_LIST_next_set           single_linked_list_next_set
 #define LINKED_LIST_previous           single_linked_list_previous

@@ -6,7 +6,7 @@ static void                                                         \
 utest_##name##_linked_list_create(void)                             \
 {                                                                   \
     bool pass;                                                      \
-    struct LINKED_LIST *list;                                       \
+    LINKED_LIST *list;                                              \
                                                                     \
     pass = true;                                                    \
     list = LINKED_LIST_create();                                    \
@@ -23,7 +23,7 @@ static void                                                         \
 utest_##name##_linked_list_initial(void)                            \
 {                                                                   \
     bool pass;                                                      \
-    struct LINKED_LIST *list;                                       \
+    LINKED_LIST *list;                                              \
                                                                     \
     pass = true;                                                    \
     list = memory_cache_allocate(sizeof(*list));                    \
@@ -41,8 +41,8 @@ static void                                                               \
 utest_##name##_linked_list_previous(void)                                 \
 {                                                                         \
     bool pass;                                                            \
-    struct LINKED_LIST *list;                                             \
-    struct LINKED_LIST *prev;                                             \
+    LINKED_LIST *list;                                                    \
+    LINKED_LIST *prev;                                                    \
                                                                           \
     pass = true;                                                          \
     UNIT_TEST_BEGIN(name##_linked_list_previous);                         \
@@ -63,9 +63,9 @@ static void                                                            \
 utest_##name##_linked_list_insert_after(void)                          \
 {                                                                      \
     bool pass;                                                         \
-    struct LINKED_LIST *list;                                          \
-    struct LINKED_LIST *next;                                          \
-    struct LINKED_LIST *inserted;                                      \
+    LINKED_LIST *list;                                                 \
+    LINKED_LIST *next;                                                 \
+    LINKED_LIST *inserted;                                             \
                                                                        \
     pass = true;                                                       \
     list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                    \
@@ -92,9 +92,9 @@ static void                                                            \
 utest_##name##_linked_list_insert_before(void)                         \
 {                                                                      \
     bool pass;                                                         \
-    struct LINKED_LIST *list;                                          \
-    struct LINKED_LIST *prev;                                          \
-    struct LINKED_LIST *inserted;                                      \
+    LINKED_LIST *list;                                                 \
+    LINKED_LIST *prev;                                                 \
+    LINKED_LIST *inserted;                                             \
                                                                        \
     pass = true;                                                       \
     list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                    \
@@ -123,7 +123,7 @@ utest_##name##_linked_list_destroy(void)                \
     bool pass;                                          \
     uint32 len;                                         \
     uint32 *iter;                                       \
-    struct LINKED_LIST *list;                           \
+    LINKED_LIST *list;                                  \
     uint32 sizes[] = {1, 10, 100, 1000, 10000,};        \
                                                         \
     iter = sizes;                                       \
@@ -156,7 +156,7 @@ utest_##name##_linked_list_length(void)                         \
 {                                                               \
     bool pass;                                                  \
     uint32 len;                                                 \
-    struct LINKED_LIST *list;                                   \
+    LINKED_LIST *list;                                          \
                                                                 \
     pass = true;                                                \
     len = LIST_SIZE_INVALID;                                    \
@@ -182,8 +182,8 @@ utest_##name##_linked_list_node_by_index(void)                \
 {                                                             \
     bool pass;                                                \
     uint32 len;                                               \
-    struct LINKED_LIST *list;                                 \
-    struct LINKED_LIST *tmp;                                  \
+    LINKED_LIST *list;                                        \
+    LINKED_LIST *tmp;                                         \
                                                               \
     pass = true;                                              \
     UNIT_TEST_BEGIN(name##_linked_list_node_by_index);        \
@@ -211,8 +211,8 @@ static void                                                             \
 utest_##name##_linked_list_contains_p(void)                             \
 {                                                                       \
     bool pass;                                                          \
-    struct LINKED_LIST *tmp;                                            \
-    struct LINKED_LIST *list;                                           \
+    LINKED_LIST *tmp;                                                   \
+    LINKED_LIST *list;                                                  \
                                                                         \
     pass = true;                                                        \
     UNIT_TEST_BEGIN(name##_linked_list_contains_p);                     \
@@ -237,8 +237,8 @@ static void                                                                \
 utest_##name##_linked_list_node_copy(void)                                 \
 {                                                                          \
     bool pass;                                                             \
-    struct LINKED_LIST *list;                                              \
-    struct LINKED_LIST *tmp;                                               \
+    LINKED_LIST *list;                                                     \
+    LINKED_LIST *tmp;                                                      \
                                                                            \
     pass = true;                                                           \
     list = LINKED_LIST_create();                                           \
@@ -261,9 +261,9 @@ static void                                                      \
 utest_##name##_linked_list_remove(void)                          \
 {                                                                \
     bool pass;                                                   \
-    struct LINKED_LIST *tmp;                                     \
-    struct LINKED_LIST *list;                                    \
-    struct LINKED_LIST *next;                                    \
+    LINKED_LIST *tmp;                                            \
+    LINKED_LIST *list;                                           \
+    LINKED_LIST *next;                                           \
                                                                  \
     LINKED_LIST_remove(NULL);                                    \
     UNIT_TEST_BEGIN(name##_linked_list_remove);                  \
@@ -293,7 +293,7 @@ utest_##name##_linked_list_iterate(void)                          \
 {                                                                 \
     bool pass;                                                    \
     uint32 length;                                                \
-    struct LINKED_LIST *list;                                     \
+    LINKED_LIST *list;                                            \
                                                                   \
     pass = true;                                                  \
     UNIT_TEST_BEGIN(name##_linked_list_iterate);                  \
@@ -316,9 +316,9 @@ utest_##name##_linked_list_merge(void)                                        \
 {                                                                             \
     bool pass;                                                                \
     uint32 length;                                                            \
-    struct LINKED_LIST *list_m;                                               \
-    struct LINKED_LIST *list_n;                                               \
-    struct LINKED_LIST *list;                                                 \
+    LINKED_LIST *list_m;                                                      \
+    LINKED_LIST *list_n;                                                      \
+    LINKED_LIST *list;                                                        \
                                                                               \
     pass = true;                                                              \
     UNIT_TEST_BEGIN(name##_linked_list_merge);                                \
