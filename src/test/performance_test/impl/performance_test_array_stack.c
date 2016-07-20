@@ -11,6 +11,7 @@
 #define STACK_rest             array_stack_rest
 #define STACK_push             array_stack_push
 #define STACK_pop              array_stack_pop
+#define STACK_top              array_stack_top
 #define STACK_empty_p          array_stack_empty_p
 #define STACK_cleanup          array_stack_cleanup
 #define STACK_iterate          array_stack_iterate
@@ -25,6 +26,7 @@ PT_STACK_capacity(array)
 PT_STACK_rest(array)
 PT_STACK_push(array)
 PT_STACK_pop(array)
+PT_STACK_top(array)
 PT_STACK_empty_p(array)
 PT_STACK_cleanup(array)
 PT_STACK_iterate(array)
@@ -42,6 +44,7 @@ PT_STACK_iterate(array)
 #undef STACK_rest
 #undef STACK_push
 #undef STACK_pop
+#undef STACK_top
 #undef STACK_empty_p
 #undef STACK_cleanup
 #undef STACK_iterate

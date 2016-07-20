@@ -50,6 +50,7 @@ static struct performance_test_reference performance_reference[] = {
     {"array_stack_capacity",                             0x0u, 0x0u},
     {"array_stack_push",                                 0x0u, 0x0u},
     {"array_stack_pop",                                  0x0u, 0x0u},
+    {"array_stack_top",                                  0x0u, 0x0u},
     {"array_stack_empty_p",                              0x0u, 0x0u},
     {"array_stack_cleanup",                              0x0u, 0x0u},
     {"array_stack_iterate",                              0x0u, 0x0u},

@@ -379,7 +379,7 @@ static const struct test_layer_table array_stack[] = {
         NULL,
         {
             &utest_array_stack_top,
-            NULL,
+            &ptest_array_stack_top,
         },
     },
     {
