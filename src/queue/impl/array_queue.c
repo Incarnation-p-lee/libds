@@ -280,6 +280,26 @@ array_queue_enter(struct array_queue *queue, void *member)
 }
 
 void *
+array_queue_front(s_array_queue_t *queue)
+{
+    if (!array_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else {
+        return *queue->space.front;
+    }
+}
+
+void *
+array_queue_rear(s_array_queue_t *queue)
+{
+    if (!array_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else {
+        return *queue->space.rear;
+    }
+}
+
+void *
 array_queue_leave(struct array_queue *queue)
 {
     uint32 dim;

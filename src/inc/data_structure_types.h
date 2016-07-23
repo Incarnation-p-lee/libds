@@ -52,6 +52,7 @@ typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
+typedef struct array_queue          s_array_queue_t;
 
 /*
  *   Implement the unify single_linked_list interface

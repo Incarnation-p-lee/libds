@@ -67,6 +67,7 @@ typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
+typedef struct array_queue          s_array_queue_t;
 
 enum ITER_ORDER {
     ORDER_START,
@@ -294,7 +295,9 @@ extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
 extern uint32 stacked_queue_dim(struct stacked_queue *queue);
 extern uint32 stacked_queue_space_rest(struct stacked_queue *queue);
+extern void * array_queue_front(s_array_queue_t *queue);
 extern void * array_queue_leave(struct array_queue *queue);
+extern void * array_queue_rear(s_array_queue_t *queue);
 extern void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
 extern void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
 extern void * stacked_queue_leave(struct stacked_queue *queue);
