@@ -98,6 +98,7 @@ open_addressing_hash_insert_i(s_open_addressing_hash_t **hash, void *key)
     uint32 factor;
 
     assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(!complain_null_pointer_p(key));
     assert_exit(open_addressing_hash_structure_legal_p(*hash));
 
     factor = open_addressing_hash_load_factor_calculate(*hash);
@@ -122,6 +123,8 @@ open_addressing_hash_insert(s_open_addressing_hash_t **hash, void *key)
         return PTR_INVALID;
     } else if (!open_addressing_hash_structure_legal_p(*hash)) {
         return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
+        return PTR_INVALID;
     } else {
         return open_addressing_hash_insert_i(hash, key);
     }
@@ -133,6 +136,8 @@ open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key)
     uint32 index;
 
     if (!open_addressing_hash_structure_legal_p(hash)) {
+        return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
         return PTR_INVALID;
     } else {
         index = open_addressing_hash_find_index(hash, key);
@@ -151,6 +156,7 @@ open_addressing_hash_find_index(s_open_addressing_hash_t *hash, void *key)
     uint32 i;
     uint32 index;
 
+    assert_exit(!complain_null_pointer_p(key));
     assert_exit(open_addressing_hash_structure_legal_p(hash));
 
     i = 0;
@@ -169,6 +175,8 @@ void *
 open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key)
 {
     if (!open_addressing_hash_structure_legal_p(hash)) {
+        return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
         return PTR_INVALID;
     } else if (HASH_IDX_INVALID == open_addressing_hash_find_index(hash, key)) {
         return NULL;

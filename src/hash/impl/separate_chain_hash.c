@@ -180,6 +180,7 @@ separate_chain_hash_insert_i(s_separate_chain_hash_t **hash, void *key)
     s_separate_chain_t *tmp;
     s_separate_chain_t *head;
 
+    assert_exit(!complain_null_pointer_p(key));
     assert_exit(!complain_null_pointer_p(hash));
     assert_exit(separate_chain_hash_structure_legal_p(*hash));
 
@@ -209,6 +210,10 @@ separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key)
         return PTR_INVALID;
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
         return PTR_INVALID;
+    } else if (complain_null_pointer_p(*hash)) {
+        return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
+        return PTR_INVALID;
     } else {
         return separate_chain_hash_insert_i(hash, key);
     }
@@ -223,6 +228,8 @@ separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key)
     s_separate_chain_t *head, *chain, *next;
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
+        return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
         return PTR_INVALID;
     } else {
         list = retval = NULL;
@@ -261,6 +268,8 @@ separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key)
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
+    } else if (complain_null_pointer_p(key)) {
+        return PTR_INVALID;
     } else {
         index = separate_chain_hash_index_calculate(hash, key);
         head = hash->table->space[index];
@@ -296,7 +305,7 @@ separate_chain_hash_space_rehashing(s_separate_chain_hash_t *to,
         if (*chain) {
             head = list = *chain;
             do {
-                separate_chain_hash_insert(&to, list->val);
+                separate_chain_hash_insert_i(&to, list->val);
                 list = separate_chain_next(list);
             } while (head != list);
         }

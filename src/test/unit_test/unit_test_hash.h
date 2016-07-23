@@ -87,31 +87,32 @@ utest_##name##_hash_load_factor_calculate(void)                \
     UNIT_TEST_RESULT(name##_hash_load_factor_calculate, pass); \
 }
 
-#define UT_HASH_insert(name)                                          \
-static void                                                           \
-utest_##name##_hash_insert(void)                                      \
-{                                                                     \
-    bool pass;                                                        \
-    uint32 tmp;                                                       \
-    struct HASH *hash;                                                \
-                                                                      \
-    tmp = 0x2eadu;                                                    \
-    pass = true;                                                      \
-                                                                      \
-    hash = NULL;                                                      \
-    HASH_insert(&hash, &pass);                                        \
-    RESULT_CHECK_pointer(NULL, hash, &pass);                          \
-                                                                      \
-    hash = TEST_HASH_sample(0x7);                                     \
-    HASH_destroy(&hash);                                              \
-                                                                      \
-    RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, &pass), &pass); \
-    hash = TEST_HASH_sample(tmp);                                     \
-    HASH_insert(&hash, &pass);                                        \
-    RESULT_CHECK_pointer(&pass, HASH_find(hash, &pass), &pass);       \
-                                                                      \
-    HASH_destroy(&hash);                                              \
-    UNIT_TEST_RESULT(name##_hash_insert, pass);                       \
+#define UT_HASH_insert(name)                                            \
+static void                                                             \
+utest_##name##_hash_insert(void)                                        \
+{                                                                       \
+    bool pass;                                                          \
+    uint32 tmp;                                                         \
+    struct HASH *hash;                                                  \
+                                                                        \
+    tmp = 0x2eadu;                                                      \
+    pass = true;                                                        \
+                                                                        \
+    hash = NULL;                                                        \
+    HASH_insert(&hash, &pass);                                          \
+    RESULT_CHECK_pointer(NULL, hash, &pass);                            \
+                                                                        \
+    hash = TEST_HASH_sample(0x7);                                       \
+    RESULT_CHECK_pointer(PTR_INVALID, HASH_insert(&hash, NULL), &pass); \
+    HASH_destroy(&hash);                                                \
+                                                                        \
+    RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, &pass), &pass);   \
+    hash = TEST_HASH_sample(tmp);                                       \
+    HASH_insert(&hash, &pass);                                          \
+    RESULT_CHECK_pointer(&pass, HASH_find(hash, &pass), &pass);         \
+                                                                        \
+    HASH_destroy(&hash);                                                \
+    UNIT_TEST_RESULT(name##_hash_insert, pass);                         \
 }
 
 #define UT_HASH_remove(name)                                           \
@@ -142,7 +143,7 @@ utest_##name##_hash_remove(void)                                       \
     hash = TEST_HASH_sample(tmp);                                      \
     HASH_insert(&hash, &pass);                                         \
     RESULT_CHECK_pointer(&pass, HASH_find(hash, &pass), &pass);        \
-    RESULT_CHECK_pointer(NULL, HASH_remove(hash, NULL), &pass);        \
+    RESULT_CHECK_pointer(PTR_INVALID, HASH_remove(hash, NULL), &pass); \
                                                                        \
     RESULT_CHECK_pointer(&pass, HASH_remove(hash, &pass), &pass);      \
     RESULT_CHECK_pointer(NULL, HASH_find(hash, &pass), &pass);         \
@@ -163,6 +164,7 @@ utest_##name##_hash_find(void)                                        \
     hash = NULL;                                                      \
                                                                       \
     RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, &pass), &pass); \
+    RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, NULL), &pass);  \
                                                                       \
     tmp = 0x0u;                                                       \
     hash = HASH_create(tmp);                                          \
