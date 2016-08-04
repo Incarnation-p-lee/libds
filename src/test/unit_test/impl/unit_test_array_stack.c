@@ -1,4 +1,4 @@
-#define STACK                  array_stack
+#define STACK                  s_array_stack_t
 #define TEST_STACK_legal_p     utest_array_stack_struct_legal_p
 
 #define STACK_create           array_stack_create
@@ -46,7 +46,7 @@ UT_STACK_iterate(array)
 #undef STACK_iterate
 
 static inline bool
-utest_array_stack_struct_legal_p(struct array_stack *stack)
+utest_array_stack_struct_legal_p(s_array_stack_t *stack)
 {
     assert_exit(!complain_null_pointer_p(stack));
 

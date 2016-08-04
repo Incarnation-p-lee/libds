@@ -6,7 +6,7 @@ static void                                                    \
 utest_##name##_stack_create(void)                              \
 {                                                              \
     bool pass;                                                 \
-    struct STACK *stack;                                       \
+    STACK *stack;                                              \
                                                                \
     pass = true;                                               \
     UNIT_TEST_BEGIN(name##_stack_create);                      \
@@ -23,7 +23,7 @@ static void                                       \
 utest_##name##_stack_destroy(void)                \
 {                                                 \
     bool pass;                                    \
-    struct STACK *stack;                          \
+    STACK *stack;                                 \
                                                   \
     pass = true;                                  \
     stack = NULL;                                 \
@@ -45,7 +45,7 @@ static void                                                        \
 utest_##name##_stack_resize(void)                                  \
 {                                                                  \
     bool pass;                                                     \
-    struct STACK *stack;                                           \
+    STACK *stack;                                                  \
     uint32 stk_size;                                               \
                                                                    \
     pass = true;                                                   \
@@ -76,7 +76,7 @@ static void                                               \
 utest_##name##_stack_full_p(void)                         \
 {                                                         \
     bool pass;                                            \
-    struct STACK *stack;                                  \
+    STACK *stack;                                         \
     void *mem;                                            \
     uint32 tmp;                                           \
                                                           \
@@ -106,7 +106,7 @@ static void                                                               \
 utest_##name##_stack_capacity(void)                                       \
 {                                                                         \
     bool pass;                                                            \
-    struct STACK *stack;                                                  \
+    STACK *stack;                                                         \
     uint32 stk_size;                                                      \
     uint32 extra;                                                         \
                                                                           \
@@ -132,7 +132,7 @@ static void                                                               \
 utest_##name##_stack_rest(void)                                           \
 {                                                                         \
     bool pass;                                                            \
-    struct STACK *stack;                                                  \
+    STACK *stack;                                                         \
     uint32 stk_size;                                                      \
                                                                           \
     UNIT_TEST_BEGIN(name##_stack_rest);                                   \
@@ -156,7 +156,7 @@ static void                                                 \
 utest_##name##_stack_push(void)                             \
 {                                                           \
     bool pass;                                              \
-    struct STACK *stack;                                    \
+    STACK *stack;                                           \
     void *mem;                                              \
     uint32 tmp;                                             \
                                                             \
@@ -193,7 +193,7 @@ static void                                                     \
 utest_##name##_stack_pop(void)                                  \
 {                                                               \
     bool pass;                                                  \
-    struct STACK *stack;                                        \
+    STACK *stack;                                               \
                                                                 \
     UNIT_TEST_BEGIN(name##_stack_pop);                          \
     stack = STACK_create();                                     \
@@ -218,7 +218,7 @@ utest_##name##_stack_top(void)                                  \
 {                                                               \
     bool pass;                                                  \
     void *tmp;                                                  \
-    struct STACK *stack;                                        \
+    STACK *stack;                                               \
                                                                 \
     UNIT_TEST_BEGIN(name##_stack_top);                          \
     stack = STACK_create();                                     \
@@ -239,7 +239,7 @@ static void                                                \
 utest_##name##_stack_empty_p(void)                         \
 {                                                          \
     bool pass;                                             \
-    struct STACK *stack;                                   \
+    STACK *stack;                                          \
                                                            \
     UNIT_TEST_BEGIN(name##_stack_empty_p);                 \
     RESULT_CHECK_bool(false, STACK_empty_p(NULL), &pass);  \
@@ -261,7 +261,7 @@ static void                                               \
 utest_##name##_stack_cleanup(void)                        \
 {                                                         \
     bool pass;                                            \
-    struct STACK *stack;                                  \
+    STACK *stack;                                         \
                                                           \
     UNIT_TEST_BEGIN(name##_stack_cleanup);                \
     STACK_cleanup(NULL);                                  \
@@ -282,7 +282,7 @@ static void                                        \
 utest_##name##_stack_iterate(void)                 \
 {                                                  \
     bool pass;                                     \
-    struct STACK *stack;                           \
+    STACK *stack;                                  \
     sint32 *tmp;                                   \
     sint32 data[] = {0xA, 0xB, 0xC, 0xD, 0xE, };   \
     sint32 expect[] = {0xF, 0xE, 0xD, 0xC, 0xB, }; \

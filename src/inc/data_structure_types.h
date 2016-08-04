@@ -54,6 +54,8 @@ typedef struct separate_chain       s_separate_chain_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct array_stack          s_array_stack_t;
 typedef struct array_stack_space    s_array_stack_space_t;
+typedef struct linked_stack_space   s_linked_stack_space_t;
+typedef struct linked_stack         s_linked_stack_t;
 
 /*
  *   Implement the unify single_linked_list interface
