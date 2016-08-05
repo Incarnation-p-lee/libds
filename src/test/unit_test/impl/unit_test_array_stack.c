@@ -1,5 +1,5 @@
 #define STACK                  s_array_stack_t
-#define TEST_STACK_legal_p     utest_array_stack_struct_legal_p
+#define TEST_STACK_legal_p     array_stack_structure_legal_p
 
 #define STACK_create           array_stack_create
 #define STACK_destroy          array_stack_destroy
@@ -44,20 +44,4 @@ UT_STACK_iterate(array)
 #undef STACK_empty_p
 #undef STACK_cleanup
 #undef STACK_iterate
-
-static inline bool
-utest_array_stack_struct_legal_p(s_array_stack_t *stack)
-{
-    assert_exit(!complain_null_pointer_p(stack));
-
-    if (STACK_SIZE_DFT != array_stack_capacity(stack)) {
-        return false;
-    } else if (complain_null_pointer_p(stack->space.sp)) {
-        return false;
-    } else if (complain_null_pointer_p(stack->space.bp)) {
-        return false;
-    } else {
-        return true;
-    }
-}
 

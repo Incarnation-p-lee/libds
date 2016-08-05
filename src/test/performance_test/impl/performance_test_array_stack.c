@@ -1,8 +1,4 @@
-#define STACK                  array_stack
-#define STACK_sid              array_stack_sid
-#define STACK_sid_set          array_stack_sid_set
-#define TEST_STACK_legal_p     utest_array_stack_struct_legal_p
-
+#define STACK                  s_array_stack_t
 #define STACK_create           array_stack_create
 #define STACK_destroy          array_stack_destroy
 #define STACK_resize           array_stack_resize
@@ -32,10 +28,6 @@ PT_STACK_cleanup(array)
 PT_STACK_iterate(array)
 
 #undef STACK
-#undef STACK_sid
-#undef STACK_sid_set
-#undef TEST_STACK_legal_p
-
 #undef STACK_create
 #undef STACK_destroy
 #undef STACK_resize

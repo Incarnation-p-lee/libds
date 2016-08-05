@@ -320,6 +320,7 @@ extern void stacked_queue_resize(struct stacked_queue *queue, uint32 dim);
 extern bool array_stack_empty_p(s_array_stack_t *stack);
 extern bool array_stack_full_p(s_array_stack_t *stack);
 extern bool array_stack_space_structure_legal_p(s_array_stack_space_t *space);
+extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
 extern bool linked_stack_empty_p(s_linked_stack_t *stack);
 extern bool linked_stack_full_p(s_linked_stack_t *stack);
 extern bool linked_stack_structure_legal_p(s_linked_stack_t *stack);

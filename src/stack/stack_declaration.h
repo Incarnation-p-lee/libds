@@ -6,6 +6,7 @@
 bool array_stack_empty_p(s_array_stack_t *stack);
 bool array_stack_full_p(s_array_stack_t *stack);
 bool array_stack_space_structure_legal_p(s_array_stack_space_t *space);
+bool array_stack_structure_legal_p(s_array_stack_t *stack);
 bool linked_stack_empty_p(s_linked_stack_t *stack);
 bool linked_stack_full_p(s_linked_stack_t *stack);
 bool linked_stack_structure_legal_p(s_linked_stack_t *stack);
@@ -13,7 +14,7 @@ s_array_stack_t * array_stack_create(void);
 s_linked_stack_t * linked_stack_create(void);
 static inline bool array_stack_empty_ip(s_array_stack_t *stack);
 static inline bool array_stack_full_ip(s_array_stack_t *stack);
-static inline bool array_stack_structure_legal_p(s_array_stack_t *stack);
+static inline bool array_stack_structure_legal_ip(s_array_stack_t *stack);
 static inline bool linked_stack_empty_ip(s_linked_stack_t *stack);
 static inline bool linked_stack_full_ip(s_linked_stack_t *stack);
 static inline bool linked_stack_space_empty_p(s_linked_stack_space_t *space);

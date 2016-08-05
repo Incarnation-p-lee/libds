@@ -428,7 +428,7 @@ static const struct test_layer_table linked_stack[] = {
         "top", NULL,
         {
             &utest_linked_stack_top,
-            NULL,
+            &ptest_linked_stack_top,
         },
     },
     {

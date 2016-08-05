@@ -1,7 +1,7 @@
 uint32
 array_stack_size(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return STACK_SIZE_INVALID;
     } else {
         return (uint32)(stack->space.sp - stack->space.bp);
@@ -11,7 +11,7 @@ array_stack_size(s_array_stack_t *stack)
 static inline uint32
 array_stack_size_i(s_array_stack_t *stack)
 {
-    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     return (uint32)(stack->space.sp - stack->space.bp);
 }
@@ -34,8 +34,15 @@ array_stack_space_structure_legal_p(s_array_stack_space_t *space)
     }
 }
 
-static inline bool
+bool
 array_stack_structure_legal_p(s_array_stack_t *stack)
+{
+    return array_stack_structure_legal_ip(stack);
+}
+
+
+static inline bool
+array_stack_structure_legal_ip(s_array_stack_t *stack)
 {
     if (complain_null_pointer_p(stack)) {
         return false;
@@ -62,7 +69,7 @@ array_stack_destroy(s_array_stack_t **stack)
 {
     if (complain_null_pointer_p(stack)) {
         return;
-    } else if (array_stack_structure_legal_p(*stack)) {
+    } else if (array_stack_structure_legal_ip(*stack)) {
         memory_cache_free((*stack)->space.bp);
         memory_cache_free(*stack);
         *stack = NULL;
@@ -75,7 +82,7 @@ array_stack_resize_i(s_array_stack_t *stack, uint32 dim)
     uint32 size;
 
     assert_exit(!complain_zero_size_p(dim));
-    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     size = array_stack_size_i(stack);
     if (size > dim) {
@@ -92,7 +99,7 @@ array_stack_resize_i(s_array_stack_t *stack, uint32 dim)
 void
 array_stack_resize(s_array_stack_t *stack, uint32 dim)
 {
-    if (array_stack_structure_legal_p(stack)) {
+    if (array_stack_structure_legal_ip(stack)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
             dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
@@ -104,7 +111,7 @@ array_stack_resize(s_array_stack_t *stack, uint32 dim)
 static inline bool
 array_stack_full_ip(s_array_stack_t *stack)
 {
-    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     return stack->space.dim == array_stack_size_i(stack) ? true : false;
 }
@@ -112,7 +119,7 @@ array_stack_full_ip(s_array_stack_t *stack)
 bool
 array_stack_full_p(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return true;
     } else {
         return array_stack_full_ip(stack);
@@ -122,7 +129,7 @@ array_stack_full_p(s_array_stack_t *stack)
 uint32
 array_stack_capacity(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return STACK_SIZE_INVALID;
     } else {
         return stack->space.dim;
@@ -132,7 +139,7 @@ array_stack_capacity(s_array_stack_t *stack)
 static inline uint32
 array_stack_rest_i(s_array_stack_t *stack)
 {
-    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     return stack->space.dim - array_stack_size_i(stack);
 }
@@ -140,7 +147,7 @@ array_stack_rest_i(s_array_stack_t *stack)
 uint32
 array_stack_rest(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return STACK_SIZE_INVALID;
     } else {
         return array_stack_rest_i(stack);
@@ -152,7 +159,7 @@ array_stack_push(s_array_stack_t *stack, void *member)
 {
     uint32 dim;
 
-    if (array_stack_structure_legal_p(stack)) {
+    if (array_stack_structure_legal_ip(stack)) {
         if (array_stack_full_ip(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
             dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
@@ -166,7 +173,7 @@ array_stack_push(s_array_stack_t *stack, void *member)
 void *
 array_stack_top(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return PTR_INVALID;
     } else if (array_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
@@ -179,7 +186,7 @@ array_stack_top(s_array_stack_t *stack)
 void *
 array_stack_pop(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return PTR_INVALID;
     } else if (array_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
@@ -192,7 +199,7 @@ array_stack_pop(s_array_stack_t *stack)
 static inline bool
 array_stack_empty_ip(s_array_stack_t *stack)
 {
-    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     return stack->space.bp == stack->space.sp ? true : false;
 }
@@ -200,7 +207,7 @@ array_stack_empty_ip(s_array_stack_t *stack)
 bool
 array_stack_empty_p(s_array_stack_t *stack)
 {
-    if (!array_stack_structure_legal_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return false;
     } else {
         return array_stack_empty_ip(stack);
@@ -210,7 +217,7 @@ array_stack_empty_p(s_array_stack_t *stack)
 void
 array_stack_cleanup(s_array_stack_t *stack)
 {
-    if (array_stack_structure_legal_p(stack)) {
+    if (array_stack_structure_legal_ip(stack)) {
         dp_memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = stack->space.bp;
     }
@@ -221,7 +228,7 @@ array_stack_iterate(s_array_stack_t *stack, void (*handler)(void *))
 {
     void **i;
 
-    if (array_stack_structure_legal_p(stack)
+    if (array_stack_structure_legal_ip(stack)
         && !complain_null_pointer_p(handler)) {
         /* iterate from sp to bp */
         i = stack->space.sp;
