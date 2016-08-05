@@ -201,7 +201,7 @@ linked_stack_full_ip(s_linked_stack_t *stack)
 bool
 linked_stack_full_p(s_linked_stack_t *stack)
 {
-    if (linked_stack_structure_legal_ip(stack)) {
+    if (!linked_stack_structure_legal_ip(stack)) {
         return true;
     } else {
         return linked_stack_full_ip(stack);
@@ -231,7 +231,7 @@ uint32
 linked_stack_rest(s_linked_stack_t *stack)
 {
     if (!linked_stack_structure_legal_ip(stack)) {
-        return 0u;
+        return STACK_SIZE_INVALID;
     } else {
         return linked_stack_rest_i(stack);
     }
@@ -260,7 +260,7 @@ uint32
 linked_stack_capacity(s_linked_stack_t *stack)
 {
     if (!linked_stack_structure_legal_ip(stack)) {
-        return 0u;
+        return STACK_SIZE_INVALID;
     } else {
         return linked_stack_capacity_i(stack);
     }
@@ -324,10 +324,10 @@ void *
 linked_stack_pop(s_linked_stack_t *stack)
 {
     if (!linked_stack_structure_legal_ip(stack)) {
-        return NULL;
+        return PTR_INVALID;
     } else if (linked_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
-        return NULL;
+        return PTR_INVALID;
     } else {
         if (linked_stack_space_empty_p(stack->top)) {
             pr_log_info("Stack node is empty, will move to previous node.\n");
@@ -342,10 +342,10 @@ void *
 linked_stack_top(s_linked_stack_t *stack)
 {
     if (!linked_stack_structure_legal_ip(stack)) {
-        return NULL;
+        return PTR_INVALID;
     } else if (linked_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
-        return NULL;
+        return PTR_INVALID;
     } else {
         if (linked_stack_space_empty_p(stack->top)) {
             pr_log_info("Stack node is empty, will move to previous node.\n");
