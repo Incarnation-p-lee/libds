@@ -513,6 +513,20 @@ static const struct test_layer_table array_queue[] = {
         },
     },
     {
+        "front", NULL,
+        {
+            &utest_array_queue_front,
+            NULL,
+        },
+    },
+    {
+        "rear", NULL,
+        {
+            &utest_array_queue_rear,
+            NULL,
+        },
+    },
+    {
         "empty_p", NULL,
         {
             &utest_array_queue_empty_p,

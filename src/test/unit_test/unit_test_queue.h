@@ -10,6 +10,7 @@ utest_##name##_queue_create(void)                                \
     struct QUEUE *queue;                                         \
                                                                  \
     pass = true;                                                 \
+    UNIT_TEST_BEGIN(name##_queue_create);                        \
     queue = QUEUE_create();                                      \
                                                                  \
     capacity = QUEUE_capacity(queue);                            \
@@ -29,6 +30,7 @@ utest_##name##_queue_destroy(void)                \
                                                   \
     pass = true;                                  \
     queue = NULL;                                 \
+    UNIT_TEST_BEGIN(name##_queue_destroy);        \
                                                   \
     QUEUE_destroy(&queue);                        \
     RESULT_CHECK_pointer(NULL, queue, &pass);     \
@@ -212,30 +214,88 @@ utest_##name##_queue_enter(void)                             \
     UNIT_TEST_RESULT(name##_queue_enter, pass);              \
 }
 
-#define UT_QUEUE_leave(name)                                 \
-static void                                                  \
-utest_##name##_queue_leave(void)                             \
-{                                                            \
-    bool pass;                                               \
-    uint32 rest;                                             \
-    struct QUEUE *queue;                                     \
-                                                             \
-    pass = true;                                             \
-    queue = NULL;                                            \
-                                                             \
-    QUEUE_leave(queue);                                      \
-    queue = QUEUE_create();                                  \
-                                                             \
-    while (!QUEUE_full_p(queue)) {                           \
-        QUEUE_enter(queue, &pass);                           \
-    }                                                        \
-                                                             \
-    rest = QUEUE_rest(queue);                                \
-    RESULT_CHECK_pointer(&pass, QUEUE_leave(queue), &pass);  \
-    RESULT_CHECK_uint32(rest + 1, QUEUE_rest(queue), &pass); \
-                                                             \
-    QUEUE_destroy(&queue);                                   \
-    UNIT_TEST_RESULT(name##_queue_leave, pass);              \
+#define UT_QUEUE_front(name)                                      \
+static void                                                       \
+utest_##name##_queue_front(void)                                  \
+{                                                                 \
+    bool pass;                                                    \
+    void *tmp;                                                    \
+    struct QUEUE *queue;                                          \
+                                                                  \
+    pass = true;                                                  \
+    queue = NULL;                                                 \
+                                                                  \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_front(queue), &pass); \
+    queue = QUEUE_create();                                       \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_front(queue), &pass); \
+                                                                  \
+    QUEUE_enter(queue, &pass);                                    \
+    RESULT_CHECK_pointer(&pass, QUEUE_front(queue), &pass);       \
+                                                                  \
+    tmp = QUEUE_front(queue);                                     \
+    RESULT_CHECK_pointer(tmp, QUEUE_leave(queue), &pass);         \
+                                                                  \
+    while (1 != QUEUE_rest(queue)) {                              \
+        QUEUE_enter(queue, &pass);                                \
+    }                                                             \
+    QUEUE_enter(queue, queue);                                    \
+    RESULT_CHECK_pointer(queue, QUEUE_rear(queue), &pass);        \
+                                                                  \
+    QUEUE_destroy(&queue);                                        \
+    UNIT_TEST_RESULT(name##_queue_front, pass);                   \
+}
+
+#define UT_QUEUE_rear(name)                                      \
+static void                                                      \
+utest_##name##_queue_rear(void)                                  \
+{                                                                \
+    bool pass;                                                   \
+    void *tmp;                                                   \
+    struct QUEUE *queue;                                         \
+                                                                 \
+    pass = true;                                                 \
+    queue = NULL;                                                \
+                                                                 \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_rear(queue), &pass); \
+    queue = QUEUE_create();                                      \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_rear(queue), &pass); \
+                                                                 \
+    QUEUE_enter(queue, &pass);                                   \
+    RESULT_CHECK_pointer(&pass, QUEUE_rear(queue), &pass);       \
+                                                                 \
+    tmp = QUEUE_rear(queue);                                     \
+    RESULT_CHECK_pointer(tmp, QUEUE_leave(queue), &pass);        \
+                                                                 \
+    QUEUE_destroy(&queue);                                       \
+    UNIT_TEST_RESULT(name##_queue_rear, pass);                   \
+}
+
+#define UT_QUEUE_leave(name)                                      \
+static void                                                       \
+utest_##name##_queue_leave(void)                                  \
+{                                                                 \
+    bool pass;                                                    \
+    uint32 rest;                                                  \
+    struct QUEUE *queue;                                          \
+                                                                  \
+    pass = true;                                                  \
+    queue = NULL;                                                 \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_leave(queue), &pass); \
+                                                                  \
+    QUEUE_leave(queue);                                           \
+    queue = QUEUE_create();                                       \
+    RESULT_CHECK_pointer(PTR_INVALID, QUEUE_leave(queue), &pass); \
+                                                                  \
+    while (!QUEUE_full_p(queue)) {                                \
+        QUEUE_enter(queue, &pass);                                \
+    }                                                             \
+                                                                  \
+    rest = QUEUE_rest(queue);                                     \
+    RESULT_CHECK_pointer(&pass, QUEUE_leave(queue), &pass);       \
+    RESULT_CHECK_uint32(rest + 1, QUEUE_rest(queue), &pass);      \
+                                                                  \
+    QUEUE_destroy(&queue);                                        \
+    UNIT_TEST_RESULT(name##_queue_leave, pass);                   \
 }
 
 #define UT_QUEUE_cleanup(name)                                            \

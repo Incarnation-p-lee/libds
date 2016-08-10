@@ -1,7 +1,7 @@
 uint32
 array_queue_capacity(struct array_queue *queue)
 {
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return QUEUE_SIZE_INVALID;
     } else {
         return queue->space.dim;
@@ -29,7 +29,7 @@ array_queue_create(void)
 void
 array_queue_destroy(struct array_queue **queue)
 {
-    if (!complain_null_pointer_p(queue) && array_queue_structure_legal_p(*queue)) {
+    if (!complain_null_pointer_p(queue) && array_queue_structure_legal_ip(*queue)) {
         memory_cache_free((*queue)->space.base);
         memory_cache_free(*queue);
         *queue = NULL;
@@ -37,17 +37,17 @@ array_queue_destroy(struct array_queue **queue)
 }
 
 static inline bool
-array_queue_structure_legal_p(struct array_queue *queue)
+array_queue_space_structure_legal_p(s_array_queue_space_t *space)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (complain_null_pointer_p(space)) {
         return false;
-    } else if (complain_null_pointer_p(queue->space.base)) {
+    } else if (space->rest > space->dim) {
         return false;
-    } else if (complain_null_pointer_p(queue->space.front)) {
+    } else if (complain_null_pointer_p(space->base)) {
         return false;
-    } else if (complain_null_pointer_p(queue->space.rear)) {
+    } else if (complain_null_pointer_p(space->front)) {
         return false;
-    } else if (queue->space.rest > queue->space.dim) {
+    } else if (complain_null_pointer_p(space->rear)) {
         return false;
     } else {
         return true;
@@ -55,13 +55,29 @@ array_queue_structure_legal_p(struct array_queue *queue)
 }
 
 static inline bool
-array_queue_resize_front_to_rear_p(struct array_queue *queue)
+array_queue_structure_legal_ip(s_array_queue_t *queue)
 {
-    assert_exit(array_queue_structure_legal_p(queue));
+    if (complain_null_pointer_p(queue)) {
+        return false;
+    } else {
+        return array_queue_space_structure_legal_p(&queue->space);
+    }
+}
+
+bool
+array_queue_structure_legal_p(s_array_queue_t *queue)
+{
+    return array_queue_structure_legal_ip(queue);
+}
+
+static inline bool
+array_queue_resize_front_to_rear_p(s_array_queue_t *queue)
+{
+    assert_exit(array_queue_structure_legal_ip(queue));
 
     if (queue->space.front < queue->space.rear) {
         return false;
-    } else if (array_queue_empty_p_internal(queue)) {
+    } else if (array_queue_empty_ip(queue)) {
         return false;
     } else {
         return true;
@@ -69,15 +85,14 @@ array_queue_resize_front_to_rear_p(struct array_queue *queue)
 }
 
 static inline void
-array_queue_resize_expand(struct array_queue *queue, uint32 size,
-    void **addr)
+array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
 {
     uint32 counted;
     uint32 chunk_size;
 
     assert_exit(!complain_null_pointer_p(addr));
     assert_exit(!complain_zero_size_p(size));
-    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size > queue->space.dim);
 
     if (queue->space.front < queue->space.rear) {
@@ -104,8 +119,7 @@ array_queue_resize_expand(struct array_queue *queue, uint32 size,
 }
 
 static inline void
-array_queue_resize_narrow(struct array_queue *queue, uint32 size,
-    void **addr)
+array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr)
 {
     uint32 counted;
     uint32 part_size;
@@ -113,7 +127,7 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
 
     assert_exit(!complain_null_pointer_p(addr));
     assert_exit(!complain_zero_size_p(size));
-    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size < queue->space.dim);
 
     if (queue->space.front < queue->space.rear) {
@@ -154,12 +168,12 @@ array_queue_resize_narrow(struct array_queue *queue, uint32 size,
 }
 
 static inline void
-array_queue_resize_internal(struct array_queue *queue, uint32 size)
+array_queue_resize_i(s_array_queue_t *queue, uint32 size)
 {
     void **addr;
 
     assert_exit(!complain_zero_size_p(size));
-    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size != queue->space.dim);
 
     addr = memory_cache_allocate(sizeof(void *) * size);
@@ -174,7 +188,7 @@ array_queue_resize_internal(struct array_queue *queue, uint32 size)
 void
 array_queue_resize(struct array_queue *queue, uint32 size)
 {
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return;
     } else if (size == queue->space.dim) {
         return;
@@ -183,16 +197,13 @@ array_queue_resize(struct array_queue *queue, uint32 size)
         pr_log_info("Expanding size not specified, use default.\n");
     }
 
-    array_queue_resize_internal(queue, size);
+    array_queue_resize_i(queue, size);
 }
 
-/*
- * NULL array queue will _RETURN_ 0.
- */
 uint32
-array_queue_rest(struct array_queue *queue)
+array_queue_rest(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return QUEUE_REST_INVALID;
     } else {
         return queue->space.rest;
@@ -200,61 +211,77 @@ array_queue_rest(struct array_queue *queue)
 }
 
 static inline bool
-array_queue_full_p_internal(struct array_queue *queue)
+array_queue_full_ip(s_array_queue_t *queue)
 {
-    assert_exit(NULL != queue);
+    assert_exit(array_queue_structure_legal_ip(queue));
 
     return 0u == queue->space.rest ? true : false;
 }
 
-/*
- * NULL array queue will be treated as full, _RETURN_ true.
- */
 bool
-array_queue_full_p(struct array_queue *queue)
+array_queue_full_p(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return true;
     } else {
-        return array_queue_full_p_internal(queue);
+        return array_queue_full_ip(queue);
     }
 }
 
 static inline bool
-array_queue_empty_p_internal(struct array_queue *queue)
+array_queue_empty_ip(s_array_queue_t *queue)
 {
-    uint32 capacity;
-    uint32 rest;
+    assert_exit(array_queue_structure_legal_ip(queue));
 
-    assert_exit(NULL != queue);
-
-    capacity = queue->space.dim;
-    rest = queue->space.rest;
-
-    return capacity == rest ? true : false;
+    return queue->space.dim == queue->space.rest ? true : false;
 }
 
-/*
- * NULL array queue will be treated as full, _RETURN_ false.
- */
 bool
-array_queue_empty_p(struct array_queue *queue)
+array_queue_empty_p(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return false;
     } else {
-        return array_queue_empty_p_internal(queue);
+        return array_queue_empty_ip(queue);
+    }
+}
+
+void *
+array_queue_front(s_array_queue_t *queue)
+{
+    if (!array_queue_structure_legal_ip(queue)) {
+        return PTR_INVALID;
+    } else if (array_queue_empty_ip(queue)) {
+        return PTR_INVALID;
+    } else {
+        return *queue->space.front;
+    }
+}
+
+void *
+array_queue_rear(s_array_queue_t *queue)
+{
+    if (!array_queue_structure_legal_ip(queue)) {
+        return PTR_INVALID;
+    } else if (array_queue_empty_ip(queue)) {
+        return PTR_INVALID;
+    } else {
+        if (queue->space.rear == queue->space.base) {
+             return *(queue->space.base + queue->space.dim - 1);
+        } else {
+             return *(queue->space.rear - 1);
+        }
     }
 }
 
 void
-array_queue_enter(struct array_queue *queue, void *member)
+array_queue_enter(s_array_queue_t *queue, void *member)
 {
     uint32 dim;
 
-    if (array_queue_structure_legal_p(queue)) {
-        if (array_queue_full_p_internal(queue)) {
-            array_queue_resize_internal(queue, queue->space.dim * 2);
+    if (array_queue_structure_legal_ip(queue)) {
+        if (array_queue_full_ip(queue)) {
+            array_queue_resize_i(queue, queue->space.dim * 2);
         }
 
         *queue->space.rear++ = member;
@@ -270,16 +297,16 @@ array_queue_enter(struct array_queue *queue, void *member)
 }
 
 void *
-array_queue_leave(struct array_queue *queue)
+array_queue_leave(s_array_queue_t *queue)
 {
     uint32 dim;
     void *retval;
 
-    if (!array_queue_structure_legal_p(queue)) {
-        return NULL;
-    } else if (array_queue_empty_p_internal(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
+        return PTR_INVALID;
+    } else if (array_queue_empty_ip(queue)) {
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
-        return NULL;
+        return PTR_INVALID;
     } else {
         retval = *queue->space.front++;
         dim = queue->space.dim;
@@ -290,19 +317,18 @@ array_queue_leave(struct array_queue *queue)
         }
 
         queue->space.rest++;
-
         return retval;
     }
 }
 
 void
-array_queue_cleanup(struct array_queue *queue)
+array_queue_cleanup(s_array_queue_t *queue)
 {
     uint32 dim;
 
-    if (array_queue_structure_legal_p(queue)) {
+    if (array_queue_structure_legal_ip(queue)) {
         dim = queue->space.dim;
-        memset(queue->space.base, 0, sizeof(void *) * dim);
+        dp_memset(queue->space.base, 0, sizeof(void *) * dim);
 
         queue->space.rest = dim;
         queue->space.front = queue->space.base;
@@ -311,18 +337,17 @@ array_queue_cleanup(struct array_queue *queue)
 }
 
 void
-array_queue_iterate(struct array_queue *queue, void (*handler)(void *))
+array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *))
 {
     void **lmt;
     void **iter;
 
-    if (!array_queue_structure_legal_p(queue)) {
+    if (!array_queue_structure_legal_ip(queue)) {
         return;
     } else if (complain_null_pointer_p(handler)) {
         return;
-    } else if (array_queue_empty_p_internal(queue)) {
+    } else if (array_queue_empty_ip(queue)) {
         pr_log_warn("Iterate on _EMPTY_ queue, nothing will be done.\n");
-        return;
     } else {
         lmt = queue->space.base + queue->space.dim;
         iter = queue->space.front;

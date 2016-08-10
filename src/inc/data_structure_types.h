@@ -56,6 +56,8 @@ typedef struct array_stack          s_array_stack_t;
 typedef struct array_stack_space    s_array_stack_space_t;
 typedef struct linked_stack_space   s_linked_stack_space_t;
 typedef struct linked_stack         s_linked_stack_t;
+typedef struct array_queue_space    s_array_queue_space_t;
+typedef struct array_queue          s_array_queue_t;
 
 /*
  *   Implement the unify single_linked_list interface

@@ -8,6 +8,8 @@
 #define QUEUE_capacity         array_queue_capacity
 #define QUEUE_rest             array_queue_rest
 #define QUEUE_enter            array_queue_enter
+#define QUEUE_front            array_queue_front
+#define QUEUE_rear             array_queue_rear
 #define QUEUE_leave            array_queue_leave
 #define QUEUE_cleanup          array_queue_cleanup
 #define QUEUE_iterate          array_queue_iterate
@@ -23,6 +25,8 @@ UT_QUEUE_capacity(array)
 UT_QUEUE_rest(array)
 UT_QUEUE_enter(array)
 UT_QUEUE_leave(array)
+UT_QUEUE_front(array)
+UT_QUEUE_rear(array)
 UT_QUEUE_cleanup(array)
 UT_QUEUE_iterate(array)
 
@@ -37,6 +41,8 @@ UT_QUEUE_iterate(array)
 #undef QUEUE_rest
 #undef QUEUE_enter
 #undef QUEUE_leave
+#undef QUEUE_front
+#undef QUEUE_rear
 #undef QUEUE_cleanup
 #undef QUEUE_iterate
 
