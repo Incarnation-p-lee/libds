@@ -157,14 +157,14 @@ test_open_addressing_hash_sample(uint32 count)
     hash = open_addressing_hash_create(0);
     heap = memory_maps_entry_find("[heap]");
 
-    assert_exit(NULL != hash);
-    assert_exit(NULL != heap);
+    assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(!complain_null_pointer_p(heap));
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
 
     while (0 != count-- && iter < limit) {
-        open_addressing_hash_insert(&hash, UNSIGNED_TO_PTR(iter));
+        open_addressing_hash_insert(hash, UNSIGNED_TO_PTR(iter));
         iter += 4;
     }
 
@@ -188,7 +188,7 @@ test_separate_chain_hash_sample(uint32 count)
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
     while (0 != count-- && iter < limit) {
-        separate_chain_hash_insert(&hash, UNSIGNED_TO_PTR(iter));
+        separate_chain_hash_insert(hash, UNSIGNED_TO_PTR(iter));
         iter += 4;
     }
 

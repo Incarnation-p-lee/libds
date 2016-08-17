@@ -402,9 +402,7 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
-extern s_open_addressing_hash_t * open_addressing_hash_rehashing(s_open_addressing_hash_t **hash);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);
-extern s_separate_chain_hash_t * separate_chain_hash_rehashing(s_separate_chain_hash_t **hash);
 extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 counter);
 extern uint32 hashing_function_polynomial(void *key, uint32 size);
 extern uint32 open_addressing_hash_load_factor(s_open_addressing_hash_t *hash);
@@ -414,14 +412,16 @@ extern uint32 separate_chain_hash_load_factor(s_separate_chain_hash_t *hash);
 extern uint32 separate_chain_hash_load_factor_calculate(s_separate_chain_hash_t *hash);
 extern uint32 separate_chain_hash_size(s_separate_chain_hash_t *hash);
 extern void * open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key);
-extern void * open_addressing_hash_insert(s_open_addressing_hash_t **hash, void *key);
-extern void * open_addressing_hash_insert_i(s_open_addressing_hash_t **hash, void *key);
+extern void * open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key);
+extern void * open_addressing_hash_insert_i(s_open_addressing_hash_t *hash, void *key);
 extern void * open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key);
 extern void * separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key);
-extern void * separate_chain_hash_insert(s_separate_chain_hash_t **hash, void *key);
+extern void * separate_chain_hash_insert(s_separate_chain_hash_t *hash, void *key);
 extern void * separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key);
 extern void open_addressing_hash_destroy(s_open_addressing_hash_t **hash);
+extern void open_addressing_hash_rehashing(s_open_addressing_hash_t *hash);
 extern void separate_chain_hash_destroy(s_separate_chain_hash_t **hash);
+extern void separate_chain_hash_rehashing(s_separate_chain_hash_t *hash);
 
 extern bool maximal_heap_empty_p(struct maximal_heap *heap);
 extern bool maximal_heap_full_p(struct maximal_heap *heap);

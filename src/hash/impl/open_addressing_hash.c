@@ -54,14 +54,22 @@ open_addressing_hash_structure_legal_p(s_open_addressing_hash_t *hash)
     }
 }
 
+static inline void
+open_addressing_hash_destroy_i(s_open_addressing_hash_t *hash)
+{
+    assert_exit(open_addressing_hash_structure_legal_p(hash));
+
+    hashing_table_destroy(&hash->table);
+    memory_cache_free(hash);
+}
+
 void
 open_addressing_hash_destroy(s_open_addressing_hash_t **hash)
 {
     if (complain_null_pointer_p(hash)) {
         return;
     } else if (open_addressing_hash_structure_legal_p(*hash)) {
-        hashing_table_destroy(&(*hash)->table);
-        memory_cache_free(*hash);
+        open_addressing_hash_destroy_i(*hash);
         *hash = NULL;
     }
 }
@@ -91,37 +99,34 @@ open_addressing_hash_index_calculate(s_open_addressing_hash_t *hash,
 }
 
 void *
-open_addressing_hash_insert_i(s_open_addressing_hash_t **hash, void *key)
+open_addressing_hash_insert_i(s_open_addressing_hash_t *hash, void *key)
 {
     uint32 i;
     uint32 index;
     uint32 factor;
 
-    assert_exit(!complain_null_pointer_p(hash));
     assert_exit(!complain_null_pointer_p(key));
-    assert_exit(open_addressing_hash_structure_legal_p(*hash));
+    assert_exit(open_addressing_hash_structure_legal_p(hash));
 
-    factor = open_addressing_hash_load_factor_calculate(*hash);
-    if (factor >= (*hash)->table->load_factor) {
+    factor = open_addressing_hash_load_factor_calculate(hash);
+    if (factor >= hash->table->load_factor) {
         pr_log_info("Reach the load factor limit, will rehashing.\n");
-        *hash = open_addressing_hash_rehashing(hash);
+        open_addressing_hash_rehashing_i(hash);
     }
 
     i = 0;
     do {
-        index = open_addressing_hash_index_calculate(*hash, key, i++);
-    } while ((*hash)->table->space[index]);
+        index = open_addressing_hash_index_calculate(hash, key, i++);
+    } while (hash->table->space[index]);
 
-    (*hash)->table->space[index] = key;
+    hash->table->space[index] = key;
     return key;
 }
 
 void *
-open_addressing_hash_insert(s_open_addressing_hash_t **hash, void *key)
+open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key)
 {
-    if (complain_null_pointer_p(hash)) {
-        return PTR_INVALID;
-    } else if (!open_addressing_hash_structure_legal_p(*hash)) {
+    if (!open_addressing_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
     } else if (complain_null_pointer_p(key)) {
         return PTR_INVALID;
@@ -186,42 +191,42 @@ open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key)
 }
 
 static inline void
-open_addressing_hash_space_rehashing(s_open_addressing_hash_t *to,
-    s_open_addressing_hash_t *from)
+open_addressing_hash_rehashing_i(s_open_addressing_hash_t *hash)
 {
     void **i;
+    uint32 new_size;
+    s_open_addressing_hash_t *new_hash;
 
-    assert_exit(open_addressing_hash_structure_legal_p(to));
-    assert_exit(open_addressing_hash_structure_legal_p(from));
+    assert_exit(open_addressing_hash_structure_legal_p(hash));
 
-    i = from->table->space;
+    new_size = prime_numeral_next(hash->table->size + 1);
+    new_hash = open_addressing_hash_create_i(new_size);
 
-    while (i < from->table->space + from->table->size) {
+    i = hash->table->space;
+    while (i < hash->table->space + hash->table->size) {
         if (*i) {
-            open_addressing_hash_insert_i(&to, *i);
+            open_addressing_hash_insert_i(new_hash, *i);
         }
         i++;
     }
+
+    /* swap space of hash and new */
+    i = hash->table->space;
+    hash->table->space = new_hash->table->space;
+    new_hash->table->space = i;
+
+    /* swap size of hash and new */
+    new_hash->table->size = hash->table->size;
+    hash->table->size = new_size;
+
+    open_addressing_hash_destroy_i(new_hash);
 }
 
-s_open_addressing_hash_t *
-open_addressing_hash_rehashing(s_open_addressing_hash_t **hash)
+void
+open_addressing_hash_rehashing(s_open_addressing_hash_t *hash)
 {
-    uint32 resize;
-    s_open_addressing_hash_t *new;
-
-    if (complain_null_pointer_p(hash)) {
-        return PTR_INVALID;
-    } else if (!open_addressing_hash_structure_legal_p(*hash)) {
-        return PTR_INVALID;
-    } else {
-        resize = prime_numeral_next((*hash)->table->size + 1);
-        new = open_addressing_hash_create_i(resize);
-
-        open_addressing_hash_space_rehashing(new, *hash);
-        open_addressing_hash_destroy(hash);
-
-        return new;
+    if (open_addressing_hash_structure_legal_p(hash)) {
+        open_addressing_hash_rehashing_i(hash);
     }
 }
 
