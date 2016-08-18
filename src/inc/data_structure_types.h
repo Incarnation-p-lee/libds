@@ -9,6 +9,8 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
+#define true                   1
+#define false                  0
 #define SIZE_INVALID           0xffffffffu
 #define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
@@ -53,6 +55,10 @@ typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct array_queue          s_array_queue_t;
+typedef struct array_stack          s_array_stack_t;
+typedef struct array_stack_space    s_array_stack_space_t;
+typedef struct linked_stack_space   s_linked_stack_space_t;
+typedef struct linked_stack         s_linked_stack_t;
 
 /*
  *   Implement the unify single_linked_list interface

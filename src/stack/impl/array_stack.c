@@ -1,50 +1,75 @@
 uint32
-array_stack_dim(struct array_stack *stack)
+array_stack_size(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
-        return STACK_SIZE_INVALID;
-    } else {
-        return stack->space.dim;
-    }
-}
-
-uint32
-array_stack_size(struct array_stack *stack)
-{
-    if (complain_null_pointer_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return STACK_SIZE_INVALID;
     } else {
         return (uint32)(stack->space.sp - stack->space.bp);
     }
 }
 
-/*
- * _RETURN_ one instance of array_stack.
- *   If no memory available, it never _RETURN_, export an error and exit.
- */
-struct array_stack *
+static inline uint32
+array_stack_size_i(s_array_stack_t *stack)
+{
+    assert_exit(array_stack_structure_legal_ip(stack));
+
+    return (uint32)(stack->space.sp - stack->space.bp);
+}
+
+bool
+array_stack_space_structure_legal_p(s_array_stack_space_t *space)
+{
+    if (complain_null_pointer_p(space)) {
+        return false;
+    } else if (complain_null_pointer_p(space->sp)) {
+        return false;
+    } else if (complain_null_pointer_p(space->bp)) {
+        return false;
+    } else if (complain_zero_size_p(space->dim)) {
+        return false;
+    } else if ((uint32)(space->sp - space->bp) > space->dim) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool
+array_stack_structure_legal_p(s_array_stack_t *stack)
+{
+    return array_stack_structure_legal_ip(stack);
+}
+
+
+static inline bool
+array_stack_structure_legal_ip(s_array_stack_t *stack)
+{
+    if (complain_null_pointer_p(stack)) {
+        return false;
+    } else {
+        return array_stack_space_structure_legal_p(&stack->space);
+    }
+}
+
+s_array_stack_t *
 array_stack_create(void)
 {
-    struct array_stack *stack;
+    s_array_stack_t *stack;
 
     stack = memory_cache_allocate(sizeof(*stack));
-    stack->space.bp = memory_cache_allocate(
-        sizeof(void *) * STACK_SIZE_DFT);
-
+    stack->space.bp = memory_cache_allocate(sizeof(void *) * STACK_SIZE_DFT);
     stack->space.sp = stack->space.bp;
     stack->space.dim = STACK_SIZE_DFT;
 
     return stack;
 }
 
-/*
- * Destroy the instance of array stack.
- *   If NULL _ARGV_, nothing will be done.
- */
 void
-array_stack_destroy(struct array_stack **stack)
+array_stack_destroy(s_array_stack_t **stack)
 {
-    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(*stack)) {
+    if (complain_null_pointer_p(stack)) {
+        return;
+    } else if (array_stack_structure_legal_ip(*stack)) {
         memory_cache_free((*stack)->space.bp);
         memory_cache_free(*stack);
         *stack = NULL;
@@ -52,126 +77,93 @@ array_stack_destroy(struct array_stack **stack)
 }
 
 static inline void
-array_stack_resize_internal(struct array_stack *stack, uint32 dim)
+array_stack_resize_i(s_array_stack_t *stack, uint32 dim)
 {
-    uint32 offset;
+    uint32 size;
 
-    assert_exit(NULL != stack);
-    assert_exit(0 != dim);
+    assert_exit(!complain_zero_size_p(dim));
+    assert_exit(array_stack_structure_legal_ip(stack));
 
-    offset = (uint32)((ptr_t)stack->space.sp - (ptr_t)stack->space.bp);
-    if (offset > stack->space.dim) {
+    size = array_stack_size_i(stack);
+    if (size > dim) {
         pr_log_warn("Stack overflow, will truncate to the top of stack.\n");
-        offset = stack->space.dim;
+        size = dim;
     }
 
     stack->space.bp = memory_cache_re_allocate(stack->space.bp,
         sizeof(void *) * dim);
-    stack->space.sp = stack->space.bp + offset;
+    stack->space.sp = stack->space.bp + size;
     stack->space.dim = dim;
 }
 
-/*
- * Expand the stack space if need.
- *   If NULL stack, nothing will be done.
- *   If extra is zero, expand to 2x + min.
- */
 void
-array_stack_resize(struct array_stack *stack, uint32 dim)
+array_stack_resize(s_array_stack_t *stack, uint32 dim)
 {
-    if (!complain_null_pointer_p(stack)) {
+    if (array_stack_structure_legal_ip(stack)) {
         if (0 == dim) {
             pr_log_info("Expanding size not specified, use default.\n");
             dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
         }
-
-        array_stack_resize_internal(stack, dim);
+        array_stack_resize_i(stack, dim);
     }
 }
 
 static inline bool
-array_stack_full_p_internal(struct array_stack *stack)
+array_stack_full_ip(s_array_stack_t *stack)
 {
-    assert_exit(NULL != stack);
+    assert_exit(array_stack_structure_legal_ip(stack));
 
-    return 0u == array_stack_rest_internal(stack) ? true : false;
+    return stack->space.dim == array_stack_size_i(stack) ? true : false;
 }
 
-/*
- * _RETURN_ true if no space left in stack, or _RETURN_ false;
- *   If NULL _ARGV_, _RETURN_ true.
- */
 bool
-array_stack_full_p(struct array_stack *stack)
+array_stack_full_p(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return true;
     } else {
-        return array_stack_full_p_internal(stack);
+        return array_stack_full_ip(stack);
     }
 }
 
-/*
- * _RETURN_ total space of stack.
- *   If NULL _ARGV_, _RETURN_ 0.
- */
 uint32
-array_stack_capacity(struct array_stack *stack)
+array_stack_capacity(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
-        return 0u;
+    if (!array_stack_structure_legal_ip(stack)) {
+        return STACK_SIZE_INVALID;
     } else {
         return stack->space.dim;
     }
 }
 
 static inline uint32
-array_stack_rest_internal(struct array_stack *stack)
+array_stack_rest_i(s_array_stack_t *stack)
 {
-    void **limit;
-    void **tmp;
+    assert_exit(array_stack_structure_legal_ip(stack));
 
-    assert_exit(NULL != stack);
-
-    tmp = stack->space.sp;
-    limit = stack->space.bp + stack->space.dim;
-
-    if ((sint32)(tmp - limit) > 0) {
-        pr_log_err("Array stack overflow.\n");
-    }
-
-    return (uint32)(limit - tmp);
+    return stack->space.dim - array_stack_size_i(stack);
 }
 
-/*
- * _RETURN_ rest space of stack.
- *   If NULL _ARGV_, _RETURN_ 0.
- */
 uint32
-array_stack_rest(struct array_stack *stack)
+array_stack_rest(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
-        return 0;
+    if (!array_stack_structure_legal_ip(stack)) {
+        return STACK_SIZE_INVALID;
     } else {
-        return array_stack_rest_internal(stack);
+        return array_stack_rest_i(stack);
     }
 }
 
-/*
- * Push one void pointer to stack
- *   If NULL stack, nothing will be done.
- */
 void
-array_stack_push(struct array_stack *stack, void *member)
+array_stack_push(s_array_stack_t *stack, void *member)
 {
     uint32 dim;
 
-    if (!complain_null_pointer_p(stack)) {
-        if (array_stack_full_p_internal(stack)) {
+    if (array_stack_structure_legal_ip(stack)) {
+        if (array_stack_full_ip(stack)) {
             pr_log_info("Stack is full, expand stack with default size.\n");
-
             dim = stack->space.dim * 2 + STACK_EXPD_SIZE_MIN;
-            array_stack_resize_internal(stack, dim);
+            array_stack_resize_i(stack, dim);
         }
 
         *stack->space.sp++ = member;
@@ -179,89 +171,69 @@ array_stack_push(struct array_stack *stack, void *member)
 }
 
 void *
-array_stack_top(struct array_stack *stack)
+array_stack_top(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
-        return NULL;
-    } else if (array_stack_empty_p_internal(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
+        return PTR_INVALID;
+    } else if (array_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
-        return NULL;
+        return PTR_INVALID;
     } else {
         return *(stack->space.sp - 1);
     }
 }
 
-/*
- * _RETURN_ one void pointer from stack
- *  If NULL _ARGV_, _RETURN_ NULL.
- */
 void *
-array_stack_pop(struct array_stack *stack)
+array_stack_pop(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
-        return NULL;
-    } else if (array_stack_empty_p_internal(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
+        return PTR_INVALID;
+    } else if (array_stack_empty_ip(stack)) {
         pr_log_warn("Attempt to pop from _EMPTY_ stack.\n");
-        return NULL;
+        return PTR_INVALID;
     } else {
         return *(--stack->space.sp);
     }
 }
 
 static inline bool
-array_stack_empty_p_internal(struct array_stack *stack)
+array_stack_empty_ip(s_array_stack_t *stack)
 {
-    assert_exit(NULL != stack);
-    assert_exit((sint32)(stack->space.sp - stack->space.bp) >= 0);
+    assert_exit(array_stack_structure_legal_ip(stack));
 
     return stack->space.bp == stack->space.sp ? true : false;
 }
 
-/*
- * _RETURN_ true if empty stack, or _RETURN_ false.
- *  If NULL _ARGV_, _RETURN_ false.
- */
 bool
-array_stack_empty_p(struct array_stack *stack)
+array_stack_empty_p(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
+    if (!array_stack_structure_legal_ip(stack)) {
         return false;
-    } else if ((sint32)(stack->space.sp - stack->space.bp) < 0) {
-        pr_log_err("Array stack overflow.");
+    } else {
+        return array_stack_empty_ip(stack);
     }
-
-    return array_stack_empty_p_internal(stack);
 }
 
-/*
- * Clean up stack space. Discard all data in stack.
- *   If NULL _ARGV_, nothing will be done.  
- */
 void
-array_stack_cleanup(struct array_stack *stack)
+array_stack_cleanup(s_array_stack_t *stack)
 {
-    if (!complain_null_pointer_p(stack)) {
-        memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
+    if (array_stack_structure_legal_ip(stack)) {
+        dp_memset(stack->space.bp, 0, sizeof(void *) * stack->space.dim);
         stack->space.sp = stack->space.bp;
     }
 }
 
-/*
- * Iterate each element of stack.
- *   If NULL stack, nothing will be done.
- */
 void
-array_stack_iterate(struct array_stack *stack, void (*handler)(void *))
+array_stack_iterate(s_array_stack_t *stack, void (*handler)(void *))
 {
-    register void **iter;
+    void **i;
 
-    if (!complain_null_pointer_p(stack) && !complain_null_pointer_p(handler)) {
-        /* 
-         * iterate from sp to bp
-         */
-        iter = stack->space.sp;
-        while(iter != stack->space.bp) {
-            handler(*(--iter));
+    if (array_stack_structure_legal_ip(stack)
+        && !complain_null_pointer_p(handler)) {
+        /* iterate from sp to bp */
+        i = stack->space.sp;
+        while(i != stack->space.bp) {
+            handler(*(--i));
         }
     }
 }

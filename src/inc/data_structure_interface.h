@@ -14,7 +14,6 @@ typedef unsigned int           bool;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
-    typedef unsigned long      ulint32;
     typedef unsigned int       ptr_t;
 #endif
 
@@ -36,6 +35,8 @@ enum log_level {
 };
 
 
+#define true                   1
+#define false                  0
 #define SIZE_INVALID           0xffffffffu
 #define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
@@ -76,6 +77,10 @@ typedef struct hashing_table        s_hashing_table_t;
 typedef struct separate_chain       s_separate_chain_t;
 typedef struct open_addressing_hash s_open_addressing_hash_t;
 typedef struct array_queue          s_array_queue_t;
+typedef struct array_stack          s_array_stack_t;
+typedef struct array_stack_space    s_array_stack_space_t;
+typedef struct linked_stack_space   s_linked_stack_space_t;
+typedef struct linked_stack         s_linked_stack_t;
 
 enum ITER_ORDER {
     ORDER_START,
@@ -316,7 +321,6 @@ extern struct array_queue * array_queue_create(void);
 extern struct doubly_end_queue * doubly_end_queue_create(void);
 extern struct stacked_queue * stacked_queue_create(void);
 extern uint32 array_queue_capacity(struct array_queue *queue);
-extern uint32 array_queue_dim(struct array_queue *queue);
 extern uint32 array_queue_rest(struct array_queue *queue);
 extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
@@ -344,31 +348,34 @@ extern void stacked_queue_enter(struct stacked_queue *queue, void *member);
 extern void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
 extern void stacked_queue_resize(struct stacked_queue *queue, uint32 dim);
 
-extern bool array_stack_empty_p(struct array_stack *stack);
-extern bool array_stack_full_p(struct array_stack *stack);
-extern bool linked_stack_empty_p(struct linked_stack *stack);
-extern bool linked_stack_full_p(struct linked_stack *stack);
-extern struct array_stack * array_stack_create(void);
-extern struct linked_stack * linked_stack_create(void);
-extern uint32 array_stack_capacity(struct array_stack *stack);
-extern uint32 array_stack_dim(struct array_stack *stack);
-extern uint32 array_stack_rest(struct array_stack *stack);
-extern uint32 array_stack_size(struct array_stack *stack);
-extern uint32 linked_stack_capacity(struct linked_stack *stack);
-extern uint32 linked_stack_rest(struct linked_stack *stack);
-extern void * array_stack_pop(struct array_stack *stack);
-extern void * array_stack_top(struct array_stack *stack);
-extern void * linked_stack_pop(struct linked_stack *stack);
-extern void array_stack_cleanup(struct array_stack *stack);
-extern void array_stack_destroy(struct array_stack **stack);
-extern void array_stack_iterate(struct array_stack *stack, void (*handler)(void *));
-extern void array_stack_push(struct array_stack *stack, void *member);
-extern void array_stack_resize(struct array_stack *stack, uint32 dim);
-extern void linked_stack_cleanup(struct linked_stack *stack);
-extern void linked_stack_destroy(struct linked_stack **stack);
-extern void linked_stack_iterate(struct linked_stack *stack, void (*handler)(void *));
-extern void linked_stack_push(struct linked_stack *stack, void *member);
-extern void linked_stack_resize(struct linked_stack *stack, uint32 dim);
+extern bool array_stack_empty_p(s_array_stack_t *stack);
+extern bool array_stack_full_p(s_array_stack_t *stack);
+extern bool array_stack_space_structure_legal_p(s_array_stack_space_t *space);
+extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
+extern bool linked_stack_empty_p(s_linked_stack_t *stack);
+extern bool linked_stack_full_p(s_linked_stack_t *stack);
+extern bool linked_stack_structure_legal_p(s_linked_stack_t *stack);
+extern s_array_stack_t * array_stack_create(void);
+extern s_linked_stack_t * linked_stack_create(void);
+extern uint32 array_stack_capacity(s_array_stack_t *stack);
+extern uint32 array_stack_rest(s_array_stack_t *stack);
+extern uint32 array_stack_size(s_array_stack_t *stack);
+extern uint32 linked_stack_capacity(s_linked_stack_t *stack);
+extern uint32 linked_stack_rest(s_linked_stack_t *stack);
+extern void * array_stack_pop(s_array_stack_t *stack);
+extern void * array_stack_top(s_array_stack_t *stack);
+extern void * linked_stack_pop(s_linked_stack_t *stack);
+extern void * linked_stack_top(s_linked_stack_t *stack);
+extern void array_stack_cleanup(s_array_stack_t *stack);
+extern void array_stack_destroy(s_array_stack_t **stack);
+extern void array_stack_iterate(s_array_stack_t *stack, void (*handler)(void *));
+extern void array_stack_push(s_array_stack_t *stack, void *member);
+extern void array_stack_resize(s_array_stack_t *stack, uint32 dim);
+extern void linked_stack_cleanup(s_linked_stack_t *stack);
+extern void linked_stack_destroy(s_linked_stack_t **stack);
+extern void linked_stack_iterate(s_linked_stack_t *stack, void (*handler)(void *));
+extern void linked_stack_push(s_linked_stack_t *stack, void *member);
+extern void linked_stack_resize(s_linked_stack_t *stack, uint32 dim);
 
 extern bool avl_tree_balanced_p(struct avl_tree *tree);
 extern bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);

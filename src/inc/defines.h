@@ -1,10 +1,13 @@
 #ifndef HAVE_DEFINES_H
 #define HAVE_DEFINES_H
 
+#define true                       1
+#define false                      0
+
 #define SYM_2_STR(symbol)          (#symbol)
 #define array_sizeof(a)            (sizeof(a) / sizeof(a[0]))
 
-#define attr_always_inline   __attribute__((always_inline))
+#define attr_always_inline         __attribute__((always_inline))
 
 /*
  * abs without if-else
@@ -30,10 +33,10 @@
                                    } while (false)
 
 #ifdef DEBUG
-    extern void libds_log_print(enum log_level lvl, const char *msg);
-    extern void * malloc_wrap(uint32 size);
-    extern void * realloc_wrap(void *ptr, uint32 size);
-    extern void free_wrap(void *ptr);
+    // extern void libds_log_print(enum log_level lvl, const char *msg);
+    // extern void * malloc_wrap(uint32 size);
+    // extern void * realloc_wrap(void *ptr, uint32 size);
+    // extern void free_wrap(void *ptr);
 
     #define malloc_ds              malloc_wrap
     #define realloc_ds             realloc_wrap

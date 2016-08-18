@@ -5,8 +5,9 @@
 static void                                       \
 ptest_##name##_stack_create(uint32 count)         \
 {                                                 \
-    struct STACK *stack;                          \
+    STACK *stack;                                 \
                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_stack_create);  \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
     while (count--) {                             \
@@ -23,8 +24,9 @@ ptest_##name##_stack_create(uint32 count)         \
 static void                                        \
 ptest_##name##_stack_destroy(uint32 count)         \
 {                                                  \
-    struct STACK *stack;                           \
+    STACK *stack;                                  \
                                                    \
+    PERFORMANCE_TEST_BEGIN(name##_stack_destroy);  \
     PERFORMANCE_TEST_CHECKPOINT;                   \
                                                    \
     while (count--) {                              \
@@ -41,10 +43,11 @@ ptest_##name##_stack_destroy(uint32 count)         \
 static void                                       \
 ptest_##name##_stack_resize(uint32 count)         \
 {                                                 \
-    struct STACK *stack;                          \
+    STACK *stack;                                 \
                                                   \
     stack = STACK_create();                       \
                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_stack_resize);  \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
     while (count--) {                             \
@@ -61,10 +64,11 @@ ptest_##name##_stack_resize(uint32 count)         \
 static void                                       \
 ptest_##name##_stack_full_p(uint32 count)         \
 {                                                 \
-    struct STACK *stack;                          \
+    STACK *stack;                                 \
                                                   \
     stack = STACK_create();                       \
                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_stack_full_p);  \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
     while (count--) {                             \
@@ -81,10 +85,11 @@ ptest_##name##_stack_full_p(uint32 count)         \
 static void                                         \
 ptest_##name##_stack_capacity(uint32 count)         \
 {                                                   \
-    struct STACK *stack;                            \
+    STACK *stack;                                   \
                                                     \
     stack = STACK_create();                         \
                                                     \
+    PERFORMANCE_TEST_BEGIN(name##_stack_capacity);  \
     PERFORMANCE_TEST_CHECKPOINT;                    \
                                                     \
     while (count--) {                               \
@@ -101,10 +106,11 @@ ptest_##name##_stack_capacity(uint32 count)         \
 static void                                     \
 ptest_##name##_stack_rest(uint32 count)         \
 {                                               \
-    struct STACK *stack;                        \
+    STACK *stack;                               \
                                                 \
     stack = STACK_create();                     \
                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_stack_rest);  \
     PERFORMANCE_TEST_CHECKPOINT;                \
                                                 \
     while (count--) {                           \
@@ -121,10 +127,11 @@ ptest_##name##_stack_rest(uint32 count)         \
 static void                                     \
 ptest_##name##_stack_push(uint32 count)         \
 {                                               \
-    struct STACK *stack;                        \
+    STACK *stack;                               \
                                                 \
     stack = STACK_create();                     \
                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_stack_push);  \
     PERFORMANCE_TEST_CHECKPOINT;                \
                                                 \
     while (count--) {                           \
@@ -141,10 +148,11 @@ ptest_##name##_stack_push(uint32 count)         \
 static void                                    \
 ptest_##name##_stack_pop(uint32 count)         \
 {                                              \
-    struct STACK *stack;                       \
+    STACK *stack;                              \
                                                \
     stack = STACK_create();                    \
                                                \
+    PERFORMANCE_TEST_BEGIN(name##_stack_pop);  \
     PERFORMANCE_TEST_CHECKPOINT;               \
                                                \
     while (count--) {                          \
@@ -158,14 +166,37 @@ ptest_##name##_stack_pop(uint32 count)         \
     PERFORMANCE_TEST_RESULT(name##_stack_pop); \
 }
 
+#define PT_STACK_top(name)                     \
+static void                                    \
+ptest_##name##_stack_top(uint32 count)         \
+{                                              \
+    STACK *stack;                              \
+                                               \
+    stack = STACK_create();                    \
+    STACK_push(stack, stack);                  \
+                                               \
+    PERFORMANCE_TEST_BEGIN(name##_stack_top);  \
+    PERFORMANCE_TEST_CHECKPOINT;               \
+                                               \
+    while (count--) {                          \
+        STACK_top(stack);                      \
+    }                                          \
+                                               \
+    PERFORMANCE_TEST_ENDPOINT;                 \
+                                               \
+    STACK_destroy(&stack);                     \
+    PERFORMANCE_TEST_RESULT(name##_stack_top); \
+}
+
 #define PT_STACK_empty_p(name)                     \
 static void                                        \
 ptest_##name##_stack_empty_p(uint32 count)         \
 {                                                  \
-    struct STACK *stack;                           \
+    STACK *stack;                                  \
                                                    \
     stack = STACK_create();                        \
                                                    \
+    PERFORMANCE_TEST_BEGIN(name##_stack_empty_p);  \
     PERFORMANCE_TEST_CHECKPOINT;                   \
                                                    \
     while (count--) {                              \
@@ -182,10 +213,11 @@ ptest_##name##_stack_empty_p(uint32 count)         \
 static void                                        \
 ptest_##name##_stack_cleanup(uint32 count)         \
 {                                                  \
-    struct STACK *stack;                           \
+    STACK *stack;                                  \
                                                    \
     stack = STACK_create();                        \
                                                    \
+    PERFORMANCE_TEST_BEGIN(name##_stack_cleanup);  \
     PERFORMANCE_TEST_CHECKPOINT;                   \
                                                    \
     while (count--) {                              \
@@ -203,7 +235,7 @@ ptest_##name##_stack_cleanup(uint32 count)         \
 static void                                           \
 ptest_##name##_stack_iterate(uint32 count)            \
 {                                                     \
-    struct STACK *stack;                              \
+    STACK *stack;                                     \
     sint32 reference;                                 \
                                                       \
     stack = STACK_create();                           \
@@ -214,6 +246,7 @@ ptest_##name##_stack_iterate(uint32 count)            \
     }                                                 \
                                                       \
     PERFORMANCE_TEST_CHECKPOINT;                      \
+    PERFORMANCE_TEST_BEGIN(name##_stack_iterate);     \
                                                       \
     while (count--) {                                 \
         STACK_iterate(stack, &stack_iterate_handler); \

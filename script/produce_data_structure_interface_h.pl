@@ -51,7 +51,7 @@ printf INTERFACE "\n";
 ####################
 ## Scan structure ##
 ####################
-my @structure = scan_header_file_structure($source);
+@structure = scan_header_file_structure($source);
 foreach (@structure) {
     printf INTERFACE "$_";
 }

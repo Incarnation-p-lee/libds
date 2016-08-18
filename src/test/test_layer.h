@@ -3,240 +3,211 @@
 
 static const struct test_layer_table single_linked_list_interface[] = {
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_single_linked_list_initial,
             &ptest_single_linked_list_initial,
         },
     },
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_single_linked_list_create,
             &ptest_single_linked_list_create,
         },
     },
     {
-        "previous",
-        NULL,
+        "previous", NULL,
         {
             &utest_single_linked_list_previous,
             &ptest_single_linked_list_previous,
         },
     },
     {
-        "insert_before",
-        NULL,
+        "insert_before", NULL,
         {
             &utest_single_linked_list_insert_before,
             &ptest_single_linked_list_insert_before,
         },
     },
     {
-        "insert_after",
-        NULL,
+        "insert_after", NULL,
         {
             &utest_single_linked_list_insert_after,
             &ptest_single_linked_list_insert_after,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_single_linked_list_destroy,
             &ptest_single_linked_list_destroy,
         },
     },
     {
-        "length",
-        NULL,
+        "length", NULL,
         {
             &utest_single_linked_list_length,
             &ptest_single_linked_list_length,
         },
     },
     {
-        "node_by_index",
-        NULL,
+        "node_by_index", NULL,
         {
             &utest_single_linked_list_node_by_index,
             &ptest_single_linked_list_node_by_index,
         },
     },
     {
-        "contains_p",
-        NULL,
+        "contains_p", NULL,
         {
             &utest_single_linked_list_contains_p,
             &ptest_single_linked_list_contains_p,
         },
     },
     {
-        "node_copy",
-        NULL,
+        "node_copy", NULL,
         {
             &utest_single_linked_list_node_copy,
             &ptest_single_linked_list_node_copy,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_single_linked_list_remove,
             &ptest_single_linked_list_remove,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_single_linked_list_iterate,
             &ptest_single_linked_list_iterate,
         },
     },
     {
-        "merge",
-        NULL,
+        "merge", NULL,
         {
             &utest_single_linked_list_merge,
             &ptest_single_linked_list_merge,
         },
     },
-    {NULL,                      NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table doubly_linked_list_interface[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_doubly_linked_list_create,
             &ptest_doubly_linked_list_create,
         },
     },
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_doubly_linked_list_initial,
             &ptest_doubly_linked_list_initial,
         },
     },
     {
-        "insert_before",
-        NULL,
+        "insert_before", NULL,
         {
             &utest_doubly_linked_list_insert_before,
             &ptest_doubly_linked_list_insert_before,
         },
     },
     {
-        "insert_after",
-        NULL,
+        "insert_after", NULL,
         {
             &utest_doubly_linked_list_insert_after,
             &ptest_doubly_linked_list_insert_after,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_doubly_linked_list_destroy,
             &ptest_doubly_linked_list_destroy,
         },
     },
     {
-        "length",
-        NULL,
+        "length", NULL,
         {
             &utest_doubly_linked_list_length,
             &ptest_doubly_linked_list_length,
         },
     },
     {
-        "node_by_index",
-        NULL,
+        "node_by_index", NULL,
         {
             &utest_doubly_linked_list_node_by_index,
             &ptest_doubly_linked_list_node_by_index,
         },
     },
     {
-        "contains_p",
-        NULL,
+        "contains_p", NULL,
         {
             &utest_doubly_linked_list_contains_p,
             &ptest_doubly_linked_list_contains_p,
         },
     },
     {
-        "node_copy",
-        NULL,
+        "node_copy", NULL,
         {
             &utest_doubly_linked_list_node_copy,
             &ptest_doubly_linked_list_node_copy,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_doubly_linked_list_remove,
             &ptest_doubly_linked_list_remove,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_doubly_linked_list_iterate,
             &ptest_doubly_linked_list_iterate,
         },
     },
     {
-        "merge",
-        NULL,
+        "merge", NULL,
         {
             &utest_doubly_linked_list_merge,
             &ptest_doubly_linked_list_merge,
         },
     },
-    {NULL,                      NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table skip_linked_list_interface[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_skip_linked_list_create,
             &ptest_skip_linked_list_create,
         },
     },
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_skip_linked_list_initial,
             &ptest_skip_linked_list_initial,
         },
     },
     {
-        "create_with_key",
-        NULL,
+        "create_with_key", NULL,
         {
             &utest_skip_linked_list_create_with_key,
             &ptest_skip_linked_list_create_with_key,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_skip_linked_list_destroy,
             &ptest_skip_linked_list_destroy,
@@ -299,1367 +270,1216 @@ static const struct test_layer_table skip_linked_list_interface[] = {
         },
     },
     {
-        "merge",
-        NULL,
+        "merge", NULL,
         {
             &utest_skip_linked_list_merge,
             &ptest_skip_linked_list_merge,
         },
     },
-    {NULL,                      NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table array_stack[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_array_stack_create,
             &ptest_array_stack_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_array_stack_destroy,
             &ptest_array_stack_destroy,
         },
     },
     {
-        "resize",
-        NULL,
+        "resize", NULL,
         {
             &utest_array_stack_resize,
             &ptest_array_stack_resize,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_array_stack_full_p,
             &ptest_array_stack_full_p,
         },
     },
     {
-        "capacity",
-        NULL,
+        "capacity", NULL,
         {
             &utest_array_stack_capacity,
             &ptest_array_stack_capacity,
         },
     },
     {
-        "rest",
-        NULL,
+        "rest", NULL,
         {
             &utest_array_stack_rest,
             &ptest_array_stack_rest,
         },
     },
     {
-        "push",
-        NULL,
+        "push", NULL,
         {
             &utest_array_stack_push,
             &ptest_array_stack_push,
         },
     },
     {
-        "pop",
-        NULL,
+        "pop", NULL,
         {
             &utest_array_stack_pop,
             &ptest_array_stack_pop,
         },
     },
     {
-        "top",
-        NULL,
+        "top", NULL,
         {
             &utest_array_stack_top,
-            NULL,
+            &ptest_array_stack_top,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &utest_array_stack_empty_p,
             &ptest_array_stack_empty_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_array_stack_cleanup,
             &ptest_array_stack_cleanup,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_array_stack_iterate,
             &ptest_array_stack_iterate,
         },
     },
-    {NULL,           NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table linked_stack[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_linked_stack_create,
             &ptest_linked_stack_create,
         },
     },
-    {   "destroy",
-        NULL,
+    {
+        "destroy", NULL,
         {
             &utest_linked_stack_destroy,
             &ptest_linked_stack_destroy,
         },
     },
     {
-        "resize",
-        NULL,
+        "resize", NULL,
         {
             &utest_linked_stack_resize,
             &ptest_linked_stack_resize,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_linked_stack_full_p,
             &ptest_linked_stack_full_p,
         },
     },
     {
-        "rest",
-        NULL,
+        "rest", NULL,
         {
             &utest_linked_stack_rest,
             &ptest_linked_stack_rest,
         },
     },
     {
-        "capacity",
-        NULL,
+        "capacity", NULL,
         {
             &utest_linked_stack_capacity,
             &ptest_linked_stack_capacity,
         },
     },
     {
-        "push",
-        NULL,
+        "push", NULL,
         {
             &utest_linked_stack_push,
             &ptest_linked_stack_push,
         },
     },
     {
-        "pop",
-        NULL,
+        "pop", NULL,
         {
             &utest_linked_stack_pop,
             &ptest_linked_stack_pop,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "top", NULL,
+        {
+            &utest_linked_stack_top,
+            &ptest_linked_stack_top,
+        },
+    },
+    {
+        "empty_p", NULL,
         {
             &utest_linked_stack_empty_p,
             &ptest_linked_stack_empty_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_linked_stack_cleanup,
             &ptest_linked_stack_cleanup,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_linked_stack_iterate,
             &ptest_linked_stack_iterate,
         },
     },
-    {NULL,           NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table array_queue[] = {
-    {   "create",
-        NULL,
+    {
+        "create", NULL,
         {
             &utest_array_queue_create,
             &performance_test_array_queue_create,
         },
     },
-    {   "destroy",
-        NULL,
+    {
+        "destroy", NULL,
         {
             &utest_array_queue_destroy,
             &performance_test_array_queue_destroy,
         },
     },
     {
-        "resize",
-        NULL,
+        "resize", NULL,
         {
             &utest_array_queue_resize,
             &performance_test_array_queue_space_expand,
         },
     },
     {
-        "capacity",
-        NULL,
+        "capacity", NULL,
         {
             &utest_array_queue_capacity,
             &performance_test_array_queue_capacity,
         },
     },
     {
-        "rest",
-        NULL,
+        "rest", NULL,
         {
             &utest_array_queue_rest,
             &performance_test_array_queue_space_rest,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_array_queue_full_p,
             &performance_test_array_queue_full_p,
         },
     },
     {
-        "enter",
-        NULL,
+        "enter", NULL,
         {
             &utest_array_queue_enter,
             &performance_test_array_queue_enter,
         },
     },
-    {   "leave",
-        NULL,
+    {
+        "leave", NULL,
         {
             &utest_array_queue_leave,
             &performance_test_array_queue_leave,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &utest_array_queue_empty_p,
             &performance_test_array_queue_empty_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_array_queue_cleanup,
             &performance_test_array_queue_cleanup,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_array_queue_iterate,
             &performance_test_array_queue_iterate,
         },
     },
-    {NULL,           NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table stacked_queue[] = {
     {
-        "struct_field",
-        NULL,
+        "struct_field", NULL,
         {
             &unit_test_stacked_queue_struct_field,
             &performance_test_stacked_queue_struct_field,
         },
     },
-    {   "create",
-        NULL,
+    {   "create", NULL,
         {
             &unit_test_stacked_queue_create,
             &performance_test_stacked_queue_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &unit_test_stacked_queue_destroy,
             &performance_test_stacked_queue_destroy,
         },
     },
     {
-        "resize",
-        NULL,
+        "resize", NULL,
         {
             &unit_test_stacked_queue_resize,
             &performance_test_stacked_queue_space_expand,
         },
     },
     {
-        "space_rest",
-        NULL,
+        "space_rest", NULL,
         {
             &unit_test_stacked_queue_space_rest,
             &performance_test_stacked_queue_space_rest,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &unit_test_stacked_queue_full_p,
             &performance_test_stacked_queue_full_p,
         },
     },
     {
-        "capacity",
-        NULL,
+        "capacity", NULL,
         {
             &unit_test_stacked_queue_capacity,
             &performance_test_stacked_queue_capacity,
         },
     },
     {
-        "enter",
-        NULL,
+        "enter", NULL,
         {
             &unit_test_stacked_queue_enter,
             &performance_test_stacked_queue_enter,
         },
     },
     {
-        "leave",
-        NULL,
+        "leave", NULL,
         {
             &unit_test_stacked_queue_leave,
             &performance_test_stacked_queue_leave,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &unit_test_stacked_queue_empty_p,
             &performance_test_stacked_queue_empty_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &unit_test_stacked_queue_cleanup,
             &performance_test_stacked_queue_cleanup,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &unit_test_stacked_queue_iterate,
             &performance_test_stacked_queue_iterate,
         },
     },
-    {NULL,           NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table doubly_end_queue[] = {
     {
-        "struct_field",
-        NULL,
+        "struct_field", NULL,
         {
             &unit_test_doubly_end_queue_struct_field,
             &performance_test_doubly_end_queue_struct_field,
         },
     },
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &unit_test_doubly_end_queue_create,
             &performance_test_doubly_end_queue_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &unit_test_doubly_end_queue_destroy,
             &performance_test_doubly_end_queue_destroy,
         },
     },
     {
-        "length",
-        NULL,
+        "length", NULL,
         {
             &unit_test_doubly_end_queue_length,
             &performance_test_doubly_end_queue_length,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &unit_test_doubly_end_queue_empty_p,
             &performance_test_doubly_end_queue_empty_p,
         },
     },
     {
-        "head_enter",
-        NULL,
+        "head_enter", NULL,
         {
             &unit_test_doubly_end_queue_head_enter,
             &performance_test_doubly_end_queue_head_enter,
         },
     },
     {
-        "head_leave",
-        NULL,
+        "head_leave", NULL,
         {
             &unit_test_doubly_end_queue_head_leave,
             &performance_test_doubly_end_queue_head_leave,
         },
     },
     {
-        "tail_enter",
-        NULL,
+        "tail_enter", NULL,
         {
             &unit_test_doubly_end_queue_tail_enter,
             &performance_test_doubly_end_queue_tail_enter,
         },
     },
     {
-        "tail_leave",
-        NULL,
+        "tail_leave", NULL,
         {
             &unit_test_doubly_end_queue_tail_leave,
             &performance_test_doubly_end_queue_tail_leave,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &unit_test_doubly_end_queue_cleanup,
             &performance_test_doubly_end_queue_cleanup,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &unit_test_doubly_end_queue_iterate,
             &performance_test_doubly_end_queue_iterate,
         },
     },
-    {NULL,           NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table binary_search_tree[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_binary_search_tree_create,
             &ptest_binary_search_tree_create,
         },
     },
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_binary_search_tree_initial,
             &ptest_binary_search_tree_initial,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_binary_search_tree_destroy,
             &ptest_binary_search_tree_destroy,
         },
     },
     {
-        "find",
-        NULL,
+        "find", NULL,
         {
             &utest_binary_search_tree_find,
             &ptest_binary_search_tree_find,
         },
     },
     {
-        "find_min",
-        NULL,
+        "find_min", NULL,
         {
             &utest_binary_search_tree_find_min,
             &ptest_binary_search_tree_find_min,
         },
     },
     {
-        "find_max",
-        NULL,
+        "find_max", NULL,
         {
             &utest_binary_search_tree_find_max,
             &ptest_binary_search_tree_find_max,
         },
     },
     {
-        "height",
-        NULL,
+        "height", NULL,
         {
             &utest_binary_search_tree_height,
             &ptest_binary_search_tree_height,
         },
     },
     {
-        "contains_p",
-        NULL,
+        "contains_p", NULL,
         {
             &utest_binary_search_tree_contains_p,
             &ptest_binary_search_tree_contains_p,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_binary_search_tree_insert,
             &ptest_binary_search_tree_insert,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_binary_search_tree_remove,
             &ptest_binary_search_tree_remove,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_binary_search_tree_iterate,
             &ptest_binary_search_tree_iterate,
         },},
-    {NULL,                      NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table avl_tree[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_avl_tree_create,
             &ptest_avl_tree_create,
         },
     },
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_avl_tree_initial,
             &ptest_avl_tree_initial,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_avl_tree_destroy,
             &ptest_avl_tree_destroy,
         },
     },
     {
-        "find",
-        NULL,
+        "find", NULL,
         {
             &utest_avl_tree_find,
             &ptest_avl_tree_find,
         },
     },
     {
-        "find_min",
-        NULL,
+        "find_min", NULL,
         {
             &utest_avl_tree_find_min,
             &ptest_avl_tree_find_min,
         },
     },
     {
-        "find_max",
-        NULL,
+        "find_max", NULL,
         {
             &utest_avl_tree_find_max,
             &ptest_avl_tree_find_max,
         },
     },
     {
-        "height",
-        NULL,
+        "height", NULL,
         {
             &utest_avl_tree_height,
             &ptest_avl_tree_height,
         },
     },
     {
-        "contains_p",
-        NULL,
+        "contains_p", NULL,
         {
             &utest_avl_tree_contains_p,
             &ptest_avl_tree_contains_p,
         },
     },
     {
-        "balanced_p",
-        NULL,
+        "balanced_p", NULL,
         {
             &utest_avl_tree_balanced_p,
             &ptest_avl_tree_balanced_p,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_avl_tree_insert,
             &ptest_avl_tree_insert,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_avl_tree_remove,
             &ptest_avl_tree_remove,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_avl_tree_iterate,
             &ptest_avl_tree_iterate,
         },
     },
-    {NULL,                      NULL, {NULL,},},
+    {NULL, NULL, {NULL, NULL, },},
 };
 
 static const struct test_layer_table splay_tree[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_splay_tree_create,
             &ptest_splay_tree_create,
         },
     },
     {
-        "initial",
-        NULL,
+        "initial", NULL,
         {
             &utest_splay_tree_initial,
             &ptest_splay_tree_initial,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_splay_tree_destroy,
             &ptest_splay_tree_destroy,
         },
     },
     {
-        "find",
-        NULL,
+        "find", NULL,
         {
             &utest_splay_tree_find,
             &ptest_splay_tree_find,
         },
     },
     {
-        "find_min",
-        NULL,
+        "find_min", NULL,
         {
             &utest_splay_tree_find_min,
             &ptest_splay_tree_find_min,
         },
     },
     {
-        "find_max",
-        NULL,
+        "find_max", NULL,
         {
             &utest_splay_tree_find_max,
             &ptest_splay_tree_find_max,
         },
     },
     {
-        "height",
-        NULL,
+        "height", NULL,
         {
             &utest_splay_tree_height,
             &ptest_splay_tree_height,
         },
     },
     {
-        "contains_p",
-        NULL,
+        "contains_p", NULL,
         {
             &utest_splay_tree_contains_p,
             &ptest_splay_tree_contains_p,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_splay_tree_insert,
             &ptest_splay_tree_insert,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_splay_tree_remove,
             &ptest_splay_tree_remove,
         },
     },
     {
-        "iterate",
-        NULL,
+        "iterate", NULL,
         {
             &utest_splay_tree_iterate,
             &ptest_splay_tree_iterate,
         },
     },
-    {NULL,                      NULL, {NULL,},},
+    {NULL, NULL, {NULL, NULL,},},
 };
 
 static const struct test_layer_table binary_indexed_tree[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_binary_indexed_tree_create,
             &ptest_binary_indexed_tree_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_binary_indexed_tree_destroy,
             &ptest_binary_indexed_tree_destroy,
         },
     },
     {
-        "add",
-        NULL,
+        "add", NULL,
         {
             &utest_binary_indexed_tree_add,
             &ptest_binary_indexed_tree_add,
         },
     },
     {
-        "sub",
-        NULL,
+        "sub", NULL,
         {
             &utest_binary_indexed_tree_sub,
             &ptest_binary_indexed_tree_sub,
         },
     },
     {
-        "sum",
-        NULL,
+        "sum", NULL,
         {
             &utest_binary_indexed_tree_sum,
             &ptest_binary_indexed_tree_sum,
         },
     },
     {
-        "range_sum",
-        NULL,
+        "range_sum", NULL,
         {
             &utest_binary_indexed_tree_range_sum,
             &ptest_binary_indexed_tree_range_sum,
         },
     },
-    {NULL,                      NULL, {NULL,},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table separate_chain_hash[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_separate_chain_hash_create,
             &ptest_separate_chain_hash_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_separate_chain_hash_destroy,
             &ptest_separate_chain_hash_destroy,
         },
     },
     {
-        "load_factor_calculate",
-        NULL,
+        "load_factor_calculate", NULL,
         {
             &utest_separate_chain_hash_load_factor_calculate,
             &ptest_separate_chain_hash_load_factor_calculate,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_separate_chain_hash_insert,
             &ptest_separate_chain_hash_insert,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_separate_chain_hash_remove,
             &ptest_separate_chain_hash_remove,
         },
     },
     {
-        "find",
-        NULL,
+        "find", NULL,
         {
             &utest_separate_chain_hash_find,
             &ptest_separate_chain_hash_find,
         },
     },
     {
-        "rehashing",
-        NULL,
+        "rehashing", NULL,
         {
             &utest_separate_chain_hash_rehashing,
             &ptest_separate_chain_hash_rehashing,
         },
     },
-    {NULL,                    NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table open_addressing_hash[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_open_addressing_hash_create,
             &ptest_open_addressing_hash_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_open_addressing_hash_destroy,
             &ptest_open_addressing_hash_destroy,
         },
     },
     {
-        "load_factor_calculate",
-        NULL,
+        "load_factor_calculate", NULL,
         {
             &utest_open_addressing_hash_load_factor_calculate,
             &ptest_open_addressing_hash_load_factor_calculate,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_open_addressing_hash_insert,
             &ptest_open_addressing_hash_insert,
-        },},
+        },
+    },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_open_addressing_hash_remove,
             &ptest_open_addressing_hash_remove,
         },
     },
     {
-        "find",
-        NULL,
+        "find", NULL,
         {
             &utest_open_addressing_hash_find,
             &ptest_open_addressing_hash_find,
         },
     },
     {
-        "rehashing",
-        NULL,
+        "rehashing", NULL,
         {
             &utest_open_addressing_hash_rehashing,
             &ptest_open_addressing_hash_rehashing,
         },
     },
-    {NULL,                    NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table minimal_heap[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_minimal_heap_create,
             &ptest_minimal_heap_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_minimal_heap_destroy,
             &ptest_minimal_heap_destroy,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &utest_minimal_heap_empty_p,
             &ptest_minimal_heap_empty_p,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_minimal_heap_full_p,
             &ptest_minimal_heap_full_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_minimal_heap_cleanup,
             &ptest_minimal_heap_cleanup,
         },
     },
     {
-        "get_min",
-        NULL,
+        "get_min", NULL,
         {
             &utest_minimal_heap_get_min,
             &ptest_minimal_heap_get_min,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_minimal_heap_insert,
             &ptest_minimal_heap_insert,
         },
     },
     {
-        "remove_min",
-        NULL,
+        "remove_min", NULL,
         {
             &utest_minimal_heap_remove_min,
             &ptest_minimal_heap_remove_min,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_minimal_heap_remove,
             &ptest_minimal_heap_remove,
         },
     },
     {
-        "decrease_nice",
-        NULL,
+        "decrease_nice", NULL,
         {
             &utest_minimal_heap_decrease_nice,
             &ptest_minimal_heap_decrease_nice,
         },
     },
     {
-        "increase_nice",
-        NULL,
+        "increase_nice", NULL,
         {
             &utest_minimal_heap_increase_nice,
             &ptest_minimal_heap_increase_nice,
         },
     },
     {
-        "build",
-        NULL,
+        "build", NULL,
         {
             &utest_minimal_heap_build,
             &ptest_minimal_heap_build,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table maximal_heap[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_maximal_heap_create,
             &ptest_maximal_heap_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_maximal_heap_destroy,
             &ptest_maximal_heap_destroy,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &utest_maximal_heap_empty_p,
             &ptest_maximal_heap_empty_p,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_maximal_heap_full_p,
             &ptest_maximal_heap_full_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_maximal_heap_cleanup,
             &ptest_maximal_heap_cleanup,
         },
     },
     {
-        "get_max",
-        NULL,
+        "get_max", NULL,
         {
             &utest_maximal_heap_get_max,
             &ptest_maximal_heap_get_max,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_maximal_heap_insert,
             &ptest_maximal_heap_insert,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_maximal_heap_remove,
             &ptest_maximal_heap_remove,
         },
     },
     {
-        "decrease_nice",
-        NULL,
+        "decrease_nice", NULL,
         {
             &utest_maximal_heap_decrease_nice,
             &ptest_maximal_heap_decrease_nice,
         },
     },
     {
-        "increase_nice",
-        NULL,
+        "increase_nice", NULL,
         {
             &utest_maximal_heap_increase_nice,
             &ptest_maximal_heap_increase_nice,
         },
     },
     {
-        "build",
-        NULL,
+        "build", NULL,
         {
             &utest_maximal_heap_build,
             &ptest_maximal_heap_build,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table min_max_heap[] = {
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &utest_min_max_heap_create,
             &ptest_min_max_heap_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &utest_min_max_heap_destroy,
             &ptest_min_max_heap_destroy,
         },
     },
     {
-        "empty_p",
-        NULL,
+        "empty_p", NULL,
         {
             &utest_min_max_heap_empty_p,
             &ptest_min_max_heap_empty_p,
         },
     },
     {
-        "full_p",
-        NULL,
+        "full_p", NULL,
         {
             &utest_min_max_heap_full_p,
             &ptest_min_max_heap_full_p,
         },
     },
     {
-        "cleanup",
-        NULL,
+        "cleanup", NULL,
         {
             &utest_min_max_heap_cleanup,
             &ptest_min_max_heap_cleanup,
         },
     },
     {
-        "get_min",
-        NULL,
+        "get_min", NULL,
         {
             &utest_min_max_heap_get_min,
             &ptest_min_max_heap_get_min,
         },
     },
     {
-        "get_max",
-        NULL,
+        "get_max", NULL,
         {
             &utest_min_max_heap_get_max,
             &ptest_min_max_heap_get_max,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &utest_min_max_heap_insert,
             &ptest_min_max_heap_insert,
         },
     },
     {
-        "depth",
-        NULL,
+        "depth", NULL,
         {
             &utest_min_max_heap_depth,
             &ptest_min_max_heap_depth,
         },
     },
     {
-        "remove_min",
-        NULL,
+        "remove_min", NULL,
         {
             &utest_min_max_heap_remove_min,
             &ptest_min_max_heap_remove_min,
         },
     },
     {
-        "remove_max",
-        NULL,
+        "remove_max", NULL,
         {
             &utest_min_max_heap_remove_max,
             &ptest_min_max_heap_remove_max,
         },
     },
     {
-        "remove",
-        NULL,
+        "remove", NULL,
         {
             &utest_min_max_heap_remove,
             &ptest_min_max_heap_remove,
         },
     },
     {
-        "decrease_nice",
-        NULL,
+        "decrease_nice", NULL,
         {
             &utest_min_max_heap_decrease_nice,
             &ptest_min_max_heap_decrease_nice,
         },
     },
     {
-        "increase_nice",
-        NULL,
+        "increase_nice", NULL,
         {
             &utest_min_max_heap_increase_nice,
             &ptest_min_max_heap_increase_nice,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table leftist_heap[] = {
     {
-        "struct_field",
-        NULL,
+        "struct_field", NULL,
         {
             &unit_test_leftist_heap_struct_field,
             &performance_test_leftist_heap_struct_field,
         },
     },
     {
-        "create",
-        NULL,
+        "create", NULL,
         {
             &unit_test_leftist_heap_create,
             &performance_test_leftist_heap_create,
         },
     },
     {
-        "node_create",
-        NULL,
+        "node_create", NULL,
         {
             &unit_test_leftist_heap_node_create,
             &performance_test_leftist_heap_node_create,
         },
     },
     {
-        "destroy",
-        NULL,
+        "destroy", NULL,
         {
             &unit_test_leftist_heap_destroy,
             &performance_test_leftist_heap_destroy,
         },
     },
     {
-        "get_min",
-        NULL,
+        "get_min", NULL,
         {
             &unit_test_leftist_heap_get_min,
             &performance_test_leftist_heap_get_min,
         },
     },
     {
-        "insert",
-        NULL,
+        "insert", NULL,
         {
             &unit_test_leftist_heap_insert,
             &performance_test_leftist_heap_insert,
         },
     },
     {
-        "merge",
-        NULL,
+        "merge", NULL,
         {
             &unit_test_leftist_heap_merge,
             &performance_test_leftist_heap_merge,
         },
     },
     {
-        "remove_min",
-        NULL,
+        "remove_min", NULL,
         {
             &unit_test_leftist_heap_remove_min,
             &performance_test_leftist_heap_remove_min,
         },
     },
     {
-        "remove_min_and_destroy",
-        NULL,
+        "remove_min_and_destroy", NULL,
         {
             &unit_test_leftist_heap_remove_min_and_destroy,
             &performance_test_leftist_heap_remove_min_and_destroy,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 static const struct test_layer_table sort_collection[] = {
     {
-        "insertion",
-        NULL,
+        "insertion", NULL,
         {
             &utest_insertion_sort,
             &ptest_insertion_sort,
         },
     },
     {
-        "shell",
-        NULL,
+        "shell", NULL,
         {
             &utest_shell_sort,
             &ptest_shell_sort,
         },
     },
     {
-        "heap",
-        NULL,
+        "heap", NULL,
         {
             &utest_heap_sort,
             &ptest_heap_sort,
         },
     },
     {
-        "merge",
-        NULL,
+        "merge", NULL,
         {
             &utest_merge_sort,
             &ptest_merge_sort,
         },
     },
     {
-        "quick",
-        NULL,
+        "quick", NULL,
         {
             &utest_quick_sort,
             &ptest_quick_sort,
         },
     },
-    {NULL,                          NULL, {NULL, NULL},},
+    {NULL, NULL, {NULL, NULL},},
 };
 
 /*-----------------------------------------------------------------*/

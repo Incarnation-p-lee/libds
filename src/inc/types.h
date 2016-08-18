@@ -12,9 +12,6 @@ typedef signed char            sint8;
 typedef unsigned char          uint8;
 typedef unsigned int           bool;
 
-#define true                   1
-#define false                  0
-
 #if defined X86_32
     typedef signed short       sint16;
     typedef unsigned short     uint16;
@@ -22,10 +19,8 @@ typedef unsigned int           bool;
     typedef unsigned int       uint32;
     typedef signed long long   sint64;
     typedef unsigned long long uint64;
-    typedef unsigned long      ulint32;
     typedef unsigned int       ptr_t;
     #define M32
-    #define NUMERAL            ulint32
 #endif
 
 #if defined X86_64
@@ -37,7 +32,6 @@ typedef unsigned int           bool;
     typedef unsigned long      uint64;
     typedef unsigned long      ptr_t;
     #define M64
-    #define NUMERAL            uint64
 #endif
 
 

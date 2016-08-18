@@ -29,7 +29,6 @@ struct array_queue * array_queue_create(void);
 struct doubly_end_queue * doubly_end_queue_create(void);
 struct stacked_queue * stacked_queue_create(void);
 uint32 array_queue_capacity(struct array_queue *queue);
-uint32 array_queue_dim(struct array_queue *queue);
 uint32 array_queue_rest(struct array_queue *queue);
 uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
 uint32 stacked_queue_capacity(struct stacked_queue *queue);

@@ -1,4 +1,4 @@
-#define LINKED_LIST                    skip_linked_list
+#define LINKED_LIST                    s_skip_linked_list_t
 #define LINKED_LIST_next               skip_linked_list_next
 #define LINKED_LIST_next_set           skip_linked_list_next_set
 #define LINKED_LIST_previous           skip_linked_list_previous
@@ -39,7 +39,7 @@ PT_LINKED_LIST_merge(skip)
 static void
 ptest_skip_linked_list_create_with_key(uint32 count)
 {
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *list;
 
     PERFORMANCE_TEST_BEGIN(skip_linked_list_create_with_key);
     PERFORMANCE_TEST_CHECKPOINT;
@@ -57,9 +57,9 @@ ptest_skip_linked_list_create_with_key(uint32 count)
 static void
 ptest_skip_linked_list_find_key(uint32 count)
 {
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
     sint32 key;
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *tmp;
 
     key = 0xfade;
     list = test_skip_linked_list_sample(0xf45, 0x734);
@@ -82,9 +82,9 @@ ptest_skip_linked_list_find_key(uint32 count)
 static void
 ptest_skip_linked_list_contains_p(uint32 count)
 {
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
     sint32 key;
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *tmp;
 
     key = 0xfade;
     list = test_skip_linked_list_sample(0xf45, 0x734);
@@ -107,9 +107,9 @@ ptest_skip_linked_list_contains_p(uint32 count)
 static void
 ptest_skip_linked_list_insert(uint32 count)
 {
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
     sint32 key;
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *tmp;
 
     key = 0xfade;
     list = test_skip_linked_list_sample(0x1, 0x1);
@@ -133,8 +133,8 @@ ptest_skip_linked_list_insert(uint32 count)
 static void
 ptest_skip_linked_list_remove(uint32 count)
 {
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *tmp;
 
     list = test_skip_linked_list_sample(0x9e12, 0x1845);
 

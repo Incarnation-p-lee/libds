@@ -34,11 +34,11 @@ struct memory_maps {
     uint32      authority;
     union {
         void    *begin;
-        NUMERAL b_val;
+        ptr_t   b_val;
     };
     union {
         void    *end;
-        NUMERAL e_val;
+        ptr_t   e_val;
     };
 };
 

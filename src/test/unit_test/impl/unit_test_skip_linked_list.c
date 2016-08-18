@@ -1,4 +1,4 @@
-#define LINKED_LIST                    skip_linked_list
+#define LINKED_LIST                    s_skip_linked_list_t
 #define LINKED_LIST_next               skip_linked_list_next
 #define LINKED_LIST_next_set           skip_linked_list_next_set
 #define LINKED_LIST_previous(l)
@@ -44,7 +44,7 @@ utest_skip_linked_list_create_with_key(void)
 {
     bool pass;
     sint32 key;
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *list;
 
     pass = true;
     key = 0x431e2;
@@ -62,8 +62,8 @@ utest_skip_linked_list_contains_p(void)
 {
     bool pass;
     sint32 key;
-    struct skip_linked_list *tmp;
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *tmp;
+    s_skip_linked_list_t *list;
 
     pass = true;
     list = NULL;
@@ -96,8 +96,8 @@ utest_skip_linked_list_find_key(void)
 {
     bool pass;
     sint32 key;
-    struct skip_linked_list *tmp;
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *tmp;
+    s_skip_linked_list_t *list;
 
     pass = true;
     list = NULL;
@@ -123,8 +123,8 @@ utest_skip_linked_list_insert(void)
 {
     bool pass;
     sint32 key;
-    struct skip_linked_list *tmp;
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *tmp;
+    s_skip_linked_list_t *list;
 
     pass = true;
     list = NULL;
@@ -160,8 +160,8 @@ utest_skip_linked_list_remove(void)
 {
     bool pass;
     uint32 count;
-    struct skip_linked_list *tmp;
-    struct skip_linked_list *list;
+    s_skip_linked_list_t *tmp;
+    s_skip_linked_list_t *list;
 
     tmp = NULL;
     pass = true;
@@ -195,11 +195,11 @@ utest_skip_linked_list_remove(void)
 static void
 utest_skip_linked_list_merge(void)
 {
-    struct skip_linked_list *lm;
-    struct skip_linked_list *ln;
-    struct skip_linked_list *iter;
-    struct skip_linked_list *tmp;
     bool pass;
+    s_skip_linked_list_t *lm;
+    s_skip_linked_list_t *ln;
+    s_skip_linked_list_t *iter;
+    s_skip_linked_list_t *tmp;
 
     pass = true;
     lm = NULL;
