@@ -10,4 +10,5 @@
 #include "impl/prime.c"
 #include "impl/random.c"
 #include "impl/complain.c"
+#include "impl/log.c"
 

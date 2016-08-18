@@ -29,6 +29,15 @@ foreach (@typedef) {
 }
 printf INTERFACE "\n";
 
+#############################
+# enum/structure in types.h #
+#############################
+my @structure = scan_header_file_structure($source);
+foreach (@structure) {
+    printf INTERFACE "$_";
+}
+printf INTERFACE "\n";
+
 #####################
 ## Scan definition ##
 #####################
@@ -51,7 +60,8 @@ printf INTERFACE "\n";
 ###############################
 ## Scan function declaration ##
 ###############################
-my @delaration = ("$srcdir/linked_list/linked_list_declaration.h",
+my @delaration = ("$srcdir/common/common_declaration.h",
+                  "$srcdir/linked_list/linked_list_declaration.h",
                   "$srcdir/queue/queue_declaration.h",
                   "$srcdir/stack/stack_declaration.h",
                   "$srcdir/tree/tree_declaration.h",

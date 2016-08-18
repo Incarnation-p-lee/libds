@@ -8,7 +8,6 @@ extern void test_execution_start(void);
 extern void memory_cache_cleanup(void);
 extern void libds_log_file_create(void);
 extern void libds_log_file_close(void);
-extern void memory_trace_print(void);
 
 int
 main(int argc, char **argv)
@@ -20,7 +19,6 @@ main(int argc, char **argv)
     test_execution_start();
 
     memory_cache_cleanup();
-    memory_trace_print();
     libds_log_file_close();
 
     return 0;

@@ -28,6 +28,14 @@ typedef unsigned int           bool;
     typedef unsigned long      ptr_t;
 #endif
 
+enum log_level {
+    INFO,
+    WARN,
+    DBUG,
+    ERRR,
+};
+
+
 #define SIZE_INVALID           0xffffffffu
 #define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
@@ -228,6 +236,25 @@ struct leftist_heap {
     struct leftist_heap *right;
 };
 
+
+extern bool complain_no_memory_p(void *ptr);
+extern bool complain_null_pointer_p(void *ptr);
+extern bool complain_zero_size_p(uint32 size);
+extern sint64 random_sint64(void);
+extern uint32 prime_numeral_next(uint32 prime);
+extern uint32 random_uint32_with_limit(uint32 lmt);
+extern void * malloc_wrap(uint32 size);
+extern void * memory_cache_allocate(uint32 size);
+extern void * memory_cache_re_allocate(void *addr, uint32 size);
+extern void * realloc_wrap(void *ptr, uint32 size);
+extern void complain_assert_caution(char *msg, const char *fname, const char *func, uint32 line);
+extern void complain_assert_exit(char *msg, const char *fname, const char *func, uint32 line);
+extern void free_wrap(void *ptr);
+extern void libds_log_file_close(void);
+extern void libds_log_file_create(void);
+extern void libds_log_print(enum log_level lvl, const char *msg);
+extern void memory_cache_cleanup(void);
+extern void memory_cache_free(void *addr);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);

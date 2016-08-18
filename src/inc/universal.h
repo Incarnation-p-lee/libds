@@ -9,10 +9,16 @@ extern bool complain_zero_size_p(uint32 size);
 extern sint64 random_sint64(void);
 extern uint32 prime_numeral_next(uint32 prime);
 extern uint32 random_uint32_with_limit(uint32 lmt);
+extern void * malloc_wrap(uint32 size);
 extern void * memory_cache_allocate(uint32 size);
 extern void * memory_cache_re_allocate(void *addr, uint32 size);
+extern void * realloc_wrap(void *ptr, uint32 size);
 extern void complain_assert_caution(char *msg, const char *fname, const char *func, uint32 line);
 extern void complain_assert_exit(char *msg, const char *fname, const char *func, uint32 line);
+extern void free_wrap(void *ptr);
+extern void libds_log_file_close(void);
+extern void libds_log_file_create(void);
+extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
 
