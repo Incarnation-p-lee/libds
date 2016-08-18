@@ -44,18 +44,6 @@ static void unit_test_leftist_heap_node_create(void);
 static void unit_test_leftist_heap_remove_min(void);
 static void unit_test_leftist_heap_remove_min_and_destroy(void);
 static void unit_test_leftist_heap_struct_field(void);
-static void unit_test_stacked_queue_capacity(void);
-static void unit_test_stacked_queue_cleanup(void);
-static void unit_test_stacked_queue_create(void);
-static void unit_test_stacked_queue_destroy(void);
-static void unit_test_stacked_queue_empty_p(void);
-static void unit_test_stacked_queue_enter(void);
-static void unit_test_stacked_queue_full_p(void);
-static void unit_test_stacked_queue_iterate(void);
-static void unit_test_stacked_queue_leave(void);
-static void unit_test_stacked_queue_resize(void);
-static void unit_test_stacked_queue_space_rest(void);
-static void unit_test_stacked_queue_struct_field(void);
 static void utest_avl_tree_balanced_p(void);
 static void utest_skip_linked_list_contains_p(void);
 static void utest_skip_linked_list_create_with_key(void);
@@ -68,6 +56,11 @@ static void utest_splay_tree_find(void);
 static void utest_splay_tree_find_max(void);
 static void utest_splay_tree_find_min(void);
 static void utest_splay_tree_remove(void);
+static void utest_stacked_queue_cleanup(void);
+static void utest_stacked_queue_create(void);
+static void utest_stacked_queue_iterate(void);
+static void utest_stacked_queue_leave(void);
+static void utest_stacked_queue_rest(void);
 
 #endif
 

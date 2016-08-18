@@ -16,6 +16,8 @@ extern uint32 array_stack_capacity(struct array_stack *stack);
 extern uint32 array_stack_rest(struct array_stack *stack);
 extern struct array_stack * array_stack_create(void);
 extern struct doubly_linked_list * doubly_linked_list_remove(struct doubly_linked_list **node);
+extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
+extern void * array_stack_top(s_array_stack_t *stack);
 
 #endif
 

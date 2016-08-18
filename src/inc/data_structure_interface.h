@@ -73,6 +73,7 @@ typedef struct linked_stack_space   s_linked_stack_space_t;
 typedef struct linked_stack         s_linked_stack_t;
 typedef struct array_queue_space    s_array_queue_space_t;
 typedef struct array_queue          s_array_queue_t;
+typedef struct stacked_queue        s_stacked_queue_t;
 
 enum ITER_ORDER {
     ORDER_START,
@@ -133,7 +134,6 @@ struct array_queue {
 };
 
 struct stacked_queue {
-    uint32             sid;
     uint32             dim;
     struct array_stack *enter; /* enter stack */
     struct array_stack *leave; /* leave stack */
@@ -289,38 +289,39 @@ extern bool array_queue_empty_p(s_array_queue_t *queue);
 extern bool array_queue_full_p(s_array_queue_t *queue);
 extern bool array_queue_structure_legal_p(s_array_queue_t *queue);
 extern bool doubly_end_queue_empty_p(struct doubly_end_queue *queue);
-extern bool stacked_queue_empty_p(struct stacked_queue *queue);
-extern bool stacked_queue_full_p(struct stacked_queue *queue);
-extern struct array_queue * array_queue_create(void);
+extern bool stacked_queue_empty_p(s_stacked_queue_t *queue);
+extern bool stacked_queue_full_p(s_stacked_queue_t *queue);
+extern s_array_queue_t * array_queue_create(void);
+extern s_stacked_queue_t * stacked_queue_create(void);
 extern struct doubly_end_queue * doubly_end_queue_create(void);
-extern struct stacked_queue * stacked_queue_create(void);
-extern uint32 array_queue_capacity(struct array_queue *queue);
+extern uint32 array_queue_capacity(s_array_queue_t *queue);
 extern uint32 array_queue_rest(s_array_queue_t *queue);
 extern uint32 doubly_end_queue_length(struct doubly_end_queue *queue);
-extern uint32 stacked_queue_capacity(struct stacked_queue *queue);
-extern uint32 stacked_queue_dim(struct stacked_queue *queue);
-extern uint32 stacked_queue_space_rest(struct stacked_queue *queue);
+extern uint32 stacked_queue_capacity(s_stacked_queue_t *queue);
+extern uint32 stacked_queue_rest(s_stacked_queue_t *queue);
 extern void * array_queue_front(s_array_queue_t *queue);
 extern void * array_queue_leave(s_array_queue_t *queue);
 extern void * array_queue_rear(s_array_queue_t *queue);
 extern void * doubly_end_queue_head_leave(struct doubly_end_queue *queue);
 extern void * doubly_end_queue_tail_leave(struct doubly_end_queue *queue);
-extern void * stacked_queue_leave(struct stacked_queue *queue);
+extern void * stacked_queue_front(s_stacked_queue_t *queue);
+extern void * stacked_queue_leave(s_stacked_queue_t *queue);
+extern void * stacked_queue_rear(s_stacked_queue_t *queue);
 extern void array_queue_cleanup(s_array_queue_t *queue);
-extern void array_queue_destroy(struct array_queue **queue);
+extern void array_queue_destroy(s_array_queue_t **queue);
 extern void array_queue_enter(s_array_queue_t *queue, void *member);
 extern void array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *));
-extern void array_queue_resize(struct array_queue *queue, uint32 size);
+extern void array_queue_resize(s_array_queue_t *queue, uint32 size);
 extern void doubly_end_queue_cleanup(struct doubly_end_queue *queue);
 extern void doubly_end_queue_destroy(struct doubly_end_queue **queue);
 extern void doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member);
 extern void doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *));
 extern void doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member);
-extern void stacked_queue_cleanup(struct stacked_queue *queue);
-extern void stacked_queue_destroy(struct stacked_queue **queue);
-extern void stacked_queue_enter(struct stacked_queue *queue, void *member);
-extern void stacked_queue_iterate(struct stacked_queue *queue, void (*handler)(void *));
-extern void stacked_queue_resize(struct stacked_queue *queue, uint32 dim);
+extern void stacked_queue_cleanup(s_stacked_queue_t *queue);
+extern void stacked_queue_destroy(s_stacked_queue_t **queue);
+extern void stacked_queue_enter(s_stacked_queue_t *queue, void *member);
+extern void stacked_queue_iterate(s_stacked_queue_t *queue, void (*handler)(void *));
+extern void stacked_queue_resize(s_stacked_queue_t *queue, uint32 dim);
 
 extern bool array_stack_empty_p(s_array_stack_t *stack);
 extern bool array_stack_full_p(s_array_stack_t *stack);

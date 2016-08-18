@@ -52,6 +52,7 @@ utest_##name##_queue_resize(void)                            \
                                                              \
     pass = true;                                             \
     queue = NULL;                                            \
+    UNIT_TEST_BEGIN(name##_queue_resize);                    \
                                                              \
     QUEUE_resize(queue, 0);                                  \
     queue = QUEUE_create();                                  \
@@ -104,6 +105,7 @@ utest_##name##_queue_capacity(void)                                           \
                                                                               \
     pass = true;                                                              \
     queue = NULL;                                                             \
+    UNIT_TEST_BEGIN(name##_queue_capacity);                                   \
                                                                               \
     RESULT_CHECK_uint32(QUEUE_CPCT_INVALID, QUEUE_capacity(queue), &pass);    \
                                                                               \
@@ -123,6 +125,7 @@ utest_##name##_queue_rest(void)                                               \
                                                                               \
     pass = true;                                                              \
     queue = NULL;                                                             \
+    UNIT_TEST_BEGIN(name##_queue_rest);                                       \
                                                                               \
     RESULT_CHECK_uint32(QUEUE_REST_INVALID, QUEUE_rest(queue), &pass);        \
                                                                               \
@@ -145,6 +148,7 @@ utest_##name##_queue_full_p(void)                         \
                                                           \
     pass = true;                                          \
     queue = NULL;                                         \
+    UNIT_TEST_BEGIN(name##_queue_full_p);                 \
                                                           \
     RESULT_CHECK_bool(true, QUEUE_full_p(queue), &pass);  \
                                                           \
@@ -169,6 +173,7 @@ utest_##name##_queue_empty_p(void)                         \
                                                            \
     pass = true;                                           \
     queue = NULL;                                          \
+    UNIT_TEST_BEGIN(name##_queue_empty_p);                 \
                                                            \
     RESULT_CHECK_bool(false, QUEUE_empty_p(queue), &pass); \
                                                            \
@@ -194,6 +199,7 @@ utest_##name##_queue_enter(void)                             \
                                                              \
     pass = true;                                             \
     queue = NULL;                                            \
+    UNIT_TEST_BEGIN(name##_queue_enter);                     \
                                                              \
     QUEUE_enter(queue, NULL);                                \
     queue = QUEUE_create();                                  \
@@ -224,6 +230,7 @@ utest_##name##_queue_front(void)                                  \
                                                                   \
     pass = true;                                                  \
     queue = NULL;                                                 \
+    UNIT_TEST_BEGIN(name##_queue_front);                          \
                                                                   \
     RESULT_CHECK_pointer(PTR_INVALID, QUEUE_front(queue), &pass); \
     queue = QUEUE_create();                                       \
@@ -255,6 +262,7 @@ utest_##name##_queue_rear(void)                                  \
                                                                  \
     pass = true;                                                 \
     queue = NULL;                                                \
+    UNIT_TEST_BEGIN(name##_queue_rear);                          \
                                                                  \
     RESULT_CHECK_pointer(PTR_INVALID, QUEUE_rear(queue), &pass); \
     queue = QUEUE_create();                                      \
@@ -280,6 +288,7 @@ utest_##name##_queue_leave(void)                                  \
                                                                   \
     pass = true;                                                  \
     queue = NULL;                                                 \
+    UNIT_TEST_BEGIN(name##_queue_leave);                          \
     RESULT_CHECK_pointer(PTR_INVALID, QUEUE_leave(queue), &pass); \
                                                                   \
     QUEUE_leave(queue);                                           \
@@ -307,6 +316,7 @@ utest_##name##_queue_cleanup(void)                                        \
                                                                           \
     pass = true;                                                          \
     queue = NULL;                                                         \
+    UNIT_TEST_BEGIN(name##_queue_cleanup);                                \
                                                                           \
     QUEUE_cleanup(queue);                                                 \
     queue = QUEUE_create();                                               \
@@ -330,10 +340,12 @@ utest_##name##_queue_iterate(void)                \
     uint32 capacity;                              \
     uint32 tmp;                                   \
                                                   \
+    tmp = 0;                                      \
+    pass = true;                                  \
+    UNIT_TEST_BEGIN(name##_queue_iterate);        \
+                                                  \
     queue = QUEUE_create();                       \
     capacity = QUEUE_capacity(queue);             \
-    pass = true;                                  \
-    tmp = 0;                                      \
                                                   \
     QUEUE_iterate(NULL, queue_iterate_handler);   \
                                                   \

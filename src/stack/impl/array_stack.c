@@ -40,7 +40,6 @@ array_stack_structure_legal_p(s_array_stack_t *stack)
     return array_stack_structure_legal_ip(stack);
 }
 
-
 static inline bool
 array_stack_structure_legal_ip(s_array_stack_t *stack)
 {

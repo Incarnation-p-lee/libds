@@ -552,85 +552,93 @@ static const struct test_layer_table array_queue[] = {
 
 static const struct test_layer_table stacked_queue[] = {
     {
-        "struct_field", NULL,
+        "create", NULL,
         {
-            &unit_test_stacked_queue_struct_field,
-            &performance_test_stacked_queue_struct_field,
-        },
-    },
-    {   "create", NULL,
-        {
-            &unit_test_stacked_queue_create,
+            &utest_stacked_queue_create,
             &performance_test_stacked_queue_create,
         },
     },
     {
         "destroy", NULL,
         {
-            &unit_test_stacked_queue_destroy,
+            &utest_stacked_queue_destroy,
             &performance_test_stacked_queue_destroy,
         },
     },
     {
         "resize", NULL,
         {
-            &unit_test_stacked_queue_resize,
+            &utest_stacked_queue_resize,
             &performance_test_stacked_queue_space_expand,
         },
     },
     {
-        "space_rest", NULL,
+        "rest", NULL,
         {
-            &unit_test_stacked_queue_space_rest,
-            &performance_test_stacked_queue_space_rest,
+            &utest_stacked_queue_rest,
+            &performance_test_stacked_queue_rest,
         },
     },
     {
         "full_p", NULL,
         {
-            &unit_test_stacked_queue_full_p,
+            &utest_stacked_queue_full_p,
             &performance_test_stacked_queue_full_p,
         },
     },
     {
         "capacity", NULL,
         {
-            &unit_test_stacked_queue_capacity,
+            &utest_stacked_queue_capacity,
             &performance_test_stacked_queue_capacity,
         },
     },
     {
         "enter", NULL,
         {
-            &unit_test_stacked_queue_enter,
+            &utest_stacked_queue_enter,
             &performance_test_stacked_queue_enter,
         },
     },
     {
         "leave", NULL,
         {
-            &unit_test_stacked_queue_leave,
+            &utest_stacked_queue_leave,
+            &performance_test_stacked_queue_leave,
+        },
+    },
+    {
+        "front", NULL,
+        {
+            &utest_stacked_queue_front,
+            &performance_test_stacked_queue_enter,
+        },
+    },
+    {
+        "rear", NULL,
+        {
+            &utest_stacked_queue_rear,
             &performance_test_stacked_queue_leave,
         },
     },
     {
         "empty_p", NULL,
         {
-            &unit_test_stacked_queue_empty_p,
+            &utest_stacked_queue_empty_p,
             &performance_test_stacked_queue_empty_p,
         },
     },
     {
         "cleanup", NULL,
         {
-            &unit_test_stacked_queue_cleanup,
+            &utest_stacked_queue_cleanup,
             &performance_test_stacked_queue_cleanup,
         },
     },
     {
         "iterate", NULL,
         {
-            &unit_test_stacked_queue_iterate,
+            &utest_stacked_queue_iterate,
             &performance_test_stacked_queue_iterate,
         },
     },

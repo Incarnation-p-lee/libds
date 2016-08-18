@@ -58,6 +58,7 @@ typedef struct linked_stack_space   s_linked_stack_space_t;
 typedef struct linked_stack         s_linked_stack_t;
 typedef struct array_queue_space    s_array_queue_space_t;
 typedef struct array_queue          s_array_queue_t;
+typedef struct stacked_queue        s_stacked_queue_t;
 
 /*
  *   Implement the unify single_linked_list interface
@@ -157,7 +158,6 @@ struct array_queue {
  * stacked queue
  */
 struct stacked_queue {
-    uint32             sid;
     uint32             dim;
     struct array_stack *enter; /* enter stack */
     struct array_stack *leave; /* leave stack */

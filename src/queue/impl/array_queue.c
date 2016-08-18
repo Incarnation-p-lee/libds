@@ -1,18 +1,18 @@
 uint32
-array_queue_capacity(struct array_queue *queue)
+array_queue_capacity(s_array_queue_t *queue)
 {
     if (!array_queue_structure_legal_ip(queue)) {
-        return QUEUE_SIZE_INVALID;
+        return QUEUE_CPCT_INVALID;
     } else {
         return queue->space.dim;
     }
 }
 
-struct array_queue *
+s_array_queue_t *
 array_queue_create(void)
 {
     uint32 size;
-    struct array_queue *queue;
+    s_array_queue_t *queue;
 
     size = QUEUE_SIZE_DFT;
     queue = memory_cache_allocate(sizeof(*queue));
@@ -27,7 +27,7 @@ array_queue_create(void)
 }
 
 void
-array_queue_destroy(struct array_queue **queue)
+array_queue_destroy(s_array_queue_t **queue)
 {
     if (!complain_null_pointer_p(queue) && array_queue_structure_legal_ip(*queue)) {
         memory_cache_free((*queue)->space.base);
@@ -186,7 +186,7 @@ array_queue_resize_i(s_array_queue_t *queue, uint32 size)
 }
 
 void
-array_queue_resize(struct array_queue *queue, uint32 size)
+array_queue_resize(s_array_queue_t *queue, uint32 size)
 {
     if (!array_queue_structure_legal_ip(queue)) {
         return;

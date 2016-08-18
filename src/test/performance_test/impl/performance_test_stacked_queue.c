@@ -1,23 +1,4 @@
 static void
-performance_test_stacked_queue_struct_field(uint32 count)
-{
-    struct stacked_queue *queue;
-
-    queue = stacked_queue_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        // stacked_queue_sid_set(queue, 0x32);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    stacked_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(stacked_queue_struct_field);
-}
-
-static void
 performance_test_stacked_queue_create(uint32 count)
 {
     struct stacked_queue *queue;
@@ -71,7 +52,7 @@ performance_test_stacked_queue_space_expand(uint32 count)
 }
 
 static void
-performance_test_stacked_queue_space_rest(uint32 count)
+performance_test_stacked_queue_rest(uint32 count)
 {
     struct stacked_queue *queue;
 
@@ -80,13 +61,13 @@ performance_test_stacked_queue_space_rest(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        stacked_queue_space_rest(queue);
+        stacked_queue_rest(queue);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     stacked_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(stacked_queue_space_rest);
+    PERFORMANCE_TEST_RESULT(stacked_queue_rest);
 }
 
 static void
