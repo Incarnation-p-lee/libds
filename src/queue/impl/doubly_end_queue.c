@@ -1,25 +1,43 @@
-struct doubly_end_queue *
+s_doubly_end_queue_t *
 doubly_end_queue_create(void)
 {
-    struct doubly_end_queue *queue;
+    s_doubly_end_queue_t *queue;
 
     queue = memory_cache_allocate(sizeof(*queue));
-
-    if (!complain_no_memory_p(queue)) {
-        queue->sid = 0x0u;
-        queue->head = NULL;
-        queue->tail = NULL;
-    }
 
     return queue;
 }
 
-void
-doubly_end_queue_destroy(struct doubly_end_queue **queue)
+bool
+doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue)
 {
-    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(*queue)) {
-        if (!doubly_end_queue_empty_p_internal(*queue)) {
-            doubly_end_queue_cleanup_internal(*queue);
+    if (complain_null_pointer_p(queue)) {
+        return false;
+    } else if (complain_null_pointer_p(queue->head)) {
+        return false;
+    } else if (complain_null_pointer_p(queue->tail)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list)
+{
+    if (complain_null_pointer_p(list)) {
+        return false;
+    } else {
+        return doubly_linked_list_structure_legal_p(&list->link);
+    }
+}
+
+void
+doubly_end_queue_destroy(s_doubly_end_queue_t **queue)
+{
+    if (!complain_null_pointer_p(queue) && doubly_end_queue_structure_legal_p(*queue)) {
+        if (!doubly_end_queue_empty_ip(*queue)) {
+            doubly_end_queue_cleanup_i(*queue);
         }
 
         memory_cache_free(*queue);
@@ -28,63 +46,63 @@ doubly_end_queue_destroy(struct doubly_end_queue **queue)
 }
 
 uint32
-doubly_end_queue_length(struct doubly_end_queue *queue)
+doubly_end_queue_length(s_doubly_end_queue_t *queue)
 {
     uint32 retval;
-    struct doubly_end_queue_list *tmp;
+    s_doubly_end_queue_list_t *link;
 
-    if (complain_null_pointer_p(queue)) {
-        return 0u;
+    if (!doubly_end_queue_structure_legal_p(queue)) {
+        return QUEUE_SIZE_INVALID;
     } else {
-        if (doubly_end_queue_empty_p_internal(queue)) {
+        if (doubly_end_queue_empty_ip(queue)) {
             pr_log_info("Empty doubly end queue.\n");
             return 0u;
         } else {
             retval = 0u;
-            tmp = queue->head;
+            link = queue->head;
 
             do {
-                tmp = doubly_end_queue_list_next(tmp);
+                link = doubly_end_queue_list_next(link);
                 retval++;
-            } while (tmp != queue->head);
+            } while (link != queue->head);
 
             return retval;
         }
     }
 }
 
-static inline struct doubly_end_queue_list *
-doubly_end_queue_list_offset_reflect(struct doubly_linked_list *link)
+static inline s_doubly_end_queue_list_t *
+doubly_end_queue_list_reflect(s_doubly_linked_list_t *list)
 {
-    void *offset;
+    ptr_t offset;
 
-    assert_exit(NULL != link);
+    assert_exit(doubly_linked_list_structure_legal_p(list));
 
-    offset = &((struct doubly_end_queue_list *)0)->link;
+    offset = (ptr_t)&((s_doubly_end_queue_list_t *)0)->link;
 
-    return (void *)((void *)link - offset);
+    return (void *)((ptr_t)list - offset);
 }
 
-static inline struct doubly_end_queue_list *
-doubly_end_queue_list_next(struct doubly_end_queue_list *node)
+static inline s_doubly_end_queue_list_t *
+doubly_end_queue_list_next(s_doubly_end_queue_list_t *node)
 {
-    assert_exit(NULL != node);
+    assert_exit(doubly_end_queue_list_structure_legal_p(node));
 
-    return doubly_end_queue_list_offset_reflect(node->link.next);
+    return doubly_end_queue_list_reflect(node->link.next);
 }
 
-static inline struct doubly_end_queue_list *
-doubly_end_queue_list_previous(struct doubly_end_queue_list *node)
+static inline s_doubly_end_queue_list_t *
+doubly_end_queue_list_previous(s_doubly_end_queue_list_t *node)
 {
-    assert_exit(NULL != node);
+    assert_exit(doubly_end_queue_list_structure_legal_p(node));
 
-    return doubly_end_queue_list_offset_reflect(node->link.previous);
+    return doubly_end_queue_list_reflect(node->link.previous);
 }
 
 static inline bool
-doubly_end_queue_empty_p_internal(struct doubly_end_queue *queue)
+doubly_end_queue_empty_ip(s_doubly_end_queue_t *queue)
 {
-    assert_exit(NULL != queue);
+    assert_exit(doubly_end_queue_structure_legal_p(queue));
 
     if (NULL == queue->head && NULL == queue->tail) {
         return true;
@@ -93,131 +111,144 @@ doubly_end_queue_empty_p_internal(struct doubly_end_queue *queue)
     }
 }
 
-/*
- * NULL _ARGV_ will be treated as full, _RETURN_ false.
- */
 bool
-doubly_end_queue_empty_p(struct doubly_end_queue *queue)
+doubly_end_queue_empty_p(s_doubly_end_queue_t *queue)
 {
     if (complain_null_pointer_p(queue)) {
         return false;
     } else {
-        return doubly_end_queue_empty_p_internal(queue);
+        return doubly_end_queue_empty_ip(queue);
     }
 }
 
 void
-doubly_end_queue_head_enter(struct doubly_end_queue *queue, void *member)
+doubly_end_queue_head_enter(s_doubly_end_queue_t *queue, void *member)
 {
-    struct doubly_end_queue_list *tmp;
+    s_doubly_end_queue_list_t *list;
 
-    if (!complain_null_pointer_p(queue)) {
-        tmp = memory_cache_allocate(sizeof(*tmp));
+    if (doubly_end_queue_structure_legal_p(queue)) {
+        list = memory_cache_allocate(sizeof(*list));
+        list->val = member;
 
-        if (!complain_no_memory_p(tmp)) {
-            tmp->val = member;
-
-            if (doubly_end_queue_empty_p_internal(queue)) {
-                queue->head = tmp;
-                queue->tail = tmp;
-                doubly_linked_list_initial(&queue->head->link);
-            } else {
-                doubly_linked_list_insert_before(&queue->head->link, &tmp->link);
-                queue->head = tmp;
-            }
-        }
-    }
-}
-
-void
-doubly_end_queue_tail_enter(struct doubly_end_queue *queue, void *member)
-{
-    struct doubly_end_queue_list *tmp;
-
-    if (!complain_null_pointer_p(queue) && !complain_null_pointer_p(member)) {
-        tmp = memory_cache_allocate(sizeof(*tmp));
-
-        if (!complain_no_memory_p(tmp)) {
-            tmp->val = member;
-
-            if (doubly_end_queue_empty_p_internal(queue)) {
-                queue->head = tmp;
-                queue->tail = tmp;
-                doubly_linked_list_initial(&queue->head->link);
-            } else {
-                doubly_linked_list_insert_after(&queue->tail->link, &tmp->link);
-                queue->tail = tmp;
-            }
-        }
-    }
-}
-
-void *
-doubly_end_queue_head_leave(struct doubly_end_queue *queue)
-{
-    struct doubly_end_queue_list *tmp;
-    struct doubly_linked_list *link;
-    void *retval;
-
-    if (complain_null_pointer_p(queue)) {
-        return NULL;
-    } else {
-        if (doubly_end_queue_empty_p_internal(queue)) {
-            pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
-            return NULL;
+        if (doubly_end_queue_empty_ip(queue)) {
+            queue->head = list;
+            queue->tail = list;
+            doubly_linked_list_initial(&queue->head->link);
         } else {
-            retval = queue->head->val;
-            tmp = doubly_end_queue_list_next(queue->head);
+            doubly_linked_list_insert_before(&queue->head->link, &list->link);
+            queue->head = list;
+        }
+    }
+}
 
-            if (tmp == queue->head) {
-                doubly_end_queue_last_node_clean(queue);
-            } else {
-                link = &queue->head->link;
-                doubly_linked_list_remove(&link);
-                memory_cache_free(queue->head);
-                queue->head = tmp;
-            }
+void
+doubly_end_queue_tail_enter(s_doubly_end_queue_t *queue, void *member)
+{
+    s_doubly_end_queue_list_t *list;
 
-            return retval;
+    if (doubly_end_queue_structure_legal_p(queue)) {
+        list = memory_cache_allocate(sizeof(*list));
+        list->val = member;
+
+        if (doubly_end_queue_empty_ip(queue)) {
+            queue->head = list;
+            queue->tail = list;
+            doubly_linked_list_initial(&queue->head->link);
+        } else {
+            doubly_linked_list_insert_after(&queue->tail->link, &list->link);
+            queue->tail = list;
         }
     }
 }
 
 void *
-doubly_end_queue_tail_leave(struct doubly_end_queue *queue)
+doubly_end_queue_head(s_doubly_end_queue_t *queue)
 {
-    struct doubly_end_queue_list *tmp;
-    struct doubly_linked_list *link;
-    void *retval;
-
-    if (complain_null_pointer_p(queue)) {
-        return NULL;
+    if (!doubly_end_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else if (doubly_end_queue_empty_ip(queue)) {
+        pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
+        return PTR_INVALID;
     } else {
-        if (doubly_end_queue_empty_p_internal(queue)) {
+        return queue->head->val;
+    }
+}
+
+void *
+doubly_end_queue_tail(s_doubly_end_queue_t *queue)
+{
+    if (!doubly_end_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else if (doubly_end_queue_empty_ip(queue)) {
+        pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
+        return PTR_INVALID;
+    } else {
+        return queue->tail->val;
+    }
+}
+
+void *
+doubly_end_queue_head_leave(s_doubly_end_queue_t *queue)
+{
+    void *retval;
+    s_doubly_linked_list_t *link;
+    s_doubly_end_queue_list_t *next;
+
+    if (!doubly_end_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else if (doubly_end_queue_empty_ip(queue)) {
+        pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
+        return PTR_INVALID;
+    } else {
+        retval = queue->head->val;
+        next = doubly_end_queue_list_next(queue->head);
+
+        if (next == queue->head) {
+            doubly_end_queue_last_node_clean(queue);
+        } else {
+            link = &queue->head->link;
+            doubly_linked_list_remove(&link);
+            memory_cache_free(queue->head);
+            queue->head = next;
+        }
+        return retval;
+    }
+}
+
+void *
+doubly_end_queue_tail_leave(s_doubly_end_queue_t *queue)
+{
+    void *retval;
+    s_doubly_linked_list_t *link;
+    s_doubly_end_queue_list_t *list;
+
+    if (!doubly_end_queue_structure_legal_p(queue)) {
+        return PTR_INVALID;
+    } else {
+        if (doubly_end_queue_empty_ip(queue)) {
             pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
-            return NULL;
+            return PTR_INVALID;
         } else {
             retval = queue->tail->val;
-            tmp = doubly_end_queue_list_previous(queue->tail);
+            list = doubly_end_queue_list_previous(queue->tail);
 
-            if (tmp == queue->tail) {
+            if (list == queue->tail) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
                 link = &queue->tail->link;
                 doubly_linked_list_remove(&link);
                 memory_cache_free(queue->tail);
-                queue->tail = tmp;
+                queue->tail = list;
             }
-
             return retval;
         }
     }
 }
 
 static inline void
-doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
+doubly_end_queue_last_node_clean(s_doubly_end_queue_t *queue)
 {
-    assert_exit(NULL != queue);
+    assert_exit(doubly_end_queue_structure_legal_p(queue));
     assert_exit(queue->head == queue->tail);
 
     memory_cache_free(queue->head);
@@ -226,58 +257,55 @@ doubly_end_queue_last_node_clean(struct doubly_end_queue *queue)
 }
 
 static inline void
-doubly_end_queue_cleanup_internal(struct doubly_end_queue *queue)
+doubly_end_queue_cleanup_i(s_doubly_end_queue_t *queue)
 {
-    struct doubly_end_queue_list *tmp;
-    struct doubly_end_queue_list *next;
-    struct doubly_linked_list *link;
+    s_doubly_end_queue_list_t *list;
+    s_doubly_end_queue_list_t *next;
+    s_doubly_linked_list_t *link;
 
-    assert_exit(NULL != queue);
-    assert_exit(NULL != queue->head);
+    assert_exit(doubly_end_queue_structure_legal_p(queue));
 
-    tmp = queue->head;
+    list = queue->head;
 
-    while (tmp != queue->tail) {
-        next = doubly_end_queue_list_next(tmp);
-        link = &tmp->link;
+    while (list != queue->tail) {
+        next = doubly_end_queue_list_next(list);
+        link = &list->link;
         doubly_linked_list_remove(&link);
-        memory_cache_free(tmp);
+        memory_cache_free(list);
 
-        tmp = next;
+        list = next;
     }
 
-    queue->head = tmp;
+    queue->head = list;
     doubly_end_queue_last_node_clean(queue);
 }
 
 void
-doubly_end_queue_cleanup(struct doubly_end_queue *queue)
+doubly_end_queue_cleanup(s_doubly_end_queue_t *queue)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (!doubly_end_queue_structure_legal_p(queue)) {
         return;
-    } else if (!queue->head) {
-        pr_log_info("Cleaned queue, nothing will be done.\n");
     } else {
-        doubly_end_queue_cleanup_internal(queue);
+        doubly_end_queue_cleanup_i(queue);
     }
 }
 
 void
-doubly_end_queue_iterate(struct doubly_end_queue *queue, void (*handle)(void *))
+doubly_end_queue_iterate(s_doubly_end_queue_t *queue, void (*handle)(void *))
 {
-    register struct doubly_end_queue_list *tmp;
+    s_doubly_end_queue_list_t *list;
 
-    if (complain_null_pointer_p(queue)) {
+    if (!doubly_end_queue_structure_legal_p(queue)) {
         return;
-    } else if (!queue->head) {
+    } else if (doubly_end_queue_empty_ip(queue)) {
         pr_log_info("Iterate on _EMPTY_ queue, nothing will be done.\n");
     } else {
-        tmp = queue->head;
+        list = queue->head;
 
         do {
-           (*handle)(tmp->val);
-           tmp = doubly_end_queue_list_next(tmp);
-        } while (tmp != queue->head);
+            (*handle)(list->val);
+            list = doubly_end_queue_list_next(list);
+        } while (list != queue->head);
     }
 }
 
