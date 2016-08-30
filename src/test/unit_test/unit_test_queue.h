@@ -7,7 +7,7 @@ utest_##name##_queue_create(void)                                \
 {                                                                \
     bool pass;                                                   \
     uint32 capacity;                                             \
-    struct QUEUE *queue;                                         \
+    QUEUE *queue;                                                \
                                                                  \
     pass = true;                                                 \
     UNIT_TEST_BEGIN(name##_queue_create);                        \
@@ -26,7 +26,7 @@ static void                                       \
 utest_##name##_queue_destroy(void)                \
 {                                                 \
     bool pass;                                    \
-    struct QUEUE *queue;                          \
+    QUEUE *queue;                                 \
                                                   \
     pass = true;                                  \
     queue = NULL;                                 \
@@ -48,7 +48,7 @@ utest_##name##_queue_resize(void)                            \
 {                                                            \
     bool pass;                                               \
     uint32 size;                                             \
-    struct QUEUE *queue;                                     \
+    QUEUE *queue;                                            \
                                                              \
     pass = true;                                             \
     queue = NULL;                                            \
@@ -101,7 +101,7 @@ static void                                                                   \
 utest_##name##_queue_capacity(void)                                           \
 {                                                                             \
     bool pass;                                                                \
-    struct QUEUE *queue;                                                      \
+    QUEUE *queue;                                                             \
                                                                               \
     pass = true;                                                              \
     queue = NULL;                                                             \
@@ -121,7 +121,7 @@ static void                                                                   \
 utest_##name##_queue_rest(void)                                               \
 {                                                                             \
     bool pass;                                                                \
-    struct QUEUE *queue;                                                      \
+    QUEUE *queue;                                                             \
                                                                               \
     pass = true;                                                              \
     queue = NULL;                                                             \
@@ -144,7 +144,7 @@ static void                                               \
 utest_##name##_queue_full_p(void)                         \
 {                                                         \
     bool pass;                                            \
-    struct QUEUE *queue;                                  \
+    QUEUE *queue;                                         \
                                                           \
     pass = true;                                          \
     queue = NULL;                                         \
@@ -169,7 +169,7 @@ static void                                                \
 utest_##name##_queue_empty_p(void)                         \
 {                                                          \
     bool pass;                                             \
-    struct QUEUE *queue;                                   \
+    QUEUE *queue;                                          \
                                                            \
     pass = true;                                           \
     queue = NULL;                                          \
@@ -195,7 +195,7 @@ utest_##name##_queue_enter(void)                             \
 {                                                            \
     bool pass;                                               \
     uint32 rest;                                             \
-    struct QUEUE *queue;                                     \
+    QUEUE *queue;                                            \
                                                              \
     pass = true;                                             \
     queue = NULL;                                            \
@@ -226,7 +226,7 @@ utest_##name##_queue_front(void)                                  \
 {                                                                 \
     bool pass;                                                    \
     void *tmp;                                                    \
-    struct QUEUE *queue;                                          \
+    QUEUE *queue;                                                 \
                                                                   \
     pass = true;                                                  \
     queue = NULL;                                                 \
@@ -242,9 +242,6 @@ utest_##name##_queue_front(void)                                  \
     tmp = QUEUE_front(queue);                                     \
     RESULT_CHECK_pointer(tmp, QUEUE_leave(queue), &pass);         \
                                                                   \
-    while (1 != QUEUE_rest(queue)) {                              \
-        QUEUE_enter(queue, &pass);                                \
-    }                                                             \
     QUEUE_enter(queue, queue);                                    \
     RESULT_CHECK_pointer(queue, QUEUE_rear(queue), &pass);        \
                                                                   \
@@ -258,7 +255,7 @@ utest_##name##_queue_rear(void)                                  \
 {                                                                \
     bool pass;                                                   \
     void *tmp;                                                   \
-    struct QUEUE *queue;                                         \
+    QUEUE *queue;                                                \
                                                                  \
     pass = true;                                                 \
     queue = NULL;                                                \
@@ -284,7 +281,7 @@ utest_##name##_queue_leave(void)                                  \
 {                                                                 \
     bool pass;                                                    \
     uint32 rest;                                                  \
-    struct QUEUE *queue;                                          \
+    QUEUE *queue;                                                 \
                                                                   \
     pass = true;                                                  \
     queue = NULL;                                                 \
@@ -312,7 +309,7 @@ static void                                                               \
 utest_##name##_queue_cleanup(void)                                        \
 {                                                                         \
     bool pass;                                                            \
-    struct QUEUE *queue;                                                  \
+    QUEUE *queue;                                                         \
                                                                           \
     pass = true;                                                          \
     queue = NULL;                                                         \
@@ -336,7 +333,7 @@ static void                                       \
 utest_##name##_queue_iterate(void)                \
 {                                                 \
     bool pass;                                    \
-    struct QUEUE *queue;                          \
+    QUEUE *queue;                                 \
     uint32 capacity;                              \
     uint32 tmp;                                   \
                                                   \

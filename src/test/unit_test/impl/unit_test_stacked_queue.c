@@ -1,4 +1,4 @@
-#define QUEUE                  stacked_queue
+#define QUEUE                  s_stacked_queue_t
 
 #define QUEUE_create           stacked_queue_create
 #define QUEUE_destroy          stacked_queue_destroy
@@ -44,7 +44,6 @@ UT_QUEUE_rear(stacked)
 static void
 utest_stacked_queue_create(void)
 {
-
     bool pass;
     uint32 capacity;
     s_stacked_queue_t *queue;

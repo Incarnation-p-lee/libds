@@ -1,23 +1,4 @@
 static void
-performance_test_doubly_end_queue_struct_field(uint32 count)
-{
-    struct doubly_end_queue *queue;
-
-    queue = doubly_end_queue_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        // doubly_end_queue_sid_set(queue, 0x32);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    doubly_end_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_struct_field);
-}
-
-static void
 performance_test_doubly_end_queue_create(uint32 count)
 {
     struct doubly_end_queue *queue;
@@ -90,7 +71,7 @@ performance_test_doubly_end_queue_empty_p(uint32 count)
 }
 
 static void
-performance_test_doubly_end_queue_head_enter(uint32 count)
+performance_test_doubly_end_queue_front_enter(uint32 count)
 {
     struct doubly_end_queue *queue;
 
@@ -101,17 +82,17 @@ performance_test_doubly_end_queue_head_enter(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        doubly_end_queue_head_enter(queue, queue);
+        doubly_end_queue_front_enter(queue, queue);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     doubly_end_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_head_enter);
+    PERFORMANCE_TEST_RESULT(doubly_end_queue_front_enter);
 }
 
 static void
-performance_test_doubly_end_queue_head_leave(uint32 count)
+performance_test_doubly_end_queue_front_leave(uint32 count)
 {
     struct doubly_end_queue *queue;
 
@@ -120,18 +101,18 @@ performance_test_doubly_end_queue_head_leave(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        doubly_end_queue_head_enter(queue, queue);
-        doubly_end_queue_head_leave(queue);
+        doubly_end_queue_front_enter(queue, queue);
+        doubly_end_queue_front_leave(queue);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     doubly_end_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_head_leave);
+    PERFORMANCE_TEST_RESULT(doubly_end_queue_front_leave);
 }
 
 static void
-performance_test_doubly_end_queue_tail_enter(uint32 count)
+performance_test_doubly_end_queue_rear_enter(uint32 count)
 {
     struct doubly_end_queue *queue;
 
@@ -142,17 +123,17 @@ performance_test_doubly_end_queue_tail_enter(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        doubly_end_queue_tail_enter(queue, queue);
+        doubly_end_queue_rear_enter(queue, queue);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     doubly_end_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_tail_enter);
+    PERFORMANCE_TEST_RESULT(doubly_end_queue_rear_enter);
 }
 
 static void
-performance_test_doubly_end_queue_tail_leave(uint32 count)
+performance_test_doubly_end_queue_rear_leave(uint32 count)
 {
     struct doubly_end_queue *queue;
 
@@ -161,14 +142,14 @@ performance_test_doubly_end_queue_tail_leave(uint32 count)
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
-        doubly_end_queue_tail_enter(queue, queue);
-        doubly_end_queue_tail_leave(queue);
+        doubly_end_queue_rear_enter(queue, queue);
+        doubly_end_queue_rear_leave(queue);
     }
 
     PERFORMANCE_TEST_ENDPOINT;
 
     doubly_end_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_tail_leave);
+    PERFORMANCE_TEST_RESULT(doubly_end_queue_rear_leave);
 }
 
 static void

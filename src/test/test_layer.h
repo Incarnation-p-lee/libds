@@ -647,80 +647,87 @@ static const struct test_layer_table stacked_queue[] = {
 
 static const struct test_layer_table doubly_end_queue[] = {
     {
-        "struct_field", NULL,
-        {
-            &unit_test_doubly_end_queue_struct_field,
-            &performance_test_doubly_end_queue_struct_field,
-        },
-    },
-    {
         "create", NULL,
         {
-            &unit_test_doubly_end_queue_create,
-            &performance_test_doubly_end_queue_create,
+            &utest_doubly_end_queue_create,
+            NULL,
         },
     },
     {
         "destroy", NULL,
         {
-            &unit_test_doubly_end_queue_destroy,
-            &performance_test_doubly_end_queue_destroy,
+            &utest_doubly_end_queue_destroy,
+            NULL,
         },
     },
     {
         "length", NULL,
         {
-            &unit_test_doubly_end_queue_length,
-            &performance_test_doubly_end_queue_length,
+            &utest_doubly_end_queue_length,
+            NULL,
         },
     },
     {
         "empty_p", NULL,
         {
-            &unit_test_doubly_end_queue_empty_p,
-            &performance_test_doubly_end_queue_empty_p,
+            &utest_doubly_end_queue_empty_p,
+            NULL,
         },
     },
     {
-        "head_enter", NULL,
+        "front", NULL,
         {
-            &unit_test_doubly_end_queue_head_enter,
-            &performance_test_doubly_end_queue_head_enter,
+            &utest_doubly_end_queue_front,
+            NULL,
         },
     },
     {
-        "head_leave", NULL,
+        "front_enter", NULL,
         {
-            &unit_test_doubly_end_queue_head_leave,
-            &performance_test_doubly_end_queue_head_leave,
+            &utest_doubly_end_queue_front_enter,
+            NULL,
         },
     },
     {
-        "tail_enter", NULL,
+        "front_leave", NULL,
         {
-            &unit_test_doubly_end_queue_tail_enter,
-            &performance_test_doubly_end_queue_tail_enter,
+            &utest_doubly_end_queue_front_leave,
+            NULL,
         },
     },
     {
-        "tail_leave", NULL,
+        "rear", NULL,
         {
-            &unit_test_doubly_end_queue_tail_leave,
-            &performance_test_doubly_end_queue_tail_leave,
+            &utest_doubly_end_queue_rear,
+            NULL,
+        },
+    },
+    {
+        "rear_enter", NULL,
+        {
+            &utest_doubly_end_queue_rear_enter,
+            NULL,
+        },
+    },
+    {
+        "rear_leave", NULL,
+        {
+            &utest_doubly_end_queue_rear_leave,
+            NULL,
         },
     },
     {
         "cleanup", NULL,
         {
-            &unit_test_doubly_end_queue_cleanup,
-            &performance_test_doubly_end_queue_cleanup,
+            &utest_doubly_end_queue_cleanup,
+            NULL,
         },
     },
     {
         "iterate", NULL,
         {
-            &unit_test_doubly_end_queue_iterate,
-            &performance_test_doubly_end_queue_iterate,
+            &utest_doubly_end_queue_iterate,
+            NULL,
         },
     },
     {NULL, NULL, {NULL, NULL},},

@@ -44,21 +44,23 @@ enum ITER_ORDER {
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
 // New-Line
 
-typedef struct single_linked_list   s_single_linked_list_t;
-typedef struct doubly_linked_list   s_doubly_linked_list_t;
-typedef struct skip_linked_list     s_skip_linked_list_t;
-typedef struct separate_chain_hash  s_separate_chain_hash_t;
-typedef struct open_addressing_hash s_open_addressing_hash_t;
-typedef struct hashing_table        s_hashing_table_t;
-typedef struct separate_chain       s_separate_chain_t;
-typedef struct open_addressing_hash s_open_addressing_hash_t;
-typedef struct array_stack          s_array_stack_t;
-typedef struct array_stack_space    s_array_stack_space_t;
-typedef struct linked_stack_space   s_linked_stack_space_t;
-typedef struct linked_stack         s_linked_stack_t;
-typedef struct array_queue_space    s_array_queue_space_t;
-typedef struct array_queue          s_array_queue_t;
-typedef struct stacked_queue        s_stacked_queue_t;
+typedef struct single_linked_list    s_single_linked_list_t;
+typedef struct doubly_linked_list    s_doubly_linked_list_t;
+typedef struct skip_linked_list      s_skip_linked_list_t;
+typedef struct separate_chain_hash   s_separate_chain_hash_t;
+typedef struct open_addressing_hash  s_open_addressing_hash_t;
+typedef struct hashing_table         s_hashing_table_t;
+typedef struct separate_chain        s_separate_chain_t;
+typedef struct open_addressing_hash  s_open_addressing_hash_t;
+typedef struct array_stack           s_array_stack_t;
+typedef struct array_stack_space     s_array_stack_space_t;
+typedef struct linked_stack_space    s_linked_stack_space_t;
+typedef struct linked_stack          s_linked_stack_t;
+typedef struct array_queue_space     s_array_queue_space_t;
+typedef struct array_queue           s_array_queue_t;
+typedef struct stacked_queue         s_stacked_queue_t;
+typedef struct doubly_end_queue      s_doubly_end_queue_t;
+typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 
 /*
  *   Implement the unify single_linked_list interface
@@ -175,9 +177,8 @@ struct doubly_end_queue_list {
  * doubly end queue
  */
 struct doubly_end_queue {
-    uint32                       sid;
-    struct doubly_end_queue_list *head;
-    struct doubly_end_queue_list *tail;
+    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *rear;
 };
 
 /*

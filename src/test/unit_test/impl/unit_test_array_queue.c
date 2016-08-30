@@ -1,4 +1,4 @@
-#define QUEUE                  array_queue
+#define QUEUE                  s_array_queue_t
 
 #define QUEUE_create           array_queue_create
 #define QUEUE_destroy          array_queue_destroy

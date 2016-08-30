@@ -4,6 +4,7 @@ doubly_end_queue_create(void)
     s_doubly_end_queue_t *queue;
 
     queue = memory_cache_allocate(sizeof(*queue));
+    queue->front = queue->rear = NULL;
 
     return queue;
 }
@@ -13,9 +14,9 @@ doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue)
 {
     if (complain_null_pointer_p(queue)) {
         return false;
-    } else if (complain_null_pointer_p(queue->head)) {
+    } else if (NULL == queue->front && NULL != queue->rear) {
         return false;
-    } else if (complain_null_pointer_p(queue->tail)) {
+    } else if (NULL != queue->front && NULL == queue->rear) {
         return false;
     } else {
         return true;
@@ -59,12 +60,12 @@ doubly_end_queue_length(s_doubly_end_queue_t *queue)
             return 0u;
         } else {
             retval = 0u;
-            link = queue->head;
+            link = queue->front;
 
             do {
                 link = doubly_end_queue_list_next(link);
                 retval++;
-            } while (link != queue->head);
+            } while (link != queue->front);
 
             return retval;
         }
@@ -104,7 +105,7 @@ doubly_end_queue_empty_ip(s_doubly_end_queue_t *queue)
 {
     assert_exit(doubly_end_queue_structure_legal_p(queue));
 
-    if (NULL == queue->head && NULL == queue->tail) {
+    if (NULL == queue->front && NULL == queue->rear) {
         return true;
     } else {
         return false;
@@ -114,7 +115,7 @@ doubly_end_queue_empty_ip(s_doubly_end_queue_t *queue)
 bool
 doubly_end_queue_empty_p(s_doubly_end_queue_t *queue)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (!doubly_end_queue_structure_legal_p(queue)) {
         return false;
     } else {
         return doubly_end_queue_empty_ip(queue);
@@ -122,7 +123,7 @@ doubly_end_queue_empty_p(s_doubly_end_queue_t *queue)
 }
 
 void
-doubly_end_queue_head_enter(s_doubly_end_queue_t *queue, void *member)
+doubly_end_queue_front_enter(s_doubly_end_queue_t *queue, void *member)
 {
     s_doubly_end_queue_list_t *list;
 
@@ -131,18 +132,18 @@ doubly_end_queue_head_enter(s_doubly_end_queue_t *queue, void *member)
         list->val = member;
 
         if (doubly_end_queue_empty_ip(queue)) {
-            queue->head = list;
-            queue->tail = list;
-            doubly_linked_list_initial(&queue->head->link);
+            queue->front = list;
+            queue->rear = list;
+            doubly_linked_list_initial(&queue->front->link);
         } else {
-            doubly_linked_list_insert_before(&queue->head->link, &list->link);
-            queue->head = list;
+            doubly_linked_list_insert_before(&queue->front->link, &list->link);
+            queue->front = list;
         }
     }
 }
 
 void
-doubly_end_queue_tail_enter(s_doubly_end_queue_t *queue, void *member)
+doubly_end_queue_rear_enter(s_doubly_end_queue_t *queue, void *member)
 {
     s_doubly_end_queue_list_t *list;
 
@@ -151,18 +152,18 @@ doubly_end_queue_tail_enter(s_doubly_end_queue_t *queue, void *member)
         list->val = member;
 
         if (doubly_end_queue_empty_ip(queue)) {
-            queue->head = list;
-            queue->tail = list;
-            doubly_linked_list_initial(&queue->head->link);
+            queue->front = list;
+            queue->rear = list;
+            doubly_linked_list_initial(&queue->front->link);
         } else {
-            doubly_linked_list_insert_after(&queue->tail->link, &list->link);
-            queue->tail = list;
+            doubly_linked_list_insert_after(&queue->rear->link, &list->link);
+            queue->rear = list;
         }
     }
 }
 
 void *
-doubly_end_queue_head(s_doubly_end_queue_t *queue)
+doubly_end_queue_front(s_doubly_end_queue_t *queue)
 {
     if (!doubly_end_queue_structure_legal_p(queue)) {
         return PTR_INVALID;
@@ -170,12 +171,12 @@ doubly_end_queue_head(s_doubly_end_queue_t *queue)
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
         return PTR_INVALID;
     } else {
-        return queue->head->val;
+        return queue->front->val;
     }
 }
 
 void *
-doubly_end_queue_tail(s_doubly_end_queue_t *queue)
+doubly_end_queue_rear(s_doubly_end_queue_t *queue)
 {
     if (!doubly_end_queue_structure_legal_p(queue)) {
         return PTR_INVALID;
@@ -183,12 +184,12 @@ doubly_end_queue_tail(s_doubly_end_queue_t *queue)
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
         return PTR_INVALID;
     } else {
-        return queue->tail->val;
+        return queue->rear->val;
     }
 }
 
 void *
-doubly_end_queue_head_leave(s_doubly_end_queue_t *queue)
+doubly_end_queue_front_leave(s_doubly_end_queue_t *queue)
 {
     void *retval;
     s_doubly_linked_list_t *link;
@@ -200,23 +201,23 @@ doubly_end_queue_head_leave(s_doubly_end_queue_t *queue)
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
         return PTR_INVALID;
     } else {
-        retval = queue->head->val;
-        next = doubly_end_queue_list_next(queue->head);
+        retval = queue->front->val;
+        next = doubly_end_queue_list_next(queue->front);
 
-        if (next == queue->head) {
+        if (next == queue->front) {
             doubly_end_queue_last_node_clean(queue);
         } else {
-            link = &queue->head->link;
+            link = &queue->front->link;
             doubly_linked_list_remove(&link);
-            memory_cache_free(queue->head);
-            queue->head = next;
+            memory_cache_free(queue->front);
+            queue->front = next;
         }
         return retval;
     }
 }
 
 void *
-doubly_end_queue_tail_leave(s_doubly_end_queue_t *queue)
+doubly_end_queue_rear_leave(s_doubly_end_queue_t *queue)
 {
     void *retval;
     s_doubly_linked_list_t *link;
@@ -229,16 +230,16 @@ doubly_end_queue_tail_leave(s_doubly_end_queue_t *queue)
             pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
             return PTR_INVALID;
         } else {
-            retval = queue->tail->val;
-            list = doubly_end_queue_list_previous(queue->tail);
+            retval = queue->rear->val;
+            list = doubly_end_queue_list_previous(queue->rear);
 
-            if (list == queue->tail) {
+            if (list == queue->rear) {
                 doubly_end_queue_last_node_clean(queue);
             } else {
-                link = &queue->tail->link;
+                link = &queue->rear->link;
                 doubly_linked_list_remove(&link);
-                memory_cache_free(queue->tail);
-                queue->tail = list;
+                memory_cache_free(queue->rear);
+                queue->rear = list;
             }
             return retval;
         }
@@ -249,11 +250,11 @@ static inline void
 doubly_end_queue_last_node_clean(s_doubly_end_queue_t *queue)
 {
     assert_exit(doubly_end_queue_structure_legal_p(queue));
-    assert_exit(queue->head == queue->tail);
+    assert_exit(queue->front == queue->rear);
 
-    memory_cache_free(queue->head);
-    queue->head = NULL;
-    queue->tail = NULL;
+    memory_cache_free(queue->front);
+    queue->front = NULL;
+    queue->rear = NULL;
 }
 
 static inline void
@@ -265,9 +266,9 @@ doubly_end_queue_cleanup_i(s_doubly_end_queue_t *queue)
 
     assert_exit(doubly_end_queue_structure_legal_p(queue));
 
-    list = queue->head;
+    list = queue->front;
 
-    while (list != queue->tail) {
+    while (list != queue->rear) {
         next = doubly_end_queue_list_next(list);
         link = &list->link;
         doubly_linked_list_remove(&link);
@@ -276,7 +277,7 @@ doubly_end_queue_cleanup_i(s_doubly_end_queue_t *queue)
         list = next;
     }
 
-    queue->head = list;
+    queue->front = list;
     doubly_end_queue_last_node_clean(queue);
 }
 
@@ -300,12 +301,12 @@ doubly_end_queue_iterate(s_doubly_end_queue_t *queue, void (*handle)(void *))
     } else if (doubly_end_queue_empty_ip(queue)) {
         pr_log_info("Iterate on _EMPTY_ queue, nothing will be done.\n");
     } else {
-        list = queue->head;
+        list = queue->front;
 
         do {
             (*handle)(list->val);
             list = doubly_end_queue_list_next(list);
-        } while (list != queue->head);
+        } while (list != queue->front);
     }
 }
 

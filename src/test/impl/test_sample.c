@@ -1,9 +1,9 @@
-static inline struct single_linked_list *
+static inline s_single_linked_list_t *
 test_single_linked_list_sample(uint32 range, uint32 node_count)
 {
     uint32 i;
-    struct single_linked_list *list;
-    struct single_linked_list *node;
+    s_single_linked_list_t *list;
+    s_single_linked_list_t *node;
 
     list = single_linked_list_create();
 
@@ -17,12 +17,12 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
     return list;
 }
 
-static inline struct doubly_linked_list *
+static inline s_doubly_linked_list_t *
 test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 {
     uint32 i;
-    struct doubly_linked_list *list;
-    struct doubly_linked_list *node;
+    s_doubly_linked_list_t *list;
+    s_doubly_linked_list_t *node;
 
     list = doubly_linked_list_create();
 
@@ -36,13 +36,13 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
     return list;
 }
 
-static inline struct skip_linked_list *
+static inline s_skip_linked_list_t *
 test_skip_linked_list_sample(uint32 range, uint32 count)
 {
-    struct skip_linked_list *list;
-    struct skip_linked_list *tmp;
-    sint32 key;
     uint32 i;
+    sint32 key;
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *tmp;
 
     assert_exit(0 != range);
     assert_exit(0 != count);
@@ -61,17 +61,17 @@ test_skip_linked_list_sample(uint32 range, uint32 count)
     return list;
 }
 
-static inline struct doubly_end_queue *
+static inline s_doubly_end_queue_t *
 test_doubly_end_queue_sample(uint32 count)
 {
-    struct doubly_end_queue *queue;
+    s_doubly_end_queue_t *queue;
 
     assert_exit(0 != count);
 
     queue = doubly_end_queue_create();
 
     while (count--) {
-        doubly_end_queue_head_enter(queue, queue);
+        doubly_end_queue_front_enter(queue, queue);
     }
 
     return queue;
@@ -80,10 +80,10 @@ test_doubly_end_queue_sample(uint32 count)
 static inline struct binary_search_tree *
 test_binary_search_tree_sample(uint64 range, uint32 count)
 {
+    uint32 i;
+    sint64 nice;
     struct binary_search_tree *tree;
     struct binary_search_tree *tmp;
-    sint64 nice;
-    uint32 i;
 
     tree = binary_search_tree_create();
     binary_search_tree_initial(tree, 0);
