@@ -1,55 +1,25 @@
-static void
-performance_test_stacked_queue_create(uint32 count)
-{
-    struct stacked_queue *queue;
+#define QUEUE                  s_stacked_queue_t
 
-    PERFORMANCE_TEST_CHECKPOINT;
+#define QUEUE_create           stacked_queue_create
+#define QUEUE_destroy          stacked_queue_destroy
+#define QUEUE_rest             stacked_queue_rest
+#define QUEUE_resize           stacked_queue_resize
 
-    while (count--) {
-        queue = stacked_queue_create();
-        stacked_queue_destroy(&queue);
-    }
 
-    PERFORMANCE_TEST_ENDPOINT;
+#include "../performance_test_queue.h"
 
-    PERFORMANCE_TEST_RESULT(stacked_queue_create);
-}
+PT_QUEUE_create(stacked)
+PT_QUEUE_destroy(stacked)
+PT_QUEUE_resize(stacked)
 
-static void
-performance_test_stacked_queue_destroy(uint32 count)
-{
-    struct stacked_queue *queue;
 
-    PERFORMANCE_TEST_CHECKPOINT;
+#undef QUEUE
 
-    while (count--) {
-        queue = stacked_queue_create();
-        stacked_queue_destroy(&queue);
-    }
+#undef QUEUE_create
+#undef QUEUE_destroy
+#undef QUEUE_rest
+#undef QUEUE_resize
 
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(stacked_queue_destroy);
-}
-
-static void
-performance_test_stacked_queue_space_expand(uint32 count)
-{
-    struct stacked_queue *queue;
-
-    queue = stacked_queue_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        stacked_queue_resize(queue, 1u);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    stacked_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(stacked_queue_space_expand);
-}
 
 static void
 performance_test_stacked_queue_rest(uint32 count)

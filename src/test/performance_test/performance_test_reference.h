@@ -68,10 +68,9 @@ static struct performance_test_reference performance_reference[] = {
     {"linked_stack_cleanup",                             0x0u, 0x0u},
     {"linked_stack_iterate",                             0x0u, 0x0u},
 
-    {"array_queue_struct_field",                         0x0u, 0x0u},
     {"array_queue_create",                               0x0u, 0x0u},
     {"array_queue_destroy",                              0x0u, 0x0u},
-    {"array_queue_space_expand",                         0x0u, 0x0u},
+    {"array_queue_resize",                               0x0u, 0x0u},
     {"array_queue_space_rest",                           0x0u, 0x0u},
     {"array_queue_full_p",                               0x0u, 0x0u},
     {"array_queue_capacity",                             0x0u, 0x0u},
@@ -81,10 +80,9 @@ static struct performance_test_reference performance_reference[] = {
     {"array_queue_cleanup",                              0x0u, 0x0u},
     {"array_queue_iterate",                              0x0u, 0x0u},
 
-    {"stacked_queue_struct_field",                       0x0u, 0x0u},
     {"stacked_queue_create",                             0x0u, 0x0u},
     {"stacked_queue_destroy",                            0x0u, 0x0u},
-    {"stacked_queue_space_expand",                       0x0u, 0x0u},
+    {"stacked_queue_resize",                             0x0u, 0x0u},
     {"stacked_queue_space_rest",                         0x0u, 0x0u},
     {"stacked_queue_full_p",                             0x0u, 0x0u},
     {"stacked_queue_capacity",                           0x0u, 0x0u},

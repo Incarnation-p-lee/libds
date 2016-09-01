@@ -460,21 +460,21 @@ static const struct test_layer_table array_queue[] = {
         "create", NULL,
         {
             &utest_array_queue_create,
-            &performance_test_array_queue_create,
+            &ptest_array_queue_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_array_queue_destroy,
-            &performance_test_array_queue_destroy,
+            &ptest_array_queue_destroy,
         },
     },
     {
         "resize", NULL,
         {
             &utest_array_queue_resize,
-            &performance_test_array_queue_space_expand,
+            &ptest_array_queue_resize,
         },
     },
     {
@@ -555,21 +555,21 @@ static const struct test_layer_table stacked_queue[] = {
         "create", NULL,
         {
             &utest_stacked_queue_create,
-            &performance_test_stacked_queue_create,
+            &ptest_stacked_queue_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_stacked_queue_destroy,
-            &performance_test_stacked_queue_destroy,
+            &ptest_stacked_queue_destroy,
         },
     },
     {
         "resize", NULL,
         {
             &utest_stacked_queue_resize,
-            &performance_test_stacked_queue_space_expand,
+            &ptest_stacked_queue_resize,
         },
     },
     {
@@ -650,14 +650,14 @@ static const struct test_layer_table doubly_end_queue[] = {
         "create", NULL,
         {
             &utest_doubly_end_queue_create,
-            NULL,
+            &ptest_doubly_end_queue_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_doubly_end_queue_destroy,
-            NULL,
+            &ptest_doubly_end_queue_destroy,
         },
     },
     {

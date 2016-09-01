@@ -1,36 +1,18 @@
-static void
-performance_test_doubly_end_queue_create(uint32 count)
-{
-    struct doubly_end_queue *queue;
+#define QUEUE                  s_doubly_end_queue_t
+#define QUEUE_create           doubly_end_queue_create
+#define QUEUE_destroy          doubly_end_queue_destroy
 
-    PERFORMANCE_TEST_CHECKPOINT;
 
-    while (count--) {
-        queue = doubly_end_queue_create();
-        doubly_end_queue_destroy(&queue);
-    }
+#include "../performance_test_queue.h"
 
-    PERFORMANCE_TEST_ENDPOINT;
+PT_QUEUE_create(doubly_end)
+PT_QUEUE_destroy(doubly_end)
 
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_create);
-}
 
-static void
-performance_test_doubly_end_queue_destroy(uint32 count)
-{
-    struct doubly_end_queue *queue;
+#undef QUEUE
+#undef QUEUE_create
+#undef QUEUE_destroy
 
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        queue = test_doubly_end_queue_sample(3u);
-        doubly_end_queue_destroy(&queue);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    PERFORMANCE_TEST_RESULT(doubly_end_queue_destroy);
-}
 
 static void
 performance_test_doubly_end_queue_length(uint32 count)
