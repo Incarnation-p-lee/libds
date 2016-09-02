@@ -478,38 +478,38 @@ static const struct test_layer_table array_queue[] = {
         },
     },
     {
-        "capacity", NULL,
-        {
-            &utest_array_queue_capacity,
-            &performance_test_array_queue_capacity,
-        },
-    },
-    {
         "rest", NULL,
         {
             &utest_array_queue_rest,
-            &performance_test_array_queue_space_rest,
+            &ptest_array_queue_rest,
+        },
+    },
+    {
+        "capacity", NULL,
+        {
+            &utest_array_queue_capacity,
+            &ptest_array_queue_capacity,
         },
     },
     {
         "full_p", NULL,
         {
             &utest_array_queue_full_p,
-            &performance_test_array_queue_full_p,
+            &ptest_array_queue_full_p,
         },
     },
     {
         "enter", NULL,
         {
             &utest_array_queue_enter,
-            &performance_test_array_queue_enter,
+            &ptest_array_queue_enter,
         },
     },
     {
         "leave", NULL,
         {
             &utest_array_queue_leave,
-            &performance_test_array_queue_leave,
+            &ptest_array_queue_leave,
         },
     },
     {
@@ -576,49 +576,49 @@ static const struct test_layer_table stacked_queue[] = {
         "rest", NULL,
         {
             &utest_stacked_queue_rest,
-            &performance_test_stacked_queue_rest,
+            &ptest_stacked_queue_rest,
         },
     },
     {
         "full_p", NULL,
         {
             &utest_stacked_queue_full_p,
-            &performance_test_stacked_queue_full_p,
+            &ptest_stacked_queue_full_p,
         },
     },
     {
         "capacity", NULL,
         {
             &utest_stacked_queue_capacity,
-            &performance_test_stacked_queue_capacity,
+            &ptest_stacked_queue_capacity,
         },
     },
     {
         "enter", NULL,
         {
             &utest_stacked_queue_enter,
-            &performance_test_stacked_queue_enter,
+            &ptest_stacked_queue_enter,
         },
     },
     {
         "leave", NULL,
         {
             &utest_stacked_queue_leave,
-            &performance_test_stacked_queue_leave,
+            &ptest_stacked_queue_leave,
         },
     },
     {
         "front", NULL,
         {
             &utest_stacked_queue_front,
-            &performance_test_stacked_queue_enter,
+            NULL,
         },
     },
     {
         "rear", NULL,
         {
             &utest_stacked_queue_rear,
-            &performance_test_stacked_queue_leave,
+            NULL,
         },
     },
     {
@@ -664,7 +664,7 @@ static const struct test_layer_table doubly_end_queue[] = {
         "length", NULL,
         {
             &utest_doubly_end_queue_length,
-            NULL,
+            &ptest_doubly_end_queue_length,
         },
     },
     {

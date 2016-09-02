@@ -15,10 +15,11 @@ PT_QUEUE_destroy(doubly_end)
 
 
 static void
-performance_test_doubly_end_queue_length(uint32 count)
+ptest_doubly_end_queue_length(uint32 count)
 {
-    struct doubly_end_queue *queue;
+    s_doubly_end_queue_t *queue;
 
+    PERFORMANCE_TEST_BEGIN(doubly_end_queue_length);
     queue = test_doubly_end_queue_sample(224u);
 
     PERFORMANCE_TEST_CHECKPOINT;
