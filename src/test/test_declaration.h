@@ -65,14 +65,7 @@ static void test_case_filter_parser(struct test_case_filter *filter, char *arg);
 static void test_iterate_reference_clean(void);
 static void tree_iterate_handler(void *ptr);
 struct memory_maps * memory_maps_entry_find(char *name);
-void * malloc_wrap(uint32 size);
-void * realloc_wrap(void *ptr, uint32 size);
-void free_wrap(void *ptr);
-void libds_log_file_close(void);
-void libds_log_file_create(void);
-void libds_log_print(enum log_level lvl, const char *msg);
 void memory_maps_obtain(void);
-void memory_trace_print(void);
 void test_execution_start(void);
 void test_parameter_parser(uint32 argc, char **argv);
 

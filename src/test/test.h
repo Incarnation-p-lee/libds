@@ -12,7 +12,6 @@
 #define M_SHARED               (0x1u << 4)
 #define M_PRIVATE              (0x1u << 5)
 
-#define LOG_FNAME              "libds.log"
 
 #define RESULT_CHECK_doubly_linked_list_node(aim, ex, pass)            \
     do {                                                               \
@@ -35,11 +34,11 @@ struct memory_maps {
     uint32      authority;
     union {
         void    *begin;
-        NUMERAL b_val;
+        ptr_t   b_val;
     };
     union {
         void    *end;
-        NUMERAL e_val;
+        ptr_t   e_val;
     };
 };
 
@@ -116,11 +115,7 @@ static struct memory_maps mmaps[MAP_ENTRY_MAX] = {
     {},
 };
 
-static uint64 malloc_cnt = 0;
-static uint64 free_cnt = 0;
-static uint64 realloc_cnt = 0;
 static uint32 reference = 0;
-static FILE *logfile;
 
 #endif
 

@@ -9,6 +9,8 @@ enum ITER_ORDER {
     ORDER_END,
 };
 
+#define true                   1
+#define false                  0
 #define SIZE_INVALID           0xffffffffu
 #define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation

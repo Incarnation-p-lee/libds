@@ -13,6 +13,12 @@ static const uint32 fixed_prime[] = {
     2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369,
 };
 
-#define FIXED_PRIME_MAX fixed_prime[array_sizeof(fixed_prime) - 1]
+static FILE *logfile;
+static uint64 malloc_cnt = 0;
+static uint64 free_cnt = 0;
+static uint64 realloc_cnt = 0;
+
+#define LOG_FNAME              "libds.log"
+#define FIXED_PRIME_MAX         fixed_prime[array_sizeof(fixed_prime) - 1]
 
 #endif

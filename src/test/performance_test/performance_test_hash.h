@@ -70,7 +70,7 @@ ptest_##name##_hash_insert(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                 \
                                                  \
     while (count--) {                            \
-        HASH_insert(&hash, &count + count);      \
+        HASH_insert(hash, &count + count);       \
     }                                            \
                                                  \
     PERFORMANCE_TEST_ENDPOINT;                   \
@@ -93,7 +93,7 @@ ptest_##name##_hash_remove(uint32 count)         \
     hash = HASH_create(count * 3 + 1);           \
                                                  \
     while (count--) {                            \
-        HASH_insert(&hash, &count + count);      \
+        HASH_insert(hash, &count + count);       \
     }                                            \
                                                  \
     count = tmp;                                 \
@@ -124,7 +124,7 @@ ptest_##name##_hash_find(uint32 count)         \
     hash = HASH_create(count * 3 + 1);         \
                                                \
     while (count--) {                          \
-        HASH_insert(&hash, &count + count);    \
+        HASH_insert(hash, &count + count);     \
     }                                          \
                                                \
     count = tmp;                               \
@@ -155,7 +155,7 @@ ptest_##name##_hash_rehashing(uint32 count)         \
     PERFORMANCE_TEST_CHECKPOINT;                    \
                                                     \
     while (count--) {                               \
-        hash = HASH_rehashing(&hash);               \
+        HASH_rehashing(hash);                       \
     }                                               \
                                                     \
     PERFORMANCE_TEST_ENDPOINT;                      \
