@@ -54,7 +54,7 @@ memory_cache_free(void *addr)
 
     if (!complain_null_pointer_p(addr)) {
         size = *(uint32 *)(MEM_TO_REAL(addr));
-        assert_exit(0 != size);
+        assert_exit(0 < size);
 
         if (!memory_cache_add_entry_p(addr, size)) {
             free_ds(MEM_TO_REAL(addr));

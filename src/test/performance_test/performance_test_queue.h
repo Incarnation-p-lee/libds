@@ -49,7 +49,7 @@ ptest_##name##_queue_resize(uint32 count)           \
     PERFORMANCE_TEST_CHECKPOINT;                    \
                                                     \
     while (count--) {                               \
-        QUEUE_resize(queue, QUEUE_rest(queue) + 1); \
+        QUEUE_resize(queue, count);                 \
     }                                               \
                                                     \
     PERFORMANCE_TEST_ENDPOINT;                      \
@@ -121,6 +121,48 @@ ptest_##name##_queue_capacity(uint32 count)         \
     PERFORMANCE_TEST_RESULT(name##_queue_capacity); \
 }
 
+#define PT_QUEUE_front(name)                     \
+static void                                      \
+ptest_##name##_queue_front(uint32 count)         \
+{                                                \
+    QUEUE *queue;                                \
+                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_queue_front);  \
+    queue = QUEUE_create();                      \
+                                                 \
+    PERFORMANCE_TEST_CHECKPOINT;                 \
+                                                 \
+    while (count--) {                            \
+        QUEUE_front(queue);                      \
+    }                                            \
+                                                 \
+    PERFORMANCE_TEST_ENDPOINT;                   \
+                                                 \
+    QUEUE_destroy(&queue);                       \
+    PERFORMANCE_TEST_RESULT(name##_queue_front); \
+}
+
+#define PT_QUEUE_rear(name)                     \
+static void                                     \
+ptest_##name##_queue_rear(uint32 count)         \
+{                                               \
+    QUEUE *queue;                               \
+                                                \
+    PERFORMANCE_TEST_BEGIN(name##_queue_rear);  \
+    queue = QUEUE_create();                     \
+                                                \
+    PERFORMANCE_TEST_CHECKPOINT;                \
+                                                \
+    while (count--) {                           \
+        QUEUE_rear(queue);                      \
+    }                                           \
+                                                \
+    PERFORMANCE_TEST_ENDPOINT;                  \
+                                                \
+    QUEUE_destroy(&queue);                      \
+    PERFORMANCE_TEST_RESULT(name##_queue_rear); \
+}
+
 #define PT_QUEUE_enter(name)                     \
 static void                                      \
 ptest_##name##_queue_enter(uint32 count)         \
@@ -162,6 +204,69 @@ ptest_##name##_queue_leave(uint32 count)         \
                                                  \
     QUEUE_destroy(&queue);                       \
     PERFORMANCE_TEST_RESULT(name##_queue_leave); \
+}
+
+#define PT_QUEUE_empty_p(name)                     \
+static void                                        \
+ptest_##name##_queue_empty_p(uint32 count)         \
+{                                                  \
+    QUEUE *queue;                                  \
+                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_queue_empty_p);  \
+    queue = QUEUE_create();                        \
+                                                   \
+    PERFORMANCE_TEST_CHECKPOINT;                   \
+                                                   \
+    while (count--) {                              \
+        QUEUE_empty_p(queue);                      \
+    }                                              \
+                                                   \
+    PERFORMANCE_TEST_ENDPOINT;                     \
+                                                   \
+    QUEUE_destroy(&queue);                         \
+    PERFORMANCE_TEST_RESULT(name##_queue_empty_p); \
+}
+
+#define PT_QUEUE_cleanup(name)                     \
+static void                                        \
+ptest_##name##_queue_cleanup(uint32 count)         \
+{                                                  \
+    QUEUE *queue;                                  \
+                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_queue_cleanup);  \
+    queue = QUEUE_create();                        \
+                                                   \
+    PERFORMANCE_TEST_CHECKPOINT;                   \
+                                                   \
+    while (count--) {                              \
+        QUEUE_cleanup(queue);                      \
+    }                                              \
+                                                   \
+    PERFORMANCE_TEST_ENDPOINT;                     \
+                                                   \
+    QUEUE_destroy(&queue);                         \
+    PERFORMANCE_TEST_RESULT(name##_queue_cleanup); \
+}
+
+#define PT_QUEUE_iterate(name)                        \
+static void                                           \
+ptest_##name##_queue_iterate(uint32 count)            \
+{                                                     \
+    QUEUE *queue;                                     \
+                                                      \
+    PERFORMANCE_TEST_BEGIN(name##_queue_iterate);     \
+    queue = QUEUE_create();                           \
+                                                      \
+    PERFORMANCE_TEST_CHECKPOINT;                      \
+                                                      \
+    while (count--) {                                 \
+        QUEUE_iterate(queue, &queue_iterate_handler); \
+    }                                                 \
+                                                      \
+    PERFORMANCE_TEST_ENDPOINT;                        \
+                                                      \
+    QUEUE_destroy(&queue);                            \
+    PERFORMANCE_TEST_RESULT(name##_queue_iterate);    \
 }
 
 #endif

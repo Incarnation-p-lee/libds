@@ -516,35 +516,35 @@ static const struct test_layer_table array_queue[] = {
         "front", NULL,
         {
             &utest_array_queue_front,
-            NULL,
+            &ptest_array_queue_front,
         },
     },
     {
         "rear", NULL,
         {
             &utest_array_queue_rear,
-            NULL,
+            &ptest_array_queue_rear,
         },
     },
     {
         "empty_p", NULL,
         {
             &utest_array_queue_empty_p,
-            &performance_test_array_queue_empty_p,
+            &ptest_array_queue_empty_p,
         },
     },
     {
         "cleanup", NULL,
         {
             &utest_array_queue_cleanup,
-            &performance_test_array_queue_cleanup,
+            &ptest_array_queue_cleanup,
         },
     },
     {
         "iterate", NULL,
         {
             &utest_array_queue_iterate,
-            &performance_test_array_queue_iterate,
+            &ptest_array_queue_iterate,
         },
     },
     {NULL, NULL, {NULL, NULL},},
@@ -611,35 +611,35 @@ static const struct test_layer_table stacked_queue[] = {
         "front", NULL,
         {
             &utest_stacked_queue_front,
-            NULL,
+            &ptest_stacked_queue_front,
         },
     },
     {
         "rear", NULL,
         {
             &utest_stacked_queue_rear,
-            NULL,
+            &ptest_stacked_queue_rear,
         },
     },
     {
         "empty_p", NULL,
         {
             &utest_stacked_queue_empty_p,
-            &performance_test_stacked_queue_empty_p,
+            &ptest_stacked_queue_empty_p,
         },
     },
     {
         "cleanup", NULL,
         {
             &utest_stacked_queue_cleanup,
-            &performance_test_stacked_queue_cleanup,
+            &ptest_stacked_queue_cleanup,
         },
     },
     {
         "iterate", NULL,
         {
             &utest_stacked_queue_iterate,
-            &performance_test_stacked_queue_iterate,
+            &ptest_stacked_queue_iterate,
         },
     },
     {NULL, NULL, {NULL, NULL},},
@@ -671,63 +671,63 @@ static const struct test_layer_table doubly_end_queue[] = {
         "empty_p", NULL,
         {
             &utest_doubly_end_queue_empty_p,
-            NULL,
+            &ptest_doubly_end_queue_empty_p,
         },
     },
     {
         "front", NULL,
         {
             &utest_doubly_end_queue_front,
-            NULL,
+            &ptest_doubly_end_queue_front,
         },
     },
     {
         "front_enter", NULL,
         {
             &utest_doubly_end_queue_front_enter,
-            NULL,
+            &ptest_doubly_end_queue_front_enter,
         },
     },
     {
         "front_leave", NULL,
         {
             &utest_doubly_end_queue_front_leave,
-            NULL,
+            &ptest_doubly_end_queue_front_leave,
         },
     },
     {
         "rear", NULL,
         {
             &utest_doubly_end_queue_rear,
-            NULL,
+            &ptest_doubly_end_queue_rear,
         },
     },
     {
         "rear_enter", NULL,
         {
             &utest_doubly_end_queue_rear_enter,
-            NULL,
+            &ptest_doubly_end_queue_rear_enter,
         },
     },
     {
         "rear_leave", NULL,
         {
             &utest_doubly_end_queue_rear_leave,
-            NULL,
+            &ptest_doubly_end_queue_rear_leave,
         },
     },
     {
         "cleanup", NULL,
         {
             &utest_doubly_end_queue_cleanup,
-            NULL,
+            &ptest_doubly_end_queue_cleanup,
         },
     },
     {
         "iterate", NULL,
         {
             &utest_doubly_end_queue_iterate,
-            NULL,
+            &ptest_doubly_end_queue_iterate,
         },
     },
     {NULL, NULL, {NULL, NULL},},

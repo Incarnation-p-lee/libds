@@ -6,8 +6,13 @@
 #define QUEUE_resize           array_queue_resize
 #define QUEUE_full_p           array_queue_full_p
 #define QUEUE_capacity         array_queue_capacity
+#define QUEUE_front            array_queue_front
+#define QUEUE_rear             array_queue_rear
 #define QUEUE_enter            array_queue_enter
 #define QUEUE_leave            array_queue_leave
+#define QUEUE_empty_p          array_queue_empty_p
+#define QUEUE_cleanup          array_queue_cleanup
+#define QUEUE_iterate          array_queue_iterate
 
 #include "../performance_test_queue.h"
 
@@ -17,8 +22,13 @@ PT_QUEUE_resize(array)
 PT_QUEUE_rest(array)
 PT_QUEUE_full_p(array)
 PT_QUEUE_capacity(array)
+PT_QUEUE_front(array)
+PT_QUEUE_rear(array)
 PT_QUEUE_enter(array)
 PT_QUEUE_leave(array)
+PT_QUEUE_empty_p(array)
+PT_QUEUE_cleanup(array)
+PT_QUEUE_iterate(array)
 
 #undef QUEUE
 
@@ -28,67 +38,11 @@ PT_QUEUE_leave(array)
 #undef QUEUE_resize
 #undef QUEUE_full_p
 #undef QUEUE_capacity
+#undef QUEUE_front
+#undef QUEUE_rear
 #undef QUEUE_enter
 #undef QUEUE_leave
-
-
-static void
-performance_test_array_queue_empty_p(uint32 count)
-{
-    struct array_queue *queue;
-
-    queue = array_queue_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        array_queue_empty_p(queue);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    array_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(array_queue_empty_p);
-}
-
-static void
-performance_test_array_queue_cleanup(uint32 count)
-{
-    struct array_queue *queue;
-
-    queue = array_queue_create();
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        array_queue_cleanup(queue);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    array_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(array_queue_cleanup);
-}
-
-static void
-performance_test_array_queue_iterate(uint32 count)
-{
-    struct array_queue *queue;
-
-    queue = array_queue_create();
-    while (!array_queue_full_p(queue)) {
-        array_queue_enter(queue, queue);
-    }
-
-    PERFORMANCE_TEST_CHECKPOINT;
-
-    while (count--) {
-        array_queue_iterate(queue, &queue_iterate_handler);
-    }
-
-    PERFORMANCE_TEST_ENDPOINT;
-
-    array_queue_destroy(&queue);
-    PERFORMANCE_TEST_RESULT(array_queue_iterate);
-}
+#undef QUEUE_empty_p
+#undef QUEUE_cleanup
+#undef QUEUE_iterate
 
