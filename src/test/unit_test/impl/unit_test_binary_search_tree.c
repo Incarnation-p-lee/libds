@@ -1,6 +1,5 @@
 #define TREE                   binary_search_tree
 #define TREE_nice              binary_search_tree_nice
-#define TREE_val               binary_search_tree_val
 #define TREE_left              binary_search_tree_left
 #define TREE_right             binary_search_tree_right
 #define TEST_tree_sample       test_binary_search_tree_sample
@@ -33,7 +32,6 @@ UT_TREE_iterate(binary_search)
 
 #undef TREE
 #undef TREE_nice
-#undef TREE_val
 #undef TREE_left
 #undef TREE_right
 #undef TEST_tree_sample

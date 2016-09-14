@@ -39,6 +39,8 @@ enum ITER_ORDER {
 #define STACK_SIZE_INVALID     SIZE_INVALID
 #define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
+#define TREE_NICE_INVALID      (sint64)(-1)
+
 #define PTR_INVALID            (void *)-1 // invalid pointer
 // New-Line
 
@@ -63,6 +65,8 @@ typedef struct array_queue           s_array_queue_t;
 typedef struct stacked_queue         s_stacked_queue_t;
 typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
+typedef struct binary_search_tree    s_binary_search_tree_t;
+typedef enum ITER_ORDER              e_iter_order_t;
 
 /*
  *   Implement the unify single_linked_list interface
@@ -184,17 +188,10 @@ struct doubly_end_queue {
 };
 
 /*
- * collision chain of the same nice value
- */
-struct collision_chain {
-    struct doubly_linked_list *link;
-    sint64                    nice;
-};
-
-/*
  * binary search tree
  */
 struct binary_search_tree {
+    void *val;
     sint64                    nice;
     struct binary_search_tree *left;
     struct binary_search_tree *right;

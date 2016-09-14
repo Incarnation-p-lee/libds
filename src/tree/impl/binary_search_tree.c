@@ -1,73 +1,71 @@
 void
-binary_search_tree_node_nice_set(struct binary_search_tree *tree, sint64 nice)
+binary_search_tree_nice_set(s_binary_search_tree_t *tree, sint64 nice)
 {
-    tree->nice = nice;
+    if (binary_search_tree_structure_legal_p(tree)) {
+        tree->nice = nice;
+    }
 }
 
 sint64
-binary_search_tree_nice(struct binary_search_tree *tree)
+binary_search_tree_nice(s_binary_search_tree_t *tree)
 {
-    return tree->nice;
+    if (binary_search_tree_structure_legal_p(tree)) {
+        return tree->nice;
+    } else {
+        return TREE_NICE_INVALID;
+    }
 }
 
-struct binary_search_tree *
-binary_search_tree_left(struct binary_search_tree *tree)
+s_binary_search_tree_t *
+binary_search_tree_left(s_binary_search_tree_t *tree)
 {
-    return tree->left;
+    if (binary_search_tree_structure_legal_p(tree)) {
+        return tree->left;
+    } else {
+        return PTR_INVALID;
+    }
 }
 
-struct binary_search_tree *
-binary_search_tree_right(struct binary_search_tree *tree)
+s_binary_search_tree_t *
+binary_search_tree_right(s_binary_search_tree_t *tree)
 {
-    return tree->right;
+    if (binary_search_tree_structure_legal_p(tree)) {
+        return tree->right;
+    } else {
+        return PTR_INVALID;
+    }
 }
 
-void
-binary_search_tree_left_set(struct binary_search_tree *tree,
-    struct binary_search_tree *left)
-{
-    tree->left = left;
-}
-
-void
-binary_search_tree_right_set(struct binary_search_tree *tree,
-    struct binary_search_tree *right)
-{
-    tree->right = right;
-}
-
-struct binary_search_tree *
+s_binary_search_tree_t *
 binary_search_tree_create(void)
 {
-    struct binary_search_tree *tree;
+    s_binary_search_tree_t *tree;
 
     tree = memory_cache_allocate(sizeof(*tree));
-    binary_search_tree_initial_internal(tree, 0);
+    binary_search_tree_initial_i(tree, 0);
 
     return tree;
 }
 
 static inline void
-binary_search_tree_initial_internal(struct binary_search_tree *tree,
-    sint64 nice)
+binary_search_tree_initial_i(s_binary_search_tree_t *tree, sint64 nice)
 {
     assert_exit(!complain_null_pointer_p(tree));
 
-    tree->left = NULL;
-    tree->right = NULL;
     tree->nice = nice;
+    tree->left = tree->right = NULL;
 }
 
 void
-binary_search_tree_initial(struct binary_search_tree *tree, sint64 nice)
+binary_search_tree_initial(s_binary_search_tree_t *tree, sint64 nice)
 {
-    if (binary_search_tree_structure_legal_p(tree)) {
-        binary_search_tree_initial_internal(tree, nice);
+    if (!complain_null_pointer_p(tree)) {
+        binary_search_tree_initial_i(tree, nice);
     }
 }
 
 static inline bool
-binary_search_tree_structure_legal_p(struct binary_search_tree *tree)
+binary_search_tree_structure_legal_p(s_binary_search_tree_t *tree)
 {
     if (complain_null_pointer_p(tree)) {
         return false;
@@ -81,7 +79,7 @@ binary_search_tree_structure_legal_p(struct binary_search_tree *tree)
 }
 
 static inline void
-binary_search_tree_node_destroy(struct binary_search_tree *node)
+binary_search_tree_node_destroy(s_binary_search_tree_t *node)
 {
     assert_exit(binary_search_tree_structure_legal_p(node));
 
@@ -89,65 +87,68 @@ binary_search_tree_node_destroy(struct binary_search_tree *node)
 }
 
 static inline void
-binary_search_tree_destroy_internal(struct binary_search_tree **tree)
+binary_search_tree_destroy_i(s_binary_search_tree_t **tree)
 {
+    s_binary_search_tree_t *tmp;
+
     if (*tree && tree) {
+        tmp = *tree;
         /*
          * destroy node in post iterater order.
          * Warning: sometime if nested function call is too deepth,
          *     it may reach the default limitation of elf stack size, 8192KB.
          *     use ulimit -s unlimited or refine this function without nested.
          */
-        binary_search_tree_destroy_internal(&(*tree)->left);
-        binary_search_tree_destroy_internal(&(*tree)->right);
-        binary_search_tree_node_destroy(*tree);
+        binary_search_tree_destroy_i(&tmp->left);
+        binary_search_tree_destroy_i(&tmp->right);
+        binary_search_tree_node_destroy(tmp);
         *tree = NULL;
     }
 }
 
 void
-binary_search_tree_destroy(struct binary_search_tree **tree)
+binary_search_tree_destroy(s_binary_search_tree_t **tree)
 {
     if (complain_null_pointer_p(tree)) {
         return;
     } else if (binary_search_tree_structure_legal_p(*tree)) {
-        binary_search_tree_destroy_internal(tree);
+        binary_search_tree_destroy_i(tree);
     }
 }
 
-static inline struct binary_search_tree *
-binary_search_tree_find_internal(struct binary_search_tree *tree,
-    sint64 nice)
+static inline s_binary_search_tree_t *
+binary_search_tree_find_i(s_binary_search_tree_t *tree, sint64 nice)
 {
-    if (!binary_search_tree_structure_legal_p(tree)) {
-        return NULL;
-    } else {
-        while (tree) {
-            if (nice > binary_search_tree_nice(tree)) {
-                tree = tree->right;
-            } else if (nice < binary_search_tree_nice(tree)) {
-                tree = tree->left;
-            } else {
-                return tree;
-            }
+    sint64 node_nice;
+
+    assert_exit(binary_search_tree_structure_legal_p(tree));
+
+    while (tree) {
+        node_nice = tree->nice;
+        if (nice > node_nice) {
+            tree = tree->right;
+        } else if (nice < node_nice) {
+            tree = tree->left;
+        } else {
+            return tree;
         }
-
-        return NULL;
     }
+
+    return NULL;
 }
 
-struct binary_search_tree *
-binary_search_tree_find(struct binary_search_tree *tree, sint64 nice)
+s_binary_search_tree_t *
+binary_search_tree_find(s_binary_search_tree_t *tree, sint64 nice)
 {
     if (!binary_search_tree_structure_legal_p(tree)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
-        return binary_search_tree_find_internal(tree, nice);
+        return binary_search_tree_find_i(tree, nice);
     }
 }
 
-static inline struct binary_search_tree *
-binary_search_tree_find_min_internal(struct binary_search_tree *tree)
+static inline s_binary_search_tree_t *
+binary_search_tree_find_min_i(s_binary_search_tree_t *tree)
 {
     assert_exit(binary_search_tree_structure_legal_p(tree));
 
@@ -158,18 +159,18 @@ binary_search_tree_find_min_internal(struct binary_search_tree *tree)
     return tree;
 }
 
-struct binary_search_tree  *
-binary_search_tree_find_min(struct binary_search_tree *tree)
+s_binary_search_tree_t  *
+binary_search_tree_find_min(s_binary_search_tree_t *tree)
 {
     if (!binary_search_tree_structure_legal_p(tree)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
-        return binary_search_tree_find_min_internal(tree);
+        return binary_search_tree_find_min_i(tree);
     }
 }
 
-static inline struct binary_search_tree *
-binary_search_tree_find_max_internal(struct binary_search_tree *tree)
+static inline s_binary_search_tree_t *
+binary_search_tree_find_max_i(s_binary_search_tree_t *tree)
 {
     assert_exit(binary_search_tree_structure_legal_p(tree));
 
@@ -180,18 +181,18 @@ binary_search_tree_find_max_internal(struct binary_search_tree *tree)
     return tree;
 }
 
-struct binary_search_tree *
-binary_search_tree_find_max(struct binary_search_tree *tree)
+s_binary_search_tree_t *
+binary_search_tree_find_max(s_binary_search_tree_t *tree)
 {
     if (!binary_search_tree_structure_legal_p(tree)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
-        return binary_search_tree_find_max_internal(tree);
+        return binary_search_tree_find_max_i(tree);
     }
 }
 
 static inline sint32
-binary_search_tree_height_internal(struct binary_search_tree *tree)
+binary_search_tree_height_i(s_binary_search_tree_t *tree)
 {
     sint32 left;
     sint32 right;
@@ -199,55 +200,51 @@ binary_search_tree_height_internal(struct binary_search_tree *tree)
     if (!tree) {
         return -1;
     } else {
-        left = binary_search_tree_height_internal(tree->left);
-        right = binary_search_tree_height_internal(tree->right);
+        left = binary_search_tree_height_i(tree->left);
+        right = binary_search_tree_height_i(tree->right);
 
         return MAX_S32(left, right) + 1;
     }
 }
 
 sint32
-binary_search_tree_height(struct binary_search_tree *tree)
+binary_search_tree_height(s_binary_search_tree_t *tree)
 {
     if (!binary_search_tree_structure_legal_p(tree)) {
         return -1;
     } else {
-        return binary_search_tree_height_internal(tree);
+        return binary_search_tree_height_i(tree);
     }
 }
 
 static inline bool
-binary_search_tree_contains_p_internal(struct binary_search_tree *tree,
-    struct binary_search_tree *node)
+binary_search_tree_contains_p_i(s_binary_search_tree_t *tree,
+    s_binary_search_tree_t *node)
 {
     bool retval;
-    sint64 nice;
-    struct binary_search_tree *left;
-    struct binary_search_tree *right;
+    s_binary_search_tree_t *left, *right;
 
     assert_exit(binary_search_tree_structure_legal_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(node));
 
     retval = false;
-    nice = node->nice;
 
     while (tree) {
         if (node == tree) {
             return true;
-        } else if (nice > tree->nice) {
+        } else if (node->nice > tree->nice) {
             tree = tree->right;
-        } else if (nice < tree->nice) {
+        } else if (node->nice < tree->nice) {
             tree = tree->left;
         } else {
             left = tree->left;
             right = tree->right;
 
-            // Handle repeated nice
-            if (left && nice == left->nice) {
-                retval = binary_search_tree_contains_p_internal(left, node);
+            if (left && node->nice == left->nice) { // Handle repeated nice
+                retval = binary_search_tree_contains_p_i(left, node);
             }
-            if (!retval && right && nice == right->nice) {
-                retval = binary_search_tree_contains_p_internal(right, node);
+            if (!retval && right && node->nice == right->nice) {
+                retval = binary_search_tree_contains_p_i(right, node);
             }
 
             return retval;
@@ -258,25 +255,24 @@ binary_search_tree_contains_p_internal(struct binary_search_tree *tree,
 }
 
 bool
-binary_search_tree_contains_p(struct binary_search_tree *tree,
-    struct binary_search_tree *node)
+binary_search_tree_contains_p(s_binary_search_tree_t *tree,
+    s_binary_search_tree_t *node)
 {
     if (!binary_search_tree_structure_legal_p(tree)) {
         return false;
     } else if (!binary_search_tree_structure_legal_p(node)) {
         return false;
     } else {
-        return binary_search_tree_contains_p_internal(tree, node);
+        return binary_search_tree_contains_p_i(tree, node);
     }
 }
 
-static inline struct binary_search_tree *
-binary_search_tree_insert_internal(struct binary_search_tree **tree,
-    struct binary_search_tree *node)
+static inline s_binary_search_tree_t *
+binary_search_tree_insert_i(s_binary_search_tree_t **tree,
+    s_binary_search_tree_t *node)
 {
-    sint64 nice;
-    struct binary_search_tree **iter;
-    struct binary_search_tree *binary;
+    s_binary_search_tree_t **iter;
+    s_binary_search_tree_t *binary;
 
     assert_exit(!complain_null_pointer_p(tree));
     assert_exit(binary_search_tree_ordered_p(*tree));
@@ -284,49 +280,41 @@ binary_search_tree_insert_internal(struct binary_search_tree **tree,
     assert_exit(binary_search_tree_structure_legal_p(node));
 
     iter = tree;
-    nice = node->nice;
-
     while (*iter) {
-        if (nice > (*iter)->nice) {
+        if (node->nice > (*iter)->nice) {
             iter = &(*iter)->right;
             direct++;
-        } else if (nice < (*iter)->nice) {
+        } else if (node->nice < (*iter)->nice) {
             iter = &(*iter)->left;
             direct--;
-        } else if (node != *iter) {
+        } else if (node == *iter) {
+            pr_log_warn("Insert node exist, nothing will be done.\n");
+            return NULL;
+        } else {
             binary = *iter;
-
-            if (direct > 0) { // If right is heavy, inserted to left.
+            if (direct > 0) {        // If right is heavy, inserted to left.
                 node->left = binary;
                 node->right = binary->right;
                 binary->right = NULL;
-                *iter = node;
             } else {
-                node->left = binary->left;
                 node->right = binary;
+                node->left = binary->left;
                 binary->left = NULL;
-                *iter = node;
             }
 
-            direct = 0;
+            direct = 0;              // Exit point and reset direct
             break;
-        } else {
-            pr_log_warn("Insert node exist, nothing will be done.\n");
-            return NULL;
         }
     }
-
-    if (!*iter) {
-        *iter = node;
-    }
+    *iter = node;
 
     assert_exit(binary_search_tree_ordered_p(*tree));
     return node;
 }
 
-struct binary_search_tree *
-binary_search_tree_insert(struct binary_search_tree **tree,
-    struct binary_search_tree *node)
+s_binary_search_tree_t *
+binary_search_tree_insert(s_binary_search_tree_t **tree,
+    s_binary_search_tree_t *node)
 {
     if (complain_null_pointer_p(tree)) {
         return PTR_INVALID;
@@ -335,12 +323,12 @@ binary_search_tree_insert(struct binary_search_tree **tree,
     } else if (!binary_search_tree_structure_legal_p(node)) {
         return PTR_INVALID;
     } else {
-        return binary_search_tree_insert_internal(tree, node);
+        return binary_search_tree_insert_i(tree, node);
     }
 }
 
 static inline bool
-binary_search_tree_doubly_child_p(struct binary_search_tree *node)
+binary_search_tree_doubly_child_p(s_binary_search_tree_t *node)
 {
     assert_exit(binary_search_tree_structure_legal_p(node));
 
@@ -351,11 +339,11 @@ binary_search_tree_doubly_child_p(struct binary_search_tree *node)
     }
 }
 
-static inline struct binary_search_tree **
-binary_search_tree_find_ptr_to_max(struct binary_search_tree **tree)
+static inline s_binary_search_tree_t **
+binary_search_tree_find_ptr_to_max(s_binary_search_tree_t **tree)
 {
-    struct binary_search_tree **max;
-    struct binary_search_tree *node;
+    s_binary_search_tree_t **max;
+    s_binary_search_tree_t *node;
 
     assert_exit(!complain_null_pointer_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(*tree));
@@ -371,11 +359,11 @@ binary_search_tree_find_ptr_to_max(struct binary_search_tree **tree)
     return max;
 }
 
-static inline struct binary_search_tree **
-binary_search_tree_find_ptr_to_min(struct binary_search_tree **tree)
+static inline s_binary_search_tree_t **
+binary_search_tree_find_ptr_to_min(s_binary_search_tree_t **tree)
 {
-    struct binary_search_tree **min;
-    struct binary_search_tree *node;
+    s_binary_search_tree_t **min;
+    s_binary_search_tree_t *node;
 
     assert_exit(!complain_null_pointer_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(*tree));
@@ -392,8 +380,8 @@ binary_search_tree_find_ptr_to_min(struct binary_search_tree **tree)
 }
 
 static inline void
-binary_search_tree_swap_child(struct binary_search_tree *a,
-    struct binary_search_tree *b)
+binary_search_tree_swap_child(s_binary_search_tree_t *a,
+    s_binary_search_tree_t *b)
 {
     void *tmp;
 
@@ -410,8 +398,8 @@ binary_search_tree_swap_child(struct binary_search_tree *a,
 }
 
 static inline void
-binary_search_tree_lt_doubly_child_strip(struct binary_search_tree **pre,
-    struct binary_search_tree *node)
+binary_search_tree_lt_doubly_child_strip(s_binary_search_tree_t **pre,
+    s_binary_search_tree_t *node)
 {
     assert_exit(!complain_null_pointer_p(pre));
     assert_exit(binary_search_tree_structure_legal_p(node));
@@ -430,20 +418,18 @@ binary_search_tree_lt_doubly_child_strip(struct binary_search_tree **pre,
 }
 
 static inline void
-binary_search_tree_child_strip_from_max(struct binary_search_tree **node_pre)
+binary_search_tree_child_strip_from_max(s_binary_search_tree_t **node_pre)
 {
-    struct binary_search_tree *binary;
-    struct binary_search_tree *max;
-    struct binary_search_tree **max_pre;
+    s_binary_search_tree_t *binary;
+    s_binary_search_tree_t *max;
+    s_binary_search_tree_t **max_pre;
 
     assert_exit(!complain_null_pointer_p(node_pre));
     assert_exit(binary_search_tree_structure_legal_p(*node_pre));
     assert_exit(binary_search_tree_doubly_child_p(*node_pre));
 
     binary = *node_pre;
-
-    if (!binary->left->right) {
-        // short cut here
+    if (!binary->left->right) {                      // short cut here
         *node_pre = binary->left;
         binary->left->right = binary->right;
         binary->left = binary->right = NULL;
@@ -460,11 +446,11 @@ binary_search_tree_child_strip_from_max(struct binary_search_tree **node_pre)
 }
 
 static inline void
-binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
+binary_search_tree_child_strip_from_min(s_binary_search_tree_t **node_pre)
 {
-    struct binary_search_tree *binary;
-    struct binary_search_tree *min;
-    struct binary_search_tree **min_pre;
+    s_binary_search_tree_t *binary;
+    s_binary_search_tree_t *min;
+    s_binary_search_tree_t **min_pre;
 
     assert_exit(!complain_null_pointer_p(node_pre));
     assert_exit(binary_search_tree_structure_legal_p(*node_pre));
@@ -472,8 +458,7 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
 
     binary = *node_pre;
 
-    if (!binary->right->left) {
-        // short cut here
+    if (!binary->right->left) {                      // short cut here
         *node_pre = binary->right;
         binary->right->left = binary->left;
         binary->left = binary->right = NULL;
@@ -490,7 +475,7 @@ binary_search_tree_child_strip_from_min(struct binary_search_tree **node_pre)
 }
 
 static inline void
-binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
+binary_search_tree_doubly_child_strip(s_binary_search_tree_t **node_pre)
 {
     assert_exit(!complain_null_pointer_p(node_pre));
     assert_exit(binary_search_tree_structure_legal_p(*node_pre));
@@ -501,18 +486,17 @@ binary_search_tree_doubly_child_strip(struct binary_search_tree **node_pre)
     } else {
         binary_search_tree_child_strip_from_min(node_pre);
     }
-
     direct = 0;
 }
 
-static inline struct binary_search_tree *
-binary_search_tree_remove_internal(struct binary_search_tree **tree,
-    struct binary_search_tree *node)
+static inline s_binary_search_tree_t *
+binary_search_tree_remove_i(s_binary_search_tree_t **tree,
+    s_binary_search_tree_t *node)
 {
     sint64 nice;
-    struct binary_search_tree *n;
-    struct binary_search_tree *removed;
-    struct binary_search_tree **pre;
+    s_binary_search_tree_t *n;
+    s_binary_search_tree_t *removed;
+    s_binary_search_tree_t **pre;
 
     assert_exit(!complain_null_pointer_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(*tree));
@@ -520,8 +504,7 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
     assert_exit(binary_search_tree_ordered_p(*tree));
     assert_exit(binary_search_tree_structure_legal_p(node));
 
-    pre = tree;
-    n = *pre;
+    n = *(pre = tree);
     nice = node->nice;
     removed = NULL;
 
@@ -534,10 +517,10 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
             direct--;
         } else if (node != n) {
             if (n->left && nice == n->left->nice) {
-                removed = binary_search_tree_remove_internal(&n->left, node);
+                removed = binary_search_tree_remove_i(&n->left, node);
             }
             if (NULL == removed && n->right && nice == n->right->nice) {
-                removed = binary_search_tree_remove_internal(&n->right, node);
+                removed = binary_search_tree_remove_i(&n->right, node);
             }
             break;
         } else if (binary_search_tree_doubly_child_p(n)) {
@@ -558,9 +541,9 @@ binary_search_tree_remove_internal(struct binary_search_tree **tree,
     return removed;
 }
 
-struct binary_search_tree *
-binary_search_tree_remove(struct binary_search_tree **tree,
-    struct binary_search_tree *node)
+s_binary_search_tree_t *
+binary_search_tree_remove(s_binary_search_tree_t **tree,
+    s_binary_search_tree_t *node)
 {
     if (complain_null_pointer_p(tree)) {
         return PTR_INVALID;
@@ -569,13 +552,13 @@ binary_search_tree_remove(struct binary_search_tree **tree,
     } else if (!binary_search_tree_structure_legal_p(node)) {
         return PTR_INVALID;
     } else {
-        return binary_search_tree_remove_internal(tree, node);
+        return binary_search_tree_remove_i(tree, node);
     }
 }
 
 static inline void
-binary_search_tree_iterate_internal(struct binary_search_tree *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+binary_search_tree_iterate_i(s_binary_search_tree_t *tree,
+    void (*handle)(void *), e_iter_order_t order)
 {
     assert_exit(LEGAL_ORDER_P(order));
     assert_exit(!complain_null_pointer_p(handle));
@@ -585,13 +568,13 @@ binary_search_tree_iterate_internal(struct binary_search_tree *tree,
             handle(tree);
         }
 
-        binary_search_tree_iterate_internal(tree->left, handle, order);
+        binary_search_tree_iterate_i(tree->left, handle, order);
 
         if (ORDER_IN == order) {
             handle(tree);
         }
 
-        binary_search_tree_iterate_internal(tree->right, handle, order);
+        binary_search_tree_iterate_i(tree->right, handle, order);
 
         if (ORDER_POST == order) {
             handle(tree);
@@ -600,18 +583,15 @@ binary_search_tree_iterate_internal(struct binary_search_tree *tree,
 }
 
 void
-binary_search_tree_iterate(struct binary_search_tree *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+binary_search_tree_iterate(s_binary_search_tree_t *tree,
+    void (*handle)(void *), e_iter_order_t order)
 {
     if (complain_null_pointer_p(handle)) {
         return;
-    } else if (!binary_search_tree_structure_legal_p(tree)) {
-        return;
     } else if (!LEGAL_ORDER_P(order)) {
         pr_log_warn("Invalid value of enum ITER_ORDER.\n");
-        return;
-    } else {
-        binary_search_tree_iterate_internal(tree, handle, order);
+    } else if (binary_search_tree_structure_legal_p(tree)) {
+        binary_search_tree_iterate_i(tree, handle, order);
     }
 }
 

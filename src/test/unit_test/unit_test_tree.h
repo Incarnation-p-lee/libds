@@ -10,6 +10,7 @@ utest_##name##_tree_create(void)                               \
                                                                \
     pass = true;                                               \
     tree = TREE_create();                                      \
+    UNIT_TEST_BEGIN(name##_tree_create);                       \
                                                                \
     RESULT_CHECK_NOT_EQUAL_pointer(NULL, tree, &pass);         \
                                                                \
@@ -29,6 +30,7 @@ utest_##name##_tree_initial(void)                              \
     nice = 0xfade;                                             \
     tree = TREE_create();                                      \
     TREE_initial(tree, nice);                                  \
+    UNIT_TEST_BEGIN(name##_tree_initial);                      \
                                                                \
     RESULT_CHECK_pointer(NULL, TREE_left(tree), &pass);        \
     RESULT_CHECK_pointer(NULL, TREE_right(tree), &pass);       \
@@ -47,6 +49,7 @@ utest_##name##_tree_destroy(void)                              \
                                                                \
     pass = true;                                               \
     tree = TREE_create();                                      \
+    UNIT_TEST_BEGIN(name##_tree_destroy);                      \
                                                                \
     TREE_destroy(NULL);                                        \
     TREE_destroy(&tree);                                       \
@@ -55,74 +58,77 @@ utest_##name##_tree_destroy(void)                              \
     UNIT_TEST_RESULT(name##_tree_destroy, pass);               \
 }
 
-#define UT_TREE_find(name)                                               \
-static void                                                              \
-utest_##name##_tree_find(void)                                           \
-{                                                                        \
-    bool pass;                                                           \
-    sint64 nice;                                                         \
-    struct TREE *tree;                                                   \
-    struct TREE *tmp;                                                    \
-                                                                         \
-    pass = true;                                                         \
-    tree = TEST_tree_sample(0x2234, 0xDEF);                             \
-                                                                         \
-    RESULT_CHECK_pointer(NULL, TREE_find(NULL, TREE_nice(tree)), &pass); \
-    RESULT_CHECK_pointer(tree, TREE_find(tree, TREE_nice(tree)), &pass); \
-    RESULT_CHECK_pointer(NULL, TREE_find(tree, 0xFFFFFFF), &pass);       \
-                                                                         \
-    tmp = TREE_find_min(tree);                                           \
-    nice = TREE_nice(tree);                                              \
-    tmp = TREE_find(tree, nice);                                         \
-    RESULT_CHECK_sint64(nice, TREE_nice(tmp), &pass);                    \
-                                                                         \
-    tmp = TREE_find_max(tree);                                           \
-    nice = TREE_nice(tree);                                              \
-    tmp = TREE_find(tree, nice);                                         \
-    RESULT_CHECK_sint64(nice, TREE_nice(tmp), &pass);                    \
-                                                                         \
-    TREE_destroy(&tree);                                                 \
-    UNIT_TEST_RESULT(name##_tree_find, pass);                            \
+#define UT_TREE_find(name)                                                      \
+static void                                                                     \
+utest_##name##_tree_find(void)                                                  \
+{                                                                               \
+    bool pass;                                                                  \
+    sint64 nice;                                                                \
+    struct TREE *tree;                                                          \
+    struct TREE *tmp;                                                           \
+                                                                                \
+    pass = true;                                                                \
+    tree = TEST_tree_sample(0x2234, 0xDEF);                                     \
+    UNIT_TEST_BEGIN(name##_tree_find);                                          \
+                                                                                \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_find(NULL, TREE_nice(tree)), &pass); \
+    RESULT_CHECK_pointer(tree, TREE_find(tree, TREE_nice(tree)), &pass);        \
+    RESULT_CHECK_pointer(NULL, TREE_find(tree, 0xFFFFFFF), &pass);              \
+                                                                                \
+    tmp = TREE_find_min(tree);                                                  \
+    nice = TREE_nice(tree);                                                     \
+    tmp = TREE_find(tree, nice);                                                \
+    RESULT_CHECK_sint64(nice, TREE_nice(tmp), &pass);                           \
+                                                                                \
+    tmp = TREE_find_max(tree);                                                  \
+    nice = TREE_nice(tree);                                                     \
+    tmp = TREE_find(tree, nice);                                                \
+    RESULT_CHECK_sint64(nice, TREE_nice(tmp), &pass);                           \
+                                                                                \
+    TREE_destroy(&tree);                                                        \
+    UNIT_TEST_RESULT(name##_tree_find, pass);                                   \
 }
 
-#define UT_TREE_find_min(name)                              \
-static void                                                 \
-utest_##name##_tree_find_min(void)                          \
-{                                                           \
-    bool pass;                                              \
-    struct TREE *tree;                                      \
-    struct TREE *tmp;                                       \
-                                                            \
-    pass = true;                                            \
-    tree = TEST_tree_sample(0x3134, 0xABD);                \
-                                                            \
-    RESULT_CHECK_pointer(NULL, TREE_find_min(NULL), &pass); \
-                                                            \
-    tmp = TREE_find_min(tree);                              \
-    RESULT_CHECK_pointer(NULL, TREE_left(tmp), &pass);      \
-                                                            \
-    TREE_destroy(&tree);                                    \
-    UNIT_TEST_RESULT(name##_find_min, pass);                \
+#define UT_TREE_find_min(name)                                     \
+static void                                                        \
+utest_##name##_tree_find_min(void)                                 \
+{                                                                  \
+    bool pass;                                                     \
+    struct TREE *tree;                                             \
+    struct TREE *tmp;                                              \
+                                                                   \
+    pass = true;                                                   \
+    tree = TEST_tree_sample(0x3134, 0xABD);                        \
+    UNIT_TEST_BEGIN(name##_tree_find_min);                         \
+                                                                   \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_find_min(NULL), &pass); \
+                                                                   \
+    tmp = TREE_find_min(tree);                                     \
+    RESULT_CHECK_pointer(NULL, TREE_left(tmp), &pass);             \
+                                                                   \
+    TREE_destroy(&tree);                                           \
+    UNIT_TEST_RESULT(name##_tree_find_min, pass);                  \
 }
 
-#define UT_TREE_find_max(name)                              \
-static void                                                 \
-utest_##name##_tree_find_max(void)                          \
-{                                                           \
-    bool pass;                                              \
-    struct TREE *tree;                                      \
-    struct TREE *tmp;                                       \
-                                                            \
-    pass = true;                                            \
-    tree = TEST_tree_sample(0x3134, 0xABD);                \
-                                                            \
-    RESULT_CHECK_pointer(NULL, TREE_find_max(NULL), &pass); \
-                                                            \
-    tmp = TREE_find_max(tree);                              \
-    RESULT_CHECK_pointer(NULL, TREE_right(tmp), &pass);     \
-                                                            \
-    TREE_destroy(&tree);                                    \
-    UNIT_TEST_RESULT(name##_find_max, pass);                \
+#define UT_TREE_find_max(name)                                     \
+static void                                                        \
+utest_##name##_tree_find_max(void)                                 \
+{                                                                  \
+    bool pass;                                                     \
+    struct TREE *tree;                                             \
+    struct TREE *tmp;                                              \
+                                                                   \
+    pass = true;                                                   \
+    tree = TEST_tree_sample(0x3134, 0xABD);                        \
+    UNIT_TEST_BEGIN(name##_tree_find_max);                         \
+                                                                   \
+    RESULT_CHECK_pointer(PTR_INVALID, TREE_find_max(NULL), &pass); \
+                                                                   \
+    tmp = TREE_find_max(tree);                                     \
+    RESULT_CHECK_pointer(NULL, TREE_right(tmp), &pass);            \
+                                                                   \
+    TREE_destroy(&tree);                                           \
+    UNIT_TEST_RESULT(name##_tree_find_max, pass);                  \
 }
 
 #define UT_TREE_height(name)                                  \
@@ -134,7 +140,8 @@ utest_##name##_tree_height(void)                              \
     sint32 child;                                             \
                                                               \
     pass = true;                                              \
-    tree = TEST_tree_sample(0x38F1, 0xF0C);                  \
+    tree = TEST_tree_sample(0x38F1, 0xF0C);                   \
+    UNIT_TEST_BEGIN(name##_tree_height);                      \
                                                               \
     RESULT_CHECK_sint32(-1, TREE_height(NULL), &pass);        \
                                                               \
@@ -156,9 +163,10 @@ utest_##name##_tree_contains_p(void)                              \
     struct TREE *fake;                                            \
                                                                   \
     pass = true;                                                  \
-    tree = TEST_tree_sample(0x2FD7, 0xA1D);                      \
+    tree = TEST_tree_sample(0x2FD7, 0xA1D);                       \
     tmp = TREE_create();                                          \
     TREE_initial(tmp, 0x1234);                                    \
+    UNIT_TEST_BEGIN(name##_tree_contains_p);                      \
                                                                   \
     RESULT_CHECK_bool(false, TREE_contains_p(tree, NULL), &pass); \
     RESULT_CHECK_bool(false, TREE_contains_p(NULL, NULL), &pass); \
@@ -186,9 +194,10 @@ utest_##name##_tree_insert(void)                                        \
     struct TREE *tmp;                                                   \
                                                                         \
     pass = true;                                                        \
-    tree = TEST_tree_sample(0x3321, 0xA2B);                            \
+    tree = TEST_tree_sample(0x3321, 0xA2B);                             \
     tmp = TREE_create();                                                \
     TREE_initial(tmp, 0xFFFDEA);                                        \
+    UNIT_TEST_BEGIN(name##_tree_insert);                                \
                                                                         \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_insert(&tree, NULL), &pass); \
     RESULT_CHECK_pointer(tmp, TREE_insert(&tree, tmp), &pass);          \
@@ -216,8 +225,9 @@ utest_##name##_tree_remove(void)                                        \
     tmp = TREE_create();                                                \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, tmp), &pass);  \
     TREE_destroy(&tmp);                                                 \
+    UNIT_TEST_BEGIN(name##_tree_remove);                                \
                                                                         \
-    tree = TEST_tree_sample(0x3321, 0xA2B);                            \
+    tree = TEST_tree_sample(0x3321, 0xA2B);                             \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(NULL, NULL), &pass);  \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, NULL), &pass); \
                                                                         \
@@ -253,6 +263,7 @@ utest_##name##_tree_iterate(void)                          \
     pass = true;                                           \
     cnt = 0x1C7D;                                          \
     TREE_iterate(NULL, &tree_iterate_handler, ORDER_PRE);  \
+    UNIT_TEST_BEGIN(name##_tree_iterate);                  \
                                                            \
     tree = TEST_tree_sample(0x2A28, cnt);                  \
                                                            \
