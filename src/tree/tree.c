@@ -9,9 +9,7 @@
 #include "tree_optimize.h"
 
 #if defined DEBUG
-    #include "impl/binary_search_tree_debug.c"
-    #include "impl/avl_tree_debug.c"
-    #include "impl/splay_tree_debug.c"
+    #include "impl/tree_debug.c"
 #endif
 
 #include "impl/tree_optimize.c"
