@@ -66,6 +66,12 @@ typedef struct stacked_queue         s_stacked_queue_t;
 typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 typedef struct binary_search_tree    s_binary_search_tree_t;
+typedef struct avl_tree              s_avl_tree_t;
+typedef struct splay_tree            s_splay_tree_t;
+typedef struct heap_data             s_heap_data_t;
+typedef struct binary_heap           s_binary_heap_t;
+typedef struct leftist_heap          s_leftist_heap_t;
+typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef enum ITER_ORDER              e_iter_order_t;
 
 /*
@@ -82,12 +88,12 @@ typedef enum ITER_ORDER              e_iter_order_t;
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    struct single_linked_list *next;
+    s_single_linked_list_t *next;
 };
 
 struct doubly_linked_list {
-    struct doubly_linked_list *next;
-    struct doubly_linked_list *previous;
+    s_doubly_linked_list_t *next;
+    s_doubly_linked_list_t *previous;
 };
 
 /*
@@ -104,8 +110,8 @@ struct doubly_linked_list {
 struct skip_linked_list {
     sint32 key;
     union {
-        struct skip_linked_list *next;
-        struct skip_linked_list *layer[SKIP_LVL_LMT];
+        s_skip_linked_list_t *next;
+        s_skip_linked_list_t *layer[SKIP_LVL_LMT];
     };
 };
 
@@ -122,23 +128,23 @@ struct array_stack_space {
  * array stack
  */
 struct array_stack {
-    struct array_stack_space space;
+    s_array_stack_space_t space;
 };
 
 /*
  * linked stack space
  */
 struct linked_stack_space {
-    struct array_stack_space  space;
-    struct doubly_linked_list link;
+    s_array_stack_space_t  space;
+    s_doubly_linked_list_t link;
 };
 
 /*
  * linked stack
  */
 struct linked_stack {
-    struct linked_stack_space *base;
-    struct linked_stack_space *top;
+    s_linked_stack_space_t *base;
+    s_linked_stack_space_t *top;
 };
 
 /*
@@ -159,61 +165,60 @@ struct array_queue_space {
  * array queue
  */
 struct array_queue {
-    struct array_queue_space space;
+    s_array_queue_space_t space;
 };
 
 /*
  * stacked queue
  */
 struct stacked_queue {
-    uint32             dim;
-    struct array_stack *enter; /* enter stack */
-    struct array_stack *leave; /* leave stack */
+    uint32          dim;
+    s_array_stack_t *enter; /* enter stack */
+    s_array_stack_t *leave; /* leave stack */
 };
 
 /*
  * doubly_end_queue_list
  */
 struct doubly_end_queue_list {
-    void                      *val;
-    struct doubly_linked_list link;
+    void                   *val;
+    s_doubly_linked_list_t link;
 };
 
 /*
  * doubly end queue
  */
 struct doubly_end_queue {
-    struct doubly_end_queue_list *front;
-    struct doubly_end_queue_list *rear;
+    s_doubly_end_queue_list_t *front;
+    s_doubly_end_queue_list_t *rear;
 };
 
 /*
  * binary search tree
  */
 struct binary_search_tree {
-    void *val;
-    sint64                    nice;
-    struct binary_search_tree *left;
-    struct binary_search_tree *right;
+    sint64                 nice;
+    s_binary_search_tree_t *left;
+    s_binary_search_tree_t *right;
 };
 
 /*
  * avl tree
  */
 struct avl_tree {
-    sint32          height;
-    sint64          nice;
-    struct avl_tree *left;
-    struct avl_tree *right;
+    sint32       height;
+    sint64       nice;
+    s_avl_tree_t *left;
+    s_avl_tree_t *right;
 };
 
 /*
  * splay tree
  */
 struct splay_tree {
-    sint64            nice;
-    struct splay_tree *left;
-    struct splay_tree *right;
+    sint64         nice;
+    s_splay_tree_t *left;
+    s_splay_tree_t *right;
 };
 
 /*
@@ -263,14 +268,14 @@ struct separate_chain {
  * hashing table with separate chaining
  */
 struct separate_chain_hash {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 };
 
 /*
  * hashing table with open addressing square
  */
 struct open_addressing_hash {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 };
 
 /*
@@ -286,7 +291,7 @@ struct heap_data {
  * allow different node with the same nice
  */
 struct binary_heap {
-    struct heap_data **base;
+    s_heap_data_t **base;
     uint32 capacity;
     uint32 size;
 };
@@ -295,14 +300,14 @@ struct binary_heap {
  * min heap
  */
 struct minimal_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
  * max heap
  */
 struct maximal_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
@@ -311,7 +316,7 @@ struct maximal_heap {
  *     for odd  depth node, > fater, < gdp_randfater
  */
 struct min_max_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
@@ -334,10 +339,10 @@ struct min_max_heap {
  *       structure binary search tree.
  */
 struct leftist_heap {
-    sint32              npl; /* null path length, NULL node is -1 */
-    struct heap_data    data;
-    struct leftist_heap *left;
-    struct leftist_heap *right;
+    sint32           npl; /* null path length, NULL node is -1 */
+    s_heap_data_t    data;
+    s_leftist_heap_t *left;
+    s_leftist_heap_t *right;
 };
 
 #endif
