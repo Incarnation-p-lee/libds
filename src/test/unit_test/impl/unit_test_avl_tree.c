@@ -54,10 +54,11 @@ static void
 utest_avl_tree_balanced_p(void)
 {
     bool pass;
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
+    s_avl_tree_t *tree;
+    s_avl_tree_t *tmp;
 
     pass = true;
+    UNIT_TEST_BEGIN(avl_tree_balanced_p);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(NULL), &pass);
 
     tree = test_avl_tree_sample(0x48EA, 0x3D64);
