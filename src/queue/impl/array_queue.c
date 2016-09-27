@@ -87,8 +87,8 @@ array_queue_resize_front_to_rear_p(s_array_queue_t *queue)
 static inline void
 array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
 {
-    uint32 counted;
-    uint32 chunk_size;
+    uint32 offset;
+    uint32 left_size, right_size;
 
     assert_exit(!complain_null_pointer_p(addr));
     assert_exit(!complain_zero_size_p(size));
@@ -96,25 +96,38 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
     assert_exit(size > queue->space.dim);
 
     if (queue->space.front < queue->space.rear) {
-        counted = queue->space.rear - queue->space.front;
-        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
-    } else if (array_queue_resize_front_to_rear_p(queue)) {
-        chunk_size = queue->space.front - queue->space.base;
-        counted = queue->space.dim - chunk_size;
-        dp_memcpy(addr, queue->space.front, sizeof(void *) * counted);
+        left_size = queue->space.rear - queue->space.front;
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * left_size);
 
-        chunk_size = queue->space.rear - queue->space.base;
-        dp_memcpy(addr + counted, queue->space.base, chunk_size);
-        counted += chunk_size;
-    } else {
-        counted = 0;
+        queue->space.front = addr;
+        queue->space.rear = addr + left_size;
+        queue->space.rest = size - left_size;
+    } else if (array_queue_resize_front_to_rear_p(queue)) {
+        /*
+         *      r   f            f         r
+         * +-+-+-+-+-+-+-+      +-+-+-+-+-+-+-+-+-+
+         * |a|b| | |c|d|e|  ==> |c|d|e|a|b| | | | |
+         * +-+-+-+-+-+-+-+      +-+-+-+-+-+-+-+-+-+
+         * left|   |right
+         *  offset |
+         */
+        offset = queue->space.front - queue->space.base;
+        left_size = queue->space.rear - queue->space.base;
+        right_size = queue->space.dim - offset;
+
+        dp_memcpy(addr, queue->space.front, sizeof(void *) * right_size);
+        dp_memcpy(addr + right_size, queue->space.base, sizeof(void *) * left_size);
+
+        queue->space.front = addr;
+        queue->space.rear = addr + left_size + right_size;
+        queue->space.rest = size - left_size - right_size;
+    } else { /* queue is empty */
+        queue->space.front = queue->space.rear = addr;
+        queue->space.rest = size;
     }
 
     memory_cache_free(queue->space.base);
     queue->space.base = addr;
-    queue->space.front = addr;
-    queue->space.rear = addr + counted;
-    queue->space.rest = size - counted;
     queue->space.dim = size;
 }
 

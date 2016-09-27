@@ -75,19 +75,28 @@ avl_tree_structure_legal_p(s_avl_tree_t *tree)
 static inline void
 avl_tree_destroy_i(s_avl_tree_t *tree)
 {
-    /*
-     * Fix-Me: queue for destroy, instead of recursion
-     * destroy node in post iterater order.
-     * Warning: sometime if nested function call is too deepth,
-     *     it may reach the default limitation of elf stack size, 8192KB.
-     *     use ulimit -s unlimited or refine this function without nested.
-     */
-    if (tree) {
-        avl_tree_destroy_i(tree->left);
-        avl_tree_destroy_i(tree->right);
+    s_array_queue_t *queue;
+    s_avl_tree_t *avl_node;
 
-        memory_cache_free(tree);
+    assert_exit(avl_tree_structure_legal_p(tree));
+
+    queue = array_queue_create();
+    array_queue_enter(queue, tree);
+
+    while (!array_queue_empty_p(queue)) {
+        avl_node = array_queue_leave(queue);
+
+        if (NULL != avl_node->left) {
+            array_queue_enter(queue, avl_node->left);
+        }
+        if (NULL != avl_node->right) {
+            array_queue_enter(queue, avl_node->right);
+        }
+
+        memory_cache_free(avl_node);
     }
+
+    array_queue_destroy(&queue);
 }
 
 void
