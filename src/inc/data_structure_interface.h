@@ -330,6 +330,7 @@ extern s_doubly_end_queue_t * doubly_end_queue_create(void);
 extern s_stacked_queue_t * stacked_queue_create(void);
 extern uint32 array_queue_capacity(s_array_queue_t *queue);
 extern uint32 array_queue_rest(s_array_queue_t *queue);
+extern uint32 array_queue_size(s_array_queue_t *queue);
 extern uint32 doubly_end_queue_length(s_doubly_end_queue_t *queue);
 extern uint32 stacked_queue_capacity(s_stacked_queue_t *queue);
 extern uint32 stacked_queue_rest(s_stacked_queue_t *queue);

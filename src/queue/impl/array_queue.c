@@ -8,6 +8,19 @@ array_queue_capacity(s_array_queue_t *queue)
     }
 }
 
+/*
+ * Return the size of elements in given queue.
+ */
+uint32
+array_queue_size(s_array_queue_t *queue)
+{
+    if (!array_queue_structure_legal_ip(queue)) {
+        return QUEUE_CPCT_INVALID;
+    } else {
+        return queue->space.dim - queue->space.rest;
+    }
+}
+
 s_array_queue_t *
 array_queue_create(void)
 {
@@ -94,6 +107,7 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size > queue->space.dim);
+    assert_exit(array_queue_resize_expand_restore_data_p(queue, size, addr));
 
     if (queue->space.front < queue->space.rear) {
         left_size = queue->space.rear - queue->space.front;
@@ -106,7 +120,7 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
         /*
          *      r   f            f         r
          * +-+-+-+-+-+-+-+      +-+-+-+-+-+-+-+-+-+
-         * |a|b| | |c|d|e|  ==> |c|d|e|a|b| | | | |
+         * |a|b| | |X|Y|Z|  ==> |X|Y|Z|a|b| | | | |
          * +-+-+-+-+-+-+-+      +-+-+-+-+-+-+-+-+-+
          * left|   |right
          *  offset |
@@ -129,6 +143,8 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
     memory_cache_free(queue->space.base);
     queue->space.base = addr;
     queue->space.dim = size;
+
+    assert_exit(array_queue_resize_expand_data_consistant_p(queue));
 }
 
 static inline void
