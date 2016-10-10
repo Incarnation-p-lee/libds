@@ -86,10 +86,11 @@ avl_tree_destroy_i(s_avl_tree_t *tree)
     while (!array_queue_empty_p(queue)) {
         avl_node = array_queue_leave(queue);
 
-        if (NULL != avl_node->left) {
+        if (avl_node->left != NULL) {
             array_queue_enter(queue, avl_node->left);
         }
-        if (NULL != avl_node->right) {
+
+        if (avl_node->right != NULL) {
             array_queue_enter(queue, avl_node->right);
         }
 
@@ -102,7 +103,9 @@ avl_tree_destroy_i(s_avl_tree_t *tree)
 void
 avl_tree_destroy(s_avl_tree_t **tree)
 {
-    if (!complain_null_pointer_p(tree) && avl_tree_structure_legal_p(*tree)) {
+    if (complain_null_pointer_p(tree)) {
+        return;
+    } else if (avl_tree_structure_legal_p(*tree)) {
         avl_tree_destroy_i(*tree);
         *tree = NULL;
     }

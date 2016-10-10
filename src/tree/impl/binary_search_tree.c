@@ -79,31 +79,31 @@ binary_search_tree_structure_legal_p(s_binary_search_tree_t *tree)
 }
 
 static inline void
-binary_search_tree_node_destroy(s_binary_search_tree_t *node)
+binary_search_tree_destroy_i(s_binary_search_tree_t *tree)
 {
-    assert_exit(binary_search_tree_structure_legal_p(node));
+    s_array_queue_t *queue;
+    s_binary_search_tree_t *binary_node;
 
-    memory_cache_free(node);
-}
+    assert_exit(binary_search_tree_structure_legal_p(tree));
 
-static inline void
-binary_search_tree_destroy_i(s_binary_search_tree_t **tree)
-{
-    s_binary_search_tree_t *tmp;
+    queue = array_queue_create();
+    array_queue_enter(queue, tree);
 
-    if (*tree && tree) {
-        tmp = *tree;
-        /*
-         * destroy node in post iterater order.
-         * Warning: sometime if nested function call is too deepth,
-         *     it may reach the default limitation of elf stack size, 8192KB.
-         *     use ulimit -s unlimited or refine this function without nested.
-         */
-        binary_search_tree_destroy_i(&tmp->left);
-        binary_search_tree_destroy_i(&tmp->right);
-        binary_search_tree_node_destroy(tmp);
-        *tree = NULL;
+    while (!array_queue_empty_p(queue)) {
+        binary_node = array_queue_leave(queue);
+
+        if (binary_node->left != NULL) {
+            array_queue_enter(queue, binary_node->left);
+        }
+
+        if (binary_node->right != NULL) {
+            array_queue_enter(queue, binary_node->right);
+        }
+
+        memory_cache_free(binary_node);
     }
+
+    array_queue_destroy(&queue);
 }
 
 void
@@ -112,7 +112,8 @@ binary_search_tree_destroy(s_binary_search_tree_t **tree)
     if (complain_null_pointer_p(tree)) {
         return;
     } else if (binary_search_tree_structure_legal_p(*tree)) {
-        binary_search_tree_destroy_i(tree);
+        binary_search_tree_destroy_i(*tree);
+        *tree = NULL;
     }
 }
 
