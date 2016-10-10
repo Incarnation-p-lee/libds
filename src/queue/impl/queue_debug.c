@@ -8,7 +8,7 @@
  *         free them elegantly.
  */
 static inline bool
-array_queue_resize_expand_restore_data_p(s_array_queue_t *queue, uint32 size,
+array_queue_resize_restore_data_p(s_array_queue_t *queue, uint32 size,
     void **addr)
 {
     void **restore_array;
@@ -19,14 +19,12 @@ array_queue_resize_expand_restore_data_p(s_array_queue_t *queue, uint32 size,
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
 
-    if (size <= queue->space.dim) {
-        return false;
-    } else if (array_queue_empty_ip(queue)) {
+    if (array_queue_empty_ip(queue)) {
         return true;
     } else {
         queue_element_size = array_queue_size(queue);
-        addr[size - 1] = dp_malloc(sizeof(void *) * (queue_element_size + 1));
-        restore_array = addr[size - 1];
+        addr[size] = dp_malloc(sizeof(void *) * (queue_element_size + 1));
+        restore_array = addr[size];
 
         data_limit = queue->space.base + queue->space.dim;
         data_i = queue->space.front;
@@ -39,14 +37,14 @@ array_queue_resize_expand_restore_data_p(s_array_queue_t *queue, uint32 size,
         } while (data_i != queue->space.rear);
 
         *restore_array = NULL;
-        assert_exit(queue_element_size == restore_array - (void **)addr[size - 1]);
+        assert_exit(queue_element_size == restore_array - (void **)addr[size]);
 
         return true;
     }
 }
 
 static inline bool
-array_queue_resize_expand_data_consistant_p(s_array_queue_t *queue)
+array_queue_resize_data_consistant_p(s_array_queue_t *queue)
 {
     uint32 i;
     void **restore_array;
@@ -54,8 +52,6 @@ array_queue_resize_expand_data_consistant_p(s_array_queue_t *queue)
 
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(queue->space.front == queue->space.base);
-    assert_exit(array_queue_capacity(queue) > array_queue_size(queue));
-
 
     if (array_queue_empty_ip(queue)) {
         return true;
@@ -64,7 +60,7 @@ array_queue_resize_expand_data_consistant_p(s_array_queue_t *queue)
         data_limit = queue->space.base + array_queue_size(queue);
 
         i = 0;
-        restore_array = queue->space.base[queue->space.dim - 1];
+        restore_array = queue->space.base[queue->space.dim];
 
         do {
             if (restore_array[i] != *data_i) {
