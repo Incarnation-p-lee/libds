@@ -98,15 +98,18 @@ array_queue_resize_rotated_p(s_array_queue_t *queue)
 }
 
 static inline void
-array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
+array_queue_resize_expand(s_array_queue_t *queue, uint32 size)
 {
+    void **addr;
     uint32 left_size, right_size;
     uint32 data_size, leading_size;
 
-    assert_exit(!complain_null_pointer_p(addr));
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size > queue->space.dim);
+
+    /* Additional 1 position for checking */
+    addr = memory_cache_allocate(sizeof(void *) * (size + 1));
     assert_exit(array_queue_resize_restore_data_p(queue, size, addr));
 
     if (queue->space.front < queue->space.rear) {
@@ -143,15 +146,18 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
 }
 
 static inline void
-array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr)
+array_queue_resize_narrow(s_array_queue_t *queue, uint32 size)
 {
+    void **addr;
     uint32 left_size, right_size;
     uint32 data_size, leading_size, rest_size;
 
-    assert_exit(!complain_null_pointer_p(addr));
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size < queue->space.dim);
+
+    /* Additional 1 position for checking */
+    addr = memory_cache_allocate(sizeof(void *) * (size + 1));
     assert_exit(array_queue_resize_restore_data_p(queue, size, addr));
 
     if (queue->space.front < queue->space.rear) {
@@ -196,19 +202,14 @@ array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr)
 static inline void
 array_queue_resize_i(s_array_queue_t *queue, uint32 size)
 {
-    void **addr;
-
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size != queue->space.dim);
 
-    /* Additional 1 position for checking */
-    addr = memory_cache_allocate(sizeof(void *) * (size + 1));
-
     if (size > queue->space.dim) {
-        array_queue_resize_expand(queue, size, addr);
+        array_queue_resize_expand(queue, size);
     } else {
-        array_queue_resize_narrow(queue, size, addr);
+        array_queue_resize_narrow(queue, size);
     }
 }
 

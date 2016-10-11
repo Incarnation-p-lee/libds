@@ -28,9 +28,9 @@ static inline s_doubly_end_queue_list_t * doubly_end_queue_list_next(s_doubly_en
 static inline s_doubly_end_queue_list_t * doubly_end_queue_list_previous(s_doubly_end_queue_list_t *node);
 static inline s_doubly_end_queue_list_t * doubly_end_queue_list_reflect(s_doubly_linked_list_t *list);
 static inline uint32 stacked_queue_rest_i(s_stacked_queue_t *queue);
-static inline void array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr);
+static inline void array_queue_resize_expand(s_array_queue_t *queue, uint32 size);
 static inline void array_queue_resize_i(s_array_queue_t *queue, uint32 size);
-static inline void array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr);
+static inline void array_queue_resize_narrow(s_array_queue_t *queue, uint32 size);
 static inline void doubly_end_queue_cleanup_i(s_doubly_end_queue_t *queue);
 static inline void doubly_end_queue_last_node_clean(s_doubly_end_queue_t *queue);
 static inline void stacked_queue_resize_i(s_stacked_queue_t *queue, uint32 dim);
