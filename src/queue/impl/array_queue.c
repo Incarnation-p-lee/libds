@@ -8,11 +8,67 @@ array_queue_capacity(s_array_queue_t *queue)
     }
 }
 
+static inline void
+array_queue_iterator_index_initial(void *queue, s_array_iterator_t *iterator)
+{
+    uint32 index;
+    s_array_queue_t *array_queue;
+
+    assert_exit(array_queue_structure_legal_ip(queue));
+    assert_exit(!complain_null_pointer_p(iterator));
+
+    array_queue = queue;
+    index = (uint32)(array_queue->space.front - array_queue->space.base);
+
+    iterator->index = index;
+}
+
+static inline bool
+array_queue_iterator_next_exist_p(void *queue, s_array_iterator_t *iterator)
+{
+    void **location;
+    s_array_queue_t *array_queue;
+
+    assert_exit(array_queue_structure_legal_ip(queue));
+    assert_exit(!complain_null_pointer_p(iterator));
+
+    array_queue = queue;
+    location = array_queue->space.base + iterator->index;
+
+    if (location == array_queue->space.rear) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline void *
+array_queue_iterator_next_obtain(void *queue, s_array_iterator_t *iterator)
+{
+    void *next_node;
+    s_array_queue_t *array_queue;
+
+    assert_exit(array_queue_structure_legal_ip(queue));
+    assert_exit(!complain_null_pointer_p(iterator));
+    assert_exit(array_queue_iterator_next_exist_p(queue, iterator));
+
+    array_queue = queue;
+    next_node = array_queue->space.base[iterator->index];
+    iterator->index++;
+
+    if (iterator->index == array_queue->space.dim) { // Index of array rotated
+        iterator->index = 0;
+    }
+
+    return next_node;
+}
+
 s_array_queue_t *
 array_queue_create(void)
 {
     uint32 size;
     s_array_queue_t *queue;
+    void *initial, *next_exist_p, *next_obtain;
 
     size = QUEUE_SIZE_DFT;
     queue = memory_cache_allocate(sizeof(*queue));
@@ -23,6 +79,13 @@ array_queue_create(void)
     queue->space.front = queue->space.base;
     queue->space.rear = queue->space.base;
 
+    initial = &array_queue_iterator_index_initial;
+    next_exist_p = &array_queue_iterator_next_exist_p;
+    next_obtain = &array_queue_iterator_next_obtain;
+
+    queue->iterator = array_iterator_create();
+    array_iterator_initial(queue->iterator, initial, next_exist_p, next_obtain);
+
     return queue;
 }
 
@@ -30,8 +93,10 @@ void
 array_queue_destroy(s_array_queue_t **queue)
 {
     if (!complain_null_pointer_p(queue) && array_queue_structure_legal_ip(*queue)) {
+        array_iterator_destroy((*queue)->iterator);
         memory_cache_free((*queue)->space.base);
         memory_cache_free(*queue);
+
         *queue = NULL;
     }
 }
@@ -58,6 +123,8 @@ static inline bool
 array_queue_structure_legal_ip(s_array_queue_t *queue)
 {
     if (complain_null_pointer_p(queue)) {
+        return false;
+    } else if (!array_iterator_structure_legal_p(queue->iterator)) {
         return false;
     } else {
         return array_queue_space_structure_legal_p(&queue->space);

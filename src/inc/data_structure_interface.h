@@ -38,6 +38,7 @@ enum log_level {
 #define true                   1
 #define false                  0
 #define SIZE_INVALID           0xffffffffu
+#define TRIE_INDEX_INVALID     SIZE_INVALID
 #define LIST_SIZE_INVALID      SIZE_INVALID
 #define SKIP_LVL_LMT           8          // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
@@ -63,6 +64,8 @@ enum log_level {
 #define STACK_SIZE_DFT         1024       // stack size default
 #define STACK_EXPD_SIZE_MIN    128        // stack expand size minimal
 #define STACK_SIZE_INVALID     SIZE_INVALID
+#define TRIE_TREE_ROOT         -1         // Root node val of trie tree
+#define TRIE_TREE_SIZE_MIN     16         // Minimal sub tree size of trie tree
 #define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
 #define PTR_INVALID            (void *)-1 // invalid pointer
@@ -85,6 +88,11 @@ typedef struct array_queue           s_array_queue_t;
 typedef struct stacked_queue         s_stacked_queue_t;
 typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
+typedef struct trie_tree             s_trie_tree_t;
+typedef struct array_iterator        s_array_iterator_t;
+typedef void   (*f_array_iterator_initial_t)(void *, s_array_iterator_t *);
+typedef bool   (*f_array_iterator_next_exist_t)(void *, s_array_iterator_t *);
+typedef void * (*f_array_iterator_next_obtain_t)(void *, s_array_iterator_t *);
 
 enum ITER_ORDER {
     ORDER_START,
@@ -92,6 +100,13 @@ enum ITER_ORDER {
     ORDER_IN,
     ORDER_POST,
     ORDER_END,
+};
+
+struct array_iterator {
+    uint32                         index;
+    f_array_iterator_initial_t     fp_index_initial;
+    f_array_iterator_next_exist_t  fp_next_exist_p;
+    f_array_iterator_next_obtain_t fp_next_obtain;
 };
 
 struct single_linked_list {
@@ -142,6 +157,7 @@ struct array_queue_space {
 
 struct array_queue {
     struct array_queue_space space;
+    s_array_iterator_t       *iterator;
 };
 
 struct stacked_queue {
@@ -187,6 +203,13 @@ struct splay_tree {
 struct binary_indexed_tree {
     sint64 *data;
     uint32 size;
+};
+
+struct trie_tree {
+    bool          is_terminal;
+    uint32        val;
+    uint32        sub_size;
+    s_trie_tree_t **sub_node;
 };
 
 struct hashing_table {
@@ -244,9 +267,11 @@ struct leftist_heap {
 };
 
 
+extern bool array_iterator_structure_legal_p(s_array_iterator_t *iterator);
 extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
 extern bool complain_zero_size_p(uint32 size);
+extern s_array_iterator_t * array_iterator_create(void);
 extern sint64 random_sint64(void);
 extern uint32 prime_numeral_next(uint32 prime);
 extern uint32 random_uint32_with_limit(uint32 lmt);
@@ -254,6 +279,8 @@ extern void * malloc_wrap(uint32 size);
 extern void * memory_cache_allocate(uint32 size);
 extern void * memory_cache_re_allocate(void *addr, uint32 size);
 extern void * realloc_wrap(void *ptr, uint32 size);
+extern void array_iterator_destroy(s_array_iterator_t *iterator);
+extern void array_iterator_initial(s_array_iterator_t *iterator, f_array_iterator_initial_t fp_index_initial, f_array_iterator_next_exist_t fp_next_exist_p, f_array_iterator_next_obtain_t fp_next_obtain);
 extern void complain_assert_caution(char *msg, const char *fname, const char *func, uint32 line);
 extern void complain_assert_exit(char *msg, const char *fname, const char *func, uint32 line);
 extern void free_wrap(void *ptr);
@@ -388,6 +415,9 @@ extern bool avl_tree_balanced_p(struct avl_tree *tree);
 extern bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);
 extern bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern bool splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node);
+extern bool trie_tree_sequence_match_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
+extern s_trie_tree_t * trie_tree_create(void);
 extern sint32 avl_tree_height(struct avl_tree *tree);
 extern sint32 binary_search_tree_height(struct binary_search_tree *tree);
 extern sint32 splay_tree_height(struct splay_tree *tree);
@@ -441,6 +471,8 @@ extern void splay_tree_destroy(struct splay_tree **tree);
 extern void splay_tree_initial(struct splay_tree *tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
+extern void trie_tree_insert_char(s_trie_tree_t *trie, char *string);
+extern void trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);

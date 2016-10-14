@@ -547,6 +547,13 @@ static const struct test_layer_table array_queue[] = {
             &ptest_array_queue_iterate,
         },
     },
+    {
+        "iterator", NULL,
+        {
+            &utest_array_queue_iterator,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

@@ -7,6 +7,9 @@ bool avl_tree_balanced_p(struct avl_tree *tree);
 bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);
 bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 bool splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node);
+bool trie_tree_sequence_match_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
+s_trie_tree_t * trie_tree_create(void);
 sint32 avl_tree_height(struct avl_tree *tree);
 sint32 binary_search_tree_height(struct binary_search_tree *tree);
 sint32 splay_tree_height(struct splay_tree *tree);
@@ -42,6 +45,12 @@ static inline bool splay_tree_contains_p_internal(struct splay_tree *tree, struc
 static inline bool splay_tree_doubly_child_p(struct splay_tree *node);
 static inline bool splay_tree_ordered_p(struct splay_tree *tree);
 static inline bool splay_tree_structure_legal_p(struct splay_tree *tree);
+static inline bool trie_tree_root_node_p(s_trie_tree_t *trie);
+static inline bool trie_tree_sequence_match_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+static inline bool trie_tree_structure_legal_ip(s_trie_tree_t *trie);
+static inline s_trie_tree_t * trie_tree_insert_sub_node(s_trie_tree_t *trie, uint32 val);
+static inline s_trie_tree_t * trie_tree_node_create(uint32 sub_size, uint32 val);
+static inline s_trie_tree_t * trie_tree_sub_node_find(s_trie_tree_t *trie, uint32 val);
 static inline sint32 attr_always_inline avl_tree_height_balanced_opt_p(struct avl_tree *tree);
 static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
 static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
@@ -74,6 +83,8 @@ static inline struct splay_tree * splay_tree_find_min_internal(struct splay_tree
 static inline struct splay_tree * splay_tree_insert_internal(struct splay_tree **tree, struct splay_tree *node, struct splay_tree *root);
 static inline struct splay_tree * splay_tree_remove_internal(struct splay_tree **tree, struct splay_tree *node);
 static inline struct splay_tree ** splay_tree_find_ptr_to_min(struct splay_tree **tree);
+static inline uint32 * trie_tree_string_to_uint32_array(char *string, uint32 *len);
+static inline uint32 trie_tree_sub_node_find_index(s_trie_tree_t *trie, uint32 val);
 static inline void avl_tree_destroy_internal(struct avl_tree *tree);
 static inline void avl_tree_doubly_child_strip(struct avl_tree **node_pre);
 static inline void avl_tree_doubly_child_strip_from_max(struct avl_tree **node_pre);
@@ -105,6 +116,8 @@ static inline void splay_tree_iterate_internal(struct splay_tree *tree, void (*h
 static inline void splay_tree_lt_doubly_child_strip(struct splay_tree **pre, struct splay_tree *node);
 static inline void splay_tree_node_destroy(struct splay_tree *node);
 static inline void splay_tree_swap_child(struct splay_tree *a, struct splay_tree *b);
+static inline void trie_tree_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+static inline void trie_tree_sub_node_expand(s_trie_tree_t *trie);
 static void inline splay_tree_balance_doubly_splaying_left(struct splay_tree **tree);
 static void inline splay_tree_balance_doubly_splaying_right(struct splay_tree **tree);
 static void inline splay_tree_balance_root_splaying_left(struct splay_tree **tree);
@@ -155,6 +168,8 @@ void splay_tree_destroy(struct splay_tree **tree);
 void splay_tree_initial(struct splay_tree *tree, sint64 nice);
 void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
+void trie_tree_insert_char(s_trie_tree_t *trie, char *string);
+void trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 
 #endif
 

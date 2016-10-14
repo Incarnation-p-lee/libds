@@ -15,6 +15,7 @@ s_doubly_end_queue_t * doubly_end_queue_create(void);
 s_stacked_queue_t * stacked_queue_create(void);
 static inline bool array_queue_empty_ip(s_array_queue_t *queue);
 static inline bool array_queue_full_ip(s_array_queue_t *queue);
+static inline bool array_queue_iterator_next_exist_p(void *queue, s_array_iterator_t *iterator);
 static inline bool array_queue_resize_front_to_rear_p(s_array_queue_t *queue);
 static inline bool array_queue_space_structure_legal_p(s_array_queue_space_t *space);
 static inline bool array_queue_structure_legal_ip(s_array_queue_t *queue);
@@ -26,6 +27,8 @@ static inline s_doubly_end_queue_list_t * doubly_end_queue_list_next(s_doubly_en
 static inline s_doubly_end_queue_list_t * doubly_end_queue_list_previous(s_doubly_end_queue_list_t *node);
 static inline s_doubly_end_queue_list_t * doubly_end_queue_list_reflect(s_doubly_linked_list_t *list);
 static inline uint32 stacked_queue_rest_i(s_stacked_queue_t *queue);
+static inline void * array_queue_iterator_next_obtain(void *queue, s_array_iterator_t *iterator);
+static inline void array_queue_iterator_index_initial(void *queue, s_array_iterator_t *iterator);
 static inline void array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr);
 static inline void array_queue_resize_i(s_array_queue_t *queue, uint32 size);
 static inline void array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr);
