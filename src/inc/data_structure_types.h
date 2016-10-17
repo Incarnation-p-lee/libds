@@ -69,9 +69,9 @@ typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 
-typedef void   (*f_array_iterator_initial_t)(void *, s_array_iterator_t *);
-typedef bool   (*f_array_iterator_next_exist_t)(void *, s_array_iterator_t *);
-typedef void * (*f_array_iterator_next_obtain_t)(void *, s_array_iterator_t *);
+typedef void   (*f_array_iterator_initial_t)(void *);
+typedef bool   (*f_array_iterator_next_exist_t)(void *);
+typedef void * (*f_array_iterator_next_obtain_t)(void *);
 
 struct array_iterator {
     uint32                         index;
@@ -172,7 +172,7 @@ struct array_queue_space {
  */
 struct array_queue {
     struct array_queue_space space;
-    s_array_iterator_t       *iterator;
+    s_array_iterator_t       iterator;
 };
 
 /*
@@ -267,10 +267,9 @@ struct binary_indexed_tree {
  * trie tree
  */
 struct trie_tree {
-    bool          is_terminal;
-    uint32        val;
-    uint32        sub_size;
-    s_trie_tree_t **sub_node;
+    bool            is_terminal;
+    uint32          val;
+    s_array_queue_t *sub_queue;
 };
 
 struct hashing_table {

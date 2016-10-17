@@ -44,8 +44,8 @@ array_iterator_initial(s_array_iterator_t *iterator,
         return;
     }
 
+    // pr_log_err will exit program
     if (complain_null_pointer_p(fp_index_initial)) {
-        // pr_log_err will exit program
         pr_log_err("Function pointer 'fp_index_initial' is NULL.");
     }
 

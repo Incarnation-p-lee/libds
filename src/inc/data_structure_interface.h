@@ -90,9 +90,9 @@ typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
-typedef void   (*f_array_iterator_initial_t)(void *, s_array_iterator_t *);
-typedef bool   (*f_array_iterator_next_exist_t)(void *, s_array_iterator_t *);
-typedef void * (*f_array_iterator_next_obtain_t)(void *, s_array_iterator_t *);
+typedef void   (*f_array_iterator_initial_t)(void *);
+typedef bool   (*f_array_iterator_next_exist_t)(void *);
+typedef void * (*f_array_iterator_next_obtain_t)(void *);
 
 enum ITER_ORDER {
     ORDER_START,
@@ -157,7 +157,7 @@ struct array_queue_space {
 
 struct array_queue {
     struct array_queue_space space;
-    s_array_iterator_t       *iterator;
+    s_array_iterator_t       iterator;
 };
 
 struct stacked_queue {
@@ -206,10 +206,9 @@ struct binary_indexed_tree {
 };
 
 struct trie_tree {
-    bool          is_terminal;
-    uint32        val;
-    uint32        sub_size;
-    s_trie_tree_t **sub_node;
+    bool            is_terminal;
+    uint32          val;
+    s_array_queue_t *sub_queue;
 };
 
 struct hashing_table {
@@ -348,6 +347,7 @@ extern bool doubly_end_queue_empty_p(s_doubly_end_queue_t *queue);
 extern bool doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue);
 extern bool stacked_queue_empty_p(s_stacked_queue_t *queue);
 extern bool stacked_queue_full_p(s_stacked_queue_t *queue);
+extern s_array_iterator_t * array_queue_iterator_obtain(s_array_queue_t *queue);
 extern s_array_queue_t * array_queue_create(void);
 extern s_doubly_end_queue_t * doubly_end_queue_create(void);
 extern s_stacked_queue_t * stacked_queue_create(void);
@@ -415,6 +415,7 @@ extern bool avl_tree_balanced_p(struct avl_tree *tree);
 extern bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);
 extern bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern bool splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node);
+extern bool trie_tree_sequence_char_matched_p(s_trie_tree_t *trie, char *string);
 extern bool trie_tree_sequence_match_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
 extern s_trie_tree_t * trie_tree_create(void);
@@ -471,6 +472,7 @@ extern void splay_tree_destroy(struct splay_tree **tree);
 extern void splay_tree_initial(struct splay_tree *tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
+extern void trie_tree_destroy(s_trie_tree_t **trie);
 extern void trie_tree_insert_char(s_trie_tree_t *trie, char *string);
 extern void trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 

@@ -1,27 +1,34 @@
 s_trie_tree_t *
 trie_tree_create(void)
 {
-    return trie_tree_node_create(TRIE_TREE_SIZE_MIN, TRIE_TREE_ROOT);
+    return trie_tree_node_create(TRIE_TREE_ROOT);
 }
 
 static inline s_trie_tree_t *
-trie_tree_node_create(uint32 sub_size, uint32 val)
+trie_tree_node_create(uint32 val)
 {
     s_trie_tree_t *trie;
-    uint32 sub_node_bytes;
-
-    assert_exit(sub_size);
 
     trie = dp_malloc(sizeof(*trie));
+    trie->sub_queue = array_queue_create();
+
     trie->val = val;
-    trie->sub_size = sub_size;
     trie->is_terminal = false;
 
-    sub_node_bytes = sizeof(trie) * sub_size;
-    trie->sub_node = dp_malloc(sub_node_bytes);
-    dp_memset(trie->sub_node, 0, sub_node_bytes);
-
     return trie;
+}
+
+void
+trie_tree_destroy(s_trie_tree_t **trie)
+{
+    if (complain_null_pointer_p(trie)) {
+        return;
+    } else if (trie_tree_structure_legal_ip(*trie)) {
+        array_queue_destroy(&(*trie)->sub_queue);
+        dp_free(*trie);
+
+        *trie = NULL;
+    }
 }
 
 bool
@@ -35,10 +42,8 @@ trie_tree_structure_legal_ip(s_trie_tree_t *trie)
 {
     if (complain_null_pointer_p(trie)) {
         return false;
-    } else if (complain_zero_size_p(trie->sub_size)) {
-        return false;
     } else {
-        return true;
+        return array_queue_structure_legal_p(trie->sub_queue);
     }
 }
 
@@ -50,51 +55,22 @@ trie_tree_root_node_p(s_trie_tree_t *trie)
     return trie->val == TRIE_TREE_ROOT ? true : false;
 }
 
-static inline void
-trie_tree_sub_node_expand(s_trie_tree_t *trie)
-{
-    uint32 sub_size;
-    uint32 new_sub_size;
-    s_trie_tree_t **new_sub_node;
-
-    assert_exit(trie_tree_structure_legal_p(trie));
-
-    sub_size = trie->sub_size;
-    new_sub_size = sub_size * 2 + TRIE_TREE_SIZE_MIN;
-    new_sub_node = dp_malloc(sizeof(*new_sub_node) * new_sub_size);
-    dp_memset(new_sub_node, 0, sizeof(*new_sub_node) * new_sub_size);
-
-    dp_memcpy(new_sub_node, trie->sub_node, sizeof(*new_sub_node) * sub_size);
-    dp_free(trie->sub_node);
-
-    trie->sub_node = new_sub_node;
-    trie->sub_size = new_sub_size;
-}
-
 static inline s_trie_tree_t *
 trie_tree_insert_sub_node(s_trie_tree_t *trie, uint32 val)
 {
-    uint32 index;
-    s_trie_tree_t **sub_node;
+    s_trie_tree_t *sub_node;
 
     assert_exit(val != TRIE_TREE_ROOT);
     assert_exit(trie_tree_structure_legal_p(trie));
 
-    sub_node = trie->sub_node;
-    index = trie_tree_sub_node_find_index(trie, val);
+    sub_node = trie_tree_sub_queue_find(trie, val);
 
-    if (index != TRIE_INDEX_INVALID && sub_node[index]) {
-        return sub_node[index];
-    } else if (index != TRIE_INDEX_INVALID && !sub_node[index]) {
-        sub_node[index] = trie_tree_node_create(TRIE_TREE_SIZE_MIN, val);
-        return sub_node[index];
-    } else {  // Unfortunately, no space in sub_node for val
-        index = trie->sub_size;
-        trie_tree_sub_node_expand(trie);
-
-        trie->sub_node[index] = trie_tree_node_create(TRIE_TREE_SIZE_MIN, val);
-        return trie->sub_node[index];
+    if (sub_node == NULL) {
+        sub_node = trie_tree_node_create(val);
+        array_queue_enter(trie->sub_queue, sub_node);
     }
+
+    return sub_node;
 }
 
 static inline void
@@ -179,79 +155,90 @@ trie_tree_insert_char(s_trie_tree_t *trie, char *string)
     }
 }
 
+static inline s_trie_tree_t *
+trie_tree_sub_queue_find(s_trie_tree_t *trie, uint32 val)
+{
+    s_trie_tree_t *sub_node;
+    s_array_queue_t *sub_queue;
+    s_array_iterator_t *iterator;
+
+    assert_exit(val != TRIE_TREE_ROOT);
+    assert_exit(trie_tree_structure_legal_p(trie));
+
+    sub_queue = trie->sub_queue;
+    iterator = array_queue_iterator_obtain(sub_queue);
+    assert_exit(PTR_INVALID == iterator);
+
+    iterator->fp_index_initial(sub_queue);
+    while (iterator->fp_next_exist_p(sub_queue)) {
+        sub_node = iterator->fp_next_obtain(sub_queue);
+        if (sub_node->val == val) {
+            return sub_node;
+        }
+    }
+
+    return NULL;
+}
+
 bool
 trie_tree_sequence_match_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 {
-    return false;
-}
-
-/*
- * 1. find the index of sub node with given val.
- * 2. If no val, and not full of sub node, return the next index.
- * 3. Or return TRIE_INDEX_INVALID.
- */
-static inline uint32
-trie_tree_sub_node_find_index(s_trie_tree_t *trie, uint32 val)
-{
-    uint32 index;
-    uint32 sub_size;
-    s_trie_tree_t **sub_node;
-
-    assert_exit(val != TRIE_TREE_ROOT);
-    assert_exit(trie_tree_structure_legal_p(trie));
-
-    index = 0;
-    sub_node = trie->sub_node;
-    sub_size = trie->sub_size;
-
-    while (index < sub_size) {
-        if (sub_node[index]->val == val) {
-            return index;
-        }
-        if (!sub_node[index]) {
-            return index;
-        }
-
-        index++;
-    }
-
-    return TRIE_INDEX_INVALID;
-}
-
-static inline s_trie_tree_t *
-trie_tree_sub_node_find(s_trie_tree_t *trie, uint32 val)
-{
-    uint32 index;
-
-    assert_exit(val != TRIE_TREE_ROOT);
-    assert_exit(trie_tree_structure_legal_p(trie));
-
-    index = trie_tree_sub_node_find_index(trie, val);
-    if (index == TRIE_INDEX_INVALID) {
-        return NULL;
+    if (complain_null_pointer_p(sequence)) {
+        return false;
+    } else if (complain_zero_size_p(len)) {
+        return false;
+    } else if (!trie_tree_structure_legal_ip(trie)) {
+        return false;
     } else {
-        /* May return NULL here */
-        return trie->sub_node[index];
+        return trie_tree_sequence_match_ip(trie, sequence, len);
+    }
+}
+
+bool
+trie_tree_sequence_char_matched_p(s_trie_tree_t *trie, char *string)
+{
+    uint32 len;
+    bool is_matched;
+    uint32 *seq_translated;
+
+    if (!trie_tree_structure_legal_ip(trie)) {
+        return false;
+    } else if (!trie_tree_root_node_p(trie)) {
+        return false;
+    } else if (complain_null_pointer_p(string)) {
+        return false;
+    } else {
+        seq_translated = trie_tree_string_to_uint32_array(string, &len);
+        is_matched = trie_tree_sequence_match_ip(trie, seq_translated, len);
+        dp_free(seq_translated);
+
+        return is_matched;
     }
 }
 
 static inline bool
 trie_tree_sequence_match_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 {
-    return false;
-    // s_trie_tree_t *trie_node;
+    uint32 i;
+    s_trie_tree_t *trie_node;
 
-    // assert_exit(!complain_zero_size_p(len));
-    // assert_exit(trie_tree_root_node_p(trie));
-    // assert_exit(trie_tree_structure_legal_p(trie));
-    // assert_exit(!complain_null_pointer_p(sequence));
+    assert_exit(!complain_zero_size_p(len));
+    assert_exit(trie_tree_root_node_p(trie));
+    assert_exit(trie_tree_structure_legal_p(trie));
+    assert_exit(!complain_null_pointer_p(sequence));
 
-    // i = 0;
+    trie_node = trie;
 
-    // while (sub_node < trie->sub_node + sub_size && *sub_node) {
-    //     if (
-    // }
+    i = 0;
+    while (i < len) {
+        trie_node = trie_tree_sub_queue_find(trie_node, sequence[i]);
+        if (trie_node == NULL) {
+            return false;
+        }
+        i++;
+    }
 
+    return trie_node->is_terminal;
 }
 
 

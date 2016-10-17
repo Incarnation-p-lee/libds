@@ -361,41 +361,41 @@ utest_##name##_queue_iterate(void)                \
     UNIT_TEST_RESULT(name##_queue_iterate, pass); \
 }
 
-#define UT_QUEUE_iterator(name)                                                  \
-static void                                                                      \
-utest_##name##_queue_iterator(void)                                              \
-{                                                                                \
-    ptr_t i;                                                                     \
-    bool pass;                                                                   \
-    QUEUE *queue;                                                                \
-    ptr_t capacity;                                                              \
-    s_array_iterator_t *iterator;                                                \
-    f_array_iterator_next_obtain_t fp_next_obtain;                               \
-                                                                                 \
-    i = 0;                                                                       \
-    pass = true;                                                                 \
-    UNIT_TEST_BEGIN(name##_queue_iterator);                                      \
-                                                                                 \
-    queue = QUEUE_create();                                                      \
-    capacity = (ptr_t)QUEUE_capacity(queue);                                     \
-                                                                                 \
-    while (i < capacity) {                                                       \
-        QUEUE_enter(queue, (void *)i);                                           \
-        i++;                                                                     \
-    }                                                                            \
-                                                                                 \
-    iterator = queue->iterator;                                                  \
-    iterator->fp_index_initial(queue, iterator);                                 \
-    fp_next_obtain = iterator->fp_next_obtain;                                   \
-                                                                                 \
-    i = 0;                                                                       \
-    while (iterator->fp_next_exist_p(queue, iterator)) {                         \
-        RESULT_CHECK_pointer((void *)i, fp_next_obtain(queue, iterator), &pass); \
-        i++;                                                                     \
-    }                                                                            \
-                                                                                 \
-    QUEUE_destroy(&queue);                                                       \
-    UNIT_TEST_RESULT(name##_queue_iterator, pass);                               \
+#define UT_QUEUE_iterator(name)                                        \
+static void                                                            \
+utest_##name##_queue_iterator(void)                                    \
+{                                                                      \
+    ptr_t i;                                                           \
+    bool pass;                                                         \
+    QUEUE *queue;                                                      \
+    ptr_t capacity;                                                    \
+    s_array_iterator_t *iterator;                                      \
+    f_array_iterator_next_obtain_t fp_next_obtain;                     \
+                                                                       \
+    i = 0;                                                             \
+    pass = true;                                                       \
+    UNIT_TEST_BEGIN(name##_queue_iterator);                            \
+                                                                       \
+    queue = QUEUE_create();                                            \
+    capacity = (ptr_t)QUEUE_capacity(queue);                           \
+                                                                       \
+    while (i < capacity) {                                             \
+        QUEUE_enter(queue, (void *)i);                                 \
+        i++;                                                           \
+    }                                                                  \
+                                                                       \
+    iterator = &queue->iterator;                                       \
+    iterator->fp_index_initial(queue);                                 \
+    fp_next_obtain = iterator->fp_next_obtain;                         \
+                                                                       \
+    i = 0;                                                             \
+    while (iterator->fp_next_exist_p(queue)) {                         \
+        RESULT_CHECK_pointer((void *)i, fp_next_obtain(queue), &pass); \
+        i++;                                                           \
+    }                                                                  \
+                                                                       \
+    QUEUE_destroy(&queue);                                             \
+    UNIT_TEST_RESULT(name##_queue_iterator, pass);                     \
 }
 
 #endif
