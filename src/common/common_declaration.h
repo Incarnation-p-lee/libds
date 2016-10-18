@@ -16,6 +16,7 @@ static inline bool memory_cache_find_entry_of_size_p(void **addr, uint32 size);
 static inline uint32 prime_numeral_calculate_next(uint32 prime);
 static inline void libds_log_memory_stat_print(void);
 static inline void memory_cache_remove_entry_by_index(uint32 index);
+uint32 * convert_string_to_uint32_array(char *string, uint32 *len);
 uint32 prime_numeral_next(uint32 prime);
 uint32 random_uint32_with_limit(uint32 lmt);
 void * malloc_wrap(uint32 size);

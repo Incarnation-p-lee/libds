@@ -18,15 +18,40 @@ trie_tree_node_create(uint32 val)
     return trie;
 }
 
+static inline void
+trie_tree_node_destroy(s_trie_tree_t *trie)
+{
+    assert_exit(trie_tree_structure_legal_ip(trie));
+
+    array_queue_destroy(&trie->sub_queue);
+    dp_free(trie);
+}
+
 void
 trie_tree_destroy(s_trie_tree_t **trie)
 {
+    s_trie_tree_t *trie_node;
+    s_array_queue_t *sub_queue, *queue;
+
     if (complain_null_pointer_p(trie)) {
         return;
     } else if (trie_tree_structure_legal_ip(*trie)) {
-        array_queue_destroy(&(*trie)->sub_queue);
-        dp_free(*trie);
+        trie_node = *trie;
+        queue = array_queue_create();
+        array_queue_enter(queue, trie_node);
 
+        while (!array_queue_empty_p(queue)) {
+            trie_node = array_queue_leave(queue);
+            sub_queue = trie_node->sub_queue;
+
+            while (!array_queue_empty_p(sub_queue)) {
+                array_queue_enter(queue, array_queue_leave(sub_queue));
+            }
+
+            trie_tree_node_destroy(trie_node);
+        }
+
+        array_queue_destroy(&queue);
         *trie = NULL;
     }
 }
@@ -56,25 +81,25 @@ trie_tree_root_node_p(s_trie_tree_t *trie)
 }
 
 static inline s_trie_tree_t *
-trie_tree_insert_sub_node(s_trie_tree_t *trie, uint32 val)
+trie_tree_scalar_insert(s_trie_tree_t *trie, uint32 val)
 {
-    s_trie_tree_t *sub_node;
+    s_trie_tree_t *trie_node;
 
     assert_exit(val != TRIE_TREE_ROOT);
     assert_exit(trie_tree_structure_legal_p(trie));
 
-    sub_node = trie_tree_sub_queue_find(trie, val);
+    trie_node = trie_tree_sub_queue_find(trie, val);
 
-    if (sub_node == NULL) {
-        sub_node = trie_tree_node_create(val);
-        array_queue_enter(trie->sub_queue, sub_node);
+    if (trie_node == NULL) {
+        trie_node = trie_tree_node_create(val);
+        array_queue_enter(trie->sub_queue, trie_node);
     }
 
-    return sub_node;
+    return trie_node;
 }
 
 static inline void
-trie_tree_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
+trie_tree_sequence_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 {
     uint32 *seq;
     s_trie_tree_t *trie_node;
@@ -88,7 +113,7 @@ trie_tree_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
     trie_node = trie;
 
     while (seq < sequence + len) {
-        trie_node = trie_tree_insert_sub_node(trie_node, *seq);
+        trie_node = trie_tree_scalar_insert(trie_node, *seq);
         assert_exit(trie_node->val == *seq);
         seq++;
     }
@@ -97,7 +122,7 @@ trie_tree_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 }
 
 void
-trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
+trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 {
     if (!trie_tree_structure_legal_ip(trie)) {
         return;
@@ -108,39 +133,15 @@ trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
     } else if (complain_null_pointer_p(sequence)) {
         return;
     } else {
-        trie_tree_insert_i(trie, sequence, len);
+        trie_tree_sequence_insert_i(trie, sequence, len);
     }
-}
-
-/*
- * will return len
- */
-static inline uint32 *
-trie_tree_string_to_uint32_array(char *string, uint32 *len)
-{
-    uint32 i, string_len;
-    uint32 *translated;
-
-    assert_exit(string);
-
-    string_len = dp_strlen(string);
-    translated = dp_malloc(sizeof(*translated) * string_len);
-
-    i = 0;
-    while (i < string_len) {
-        translated[i] = (uint32)string[i];
-        i++;
-    }
-
-    *len = string_len;
-    return translated;
 }
 
 void
-trie_tree_insert_char(s_trie_tree_t *trie, char *string)
+trie_tree_sequence_insert_char(s_trie_tree_t *trie, char *string)
 {
     uint32 len;
-    uint32 *seq_translated;
+    uint32 *sequence;
 
     if (!trie_tree_structure_legal_ip(trie)) {
         return;
@@ -149,9 +150,9 @@ trie_tree_insert_char(s_trie_tree_t *trie, char *string)
     } else if (complain_null_pointer_p(string)) {
         return;
     } else {
-        seq_translated = trie_tree_string_to_uint32_array(string, &len);
-        trie_tree_insert_i(trie, seq_translated, len);
-        dp_free(seq_translated);
+        sequence = convert_string_to_uint32_array(string, &len);
+        trie_tree_sequence_insert_i(trie, sequence, len);
+        dp_free(sequence);
     }
 }
 
@@ -199,7 +200,7 @@ trie_tree_sequence_char_matched_p(s_trie_tree_t *trie, char *string)
 {
     uint32 len;
     bool is_matched;
-    uint32 *seq_translated;
+    uint32 *sequence;
 
     if (!trie_tree_structure_legal_ip(trie)) {
         return false;
@@ -208,10 +209,10 @@ trie_tree_sequence_char_matched_p(s_trie_tree_t *trie, char *string)
     } else if (complain_null_pointer_p(string)) {
         return false;
     } else {
-        seq_translated = trie_tree_string_to_uint32_array(string, &len);
-        is_matched = trie_tree_sequence_match_ip(trie, seq_translated, len);
-        dp_free(seq_translated);
+        sequence = convert_string_to_uint32_array(string, &len);
+        is_matched = trie_tree_sequence_match_ip(trie, sequence, len);
 
+        dp_free(sequence);
         return is_matched;
     }
 }
@@ -240,5 +241,4 @@ trie_tree_sequence_match_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 
     return trie_node->is_terminal;
 }
-
 

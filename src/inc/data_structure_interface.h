@@ -272,6 +272,7 @@ extern bool complain_null_pointer_p(void *ptr);
 extern bool complain_zero_size_p(uint32 size);
 extern s_array_iterator_t * array_iterator_create(void);
 extern sint64 random_sint64(void);
+extern uint32 * convert_string_to_uint32_array(char *string, uint32 *len);
 extern uint32 prime_numeral_next(uint32 prime);
 extern uint32 random_uint32_with_limit(uint32 lmt);
 extern void * malloc_wrap(uint32 size);
@@ -473,8 +474,8 @@ extern void splay_tree_initial(struct splay_tree *tree, sint64 nice);
 extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 extern void trie_tree_destroy(s_trie_tree_t **trie);
-extern void trie_tree_insert_char(s_trie_tree_t *trie, char *string);
-extern void trie_tree_insert_uint32(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern void trie_tree_sequence_insert_char(s_trie_tree_t *trie, char *string);
 
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);

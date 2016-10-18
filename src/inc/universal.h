@@ -9,6 +9,7 @@ extern bool complain_null_pointer_p(void *ptr);
 extern bool complain_zero_size_p(uint32 size);
 extern s_array_iterator_t * array_iterator_create(void);
 extern sint64 random_sint64(void);
+extern uint32 * convert_string_to_uint32_array(char *string, uint32 *len);
 extern uint32 prime_numeral_next(uint32 prime);
 extern uint32 random_uint32_with_limit(uint32 lmt);
 extern void * malloc_wrap(uint32 size);
