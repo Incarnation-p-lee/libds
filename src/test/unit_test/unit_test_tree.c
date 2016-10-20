@@ -2,3 +2,4 @@
 #include "impl/unit_test_avl_tree.c"
 #include "impl/unit_test_splay_tree.c"
 #include "impl/unit_test_binary_indexed_tree.c"
+#include "impl/unit_test_trie_tree.c"

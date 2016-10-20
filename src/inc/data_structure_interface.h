@@ -269,12 +269,15 @@ struct leftist_heap {
 extern bool array_iterator_structure_legal_p(s_array_iterator_t *iterator);
 extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
+extern bool complain_null_string_p(char *string);
 extern bool complain_zero_size_p(uint32 size);
 extern s_array_iterator_t * array_iterator_create(void);
 extern sint64 random_sint64(void);
 extern uint32 * convert_string_to_uint32_array(char *string, uint32 *len);
+extern uint32 * random_sequence_uint32_limited_obtain(uint32 len, uint32 limit);
+extern uint32 * random_sequence_uint32_obtain(uint32 len);
 extern uint32 prime_numeral_next(uint32 prime);
-extern uint32 random_uint32_with_limit(uint32 lmt);
+extern uint32 random_uint32_with_limit(uint32 limit);
 extern void * malloc_wrap(uint32 size);
 extern void * memory_cache_allocate(uint32 size);
 extern void * memory_cache_re_allocate(void *addr, uint32 size);
@@ -289,6 +292,7 @@ extern void libds_log_file_create(void);
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
+extern void random_sequence_drop(uint32 *sequence);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
@@ -416,8 +420,8 @@ extern bool avl_tree_balanced_p(struct avl_tree *tree);
 extern bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);
 extern bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
 extern bool splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node);
-extern bool trie_tree_sequence_char_matched_p(s_trie_tree_t *trie, char *string);
-extern bool trie_tree_sequence_match_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern bool trie_tree_sequence_matched_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern bool trie_tree_string_matched_p(s_trie_tree_t *trie, char *string);
 extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
 extern s_trie_tree_t * trie_tree_create(void);
 extern sint32 avl_tree_height(struct avl_tree *tree);
@@ -475,7 +479,7 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 extern void trie_tree_destroy(s_trie_tree_t **trie);
 extern void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
-extern void trie_tree_sequence_insert_char(s_trie_tree_t *trie, char *string);
+extern void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
 
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);

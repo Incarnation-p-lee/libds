@@ -1035,6 +1035,52 @@ static const struct test_layer_table binary_indexed_tree[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table trie_tree[] = {
+    {
+        "create", NULL,
+        {
+            &utest_trie_tree_create,
+            NULL,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_trie_tree_destroy,
+            NULL,
+        },
+    },
+    {
+        "sequence_insert", NULL,
+        {
+            &utest_trie_tree_sequence_insert,
+            NULL,
+        },
+    },
+    {
+        "string_insert", NULL,
+        {
+            &utest_trie_tree_string_insert,
+            NULL,
+        },
+    },
+    {
+        "sequence_matched_p", NULL,
+        {
+            &utest_trie_tree_sequence_matched_p,
+            NULL,
+        },
+    },
+    {
+        "string_matched_p", NULL,
+        {
+            &utest_trie_tree_string_matched_p,
+            NULL,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
 static const struct test_layer_table separate_chain_hash[] = {
     {
         "create", NULL,
@@ -1554,8 +1600,9 @@ static const struct test_layer_table test_tree_implement[] = {
     {"avl",            avl_tree,            {NULL, NULL},},
     {"splay",          splay_tree,          {NULL, NULL},},
     {"binary_indexed", binary_indexed_tree, {NULL, NULL},},
+    {"trie",           trie_tree,           {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
-    {NULL,            NULL,               {NULL, NULL},},
+    {NULL,            NULL,                 {NULL, NULL},},
 };
 
 static const struct test_layer_table test_hash_implement[] = {

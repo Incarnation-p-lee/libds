@@ -10,6 +10,19 @@ complain_null_pointer_p(void *ptr)
 }
 
 bool
+complain_null_string_p(char *string)
+{
+    if (NULL == string) {
+        pr_log_warn("Attempt to access NULL pointer.\n");
+        return true;
+    } else if (string[0] == '\0') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool
 complain_no_memory_p(void *ptr)
 {
     if (NULL == ptr) {

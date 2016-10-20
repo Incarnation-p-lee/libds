@@ -6,12 +6,15 @@
 extern bool array_iterator_structure_legal_p(s_array_iterator_t *iterator);
 extern bool complain_no_memory_p(void *ptr);
 extern bool complain_null_pointer_p(void *ptr);
+extern bool complain_null_string_p(char *string);
 extern bool complain_zero_size_p(uint32 size);
 extern s_array_iterator_t * array_iterator_create(void);
 extern sint64 random_sint64(void);
 extern uint32 * convert_string_to_uint32_array(char *string, uint32 *len);
+extern uint32 * random_sequence_uint32_limited_obtain(uint32 len, uint32 limit);
+extern uint32 * random_sequence_uint32_obtain(uint32 len);
 extern uint32 prime_numeral_next(uint32 prime);
-extern uint32 random_uint32_with_limit(uint32 lmt);
+extern uint32 random_uint32_with_limit(uint32 limit);
 extern void * malloc_wrap(uint32 size);
 extern void * memory_cache_allocate(uint32 size);
 extern void * memory_cache_re_allocate(void *addr, uint32 size);
@@ -26,6 +29,7 @@ extern void libds_log_file_create(void);
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
+extern void random_sequence_drop(uint32 *sequence);
 
 #endif
 
