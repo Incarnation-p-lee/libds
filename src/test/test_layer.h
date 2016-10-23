@@ -1040,56 +1040,56 @@ static const struct test_layer_table trie_tree[] = {
         "create", NULL,
         {
             &utest_trie_tree_create,
-            NULL,
+            &ptest_trie_tree_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_trie_tree_destroy,
-            NULL,
+            &ptest_trie_tree_destroy,
         },
     },
     {
         "sequence_insert", NULL,
         {
             &utest_trie_tree_sequence_insert,
-            NULL,
+            &ptest_trie_tree_sequence_insert,
         },
     },
     {
         "string_insert", NULL,
         {
             &utest_trie_tree_string_insert,
-            NULL,
+            &ptest_trie_tree_string_insert,
         },
     },
     {
         "sequence_remove", NULL,
         {
             &utest_trie_tree_sequence_remove,
-            NULL,
+            &ptest_trie_tree_sequence_remove,
         },
     },
     {
         "string_remove", NULL,
         {
             &utest_trie_tree_string_remove,
-            NULL,
+            &ptest_trie_tree_string_remove,
         },
     },
     {
         "sequence_matched_p", NULL,
         {
             &utest_trie_tree_sequence_matched_p,
-            NULL,
+            &ptest_trie_tree_sequence_matched_p,
         },
     },
     {
         "string_matched_p", NULL,
         {
             &utest_trie_tree_string_matched_p,
-            NULL,
+            &ptest_trie_tree_string_matched_p,
         },
     },
     {NULL, NULL, {NULL, NULL},},
