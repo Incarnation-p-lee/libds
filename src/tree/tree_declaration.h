@@ -49,6 +49,7 @@ static inline bool splay_tree_structure_legal_p(struct splay_tree *tree);
 static inline bool trie_tree_root_node_p(s_trie_tree_t *trie);
 static inline bool trie_tree_sequence_matched_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 static inline bool trie_tree_structure_legal_ip(s_trie_tree_t *trie);
+static inline bool trie_tree_sub_queue_empty_p(s_trie_tree_t *trie);
 static inline s_trie_tree_t * trie_tree_node_create(uint32 val);
 static inline s_trie_tree_t * trie_tree_scalar_insert(s_trie_tree_t *trie, uint32 val);
 static inline s_trie_tree_t * trie_tree_sub_queue_find(s_trie_tree_t *trie, uint32 val);
@@ -117,6 +118,7 @@ static inline void splay_tree_node_destroy(struct splay_tree *node);
 static inline void splay_tree_swap_child(struct splay_tree *a, struct splay_tree *b);
 static inline void trie_tree_node_destroy(s_trie_tree_t *trie);
 static inline void trie_tree_sequence_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+static inline void trie_tree_sequence_remove_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 static void inline splay_tree_balance_doubly_splaying_left(struct splay_tree **tree);
 static void inline splay_tree_balance_doubly_splaying_right(struct splay_tree **tree);
 static void inline splay_tree_balance_root_splaying_left(struct splay_tree **tree);
@@ -169,7 +171,9 @@ void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum IT
 void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 void trie_tree_destroy(s_trie_tree_t **trie);
 void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
+void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
 #endif
 

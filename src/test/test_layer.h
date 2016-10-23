@@ -1065,6 +1065,20 @@ static const struct test_layer_table trie_tree[] = {
         },
     },
     {
+        "sequence_remove", NULL,
+        {
+            &utest_trie_tree_sequence_remove,
+            NULL,
+        },
+    },
+    {
+        "string_remove", NULL,
+        {
+            &utest_trie_tree_string_remove,
+            NULL,
+        },
+    },
+    {
         "sequence_matched_p", NULL,
         {
             &utest_trie_tree_sequence_matched_p,

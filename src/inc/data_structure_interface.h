@@ -206,6 +206,7 @@ struct binary_indexed_tree {
 };
 
 struct trie_tree {
+    bool            is_deleted;
     bool            is_terminal;
     uint32          val;
     s_array_queue_t *sub_queue;
@@ -479,7 +480,9 @@ extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), 
 extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 extern void trie_tree_destroy(s_trie_tree_t **trie);
 extern void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+extern void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
+extern void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);

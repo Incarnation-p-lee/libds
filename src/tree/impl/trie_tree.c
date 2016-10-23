@@ -13,7 +13,7 @@ trie_tree_node_create(uint32 val)
     trie->sub_queue = array_queue_create();
 
     trie->val = val;
-    trie->is_terminal = false;
+    trie->is_deleted = trie->is_terminal = false;
 
     return trie;
 }
@@ -147,8 +147,6 @@ trie_tree_string_insert(s_trie_tree_t *trie, char *string)
         return;
     } else if (!trie_tree_root_node_p(trie)) {
         return;
-    } else if (complain_null_pointer_p(string)) {
-        return;
     } else if (complain_null_string_p(string)) {
         return;
     } else {
@@ -178,7 +176,7 @@ trie_tree_sub_queue_find(s_trie_tree_t *trie, uint32 val)
     while (iterator->fp_next_exist_p(sub_queue)) {
         sub_node = iterator->fp_next_obtain(sub_queue);
 
-        if (sub_node->val == val) {
+        if (sub_node->val == val && !sub_node->is_deleted) {
             return sub_node;
         }
     }
@@ -223,6 +221,104 @@ trie_tree_string_matched_p(s_trie_tree_t *trie, char *string)
         dp_free(sequence);
 
         return is_matched;
+    }
+}
+
+static inline bool
+trie_tree_sub_queue_empty_p(s_trie_tree_t *trie)
+{
+    s_trie_tree_t *trie_node;
+    s_array_queue_t *sub_queue;
+    s_array_iterator_t *iterator;
+
+    assert_exit(trie_tree_structure_legal_p(trie));
+
+    sub_queue = trie->sub_queue;
+    iterator = array_queue_iterator_obtain(sub_queue);
+
+    iterator->fp_index_initial(sub_queue);
+    while (iterator->fp_next_exist_p(sub_queue)) {
+        trie_node = iterator->fp_next_obtain(sub_queue);
+
+        if (trie_node->is_deleted == false) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static inline void
+trie_tree_sequence_remove_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
+{
+    uint32 *seq;
+    s_array_stack_t *stack;
+    s_trie_tree_t *trie_node;
+
+    assert_exit(!complain_zero_size_p(len));
+    assert_exit(trie_tree_root_node_p(trie));
+    assert_exit(trie_tree_structure_legal_p(trie));
+    assert_exit(!complain_null_pointer_p(sequence));
+
+    seq = sequence;
+    trie_node = trie;
+    stack = array_stack_create();
+
+    while (seq < sequence + len) {
+        trie_node = trie_tree_sub_queue_find(trie_node, *seq);
+        if (trie_node == NULL) {
+            array_stack_destroy(&stack);
+            return;
+        } else {
+            array_stack_push(stack, trie_node);
+            seq++;
+        }
+    }
+
+    while (!array_stack_empty_p(stack)) {
+        trie_node = array_stack_pop(stack);
+        if (trie_tree_sub_queue_empty_p(trie_node)) {
+            trie_node->is_deleted = true;
+        }
+    }
+
+    array_stack_destroy(&stack);
+}
+
+void
+trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
+{
+    if (!trie_tree_structure_legal_ip(trie)) {
+        return;
+    } else if (!trie_tree_root_node_p(trie)) {
+        return;
+    } else if (complain_zero_size_p(len)) {
+        return;
+    } else if (complain_null_pointer_p(sequence)) {
+        return;
+    } else {
+        trie_tree_sequence_remove_i(trie, sequence, len);
+    }
+}
+
+void
+trie_tree_string_remove(s_trie_tree_t *trie, char *string)
+{
+    uint32 len;
+    uint32 *sequence;
+
+    if (!trie_tree_structure_legal_ip(trie)) {
+        return;
+    } else if (!trie_tree_root_node_p(trie)) {
+        return;
+    } else if (complain_null_string_p(string)) {
+        return;
+    } else {
+        sequence = convert_string_to_uint32_array(string, &len);
+        assert_exit(sequence != PTR_INVALID);
+
+        trie_tree_sequence_remove_i(trie, sequence, len);
+        dp_free(sequence);
     }
 }
 

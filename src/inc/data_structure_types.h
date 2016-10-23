@@ -267,6 +267,7 @@ struct binary_indexed_tree {
  * trie tree
  */
 struct trie_tree {
+    bool            is_deleted;
     bool            is_terminal;
     uint32          val;
     s_array_queue_t *sub_queue;

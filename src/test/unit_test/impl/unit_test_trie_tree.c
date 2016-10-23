@@ -96,6 +96,7 @@ utest_trie_tree_string_insert(void)
 
     trie_tree_string_insert(NULL, NULL);
     trie_tree_string_insert(trie, NULL);
+    trie_tree_string_remove(trie, "");
 
     trie_tree_string_insert(trie, "");
     trie_tree_string_insert(trie, "asm");
@@ -181,5 +182,80 @@ utest_trie_tree_string_matched_p(void)
 
     trie_tree_destroy(&trie);
     UNIT_TEST_RESULT(utest_trie_tree_string_matched_p, pass);
+}
+
+static inline void
+utest_trie_tree_sequence_remove(void)
+{
+    bool pass;
+    uint32 *sequence;
+    uint32 len, limit;
+    s_trie_tree_t *trie;
+
+    UNIT_TEST_BEGIN(utest_trie_tree_sequence_remove);
+
+    pass = true;
+    len = 0x123;
+    limit = 0xfff;
+
+    trie = trie_tree_create();
+    sequence = random_sequence_uint32_limited_obtain(len, limit);
+
+    trie_tree_sequence_remove(NULL, NULL, 0);
+    trie_tree_sequence_remove(trie, NULL, 0);
+    trie_tree_sequence_remove(trie, sequence, 0);
+    random_sequence_drop(sequence);
+
+    len = 0x12de;
+    sequence = random_sequence_uint32_limited_obtain(len, limit);
+    trie_tree_sequence_insert(trie, sequence, len);
+    random_sequence_drop(sequence);
+
+    len = 0x2d83;
+    sequence = random_sequence_uint32_limited_obtain(len, limit);
+    trie_tree_sequence_insert(trie, sequence, len);
+
+    RESULT_CHECK_bool(true, trie_tree_sequence_matched_p(trie, sequence, len), &pass);
+    trie_tree_sequence_remove(trie, sequence, len);
+    RESULT_CHECK_bool(false, trie_tree_sequence_matched_p(trie, sequence, len), &pass);
+    random_sequence_drop(sequence);
+
+    trie_tree_destroy(&trie);
+    UNIT_TEST_RESULT(utest_trie_tree_sequence_remove, pass);
+}
+
+static inline void
+utest_trie_tree_string_remove(void)
+{
+    bool pass;
+    s_trie_tree_t *trie;
+
+    UNIT_TEST_BEGIN(utest_trie_tree_string_remove);
+
+    pass = true;
+    trie = trie_tree_create();
+
+    trie_tree_string_remove(NULL, NULL);
+    trie_tree_string_remove(trie, NULL);
+    trie_tree_string_remove(trie, "");
+
+    trie_tree_string_insert(trie, "asm");
+    trie_tree_string_insert(trie, "auto");
+    trie_tree_string_insert(trie, "break");
+    trie_tree_string_insert(trie, "case");
+    trie_tree_string_insert(trie, "char");
+    trie_tree_string_insert(trie, "const");
+    trie_tree_string_insert(trie, "continue");
+
+    RESULT_CHECK_bool(true, trie_tree_string_matched_p(trie, "asm"), &pass);
+    trie_tree_string_remove(trie, "asm");
+    RESULT_CHECK_bool(false, trie_tree_string_matched_p(trie, "asm"), &pass);
+
+    RESULT_CHECK_bool(true, trie_tree_string_matched_p(trie, "char"), &pass);
+    trie_tree_string_remove(trie, "char");
+    RESULT_CHECK_bool(false, trie_tree_string_matched_p(trie, "char"), &pass);
+
+    trie_tree_destroy(&trie);
+    UNIT_TEST_RESULT(utest_trie_tree_string_remove, pass);
 }
 
