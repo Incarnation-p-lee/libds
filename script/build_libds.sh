@@ -22,8 +22,13 @@ fi
 
 base=$(pwd)
 src_dir=$base/src
-objdir=$base/output
-bindir=$objdir/out
+output_dir=$base/output
+obj_dir=$output_dir/obj
+bin_dir=$output_dir/bin
+inc_dir=$output_dir/inc
+arg_list=$@
+arg_tmp=
+binary_list="ELF OBJ DYN"
 
 #######################
 ## parameters handle ##
@@ -49,6 +54,8 @@ do
             ld_library="-lc -lm" ;;
         "KERNEL")
             cc_config="$cc_config -DKERNEL -nostdlib -nostdinc -fno-builtin" ;;
+        "ALL")
+            target=ALL ;;
         "ELF")
             target=elf ;;
         "OBJ")
@@ -62,22 +69,39 @@ do
     esac
 done
 
+########################
+## Check if build ALL ##
+#######################
+if [ "$target" == "ALL" ]
+then
+    arg_list=${arg_list// ALL/}
+
+    for binary in $binary_list
+    do
+        arg_tmp="$arg_list $binary"
+        echo && echo "sh $0 $arg_tmp"
+        sh $0 $arg_tmp
+    done
+
+    exit 0
+fi
+
 #############################
 ## create output directory ##
 #############################
-if [ -d $objdir ]
+if [ -d $obj_dir ]
 then
-    rm -rf $objdir
-    echo "Remove last build directory $objdir"
+    rm -rf $obj_dir
+    echo "Remove last build directory $obj_dir"
 fi
-mkdir -p $bindir
+mkdir -p $obj_dir
 
 ###########################################
 ## update some header files and makefile ##
 ###########################################
 perl script/produce_module_declaration_h.pl $debug_mode
 perl script/produce_universal_h.pl
-perl script/produce_data_structure_interface_h.pl
+perl script/produce_data_structure_interface_h.pl $inc_dir
 perl script/produce_compile_makefile.pl $src_dir
 
 ####################################
@@ -89,7 +113,7 @@ function obj_compile() {
     then
         exit 3
     else
-        mv *.o $objdir
+        mv *.o $obj_dir
     fi
 }
 
@@ -119,12 +143,12 @@ done
 ###############################
 ## generate linking Makefile ##
 ###############################
-perl script/produce_link_makefile.pl
+perl script/produce_link_makefile.pl $obj_dir $bin_dir
 
 #######################
 ## link final target ##
 #######################
-cp $src_dir/Makefile.in $objdir && cd $objdir
+cp $src_dir/Makefile.in $obj_dir && cd $obj_dir
 make "ld_config=$ld_config" "ld_library=$ld_library" $target
 
 if [ "$?" != 0 ]

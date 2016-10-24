@@ -1,0 +1,20 @@
+.SUFFIXES:
+.SUFFIXES: .o .a .so .h .c .s .S
+
+SHELL        =/bin/sh
+AR           =ar
+CC           =gcc
+LD           =gcc
+#CC           =clang-3.5
+
+AFLAG        =-rcv
+LFLAG        =-Wl,--warn-common
+CFLAG        =-Wall -Werror -c
+CFLAG        +=$(cc_config)
+LFLAG        +=$(ld_config)
+
+ELF_TARGET   =ds.elf
+OBJ_TARGET   =libds.a
+DYN_TARGET   =libds.so
+LD_LIBRARY   =$(ld_library)
+

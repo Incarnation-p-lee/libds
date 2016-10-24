@@ -17,7 +17,7 @@
     1. sh src/script/build.sh DEBUG/RELEASE
                               X86_64/X86_32
                               LIBC
-                              ELF/OBJ/DYN
+                              ELF/OBJ/DYN/ALL
                               PROFILE         -optional
                               CODE_COVERAGE   -optional
 
