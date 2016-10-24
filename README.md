@@ -14,17 +14,17 @@
 ##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
 ### build
-    1. sh src/script/build.sh DEBUG/RELEASE
-                              X86_64/X86_32
-                              LIBC
-                              ELF/OBJ/DYN/ALL
-                              PROFILE         -optional
-                              CODE_COVERAGE   -optional
+    1. sh script/build_libds.sh DEBUG/RELEASE
+                                X86_64/X86_32
+                                LIBC
+                                ELF/OBJ/DYN/ALL
+                                PROFILE         -optional
+                                CODE_COVERAGE   -optional
 
-    2. Output output/out/ds.elf
-              output/out/ds.h
-              output/out/libds.a
-              output/out/libds.so
+    2. Output output/bin/ds.elf
+              output/bin/libds.a
+              output/bin/libds.so
+              output/inc/data_structure_interface.h
 
 ### Design
 
@@ -49,6 +49,7 @@
         b. avl tree
         c. splay tree
         d. binary indexed tree
+        e. trie tree
     5. hash
         a. separate chain hash
         b. open addressing hash
@@ -63,4 +64,6 @@
         c. heap sort
         d. merge sort
         e. quick sort
+        
+----- to be continue -----
 
