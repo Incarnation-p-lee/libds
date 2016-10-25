@@ -21,6 +21,7 @@ extern void libds_log_file_create(void);
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
+extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 #endif
 

@@ -269,57 +269,60 @@ binary_search_tree_contains_p(s_binary_search_tree_t *tree,
 }
 
 static inline s_binary_search_tree_t *
-binary_search_tree_insert_i(s_binary_search_tree_t **tree,
+binary_search_tree_insert_i(s_binary_search_tree_t *tree,
     s_binary_search_tree_t *node)
 {
-    s_binary_search_tree_t **iter;
-    s_binary_search_tree_t *binary;
+    sint64 nice;
+    sint32 path_direction;
+    s_binary_search_tree_t *binary_node;
+    s_binary_search_tree_t **iterator_node;
 
-    assert_exit(!complain_null_pointer_p(tree));
-    assert_exit(binary_search_tree_ordered_p(*tree));
-    assert_exit(binary_search_tree_structure_legal_p(*tree));
+    assert_exit(binary_search_tree_structure_legal_p(tree));
+    assert_exit(binary_search_tree_ordered_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(node));
 
-    iter = tree;
-    while (*iter) {
-        if (node->nice > (*iter)->nice) {
-            iter = &(*iter)->right;
-            direct++;
-        } else if (node->nice < (*iter)->nice) {
-            iter = &(*iter)->left;
-            direct--;
-        } else if (node == *iter) {
+    nice = node->nice;
+    path_direction = 0;
+    iterator_node = &tree;
+
+    while (*iterator_node) {
+        binary_node = *iterator_node;
+        if (nice < binary_node->nice) {
+            path_direction--;
+            iterator_node = &binary_node->left;
+        } else if (nice > binary_node->nice) {
+            path_direction++;
+            iterator_node = &binary_node->right;
+        } else if (binary_node == node) {
             pr_log_warn("Insert node exist, nothing will be done.\n");
             return NULL;
         } else {
-            binary = *iter;
-            if (direct > 0) {        // If right is heavy, inserted to left.
-                node->left = binary;
-                node->right = binary->right;
-                binary->right = NULL;
+            if (path_direction > 0) { // If right is heavy, inserted to left.
+                node->left = binary_node->left;
+                binary_node->left = node;
+                node->right = NULL;
             } else {
-                node->right = binary;
-                node->left = binary->left;
-                binary->left = NULL;
+                node->right = binary_node->right;
+                binary_node->right = node;
+                node->left = NULL;
             }
 
-            direct = 0;              // Exit point and reset direct
-            break;
+            assert_exit(binary_search_tree_ordered_p(tree));
+            return node;
         }
     }
-    *iter = node;
 
-    assert_exit(binary_search_tree_ordered_p(*tree));
+    *iterator_node = node;
+
+    assert_exit(binary_search_tree_ordered_p(tree));
     return node;
 }
 
 s_binary_search_tree_t *
-binary_search_tree_insert(s_binary_search_tree_t **tree,
+binary_search_tree_insert(s_binary_search_tree_t *tree,
     s_binary_search_tree_t *node)
 {
-    if (complain_null_pointer_p(tree)) {
-        return PTR_INVALID;
-    } else if (!binary_search_tree_structure_legal_p(*tree)) {
+    if (!binary_search_tree_structure_legal_p(tree)) {
         return PTR_INVALID;
     } else if (!binary_search_tree_structure_legal_p(node)) {
         return PTR_INVALID;

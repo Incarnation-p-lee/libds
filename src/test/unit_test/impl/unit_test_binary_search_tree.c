@@ -12,7 +12,6 @@
 #define TREE_find_max          binary_search_tree_find_max
 #define TREE_height            binary_search_tree_height
 #define TREE_contains_p        binary_search_tree_contains_p
-#define TREE_insert            binary_search_tree_insert
 #define TREE_remove            binary_search_tree_remove
 #define TREE_iterate           binary_search_tree_iterate
 
@@ -26,7 +25,6 @@ UT_TREE_find_min(binary_search)
 UT_TREE_find_max(binary_search)
 UT_TREE_height(binary_search)
 UT_TREE_contains_p(binary_search)
-UT_TREE_insert(binary_search)
 UT_TREE_remove(binary_search)
 UT_TREE_iterate(binary_search)
 
@@ -44,7 +42,33 @@ UT_TREE_iterate(binary_search)
 #undef TREE_find_max
 #undef TREE_height
 #undef TREE_contains_p
-#undef TREE_insert
 #undef TREE_remove
 #undef TREE_iterate
+
+static void
+utest_binary_search_tree_insert(void)
+{
+    bool pass;
+    s_binary_search_tree_t *tmp;
+    s_binary_search_tree_t *tree;
+
+    UNIT_TEST_BEGIN(binary_search_tree_insert);
+
+    pass = true;
+    tree = test_binary_search_tree_sample(0x3321, 0xA2B);
+    tmp = binary_search_tree_create();
+    binary_search_tree_initial(tmp, 0xFFFDEA);
+
+    RESULT_CHECK_pointer(PTR_INVALID, binary_search_tree_insert(tree, NULL), &pass);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_insert(tree, tmp), &pass);
+    RESULT_CHECK_bool(true, binary_search_tree_contains_p(tree, tmp), &pass);
+    RESULT_CHECK_pointer(NULL, binary_search_tree_insert(tree, tmp), &pass);
+
+    tmp = binary_search_tree_create();
+    binary_search_tree_initial(tmp, 0xFFFDEA);
+    RESULT_CHECK_pointer(tmp, binary_search_tree_insert(tree, tmp), &pass);
+
+    binary_search_tree_destroy(&tree);
+    UNIT_TEST_RESULT(binary_search_tree_insert, pass);
+}
 

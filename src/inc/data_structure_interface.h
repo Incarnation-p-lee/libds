@@ -266,6 +266,7 @@ extern void libds_log_file_create(void);
 extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
+extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
@@ -405,7 +406,7 @@ extern s_binary_search_tree_t  * binary_search_tree_find_min(s_binary_search_tre
 extern s_binary_search_tree_t * binary_search_tree_create(void);
 extern s_binary_search_tree_t * binary_search_tree_find(s_binary_search_tree_t *tree, sint64 nice);
 extern s_binary_search_tree_t * binary_search_tree_find_max(s_binary_search_tree_t *tree);
-extern s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
+extern s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
 extern s_binary_search_tree_t * binary_search_tree_left(s_binary_search_tree_t *tree);
 extern s_binary_search_tree_t * binary_search_tree_remove(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
 extern s_binary_search_tree_t * binary_search_tree_right(s_binary_search_tree_t *tree);

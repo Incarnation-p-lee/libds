@@ -19,7 +19,7 @@ s_binary_search_tree_t  * binary_search_tree_find_min(s_binary_search_tree_t *tr
 s_binary_search_tree_t * binary_search_tree_create(void);
 s_binary_search_tree_t * binary_search_tree_find(s_binary_search_tree_t *tree, sint64 nice);
 s_binary_search_tree_t * binary_search_tree_find_max(s_binary_search_tree_t *tree);
-s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
+s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
 s_binary_search_tree_t * binary_search_tree_left(s_binary_search_tree_t *tree);
 s_binary_search_tree_t * binary_search_tree_remove(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
 s_binary_search_tree_t * binary_search_tree_right(s_binary_search_tree_t *tree);
@@ -72,7 +72,7 @@ static inline s_avl_tree_t ** avl_tree_find_ptr_to_min(s_avl_tree_t **tree);
 static inline s_binary_search_tree_t * binary_search_tree_find_i(s_binary_search_tree_t *tree, sint64 nice);
 static inline s_binary_search_tree_t * binary_search_tree_find_max_i(s_binary_search_tree_t *tree);
 static inline s_binary_search_tree_t * binary_search_tree_find_min_i(s_binary_search_tree_t *tree);
-static inline s_binary_search_tree_t * binary_search_tree_insert_i(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
+static inline s_binary_search_tree_t * binary_search_tree_insert_i(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
 static inline s_binary_search_tree_t * binary_search_tree_remove_i(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
 static inline s_binary_search_tree_t ** binary_search_tree_find_ptr_to_max(s_binary_search_tree_t **tree);
 static inline s_binary_search_tree_t ** binary_search_tree_find_ptr_to_min(s_binary_search_tree_t **tree);

@@ -35,6 +35,7 @@ static void unit_test_leftist_heap_remove_min(void);
 static void unit_test_leftist_heap_remove_min_and_destroy(void);
 static void unit_test_leftist_heap_struct_field(void);
 static void utest_avl_tree_balanced_p(void);
+static void utest_binary_search_tree_insert(void);
 static void utest_doubly_end_queue_cleanup(void);
 static void utest_doubly_end_queue_empty_p(void);
 static void utest_doubly_end_queue_front_enter(void);

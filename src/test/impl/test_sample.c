@@ -93,7 +93,7 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
         nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_create();
         binary_search_tree_initial(tmp, nice);
-        binary_search_tree_insert(&tree, tmp);
+        binary_search_tree_insert(tree, tmp);
         i++;
     }
 
