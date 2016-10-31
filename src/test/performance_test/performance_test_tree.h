@@ -215,26 +215,24 @@ ptest_##name##_tree_remove(uint32 count)             \
     PERFORMANCE_TEST_RESULT(name##_tree_remove);     \
 }
 
-#define PT_TREE_iterate(name)                                  \
-static inline void                                             \
-ptest_##name##_tree_iterate(uint32 count)                      \
-{                                                              \
-    struct TREE *tree;                                         \
-                                                               \
-    tree = TEST_tree_sample(0xd3, 0x82);                       \
-                                                               \
-    PERFORMANCE_TEST_CHECKPOINT;                               \
-                                                               \
-    while (count--) {                                          \
-        TREE_iterate(tree, &tree_iterate_handler, ORDER_POST); \
-        TREE_iterate(tree, &tree_iterate_handler, ORDER_PRE);  \
-        TREE_iterate(tree, &tree_iterate_handler, ORDER_IN);   \
-    }                                                          \
-                                                               \
-    PERFORMANCE_TEST_ENDPOINT;                                 \
-                                                               \
-    TREE_destroy(&tree);                                       \
-    PERFORMANCE_TEST_RESULT(name##_tree_iterate);              \
+#define PT_TREE_iterate(name)                      \
+static inline void                                 \
+ptest_##name##_tree_iterate(uint32 count)          \
+{                                                  \
+    struct TREE *tree;                             \
+                                                   \
+    tree = TEST_tree_sample(0xd3, 0x82);           \
+                                                   \
+    PERFORMANCE_TEST_CHECKPOINT;                   \
+                                                   \
+    while (count--) {                              \
+        TREE_iterate(tree, &tree_iterate_handler); \
+    }                                              \
+                                                   \
+    PERFORMANCE_TEST_ENDPOINT;                     \
+                                                   \
+    TREE_destroy(&tree);                           \
+    PERFORMANCE_TEST_RESULT(name##_tree_iterate);  \
 }
 
 #endif

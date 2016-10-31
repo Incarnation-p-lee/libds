@@ -54,6 +54,8 @@ binary_search_tree_initial_i(s_binary_search_tree_t *tree, sint64 nice)
 
     tree->nice = nice;
     tree->left = tree->right = NULL;
+
+    assert_exit(binary_search_tree_structure_legal_p(tree));
 }
 
 void
@@ -609,41 +611,47 @@ binary_search_tree_remove(s_binary_search_tree_t **tree,
 }
 
 static inline void
-binary_search_tree_iterate_i(s_binary_search_tree_t *tree,
-    void (*handle)(void *), e_iter_order_t order)
+binary_search_tree_iterate_i(s_binary_search_tree_t *tree, void (*handler)(void *))
 {
-    assert_exit(LEGAL_ORDER_P(order));
-    assert_exit(!complain_null_pointer_p(handle));
+    s_array_queue_t *queue_slave;
+    s_array_queue_t *queue_master;
+    s_binary_search_tree_t *binary_node;
 
-    if (tree) {
-        if (ORDER_PRE == order) {
-            handle(tree);
+    assert_exit(!complain_null_pointer_p(handler));
+    assert_exit(binary_search_tree_structure_legal_p(tree));
+
+    queue_slave = array_queue_create();
+    queue_master = array_queue_create();
+    array_queue_enter(queue_master, tree);
+
+    while (!array_queue_empty_p(queue_master)) {
+        while (!array_queue_empty_p(queue_master)) {
+            binary_node = array_queue_leave(queue_master);
+            handler(binary_node);
+
+            if (binary_node->left) {
+                array_queue_enter(queue_slave, binary_node->left);
+            }
+            if (binary_node->right) {
+                array_queue_enter(queue_slave, binary_node->right);
+            }
         }
-
-        binary_search_tree_iterate_i(tree->left, handle, order);
-
-        if (ORDER_IN == order) {
-            handle(tree);
-        }
-
-        binary_search_tree_iterate_i(tree->right, handle, order);
-
-        if (ORDER_POST == order) {
-            handle(tree);
-        }
+        swap_pointer((void **)&queue_master, (void **)&queue_slave);
     }
+
+    array_queue_destroy(&queue_slave);
+    array_queue_destroy(&queue_master);
 }
 
 void
-binary_search_tree_iterate(s_binary_search_tree_t *tree,
-    void (*handle)(void *), e_iter_order_t order)
+binary_search_tree_iterate(s_binary_search_tree_t *tree, void (*handler)(void *))
 {
-    if (complain_null_pointer_p(handle)) {
+    if (complain_null_pointer_p(handler)) {
         return;
-    } else if (!LEGAL_ORDER_P(order)) {
-        pr_log_warn("Invalid value of enum ITER_ORDER.\n");
-    } else if (binary_search_tree_structure_legal_p(tree)) {
-        binary_search_tree_iterate_i(tree, handle, order);
+    } else if (!binary_search_tree_structure_legal_p(tree)) {
+        return;
+    } else {
+        binary_search_tree_iterate_i(tree, handler);
     }
 }
 

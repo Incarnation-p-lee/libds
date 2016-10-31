@@ -252,39 +252,36 @@ utest_##name##_tree_remove(void)                                        \
     UNIT_TEST_RESULT(name##_tree_remove, pass);                         \
 }
 
-#define UT_TREE_iterate(name)                              \
-static void                                                \
-utest_##name##_tree_iterate(void)                          \
-{                                                          \
-    bool pass;                                             \
-    struct TREE *tree;                                     \
-    uint32 cnt;                                            \
-                                                           \
-    pass = true;                                           \
-    cnt = 0x1C7D;                                          \
-    TREE_iterate(NULL, &tree_iterate_handler, ORDER_PRE);  \
-    UNIT_TEST_BEGIN(name##_tree_iterate);                  \
-                                                           \
-    tree = TEST_tree_sample(0x2A28, cnt);                  \
-                                                           \
-    test_iterate_reference_clean();                        \
-    TREE_iterate(tree, &tree_iterate_handler, ORDER_PRE);  \
-    RESULT_CHECK_uint32(reference, cnt, &pass);            \
-                                                           \
-    test_iterate_reference_clean();                        \
-    TREE_iterate(tree, &tree_iterate_handler, ORDER_END);  \
-    RESULT_CHECK_uint32(0x0u, reference, &pass);           \
-                                                           \
-    test_iterate_reference_clean();                        \
-    TREE_iterate(tree, &tree_iterate_handler, ORDER_IN);   \
-    RESULT_CHECK_uint32(reference, cnt, &pass);            \
-                                                           \
-    test_iterate_reference_clean();                        \
-    TREE_iterate(tree, &tree_iterate_handler, ORDER_POST); \
-    RESULT_CHECK_uint32(reference, cnt, &pass);            \
-                                                           \
-    TREE_destroy(&tree);                                   \
-    UNIT_TEST_RESULT(name##_tree_iterate, pass);           \
+#define UT_TREE_iterate(name)                    \
+static void                                      \
+utest_##name##_tree_iterate(void)                \
+{                                                \
+    bool pass;                                   \
+    struct TREE *tree;                           \
+    uint32 cnt;                                  \
+                                                 \
+    UNIT_TEST_BEGIN(name##_tree_iterate);        \
+                                                 \
+    pass = true;                                 \
+    cnt = 0xC7D;                                 \
+    TREE_iterate(NULL, &tree_iterate_handler);   \
+                                                 \
+    tree = TEST_tree_sample(0x2A28, cnt);        \
+    TREE_iterate(tree, NULL);                    \
+                                                 \
+    test_iterate_reference_clean();              \
+    TREE_iterate(tree, &tree_iterate_handler);   \
+    RESULT_CHECK_uint32(reference, cnt, &pass);  \
+    TREE_destroy(&tree);                         \
+                                                 \
+    cnt = 0xe1D;                                 \
+    tree = TEST_tree_sample(0x2A28, cnt);        \
+    test_iterate_reference_clean();              \
+    TREE_iterate(tree, &tree_iterate_handler);   \
+    RESULT_CHECK_uint32(reference, cnt, &pass);  \
+    TREE_destroy(&tree);                         \
+                                                 \
+    UNIT_TEST_RESULT(name##_tree_iterate, pass); \
 }
 
 #endif

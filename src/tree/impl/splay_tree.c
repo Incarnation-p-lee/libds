@@ -51,11 +51,12 @@ splay_tree_structure_legal_p(struct splay_tree *tree)
 static inline void
 splay_tree_initial_internal(struct splay_tree *tree, sint64 nice)
 {
-     assert_exit(splay_tree_structure_legal_p(tree));
+    assert_exit(!complain_null_pointer_p(tree));
 
-     tree->left = NULL;
-     tree->right = NULL;
-     tree->nice = nice;
+    tree->nice = nice;
+    tree->left = tree->right = NULL;
+
+    assert_exit(splay_tree_structure_legal_p(tree));
 }
 
 struct splay_tree *
@@ -808,41 +809,47 @@ splay_tree_remove(struct splay_tree **tree, struct splay_tree *node)
 }
 
 static inline void
-splay_tree_iterate_internal(struct splay_tree *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+splay_tree_iterate_i(s_splay_tree_t *tree, void (*handler)(void *))
 {
-    assert_exit(LEGAL_ORDER_P(order));
-    assert_exit(!complain_null_pointer_p(handle));
+    s_splay_tree_t *splay_node;
+    s_array_queue_t *queue_slave;
+    s_array_queue_t *queue_master;
 
-    if (tree) {
-        if (ORDER_PRE == order) {
-            handle(tree);
+    assert_exit(!complain_null_pointer_p(handler));
+    assert_exit(splay_tree_structure_legal_p(tree));
+
+    queue_slave = array_queue_create();
+    queue_master = array_queue_create();
+    array_queue_enter(queue_master, tree);
+
+    while (!array_queue_empty_p(queue_master)) {
+        while (!array_queue_empty_p(queue_master)) {
+            splay_node = array_queue_leave(queue_master);
+            handler(splay_node);
+
+            if (splay_node->left) {
+                array_queue_enter(queue_slave, splay_node->left);
+            }
+            if (splay_node->right) {
+                array_queue_enter(queue_slave, splay_node->right);
+            }
         }
-
-        splay_tree_iterate_internal(tree->left, handle, order);
-
-        if (ORDER_IN == order) {
-            handle(tree);
-        }
-
-        splay_tree_iterate_internal(tree->right, handle, order);
-
-        if (ORDER_POST == order) {
-            handle(tree);
-        }
+        swap_pointer((void **)&queue_master, (void **)&queue_slave);
     }
+
+    array_queue_destroy(&queue_slave);
+    array_queue_destroy(&queue_master);
 }
 
 void
-splay_tree_iterate(struct splay_tree *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+splay_tree_iterate(s_splay_tree_t *tree, void (*handler)(void *))
 {
-    if (complain_null_pointer_p(tree) || complain_null_pointer_p(handle)) {
+    if (complain_null_pointer_p(handler)) {
         return;
-    } else if (!LEGAL_ORDER_P(order)) {
-        pr_log_warn("illegal oder type of iterate.\n");
+    } else if (!splay_tree_structure_legal_p(tree)) {
+        return;
     } else {
-        splay_tree_iterate_internal(tree, handle, order);
+        splay_tree_iterate_i(tree, handler);
     }
 }
 

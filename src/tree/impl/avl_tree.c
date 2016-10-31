@@ -837,44 +837,47 @@ avl_tree_remove(s_avl_tree_t **tree, s_avl_tree_t *node)
 }
 
 static inline void
-avl_tree_iterate_i(s_avl_tree_t *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+avl_tree_iterate_i(s_avl_tree_t *tree, void (*handler)(void *))
 {
-    assert_exit(LEGAL_ORDER_P(order));
-    assert_exit(!complain_null_pointer_p(handle));
+    s_avl_tree_t *avl_node;
+    s_array_queue_t *queue_slave;
+    s_array_queue_t *queue_master;
 
-    if (tree) {
-        if (ORDER_PRE == order) {
-            handle(tree);
+    assert_exit(!complain_null_pointer_p(handler));
+    assert_exit(avl_tree_structure_legal_p(tree));
+
+    queue_slave = array_queue_create();
+    queue_master = array_queue_create();
+    array_queue_enter(queue_master, tree);
+
+    while (!array_queue_empty_p(queue_master)) {
+        while (!array_queue_empty_p(queue_master)) {
+            avl_node = array_queue_leave(queue_master);
+            handler(avl_node);
+
+            if (avl_node->left) {
+                array_queue_enter(queue_slave, avl_node->left);
+            }
+            if (avl_node->right) {
+                array_queue_enter(queue_slave, avl_node->right);
+            }
         }
-
-        avl_tree_iterate_i(tree->left, handle, order);
-
-        if (ORDER_IN == order) {
-            handle(tree);
-        }
-
-        avl_tree_iterate_i(tree->right, handle, order);
-
-        if (ORDER_POST == order) {
-            handle(tree);
-        }
+        swap_pointer((void **)&queue_master, (void **)&queue_slave);
     }
+
+    array_queue_destroy(&queue_slave);
+    array_queue_destroy(&queue_master);
 }
 
 void
-avl_tree_iterate(s_avl_tree_t *tree,
-    void (*handle)(void *), enum ITER_ORDER order)
+avl_tree_iterate(s_avl_tree_t *tree, void (*handler)(void *))
 {
-    if (complain_null_pointer_p(handle)) {
+    if (complain_null_pointer_p(handler)) {
         return;
     } else if (!avl_tree_structure_legal_p(tree)) {
         return;
-    } else if (!LEGAL_ORDER_P(order)) {
-        pr_log_warn("Invalid value of enum ITER_ORDER.\n");
-        return;
     } else {
-        avl_tree_iterate_i(tree, handle, order);
+        avl_tree_iterate_i(tree, handler);
     }
 }
 
