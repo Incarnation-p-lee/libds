@@ -503,6 +503,7 @@ binary_search_tree_child_strip(s_binary_search_tree_t **binary_node,
     assert_exit(binary_search_tree_structure_legal_p(*binary_node));
 
     node_tmp = *binary_node;
+
     if (binary_search_tree_doubly_child_p(node_tmp)) {
         binary_search_tree_doubly_child_strip(binary_node);
     } else {
@@ -516,15 +517,15 @@ binary_search_tree_repeated_remove(s_binary_search_tree_t **tree,
 {
     sint64 nice;
     s_array_queue_t *queue;
-    s_binary_search_tree_t *removed_node;
-    s_binary_search_tree_t *binary_node, **iterator;
+    s_binary_search_tree_t **iterator;
+    s_binary_search_tree_t *binary_node, *removed_node;
 
     assert_exit(!complain_null_pointer_p(tree));
     assert_exit(binary_search_tree_structure_legal_p(node));
     assert_exit(binary_search_tree_structure_legal_p(*tree));
     assert_exit(binary_search_tree_ordered_p(*tree));
-    assert_exit(*tree !=  node);
     assert_exit((*tree)->nice == node->nice);
+    assert_exit(*tree != node);
 
     iterator = tree;
     removed_node = NULL;
@@ -541,8 +542,10 @@ binary_search_tree_repeated_remove(s_binary_search_tree_t **tree,
              binary_search_tree_child_strip(iterator, direction);
              break;
          } else if (binary_node->left && binary_node->left->nice == nice) {
+             direction--;
              array_queue_enter(queue, &binary_node->left);
          } else if (binary_node->right && binary_node->right->nice == nice) {
+             direction++;
              array_queue_enter(queue, &binary_node->right);
          }
     }
@@ -587,7 +590,7 @@ binary_search_tree_remove_i(s_binary_search_tree_t **tree,
         binary_node = *iterator;
     }
 
-    if (NULL == removed_node) {
+    if (removed_node == NULL) {
         pr_log_warn("Failed to find the node in given tree.\n");
     }
 
