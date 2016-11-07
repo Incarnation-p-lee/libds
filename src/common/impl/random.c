@@ -65,7 +65,7 @@ random_sequence_uint32_obtain(uint32 len)
 void
 random_sequence_drop(uint32 *sequence)
 {
-    if (!complain_null_pointer_p(sequence)) {
+    if (!NULL_PTR_P(sequence)) {
         dp_free(sequence);
     }
 }

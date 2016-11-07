@@ -21,7 +21,7 @@ array_iterator_structure_legal_p(s_array_iterator_t *iterator)
 static inline bool
 array_iterator_structure_legal_ip(s_array_iterator_t *iterator)
 {
-    if (complain_null_pointer_p(iterator)) {
+    if (NULL_PTR_P(iterator)) {
         return false;
     } else if (!iterator->fp_index_initial) {
         return false;
@@ -40,20 +40,20 @@ array_iterator_initial(s_array_iterator_t *iterator,
             f_array_iterator_next_exist_t fp_next_exist_p,
            f_array_iterator_next_obtain_t fp_next_obtain)
 {
-    if (complain_null_pointer_p(iterator)) {
+    if (NULL_PTR_P(iterator)) {
         return;
     }
 
     // pr_log_err will exit program
-    if (complain_null_pointer_p(fp_index_initial)) {
+    if (NULL_PTR_P(fp_index_initial)) {
         pr_log_err("Function pointer 'fp_index_initial' is NULL.");
     }
 
-    if (complain_null_pointer_p(fp_next_exist_p)) {
+    if (NULL_PTR_P(fp_next_exist_p)) {
         pr_log_err("Function pointer 'fp_next_exist_p' is NULL.");
     }
 
-    if (complain_null_pointer_p(fp_next_obtain)) {
+    if (NULL_PTR_P(fp_next_obtain)) {
         pr_log_err("Function pointer 'fp_next_obtain' is NULL.");
     }
 

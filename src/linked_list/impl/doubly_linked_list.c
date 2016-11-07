@@ -27,7 +27,7 @@ doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list)
 static inline bool
 doubly_linked_list_structure_legal_ip(s_doubly_linked_list_t *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return false;
     } else if (PTR_INVALID == list->next) {
         return false;
@@ -164,7 +164,7 @@ doubly_linked_list_destroy(s_doubly_linked_list_t **list)
     s_doubly_linked_list_t *node;
     s_doubly_linked_list_t *next;
 
-    if (!complain_null_pointer_p(list)
+    if (!NULL_PTR_P(list)
         && doubly_linked_list_structure_legal_ip(*list)) {
         node = *list;
         do {
@@ -273,7 +273,7 @@ doubly_linked_list_remove_i(s_doubly_linked_list_t **list)
 {
     s_doubly_linked_list_t *removed;
 
-    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(!NULL_PTR_P(list));
     assert_exit(doubly_linked_list_structure_legal_ip(*list));
 
     removed = *list;
@@ -297,7 +297,7 @@ doubly_linked_list_remove_i(s_doubly_linked_list_t **list)
 s_doubly_linked_list_t *
 doubly_linked_list_remove(s_doubly_linked_list_t **list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return PTR_INVALID;
     } else if (!doubly_linked_list_structure_legal_ip(*list)) {
         return PTR_INVALID;
@@ -311,7 +311,7 @@ doubly_linked_list_iterate(s_doubly_linked_list_t *list, void (*handler)(void *)
 {
     s_doubly_linked_list_t *node;
 
-    if (!complain_null_pointer_p(handler)
+    if (!NULL_PTR_P(handler)
         && doubly_linked_list_structure_legal_ip(list)) {
         node = list;
 

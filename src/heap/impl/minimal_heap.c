@@ -1,7 +1,7 @@
 uint32
 minimal_heap_index_limit(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_CPCT_INVALID;
     } else {
         return heap->alias->capacity + 1;
@@ -11,7 +11,7 @@ minimal_heap_index_limit(struct minimal_heap *heap)
 uint32
 minimal_heap_size(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_SIZE_INVALID;
     } else {
         return heap->alias->size;
@@ -21,7 +21,7 @@ minimal_heap_size(struct minimal_heap *heap)
 sint64
 minimal_heap_nice(struct minimal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_NICE_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= minimal_heap_index_limit(heap)) {
         return HEAP_NICE_INVALID;
@@ -33,7 +33,7 @@ minimal_heap_nice(struct minimal_heap *heap, uint32 index)
 void *
 minimal_heap_val(struct minimal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return PTR_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= minimal_heap_index_limit(heap)) {
         return PTR_INVALID;
@@ -56,7 +56,7 @@ minimal_heap_create(uint32 capacity)
 void
 minimal_heap_destroy(struct minimal_heap **heap)
 {
-    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
+    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
         memory_cache_free(*heap);
         *heap = NULL;
@@ -66,7 +66,7 @@ minimal_heap_destroy(struct minimal_heap **heap)
 bool
 minimal_heap_empty_p(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return false;
     } else {
         return binary_heap_empty_p(heap->alias);
@@ -76,7 +76,7 @@ minimal_heap_empty_p(struct minimal_heap *heap)
 bool
 minimal_heap_full_p(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return true;
     } else {
         return binary_heap_full_p(heap->alias);
@@ -92,7 +92,7 @@ minimal_heap_index_last(struct minimal_heap *heap)
 void
 minimal_heap_cleanup(struct minimal_heap *heap)
 {
-    if (!complain_null_pointer_p(heap)) {
+    if (!NULL_PTR_P(heap)) {
         binary_heap_cleanup(heap->alias);
     }
 }
@@ -100,7 +100,7 @@ minimal_heap_cleanup(struct minimal_heap *heap)
 void *
 minimal_heap_get_min(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else {
         return binary_heap_root(heap->alias);
@@ -110,7 +110,7 @@ minimal_heap_get_min(struct minimal_heap *heap)
 void
 minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } if (binary_heap_nice_legal_p(nice)) {
         binary_heap_insert(heap->alias, val, nice,
@@ -125,7 +125,7 @@ minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(!binary_heap_empty_p(heap->alias));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
@@ -142,7 +142,7 @@ minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
     index = binary_heap_reorder(alias, index, nice, &binary_heap_minimal_ordered_p);
 
     assert_exit(INDEX_ROOT == index);
-    assert_exit(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
+    assert_exit(NULL_PTR_P(HEAP_DATA(alias, INDEX_ROOT)));
 
     HEAP_DATA(alias, INDEX_ROOT) = tmp;
     return binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
@@ -151,7 +151,7 @@ minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
 void *
 minimal_heap_remove(struct minimal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return NULL;
@@ -166,7 +166,7 @@ minimal_heap_remove(struct minimal_heap *heap, uint32 index)
 void *
 minimal_heap_remove_min(struct minimal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
@@ -184,7 +184,7 @@ minimal_heap_nice_alter(struct minimal_heap *heap, uint32 index,
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
 
@@ -206,7 +206,7 @@ minimal_heap_decrease_nice(struct minimal_heap *heap, uint32 index,
 {
     sint64 nice;
 
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
@@ -224,7 +224,7 @@ minimal_heap_increase_nice(struct minimal_heap *heap, uint32 index,
 {
     sint64 nice;
 
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
@@ -245,7 +245,7 @@ minimal_heap_build_internal(struct minimal_heap *heap)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(binary_heap_full_p(heap->alias));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
 
@@ -273,7 +273,7 @@ minimal_heap_build(struct heap_data **hd_array, uint32 size)
 {
     struct minimal_heap *heap;
 
-    if (complain_null_pointer_p(hd_array)) {
+    if (NULL_PTR_P(hd_array)) {
         return NULL;
     } else if (complain_zero_size_p(size)) {
         return NULL;

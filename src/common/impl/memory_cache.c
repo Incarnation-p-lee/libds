@@ -54,7 +54,7 @@ memory_cache_re_allocate(void *addr, uint32 size)
 
     if (complain_zero_size_p(size)) {
         return NULL;
-    } else if (complain_null_pointer_p(addr)) {
+    } else if (NULL_PTR_P(addr)) {
         return memory_cache_allocate(size);
     } else {
         old_size = *(uint32 *)MEM_TO_REAL(addr);
@@ -75,7 +75,7 @@ memory_cache_free(void *addr)
 {
     uint32 size;
 
-    if (!complain_null_pointer_p(addr)) {
+    if (!NULL_PTR_P(addr)) {
         size = *(uint32 *)(MEM_TO_REAL(addr));
         assert_exit(0 < size);
 

@@ -70,8 +70,8 @@ min_max_heap_ordered_p(struct min_max_heap *heap)
     uint32 index;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
-    assert_exit(!complain_null_pointer_p(heap->alias));
+    assert_exit(!NULL_PTR_P(heap));
+    assert_exit(!NULL_PTR_P(heap->alias));
 
     index = INDEX_ROOT;
     alias = heap->alias;

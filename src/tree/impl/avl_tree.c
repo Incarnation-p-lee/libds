@@ -42,7 +42,7 @@ avl_tree_create(void)
 static inline void
 avl_tree_initial_internal(struct avl_tree *tree, sint64 nice)
 {
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
 
     tree->height = 0;
     tree->nice = nice;
@@ -61,7 +61,7 @@ avl_tree_initial(struct avl_tree *tree, sint64 nice)
 static inline bool
 avl_tree_structure_legal_p(struct avl_tree *tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return false;
     } else if (tree->left == tree->right && NULL != tree->left) {
         return false;
@@ -103,7 +103,7 @@ avl_tree_destroy_internal(struct avl_tree *tree)
 void
 avl_tree_destroy(struct avl_tree **tree)
 {
-    if (!complain_null_pointer_p(tree) && avl_tree_structure_legal_p(*tree)) {
+    if (!NULL_PTR_P(tree) && avl_tree_structure_legal_p(*tree)) {
         avl_tree_destroy_internal(*tree);
         *tree = NULL;
     }
@@ -458,7 +458,7 @@ avl_tree_rotate_left(struct avl_tree **tree)
     sint32 r_ht;
     struct avl_tree *left;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->left));
 
@@ -494,7 +494,7 @@ avl_tree_rotate_right(struct avl_tree **tree)
     sint32 r_ht;
     struct avl_tree *right;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->right));
 
@@ -531,7 +531,7 @@ avl_tree_insert_internal(struct avl_tree **tree, struct avl_tree *node)
     struct avl_tree *avl;
     struct avl_tree *inserted;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p(node));
     assert_exit(avl_tree_balanced_p(*tree));
@@ -589,7 +589,7 @@ avl_tree_insert_internal(struct avl_tree **tree, struct avl_tree *node)
 struct avl_tree *
 avl_tree_insert(struct avl_tree **tree, struct avl_tree *node)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!avl_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -604,7 +604,7 @@ avl_tree_insert(struct avl_tree **tree, struct avl_tree *node)
 static inline void
 avl_tree_lt_doubly_child_strip(struct avl_tree **pre, struct avl_tree *node)
 {
-    assert_exit(!complain_null_pointer_p(pre));
+    assert_exit(!NULL_PTR_P(pre));
     assert_exit(avl_tree_structure_legal_p(*pre));
     assert_exit(avl_tree_structure_legal_p(node));
     assert_exit(*pre == node);
@@ -626,7 +626,7 @@ avl_tree_doubly_child_strip(struct avl_tree **node_pre)
     sint32 r_ht;
     struct avl_tree *avl;
 
-    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(!NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
 
     avl = *node_pre;
@@ -668,7 +668,7 @@ avl_tree_find_ptr_to_max(struct avl_tree **tree)
     struct avl_tree *avl;
     struct avl_tree **max;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_doubly_child_p(*tree));
 
@@ -689,7 +689,7 @@ avl_tree_find_ptr_to_min(struct avl_tree **tree)
     struct avl_tree *avl;
     struct avl_tree **min;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_doubly_child_p(*tree));
 
@@ -712,7 +712,7 @@ avl_tree_doubly_child_strip_from_max(struct avl_tree **node_pre)
     struct avl_tree *max;
     struct avl_tree **max_pre;
 
-    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(!NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
     assert_exit(avl_tree_doubly_child_p(*node_pre));
 
@@ -746,7 +746,7 @@ avl_tree_doubly_child_strip_from_min(struct avl_tree **node_pre)
     struct avl_tree *min;
     struct avl_tree **min_pre;
 
-    assert_exit(!complain_null_pointer_p(node_pre));
+    assert_exit(!NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
     assert_exit(avl_tree_doubly_child_p(*node_pre));
 
@@ -779,7 +779,7 @@ avl_tree_remove_internal(struct avl_tree **tree, struct avl_tree *node)
     struct avl_tree *avl;
     struct avl_tree *removed;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_balanced_p(*tree));
     assert_exit(avl_tree_ordered_p(*tree));
@@ -842,7 +842,7 @@ avl_tree_remove_internal(struct avl_tree **tree, struct avl_tree *node)
 struct avl_tree *
 avl_tree_remove(struct avl_tree **tree, struct avl_tree *node)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!avl_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -858,7 +858,7 @@ avl_tree_iterate_internal(struct avl_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
     assert_exit(LEGAL_ORDER_P(order));
-    assert_exit(!complain_null_pointer_p(handle));
+    assert_exit(!NULL_PTR_P(handle));
 
     if (tree) {
         if (ORDER_PRE == order) {
@@ -883,7 +883,7 @@ void
 avl_tree_iterate(struct avl_tree *tree,
     void (*handle)(void *), enum ITER_ORDER order)
 {
-    if (complain_null_pointer_p(handle)) {
+    if (NULL_PTR_P(handle)) {
         return;
     } else if (!avl_tree_structure_legal_p(tree)) {
         return;

@@ -157,8 +157,8 @@ test_open_addressing_hash_sample(uint32 count)
     hash = open_addressing_hash_create(0);
     heap = memory_maps_entry_find("[heap]");
 
-    assert_exit(!complain_null_pointer_p(hash));
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(hash));
+    assert_exit(!NULL_PTR_P(heap));
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);

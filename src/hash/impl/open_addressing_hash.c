@@ -47,7 +47,7 @@ open_addressing_hash_create(uint32 size)
 static inline bool
 open_addressing_hash_structure_legal_p(s_open_addressing_hash_t *hash)
 {
-    if (complain_null_pointer_p(hash)) {
+    if (NULL_PTR_P(hash)) {
         return false;
     } else {
         return hashing_table_structure_legal_p(hash->table);
@@ -66,7 +66,7 @@ open_addressing_hash_destroy_i(s_open_addressing_hash_t *hash)
 void
 open_addressing_hash_destroy(s_open_addressing_hash_t **hash)
 {
-    if (complain_null_pointer_p(hash)) {
+    if (NULL_PTR_P(hash)) {
         return;
     } else if (open_addressing_hash_structure_legal_p(*hash)) {
         open_addressing_hash_destroy_i(*hash);
@@ -105,7 +105,7 @@ open_addressing_hash_insert_i(s_open_addressing_hash_t *hash, void *key)
     uint32 index;
     uint32 factor;
 
-    assert_exit(!complain_null_pointer_p(key));
+    assert_exit(!NULL_PTR_P(key));
     assert_exit(open_addressing_hash_structure_legal_p(hash));
 
     factor = open_addressing_hash_load_factor_calculate(hash);
@@ -128,7 +128,7 @@ open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key)
 {
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else {
         return open_addressing_hash_insert_i(hash, key);
@@ -142,7 +142,7 @@ open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key)
 
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else {
         index = open_addressing_hash_find_index(hash, key);
@@ -161,7 +161,7 @@ open_addressing_hash_find_index(s_open_addressing_hash_t *hash, void *key)
     uint32 i;
     uint32 index;
 
-    assert_exit(!complain_null_pointer_p(key));
+    assert_exit(!NULL_PTR_P(key));
     assert_exit(open_addressing_hash_structure_legal_p(hash));
 
     i = 0;
@@ -181,7 +181,7 @@ open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key)
 {
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else if (HASH_IDX_INVALID == open_addressing_hash_find_index(hash, key)) {
         return NULL;

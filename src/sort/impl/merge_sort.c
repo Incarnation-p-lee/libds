@@ -20,9 +20,9 @@ merge_sort_recursive(void *base, void *tmp, uint32 left, uint32 right,
 {
     uint32 med;
 
-    assert_exit(!complain_null_pointer_p(base));
-    assert_exit(!complain_null_pointer_p(tmp));
-    assert_exit(!complain_null_pointer_p(compare));
+    assert_exit(!NULL_PTR_P(base));
+    assert_exit(!NULL_PTR_P(tmp));
+    assert_exit(!NULL_PTR_P(compare));
     assert_exit(!complain_zero_size_p(csize));
 
     if (left < right) {
@@ -42,9 +42,9 @@ merge_sort_divide_merge(void *base, void *tmp, uint32 left, uint32 med, uint32 r
     void *p1, *p1_lmt;
     void *p2, *p2_lmt;
 
-    assert_exit(!complain_null_pointer_p(base));
-    assert_exit(!complain_null_pointer_p(compare));
-    assert_exit(!complain_null_pointer_p(tmp));
+    assert_exit(!NULL_PTR_P(base));
+    assert_exit(!NULL_PTR_P(compare));
+    assert_exit(!NULL_PTR_P(tmp));
     assert_exit(!complain_zero_size_p(csize));
     assert_exit(left <= med && med <= right);
 

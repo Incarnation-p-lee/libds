@@ -12,7 +12,7 @@ doubly_end_queue_create(void)
 bool
 doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (NULL_PTR_P(queue)) {
         return false;
     } else if (NULL == queue->front && NULL != queue->rear) {
         return false;
@@ -26,7 +26,7 @@ doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue)
 static inline bool
 doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return false;
     } else {
         return doubly_linked_list_structure_legal_p(&list->link);
@@ -36,7 +36,7 @@ doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list)
 void
 doubly_end_queue_destroy(s_doubly_end_queue_t **queue)
 {
-    if (!complain_null_pointer_p(queue) && doubly_end_queue_structure_legal_p(*queue)) {
+    if (!NULL_PTR_P(queue) && doubly_end_queue_structure_legal_p(*queue)) {
         if (!doubly_end_queue_empty_ip(*queue)) {
             doubly_end_queue_cleanup_i(*queue);
         }
