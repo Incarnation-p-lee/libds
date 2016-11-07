@@ -33,11 +33,7 @@
                                    } while (false)
 
 #ifdef DEBUG
-    // extern void libds_log_print(enum log_level lvl, const char *msg);
-    // extern void * malloc_wrap(uint32 size);
-    // extern void * realloc_wrap(void *ptr, uint32 size);
-    // extern void free_wrap(void *ptr);
-
+    #define NULL_PTR_P(ptr)        complain_null_pointer_p(ptr)
     #define malloc_ds              malloc_wrap
     #define realloc_ds             realloc_wrap
     #define free_ds                free_wrap
@@ -50,6 +46,7 @@
                                        }                                                                 \
                                    } while (false)
 #else
+    #define NULL_PTR_P(ptr)        (ptr == NULL ? true : false)
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
     #define free_ds                dp_free

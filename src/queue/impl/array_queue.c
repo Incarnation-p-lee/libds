@@ -105,7 +105,7 @@ array_queue_create(void)
 void
 array_queue_destroy(s_array_queue_t **queue)
 {
-    if (!complain_null_pointer_p(queue) && array_queue_structure_legal_ip(*queue)) {
+    if (!NULL_PTR_P(queue) && array_queue_structure_legal_ip(*queue)) {
         memory_cache_free((*queue)->space.base);
         memory_cache_free(*queue);
 
@@ -116,15 +116,15 @@ array_queue_destroy(s_array_queue_t **queue)
 static inline bool
 array_queue_space_structure_legal_p(s_array_queue_space_t *space)
 {
-    if (complain_null_pointer_p(space)) {
+    if (NULL_PTR_P(space)) {
         return false;
     } else if (space->rest > space->dim) {
         return false;
-    } else if (complain_null_pointer_p(space->base)) {
+    } else if (NULL_PTR_P(space->base)) {
         return false;
-    } else if (complain_null_pointer_p(space->front)) {
+    } else if (NULL_PTR_P(space->front)) {
         return false;
-    } else if (complain_null_pointer_p(space->rear)) {
+    } else if (NULL_PTR_P(space->rear)) {
         return false;
     } else {
         return true;
@@ -134,7 +134,7 @@ array_queue_space_structure_legal_p(s_array_queue_space_t *space)
 static inline bool
 array_queue_structure_legal_ip(s_array_queue_t *queue)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (NULL_PTR_P(queue)) {
         return false;
     } else if (!array_iterator_structure_legal_p(&queue->iterator)) {
         return false;
@@ -169,7 +169,7 @@ array_queue_resize_expand(s_array_queue_t *queue, uint32 size, void **addr)
     uint32 counted;
     uint32 chunk_size;
 
-    assert_exit(!complain_null_pointer_p(addr));
+    assert_exit(!NULL_PTR_P(addr));
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size > queue->space.dim);
@@ -204,7 +204,7 @@ array_queue_resize_narrow(s_array_queue_t *queue, uint32 size, void **addr)
     uint32 part_size;
     uint32 chunk_size;
 
-    assert_exit(!complain_null_pointer_p(addr));
+    assert_exit(!NULL_PTR_P(addr));
     assert_exit(!complain_zero_size_p(size));
     assert_exit(array_queue_structure_legal_ip(queue));
     assert_exit(size < queue->space.dim);
@@ -423,7 +423,7 @@ array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *))
 
     if (!array_queue_structure_legal_ip(queue)) {
         return;
-    } else if (complain_null_pointer_p(handler)) {
+    } else if (NULL_PTR_P(handler)) {
         return;
     } else if (array_queue_empty_ip(queue)) {
         pr_log_warn("Iterate on _EMPTY_ queue, nothing will be done.\n");
