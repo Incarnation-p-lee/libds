@@ -465,11 +465,11 @@ splay_tree_balance_splaying_root(s_splay_tree_t **tree, uint32 path_mask)
     assert_exit(splay_tree_structure_legal_p(*tree));
 
     switch (path_mask) {
-            splay_tree_balance_splaying_root_left(tree);
         case PATH_LEFT:
+            splay_tree_balance_splaying_root_left(tree);
             break;
-            splay_tree_balance_splaying_root_right(tree);
         case PATH_RIGHT:
+            splay_tree_balance_splaying_root_right(tree);
             break;
         default:
             assert_not_reached("Unexpected value of enum tree_path_type.\n");
@@ -490,7 +490,7 @@ splay_tree_balance_splaying(s_array_stack_t *path_stack)
         path_mask = TREE_PATH_MASK(iterator);
 
         iterator = array_stack_pop(path_stack);
-        path_mask = (path_mask << 1) + TREE_PATH_MASK(iterator);
+        path_mask = path_mask + (TREE_PATH_MASK(iterator) << 1);
 
         iterator = TREE_PATH_DECODE(iterator);
         splay_tree_balance_splaying_i(iterator, path_mask);
@@ -733,7 +733,7 @@ splay_tree_find_ptr_to_min(s_splay_tree_t **tree)
     assert_exit(splay_tree_structure_legal_p(*tree));
 
     min = tree;
-    splay = *min;
+    splay = *tree;
 
     while (splay->left) {
         min = &splay->left;
@@ -741,6 +741,26 @@ splay_tree_find_ptr_to_min(s_splay_tree_t **tree)
     }
 
     return min;
+}
+
+static inline s_splay_tree_t **
+splay_tree_find_ptr_to_max(s_splay_tree_t **tree)
+{
+    s_splay_tree_t **max;
+    s_splay_tree_t *splay;
+
+    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(splay_tree_structure_legal_p(*tree));
+
+    max = tree;
+    splay = *tree;
+
+    while (splay->right) {
+        max = &splay->right;
+        splay = *max;
+    }
+
+    return max;
 }
 
 static inline void
@@ -807,7 +827,7 @@ splay_tree_doubly_child_strip_from_max(s_splay_tree_t **splay_node)
         splay->left->right = splay->right;
         splay->left = splay->right = NULL;
     } else {
-        max_node = splay_tree_find_ptr_to_min(&splay->left);
+        max_node = splay_tree_find_ptr_to_max(&splay->left);
         max = *max_node;
 
         splay_tree_swap_child(splay, max);
@@ -920,6 +940,7 @@ splay_tree_remove_i(s_splay_tree_t **tree, s_splay_tree_t *node)
             removed_node = splay_tree_repeated_remove(iterator, node, direction);
             break;
         }
+        splay_node = *iterator;
     }
 
     if (removed_node == NULL) {

@@ -6,13 +6,12 @@
 
 #define TREE_PATH_LEFT_MASK      0x0u /* indicate the node take left in given path */
 #define TREE_PATH_RIGHT_MASK     0x1u
+#define PATH_MASK                TREE_PATH_RIGHT_MASK
 
 #define TREE_PATH_L_ENCODE(node) (void *)((ptr_t)node | TREE_PATH_LEFT_MASK)
 #define TREE_PATH_R_ENCODE(node) (void *)((ptr_t)node | TREE_PATH_RIGHT_MASK)
-#define TREE_PATH_MASK(node)     (uint32)((ptr_t)node & TREE_PATH_LEFT_MASK)
+#define TREE_PATH_MASK(node)     (uint32)((ptr_t)node & PATH_MASK)
 #define TREE_PATH_DECODE(node)   (void *)((ptr_t)node & (((ptr_t)-1) - 1))
-
-#define LEGAL_ORDER_P(x)          ((x) > ORDER_START && (x) < ORDER_END) ? true : false
 
 enum tree_path_type {
     PATH_LEFT           = 0x0,
