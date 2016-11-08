@@ -8,6 +8,7 @@ test_case_list(struct test_extra_info *info, char *content)
     filter = test_case_filter_obtain(content);
 
     dp_fprintf(stdout, "  >> TEST CASE LIST << \n");
+    dp_fprintf(stdout, "  Repeated %d\n", info == NULL ? 1 : info ->count);
     test_case_list_category(test_category, filter);
     test_case_filter_destroy(&filter);
 }

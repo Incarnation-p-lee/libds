@@ -135,7 +135,8 @@ utest_binary_indexed_tree_sum(void)
     RESULT_CHECK_sint64(0, binary_indexed_tree_sum(tree, BIN_IDXED_NMBR_INVALID), &pass);
 
     while (number <= size) {
-        RESULT_CHECK_sint64(test_sint64_data_sum(data, 0, number - 1, size),
+        RESULT_CHECK_sint64(
+            test_sint64_data_sum(data, 0, number - 1),
             binary_indexed_tree_sum(tree, number), &pass);
         number++;
     }
@@ -173,7 +174,7 @@ utest_binary_indexed_tree_range_sum(void)
         number_e = number_s;
         while (number_e <= size) {
             RESULT_CHECK_sint64(
-                test_sint64_data_sum(data, number_s - 1, number_e - 1, size),
+                test_sint64_data_sum(data, number_s - 1, number_e - 1),
                 binary_indexed_tree_range_sum(tree, number_s, number_e),
                 &pass);
             number_e++;

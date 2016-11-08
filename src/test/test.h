@@ -103,7 +103,7 @@ static struct test_entry_list entry_list[] = {
 };
 
 static struct test_suite suite = {
-    entry_list,
+    entry_list, "",
 };
 
 static const struct test_layer_table test_category[];
@@ -112,7 +112,7 @@ static const struct test_layer_table test_category[];
  * section info of binary
  */
 static struct memory_maps mmaps[MAP_ENTRY_MAX] = {
-    {},
+    {"", 0, {NULL, }, {NULL, },},
 };
 
 static uint32 reference = 0;

@@ -481,18 +481,18 @@ binary_search_tree_child_strip_from_min(s_binary_search_tree_t **binary_node)
 }
 
 static inline void
-binary_search_tree_doubly_child_strip(s_binary_search_tree_t **binary_node)
+binary_search_tree_doubly_child_strip(s_binary_search_tree_t **binary_node,
+    sint32 direction)
 {
     assert_exit(!complain_null_pointer_p(binary_node));
     assert_exit(binary_search_tree_structure_legal_p(*binary_node));
     assert_exit(binary_search_tree_doubly_child_p(*binary_node));
 
-    if (direct > 0) {
+    if (direction > 0) {
         binary_search_tree_child_strip_from_max(binary_node);
     } else {
         binary_search_tree_child_strip_from_min(binary_node);
     }
-    direct = 0;
 }
 
 static inline void
@@ -503,7 +503,7 @@ binary_search_tree_child_strip(s_binary_search_tree_t **binary_node,
     assert_exit(binary_search_tree_structure_legal_p(*binary_node));
 
     if (binary_search_tree_doubly_child_p(*binary_node)) {
-        binary_search_tree_doubly_child_strip(binary_node);
+        binary_search_tree_doubly_child_strip(binary_node, direction);
     } else {
         binary_search_tree_lt_doubly_child_strip(binary_node);
     }

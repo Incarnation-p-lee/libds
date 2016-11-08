@@ -100,6 +100,9 @@ static inline sint32 avl_tree_height_internal(struct avl_tree *tree);
 static inline sint32 binary_search_tree_height_i(s_binary_search_tree_t *tree);
 static inline sint32 splay_tree_height_i(s_splay_tree_t *tree);
 static inline sint64 binary_indexed_tree_sum_internal(struct binary_indexed_tree *tree, uint32 number);
+static inline void  splay_tree_balance_splaying_left_to_left(s_splay_tree_t **tree);
+static inline void  splay_tree_balance_splaying_left_to_right(s_splay_tree_t **tree);
+static inline void  splay_tree_balance_splaying_right_to_right(s_splay_tree_t **tree);
 static inline void avl_tree_destroy_i(s_avl_tree_t *tree);
 static inline void avl_tree_doubly_child_strip(s_avl_tree_t **node_pre);
 static inline void avl_tree_doubly_child_strip_from_max(s_avl_tree_t **node_pre);
@@ -116,7 +119,7 @@ static inline void binary_search_tree_child_strip(s_binary_search_tree_t **binar
 static inline void binary_search_tree_child_strip_from_max(s_binary_search_tree_t **binary_node);
 static inline void binary_search_tree_child_strip_from_min(s_binary_search_tree_t **binary_node);
 static inline void binary_search_tree_destroy_i(s_binary_search_tree_t *tree);
-static inline void binary_search_tree_doubly_child_strip(s_binary_search_tree_t **binary_node);
+static inline void binary_search_tree_doubly_child_strip(s_binary_search_tree_t **binary_node, sint32 direction);
 static inline void binary_search_tree_initial_i(s_binary_search_tree_t *tree, sint64 nice);
 static inline void binary_search_tree_iterate_i(s_binary_search_tree_t *tree, void (*handler)(void *));
 static inline void binary_search_tree_lt_doubly_child_strip(s_binary_search_tree_t **binary_node);
@@ -126,6 +129,7 @@ static inline void splay_tree_balance_splaying_i(s_splay_tree_t **tree, uint32 p
 static inline void splay_tree_balance_splaying_right_to_left(s_splay_tree_t **tree);
 static inline void splay_tree_balance_splaying_root(s_splay_tree_t **tree, uint32 path_mask);
 static inline void splay_tree_balance_splaying_root_left(s_splay_tree_t **tree);
+static inline void splay_tree_balance_splaying_root_right(s_splay_tree_t **tree);
 static inline void splay_tree_child_strip(s_splay_tree_t **splay_node, sint32 direction);
 static inline void splay_tree_destroy_i(s_splay_tree_t *tree);
 static inline void splay_tree_doubly_child_strip(s_splay_tree_t **splay_node, sint32 direction);
@@ -137,10 +141,6 @@ static inline void splay_tree_lt_doubly_child_strip(s_splay_tree_t **splay_node)
 static inline void splay_tree_node_destroy(s_splay_tree_t *node);
 static inline void splay_tree_swap_child(s_splay_tree_t *a, s_splay_tree_t *b);
 static inline void splay_tree_the_same_nice_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted, sint32 path_direction);
-static void inline splay_tree_balance_splaying_left_to_left(s_splay_tree_t **tree);
-static void inline splay_tree_balance_splaying_left_to_right(s_splay_tree_t **tree);
-static void inline splay_tree_balance_splaying_right_to_right(s_splay_tree_t **tree);
-static void inline splay_tree_balance_splaying_root_right(s_splay_tree_t **tree);
 struct binary_indexed_tree * binary_indexed_tree_create(sint64 *data, uint32 size);
 uint32 binary_indexed_tree_size(struct binary_indexed_tree *tree);
 void avl_tree_destroy(s_avl_tree_t **tree);

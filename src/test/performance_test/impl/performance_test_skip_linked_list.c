@@ -62,7 +62,7 @@ ptest_skip_linked_list_find_key(uint32 count)
     s_skip_linked_list_t *tmp;
 
     key = 0xfade;
-    list = test_skip_linked_list_sample(0xf45, 0x734);
+    list = test_skip_linked_list_sample(0x734);
     tmp = skip_linked_list_create_with_key(key);
     skip_linked_list_insert(&list, tmp);
 
@@ -87,7 +87,7 @@ ptest_skip_linked_list_contains_p(uint32 count)
     s_skip_linked_list_t *tmp;
 
     key = 0xfade;
-    list = test_skip_linked_list_sample(0xf45, 0x734);
+    list = test_skip_linked_list_sample(0x734);
     tmp = skip_linked_list_create_with_key(key);
 
     PERFORMANCE_TEST_BEGIN(skip_linked_list_contains_p);
@@ -112,7 +112,7 @@ ptest_skip_linked_list_insert(uint32 count)
     s_skip_linked_list_t *tmp;
 
     key = 0xfade;
-    list = test_skip_linked_list_sample(0x1, 0x1);
+    list = test_skip_linked_list_sample(0x1);
 
     PERFORMANCE_TEST_BEGIN(skip_linked_list_insert);
     PERFORMANCE_TEST_CHECKPOINT;
@@ -136,7 +136,7 @@ ptest_skip_linked_list_remove(uint32 count)
     s_skip_linked_list_t *list;
     s_skip_linked_list_t *tmp;
 
-    list = test_skip_linked_list_sample(0x9e12, 0x1845);
+    list = test_skip_linked_list_sample(0x1845);
 
     PERFORMANCE_TEST_BEGIN(skip_linked_list_remove);
     PERFORMANCE_TEST_CHECKPOINT;

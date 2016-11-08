@@ -49,7 +49,7 @@ utest_##name##_linked_list_previous(void)                                 \
                                                                           \
     RESULT_CHECK_pointer(PTR_INVALID, LINKED_LIST_previous(NULL), &pass); \
                                                                           \
-    list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                       \
+    list = TEST_LINKED_LIST_sample(0x1f19);                               \
     prev = LINKED_LIST_previous(list);                                    \
                                                                           \
     RESULT_CHECK_pointer(list, LINKED_LIST_next(prev), &pass);            \
@@ -68,7 +68,7 @@ utest_##name##_linked_list_insert_after(void)                          \
     LINKED_LIST *inserted;                                             \
                                                                        \
     pass = true;                                                       \
-    list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                    \
+    list = TEST_LINKED_LIST_sample(0x1f19);                            \
     UNIT_TEST_BEGIN(name##_linked_list_insert_after);                  \
                                                                        \
     LINKED_LIST_insert_after(NULL, NULL);                              \
@@ -97,7 +97,7 @@ utest_##name##_linked_list_insert_before(void)                         \
     LINKED_LIST *inserted;                                             \
                                                                        \
     pass = true;                                                       \
-    list = TEST_LINKED_LIST_sample(0x3f26, 0x1f19);                    \
+    list = TEST_LINKED_LIST_sample(0x1f19);                            \
     UNIT_TEST_BEGIN(name##_linked_list_insert_before);                 \
                                                                        \
     LINKED_LIST_insert_before(NULL, NULL);                             \
@@ -137,7 +137,7 @@ utest_##name##_linked_list_destroy(void)                \
     iter = sizes;                                       \
     while (iter < sizes + array_sizeof(sizes)) {        \
         len = *iter++;                                  \
-        list = TEST_LINKED_LIST_sample(0x316FA, len);   \
+        list = TEST_LINKED_LIST_sample(len);            \
                                                         \
         LINKED_LIST_destroy(&list);                     \
         RESULT_CHECK_pointer(NULL, list, &pass);        \
@@ -165,7 +165,7 @@ utest_##name##_linked_list_length(void)                         \
     RESULT_CHECK_uint32(len, LINKED_LIST_length(NULL), &pass);  \
                                                                 \
     len = 0x2e2c;                                               \
-    list = TEST_LINKED_LIST_sample(0x2e8, len);                 \
+    list = TEST_LINKED_LIST_sample(len);                        \
     RESULT_CHECK_uint32(len, LINKED_LIST_length(list), &pass);  \
     LINKED_LIST_destroy(&list);                                 \
                                                                 \
@@ -188,7 +188,7 @@ utest_##name##_linked_list_node_by_index(void)                \
     pass = true;                                              \
     UNIT_TEST_BEGIN(name##_linked_list_node_by_index);        \
                                                               \
-    list = TEST_LINKED_LIST_sample(0x8fa, 0x3a2);             \
+    list = TEST_LINKED_LIST_sample(0x3a2);                    \
     len = LINKED_LIST_length(list);                           \
                                                               \
     tmp = LINKED_LIST_node_by_index(NULL, 0);                 \
@@ -217,7 +217,7 @@ utest_##name##_linked_list_contains_p(void)                             \
     pass = true;                                                        \
     UNIT_TEST_BEGIN(name##_linked_list_contains_p);                     \
                                                                         \
-    list = TEST_LINKED_LIST_sample(0x1dd2, 0x28ae);                     \
+    list = TEST_LINKED_LIST_sample(0x28ae);                             \
     tmp = LINKED_LIST_next(list);                                       \
                                                                         \
     RESULT_CHECK_bool(false, LINKED_LIST_contains_p(NULL, tmp), &pass); \
@@ -269,7 +269,7 @@ utest_##name##_linked_list_remove(void)                          \
     UNIT_TEST_BEGIN(name##_linked_list_remove);                  \
                                                                  \
     pass = true;                                                 \
-    list = TEST_LINKED_LIST_sample(0x31e2, 0x28ed);              \
+    list = TEST_LINKED_LIST_sample(0x28ed);                      \
     tmp = list;                                                  \
     next = list->next;                                           \
                                                                  \
@@ -297,7 +297,7 @@ utest_##name##_linked_list_iterate(void)                          \
                                                                   \
     pass = true;                                                  \
     UNIT_TEST_BEGIN(name##_linked_list_iterate);                  \
-    list = TEST_LINKED_LIST_sample(0x1F2, 0x381);                 \
+    list = TEST_LINKED_LIST_sample(0x381);                        \
     length = LINKED_LIST_length(list);                            \
                                                                   \
     LINKED_LIST_iterate(NULL, &linked_list_iterate_handler);      \
@@ -322,8 +322,8 @@ utest_##name##_linked_list_merge(void)                                        \
                                                                               \
     pass = true;                                                              \
     UNIT_TEST_BEGIN(name##_linked_list_merge);                                \
-    list_m = TEST_LINKED_LIST_sample(0x1F2, 0x381);                           \
-    list_n = TEST_LINKED_LIST_sample(0x231, 0x4e2);                           \
+    list_m = TEST_LINKED_LIST_sample(0x381);                                  \
+    list_n = TEST_LINKED_LIST_sample(0x4e2);                                  \
                                                                               \
     RESULT_CHECK_pointer(PTR_INVALID, LINKED_LIST_merge(NULL, NULL), &pass);  \
     RESULT_CHECK_pointer(list_m, LINKED_LIST_merge(list_m, NULL), &pass);     \

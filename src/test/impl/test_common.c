@@ -61,13 +61,12 @@ test_uint32_data_array(uint32 size)
 }
 
 static inline sint64
-test_sint64_data_sum(sint64 *data, int m, int n, int size)
+test_sint64_data_sum(sint64 *data, uint32 m, uint32 n)
 {
     uint32 i;
     sint64 retval;
 
-    assert_exit(m <= n && n < size);
-    assert_exit(!complain_zero_size_p(size));
+    assert_exit(m <= n);
     assert_exit(!complain_null_pointer_p(data));
 
     i = m;

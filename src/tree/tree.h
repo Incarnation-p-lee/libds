@@ -23,8 +23,6 @@ enum tree_path_type {
     PATH_RIGHT_TO_RIGHT = 0x3,
 };
 
-static sint32 direct = 0;
-
 extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool array_queue_empty_p(s_array_queue_t *queue);

@@ -256,7 +256,7 @@ splay_tree_find_max(s_splay_tree_t **tree)
  *   /  \                    /  \
  *  a    b                  c    d
  */
-static void inline
+static inline void
 splay_tree_balance_splaying_left_to_left(s_splay_tree_t **tree)
 {
     s_splay_tree_t *k1;
@@ -289,7 +289,7 @@ splay_tree_balance_splaying_left_to_left(s_splay_tree_t **tree)
  *    /  \
  *   b    c
  */
-static void inline
+static inline void
 splay_tree_balance_splaying_left_to_right(s_splay_tree_t **tree)
 {
     s_splay_tree_t *k1;
@@ -355,7 +355,7 @@ splay_tree_balance_splaying_right_to_left(s_splay_tree_t **tree)
  *         /  \      /  \
  *        c    d    a    b
  */
-static void inline
+static inline void
 splay_tree_balance_splaying_right_to_right(s_splay_tree_t **tree)
 {
     s_splay_tree_t *k1;
@@ -438,7 +438,7 @@ splay_tree_balance_splaying_root_left(s_splay_tree_t **tree)
  *     /  \        /  \
  *    b    c      a    b
  */
-static void inline
+static inline void
 splay_tree_balance_splaying_root_right(s_splay_tree_t **tree)
 {
     s_splay_tree_t *k1;

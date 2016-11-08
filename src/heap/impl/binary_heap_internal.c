@@ -380,7 +380,7 @@ binary_heap_depth(uint32 index)
 
     depth = 0;
 
-    while (index >= (1 << (depth + 1))) {
+    while (index >= (1u << (depth + 1))) {
         depth++;
     }
 

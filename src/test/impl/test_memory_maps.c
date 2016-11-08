@@ -48,18 +48,19 @@ memory_maps_filter_process(FILE *maps)
 
     dp_memset(line, 0, sizeof(line));
     while (dp_fgets(line, NAME_LEN, maps)) {
-        memory_maps_one_line_process(line, dp_strlen(line));
+        assert_exit(dp_strlen(line) < NAME_LEN);
+
+        memory_maps_one_line_process(line);
         dp_memset(line, 0, sizeof(line));
     }
 }
 
 static inline void
-memory_maps_one_line_process(char *line, uint32 len)
+memory_maps_one_line_process(char *line)
 {
     static struct memory_maps *start = mmaps;
     char *name;
 
-    assert_exit(len <= NAME_LEN);
     if ((uint32)(start - mmaps) == MAP_ENTRY_MAX) {
         pr_log_err("Touch the end of the array, may override.\n");
     }

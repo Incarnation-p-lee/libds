@@ -9,7 +9,7 @@ static inline void unit_test_begin_print(char *name);
 static inline void unit_test_execution_category(const struct test_layer_table *category, struct test_case_filter *filter);
 static inline void unit_test_execution_implement(const struct test_layer_table *implement, struct test_case_filter *filter);
 static inline void unit_test_execution_interface(const struct test_layer_table *interface, struct test_case_filter *filter);
-static inline void unit_test_execution_start(struct test_extra_info *entry, char *content);
+static inline void unit_test_execution_start(struct test_extra_info *info, char *content);
 static inline void unit_test_result_print(char *name, bool passed);
 static inline void utest_binary_indexed_tree_add(void);
 static inline void utest_binary_indexed_tree_create(void);
