@@ -1,7 +1,7 @@
 uint32
 array_queue_capacity(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return QUEUE_CPCT_INVALID;
     } else {
         return queue->space.dim;
@@ -11,7 +11,7 @@ array_queue_capacity(s_array_queue_t *queue)
 s_array_iterator_t *
 array_queue_iterator_obtain(s_array_queue_t *queue)
 {
-    if (array_queue_structure_legal_ip(queue)) {
+    if (ARRAY_QUEUE_LEGAL_P(queue)) {
         return &queue->iterator;
     } else {
         return PTR_INVALID;
@@ -105,7 +105,7 @@ array_queue_create(void)
 void
 array_queue_destroy(s_array_queue_t **queue)
 {
-    if (!NULL_PTR_P(queue) && array_queue_structure_legal_ip(*queue)) {
+    if (NON_NULL_PTR_P(queue) && ARRAY_QUEUE_LEGAL_P(*queue)) {
         memory_cache_free((*queue)->space.base);
         memory_cache_free(*queue);
 
@@ -267,7 +267,7 @@ array_queue_resize_i(s_array_queue_t *queue, uint32 size)
 void
 array_queue_resize(s_array_queue_t *queue, uint32 size)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return;
     } else if (size == queue->space.dim) {
         return;
@@ -282,7 +282,7 @@ array_queue_resize(s_array_queue_t *queue, uint32 size)
 uint32
 array_queue_rest(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return QUEUE_REST_INVALID;
     } else {
         return queue->space.rest;
@@ -300,14 +300,14 @@ array_queue_full_ip(s_array_queue_t *queue)
 bool
 array_queue_full_p(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return true;
     } else {
         return array_queue_full_ip(queue);
     }
 }
 
-static inline bool
+static inline ALWAYS_INLINE bool
 array_queue_empty_ip(s_array_queue_t *queue)
 {
     assert_exit(array_queue_structure_legal_ip(queue));
@@ -318,7 +318,7 @@ array_queue_empty_ip(s_array_queue_t *queue)
 bool
 array_queue_empty_p(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return false;
     } else {
         return array_queue_empty_ip(queue);
@@ -328,7 +328,7 @@ array_queue_empty_p(s_array_queue_t *queue)
 void *
 array_queue_front(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return PTR_INVALID;
     } else if (array_queue_empty_ip(queue)) {
         return PTR_INVALID;
@@ -340,7 +340,7 @@ array_queue_front(s_array_queue_t *queue)
 void *
 array_queue_rear(s_array_queue_t *queue)
 {
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return PTR_INVALID;
     } else if (array_queue_empty_ip(queue)) {
         return PTR_INVALID;
@@ -358,7 +358,7 @@ array_queue_enter(s_array_queue_t *queue, void *member)
 {
     uint32 dim;
 
-    if (array_queue_structure_legal_ip(queue)) {
+    if (ARRAY_QUEUE_LEGAL_P(queue)) {
         if (array_queue_full_ip(queue)) {
             array_queue_resize_i(queue, queue->space.dim * 2);
         }
@@ -381,7 +381,7 @@ array_queue_leave(s_array_queue_t *queue)
     uint32 dim;
     void *retval;
 
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return PTR_INVALID;
     } else if (array_queue_empty_ip(queue)) {
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
@@ -405,7 +405,7 @@ array_queue_cleanup(s_array_queue_t *queue)
 {
     uint32 dim;
 
-    if (array_queue_structure_legal_ip(queue)) {
+    if (ARRAY_QUEUE_LEGAL_P(queue)) {
         dim = queue->space.dim;
         dp_memset(queue->space.base, 0, sizeof(void *) * dim);
 
@@ -421,7 +421,7 @@ array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *))
     void **lmt;
     void **iter;
 
-    if (!array_queue_structure_legal_ip(queue)) {
+    if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return;
     } else if (NULL_PTR_P(handler)) {
         return;

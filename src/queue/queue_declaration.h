@@ -14,7 +14,7 @@ s_array_iterator_t * array_queue_iterator_obtain(s_array_queue_t *queue);
 s_array_queue_t * array_queue_create(void);
 s_doubly_end_queue_t * doubly_end_queue_create(void);
 s_stacked_queue_t * stacked_queue_create(void);
-static inline bool array_queue_empty_ip(s_array_queue_t *queue);
+static inline ALWAYS_INLINE bool array_queue_empty_ip(s_array_queue_t *queue);
 static inline bool array_queue_full_ip(s_array_queue_t *queue);
 static inline bool array_queue_iterator_next_exist_p(void *queue);
 static inline bool array_queue_resize_front_to_rear_p(s_array_queue_t *queue);

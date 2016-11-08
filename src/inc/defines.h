@@ -32,8 +32,7 @@
                                        }                                                                    \
                                    } while (false)
 
-#ifdef DEBUG
-    #define NULL_PTR_P(ptr)        complain_null_pointer_p(ptr)
+#if defined DEBUG
     #define malloc_ds              malloc_wrap
     #define realloc_ds             realloc_wrap
     #define free_ds                free_wrap
@@ -45,8 +44,10 @@
                                            complain_assert_exit(#exp, __FILE__, __FUNCTION__, __LINE__); \
                                        }                                                                 \
                                    } while (false)
+    #define NULL_PTR_P(ptr)        complain_null_pointer_p(ptr)
+    #define NON_NULL_PTR_P(ptr)    (!complain_null_pointer_p(ptr))
+    #define ALWAYS_INLINE
 #else
-    #define NULL_PTR_P(ptr)        (ptr == NULL ? true : false)
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
     #define free_ds                dp_free
@@ -54,6 +55,9 @@
     #define pr_log_warn(msg)
     #define pr_log_debug(msg)
     #define assert_exit(exp)
+    #define NULL_PTR_P(ptr)        (ptr == NULL ? true : false)
+    #define NON_NULL_PTR_P(ptr)    (ptr != NULL ? true : false)
+    #define ALWAYS_INLINE          __attribute__((always_inline))
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \
