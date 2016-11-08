@@ -406,89 +406,91 @@ binary_search_tree_swap_child(s_binary_search_tree_t *a,
 static inline void
 binary_search_tree_lt_doubly_child_strip(s_binary_search_tree_t **binary_node)
 {
-    s_binary_search_tree_t *node_tmp;
+    s_binary_search_tree_t *node_strip;
 
     assert_exit(!complain_null_pointer_p(binary_node));
     assert_exit(binary_search_tree_structure_legal_p(*binary_node));
     assert_exit(!binary_search_tree_doubly_child_p(*binary_node));
 
-    node_tmp = *binary_node;
+    node_strip = *binary_node;
 
-    if (node_tmp->left != NULL) {
-        *binary_node = node_tmp->left;
+    if (node_strip->left != NULL) {
+        *binary_node = node_strip->left;
     } else {
-        *binary_node = node_tmp->right;
+        *binary_node = node_strip->right;
     }
 
-    node_tmp->left = node_tmp->right = NULL;
+    node_strip->left = node_strip->right = NULL;
 }
 
 static inline void
-binary_search_tree_child_strip_from_max(s_binary_search_tree_t **node_pre)
+binary_search_tree_child_strip_from_max(s_binary_search_tree_t **binary_node)
 {
     s_binary_search_tree_t *binary;
     s_binary_search_tree_t *max;
-    s_binary_search_tree_t **max_pre;
+    s_binary_search_tree_t **max_node;
 
-    assert_exit(!complain_null_pointer_p(node_pre));
-    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
-    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(binary_node));
+    assert_exit(binary_search_tree_structure_legal_p(*binary_node));
+    assert_exit(binary_search_tree_doubly_child_p(*binary_node));
 
-    binary = *node_pre;
-    if (!binary->left->right) {                      // short cut here
-        *node_pre = binary->left;
+    binary = *binary_node;
+
+    if (!binary->left->right) { // short cut here
+        *binary_node = binary->left;
         binary->left->right = binary->right;
         binary->left = binary->right = NULL;
     } else {
-        max_pre = binary_search_tree_find_ptr_to_max(&binary->left);
-        max = *max_pre;
+        max_node = binary_search_tree_find_ptr_to_max(&binary->left);
+        max = *max_node;
 
         binary_search_tree_swap_child(binary, max);
-        *max_pre = binary;
-        *node_pre = max;
-        binary_search_tree_lt_doubly_child_strip(max_pre);
+        *max_node = binary;
+        *binary_node = max;
+        binary_search_tree_lt_doubly_child_strip(max_node);
     }
 }
 
 static inline void
-binary_search_tree_child_strip_from_min(s_binary_search_tree_t **node_pre)
+binary_search_tree_child_strip_from_min(s_binary_search_tree_t **binary_node)
 {
     s_binary_search_tree_t *binary;
     s_binary_search_tree_t *min;
-    s_binary_search_tree_t **min_pre;
+    s_binary_search_tree_t **min_node;
 
-    assert_exit(!complain_null_pointer_p(node_pre));
-    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
-    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(binary_node));
+    assert_exit(binary_search_tree_structure_legal_p(*binary_node));
+    assert_exit(binary_search_tree_doubly_child_p(*binary_node));
 
-    binary = *node_pre;
+    binary = *binary_node;
 
-    if (!binary->right->left) {                      // short cut here
-        *node_pre = binary->right;
+    if (!binary->right->left) { // short cut here
+        *binary_node = binary->right;
         binary->right->left = binary->left;
         binary->left = binary->right = NULL;
     } else {
-        min_pre = binary_search_tree_find_ptr_to_min(&binary->right);
-        min = *min_pre;
+        min_node = binary_search_tree_find_ptr_to_min(&binary->right);
+        min = *min_node;
 
         binary_search_tree_swap_child(binary, min);
-        *min_pre = binary;
-        *node_pre = min;
-        binary_search_tree_lt_doubly_child_strip(min_pre);
+        *min_node = binary;
+        *binary_node = min;
+
+        binary_search_tree_lt_doubly_child_strip(min_node);
     }
 }
 
 static inline void
-binary_search_tree_doubly_child_strip(s_binary_search_tree_t **node_pre)
+binary_search_tree_doubly_child_strip(s_binary_search_tree_t **binary_node)
 {
-    assert_exit(!complain_null_pointer_p(node_pre));
-    assert_exit(binary_search_tree_structure_legal_p(*node_pre));
-    assert_exit(binary_search_tree_doubly_child_p(*node_pre));
+    assert_exit(!complain_null_pointer_p(binary_node));
+    assert_exit(binary_search_tree_structure_legal_p(*binary_node));
+    assert_exit(binary_search_tree_doubly_child_p(*binary_node));
 
     if (direct > 0) {
-        binary_search_tree_child_strip_from_max(node_pre);
+        binary_search_tree_child_strip_from_max(binary_node);
     } else {
-        binary_search_tree_child_strip_from_min(node_pre);
+        binary_search_tree_child_strip_from_min(binary_node);
     }
     direct = 0;
 }
@@ -497,14 +499,10 @@ static inline void
 binary_search_tree_child_strip(s_binary_search_tree_t **binary_node,
     sint32 direction)
 {
-    s_binary_search_tree_t *node_tmp;
-
     assert_exit(!complain_null_pointer_p(binary_node));
     assert_exit(binary_search_tree_structure_legal_p(*binary_node));
 
-    node_tmp = *binary_node;
-
-    if (binary_search_tree_doubly_child_p(node_tmp)) {
+    if (binary_search_tree_doubly_child_p(*binary_node)) {
         binary_search_tree_doubly_child_strip(binary_node);
     } else {
         binary_search_tree_lt_doubly_child_strip(binary_node);
