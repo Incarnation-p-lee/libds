@@ -612,7 +612,7 @@ splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node)
 }
 
 static inline void
-splay_tree_the_same_nice_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted,
+splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted,
     sint32 path_direction)
 {
     assert_exit(splay_tree_structure_legal_p(splay));
@@ -662,7 +662,7 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
             array_stack_destroy(&path_stack);
             return NULL;
         } else {
-            splay_tree_the_same_nice_insert(splay_node, node, path_direction);
+            splay_tree_repeated_insert(splay_node, node, path_direction);
             break;
         }
         splay_node = *iterator;
