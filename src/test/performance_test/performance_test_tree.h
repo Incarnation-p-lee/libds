@@ -5,7 +5,9 @@
 static inline void                               \
 ptest_##name##_tree_create(uint32 count)         \
 {                                                \
-    struct TREE *tree;                           \
+    TREE *tree;                                  \
+                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_tree_create);  \
                                                  \
     PERFORMANCE_TEST_CHECKPOINT;                 \
                                                  \
@@ -23,7 +25,9 @@ ptest_##name##_tree_create(uint32 count)         \
 static inline void                                \
 ptest_##name##_tree_initial(uint32 count)         \
 {                                                 \
-    struct TREE *tree;                            \
+    TREE *tree;                                   \
+                                                  \
+    PERFORMANCE_TEST_BEGIN(name##_tree_initial);  \
                                                   \
     tree = TREE_create();                         \
                                                   \
@@ -42,7 +46,9 @@ ptest_##name##_tree_initial(uint32 count)         \
 static inline void                                \
 ptest_##name##_tree_destroy(uint32 count)         \
 {                                                 \
-    struct TREE *tree;                            \
+    TREE *tree;                                   \
+                                                  \
+    PERFORMANCE_TEST_BEGIN(name##_tree_destroy);  \
                                                   \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
@@ -60,8 +66,10 @@ ptest_##name##_tree_destroy(uint32 count)         \
 static inline void                             \
 ptest_##name##_tree_find(uint32 count)         \
 {                                              \
-    struct TREE *tree;                         \
+    TREE *tree;                                \
     sint64 nice;                               \
+                                               \
+    PERFORMANCE_TEST_BEGIN(name##_tree_find);  \
                                                \
     tree = TEST_tree_sample(0x93915, 0x7282d); \
     nice = TREE_nice(TREE_find_max(tree));     \
@@ -82,7 +90,9 @@ ptest_##name##_tree_find(uint32 count)         \
 static inline void                                 \
 ptest_##name##_tree_find_min(uint32 count)         \
 {                                                  \
-    struct TREE *tree;                             \
+    TREE *tree;                                    \
+                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_tree_find_min);  \
                                                    \
     tree = TEST_tree_sample(0x93915, 0x7282d);     \
                                                    \
@@ -102,7 +112,9 @@ ptest_##name##_tree_find_min(uint32 count)         \
 static inline void                                 \
 ptest_##name##_tree_find_max(uint32 count)         \
 {                                                  \
-    struct TREE *tree;                             \
+    TREE *tree;                                    \
+                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_tree_find_max);  \
                                                    \
     tree = TEST_tree_sample(0x93915, 0x7282d);     \
                                                    \
@@ -122,7 +134,9 @@ ptest_##name##_tree_find_max(uint32 count)         \
 static inline void                               \
 ptest_##name##_tree_height(uint32 count)         \
 {                                                \
-    struct TREE *tree;                           \
+    TREE *tree;                                  \
+                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_tree_height);  \
                                                  \
     tree = TEST_tree_sample(0xa32, 0x12d);       \
                                                  \
@@ -142,8 +156,10 @@ ptest_##name##_tree_height(uint32 count)         \
 static inline void                                   \
 ptest_##name##_tree_contains_p(uint32 count)         \
 {                                                    \
-    struct TREE *tree;                               \
-    struct TREE *tmp;                                \
+    TREE *tmp;                                       \
+    TREE *tree;                                      \
+                                                     \
+    PERFORMANCE_TEST_BEGIN(name##_tree_contains_p);  \
                                                      \
     tree = TEST_tree_sample(0xf2a32, 0xae12d);       \
                                                      \
@@ -168,8 +184,10 @@ ptest_##name##_tree_contains_p(uint32 count)         \
 static inline void                               \
 ptest_##name##_tree_insert(uint32 count)         \
 {                                                \
-    struct TREE *tree;                           \
-    struct TREE *tmp;                            \
+    TREE *tree;                                  \
+    TREE *tmp;                                   \
+                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_tree_insert);  \
                                                  \
     count = count >> 6;                          \
     count = 0 == count ? 1000 : count;           \
@@ -193,8 +211,10 @@ ptest_##name##_tree_insert(uint32 count)         \
 static inline void                                   \
 ptest_##name##_tree_remove(uint32 count)             \
 {                                                    \
-    struct TREE *tree;                               \
-    struct TREE *tmp;                                \
+    TREE *tmp;                                       \
+    TREE *tree;                                      \
+                                                     \
+    PERFORMANCE_TEST_BEGIN(name##_tree_remove);      \
                                                      \
     tree = TEST_tree_sample(0xa3d3, 0x3f82);         \
                                                      \
@@ -219,7 +239,9 @@ ptest_##name##_tree_remove(uint32 count)             \
 static inline void                                 \
 ptest_##name##_tree_iterate(uint32 count)          \
 {                                                  \
-    struct TREE *tree;                             \
+    TREE *tree;                                    \
+                                                   \
+    PERFORMANCE_TEST_BEGIN(name##_tree_iterate);   \
                                                    \
     tree = TEST_tree_sample(0xd3, 0x82);           \
                                                    \

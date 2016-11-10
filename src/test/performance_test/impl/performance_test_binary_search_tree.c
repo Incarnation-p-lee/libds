@@ -1,4 +1,4 @@
-#define TREE                   binary_search_tree
+#define TREE                   s_binary_search_tree_t
 #define TREE_nice              binary_search_tree_nice
 #define TREE_val               binary_search_tree_val
 #define TREE_left              binary_search_tree_left

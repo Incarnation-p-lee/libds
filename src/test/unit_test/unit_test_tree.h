@@ -6,7 +6,7 @@ static void                                                    \
 utest_##name##_tree_create(void)                               \
 {                                                              \
     bool pass;                                                 \
-    struct TREE *tree;                                         \
+    TREE *tree;                                                \
                                                                \
     pass = true;                                               \
     tree = TREE_create();                                      \
@@ -24,7 +24,7 @@ utest_##name##_tree_initial(void)                              \
 {                                                              \
     bool pass;                                                 \
     sint64 nice;                                               \
-    struct TREE *tree;                                         \
+    TREE *tree;                                                \
                                                                \
     pass = true;                                               \
     nice = 0xfade;                                             \
@@ -45,7 +45,7 @@ static void                                                    \
 utest_##name##_tree_destroy(void)                              \
 {                                                              \
     bool pass;                                                 \
-    struct TREE *tree;                                         \
+    TREE *tree;                                                \
                                                                \
     pass = true;                                               \
     tree = TREE_create();                                      \
@@ -64,8 +64,8 @@ utest_##name##_tree_find(void)                                                  
 {                                                                               \
     bool pass;                                                                  \
     sint64 nice;                                                                \
-    struct TREE *tree;                                                          \
-    struct TREE *tmp;                                                           \
+    TREE *tree;                                                                 \
+    TREE *tmp;                                                                  \
                                                                                 \
     pass = true;                                                                \
     UNIT_TEST_BEGIN(name##_tree_find);                                          \
@@ -94,8 +94,8 @@ static void                                                        \
 utest_##name##_tree_find_min(void)                                 \
 {                                                                  \
     bool pass;                                                     \
-    struct TREE *tree;                                             \
-    struct TREE *tmp;                                              \
+    TREE *tree;                                                    \
+    TREE *tmp;                                                     \
                                                                    \
     pass = true;                                                   \
     UNIT_TEST_BEGIN(name##_tree_find_min);                         \
@@ -115,8 +115,8 @@ static void                                                        \
 utest_##name##_tree_find_max(void)                                 \
 {                                                                  \
     bool pass;                                                     \
-    struct TREE *tree;                                             \
-    struct TREE *tmp;                                              \
+    TREE *tree;                                                    \
+    TREE *tmp;                                                     \
                                                                    \
     pass = true;                                                   \
     UNIT_TEST_BEGIN(name##_tree_find_max);                         \
@@ -136,7 +136,7 @@ static void                                                   \
 utest_##name##_tree_height(void)                              \
 {                                                             \
     bool pass;                                                \
-    struct TREE *tree;                                        \
+    TREE *tree;                                               \
     sint32 child;                                             \
                                                               \
     pass = true;                                              \
@@ -158,9 +158,9 @@ static void                                                       \
 utest_##name##_tree_contains_p(void)                              \
 {                                                                 \
     bool pass;                                                    \
-    struct TREE *tree;                                            \
-    struct TREE *tmp;                                             \
-    struct TREE *fake;                                            \
+    TREE *tree;                                                   \
+    TREE *tmp;                                                    \
+    TREE *fake;                                                   \
                                                                   \
     pass = true;                                                  \
     UNIT_TEST_BEGIN(name##_tree_contains_p);                      \
@@ -190,8 +190,8 @@ static void                                                             \
 utest_##name##_tree_insert(void)                                        \
 {                                                                       \
     bool pass;                                                          \
-    struct TREE *tree;                                                  \
-    struct TREE *tmp;                                                   \
+    TREE *tree;                                                         \
+    TREE *tmp;                                                          \
                                                                         \
     pass = true;                                                        \
     UNIT_TEST_BEGIN(name##_tree_insert);                                \
@@ -217,8 +217,8 @@ static void                                                             \
 utest_##name##_tree_remove(void)                                        \
 {                                                                       \
     bool pass;                                                          \
-    struct TREE *tmp;                                                   \
-    struct TREE *tree;                                                  \
+    TREE *tmp;                                                          \
+    TREE *tree;                                                         \
                                                                         \
     pass = true;                                                        \
     tree = NULL;                                                        \
@@ -257,7 +257,7 @@ static void                                      \
 utest_##name##_tree_iterate(void)                \
 {                                                \
     bool pass;                                   \
-    struct TREE *tree;                           \
+    TREE *tree;                                  \
     uint32 cnt;                                  \
                                                  \
     UNIT_TEST_BEGIN(name##_tree_iterate);        \

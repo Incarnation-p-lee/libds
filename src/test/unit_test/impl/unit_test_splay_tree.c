@@ -1,4 +1,4 @@
-#define TREE                   splay_tree
+#define TREE                   s_splay_tree_t
 #define TREE_nice              splay_tree_nice
 #define TREE_val               splay_tree_val
 #define TREE_left              splay_tree_left
@@ -42,8 +42,8 @@ utest_splay_tree_find(void)
 {
     bool pass;
     sint64 nice;
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
+    s_splay_tree_t *tree;
+    s_splay_tree_t *tmp;
 
     pass = true;
     tree = test_splay_tree_sample(0x13FA, 0x143A);
@@ -71,8 +71,8 @@ static void
 utest_splay_tree_find_min(void)
 {
     bool pass;
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
 
     pass = true;
     tree = test_splay_tree_sample(0xF1C2, 0xD482);
@@ -91,8 +91,8 @@ static void
 utest_splay_tree_find_max(void)
 {
     bool pass;
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
 
     pass = true;
     tree = test_splay_tree_sample(0xF2E4, 0x9B2A);
@@ -111,9 +111,9 @@ static void
 utest_splay_tree_contains_p(void)
 {
     bool pass;
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
-    struct splay_tree *fake;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
+    s_splay_tree_t *fake;
 
     pass = true;
     tree = test_splay_tree_sample(0x14F0, 0x73BD);
@@ -142,8 +142,8 @@ utest_splay_tree_remove(void)
 {
     bool pass;
     sint64 nice;
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
 
     pass = true;
     tree = NULL;
