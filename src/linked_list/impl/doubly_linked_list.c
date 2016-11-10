@@ -111,9 +111,8 @@ doubly_linked_list_insert_after(s_doubly_linked_list_t *list,
     if (!doubly_linked_list_structure_legal_ip(list)
         || !doubly_linked_list_structure_legal_ip(node)) {
         return;
-    } else if (doubly_linked_list_contains_ip(list, node)) {
-        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
+        assert_exit(!doubly_linked_list_contains_ip(list, node));
         doubly_linked_list_insert_after_i(list, node);
     }
 }
@@ -136,9 +135,8 @@ doubly_linked_list_insert_before(s_doubly_linked_list_t *list,
     if (!doubly_linked_list_structure_legal_ip(list)
         || !doubly_linked_list_structure_legal_ip(node)) {
         return;
-    } else if (doubly_linked_list_contains_ip(list, node)) {
-        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
+        assert_exit(!doubly_linked_list_contains_ip(list, node));
         doubly_linked_list_insert_before_i(list, node);
     }
 }

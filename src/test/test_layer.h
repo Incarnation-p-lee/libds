@@ -1111,10 +1111,10 @@ static const struct test_layer_table separate_chain_hash[] = {
         },
     },
     {
-        "load_factor_calculate", NULL,
+        "load_factor", NULL,
         {
-            &utest_separate_chain_hash_load_factor_calculate,
-            &ptest_separate_chain_hash_load_factor_calculate,
+            &utest_separate_chain_hash_load_factor,
+            &ptest_separate_chain_hash_load_factor,
         },
     },
     {
@@ -1164,10 +1164,10 @@ static const struct test_layer_table open_addressing_hash[] = {
         },
     },
     {
-        "load_factor_calculate", NULL,
+        "load_factor", NULL,
         {
-            &utest_open_addressing_hash_load_factor_calculate,
-            &ptest_open_addressing_hash_load_factor_calculate,
+            &utest_open_addressing_hash_load_factor,
+            &ptest_open_addressing_hash_load_factor,
         },
     },
     {

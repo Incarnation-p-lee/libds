@@ -4,7 +4,7 @@
 
 #if defined X86_64
 
-static inline sint32 attr_always_inline
+static inline sint32 ALWAYS_INLINE
 avl_tree_height_opt(struct avl_tree *tree)
 {
     sint32 height;
@@ -33,7 +33,7 @@ avl_tree_height_opt(struct avl_tree *tree)
 
 #if defined X86_32
 
-static inline sint32 attr_always_inline
+static inline sint32 ALWAYS_INLINE
 avl_tree_height_opt(struct avl_tree *tree)
 {
     sint32 height;
@@ -60,7 +60,7 @@ avl_tree_height_opt(struct avl_tree *tree)
 
 #endif
 
-static inline sint32 attr_always_inline
+static inline sint32 ALWAYS_INLINE
 avl_tree_height_balanced_opt_p(struct avl_tree *tree)
 {
     bool balanced;

@@ -77,6 +77,7 @@ typedef struct skip_linked_list      s_skip_linked_list_t;
 typedef struct separate_chain_hash   s_separate_chain_hash_t;
 typedef struct open_addressing_hash  s_open_addressing_hash_t;
 typedef struct hashing_table         s_hashing_table_t;
+typedef struct hashing_load          s_hashing_load_t;
 typedef struct separate_chain        s_separate_chain_t;
 typedef struct open_addressing_hash  s_open_addressing_hash_t;
 typedef struct array_stack           s_array_stack_t;
@@ -212,14 +213,19 @@ struct trie_tree {
     s_array_queue_t *sub_queue;
 };
 
+struct hashing_load {
+    uint32 size;
+    uint32 amount;
+    uint32 peak;  /* peak load */
+};
+
 struct hashing_table {
-    void       **space;
-    uint32     size;
-    uint32     load_factor;
+    void             **space;
+    s_hashing_load_t load;
     union {
-        void   *func;
-        uint32 (*separate_chain)(void *, uint32);
-        uint32 (*open_addressing)(void *, uint32, uint32);
+        void         *func;
+        uint32       (*separate_chain)(void *, uint32);
+        uint32       (*open_addressing)(void *, uint32, uint32);
     };
 };
 
@@ -489,10 +495,10 @@ extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);
 extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 counter);
 extern uint32 hashing_function_polynomial(void *key, uint32 size);
 extern uint32 open_addressing_hash_load_factor(s_open_addressing_hash_t *hash);
-extern uint32 open_addressing_hash_load_factor_calculate(s_open_addressing_hash_t *hash);
+extern uint32 open_addressing_hash_load_factor_peak(s_open_addressing_hash_t *hash);
 extern uint32 open_addressing_hash_size(s_open_addressing_hash_t *hash);
 extern uint32 separate_chain_hash_load_factor(s_separate_chain_hash_t *hash);
-extern uint32 separate_chain_hash_load_factor_calculate(s_separate_chain_hash_t *hash);
+extern uint32 separate_chain_hash_load_factor_peak(s_separate_chain_hash_t *hash);
 extern uint32 separate_chain_hash_size(s_separate_chain_hash_t *hash);
 extern void * open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key);
 extern void * open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key);

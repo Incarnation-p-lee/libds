@@ -8,4 +8,6 @@ extern s_doubly_linked_list_t * doubly_linked_list_remove(s_doubly_linked_list_t
 extern void doubly_linked_list_initial(s_doubly_linked_list_t *list);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
 
+#define HASHING_TABLE_LOAD_FACTOR(table) ((table)->load.amount * 100 / (table)->load.size)
+
 #endif

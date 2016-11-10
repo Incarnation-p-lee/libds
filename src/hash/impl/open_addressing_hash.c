@@ -4,17 +4,17 @@ open_addressing_hash_size(s_open_addressing_hash_t *hash)
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return HASH_SIZE_INVALID;
     } else {
-        return hash->table->size;
+        return hash->table->load.size;
     }
 }
 
 uint32
-open_addressing_hash_load_factor(s_open_addressing_hash_t *hash)
+open_addressing_hash_load_factor_peak(s_open_addressing_hash_t *hash)
 {
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return HASH_LD_FTR_INVALID;
     } else {
-        return hash->table->load_factor;
+        return hash->table->load.peak;
     }
 }
 
@@ -24,6 +24,7 @@ open_addressing_hash_create_i(uint32 size)
     s_open_addressing_hash_t *hash;
 
     hash = memory_cache_allocate(sizeof(*hash));
+
     if (complain_zero_size_p(size)) {
         size = SPT_CHN_HASH_SIZE_DFT;
         pr_log_warn("Hash table size not specified, use default size.\n");
@@ -31,8 +32,8 @@ open_addressing_hash_create_i(uint32 size)
 
     /* open addressing requires prime table size. */
     hash->table = hashing_table_create(prime_numeral_next(size));
-    hash->table->load_factor = OPN_ADDR_HASH_LOAD_FTR;
     hash->table->func = &hashing_function_open_addressing;
+    hash->table->load.peak = OPN_ADDR_HASH_LOAD_FTR;
 
     return hash;
 }
@@ -41,7 +42,11 @@ open_addressing_hash_create_i(uint32 size)
 s_open_addressing_hash_t *
 open_addressing_hash_create(uint32 size)
 {
-    return open_addressing_hash_create_i(size);
+    if (size == 0) {
+        return PTR_INVALID;
+    } else {
+        return open_addressing_hash_create_i(size);
+    }
 }
 
 static inline bool
@@ -75,12 +80,12 @@ open_addressing_hash_destroy(s_open_addressing_hash_t **hash)
 }
 
 uint32
-open_addressing_hash_load_factor_calculate(s_open_addressing_hash_t *hash)
+open_addressing_hash_load_factor(s_open_addressing_hash_t *hash)
 {
     if (!open_addressing_hash_structure_legal_p(hash)) {
         return 0u;
     } else {
-        return hashing_table_load_factor_calculate(hash->table);
+        return hashing_table_load_factor(hash->table);
     }
 }
 
@@ -89,12 +94,13 @@ open_addressing_hash_index_calculate(s_open_addressing_hash_t *hash,
     void *key, uint32 counter)
 {
     uint32 index;
+
     assert_exit(open_addressing_hash_structure_legal_p(hash));
     assert_exit(counter < open_addressing_hash_limit(hash));
 
-    index = hash->table->open_addressing(key, hash->table->size, counter);
+    index = hash->table->open_addressing(key, hash->table->load.size, counter);
 
-    assert_exit(index < hash->table->size);
+    assert_exit(index < hash->table->load.size);
     return index;
 }
 
@@ -108,8 +114,8 @@ open_addressing_hash_insert_i(s_open_addressing_hash_t *hash, void *key)
     assert_exit(!NULL_PTR_P(key));
     assert_exit(open_addressing_hash_structure_legal_p(hash));
 
-    factor = open_addressing_hash_load_factor_calculate(hash);
-    if (factor >= hash->table->load_factor) {
+    factor = hashing_table_load_factor(hash->table);
+    if (factor >= hash->table->load.peak) {
         pr_log_info("Reach the load factor limit, will rehashing.\n");
         open_addressing_hash_rehashing_i(hash);
     }
@@ -119,7 +125,9 @@ open_addressing_hash_insert_i(s_open_addressing_hash_t *hash, void *key)
         index = open_addressing_hash_index_calculate(hash, key, i++);
     } while (hash->table->space[index]);
 
+    hash->table->load.amount++;
     hash->table->space[index] = key;
+
     return key;
 }
 
@@ -149,6 +157,7 @@ open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key)
         if (HASH_IDX_INVALID == index) {
             return NULL;
         } else {
+            hash->table->load.amount--;
             hash->table->space[index] = NULL;
             return key;
         }
@@ -199,25 +208,25 @@ open_addressing_hash_rehashing_i(s_open_addressing_hash_t *hash)
 
     assert_exit(open_addressing_hash_structure_legal_p(hash));
 
-    new_size = prime_numeral_next(hash->table->size + 1);
+    new_size = prime_numeral_next(hash->table->load.size + 1);
     new_hash = open_addressing_hash_create_i(new_size);
 
     i = hash->table->space;
-    while (i < hash->table->space + hash->table->size) {
+    while (i < hash->table->space + hash->table->load.size) {
         if (*i) {
             open_addressing_hash_insert_i(new_hash, *i);
         }
         i++;
     }
 
+
     /* swap space of hash and new */
     i = hash->table->space;
     hash->table->space = new_hash->table->space;
     new_hash->table->space = i;
 
-    /* swap size of hash and new */
-    new_hash->table->size = hash->table->size;
-    hash->table->size = new_size;
+    new_hash->table->load.size = hash->table->load.size;
+    hash->table->load.size = new_size;
 
     open_addressing_hash_destroy_i(new_hash);
 }

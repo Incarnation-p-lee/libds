@@ -1,35 +1,36 @@
 #ifndef HAVE_UNIT_TEST_HASH_H
 #define HAVE_UNIT_TEST_HASH_H
 
-#define UT_HASH_create(name)                                 \
-static void                                                  \
-utest_##name##_hash_create(void)                             \
-{                                                            \
-    bool pass;                                               \
-    uint32 tmp;                                              \
-    struct HASH *hash;                                       \
-                                                             \
-    tmp = 0;                                                 \
-    pass = true;                                             \
-                                                             \
-    hash = HASH_create(tmp);                                 \
-    tmp = SPT_CHN_HASH_SIZE_DFT;                           \
-    RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);        \
-    tmp = LOAD_FACTOR;                                       \
-    RESULT_CHECK_uint32(tmp, HASH_load_factor(hash), &pass); \
-    HASH_destroy(&hash);                                     \
-                                                             \
-    tmp = 11u;                                               \
-    hash = HASH_create(tmp);                                 \
-    HASH_destroy(&hash);                                     \
-                                                             \
-    hash = HASH_create(tmp);                                 \
-    RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);        \
-    tmp = LOAD_FACTOR;                                       \
-    RESULT_CHECK_uint32(tmp, HASH_load_factor(hash), &pass); \
-                                                             \
-    HASH_destroy(&hash);                                     \
-    UNIT_TEST_RESULT(name##_hash_create, pass);              \
+#define UT_HASH_create(name)                                      \
+static void                                                       \
+utest_##name##_hash_create(void)                                  \
+{                                                                 \
+    bool pass;                                                    \
+    uint32 tmp;                                                   \
+    struct HASH *hash;                                            \
+                                                                  \
+    pass = true;                                                  \
+                                                                  \
+    RESULT_CHECK_pointer(PTR_INVALID, HASH_create(0), &pass);     \
+                                                                  \
+    tmp = SPT_CHN_HASH_SIZE_DFT;                                  \
+    hash = HASH_create(tmp);                                      \
+    RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);             \
+    tmp = LOAD_FACTOR;                                            \
+    RESULT_CHECK_uint32(tmp, HASH_load_factor_peak(hash), &pass); \
+    HASH_destroy(&hash);                                          \
+                                                                  \
+    tmp = 11u;                                                    \
+    hash = HASH_create(tmp);                                      \
+    HASH_destroy(&hash);                                          \
+                                                                  \
+    hash = HASH_create(tmp);                                      \
+    RESULT_CHECK_uint32(tmp, HASH_size(hash), &pass);             \
+    tmp = LOAD_FACTOR;                                            \
+    RESULT_CHECK_uint32(tmp, HASH_load_factor_peak(hash), &pass); \
+                                                                  \
+    HASH_destroy(&hash);                                          \
+    UNIT_TEST_RESULT(name##_hash_create, pass);                   \
 }
 
 #define UT_HASH_destroy(name)                    \
@@ -58,33 +59,31 @@ utest_##name##_hash_destroy(void)                \
     UNIT_TEST_RESULT(name##_hash_destroy, pass); \
 }
 
-#define UT_HASH_load_factor_calculate(name)                    \
-static void                                                    \
-utest_##name##_hash_load_factor_calculate(void)                \
-{                                                              \
-    bool pass;                                                 \
-    uint32 tmp;                                                \
-    struct HASH *hash;                                         \
-                                                               \
-    tmp = 0x2adeu;                                             \
-    pass = true;                                               \
-                                                               \
-    hash = NULL;                                               \
-    RESULT_CHECK_NOT_LESS_uint32(0x0u,                         \
-        HASH_load_factor_calculate(hash), &pass);              \
-                                                               \
-    hash = TEST_HASH_sample(tmp);                              \
-    tmp = LOAD_FACTOR;                                         \
-    RESULT_CHECK_NOT_LESS_uint32(tmp,                          \
-        HASH_load_factor_calculate(hash), &pass);              \
-    HASH_destroy(&hash);                                       \
-                                                               \
-    tmp = 0x0u;                                                \
-    hash = TEST_HASH_sample(tmp);                              \
-    HASH_load_factor_calculate(hash);                          \
-                                                               \
-    HASH_destroy(&hash);                                       \
-    UNIT_TEST_RESULT(name##_hash_load_factor_calculate, pass); \
+#define UT_HASH_load_factor(name)                                      \
+static void                                                            \
+utest_##name##_hash_load_factor(void)                                  \
+{                                                                      \
+    bool pass;                                                         \
+    uint32 tmp;                                                        \
+    struct HASH *hash;                                                 \
+                                                                       \
+    tmp = 0x2adeu;                                                     \
+    pass = true;                                                       \
+                                                                       \
+    hash = NULL;                                                       \
+    RESULT_CHECK_NOT_LESS_uint32(0x0u, HASH_load_factor(hash), &pass); \
+                                                                       \
+    hash = TEST_HASH_sample(tmp);                                      \
+    tmp = LOAD_FACTOR;                                                 \
+    RESULT_CHECK_NOT_LESS_uint32(tmp, HASH_load_factor(hash), &pass);  \
+    HASH_destroy(&hash);                                               \
+                                                                       \
+    tmp = 0x0u;                                                        \
+    hash = TEST_HASH_sample(tmp);                                      \
+    HASH_load_factor(hash);                                            \
+                                                                       \
+    HASH_destroy(&hash);                                               \
+    UNIT_TEST_RESULT(name##_hash_load_factor, pass);                   \
 }
 
 #define UT_HASH_insert(name)                                            \
@@ -123,7 +122,7 @@ utest_##name##_hash_remove(void)                                       \
     uint32 tmp;                                                        \
     struct HASH *hash;                                                 \
                                                                        \
-    tmp = 0x0u;                                                        \
+    tmp = 0x1u;                                                        \
     pass = true;                                                       \
     hash = NULL;                                                       \
                                                                        \
@@ -166,7 +165,7 @@ utest_##name##_hash_find(void)                                        \
     RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, &pass), &pass); \
     RESULT_CHECK_pointer(PTR_INVALID, HASH_find(hash, NULL), &pass);  \
                                                                       \
-    tmp = 0x0u;                                                       \
+    tmp = 0x1u;                                                       \
     hash = HASH_create(tmp);                                          \
     RESULT_CHECK_pointer(NULL, HASH_find(hash, &pass), &pass);        \
     HASH_destroy(&hash);                                              \
@@ -190,7 +189,7 @@ utest_##name##_hash_rehashing(void)                        \
     uint32 tmp;                                            \
     struct HASH *hash;                                     \
                                                            \
-    tmp = 0x0u;                                            \
+    tmp = 0x1u;                                            \
     pass = true;                                           \
                                                            \
     hash = TEST_HASH_sample(tmp);                          \

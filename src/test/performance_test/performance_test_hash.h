@@ -37,24 +37,24 @@ ptest_##name##_hash_destroy(uint32 count)         \
     PERFORMANCE_TEST_RESULT(name##_hash_destroy); \
 }
 
-#define PT_HASH_load_factor_calculate(name)                     \
-static inline void                                              \
-ptest_##name##_hash_load_factor_calculate(uint32 count)         \
-{                                                               \
-    struct HASH *hash;                                          \
-                                                                \
-    hash = TEST_HASH_sample(0x18f);                             \
-                                                                \
-    PERFORMANCE_TEST_CHECKPOINT;                                \
-                                                                \
-    while (count--) {                                           \
-        HASH_load_factor_calculate(hash);                       \
-    }                                                           \
-                                                                \
-    PERFORMANCE_TEST_ENDPOINT;                                  \
-                                                                \
-    HASH_destroy(&hash);                                        \
-    PERFORMANCE_TEST_RESULT(name##_hash_load_factor_calculate); \
+#define PT_HASH_load_factor(name)                     \
+static inline void                                    \
+ptest_##name##_hash_load_factor(uint32 count)         \
+{                                                     \
+    struct HASH *hash;                                \
+                                                      \
+    hash = TEST_HASH_sample(0x18f);                   \
+                                                      \
+    PERFORMANCE_TEST_CHECKPOINT;                      \
+                                                      \
+    while (count--) {                                 \
+        HASH_load_factor(hash);                       \
+    }                                                 \
+                                                      \
+    PERFORMANCE_TEST_ENDPOINT;                        \
+                                                      \
+    HASH_destroy(&hash);                              \
+    PERFORMANCE_TEST_RESULT(name##_hash_load_factor); \
 }
 
 #define PT_HASH_insert(name)                     \
