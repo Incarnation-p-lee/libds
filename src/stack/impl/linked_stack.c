@@ -1,7 +1,7 @@
 static inline void
 linked_stack_space_initial(s_linked_stack_space_t *space, uint32 dim)
 {
-    assert_exit(!complain_null_pointer_p(space));
+    assert_exit(!NULL_PTR_P(space));
     assert_exit(!complain_zero_size_p(dim));
 
     space->space.bp = memory_cache_allocate(sizeof(void *) * dim);
@@ -26,7 +26,7 @@ linked_stack_space_create(uint32 dim)
 static inline bool
 linked_stack_space_structure_legal_p(s_linked_stack_space_t *space)
 {
-    if (complain_null_pointer_p(space)) {
+    if (NULL_PTR_P(space)) {
         return false;
     } else if (!doubly_linked_list_structure_legal_p(&space->link)) {
         return false;
@@ -46,11 +46,11 @@ linked_stack_structure_legal_p(s_linked_stack_t *stack)
 static inline bool
 linked_stack_structure_legal_ip(s_linked_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
+    if (NULL_PTR_P(stack)) {
         return false;
-    } else if (complain_null_pointer_p(stack->base)) {
+    } else if (NULL_PTR_P(stack->base)) {
         return false;
-    } else if (complain_null_pointer_p(stack->top)) {
+    } else if (NULL_PTR_P(stack->top)) {
         return false;
     } else if (!linked_stack_space_structure_legal_p(stack->base)) {
         return false;
@@ -78,7 +78,7 @@ linked_stack_destroy(s_linked_stack_t **stack)
 {
     s_linked_stack_space_t *node;
 
-    if (complain_null_pointer_p(stack)) {
+    if (NULL_PTR_P(stack)) {
         return;
     } else if (linked_stack_structure_legal_ip(*stack)) {
         node = (*stack)->base;
@@ -403,7 +403,7 @@ linked_stack_iterate(s_linked_stack_t *stack, void (*handler)(void *))
     s_linked_stack_space_t *space;
     s_linked_stack_space_t *space_head;
 
-    if (complain_null_pointer_p(handler)) {
+    if (NULL_PTR_P(handler)) {
         return;
     } else if (linked_stack_structure_legal_ip(stack)) {
         space = space_head = stack->top;
@@ -421,7 +421,7 @@ linked_stack_space_iterate(s_linked_stack_space_t *space,
 {
     void **ptr;
 
-    assert_exit(!complain_null_pointer_p(handler));
+    assert_exit(!NULL_PTR_P(handler));
     assert_exit(linked_stack_space_structure_legal_p(space));
 
     ptr = space->space.sp;

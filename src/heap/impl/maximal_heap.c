@@ -7,7 +7,7 @@ maximal_heap_index_last(struct maximal_heap *heap)
 uint32
 maximal_heap_index_limit(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_CPCT_INVALID;
     } else {
         return heap->alias->capacity + 1;
@@ -17,7 +17,7 @@ maximal_heap_index_limit(struct maximal_heap *heap)
 uint32
 maximal_heap_size(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_SIZE_INVALID;
     } else {
         return heap->alias->size;
@@ -27,7 +27,7 @@ maximal_heap_size(struct maximal_heap *heap)
 sint64
 maximal_heap_nice(struct maximal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_NICE_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= maximal_heap_index_limit(heap)) {
         return HEAP_NICE_INVALID;
@@ -39,7 +39,7 @@ maximal_heap_nice(struct maximal_heap *heap, uint32 index)
 void *
 maximal_heap_val(struct maximal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return PTR_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= maximal_heap_index_limit(heap)) {
         return PTR_INVALID;
@@ -62,7 +62,7 @@ maximal_heap_create(uint32 capacity)
 void
 maximal_heap_destroy(struct maximal_heap **heap)
 {
-    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
+    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
         memory_cache_free(*heap);
         *heap = NULL;
@@ -72,7 +72,7 @@ maximal_heap_destroy(struct maximal_heap **heap)
 bool
 maximal_heap_empty_p(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return false;
     } else {
         return binary_heap_empty_p(heap->alias);
@@ -82,7 +82,7 @@ maximal_heap_empty_p(struct maximal_heap *heap)
 bool
 maximal_heap_full_p(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return true;
     } else {
         return binary_heap_full_p(heap->alias);
@@ -92,7 +92,7 @@ maximal_heap_full_p(struct maximal_heap *heap)
 void
 maximal_heap_cleanup(struct maximal_heap *heap)
 {
-    if (!complain_null_pointer_p(heap)) {
+    if (!NULL_PTR_P(heap)) {
         binary_heap_cleanup(heap->alias);
     }
 }
@@ -100,7 +100,7 @@ maximal_heap_cleanup(struct maximal_heap *heap)
 void *
 maximal_heap_get_max(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else {
         return binary_heap_root(heap->alias);
@@ -110,7 +110,7 @@ maximal_heap_get_max(struct maximal_heap *heap)
 void
 maximal_heap_insert(struct maximal_heap *heap, void *val, sint64 nice)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } else if (binary_heap_nice_legal_p(nice)) {
         binary_heap_insert(heap->alias, val, nice,
@@ -125,7 +125,7 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(!binary_heap_empty_p(heap->alias));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
@@ -142,7 +142,7 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
     index = binary_heap_reorder(alias, index, nice, &binary_heap_maximal_ordered_p);
 
     assert_exit(INDEX_ROOT == index);
-    assert_exit(complain_null_pointer_p(HEAP_DATA(alias, INDEX_ROOT)));
+    assert_exit(NULL_PTR_P(HEAP_DATA(alias, INDEX_ROOT)));
 
     HEAP_DATA(alias, INDEX_ROOT) = tmp;
     return binary_heap_remove_root(alias, &binary_heap_maximal_ordered_p);
@@ -151,7 +151,7 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
 void *
 maximal_heap_remove(struct maximal_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else if (!binary_heap_index_legal_p(heap->alias, index)) {
         return NULL;
@@ -166,7 +166,7 @@ maximal_heap_remove(struct maximal_heap *heap, uint32 index)
 void *
 maximal_heap_remove_max(struct maximal_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else if (binary_heap_empty_p(heap->alias)) {
         pr_log_warn("Attempt to remove node in empty heap.\n");
@@ -184,7 +184,7 @@ maximal_heap_nice_alter(struct maximal_heap *heap, uint32 index,
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
 
@@ -206,7 +206,7 @@ maximal_heap_decrease_nice(struct maximal_heap *heap, uint32 index,
 {
     sint64 nice;
 
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
@@ -224,7 +224,7 @@ maximal_heap_increase_nice(struct maximal_heap *heap, uint32 index,
 {
     sint64 nice;
 
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
@@ -245,7 +245,7 @@ maximal_heap_build_internal(struct maximal_heap *heap)
     struct heap_data *tmp;
     struct binary_heap *alias;
 
-    assert_exit(!complain_null_pointer_p(heap));
+    assert_exit(!NULL_PTR_P(heap));
     assert_exit(binary_heap_full_p(heap->alias));
     assert_exit(binary_heap_structure_legal_p(heap->alias));
 
@@ -273,7 +273,7 @@ maximal_heap_build(struct heap_data **hd_array, uint32 size)
 {
     struct maximal_heap *heap;
 
-    if (complain_null_pointer_p(hd_array)) {
+    if (NULL_PTR_P(hd_array)) {
         return NULL;
     } else if (complain_zero_size_p(size)) {
         return NULL;

@@ -20,7 +20,7 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
     uint32 iterator;
     s_binary_indexed_tree_t *tree;
 
-    if (complain_null_pointer_p(data)) {
+    if (NULL_PTR_P(data)) {
         return NULL;
     } else if (complain_zero_size_p(size)) {
         return NULL;
@@ -56,7 +56,7 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
 void
 binary_indexed_tree_destroy(s_binary_indexed_tree_t **tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return;
     } else if (binary_indexed_tree_structure_legal_p(*tree)) {
         memory_cache_free((*tree)->data);
@@ -68,7 +68,7 @@ binary_indexed_tree_destroy(s_binary_indexed_tree_t **tree)
 static inline bool
 binary_indexed_tree_number_legal_p(s_binary_indexed_tree_t *tree, uint32 number)
 {
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
 
     if (number == BIN_IDXED_NMBR_INVALID) {
         return false;
@@ -82,9 +82,9 @@ binary_indexed_tree_number_legal_p(s_binary_indexed_tree_t *tree, uint32 number)
 static inline bool
 binary_indexed_tree_structure_legal_p(s_binary_indexed_tree_t *tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return false;
-    } else if (complain_null_pointer_p(tree->data)) {
+    } else if (NULL_PTR_P(tree->data)) {
         return false;
     } else if (complain_zero_size_p(tree->size)) {
         return false;
@@ -99,7 +99,7 @@ binary_indexed_tree_add_i(s_binary_indexed_tree_t *tree,
 {
     uint32 iterator;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(binary_indexed_tree_number_legal_p(tree, number));
     assert_exit(binary_indexed_tree_structure_legal_p(tree));
 

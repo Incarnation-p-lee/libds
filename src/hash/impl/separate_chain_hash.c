@@ -45,7 +45,7 @@ separate_chain_hash_create(uint32 size)
 static inline bool
 separate_chain_hash_structure_legal_p(s_separate_chain_hash_t *hash)
 {
-    if (complain_null_pointer_p(hash)) {
+    if (NULL_PTR_P(hash)) {
         return false;
     } else {
         return hashing_table_structure_legal_p(hash->table);
@@ -67,7 +67,7 @@ separate_chain_create(void *val)
 static inline bool
 separate_chain_structure_legal_p(s_separate_chain_t *chain)
 {
-    if (complain_null_pointer_p(chain)) {
+    if (NULL_PTR_P(chain)) {
         return false;
     } else if (!doubly_linked_list_structure_legal_p(&chain->list)) {
         return false;
@@ -147,7 +147,7 @@ separate_chain_hash_destroy_i(s_separate_chain_hash_t *hash)
 void
 separate_chain_hash_destroy(s_separate_chain_hash_t **hash)
 {
-    if (complain_null_pointer_p(hash)) {
+    if (NULL_PTR_P(hash)) {
         return;
     } else if (!separate_chain_hash_structure_legal_p(*hash)) {
         return;
@@ -188,7 +188,7 @@ separate_chain_hash_insert_i(s_separate_chain_hash_t *hash, void *key)
     s_separate_chain_t *tmp;
     s_separate_chain_t *head;
 
-    assert_exit(!complain_null_pointer_p(key));
+    assert_exit(!NULL_PTR_P(key));
     assert_exit(separate_chain_hash_structure_legal_p(hash));
 
     factor = separate_chain_hash_load_factor_calculate(hash);
@@ -215,7 +215,7 @@ separate_chain_hash_insert(s_separate_chain_hash_t *hash, void *key)
 {
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else {
         return separate_chain_hash_insert_i(hash, key);
@@ -232,7 +232,7 @@ separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key)
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else {
         list = retval = NULL;
@@ -271,7 +271,7 @@ separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key)
 
     if (!separate_chain_hash_structure_legal_p(hash)) {
         return PTR_INVALID;
-    } else if (complain_null_pointer_p(key)) {
+    } else if (NULL_PTR_P(key)) {
         return PTR_INVALID;
     } else {
         index = separate_chain_hash_index_calculate(hash, key);

@@ -1,7 +1,7 @@
 uint32
 min_max_heap_index_limit(struct min_max_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_CPCT_INVALID;
     } else {
         return heap->alias->capacity + 1;
@@ -17,7 +17,7 @@ min_max_heap_index_last(struct min_max_heap *heap)
 uint32
 min_max_heap_size(struct min_max_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_SIZE_INVALID;
     } else {
         return heap->alias->size;
@@ -27,7 +27,7 @@ min_max_heap_size(struct min_max_heap *heap)
 sint64
 min_max_heap_nice(struct min_max_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return HEAP_NICE_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= min_max_heap_index_limit(heap)) {
         return HEAP_NICE_INVALID;
@@ -39,7 +39,7 @@ min_max_heap_nice(struct min_max_heap *heap, uint32 index)
 void *
 min_max_heap_val(struct min_max_heap *heap, uint32 index)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return PTR_INVALID;
     } else if (index == HEAP_IDX_INVALID || index >= min_max_heap_index_limit(heap)) {
         return PTR_INVALID;
@@ -62,7 +62,7 @@ min_max_heap_create(uint32 capacity)
 void
 min_max_heap_destroy(struct min_max_heap **heap)
 {
-    if (!complain_null_pointer_p(heap) && min_max_heap_structure_legal_p(*heap)) {
+    if (!NULL_PTR_P(heap) && min_max_heap_structure_legal_p(*heap)) {
         binary_heap_destroy(&(*heap)->alias);
         memory_cache_free(*heap);
         *heap = NULL;
@@ -147,7 +147,7 @@ min_max_heap_get_max(struct min_max_heap *heap)
 static inline bool
 min_max_heap_structure_legal_p(struct min_max_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return false;
     } else {
         return binary_heap_structure_legal_p(heap->alias);

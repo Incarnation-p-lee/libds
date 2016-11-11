@@ -67,7 +67,7 @@ test_sint64_data_sum(sint64 *data, uint32 m, uint32 n)
     sint64 retval;
 
     assert_exit(m <= n);
-    assert_exit(!complain_null_pointer_p(data));
+    assert_exit(!NULL_PTR_P(data));
 
     i = m;
     retval = 0;
@@ -123,7 +123,7 @@ test_sort_data_ptr_array_destroy(struct test_sort_data **data, uint32 size)
 {
     uint32 i;
 
-    assert_exit(!complain_null_pointer_p(data));
+    assert_exit(!NULL_PTR_P(data));
     assert_exit(!complain_zero_size_p(size));
 
     i = 0;
@@ -141,8 +141,8 @@ test_sort_compare_u32(const void *a, const void *b)
     uint32 *ua;
     uint32 *ub;
 
-    assert_exit(!complain_null_pointer_p((void *)a));
-    assert_exit(!complain_null_pointer_p((void *)b));
+    assert_exit(!NULL_PTR_P((void *)a));
+    assert_exit(!NULL_PTR_P((void *)b));
 
     ua = (void *)a;
     ub = (void *)b;
@@ -162,8 +162,8 @@ test_sort_compare_struct(const void *a, const void *b)
     struct test_sort_data *pa;
     struct test_sort_data *pb;
 
-    assert_exit(!complain_null_pointer_p((void *)a));
-    assert_exit(!complain_null_pointer_p((void *)b));
+    assert_exit(!NULL_PTR_P((void *)a));
+    assert_exit(!NULL_PTR_P((void *)b));
 
     pa = (void *)a;
     pb = (void *)b;
@@ -183,8 +183,8 @@ test_sort_compare_ptr(const void *a, const void *b)
     struct test_sort_data *sa;
     struct test_sort_data *sb;
 
-    assert_exit(!complain_null_pointer_p((void *)a));
-    assert_exit(!complain_null_pointer_p((void *)b));
+    assert_exit(!NULL_PTR_P((void *)a));
+    assert_exit(!NULL_PTR_P((void *)b));
 
     sa = *(struct test_sort_data **)a;
     sb = *(struct test_sort_data **)b;

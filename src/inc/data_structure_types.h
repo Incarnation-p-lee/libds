@@ -12,36 +12,39 @@ enum ITER_ORDER {
 #define true                   1
 #define false                  0
 #define SIZE_INVALID           0xffffffffu
+#define TRIE_INDEX_INVALID     SIZE_INVALID
 #define LIST_SIZE_INVALID      SIZE_INVALID
-#define SKIP_LVL_LMT           8          // skip linked list level limitation
+#define SKIP_LVL_LMT           8            // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
-#define SPT_CHN_HASH_SIZE_DFT  11u        // separate chain hash default size
-#define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
-#define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
+#define SPT_CHN_HASH_SIZE_DFT  11u          // separate chain hash default size
+#define SPT_CHN_HASH_LOAD_FTR  72u          // separate chain hash load factor
+#define OPN_ADDR_HASH_LOAD_FTR 50u          // open addressing hash load factor
 #define HASH_SIZE_INVALID      SIZE_INVALID
 #define HASH_IDX_INVALID       0xffffffffu
-#define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
+#define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
 #define HEAP_SIZE_INVALID      SIZE_INVALID
 #define HEAP_CPCT_INVALID      SIZE_INVALID
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
-#define HEAP_CPCT_DFT          4097u      // heap default capacity
-#define HEAP_IDX_INVALID       0u         // heap invalid index
-#define HEAP_IDX_ROOT          1u         // heap root index
-#define HEAP_NPL_NULL          -1         // heap NPL value of NULL
+#define HEAP_CPCT_DFT          4097u        // heap default capacity
+#define HEAP_IDX_INVALID       0u           // heap invalid index
+#define HEAP_IDX_ROOT          1u           // heap root index
+#define HEAP_NPL_NULL          -1           // heap NPL value of NULL
 #define HEAP_DEPTH_INVALID     SIZE_INVALID
-#define QUEUE_SIZE_DFT         1024       // queue size default
-#define QUEUE_EXPD_SIZE_MIN    128        // queue expand size minimal
+#define QUEUE_SIZE_DFT         1024         // queue size default
+#define QUEUE_EXPD_SIZE_MIN    128          // queue expand size minimal
 #define QUEUE_REST_INVALID     SIZE_INVALID
 #define QUEUE_CPCT_INVALID     SIZE_INVALID
 #define QUEUE_SIZE_INVALID     SIZE_INVALID
-#define STACK_SIZE_DFT         1024       // stack size default
-#define STACK_EXPD_SIZE_MIN    128        // stack expand size minimal
+#define STACK_SIZE_DFT         1024         // stack size default
+#define STACK_EXPD_SIZE_MIN    128          // stack expand size minimal
 #define STACK_SIZE_INVALID     SIZE_INVALID
-#define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
+#define TRIE_TREE_ROOT         ((uint32)-1) // Root node val of trie tree
+#define TRIE_TREE_SIZE_MIN     16           // Minimal sub tree size of trie tree
+#define BIN_IDXED_NMBR_INVALID 0            // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
 #define TREE_NICE_INVALID      (sint64)(-1)
 
-#define PTR_INVALID            (void *)-1 // invalid pointer
+#define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line
 
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
@@ -73,6 +76,19 @@ typedef struct binary_heap           s_binary_heap_t;
 typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef enum ITER_ORDER              e_iter_order_t;
+typedef struct trie_tree             s_trie_tree_t;
+typedef struct array_iterator        s_array_iterator_t;
+
+typedef void   (*f_array_iterator_initial_t)(void *);
+typedef bool   (*f_array_iterator_next_exist_t)(void *);
+typedef void * (*f_array_iterator_next_obtain_t)(void *);
+
+struct array_iterator {
+    uint32                         index;
+    f_array_iterator_initial_t     fp_index_initial;
+    f_array_iterator_next_exist_t  fp_next_exist_p;
+    f_array_iterator_next_obtain_t fp_next_obtain;
+};
 
 /*
  *   Implement the unify single_linked_list interface
@@ -166,6 +182,7 @@ struct array_queue_space {
  */
 struct array_queue {
     s_array_queue_space_t space;
+    s_array_iterator_t    iterator;
 };
 
 /*
@@ -246,6 +263,16 @@ struct splay_tree {
 struct binary_indexed_tree {
     sint64 *data;
     uint32 size;
+};
+
+/*
+ * trie tree
+ */
+struct trie_tree {
+    bool            is_deleted;
+    bool            is_terminal;
+    uint32          val;
+    s_array_queue_t *sub_queue;
 };
 
 struct hashing_table {

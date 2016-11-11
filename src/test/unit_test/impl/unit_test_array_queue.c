@@ -29,6 +29,7 @@ UT_QUEUE_front(array)
 UT_QUEUE_rear(array)
 UT_QUEUE_cleanup(array)
 UT_QUEUE_iterate(array)
+UT_QUEUE_iterator(array)
 
 #undef QUEUE
 

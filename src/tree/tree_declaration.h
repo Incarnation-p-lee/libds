@@ -7,6 +7,9 @@ bool avl_tree_balanced_p(s_avl_tree_t *tree);
 bool avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node);
 bool binary_search_tree_contains_p(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
 bool splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node);
+bool trie_tree_sequence_matched_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+bool trie_tree_string_matched_p(s_trie_tree_t *trie, char *string);
+bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
 s_avl_tree_t * avl_tree_create(void);
 s_avl_tree_t * avl_tree_find(s_avl_tree_t *tree, sint64 nice);
 s_avl_tree_t * avl_tree_find_max(s_avl_tree_t *tree);
@@ -32,6 +35,7 @@ s_splay_tree_t * splay_tree_insert(s_splay_tree_t **tree, s_splay_tree_t *node);
 s_splay_tree_t * splay_tree_left(s_splay_tree_t *tree);
 s_splay_tree_t * splay_tree_remove(s_splay_tree_t **tree, s_splay_tree_t *node);
 s_splay_tree_t * splay_tree_right(s_splay_tree_t *tree);
+s_trie_tree_t * trie_tree_create(void);
 sint32 avl_tree_height(s_avl_tree_t *tree);
 sint32 binary_search_tree_height(s_binary_search_tree_t *tree);
 sint32 splay_tree_height(s_splay_tree_t *tree);
@@ -66,6 +70,10 @@ static inline bool splay_tree_contains_ip(s_splay_tree_t *tree, s_splay_tree_t *
 static inline bool splay_tree_doubly_child_p(s_splay_tree_t *node);
 static inline bool splay_tree_ordered_p(struct splay_tree *tree);
 static inline bool splay_tree_structure_legal_p(s_splay_tree_t *tree);
+static inline bool trie_tree_root_node_p(s_trie_tree_t *trie);
+static inline bool trie_tree_sequence_matched_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+static inline bool trie_tree_structure_legal_ip(s_trie_tree_t *trie);
+static inline bool trie_tree_sub_queue_empty_p(s_trie_tree_t *trie);
 static inline s_avl_tree_t * avl_tree_doubly_rotate_left(s_avl_tree_t *node);
 static inline s_avl_tree_t * avl_tree_doubly_rotate_right(s_avl_tree_t *node);
 static inline s_avl_tree_t * avl_tree_find_i(s_avl_tree_t *tree, sint64 nice);
@@ -93,6 +101,9 @@ static inline s_splay_tree_t * splay_tree_remove_i(s_splay_tree_t **tree, s_spla
 static inline s_splay_tree_t * splay_tree_repeated_remove(s_splay_tree_t **tree, s_splay_tree_t *node, sint32 direction);
 static inline s_splay_tree_t ** splay_tree_find_ptr_to_max(s_splay_tree_t **tree);
 static inline s_splay_tree_t ** splay_tree_find_ptr_to_min(s_splay_tree_t **tree);
+static inline s_trie_tree_t * trie_tree_node_create(uint32 val);
+static inline s_trie_tree_t * trie_tree_scalar_insert(s_trie_tree_t *trie, uint32 val);
+static inline s_trie_tree_t * trie_tree_sub_queue_find(s_trie_tree_t *trie, uint32 val);
 static inline sint32 attr_always_inline avl_tree_height_balanced_opt_p(struct avl_tree *tree);
 static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
 static inline sint32 attr_always_inline avl_tree_height_opt(struct avl_tree *tree);
@@ -142,6 +153,9 @@ static inline void splay_tree_lt_doubly_child_strip(s_splay_tree_t **splay_node)
 static inline void splay_tree_node_destroy(s_splay_tree_t *node);
 static inline void splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted, sint32 path_direction);
 static inline void splay_tree_swap_child(s_splay_tree_t *a, s_splay_tree_t *b);
+static inline void trie_tree_node_destroy(s_trie_tree_t *trie);
+static inline void trie_tree_sequence_insert_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+static inline void trie_tree_sequence_remove_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 void avl_tree_destroy(s_avl_tree_t **tree);
 void avl_tree_initial(s_avl_tree_t *tree, sint64 nice);
 void avl_tree_iterate(s_avl_tree_t *tree, void (*handler)(void *));
@@ -155,6 +169,11 @@ void binary_search_tree_nice_set(s_binary_search_tree_t *tree, sint64 nice);
 void splay_tree_destroy(s_splay_tree_t **tree);
 void splay_tree_initial(s_splay_tree_t *tree, sint64 nice);
 void splay_tree_iterate(s_splay_tree_t *tree, void (*handler)(void *));
+void trie_tree_destroy(s_trie_tree_t **trie);
+void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
+void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
+void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
 #endif
 

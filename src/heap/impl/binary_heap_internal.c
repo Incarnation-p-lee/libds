@@ -103,7 +103,7 @@ static inline void
 binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
     sint64 nice, void *val)
 {
-    assert_exit(complain_null_pointer_p(heap->base[index]));
+    assert_exit(NULL_PTR_P(heap->base[index]));
     assert_exit(binary_heap_nice_legal_p(nice));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_structure_legal_p(heap));
@@ -330,7 +330,7 @@ binary_heap_data_destroy(struct heap_data *data)
 {
     void * retval;
 
-    assert_exit(!complain_null_pointer_p(data));
+    assert_exit(!NULL_PTR_P(data));
 
     retval = data->val;
     memory_cache_free(data);
@@ -414,9 +414,9 @@ binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
 static inline bool
 binary_heap_structure_legal_p(struct binary_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return false;
-    } else if (complain_null_pointer_p(heap->base)) {
+    } else if (NULL_PTR_P(heap->base)) {
         return false;
     } else if (complain_zero_size_p(heap->capacity)) {
         return false;

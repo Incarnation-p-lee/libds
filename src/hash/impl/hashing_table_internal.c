@@ -15,11 +15,11 @@ hashing_table_create(uint32 size)
 static inline bool
 hashing_table_structure_legal_p(struct hashing_table *hash)
 {
-    if (complain_null_pointer_p(hash)) {
+    if (NULL_PTR_P(hash)) {
         return false;
-    } else if (complain_null_pointer_p(hash->space)) {
+    } else if (NULL_PTR_P(hash->space)) {
         return false;
-    } else if (complain_null_pointer_p(hash->func)) {
+    } else if (NULL_PTR_P(hash->func)) {
         return false;
     } else if (complain_zero_size_p(hash->size)) {
         return false;
@@ -35,7 +35,7 @@ hashing_table_initial(struct hashing_table *hash)
 {
     void **iter;
 
-    assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(!NULL_PTR_P(hash));
 
     hash->space = memory_cache_allocate(sizeof(*hash->space) * hash->size);
 
@@ -48,8 +48,8 @@ hashing_table_initial(struct hashing_table *hash)
 static inline void
 hashing_table_hash_function_set(struct hashing_table *hash, void *func)
 {
-    assert_exit(!complain_null_pointer_p(func));
-    assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(!NULL_PTR_P(func));
+    assert_exit(!NULL_PTR_P(hash));
 
     hash->func = func;
 }
@@ -65,7 +65,7 @@ hashing_table_space(struct hashing_table *hash)
 static inline void
 hashing_table_destroy(struct hashing_table **hash)
 {
-    assert_exit(!complain_null_pointer_p(hash));
+    assert_exit(!NULL_PTR_P(hash));
     assert_exit(hashing_table_structure_legal_p(*hash));
 
     memory_cache_free((*hash)->space);

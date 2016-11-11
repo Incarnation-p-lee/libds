@@ -40,36 +40,35 @@ enum log_level {
 #define SIZE_INVALID           0xffffffffu
 #define TRIE_INDEX_INVALID     SIZE_INVALID
 #define LIST_SIZE_INVALID      SIZE_INVALID
-#define SKIP_LVL_LMT           8            // skip linked list level limitation
+#define SKIP_LVL_LMT           8          // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
-#define SPT_CHN_HASH_SIZE_DFT  11u          // separate chain hash default size
-#define SPT_CHN_HASH_LOAD_FTR  72u          // separate chain hash load factor
-#define OPN_ADDR_HASH_LOAD_FTR 50u          // open addressing hash load factor
+#define SPT_CHN_HASH_SIZE_DFT  11u        // separate chain hash default size
+#define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
+#define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
 #define HASH_SIZE_INVALID      SIZE_INVALID
 #define HASH_IDX_INVALID       0xffffffffu
-#define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
+#define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
 #define HEAP_SIZE_INVALID      SIZE_INVALID
 #define HEAP_CPCT_INVALID      SIZE_INVALID
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
-#define HEAP_CPCT_DFT          4097u        // heap default capacity
-#define HEAP_IDX_INVALID       0u           // heap invalid index
-#define HEAP_IDX_ROOT          1u           // heap root index
-#define HEAP_NPL_NULL          -1           // heap NPL value of NULL
+#define HEAP_CPCT_DFT          4097u      // heap default capacity
+#define HEAP_IDX_INVALID       0u         // heap invalid index
+#define HEAP_IDX_ROOT          1u         // heap root index
+#define HEAP_NPL_NULL          -1         // heap NPL value of NULL
 #define HEAP_DEPTH_INVALID     SIZE_INVALID
-#define QUEUE_SIZE_DFT         1024         // queue size default
-#define QUEUE_EXPD_SIZE_MIN    128          // queue expand size minimal
+#define QUEUE_SIZE_DFT         1024       // queue size default
+#define QUEUE_EXPD_SIZE_MIN    128        // queue expand size minimal
 #define QUEUE_REST_INVALID     SIZE_INVALID
 #define QUEUE_CPCT_INVALID     SIZE_INVALID
 #define QUEUE_SIZE_INVALID     SIZE_INVALID
-#define STACK_SIZE_DFT         1024         // stack size default
-#define STACK_EXPD_SIZE_MIN    128          // stack expand size minimal
+#define STACK_SIZE_DFT         1024       // stack size default
+#define STACK_EXPD_SIZE_MIN    128        // stack expand size minimal
 #define STACK_SIZE_INVALID     SIZE_INVALID
-#define TRIE_TREE_ROOT         ((uint32)-1) // Root node val of trie tree
-#define TRIE_TREE_SIZE_MIN     16           // Minimal sub tree size of trie tree
-#define BIN_IDXED_NMBR_INVALID 0            // binary indexed tree invalid number
+#define TRIE_TREE_ROOT         -1         // Root node val of trie tree
+#define TRIE_TREE_SIZE_MIN     16         // Minimal sub tree size of trie tree
+#define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
-#define TREE_NICE_INVALID      (sint64)(-1)
-#define PTR_INVALID            (void *)-1   // invalid pointer
+#define PTR_INVALID            (void *)-1 // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
 typedef struct single_linked_list    s_single_linked_list_t;
@@ -89,14 +88,6 @@ typedef struct array_queue           s_array_queue_t;
 typedef struct stacked_queue         s_stacked_queue_t;
 typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
-typedef struct binary_search_tree    s_binary_search_tree_t;
-typedef struct avl_tree              s_avl_tree_t;
-typedef struct splay_tree            s_splay_tree_t;
-typedef struct heap_data             s_heap_data_t;
-typedef struct binary_heap           s_binary_heap_t;
-typedef struct leftist_heap          s_leftist_heap_t;
-typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
-typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
@@ -119,19 +110,19 @@ struct array_iterator {
 };
 
 struct single_linked_list {
-    s_single_linked_list_t *next;
+    struct single_linked_list *next;
 };
 
 struct doubly_linked_list {
-    s_doubly_linked_list_t *next;
-    s_doubly_linked_list_t *previous;
+    struct doubly_linked_list *next;
+    struct doubly_linked_list *previous;
 };
 
 struct skip_linked_list {
     sint32 key;
     union {
-        s_skip_linked_list_t *next;
-        s_skip_linked_list_t *layer[SKIP_LVL_LMT];
+        struct skip_linked_list *next;
+        struct skip_linked_list *layer[SKIP_LVL_LMT];
     };
 };
 
@@ -142,17 +133,17 @@ struct array_stack_space {
 };
 
 struct array_stack {
-    s_array_stack_space_t space;
+    struct array_stack_space space;
 };
 
 struct linked_stack_space {
-    s_array_stack_space_t  space;
-    s_doubly_linked_list_t link;
+    struct array_stack_space  space;
+    struct doubly_linked_list link;
 };
 
 struct linked_stack {
-    s_linked_stack_space_t *base;
-    s_linked_stack_space_t *top;
+    struct linked_stack_space *base;
+    struct linked_stack_space *top;
 };
 
 struct array_queue_space {
@@ -165,43 +156,48 @@ struct array_queue_space {
 };
 
 struct array_queue {
-    s_array_queue_space_t space;
-    s_array_iterator_t    iterator;
+    struct array_queue_space space;
+    s_array_iterator_t       iterator;
 };
 
 struct stacked_queue {
-    uint32          dim;
-    s_array_stack_t *enter; /* enter stack */
-    s_array_stack_t *leave; /* leave stack */
+    uint32             dim;
+    struct array_stack *enter; /* enter stack */
+    struct array_stack *leave; /* leave stack */
 };
 
 struct doubly_end_queue_list {
-    void                   *val;
-    s_doubly_linked_list_t link;
+    void                      *val;
+    struct doubly_linked_list link;
 };
 
 struct doubly_end_queue {
-    s_doubly_end_queue_list_t *front;
-    s_doubly_end_queue_list_t *rear;
+    struct doubly_end_queue_list *front;
+    struct doubly_end_queue_list *rear;
+};
+
+struct collision_chain {
+    struct doubly_linked_list *link;
+    sint64                    nice;
 };
 
 struct binary_search_tree {
-    sint64                 nice;
-    s_binary_search_tree_t *left;
-    s_binary_search_tree_t *right;
+    sint64                    nice;
+    struct binary_search_tree *left;
+    struct binary_search_tree *right;
 };
 
 struct avl_tree {
-    sint32       height;
-    sint64       nice;
-    s_avl_tree_t *left;
-    s_avl_tree_t *right;
+    sint32          height;
+    sint64          nice;
+    struct avl_tree *left;
+    struct avl_tree *right;
 };
 
 struct splay_tree {
-    sint64         nice;
-    s_splay_tree_t *left;
-    s_splay_tree_t *right;
+    sint64            nice;
+    struct splay_tree *left;
+    struct splay_tree *right;
 };
 
 struct binary_indexed_tree {
@@ -233,11 +229,11 @@ struct separate_chain {
 };
 
 struct separate_chain_hash {
-    s_hashing_table_t *table;
+    struct hashing_table *table;
 };
 
 struct open_addressing_hash {
-    s_hashing_table_t *table;
+    struct hashing_table *table;
 };
 
 struct heap_data {
@@ -246,28 +242,28 @@ struct heap_data {
 };
 
 struct binary_heap {
-    s_heap_data_t **base;
+    struct heap_data **base;
     uint32 capacity;
     uint32 size;
 };
 
 struct minimal_heap {
-    s_binary_heap_t *alias;
+    struct binary_heap *alias;
 };
 
 struct maximal_heap {
-    s_binary_heap_t *alias;
+    struct binary_heap *alias;
 };
 
 struct min_max_heap {
-    s_binary_heap_t *alias;
+    struct binary_heap *alias;
 };
 
 struct leftist_heap {
-    sint32           npl; /* null path length, NULL node is -1 */
-    s_heap_data_t    data;
-    s_leftist_heap_t *left;
-    s_leftist_heap_t *right;
+    sint32              npl; /* null path length, NULL node is -1 */
+    struct heap_data    data;
+    struct leftist_heap *left;
+    struct leftist_heap *right;
 };
 
 
@@ -298,7 +294,6 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
 extern void random_sequence_drop(uint32 *sequence);
-extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
@@ -364,7 +359,6 @@ extern s_doubly_end_queue_t * doubly_end_queue_create(void);
 extern s_stacked_queue_t * stacked_queue_create(void);
 extern uint32 array_queue_capacity(s_array_queue_t *queue);
 extern uint32 array_queue_rest(s_array_queue_t *queue);
-extern uint32 array_queue_size(s_array_queue_t *queue);
 extern uint32 doubly_end_queue_length(s_doubly_end_queue_t *queue);
 extern uint32 stacked_queue_capacity(s_stacked_queue_t *queue);
 extern uint32 stacked_queue_rest(s_stacked_queue_t *queue);
@@ -423,60 +417,67 @@ extern void linked_stack_iterate(s_linked_stack_t *stack, void (*handler)(void *
 extern void linked_stack_push(s_linked_stack_t *stack, void *member);
 extern void linked_stack_resize(s_linked_stack_t *stack, uint32 dim);
 
-extern bool avl_tree_balanced_p(s_avl_tree_t *tree);
-extern bool avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node);
-extern bool binary_search_tree_contains_p(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
-extern bool splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node);
+extern bool avl_tree_balanced_p(struct avl_tree *tree);
+extern bool avl_tree_contains_p(struct avl_tree *tree, struct avl_tree *node);
+extern bool binary_search_tree_contains_p(struct binary_search_tree *tree, struct binary_search_tree *node);
+extern bool splay_tree_contains_p(struct splay_tree *tree, struct splay_tree *node);
 extern bool trie_tree_sequence_matched_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern bool trie_tree_string_matched_p(s_trie_tree_t *trie, char *string);
 extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
-extern s_avl_tree_t * avl_tree_create(void);
-extern s_avl_tree_t * avl_tree_find(s_avl_tree_t *tree, sint64 nice);
-extern s_avl_tree_t * avl_tree_find_max(s_avl_tree_t *tree);
-extern s_avl_tree_t * avl_tree_find_min(s_avl_tree_t *tree);
-extern s_avl_tree_t * avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node);
-extern s_avl_tree_t * avl_tree_left(s_avl_tree_t *tree);
-extern s_avl_tree_t * avl_tree_remove(s_avl_tree_t **tree, s_avl_tree_t *node);
-extern s_avl_tree_t * avl_tree_right(s_avl_tree_t *tree);
-extern s_binary_indexed_tree_t * binary_indexed_tree_create(sint64 *data, uint32 size);
-extern s_binary_search_tree_t  * binary_search_tree_find_min(s_binary_search_tree_t *tree);
-extern s_binary_search_tree_t * binary_search_tree_create(void);
-extern s_binary_search_tree_t * binary_search_tree_find(s_binary_search_tree_t *tree, sint64 nice);
-extern s_binary_search_tree_t * binary_search_tree_find_max(s_binary_search_tree_t *tree);
-extern s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
-extern s_binary_search_tree_t * binary_search_tree_left(s_binary_search_tree_t *tree);
-extern s_binary_search_tree_t * binary_search_tree_remove(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
-extern s_binary_search_tree_t * binary_search_tree_right(s_binary_search_tree_t *tree);
-extern s_splay_tree_t * splay_tree_create(void);
-extern s_splay_tree_t * splay_tree_find(s_splay_tree_t **tree, sint64 nice);
-extern s_splay_tree_t * splay_tree_find_max(s_splay_tree_t **tree);
-extern s_splay_tree_t * splay_tree_find_min(s_splay_tree_t **tree);
-extern s_splay_tree_t * splay_tree_insert(s_splay_tree_t **tree, s_splay_tree_t *node);
-extern s_splay_tree_t * splay_tree_left(s_splay_tree_t *tree);
-extern s_splay_tree_t * splay_tree_remove(s_splay_tree_t **tree, s_splay_tree_t *node);
-extern s_splay_tree_t * splay_tree_right(s_splay_tree_t *tree);
 extern s_trie_tree_t * trie_tree_create(void);
-extern sint32 avl_tree_height(s_avl_tree_t *tree);
-extern sint32 binary_search_tree_height(s_binary_search_tree_t *tree);
-extern sint32 splay_tree_height(s_splay_tree_t *tree);
-extern sint64 avl_tree_nice(s_avl_tree_t *tree);
-extern sint64 binary_indexed_tree_range_sum(s_binary_indexed_tree_t *tree, uint32 nmbr_s, uint32 nmbr_e);
-extern sint64 binary_indexed_tree_sum(s_binary_indexed_tree_t *tree, uint32 number);
-extern sint64 binary_search_tree_nice(s_binary_search_tree_t *tree);
-extern sint64 splay_tree_nice(s_splay_tree_t *tree);
-extern void avl_tree_destroy(s_avl_tree_t **tree);
-extern void avl_tree_initial(s_avl_tree_t *tree, sint64 nice);
-extern void avl_tree_iterate(s_avl_tree_t *tree, void (*handler)(void *));
-extern void binary_indexed_tree_add(s_binary_indexed_tree_t *tree, uint32 number, sint64 val);
-extern void binary_indexed_tree_destroy(s_binary_indexed_tree_t **tree);
-extern void binary_indexed_tree_sub(s_binary_indexed_tree_t *tree, uint32 number, sint64 val);
-extern void binary_search_tree_destroy(s_binary_search_tree_t **tree);
-extern void binary_search_tree_initial(s_binary_search_tree_t *tree, sint64 nice);
-extern void binary_search_tree_iterate(s_binary_search_tree_t *tree, void (*handler)(void *));
-extern void binary_search_tree_nice_set(s_binary_search_tree_t *tree, sint64 nice);
-extern void splay_tree_destroy(s_splay_tree_t **tree);
-extern void splay_tree_initial(s_splay_tree_t *tree, sint64 nice);
-extern void splay_tree_iterate(s_splay_tree_t *tree, void (*handler)(void *));
+extern sint32 avl_tree_height(struct avl_tree *tree);
+extern sint32 binary_search_tree_height(struct binary_search_tree *tree);
+extern sint32 splay_tree_height(struct splay_tree *tree);
+extern sint64 avl_tree_nice(struct avl_tree *tree);
+extern sint64 binary_indexed_tree_range_sum(struct binary_indexed_tree *tree, uint32 nmbr_s, uint32 nmbr_e);
+extern sint64 binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number);
+extern sint64 binary_indexed_tree_value(struct binary_indexed_tree *tree, uint32 number);
+extern sint64 binary_search_tree_nice(struct binary_search_tree *tree);
+extern sint64 splay_tree_nice(struct splay_tree *tree);
+extern struct avl_tree * avl_tree_create(void);
+extern struct avl_tree * avl_tree_find(struct avl_tree *tree, sint64 nice);
+extern struct avl_tree * avl_tree_find_max(struct avl_tree *tree);
+extern struct avl_tree * avl_tree_find_min(struct avl_tree *tree);
+extern struct avl_tree * avl_tree_insert(struct avl_tree **tree, struct avl_tree *node);
+extern struct avl_tree * avl_tree_left(struct avl_tree *tree);
+extern struct avl_tree * avl_tree_remove(struct avl_tree **tree, struct avl_tree *node);
+extern struct avl_tree * avl_tree_right(struct avl_tree *tree);
+extern struct binary_indexed_tree * binary_indexed_tree_create(sint64 *data, uint32 size);
+extern struct binary_search_tree  * binary_search_tree_find_min(struct binary_search_tree *tree);
+extern struct binary_search_tree * binary_search_tree_create(void);
+extern struct binary_search_tree * binary_search_tree_find(struct binary_search_tree *tree, sint64 nice);
+extern struct binary_search_tree * binary_search_tree_find_max(struct binary_search_tree *tree);
+extern struct binary_search_tree * binary_search_tree_insert(struct binary_search_tree **tree, struct binary_search_tree *node);
+extern struct binary_search_tree * binary_search_tree_left(struct binary_search_tree *tree);
+extern struct binary_search_tree * binary_search_tree_remove(struct binary_search_tree **tree, struct binary_search_tree *node);
+extern struct binary_search_tree * binary_search_tree_right(struct binary_search_tree *tree);
+extern struct splay_tree * splay_tree_create(void);
+extern struct splay_tree * splay_tree_find(struct splay_tree **tree, sint64 nice);
+extern struct splay_tree * splay_tree_find_max(struct splay_tree **tree);
+extern struct splay_tree * splay_tree_find_min(struct splay_tree **tree);
+extern struct splay_tree * splay_tree_insert(struct splay_tree **tree, struct splay_tree *node);
+extern struct splay_tree * splay_tree_left(struct splay_tree *tree);
+extern struct splay_tree * splay_tree_remove(struct splay_tree **tree, struct splay_tree *node);
+extern struct splay_tree * splay_tree_right(struct splay_tree *tree);
+extern uint32 binary_indexed_tree_size(struct binary_indexed_tree *tree);
+extern void avl_tree_destroy(struct avl_tree **tree);
+extern void avl_tree_height_set(struct avl_tree *tree, sint32 height);
+extern void avl_tree_initial(struct avl_tree *tree, sint64 nice);
+extern void avl_tree_iterate(struct avl_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+extern void avl_tree_nice_set(struct avl_tree *tree, sint64 nice);
+extern void binary_indexed_tree_add(struct binary_indexed_tree *tree, uint32 number, sint64 val);
+extern void binary_indexed_tree_destroy(struct binary_indexed_tree **tree);
+extern void binary_indexed_tree_sub(struct binary_indexed_tree *tree, uint32 number, sint64 val);
+extern void binary_search_tree_destroy(struct binary_search_tree **tree);
+extern void binary_search_tree_initial(struct binary_search_tree *tree, sint64 nice);
+extern void binary_search_tree_iterate(struct binary_search_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+extern void binary_search_tree_left_set(struct binary_search_tree *tree, struct binary_search_tree *left);
+extern void binary_search_tree_node_nice_set(struct binary_search_tree *tree, sint64 nice);
+extern void binary_search_tree_right_set(struct binary_search_tree *tree, struct binary_search_tree *right);
+extern void splay_tree_destroy(struct splay_tree **tree);
+extern void splay_tree_initial(struct splay_tree *tree, sint64 nice);
+extern void splay_tree_iterate(struct splay_tree *tree, void (*handle)(void *), enum ITER_ORDER order);
+extern void splay_tree_nice_set(struct splay_tree *tree, sint64 nice);
 extern void trie_tree_destroy(s_trie_tree_t **trie);
 extern void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uint32 len);

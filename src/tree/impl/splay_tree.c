@@ -31,7 +31,7 @@ splay_tree_right(s_splay_tree_t *tree)
 static inline bool
 splay_tree_structure_legal_p(s_splay_tree_t *tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return false;
     } else if (tree->left == tree->right && NULL != tree->left) {
         return false;
@@ -76,8 +76,8 @@ static inline void
 splay_tree_node_destroy(s_splay_tree_t *node)
 {
     assert_exit(splay_tree_structure_legal_p(node));
-    assert_exit(complain_null_pointer_p(node->left));
-    assert_exit(complain_null_pointer_p(node->right));
+    assert_exit(NULL_PTR_P(node->left));
+    assert_exit(NULL_PTR_P(node->right));
 
     memory_cache_free(node);
 }
@@ -112,7 +112,7 @@ splay_tree_destroy_i(s_splay_tree_t *tree)
 void
 splay_tree_destroy(s_splay_tree_t **tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return;
@@ -160,7 +160,7 @@ splay_tree_find_i(s_splay_tree_t **tree, sint64 nice)
 s_splay_tree_t *
 splay_tree_find(s_splay_tree_t **tree, sint64 nice)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -176,7 +176,7 @@ splay_tree_find_min_i(s_splay_tree_t **tree)
     s_splay_tree_t **iterator;
     s_array_stack_t *path_stack;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
 
     iterator = tree;
@@ -199,7 +199,7 @@ splay_tree_find_min_i(s_splay_tree_t **tree)
 s_splay_tree_t *
 splay_tree_find_min(s_splay_tree_t **tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -215,7 +215,7 @@ splay_tree_find_max_i(s_splay_tree_t **tree)
     s_splay_tree_t **iterator;
     s_array_stack_t *path_stack;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
 
     iterator = tree;
@@ -238,7 +238,7 @@ splay_tree_find_max_i(s_splay_tree_t **tree)
 s_splay_tree_t *
 splay_tree_find_max(s_splay_tree_t **tree)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -263,7 +263,7 @@ splay_tree_balance_splaying_left_to_left(s_splay_tree_t **tree)
     s_splay_tree_t *k2;
     s_splay_tree_t *k3;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->left));
     assert_exit(splay_tree_structure_legal_p((*tree)->left->left));
@@ -296,7 +296,7 @@ splay_tree_balance_splaying_left_to_right(s_splay_tree_t **tree)
     s_splay_tree_t *k2;
     s_splay_tree_t *k3;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->left));
     assert_exit(splay_tree_structure_legal_p((*tree)->left->right));
@@ -329,7 +329,7 @@ splay_tree_balance_splaying_right_to_left(s_splay_tree_t **tree)
     s_splay_tree_t *k2;
     s_splay_tree_t *k3;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->right));
     assert_exit(splay_tree_structure_legal_p((*tree)->right->left));
@@ -362,7 +362,7 @@ splay_tree_balance_splaying_right_to_right(s_splay_tree_t **tree)
     s_splay_tree_t *k2;
     s_splay_tree_t *k3;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->right));
     assert_exit(splay_tree_structure_legal_p((*tree)->right->right));
@@ -417,7 +417,7 @@ splay_tree_balance_splaying_root_left(s_splay_tree_t **tree)
     s_splay_tree_t *k1;
     s_splay_tree_t *k2;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->left));
 
@@ -444,7 +444,7 @@ splay_tree_balance_splaying_root_right(s_splay_tree_t **tree)
     s_splay_tree_t *k1;
     s_splay_tree_t *k2;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_structure_legal_p((*tree)->right));
 
@@ -638,7 +638,7 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
     s_array_stack_t *path_stack;
     s_splay_tree_t *splay_node, **iterator;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(node));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_ordered_p(*tree));
@@ -681,7 +681,7 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
 s_splay_tree_t *
 splay_tree_insert(s_splay_tree_t **tree, s_splay_tree_t *node)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;
@@ -729,7 +729,7 @@ splay_tree_find_ptr_to_min(s_splay_tree_t **tree)
     s_splay_tree_t **min;
     s_splay_tree_t *splay;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
 
     min = tree;
@@ -915,7 +915,7 @@ splay_tree_remove_i(s_splay_tree_t **tree, s_splay_tree_t *node)
     s_splay_tree_t **iterator;
     s_splay_tree_t *removed_node, *splay_node;
 
-    assert_exit(!complain_null_pointer_p(tree));
+    assert_exit(!NULL_PTR_P(tree));
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_ordered_p(*tree));
     assert_exit(splay_tree_structure_legal_p(node));
@@ -954,7 +954,7 @@ splay_tree_remove_i(s_splay_tree_t **tree, s_splay_tree_t *node)
 s_splay_tree_t *
 splay_tree_remove(s_splay_tree_t **tree, s_splay_tree_t *node)
 {
-    if (complain_null_pointer_p(tree)) {
+    if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!splay_tree_structure_legal_p(*tree)) {
         return PTR_INVALID;

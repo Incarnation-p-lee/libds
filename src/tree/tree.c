@@ -17,4 +17,5 @@
 #include "impl/avl_tree.c"
 #include "impl/splay_tree.c"
 #include "impl/binary_indexed_tree.c"
+#include "impl/trie_tree.c"
 

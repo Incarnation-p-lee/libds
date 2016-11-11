@@ -154,6 +154,15 @@ static struct performance_test_reference performance_reference[] = {
     {"binary_indexed_tree_sum",                          0x0u, 0x0u},
     {"binary_indexed_tree_range_sum",                    0x0u, 0x0u},
 
+    {"trie_tree_create",                                 0x0u, 0x0u},
+    {"trie_tree_destroy",                                0x0u, 0x0u},
+    {"trie_tree_sequence_insert",                        0x0u, 0x0u},
+    {"trie_tree_string_insert",                          0x0u, 0x0u},
+    {"trie_tree_sequence_remove",                        0x0u, 0x0u},
+    {"trie_tree_string_remove",                          0x0u, 0x0u},
+    {"trie_tree_sequence_matched_p",                     0x0u, 0x0u},
+    {"trie_tree_string_matched_p",                       0x0u, 0x0u},
+
     {"separate_chain_hash_struct_field",                 0x0u, 0x0u},
     {"separate_chain_hash_create",                       0x0u, 0x0u},
     {"separate_chain_hash_destroy",                      0x0u, 0x0u},

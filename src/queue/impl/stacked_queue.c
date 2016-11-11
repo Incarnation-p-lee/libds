@@ -25,7 +25,7 @@ stacked_queue_create(void)
 static inline bool
 stacked_queue_structure_legal_p(s_stacked_queue_t *queue)
 {
-    if (complain_null_pointer_p(queue)) {
+    if (NULL_PTR_P(queue)) {
         return false;
     } else if (complain_zero_size_p(queue->dim)) {
         return false;
@@ -41,7 +41,7 @@ stacked_queue_structure_legal_p(s_stacked_queue_t *queue)
 void
 stacked_queue_destroy(s_stacked_queue_t **queue)
 {
-    if (!complain_null_pointer_p(queue) && stacked_queue_structure_legal_p(*queue)) {
+    if (!NULL_PTR_P(queue) && stacked_queue_structure_legal_p(*queue)) {
         array_stack_destroy(&(*queue)->enter);
         array_stack_destroy(&(*queue)->leave);
         memory_cache_free(*queue);
@@ -146,7 +146,7 @@ stacked_queue_front(s_stacked_queue_t *queue)
 void
 stacked_queue_enter(s_stacked_queue_t *queue, void *member)
 {
-    if (stacked_queue_structure_legal_p(queue) && !complain_null_pointer_p(member)) {
+    if (stacked_queue_structure_legal_p(queue) && !NULL_PTR_P(member)) {
         if (array_stack_full_p(queue->enter) && array_stack_empty_p(queue->leave)) {
             pr_log_info("Empty leave stack, will dump enter stack to leave.\n");
             stacked_queue_stack_dump(queue->enter, queue->leave);
@@ -217,7 +217,7 @@ stacked_queue_cleanup(s_stacked_queue_t *queue)
 void
 stacked_queue_iterate(s_stacked_queue_t *queue, void (*handler)(void *))
 {
-    if (stacked_queue_structure_legal_p(queue) && !complain_null_pointer_p(handler)) {
+    if (stacked_queue_structure_legal_p(queue) && !NULL_PTR_P(handler)) {
         array_stack_iterate(queue->leave, handler);
         array_stack_iterate(queue->enter, handler);
     }

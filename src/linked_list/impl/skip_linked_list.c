@@ -45,7 +45,7 @@ skip_linked_list_structure_legal_p(s_skip_linked_list_t *list)
 static inline bool
 skip_linked_list_structure_legal_ip(s_skip_linked_list_t *list)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return false;
     } else if (list->next == list) {
         return false;
@@ -83,7 +83,7 @@ skip_linked_list_create_with_key(sint32 key)
 void
 skip_linked_list_initial(s_skip_linked_list_t *list)
 {
-    if (!complain_null_pointer_p(list)) {
+    if (!NULL_PTR_P(list)) {
         skip_linked_list_initial_i(list, 0);
     }
 }
@@ -91,7 +91,7 @@ skip_linked_list_initial(s_skip_linked_list_t *list)
 static inline void
 skip_linked_list_initial_i(s_skip_linked_list_t *list, sint32 key)
 {
-    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(!NULL_PTR_P(list));
 
     list->key = key;
     list->next = NULL;
@@ -103,7 +103,7 @@ skip_linked_list_destroy(s_skip_linked_list_t **list)
     s_skip_linked_list_t *next;
     s_skip_linked_list_t *node;
 
-    if (!complain_null_pointer_p(list)
+    if (!NULL_PTR_P(list)
         && skip_linked_list_structure_legal_p(*list)) {
         node = *list;
 
@@ -247,7 +247,7 @@ skip_linked_list_insert_i(s_skip_linked_list_t **list,
     s_skip_linked_list_t **head;
     s_skip_linked_list_t *prev_list[SKIP_LIST_MAX_LVL];
 
-    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(!NULL_PTR_P(list));
     assert_exit(skip_linked_list_ordering_p(*list));
     assert_exit(skip_linked_list_structure_legal_p(tgt));
     assert_exit(skip_linked_list_structure_legal_p(*list));
@@ -288,7 +288,7 @@ s_skip_linked_list_t *
 skip_linked_list_insert(s_skip_linked_list_t **list,
     s_skip_linked_list_t *tgt)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return PTR_INVALID;
     } else if (!skip_linked_list_structure_legal_p(*list)) {
         return PTR_INVALID;
@@ -303,7 +303,7 @@ static inline void
 skip_linked_list_insert_update_with_lv(s_skip_linked_list_t *tgt,
     s_skip_linked_list_t **prev_list, uint32 lv)
 {
-    assert_exit(!complain_null_pointer_p(prev_list));
+    assert_exit(!NULL_PTR_P(prev_list));
     assert_exit(skip_linked_list_structure_legal_p(tgt));
     assert_exit(SKIP_LIST_MAX_LVL > lv);
 
@@ -380,7 +380,7 @@ skip_linked_list_remove_with_previous_list(s_skip_linked_list_t *tgt,
     s_skip_linked_list_t **pre_list, uint32 lv)
 {
     assert_exit(lv < SKIP_LIST_MAX_LVL);
-    assert_exit(!complain_null_pointer_p(pre_list));
+    assert_exit(!NULL_PTR_P(pre_list));
     assert_exit(skip_linked_list_structure_legal_p(tgt));
 
     do {
@@ -426,7 +426,7 @@ skip_linked_list_remove_i(s_skip_linked_list_t **list,
     s_skip_linked_list_t *head;
     s_skip_linked_list_t *removed;
 
-    assert_exit(!complain_null_pointer_p(list));
+    assert_exit(!NULL_PTR_P(list));
     assert_exit(skip_linked_list_ordering_p(*list));
     assert_exit(skip_linked_list_structure_legal_p(tgt));
     assert_exit(skip_linked_list_structure_legal_p(*list));
@@ -470,7 +470,7 @@ s_skip_linked_list_t *
 skip_linked_list_remove(s_skip_linked_list_t **list,
     s_skip_linked_list_t *tgt)
 {
-    if (complain_null_pointer_p(list)) {
+    if (NULL_PTR_P(list)) {
         return PTR_INVALID;
     } else if (!skip_linked_list_structure_legal_p(*list)) {
         return PTR_INVALID;
@@ -487,7 +487,7 @@ skip_linked_list_iterate(s_skip_linked_list_t *list,
 {
     s_skip_linked_list_t *skip;
 
-    if (!complain_null_pointer_p(handler)
+    if (!NULL_PTR_P(handler)
         && skip_linked_list_structure_legal_p(list)) {
         skip = list;
         while(skip) {

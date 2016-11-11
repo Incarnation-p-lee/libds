@@ -19,11 +19,11 @@ array_stack_size_i(s_array_stack_t *stack)
 bool
 array_stack_space_structure_legal_p(s_array_stack_space_t *space)
 {
-    if (complain_null_pointer_p(space)) {
+    if (NULL_PTR_P(space)) {
         return false;
-    } else if (complain_null_pointer_p(space->sp)) {
+    } else if (NULL_PTR_P(space->sp)) {
         return false;
-    } else if (complain_null_pointer_p(space->bp)) {
+    } else if (NULL_PTR_P(space->bp)) {
         return false;
     } else if (complain_zero_size_p(space->dim)) {
         return false;
@@ -43,7 +43,7 @@ array_stack_structure_legal_p(s_array_stack_t *stack)
 static inline bool
 array_stack_structure_legal_ip(s_array_stack_t *stack)
 {
-    if (complain_null_pointer_p(stack)) {
+    if (NULL_PTR_P(stack)) {
         return false;
     } else {
         return array_stack_space_structure_legal_p(&stack->space);
@@ -66,7 +66,7 @@ array_stack_create(void)
 void
 array_stack_destroy(s_array_stack_t **stack)
 {
-    if (complain_null_pointer_p(stack)) {
+    if (NULL_PTR_P(stack)) {
         return;
     } else if (array_stack_structure_legal_ip(*stack)) {
         memory_cache_free((*stack)->space.bp);
@@ -228,7 +228,7 @@ array_stack_iterate(s_array_stack_t *stack, void (*handler)(void *))
     void **i;
 
     if (array_stack_structure_legal_ip(stack)
-        && !complain_null_pointer_p(handler)) {
+        && !NULL_PTR_P(handler)) {
         /* iterate from sp to bp */
         i = stack->space.sp;
         while(i != stack->space.bp) {

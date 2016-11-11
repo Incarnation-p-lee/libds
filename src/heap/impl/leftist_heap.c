@@ -93,7 +93,7 @@ leftist_heap_destroy_internal(struct leftist_heap *heap)
 void
 leftist_heap_destroy(struct leftist_heap **heap)
 {
-    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
+    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
         leftist_heap_destroy_internal(*heap);
         *heap = NULL;
     }
@@ -110,7 +110,7 @@ leftist_heap_get_min_internal(struct leftist_heap *heap)
 void *
 leftist_heap_get_min(struct leftist_heap *heap)
 {
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else {
         return leftist_heap_get_min_internal(heap);
@@ -125,7 +125,7 @@ leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice)
 {
     struct leftist_heap *node;
 
-    if (complain_null_pointer_p(heap)) {
+    if (NULL_PTR_P(heap)) {
         return NULL;
     } else {
         node = leftist_heap_create_internal(val, 0, nice);
@@ -248,7 +248,7 @@ leftist_heap_merge_internal(struct leftist_heap *heap,
 struct leftist_heap *
 leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
 {
-    if (complain_null_pointer_p(heap) && complain_null_pointer_p(merge)) {
+    if (NULL_PTR_P(heap) && NULL_PTR_P(merge)) {
         return NULL;
     } else if (NULL == heap) {
         return merge;
@@ -292,7 +292,7 @@ leftist_heap_remove_min_internal(struct leftist_heap **heap)
 struct leftist_heap *
 leftist_heap_remove_min(struct leftist_heap **heap)
 {
-    if (complain_null_pointer_p(heap) || complain_null_pointer_p(*heap)) {
+    if (NULL_PTR_P(heap) || NULL_PTR_P(*heap)) {
         return NULL;
     } else {
         return leftist_heap_remove_min_internal(heap);
@@ -302,7 +302,7 @@ leftist_heap_remove_min(struct leftist_heap **heap)
 void
 leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
 {
-    if (!complain_null_pointer_p(heap) && !complain_null_pointer_p(*heap)) {
+    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
         memory_cache_free(leftist_heap_remove_min_internal(heap));
     }
 }
