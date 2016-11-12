@@ -289,7 +289,7 @@ array_queue_rest(s_array_queue_t *queue)
     }
 }
 
-static inline bool
+static inline ALWAYS_INLINE bool
 array_queue_full_ip(s_array_queue_t *queue)
 {
     assert_exit(array_queue_structure_legal_ip(queue));
@@ -356,30 +356,36 @@ array_queue_rear(s_array_queue_t *queue)
 void
 array_queue_enter(s_array_queue_t *queue, void *member)
 {
-    uint32 dim;
-
     if (ARRAY_QUEUE_LEGAL_P(queue)) {
         if (array_queue_full_ip(queue)) {
             array_queue_resize_i(queue, queue->space.dim * 2);
         }
 
-        *queue->space.rear++ = member;
-        dim = queue->space.dim;
-
-        if (queue->space.rear == queue->space.base + dim) {
-            pr_log_info("Reach the limitation of array, will rotate.\n");
-            queue->space.rear = queue->space.base;
-        }
-
-        queue->space.rest--;
+        assert_exit(array_queue_enter_optimize_legal_p(queue, member));
+        ARRAY_QUEUE_ENTER_I(queue, member);
+        /*
+         * *HACK* => performance
+         * ARRAY_QUEUE_ENTER_I rewrite follow code within assembly code.
+         * array_queue_enter_optimize_legal_p guarantee the correctness.
+         *
+         * uint32 dim;
+         * queue->space.rear++ = member;
+         * dim = queue->space.dim;
+         *
+         * if (queue->space.rear == queue->space.base + dim) {
+         *     pr_log_info("Reach the limitation of array, will rotate.\n");
+         *     queue->space.rear = queue->space.base;
+         * }
+         *
+         * queue->space.rest--;
+         */
     }
 }
 
 void *
 array_queue_leave(s_array_queue_t *queue)
 {
-    uint32 dim;
-    void *retval;
+    void *val;
 
     if (!ARRAY_QUEUE_LEGAL_P(queue)) {
         return PTR_INVALID;
@@ -387,16 +393,26 @@ array_queue_leave(s_array_queue_t *queue)
         pr_log_warn("Attempt to leave from _EMPTY_ queue.\n");
         return PTR_INVALID;
     } else {
-        retval = *queue->space.front++;
-        dim = queue->space.dim;
+        assert_exit(array_queue_leave_optimize_legal_p(queue));
+        ARRAY_QUEUE_LEAVE_I(queue, val);
+        /*
+         * *HACK* => performance
+         * ARRAY_QUEUE_LEAVE_I rewrite follow code within assembly code.
+         * array_queue_leave_optimize_legal_p guarantee the correctness.
+         *
+         * uint32 dim;
+         * val = *queue->space.front++;
+         * dim = queue->space.dim;
+         *
+         * if (queue->space.front == queue->space.base + dim) {
+         *     pr_log_info("Reach the limitation of array, will rotate.\n");
+         *     queue->space.front = queue->space.base;
+         * }
+         *
+         * queue->space.rest++;
+         */
 
-        if (queue->space.front == queue->space.base + dim) {
-            pr_log_info("Reach the limitation of array, will rotate.\n");
-            queue->space.front = queue->space.base;
-        }
-
-        queue->space.rest++;
-        return retval;
+        return val;
     }
 }
 
