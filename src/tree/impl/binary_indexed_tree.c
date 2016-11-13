@@ -1,15 +1,3 @@
-uint32
-binary_indexed_tree_size(struct binary_indexed_tree *tree)
-{
-    return tree->size;
-}
-
-sint64
-binary_indexed_tree_value(struct binary_indexed_tree *tree, uint32 number)
-{
-    return tree->data[number];
-}
-
 /*
  * Generate tree->data with DP.
  * For example: number 24 = 11000B
@@ -24,13 +12,13 @@ binary_indexed_tree_value(struct binary_indexed_tree *tree, uint32 number)
  * ...
  * e   XXX0100B
  */
-struct binary_indexed_tree *
+s_binary_indexed_tree_t *
 binary_indexed_tree_create(sint64 *data, uint32 size)
 {
     uint32 i;
-    uint32 base;
     uint32 mask;
-    struct binary_indexed_tree *tree;
+    uint32 iterator;
+    s_binary_indexed_tree_t *tree;
 
     if (NULL_PTR_P(data)) {
         return NULL;
@@ -38,22 +26,23 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
         return NULL;
     } else {
         tree = memory_cache_allocate(sizeof(*tree));
+
         tree->size = size;
         tree->data = memory_cache_allocate(sizeof(*tree->data) * (size + 1));
-        memset(tree->data, 0, sizeof(*tree->data) * (size + 1));
+        dp_memset(tree->data, 0, sizeof(*tree->data) * (size + 1));
 
-        i = 2;
         tree->data[1] = data[0];
 
+        i = 2;
         while (i <= size) {
             tree->data[i] = data[i - 1];
             if (0 == i % 2) {
-                base = i - 1;
+                iterator = i - 1;
                 mask = 0xfffffffe;
 
                 while (0 == (i & ~mask)) {
-                    tree->data[i] += tree->data[base];
-                    base = base & mask;
+                    tree->data[i] += tree->data[iterator];
+                    iterator = iterator & mask;
                     mask = mask << 1;
                 }
             }
@@ -65,23 +54,19 @@ binary_indexed_tree_create(sint64 *data, uint32 size)
 }
 
 void
-binary_indexed_tree_destroy(struct binary_indexed_tree **tree)
+binary_indexed_tree_destroy(s_binary_indexed_tree_t **tree)
 {
-    struct binary_indexed_tree *tmp;
-
     if (NULL_PTR_P(tree)) {
         return;
     } else if (binary_indexed_tree_structure_legal_p(*tree)) {
-        tmp = *tree;
+        memory_cache_free((*tree)->data);
+        memory_cache_free(*tree);
         *tree = NULL;
-
-        memory_cache_free(tmp->data);
-        memory_cache_free(tmp);
     }
 }
 
 static inline bool
-binary_indexed_tree_number_legal_p(struct binary_indexed_tree *tree, uint32 number)
+binary_indexed_tree_number_legal_p(s_binary_indexed_tree_t *tree, uint32 number)
 {
     assert_exit(!NULL_PTR_P(tree));
 
@@ -95,7 +80,7 @@ binary_indexed_tree_number_legal_p(struct binary_indexed_tree *tree, uint32 numb
 }
 
 static inline bool
-binary_indexed_tree_structure_legal_p(struct binary_indexed_tree *tree)
+binary_indexed_tree_structure_legal_p(s_binary_indexed_tree_t *tree)
 {
     if (NULL_PTR_P(tree)) {
         return false;
@@ -109,16 +94,16 @@ binary_indexed_tree_structure_legal_p(struct binary_indexed_tree *tree)
 }
 
 static inline void
-binary_indexed_tree_add_internal(struct binary_indexed_tree *tree,
+binary_indexed_tree_add_i(s_binary_indexed_tree_t *tree,
     uint32 number, sint64 val)
 {
-    uint32 base;
+    uint32 iterator;
 
     assert_exit(!NULL_PTR_P(tree));
     assert_exit(binary_indexed_tree_number_legal_p(tree, number));
     assert_exit(binary_indexed_tree_structure_legal_p(tree));
 
-    base = ((number - 1) ^ number) & number;
+    iterator = ((number - 1) ^ number) & number;
     tree->data[number] += val;
 
     /*
@@ -128,18 +113,18 @@ binary_indexed_tree_add_internal(struct binary_indexed_tree *tree,
      *     1. 01010B
      *     2. 01100B = 1010B + 10B
      *     3. 10000B = 1100B + 100B ...
-     *     to the limit of size. 
+     *     to the limit of size.
      */
-    while (number + base <= tree->size) {
-        number = number + base;
+    while (number + iterator <= tree->size) {
+        number = number + iterator;
         tree->data[number] += val;
-        base = base << 1;
+        iterator = iterator << 1;
     }
 }
 
 
 void
-binary_indexed_tree_add(struct binary_indexed_tree *tree,
+binary_indexed_tree_add(s_binary_indexed_tree_t *tree,
     uint32 number, sint64 val)
 {
 
@@ -148,63 +133,62 @@ binary_indexed_tree_add(struct binary_indexed_tree *tree,
     } else if (!binary_indexed_tree_number_legal_p(tree, number)) {
         return;
     } else {
-        binary_indexed_tree_add_internal(tree, number, val);
+        binary_indexed_tree_add_i(tree, number, val);
     }
 }
 
 void
-binary_indexed_tree_sub(struct binary_indexed_tree *tree,
+binary_indexed_tree_sub(s_binary_indexed_tree_t *tree,
     uint32 number, sint64 val)
 {
-
     if (!binary_indexed_tree_structure_legal_p(tree)) {
         return;
     } else if (!binary_indexed_tree_number_legal_p(tree, number)) {
         return;
     } else {
-        binary_indexed_tree_add_internal(tree, number, -val);
+        binary_indexed_tree_add_i(tree, number, -val);
     }
 }
 
 static inline sint64
-binary_indexed_tree_sum_internal(struct binary_indexed_tree *tree,
+binary_indexed_tree_sum_i(s_binary_indexed_tree_t *tree,
     uint32 number)
 {
-    sint64 retval;
-    uint32 base;
+    sint64 sum;
+    uint32 iterator;
 
     assert_exit(binary_indexed_tree_structure_legal_p(tree));
     assert_exit(binary_indexed_tree_number_legal_p(tree, number));
 
-    retval = 0;
-    base = number;
+    sum = 0;
+    iterator = number;
 
-    while (base) {
-        retval += tree->data[base];
-        base = base & (base - 1);
+    while (iterator) {
+        sum += tree->data[iterator];
+        iterator = iterator & (iterator - 1);
     }
 
-    return retval;
+    return sum;
 }
 
 sint64
-binary_indexed_tree_sum(struct binary_indexed_tree *tree, uint32 number)
+binary_indexed_tree_sum(s_binary_indexed_tree_t *tree, uint32 number)
 {
     if (!binary_indexed_tree_structure_legal_p(tree)) {
         return BIN_IDXED_SUM_INVALID;
     } else if (!binary_indexed_tree_number_legal_p(tree, number)) {
-        return 0;
+        return BIN_IDXED_SUM_INVALID;
     } else {
-        return binary_indexed_tree_sum_internal(tree, number);
+        return binary_indexed_tree_sum_i(tree, number);
     }
 }
 
 sint64
-binary_indexed_tree_range_sum(struct binary_indexed_tree *tree,
+binary_indexed_tree_range_sum(s_binary_indexed_tree_t *tree,
     uint32 nmbr_s, uint32 nmbr_e)
 {
-    sint64 retval;
-    sint64 tmp;
+    sint64 sum_head;
+    sint64 sum_range;
 
     if (!binary_indexed_tree_structure_legal_p(tree)) {
         return BIN_IDXED_SUM_INVALID;
@@ -215,15 +199,12 @@ binary_indexed_tree_range_sum(struct binary_indexed_tree *tree,
     } else if (nmbr_s > nmbr_e) {
         pr_log_warn("Invalid start number and end number of range.\n");
         return BIN_IDXED_SUM_INVALID;
+    } else if (nmbr_s == 1) {
+        return binary_indexed_tree_sum_i(tree, nmbr_e);
     } else {
-        retval = binary_indexed_tree_sum_internal(tree, nmbr_e);
-        if (nmbr_s == 1) {
-            tmp = 0;
-        } else {
-            tmp = binary_indexed_tree_sum_internal(tree, nmbr_s - 1);
-        }
-
-        return retval - tmp;
+        sum_head = binary_indexed_tree_sum_i(tree, nmbr_s - 1);
+        sum_range = binary_indexed_tree_sum_i(tree, nmbr_e) - sum_head;
+        return sum_range;
     }
 }
 

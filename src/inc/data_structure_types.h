@@ -14,35 +14,37 @@ enum ITER_ORDER {
 #define SIZE_INVALID           0xffffffffu
 #define TRIE_INDEX_INVALID     SIZE_INVALID
 #define LIST_SIZE_INVALID      SIZE_INVALID
-#define SKIP_LVL_LMT           8          // skip linked list level limitation
+#define SKIP_LVL_LMT           8            // skip linked list level limitation
 #define SKIP_KEY_INVALID       (sint32)0x80000000
-#define SPT_CHN_HASH_SIZE_DFT  11u        // separate chain hash default size
-#define SPT_CHN_HASH_LOAD_FTR  72u        // separate chain hash load factor
-#define OPN_ADDR_HASH_LOAD_FTR 50u        // open addressing hash load factor
+#define SPT_CHN_HASH_SIZE_DFT  11u          // separate chain hash default size
+#define SPT_CHN_HASH_LOAD_FTR  72u          // separate chain hash load factor
+#define OPN_ADDR_HASH_LOAD_FTR 50u          // open addressing hash load factor
 #define HASH_SIZE_INVALID      SIZE_INVALID
 #define HASH_IDX_INVALID       0xffffffffu
-#define HASH_LD_FTR_INVALID    101u       // load factor max is 100u
+#define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
 #define HEAP_SIZE_INVALID      SIZE_INVALID
 #define HEAP_CPCT_INVALID      SIZE_INVALID
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
-#define HEAP_CPCT_DFT          4097u      // heap default capacity
-#define HEAP_IDX_INVALID       0u         // heap invalid index
-#define HEAP_IDX_ROOT          1u         // heap root index
-#define HEAP_NPL_NULL          -1         // heap NPL value of NULL
+#define HEAP_CPCT_DFT          4097u        // heap default capacity
+#define HEAP_IDX_INVALID       0u           // heap invalid index
+#define HEAP_IDX_ROOT          1u           // heap root index
+#define HEAP_NPL_NULL          -1           // heap NPL value of NULL
 #define HEAP_DEPTH_INVALID     SIZE_INVALID
-#define QUEUE_SIZE_DFT         1024       // queue size default
-#define QUEUE_EXPD_SIZE_MIN    128        // queue expand size minimal
+#define QUEUE_SIZE_DFT         1024         // queue size default
+#define QUEUE_EXPD_SIZE_MIN    128          // queue expand size minimal
 #define QUEUE_REST_INVALID     SIZE_INVALID
 #define QUEUE_CPCT_INVALID     SIZE_INVALID
 #define QUEUE_SIZE_INVALID     SIZE_INVALID
-#define STACK_SIZE_DFT         1024       // stack size default
-#define STACK_EXPD_SIZE_MIN    128        // stack expand size minimal
+#define STACK_SIZE_DFT         1024         // stack size default
+#define STACK_EXPD_SIZE_MIN    128          // stack expand size minimal
 #define STACK_SIZE_INVALID     SIZE_INVALID
-#define TRIE_TREE_ROOT         -1         // Root node val of trie tree
-#define TRIE_TREE_SIZE_MIN     16         // Minimal sub tree size of trie tree
-#define BIN_IDXED_NMBR_INVALID 0          // binary indexed tree invalid number
+#define TRIE_TREE_ROOT         ((uint32)-1) // Root node val of trie tree
+#define TRIE_TREE_SIZE_MIN     16           // Minimal sub tree size of trie tree
+#define BIN_IDXED_NMBR_INVALID 0            // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
-#define PTR_INVALID            (void *)-1 // invalid pointer
+#define TREE_NICE_INVALID      (sint64)(-1)
+
+#define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line
 
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
@@ -67,6 +69,14 @@ typedef struct array_queue           s_array_queue_t;
 typedef struct stacked_queue         s_stacked_queue_t;
 typedef struct doubly_end_queue      s_doubly_end_queue_t;
 typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
+typedef struct binary_search_tree    s_binary_search_tree_t;
+typedef struct avl_tree              s_avl_tree_t;
+typedef struct splay_tree            s_splay_tree_t;
+typedef struct heap_data             s_heap_data_t;
+typedef struct binary_heap           s_binary_heap_t;
+typedef struct leftist_heap          s_leftist_heap_t;
+typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
+typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 
@@ -95,12 +105,12 @@ struct array_iterator {
  * _CIRCULAR_ linked list.
  */
 struct single_linked_list {
-    struct single_linked_list *next;
+    s_single_linked_list_t *next;
 };
 
 struct doubly_linked_list {
-    struct doubly_linked_list *next;
-    struct doubly_linked_list *previous;
+    s_doubly_linked_list_t *next;
+    s_doubly_linked_list_t *previous;
 };
 
 /*
@@ -117,8 +127,8 @@ struct doubly_linked_list {
 struct skip_linked_list {
     sint32 key;
     union {
-        struct skip_linked_list *next;
-        struct skip_linked_list *layer[SKIP_LVL_LMT];
+        s_skip_linked_list_t *next;
+        s_skip_linked_list_t *layer[SKIP_LVL_LMT];
     };
 };
 
@@ -135,23 +145,23 @@ struct array_stack_space {
  * array stack
  */
 struct array_stack {
-    struct array_stack_space space;
+    s_array_stack_space_t space;
 };
 
 /*
  * linked stack space
  */
 struct linked_stack_space {
-    struct array_stack_space  space;
-    struct doubly_linked_list link;
+    s_array_stack_space_t  space;
+    s_doubly_linked_list_t link;
 };
 
 /*
  * linked stack
  */
 struct linked_stack {
-    struct linked_stack_space *base;
-    struct linked_stack_space *top;
+    s_linked_stack_space_t *base;
+    s_linked_stack_space_t *top;
 };
 
 /*
@@ -172,69 +182,61 @@ struct array_queue_space {
  * array queue
  */
 struct array_queue {
-    struct array_queue_space space;
-    s_array_iterator_t       iterator;
+    s_array_queue_space_t space;
+    s_array_iterator_t    iterator;
 };
 
 /*
  * stacked queue
  */
 struct stacked_queue {
-    uint32             dim;
-    struct array_stack *enter; /* enter stack */
-    struct array_stack *leave; /* leave stack */
+    uint32          dim;
+    s_array_stack_t *enter; /* enter stack */
+    s_array_stack_t *leave; /* leave stack */
 };
 
 /*
  * doubly_end_queue_list
  */
 struct doubly_end_queue_list {
-    void                      *val;
-    struct doubly_linked_list link;
+    void                   *val;
+    s_doubly_linked_list_t link;
 };
 
 /*
  * doubly end queue
  */
 struct doubly_end_queue {
-    struct doubly_end_queue_list *front;
-    struct doubly_end_queue_list *rear;
-};
-
-/*
- * collision chain of the same nice value
- */
-struct collision_chain {
-    struct doubly_linked_list *link;
-    sint64                    nice;
+    s_doubly_end_queue_list_t *front;
+    s_doubly_end_queue_list_t *rear;
 };
 
 /*
  * binary search tree
  */
 struct binary_search_tree {
-    sint64                    nice;
-    struct binary_search_tree *left;
-    struct binary_search_tree *right;
+    sint64                 nice;
+    s_binary_search_tree_t *left;
+    s_binary_search_tree_t *right;
 };
 
 /*
  * avl tree
  */
 struct avl_tree {
-    sint32          height;
-    sint64          nice;
-    struct avl_tree *left;
-    struct avl_tree *right;
+    sint32       height;
+    sint64       nice;
+    s_avl_tree_t *left;
+    s_avl_tree_t *right;
 };
 
 /*
  * splay tree
  */
 struct splay_tree {
-    sint64            nice;
-    struct splay_tree *left;
-    struct splay_tree *right;
+    sint64         nice;
+    s_splay_tree_t *left;
+    s_splay_tree_t *right;
 };
 
 /*
@@ -299,14 +301,14 @@ struct separate_chain {
  * hashing table with separate chaining
  */
 struct separate_chain_hash {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 };
 
 /*
  * hashing table with open addressing square
  */
 struct open_addressing_hash {
-    struct hashing_table *table;
+    s_hashing_table_t *table;
 };
 
 /*
@@ -322,7 +324,7 @@ struct heap_data {
  * allow different node with the same nice
  */
 struct binary_heap {
-    struct heap_data **base;
+    s_heap_data_t **base;
     uint32 capacity;
     uint32 size;
 };
@@ -331,14 +333,14 @@ struct binary_heap {
  * min heap
  */
 struct minimal_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
  * max heap
  */
 struct maximal_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
@@ -347,7 +349,7 @@ struct maximal_heap {
  *     for odd  depth node, > fater, < gdp_randfater
  */
 struct min_max_heap {
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 };
 
 /*
@@ -370,10 +372,10 @@ struct min_max_heap {
  *       structure binary search tree.
  */
 struct leftist_heap {
-    sint32              npl; /* null path length, NULL node is -1 */
-    struct heap_data    data;
-    struct leftist_heap *left;
-    struct leftist_heap *right;
+    sint32           npl; /* null path length, NULL node is -1 */
+    s_heap_data_t    data;
+    s_leftist_heap_t *left;
+    s_leftist_heap_t *right;
 };
 
 #endif

@@ -1,13 +1,15 @@
 static inline s_single_linked_list_t *
-test_single_linked_list_sample(uint32 range, uint32 node_count)
+test_single_linked_list_sample(uint32 node_count)
 {
     uint32 i;
     s_single_linked_list_t *list;
     s_single_linked_list_t *node;
 
-    list = single_linked_list_create();
+    assert_exit(node_count != 0);
 
+    list = single_linked_list_create();
     i = 1;
+
     while (i < node_count) {
         node = single_linked_list_create();
         single_linked_list_insert_after(list, node);
@@ -18,15 +20,17 @@ test_single_linked_list_sample(uint32 range, uint32 node_count)
 }
 
 static inline s_doubly_linked_list_t *
-test_doubly_linked_list_sample(uint32 range, uint32 node_count)
+test_doubly_linked_list_sample(uint32 node_count)
 {
     uint32 i;
     s_doubly_linked_list_t *list;
     s_doubly_linked_list_t *node;
 
-    list = doubly_linked_list_create();
+    assert_exit(node_count != 0);
 
     i = 1;
+    list = doubly_linked_list_create();
+
     while (i < node_count) {
         node = doubly_linked_list_create();
         doubly_linked_list_insert_after(list, node);
@@ -37,22 +41,21 @@ test_doubly_linked_list_sample(uint32 range, uint32 node_count)
 }
 
 static inline s_skip_linked_list_t *
-test_skip_linked_list_sample(uint32 range, uint32 count)
+test_skip_linked_list_sample(uint32 node_count)
 {
     uint32 i;
     sint32 key;
     s_skip_linked_list_t *list;
     s_skip_linked_list_t *tmp;
 
-    assert_exit(0 != range);
-    assert_exit(0 != count);
+    assert_exit(node_count != 0);
 
     list = skip_linked_list_create();
     skip_linked_list_initial(list);
 
     i = 1;
-    while (i < count) {
-        key = (sint32)(dp_rand() % range) - (sint32)range / 2;
+    while (i < node_count) {
+        key = (sint32)random_uint32_with_limit(node_count) - (sint32)node_count / 2;
         tmp = skip_linked_list_create_with_key(key);
         skip_linked_list_insert(&list, tmp);
         i++;
@@ -93,7 +96,7 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
         nice = (sint64)((rand() % range) - (range / 2));
         tmp = binary_search_tree_create();
         binary_search_tree_initial(tmp, nice);
-        binary_search_tree_insert(&tree, tmp);
+        binary_search_tree_insert(tree, tmp);
         i++;
     }
 

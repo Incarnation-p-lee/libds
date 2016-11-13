@@ -3,12 +3,14 @@ performance_test_execution_start(struct test_extra_info *info, char *content)
 {
     struct test_case_filter *filter;
 
-    assert_exit(NULL != content);
+    assert_exit(content != NULL);
 
     performance_test_reference_golden_prepare(PERFORMANCE_TEST_GOLDEN);
     filter = test_case_filter_obtain(content);
 
     dp_fprintf(stdout, "  >> PERFORMANCE TEST << \n");
+    dp_fprintf(stdout, "  Repeated %d\n", info == NULL ? 1 : info->count);
+
     performance_test_execution_category(test_category, filter, info);
 
     test_case_filter_destroy(&filter);

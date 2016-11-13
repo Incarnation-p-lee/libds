@@ -1,4 +1,4 @@
-#define TREE                   binary_search_tree
+#define TREE                   s_binary_search_tree_t
 #define TREE_nice              binary_search_tree_nice
 #define TREE_val               binary_search_tree_val
 #define TREE_left              binary_search_tree_left
@@ -13,7 +13,6 @@
 #define TREE_find_max          binary_search_tree_find_max
 #define TREE_height            binary_search_tree_height
 #define TREE_contains_p        binary_search_tree_contains_p
-#define TREE_insert            binary_search_tree_insert
 #define TREE_remove            binary_search_tree_remove
 #define TREE_iterate           binary_search_tree_iterate
 
@@ -27,7 +26,6 @@ PT_TREE_find_min(binary_search)
 PT_TREE_find_max(binary_search)
 PT_TREE_height(binary_search)
 PT_TREE_contains_p(binary_search)
-PT_TREE_insert(binary_search)
 PT_TREE_remove(binary_search)
 PT_TREE_iterate(binary_search)
 
@@ -46,7 +44,30 @@ PT_TREE_iterate(binary_search)
 #undef TREE_find_max
 #undef TREE_height
 #undef TREE_contains_p
-#undef TREE_insert
 #undef TREE_remove
 #undef TREE_iterate
+
+static inline void
+ptest_binary_search_tree_insert(uint32 count)
+{
+    s_binary_search_tree_t *tmp;
+    s_binary_search_tree_t *tree;
+
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
+    tree = binary_search_tree_create();
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        tmp = binary_search_tree_create();
+        binary_search_tree_initial(tmp, count);
+        binary_search_tree_insert(tree, tmp);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    binary_search_tree_destroy(&tree);
+    PERFORMANCE_TEST_RESULT(binary_search_tree_insert);
+}
 

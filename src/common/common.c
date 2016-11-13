@@ -12,6 +12,7 @@
 #include "impl/random.c"
 #include "impl/complain.c"
 #include "impl/log.c"
+#include "impl/swap.c"
 #include "impl/iterator.c"
 #include "impl/convert.c"
 

@@ -1,13 +1,15 @@
 static inline void
-unit_test_execution_start(struct test_extra_info *entry, char *content)
+unit_test_execution_start(struct test_extra_info *info, char *content)
 {
     struct test_case_filter *filter;
 
-    assert_exit(NULL != content);
+    assert_exit(content != NULL);
 
     filter = test_case_filter_obtain(content);
 
     dp_fprintf(stdout, "  >> UNIT TEST << \n");
+    dp_fprintf(stdout, "  Repeated %d\n", info == NULL ? 1 : info->count);
+
     unit_test_execution_category(test_category, filter);
 
     test_case_filter_destroy(&filter);

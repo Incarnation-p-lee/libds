@@ -27,6 +27,7 @@ static inline void performance_test_reference_update(char *raw, struct performan
 static inline void performance_test_result_print(char *name, sint64 period);
 static inline void performance_test_time_stamp_begin(void);
 static inline void performance_test_time_stamp_end(void);
+static inline void ptest_binary_search_tree_insert(uint32 count);
 static inline void ptest_trie_tree_create(uint32 count);
 static inline void ptest_trie_tree_destroy(uint32 count);
 static inline void ptest_trie_tree_sequence_insert(uint32 count);

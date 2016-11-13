@@ -1,4 +1,4 @@
-#define TREE                   splay_tree
+#define TREE                   s_splay_tree_t
 #define TREE_nice              splay_tree_nice
 #define TREE_val               splay_tree_val
 #define TREE_left              splay_tree_left

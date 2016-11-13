@@ -14,8 +14,8 @@ utest_binary_indexed_tree_create(void)
     RESULT_CHECK_pointer(NULL, binary_indexed_tree_create(NULL, size), &pass);
     RESULT_CHECK_pointer(NULL, binary_indexed_tree_create(data, 0), &pass);
 
-    RESULT_CHECK_uint32(size, binary_indexed_tree_size(tree), &pass);
-    RESULT_CHECK_sint64(data[0], binary_indexed_tree_value(tree, 1), &pass);
+    RESULT_CHECK_uint32(size, tree->size, &pass);
+    RESULT_CHECK_sint64(data[0], tree->data[1], &pass);
 
     memory_cache_free(data);
     binary_indexed_tree_destroy(&tree);
@@ -132,10 +132,12 @@ utest_binary_indexed_tree_sum(void)
 
     RESULT_CHECK_sint64(BIN_IDXED_SUM_INVALID,
         binary_indexed_tree_sum(NULL, number), &pass);
-    RESULT_CHECK_sint64(0, binary_indexed_tree_sum(tree, BIN_IDXED_NMBR_INVALID), &pass);
+    RESULT_CHECK_sint64(BIN_IDXED_SUM_INVALID,
+        binary_indexed_tree_sum(tree, BIN_IDXED_NMBR_INVALID), &pass);
 
     while (number <= size) {
-        RESULT_CHECK_sint64(test_sint64_data_sum(data, 0, number - 1, size),
+        RESULT_CHECK_sint64(
+            test_sint64_data_sum(data, 0, number - 1),
             binary_indexed_tree_sum(tree, number), &pass);
         number++;
     }
@@ -173,7 +175,7 @@ utest_binary_indexed_tree_range_sum(void)
         number_e = number_s;
         while (number_e <= size) {
             RESULT_CHECK_sint64(
-                test_sint64_data_sum(data, number_s - 1, number_e - 1, size),
+                test_sint64_data_sum(data, number_s - 1, number_e - 1),
                 binary_indexed_tree_range_sum(tree, number_s, number_e),
                 &pass);
             number_e++;

@@ -7,7 +7,9 @@ test_iterate_reference(void)
 static void
 linked_list_iterate_handler(void *ptr)
 {
-    reference++;
+    if (ptr) {
+        reference++;
+    }
 }
 
 static void
@@ -29,7 +31,9 @@ queue_iterate_handler(void *ptr)
 static void
 tree_iterate_handler(void *ptr)
 {
-    reference++;
+    if (ptr) {
+        reference++;
+    }
 }
 
 static void

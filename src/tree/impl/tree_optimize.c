@@ -63,9 +63,9 @@ avl_tree_height_opt(struct avl_tree *tree)
 static inline sint32 ALWAYS_INLINE
 avl_tree_height_balanced_opt_p(struct avl_tree *tree)
 {
-    bool balanced;
     sint32 left;
     sint32 right;
+    bool balanced;
 
     assert_exit(avl_tree_structure_legal_p(tree));
 

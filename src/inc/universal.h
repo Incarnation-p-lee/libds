@@ -30,6 +30,7 @@ extern void libds_log_print(enum log_level lvl, const char *msg);
 extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
 extern void random_sequence_drop(uint32 *sequence);
+extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 #endif
 

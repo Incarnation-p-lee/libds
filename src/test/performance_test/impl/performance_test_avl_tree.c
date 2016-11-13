@@ -1,4 +1,4 @@
-#define TREE                   avl_tree
+#define TREE                   s_avl_tree_t
 #define TREE_nice              avl_tree_nice
 #define TREE_val               avl_tree_val
 #define TREE_left              avl_tree_left
