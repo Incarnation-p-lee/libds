@@ -6,6 +6,7 @@
 typedef signed char            sint8;
 typedef unsigned char          uint8;
 typedef unsigned int           bool;
+typedef unsigned long          native_wide_t;
 
 #if defined X86_32
     typedef signed short       sint16;
@@ -69,6 +70,10 @@ enum log_level {
 #define BIN_IDXED_NMBR_INVALID 0            // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
 #define TREE_NICE_INVALID      (sint64)(-1)
+#define BITMAP_INVALID         ((native_wide_t)-1)
+#define BITMAP_ALL             ((native_wide_t)-1)
+#define BITMAP_SET             (native_wide_t)1
+#define BITMAP_CLR             (native_wide_t)0
 #define PTR_INVALID            (void *)-1   // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
@@ -100,6 +105,7 @@ typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
+typedef struct bitmap                s_bitmap_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -231,6 +237,12 @@ struct hashing_table {
         uint32       (*separate_chain)(void *, uint32);
         uint32       (*open_addressing)(void *, uint32, uint32);
     };
+};
+
+struct bitmap {
+    native_wide_t *map;
+    native_wide_t  offset;
+    native_wide_t  bit_size;
 };
 
 struct separate_chain {
@@ -489,6 +501,7 @@ extern void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uin
 extern void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
 extern void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
+extern s_bitmap_t * bitmap_create(native_wide_t min, native_wide_t max);
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);
 extern uint32 hashing_function_open_addressing(void *key, uint32 size, uint32 counter);
@@ -506,6 +519,10 @@ extern void * open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *
 extern void * separate_chain_hash_find(s_separate_chain_hash_t *hash, void *key);
 extern void * separate_chain_hash_insert(s_separate_chain_hash_t *hash, void *key);
 extern void * separate_chain_hash_remove(s_separate_chain_hash_t *hash, void *key);
+extern void bitmap_bit_clear(s_bitmap_t *bitmap, native_wide_t val);
+extern void bitmap_bit_set(s_bitmap_t *bitmap, native_wide_t val);
+extern void bitmap_destroy(s_bitmap_t **bitmap);
+extern void bitmap_map_cleanup(s_bitmap_t *bitmap);
 extern void open_addressing_hash_destroy(s_open_addressing_hash_t **hash);
 extern void open_addressing_hash_rehashing(s_open_addressing_hash_t *hash);
 extern void separate_chain_hash_destroy(s_separate_chain_hash_t **hash);

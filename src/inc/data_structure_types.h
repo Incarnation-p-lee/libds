@@ -43,6 +43,10 @@ enum ITER_ORDER {
 #define BIN_IDXED_NMBR_INVALID 0            // binary indexed tree invalid number
 #define BIN_IDXED_SUM_INVALID  (sint64)(1ull << 63)
 #define TREE_NICE_INVALID      (sint64)(-1)
+#define BITMAP_INVALID         ((native_wide_t)-1)
+#define BITMAP_ALL             ((native_wide_t)-1)
+#define BITMAP_SET             (native_wide_t)1
+#define BITMAP_CLR             (native_wide_t)0
 
 #define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line
@@ -79,6 +83,7 @@ typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
+typedef struct bitmap                s_bitmap_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -290,6 +295,12 @@ struct hashing_table {
         uint32       (*separate_chain)(void *, uint32);
         uint32       (*open_addressing)(void *, uint32, uint32);
     };
+};
+
+struct bitmap {
+    native_wide_t *map;
+    native_wide_t  offset;
+    native_wide_t  bit_size;
 };
 
 struct separate_chain {
