@@ -7,7 +7,8 @@ use scan_source_file;
 
 my $debug = shift @ARGV;
 my $srcdir = "$ENV{'PWD'}/src";
-my @module = ("$srcdir/linked_list",
+my @module = (
+              "$srcdir/linked_list",
               "$srcdir/hash",
               "$srcdir/queue",
               "$srcdir/stack",
@@ -17,7 +18,8 @@ my @module = ("$srcdir/linked_list",
               "$srcdir/sort",
               "$srcdir/test/unit_test",
               "$srcdir/test/performance_test",
-              "$srcdir/common",);
+              "$srcdir/common",
+);
 
 say "Produce module_declaration.h";
 

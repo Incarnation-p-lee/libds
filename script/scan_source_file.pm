@@ -15,7 +15,7 @@ sub scan_header_file_externals {
     while (<SRC_FILE>) {
         chomp $_;
         if (/^void/ or /^bool/ or /^[su]int(32|64|16|8)/ or /^struct (\w)+ /
-            or /^[se]_(\w)+_t /) {
+            or /^\w+_t\b/) {
             push @result, "$_\n" if /;$/;
         }
     }
@@ -97,7 +97,7 @@ sub scan_source_file_implement {
     while (<SRC_FILE>) {
         chomp $_;
         if (/^(static|void|struct|bool)/ or /^[us]int(8|16|32|64)/
-            or /^[se]_\w+_t /) {
+            or /^\w+_t\b/ or /^\w+_t$/) {
             $tmp = $_;
             $status = "ENTER";
         } elsif ($status eq "ENTER") {
