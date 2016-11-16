@@ -299,8 +299,8 @@ struct hashing_table {
 
 struct bitmap {
     native_wide_t *map;
-    native_wide_t  offset;
-    native_wide_t  bit_size;
+    native_wide_t  min;
+    native_wide_t  max;
 };
 
 struct separate_chain {

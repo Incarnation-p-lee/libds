@@ -43,5 +43,8 @@
 #define RESULT_CHECK_double(expect, get, pass)                \
     assert_caution(test_result_check_double_p(expect, get, pass))
 
+#define RESULT_CHECK_native_wide(expect, get, pass)                \
+    assert_caution(test_result_check_native_wide_p(expect, get, pass))
+
 #endif
 

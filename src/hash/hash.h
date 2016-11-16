@@ -9,5 +9,7 @@ extern void doubly_linked_list_initial(s_doubly_linked_list_t *list);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
 
 #define HASHING_TABLE_LOAD_FACTOR(table) ((table)->load.amount * 100 / (table)->load.size)
+#define BITMAP_NATIVE_BYTES              sizeof(native_wide_t)
+#define BITMAP_NATIVE_BITS               (BITMAP_NATIVE_BYTES * 8)
 
 #endif

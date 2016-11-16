@@ -1201,6 +1201,52 @@ static const struct test_layer_table open_addressing_hash[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table bitmap[] = {
+    {
+        "create", NULL,
+        {
+            &utest_bitmap_create,
+            NULL,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_bitmap_destroy,
+            NULL,
+        },
+    },
+    {
+        "bit_get", NULL,
+        {
+            &utest_bitmap_bit_get,
+            NULL,
+        },
+    },
+    {
+        "bit_set", NULL,
+        {
+            &utest_bitmap_bit_set,
+            NULL,
+        },
+    },
+    {
+        "bit_clear", NULL,
+        {
+            &utest_bitmap_bit_clear,
+            NULL,
+        },
+    },
+    {
+        "map_cleanup", NULL,
+        {
+            &utest_bitmap_map_cleanup,
+            NULL,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
 static const struct test_layer_table minimal_heap[] = {
     {
         "create", NULL,
@@ -1622,6 +1668,7 @@ static const struct test_layer_table test_tree_implement[] = {
 static const struct test_layer_table test_hash_implement[] = {
     {"separate_chain",  separate_chain_hash,  {NULL, NULL},},
     {"open_addressing", open_addressing_hash, {NULL, NULL},},
+    {"bitmap",          bitmap,               {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,              NULL,                 {NULL, NULL},},
 };

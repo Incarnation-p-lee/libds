@@ -11,6 +11,7 @@ static inline bool test_result_check_float_p(float expect, float get, bool *pass
 static inline bool test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
 static inline bool test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass);
+static inline bool test_result_check_native_wide_p(native_wide_t expect, native_wide_t get, bool *pass);
 static inline bool test_result_check_not_equal_pointer_p(void *expect, void *get, bool *pass);
 static inline bool test_result_check_not_less_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_not_less_uint32_p(uint32 expect, uint32 limit, bool *pass);

@@ -231,3 +231,14 @@ test_result_check_double_p(double expect, double get, bool *pass)
     return tmp;
 }
 
+static inline bool
+test_result_check_native_wide_p(native_wide_t expect, native_wide_t get, bool *pass)
+{
+    bool tmp;
+
+    tmp = expect == get;
+    *pass = *pass && tmp;
+
+    return tmp;
+}
+

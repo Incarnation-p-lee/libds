@@ -241,8 +241,8 @@ struct hashing_table {
 
 struct bitmap {
     native_wide_t *map;
-    native_wide_t  offset;
-    native_wide_t  bit_size;
+    native_wide_t  min;
+    native_wide_t  max;
 };
 
 struct separate_chain {
@@ -501,6 +501,9 @@ extern void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uin
 extern void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
 extern void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
+extern bool bitmap_structure_illegal_p(s_bitmap_t *bitmap);
+extern bool bitmap_structure_legal_p(s_bitmap_t *bitmap);
+extern native_wide_t bitmap_bit_get(s_bitmap_t *bitmap, native_wide_t val);
 extern s_bitmap_t * bitmap_create(native_wide_t min, native_wide_t max);
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern s_separate_chain_hash_t * separate_chain_hash_create(uint32 size);
