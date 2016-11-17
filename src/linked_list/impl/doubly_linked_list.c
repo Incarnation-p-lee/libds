@@ -1,7 +1,7 @@
 s_doubly_linked_list_t *
 doubly_linked_list_next(s_doubly_linked_list_t *list)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         return list->next;
@@ -24,12 +24,24 @@ doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list)
     return doubly_linked_list_structure_legal_ip(list);
 }
 
+bool
+doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list)
+{
+    return doubly_linked_list_structure_illegal_ip(list);
+}
+
+static inline bool
+doubly_linked_list_structure_illegal_ip(s_doubly_linked_list_t *list)
+{
+    return !doubly_linked_list_structure_legal_ip(list);
+}
+
 static inline bool
 doubly_linked_list_structure_legal_ip(s_doubly_linked_list_t *list)
 {
     if (NULL_PTR_P(list)) {
         return false;
-    } else if (PTR_INVALID == list->next) {
+    } else if (list->next == NULL || list->previous == NULL) {
         return false;
     } else {
         return true;
@@ -39,7 +51,7 @@ doubly_linked_list_structure_legal_ip(s_doubly_linked_list_t *list)
 s_doubly_linked_list_t *
 doubly_linked_list_previous(s_doubly_linked_list_t *list)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         return list->previous;
@@ -65,7 +77,7 @@ doubly_linked_list_create(void)
 static inline void
 doubly_linked_list_initial_i(s_doubly_linked_list_t *list)
 {
-    assert_exit(doubly_linked_list_structure_legal_ip(list));
+    assert_exit(NON_NULL_PTR_P(list));
 
     list->next = list;
     list->previous = list;
@@ -74,7 +86,7 @@ doubly_linked_list_initial_i(s_doubly_linked_list_t *list)
 void
 doubly_linked_list_initial(s_doubly_linked_list_t *list)
 {
-    if (doubly_linked_list_structure_legal_ip(list)) {
+    if (NON_NULL_PTR_P(list)) {
         doubly_linked_list_initial_i(list);
     }
 }
@@ -94,8 +106,8 @@ static inline void
 doubly_linked_list_insert_after_i(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
+    assert_exit(NON_NULL_PTR_P(node));
     assert_exit(doubly_linked_list_structure_legal_ip(list));
-    assert_exit(doubly_linked_list_structure_legal_ip(node));
     assert_exit(!doubly_linked_list_contains_ip(list, node));
 
     list->next->previous = node;
@@ -108,11 +120,13 @@ void
 doubly_linked_list_insert_after(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)
-        || !doubly_linked_list_structure_legal_ip(node)) {
+    if (doubly_linked_list_structure_illegal_ip(list) || NULL_PTR_P(node)) {
         return;
     } else {
-        assert_exit(!doubly_linked_list_contains_ip(list, node));
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         doubly_linked_list_insert_after_i(list, node);
     }
 }
@@ -121,8 +135,8 @@ static inline void
 doubly_linked_list_insert_before_i(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
+    assert_exit(NON_NULL_PTR_P(node));
     assert_exit(doubly_linked_list_structure_legal_ip(list));
-    assert_exit(doubly_linked_list_structure_legal_ip(node));
     assert_exit(!doubly_linked_list_contains_ip(list, node));
 
     doubly_linked_list_insert_after_i(list->previous, node);
@@ -132,11 +146,13 @@ void
 doubly_linked_list_insert_before(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)
-        || !doubly_linked_list_structure_legal_ip(node)) {
+    if (doubly_linked_list_structure_illegal_ip(list) || NULL_PTR_P(node)) {
         return;
     } else {
-        assert_exit(!doubly_linked_list_contains_ip(list, node));
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         doubly_linked_list_insert_before_i(list, node);
     }
 }
@@ -146,7 +162,7 @@ doubly_linked_list_node_copy(s_doubly_linked_list_t *node)
 {
     s_doubly_linked_list_t *copy;
 
-    if (!doubly_linked_list_structure_legal_ip(node)) {
+    if (doubly_linked_list_structure_illegal_ip(node)) {
         return PTR_INVALID;
     } else {
         copy = doubly_linked_list_create_i();
@@ -197,7 +213,7 @@ doubly_linked_list_length_i(s_doubly_linked_list_t *list)
 uint32
 doubly_linked_list_length(s_doubly_linked_list_t *list)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_illegal_ip(list)) {
         return LIST_SIZE_INVALID;
     } else {
         return doubly_linked_list_length_i(list);
@@ -211,7 +227,7 @@ doubly_linked_list_node_by_index(s_doubly_linked_list_t *list,
     uint32 len;
     s_doubly_linked_list_t *node;
 
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         len = doubly_linked_list_length_i(list);
@@ -237,8 +253,8 @@ doubly_linked_list_contains_ip(s_doubly_linked_list_t *list,
 {
     s_doubly_linked_list_t *doubly;
 
+    assert_exit(NON_NULL_PTR_P(node));
     assert_exit(doubly_linked_list_structure_legal_ip(list));
-    assert_exit(doubly_linked_list_structure_legal_ip(node));
 
     doubly = list;
 
@@ -257,9 +273,9 @@ bool
 doubly_linked_list_contains_p(s_doubly_linked_list_t *list,
     s_doubly_linked_list_t *node)
 {
-    if (!doubly_linked_list_structure_legal_ip(list)) {
+    if (doubly_linked_list_structure_illegal_ip(list)) {
         return false;
-    } else if (!doubly_linked_list_structure_legal_ip(node)) {
+    } else if (doubly_linked_list_structure_illegal_ip(node)) {
         return false;
     } else {
         return doubly_linked_list_contains_ip(list, node);
@@ -297,7 +313,7 @@ doubly_linked_list_remove(s_doubly_linked_list_t **list)
 {
     if (NULL_PTR_P(list)) {
         return PTR_INVALID;
-    } else if (!doubly_linked_list_structure_legal_ip(*list)) {
+    } else if (doubly_linked_list_structure_illegal_ip(*list)) {
         return PTR_INVALID;
     } else {
         return doubly_linked_list_remove_i(list);
@@ -344,17 +360,18 @@ s_doubly_linked_list_t *
 doubly_linked_list_merge(s_doubly_linked_list_t *m,
     s_doubly_linked_list_t *n)
 {
-    if (!doubly_linked_list_structure_legal_ip(m)
-        && !doubly_linked_list_structure_legal_ip(n)) {
+    if (doubly_linked_list_structure_illegal_ip(m)
+        && doubly_linked_list_structure_illegal_ip(n)) {
         return PTR_INVALID;
-    } else if (!doubly_linked_list_structure_legal_ip(m)) {
+    } else if (doubly_linked_list_structure_illegal_ip(m)) {
         return n;
-    } else if (!doubly_linked_list_structure_legal_ip(n)) {
-        return m;
-    } else if (doubly_linked_list_contains_ip(m, n)) {
-        pr_log_info("Merge same linked list, nothing will be done.\n");
+    } else if (doubly_linked_list_structure_illegal_ip(n)) {
         return m;
     } else {
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         return doubly_linked_list_merge_i(m, n);
     }
 }

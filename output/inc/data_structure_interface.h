@@ -319,8 +319,10 @@ extern void random_sequence_drop(uint32 *sequence);
 extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
+extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list);
 extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
 extern bool single_linked_list_contains_p(s_single_linked_list_t *list, s_single_linked_list_t *node);
+extern bool single_linked_list_structure_illegal_p(s_single_linked_list_t *list);
 extern bool single_linked_list_structure_legal_p(s_single_linked_list_t *list);
 extern bool skip_linked_list_contains_p(s_skip_linked_list_t *list, s_skip_linked_list_t *node);
 extern bool skip_linked_list_structure_legal_p(s_skip_linked_list_t *list);

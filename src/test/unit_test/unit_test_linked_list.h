@@ -72,7 +72,6 @@ utest_##name##_linked_list_insert_after(void)                          \
     UNIT_TEST_BEGIN(name##_linked_list_insert_after);                  \
                                                                        \
     LINKED_LIST_insert_after(NULL, NULL);                              \
-    LINKED_LIST_insert_after(list, list);                              \
                                                                        \
     inserted = LINKED_LIST_create();                                   \
     next = LINKED_LIST_next(list);                                     \
@@ -101,7 +100,6 @@ utest_##name##_linked_list_insert_before(void)                         \
     UNIT_TEST_BEGIN(name##_linked_list_insert_before);                 \
                                                                        \
     LINKED_LIST_insert_before(NULL, NULL);                             \
-    LINKED_LIST_insert_before(list, list);                             \
                                                                        \
     inserted = LINKED_LIST_create();                                   \
     prev = LINKED_LIST_previous(list);                                 \

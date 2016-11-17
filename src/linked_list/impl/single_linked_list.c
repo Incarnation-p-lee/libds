@@ -1,7 +1,7 @@
 s_single_linked_list_t *
 single_linked_list_next(s_single_linked_list_t *list)
 {
-    if (!single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         return list->next;
@@ -24,12 +24,24 @@ single_linked_list_structure_legal_p(s_single_linked_list_t *list)
     return single_linked_list_structure_legal_ip(list);
 }
 
+bool
+single_linked_list_structure_illegal_p(s_single_linked_list_t *list)
+{
+    return single_linked_list_structure_illegal_ip(list);
+}
+
+static inline bool
+single_linked_list_structure_illegal_ip(s_single_linked_list_t *list)
+{
+    return !single_linked_list_structure_legal_ip(list);
+}
+
 static inline bool
 single_linked_list_structure_legal_ip(s_single_linked_list_t *list)
 {
     if (NULL_PTR_P(list)) {
         return false;
-    } else if (PTR_INVALID == list->next) {
+    } else if (list->next == NULL) {
         return false;
     } else {
         return true;
@@ -73,8 +85,8 @@ static inline void
 single_linked_list_insert_after_i(s_single_linked_list_t *list,
     s_single_linked_list_t *node)
 {
+    assert_exit(NON_NULL_PTR_P(node));
     assert_exit(single_linked_list_structure_legal_ip(list));
-    assert_exit(single_linked_list_structure_legal_ip(node));
     assert_exit(!single_linked_list_contains_ip(list, node));
 
     node->next = list->next;
@@ -85,12 +97,13 @@ void
 single_linked_list_insert_after(s_single_linked_list_t *list,
     s_single_linked_list_t *node)
 {
-    if (!single_linked_list_structure_legal_ip(list)
-        || !single_linked_list_structure_legal_ip(node)) {
+    if (single_linked_list_structure_illegal_ip(list) || NULL_PTR_P(node)) {
         return;
-    } else if (single_linked_list_contains_ip(list, node)) {
-        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         single_linked_list_insert_after_i(list, node);
     }
 }
@@ -101,8 +114,8 @@ single_linked_list_insert_before_i(s_single_linked_list_t *list,
 {
     s_single_linked_list_t *prev;
 
+    assert_exit(NON_NULL_PTR_P(node));
     assert_exit(single_linked_list_structure_legal_ip(list));
-    assert_exit(single_linked_list_structure_legal_ip(node));
     assert_exit(!single_linked_list_contains_ip(list, node));
 
     prev = single_linked_list_previous_i(list);
@@ -114,12 +127,13 @@ void
 single_linked_list_insert_before(s_single_linked_list_t *list,
     s_single_linked_list_t *node)
 {
-    if (!single_linked_list_structure_legal_ip(list)
-        || !single_linked_list_structure_legal_ip(node)) {
+    if (single_linked_list_structure_illegal_ip(list) || NULL_PTR_P(node)) {
         return;
-    } else if (single_linked_list_contains_ip(list, node)) {
-        pr_log_warn("Attempt to insert node contains already.\n");
     } else {
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         single_linked_list_insert_before_i(list, node);
     }
 }
@@ -129,7 +143,7 @@ single_linked_list_node_copy(s_single_linked_list_t *node)
 {
     s_single_linked_list_t *copy;
 
-    if (!single_linked_list_structure_legal_ip(node)) {
+    if (single_linked_list_structure_illegal_ip(node)) {
         return PTR_INVALID;
     } else {
         copy = single_linked_list_create_i();
@@ -179,7 +193,7 @@ single_linked_list_length_i(s_single_linked_list_t *list)
 uint32
 single_linked_list_length(s_single_linked_list_t *list)
 {
-    if (!single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_illegal_ip(list)) {
         return LIST_SIZE_INVALID;
     } else {
         return single_linked_list_length_i(list);
@@ -192,7 +206,7 @@ single_linked_list_node_by_index(s_single_linked_list_t *list, uint32 index)
     uint32 len;
     s_single_linked_list_t *node;
 
-    if (!single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         len = single_linked_list_length_i(list);
@@ -236,9 +250,9 @@ bool
 single_linked_list_contains_p(s_single_linked_list_t *list,
     s_single_linked_list_t *node)
 {
-    if (!single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_illegal_ip(list)) {
         return false;
-    } else if (!single_linked_list_structure_legal_ip(node)) {
+    } else if (single_linked_list_structure_illegal_ip(node)) {
         return false;
     } else {
         return single_linked_list_contains_ip(list, node);
@@ -265,7 +279,7 @@ single_linked_list_previous_i(s_single_linked_list_t *list)
 s_single_linked_list_t *
 single_linked_list_previous(s_single_linked_list_t *list)
 {
-    if (!single_linked_list_structure_legal_ip(list)) {
+    if (single_linked_list_structure_illegal_ip(list)) {
         return PTR_INVALID;
     } else {
         return single_linked_list_previous_i(list);
@@ -301,7 +315,7 @@ single_linked_list_remove(s_single_linked_list_t **list)
 {
     if (NULL_PTR_P(list)) {
         return PTR_INVALID;
-    } else if (!single_linked_list_structure_legal_ip(*list)) {
+    } else if (single_linked_list_structure_illegal_ip(*list)) {
         return PTR_INVALID;
     } else {
         return single_linked_list_remove_i(list);
@@ -349,17 +363,18 @@ s_single_linked_list_t *
 single_linked_list_merge(s_single_linked_list_t *m,
     s_single_linked_list_t *n)
 {
-    if (!single_linked_list_structure_legal_ip(m)
-        && !single_linked_list_structure_legal_ip(n)) {
+    if (single_linked_list_structure_illegal_ip(m)
+        && single_linked_list_structure_illegal_ip(n)) {
         return PTR_INVALID;
-    } else if (!single_linked_list_structure_legal_ip(m)) {
+    } else if (single_linked_list_structure_illegal_ip(m)) {
         return n;
-    } else if (!single_linked_list_structure_legal_ip(n)) {
-        return m;
-    } else if (single_linked_list_contains_ip(m, n)) {
-        pr_log_info("Merge same linked list, nothing will be done.\n");
+    } else if (single_linked_list_structure_illegal_ip(n)) {
         return m;
     } else {
+        /*
+         * Use assert_exit for contains check here for performance.
+         * If check contains, the cost wiil be O(1) => O(n) for each insert.
+         */
         return single_linked_list_merge_i(m, n);
     }
 }

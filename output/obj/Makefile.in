@@ -9,7 +9,7 @@ LD           =gcc
 
 AFLAG        =-rcv
 LFLAG        =-Wl,--warn-common
-CFLAG        =-Wall -Werror -c
+CFLAG        =-Wall -Wextra -Werror -c
 CFLAG        +=$(cc_config)
 LFLAG        +=$(ld_config)
 
