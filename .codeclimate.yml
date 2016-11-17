@@ -1,9 +1,19 @@
+C: true
 engines:
   rubocop: 
     enabled: true
   fixme:
     enabled: true
+    checks:
+      HACK:
+        enabled: false
   gnu-complexity:
+    enabled: true
+  duplication:
+    enabled: true
+      languages:
+        c:
+  foodcritic:
     enabled: true
 ratings:
   paths:
