@@ -1206,42 +1206,42 @@ static const struct test_layer_table bitmap[] = {
         "create", NULL,
         {
             &utest_bitmap_create,
-            NULL,
+            &ptest_bitmap_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_bitmap_destroy,
-            NULL,
+            &ptest_bitmap_destroy,
         },
     },
     {
         "bit_get", NULL,
         {
             &utest_bitmap_bit_get,
-            NULL,
+            &ptest_bitmap_bit_get,
         },
     },
     {
         "bit_set", NULL,
         {
             &utest_bitmap_bit_set,
-            NULL,
+            &ptest_bitmap_bit_set,
         },
     },
     {
         "bit_clear", NULL,
         {
             &utest_bitmap_bit_clear,
-            NULL,
+            &ptest_bitmap_bit_clear,
         },
     },
     {
         "map_cleanup", NULL,
         {
             &utest_bitmap_map_cleanup,
-            NULL,
+            &ptest_bitmap_map_cleanup,
         },
     },
     {NULL, NULL, {NULL, NULL},},

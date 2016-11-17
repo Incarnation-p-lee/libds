@@ -181,6 +181,13 @@ static struct performance_test_reference performance_reference[] = {
     {"open_addressing_hash_find",                        0x0u, 0x0u},
     {"open_addressing_hash_rehashing",                   0x0u, 0x0u},
 
+    {"bitmap_create",                                    0x0u, 0x0u},
+    {"bitmap_destroy",                                   0x0u, 0x0u},
+    {"bitmap_bit_get",                                   0x0u, 0x0u},
+    {"bitmap_bit_set",                                   0x0u, 0x0u},
+    {"bitmap_bit_clear",                                 0x0u, 0x0u},
+    {"bitmap_map_cleanup",                               0x0u, 0x0u},
+
     {"minimal_heap_create",                              0x0u, 0x0u},
     {"minimal_heap_destroy",                             0x0u, 0x0u},
     {"minimal_heap_empty_p",                             0x0u, 0x0u},

@@ -11,7 +11,9 @@ bitmap_create(native_wide_t min, native_wide_t max)
         bitmap->max = max;
         bitmap->min = min;
 
-        bytes_count = bitmap_native_bytes_count(bitmap);
+        bytes_count = (bitmap->max - bitmap->min + 1) / 8;
+        bytes_count = bitmap_native_align(bytes_count);
+
         bitmap->map = memory_cache_allocate(bytes_count);
         dp_memset(bitmap->map, 0, bytes_count);
 
