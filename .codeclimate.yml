@@ -9,8 +9,6 @@ engines:
         enabled: false
   gnu-complexity:
     enabled: true
-  duplication:
-    enabled: true
   foodcritic:
     enabled: true
 ratings:
