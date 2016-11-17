@@ -9,8 +9,6 @@ engines:
         enabled: false
   gnu-complexity:
     enabled: true
-  foodcritic:
-    enabled: true
 ratings:
   paths:
   - "**.h"
