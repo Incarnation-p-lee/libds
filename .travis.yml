@@ -21,6 +21,7 @@ install:
   - cd -
 after_success:
   - coveralls-lcov /tmp/coverage.info
+  - npm install --save-dev codeclimate-test-reporter
   - codeclimate-test-reporter < /tmp/coverage.info
   - bash ./script/run_performance_test.sh
 
