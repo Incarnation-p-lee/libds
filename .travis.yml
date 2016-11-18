@@ -1,4 +1,7 @@
 language: c
+addons:
+  code_climate:
+    repo_token: e1f9e1cd7d84e24b8b15139e1feb931257cba1785307a8a326399bace5738d86
 compiler:
   - gcc
   - clang
@@ -18,8 +21,6 @@ install:
   - cd -
 after_success:
   - coveralls-lcov /tmp/coverage.info
+  - codeclimate-test-reporter < /tmp/coverage.info
   - bash ./script/run_performance_test.sh
-addons:
-    code_climate:
-        repo_token: e1f9e1cd7d84e24b8b15139e1feb931257cba1785307a8a326399bace5738d86
 
