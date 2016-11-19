@@ -185,7 +185,9 @@ static struct performance_test_reference performance_reference[] = {
     {"bitmap_destroy",                                   0x0u, 0x0u},
     {"bitmap_bit_get",                                   0x0u, 0x0u},
     {"bitmap_bit_set",                                   0x0u, 0x0u},
+    {"bitmap_bit_set_p",                                 0x0u, 0x0u},
     {"bitmap_bit_clear",                                 0x0u, 0x0u},
+    {"bitmap_bit_clear_p",                               0x0u, 0x0u},
     {"bitmap_map_cleanup",                               0x0u, 0x0u},
 
     {"minimal_heap_create",                              0x0u, 0x0u},

@@ -1231,6 +1231,20 @@ static const struct test_layer_table bitmap[] = {
         },
     },
     {
+        "bit_clear_p", NULL,
+        {
+            &utest_bitmap_bit_clear_p,
+            &ptest_bitmap_bit_clear_p,
+        },
+    },
+    {
+        "bit_set_p", NULL,
+        {
+            &utest_bitmap_bit_set_p,
+            &ptest_bitmap_bit_set_p,
+        },
+    },
+    {
         "bit_clear", NULL,
         {
             &utest_bitmap_bit_clear,

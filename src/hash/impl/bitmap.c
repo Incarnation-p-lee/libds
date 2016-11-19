@@ -226,6 +226,34 @@ bitmap_bit_set(s_bitmap_t *bitmap, native_wide_t val)
     }
 }
 
+bool
+bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val)
+{
+    if (bitmap_structure_illegal_ip(bitmap)) {
+        return false;
+    } else if (val > bitmap->max) {
+        return false;
+    } else if (val < bitmap->min) {
+        return false;
+    } else {
+        return bitmap_bit_get_i(bitmap, val) == BITMAP_SET;
+    }
+}
+
+bool
+bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val)
+{
+    if (bitmap_structure_illegal_ip(bitmap)) {
+        return false;
+    } else if (val > bitmap->max) {
+        return false;
+    } else if (val < bitmap->min) {
+        return false;
+    } else {
+        return bitmap_bit_get_i(bitmap, val) == BITMAP_CLR;
+    }
+}
+
 void
 bitmap_map_cleanup(s_bitmap_t *bitmap)
 {

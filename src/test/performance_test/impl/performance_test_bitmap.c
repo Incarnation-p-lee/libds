@@ -97,6 +97,32 @@ ptest_bitmap_bit_set(uint32 count)
 }
 
 static inline void
+ptest_bitmap_bit_set_p(uint32 count)
+{
+    s_bitmap_t *bitmap;
+    native_wide_t min, max;
+
+    min = 0xda1;
+    max = 0xdeac;
+
+    PERFORMANCE_TEST_BEGIN(bitmap_bit_set_p);
+
+    bitmap = bitmap_create(min, max);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        bitmap_bit_set_p(bitmap, min);
+        bitmap_bit_set_p(bitmap, max);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    bitmap_destroy(&bitmap);
+    PERFORMANCE_TEST_RESULT(bitmap_bit_set_p);
+}
+
+static inline void
 ptest_bitmap_bit_clear(uint32 count)
 {
     s_bitmap_t *bitmap;
@@ -120,6 +146,32 @@ ptest_bitmap_bit_clear(uint32 count)
 
     bitmap_destroy(&bitmap);
     PERFORMANCE_TEST_RESULT(bitmap_bit_clear);
+}
+
+static inline void
+ptest_bitmap_bit_clear_p(uint32 count)
+{
+    s_bitmap_t *bitmap;
+    native_wide_t min, max;
+
+    min = 0xda1;
+    max = 0xdeac;
+
+    PERFORMANCE_TEST_BEGIN(bitmap_bit_clear_p);
+
+    bitmap = bitmap_create(min, max);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        bitmap_bit_clear_p(bitmap, min);
+        bitmap_bit_clear_p(bitmap, max);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    bitmap_destroy(&bitmap);
+    PERFORMANCE_TEST_RESULT(bitmap_bit_clear_p);
 }
 
 static inline void
