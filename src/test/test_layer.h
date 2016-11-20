@@ -1400,6 +1400,13 @@ static const struct test_layer_table maximal_heap[] = {
         },
     },
     {
+        "remove_min", NULL,
+        {
+            &utest_maximal_heap_remove_max,
+            &ptest_maximal_heap_remove_max,
+        },
+    },
+    {
         "remove", NULL,
         {
             &utest_maximal_heap_remove,

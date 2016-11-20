@@ -375,23 +375,6 @@ skip_linked_list_remove_head(s_skip_linked_list_t *list)
     skip_linked_list_node_clean(list);
 }
 
-static inline s_skip_linked_list_t *
-skip_linked_list_remove_with_previous_list(s_skip_linked_list_t *tgt,
-    s_skip_linked_list_t **pre_list, uint32 lv)
-{
-    assert_exit(lv < SKIP_LIST_MAX_LVL);
-    assert_exit(!NULL_PTR_P(pre_list));
-    assert_exit(skip_linked_list_structure_legal_p(tgt));
-
-    do {
-        pre_list[lv]->layer[lv] = tgt->layer[lv];
-    } while (0 != lv--);
-
-    skip_linked_list_node_clean(tgt);
-
-    return tgt;
-}
-
 static inline void
 skip_linked_list_remove_on_level(s_skip_linked_list_t *list,
     s_skip_linked_list_t *removed, uint32 level)

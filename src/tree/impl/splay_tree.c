@@ -73,16 +73,6 @@ splay_tree_initial(s_splay_tree_t *tree, sint64 nice)
 }
 
 static inline void
-splay_tree_node_destroy(s_splay_tree_t *node)
-{
-    assert_exit(splay_tree_structure_legal_p(node));
-    assert_exit(NULL_PTR_P(node->left));
-    assert_exit(NULL_PTR_P(node->right));
-
-    memory_cache_free(node);
-}
-
-static inline void
 splay_tree_destroy_i(s_splay_tree_t *tree)
 {
     s_array_queue_t *queue;

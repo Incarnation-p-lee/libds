@@ -45,6 +45,7 @@
     #define NULL_PTR_P(ptr)        complain_null_pointer_p(ptr)
     #define NON_NULL_PTR_P(ptr)    (!complain_null_pointer_p(ptr))
     #define ALWAYS_INLINE
+    #define inline
 #else
     #define malloc_ds              dp_malloc
     #define realloc_ds             dp_realloc
@@ -56,6 +57,7 @@
     #define NULL_PTR_P(ptr)        (ptr == NULL ? true : false)
     #define NON_NULL_PTR_P(ptr)    (ptr != NULL ? true : false)
     #define ALWAYS_INLINE          __attribute__((always_inline))
+    #define inline                 inline
 #endif
 
 #define CONTAINER_OF(ptr, type, member) \

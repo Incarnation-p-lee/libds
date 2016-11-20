@@ -55,7 +55,6 @@ static inline s_skip_linked_list_t * skip_linked_list_find_key_i(s_skip_linked_l
 static inline s_skip_linked_list_t * skip_linked_list_insert_before_head(s_skip_linked_list_t *list, s_skip_linked_list_t *tgt);
 static inline s_skip_linked_list_t * skip_linked_list_insert_i(s_skip_linked_list_t **list, s_skip_linked_list_t *tgt);
 static inline s_skip_linked_list_t * skip_linked_list_remove_i(s_skip_linked_list_t **list, s_skip_linked_list_t *tgt);
-static inline s_skip_linked_list_t * skip_linked_list_remove_with_previous_list(s_skip_linked_list_t *tgt, s_skip_linked_list_t **pre_list, uint32 lv);
 static inline uint32 doubly_linked_list_length_i(s_doubly_linked_list_t *list);
 static inline uint32 single_linked_list_length_i(s_single_linked_list_t *list);
 static inline uint32 skip_linked_list_length_i(s_skip_linked_list_t *list);
