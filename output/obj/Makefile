@@ -6,12 +6,12 @@ elf:$(ELF_TARGET)
 dyn:$(DYN_TARGET)
 obj:$(OBJ_TARGET)
 
-$(ELF_TARGET):heap.o common.o linked_list.o queue.o stack.o tree.o hash.o sort.o
+$(ELF_TARGET):sort.o heap.o queue.o common.o stack.o hash.o tree.o linked_list.o
 	$(LD) $(LFLAG) -o $@ $? $(LD_LIBRARY)
 	@mv -v $@ /home/pli/workspace/libds/output/bin
-$(DYN_TARGET):heap.o common.o linked_list.o queue.o stack.o tree.o hash.o sort.o 
+$(DYN_TARGET):sort.o heap.o queue.o common.o stack.o hash.o tree.o linked_list.o 
 	$(LD) $(LFLAG) -o $@ $? $(LD_LIBRARY)
 	@mv -v $@ /home/pli/workspace/libds/output/bin
-$(OBJ_TARGET):heap.o common.o linked_list.o queue.o stack.o tree.o hash.o sort.o 
+$(OBJ_TARGET):sort.o heap.o queue.o common.o stack.o hash.o tree.o linked_list.o 
 	$(AR) $(AFLAG) -o $@ $?
 	@mv -v $@ /home/pli/workspace/libds/output/bin
