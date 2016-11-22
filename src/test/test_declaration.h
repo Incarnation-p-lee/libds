@@ -6,11 +6,7 @@
 static inline FILE * memory_maps_proc_read(void);
 static inline bool test_case_filter_match_p(const struct test_layer_table *category, char *name);
 static inline bool test_result_check_bool_p(bool expect, bool get, bool *pass);
-static inline bool test_result_check_double_p(double expect, double get, bool *pass);
-static inline bool test_result_check_float_p(float expect, float get, bool *pass);
-static inline bool test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_less_uint32_p(uint32 expect, uint32 limit, bool *pass);
-static inline bool test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_native_wide_p(native_wide_t expect, native_wide_t get, bool *pass);
 static inline bool test_result_check_not_equal_pointer_p(void *expect, void *get, bool *pass);
 static inline bool test_result_check_not_less_sint64_p(sint64 expect, sint64 get, bool *pass);
@@ -19,7 +15,6 @@ static inline bool test_result_check_pointer_p(void *expect, void *get, bool *pa
 static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *pass);
 static inline bool test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *pass);
-static inline bool test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass);
 static inline char * memory_maps_one_line_map_name(char *line);
 static inline s_doubly_end_queue_t * test_doubly_end_queue_sample(uint32 count);
 static inline s_doubly_linked_list_t * test_doubly_linked_list_sample(uint32 node_count);

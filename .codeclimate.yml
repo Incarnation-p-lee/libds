@@ -17,6 +17,4 @@ exclude_paths:
   - script/
   - tool/
   - performance/
-script:
-  - brew update && brew upgrade codeclimate
 

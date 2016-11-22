@@ -60,11 +60,10 @@ utest_bitmap_bit_get(void)
     pass = true;
     UNIT_TEST_BEGIN(bitmap_bit_get);
 
-    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(NULL, min), &pass);
-    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(NULL, min - 1), &pass);
-    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(NULL, min + 1), &pass);
-
     bitmap = bitmap_create(min, max);
+    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(NULL, min), &pass);
+    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(bitmap, min - 1), &pass);
+    RESULT_CHECK_native_wide(BITMAP_INVALID, bitmap_bit_get(bitmap, max + 1), &pass);
 
     val = min + 1;
     RESULT_CHECK_native_wide(BITMAP_CLR, bitmap_bit_get(bitmap, val), &pass);
@@ -84,6 +83,72 @@ utest_bitmap_bit_get(void)
 }
 
 static inline void
+utest_bitmap_bit_set_p(void)
+{
+    bool pass;
+    s_bitmap_t *bitmap;
+    native_wide_t min, max, val;
+
+    min = 0x32d;
+    max = 0x83d1;
+    pass = true;
+    UNIT_TEST_BEGIN(bitmap_bit_set_p);
+
+    bitmap = bitmap_create(min, max);
+    RESULT_CHECK_bool(false, bitmap_bit_set_p(NULL, min), &pass);
+    RESULT_CHECK_bool(false, bitmap_bit_set_p(bitmap, min - 1), &pass);
+    RESULT_CHECK_bool(false, bitmap_bit_set_p(bitmap, max + 1), &pass);
+
+    val = min;
+    RESULT_CHECK_bool(false, bitmap_bit_set_p(bitmap, val), &pass);
+    bitmap_bit_set(bitmap, val);
+    RESULT_CHECK_bool(true, bitmap_bit_set_p(bitmap, val), &pass);
+
+    val = max;
+    RESULT_CHECK_bool(false, bitmap_bit_set_p(bitmap, val), &pass);
+    bitmap_bit_set(bitmap, val);
+    RESULT_CHECK_bool(true, bitmap_bit_set_p(bitmap, val), &pass);
+
+    bitmap_destroy(&bitmap);
+    UNIT_TEST_RESULT(bitmap_bit_set_p, pass);
+}
+
+static inline void
+utest_bitmap_bit_clear_p(void)
+{
+    bool pass;
+    s_bitmap_t *bitmap;
+    native_wide_t min, max, val;
+
+    min = 0x32d;
+    max = 0x83d1;
+    pass = true;
+    UNIT_TEST_BEGIN(bitmap_bit_clear_p);
+
+    bitmap = bitmap_create(min, max);
+    RESULT_CHECK_bool(false, bitmap_bit_clear_p(NULL, min), &pass);
+    RESULT_CHECK_bool(false, bitmap_bit_clear_p(bitmap, min - 1), &pass);
+    RESULT_CHECK_bool(false, bitmap_bit_clear_p(bitmap, max + 1), &pass);
+
+    val = min;
+    RESULT_CHECK_bool(true, bitmap_bit_clear_p(bitmap, val), &pass);
+    bitmap_bit_set(bitmap, val);
+    RESULT_CHECK_bool(false, bitmap_bit_clear_p(bitmap, val), &pass);
+    bitmap_bit_clear(bitmap, val);
+    RESULT_CHECK_bool(true, bitmap_bit_clear_p(bitmap, val), &pass);
+
+    val = max;
+    RESULT_CHECK_bool(true, bitmap_bit_clear_p(bitmap, val), &pass);
+    bitmap_bit_set(bitmap, val);
+    RESULT_CHECK_bool(false, bitmap_bit_clear_p(bitmap, val), &pass);
+    bitmap_bit_clear(bitmap, val);
+    RESULT_CHECK_bool(true, bitmap_bit_clear_p(bitmap, val), &pass);
+
+    bitmap_destroy(&bitmap);
+    UNIT_TEST_RESULT(bitmap_bit_clear_p, pass);
+}
+
+static inline void
 utest_bitmap_bit_set(void)
 {
     bool pass;
@@ -95,10 +160,9 @@ utest_bitmap_bit_set(void)
     pass = true;
     UNIT_TEST_BEGIN(bitmap_bit_set);
 
-    bitmap_bit_set(NULL, min);
-    bitmap_bit_set(NULL, min - 1);
-
     bitmap = bitmap_create(min, max);
+    bitmap_bit_set(NULL, min);
+    bitmap_bit_set(bitmap, min - 1);
 
     val = min;
     bitmap_bit_set(bitmap, val);
@@ -128,10 +192,10 @@ utest_bitmap_bit_clear(void)
     pass = true;
     UNIT_TEST_BEGIN(bitmap_bit_clear);
 
-    bitmap_bit_set(NULL, min);
-    bitmap_bit_set(NULL, min - 1);
-
     bitmap = bitmap_create(min, max);
+    bitmap_bit_clear(NULL, min);
+    bitmap_bit_clear(bitmap, min - 1);
+    bitmap_bit_clear(bitmap, max + 1);
 
     val = min;
     bitmap_bit_clear(bitmap, val);

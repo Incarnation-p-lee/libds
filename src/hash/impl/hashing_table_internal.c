@@ -47,23 +47,6 @@ hashing_table_initial(s_hashing_table_t *table)
 }
 
 static inline void
-hashing_table_hash_function_set(s_hashing_table_t *table, void *func)
-{
-    assert_exit(!NULL_PTR_P(func));
-    assert_exit(!NULL_PTR_P(table));
-
-    table->func = func;
-}
-
-static inline void **
-hashing_table_space(s_hashing_table_t *table)
-{
-    assert_exit(hashing_table_structure_legal_p(table));
-
-    return table->space;
-}
-
-static inline void
 hashing_table_destroy(s_hashing_table_t **table)
 {
     assert_exit(!NULL_PTR_P(table));

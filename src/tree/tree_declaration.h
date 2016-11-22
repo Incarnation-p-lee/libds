@@ -53,10 +53,8 @@ static inline bool avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *
 static inline bool avl_tree_height_balanced_p(struct avl_tree *tree);
 static inline bool avl_tree_height_opt_validity_p(struct avl_tree *tree, sint32 expected);
 static inline bool avl_tree_height_sync_with_calculated_p(struct avl_tree *tree, sint32 left, sint32 right);
-static inline bool avl_tree_left_optimize_validity_p(struct avl_tree *node, void *expected);
 static inline bool avl_tree_node_balanced_p(s_avl_tree_t *node);
 static inline bool avl_tree_ordered_p(struct avl_tree *tree);
-static inline bool avl_tree_right_optimize_validity_p(struct avl_tree *node, void *expected);
 static inline bool avl_tree_single_rotate_left_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_single_rotate_right_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_structure_legal_p(s_avl_tree_t *tree);
@@ -150,7 +148,6 @@ static inline void splay_tree_doubly_child_strip_from_min(s_splay_tree_t **splay
 static inline void splay_tree_initial_i(s_splay_tree_t *tree, sint64 nice);
 static inline void splay_tree_iterate_i(s_splay_tree_t *tree, void (*handler)(void *));
 static inline void splay_tree_lt_doubly_child_strip(s_splay_tree_t **splay_node);
-static inline void splay_tree_node_destroy(s_splay_tree_t *node);
 static inline void splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted, sint32 path_direction);
 static inline void splay_tree_swap_child(s_splay_tree_t *a, s_splay_tree_t *b);
 static inline void trie_tree_node_destroy(s_trie_tree_t *trie);

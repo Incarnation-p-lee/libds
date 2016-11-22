@@ -121,22 +121,23 @@ test_result_check_sint32_p(sint32 expect, sint32 get, bool *pass)
     return tmp;
 }
 
-static inline bool
-test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass)
-{
-    bool tmp;
-
-    tmp = (expect == get);
-
-    if (!tmp) {
-        dp_fprintf(stdout, "[32mexpected[0m: %#"U64_MDF_X"\n", expect);
-        dp_fprintf(stdout, "[31mcomputed[0m: %#"U64_MDF_X"\n", get);
-    }
-
-    *pass = *pass && tmp;
-
-    return tmp;
-}
+// Not enabled yet.
+// static inline bool
+// test_result_check_uint64_p(uint64 expect, uint64 get, bool *pass)
+// {
+//     bool tmp;
+// 
+//     tmp = (expect == get);
+// 
+//     if (!tmp) {
+//         dp_fprintf(stdout, "[32mexpected[0m: %#"U64_MDF_X"\n", expect);
+//         dp_fprintf(stdout, "[31mcomputed[0m: %#"U64_MDF_X"\n", get);
+//     }
+// 
+//     *pass = *pass && tmp;
+// 
+//     return tmp;
+// }
 
 static inline bool
 test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass)
@@ -173,63 +174,67 @@ test_result_check_not_less_sint64_p(sint64 expect, sint64 get, bool *pass)
     return tmp;
 }
 
-static inline bool
-test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass)
-{
-    bool tmp;
+// Not enabled yet.
+// static inline bool
+// test_result_check_less_sint64_p(sint64 expect, sint64 get, bool *pass)
+// {
+//     bool tmp;
+// 
+//     tmp = (expect < get);
+// 
+//     if (!tmp) {
+//         dp_fprintf(stdout, "[expect < computed]\n");
+//         dp_fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
+//         dp_fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
+//     }
+// 
+//     *pass = *pass && tmp;
+// 
+//     return tmp;
+// }
 
-    tmp = (expect < get);
+// Not enabled yet.
+// static inline bool
+// test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass)
+// {
+//     bool tmp;
+// 
+//     tmp = (expect > get);
+// 
+//     if (!tmp) {
+//         dp_fprintf(stdout, "[expect > computed]\n");
+//         dp_fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
+//         dp_fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
+//     }
+// 
+//     *pass = *pass && tmp;
+// 
+//     return tmp;
+// }
 
-    if (!tmp) {
-        dp_fprintf(stdout, "[expect < computed]\n");
-        dp_fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
-        dp_fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
-    }
+// Not enabled yet
+// static inline bool
+// test_result_check_float_p(float expect, float get, bool *pass)
+// {
+//     bool tmp;
+// 
+//     tmp = !(expect > get || expect < get);
+//     *pass = *pass && tmp;
+// 
+//     return tmp;
+// }
 
-    *pass = *pass && tmp;
-
-    return tmp;
-}
-
-static inline bool
-test_result_check_more_sint64_p(sint64 expect, sint64 get, bool *pass)
-{
-    bool tmp;
-
-    tmp = (expect > get);
-
-    if (!tmp) {
-        dp_fprintf(stdout, "[expect > computed]\n");
-        dp_fprintf(stdout, "[32mexpected[0m: %"S64_MDF_D"\n", expect);
-        dp_fprintf(stdout, "[31mcomputed[0m: %"S64_MDF_D"\n", get);
-    }
-
-    *pass = *pass && tmp;
-
-    return tmp;
-}
-
-static inline bool
-test_result_check_float_p(float expect, float get, bool *pass)
-{
-    bool tmp;
-
-    tmp = !(expect > get || expect < get);
-    *pass = *pass && tmp;
-
-    return tmp;
-}
-
-static inline bool
-test_result_check_double_p(double expect, double get, bool *pass)
-{
-    bool tmp;
-
-    tmp = !(expect > get || expect < get);
-    *pass = *pass && tmp;
-
-    return tmp;
-}
+// Not enabled yet
+// static inline bool
+// test_result_check_double_p(double expect, double get, bool *pass)
+// {
+//     bool tmp;
+// 
+//     tmp = !(expect > get || expect < get);
+//     *pass = *pass && tmp;
+// 
+//     return tmp;
+// }
 
 static inline bool
 test_result_check_native_wide_p(native_wide_t expect, native_wide_t get, bool *pass)

@@ -503,6 +503,8 @@ extern void trie_tree_sequence_remove(s_trie_tree_t *trie, uint32 *sequence, uin
 extern void trie_tree_string_insert(s_trie_tree_t *trie, char *string);
 extern void trie_tree_string_remove(s_trie_tree_t *trie, char *string);
 
+extern bool bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val);
+extern bool bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val);
 extern bool bitmap_structure_illegal_p(s_bitmap_t *bitmap);
 extern bool bitmap_structure_legal_p(s_bitmap_t *bitmap);
 extern native_wide_t bitmap_bit_get(s_bitmap_t *bitmap, native_wide_t val);

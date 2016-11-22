@@ -177,40 +177,6 @@ avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *node)
     }
 }
 
-static inline bool
-avl_tree_left_optimize_validity_p(struct avl_tree *node,
-    void *expected)
-{
-    void *computed;
-
-    assert_exit(avl_tree_structure_legal_p(node));
-
-    computed = node->left;
-
-    if (computed == expected) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-static inline bool
-avl_tree_right_optimize_validity_p(struct avl_tree *node,
-    void *expected)
-{
-    void *computed;
-
-    assert_exit(avl_tree_structure_legal_p(node));
-
-    computed = node->right;
-
-    if (computed == expected) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 static inline sint32
 avl_tree_height_internal(struct avl_tree *tree)
 {

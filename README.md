@@ -1,13 +1,21 @@
 [![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
-[![Issue Count](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/issue_count.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
+
+[![Codeclimate Test Coverage](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/coverage.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds/coverage)
+
+[![Codeclimate Issue Count](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/issue_count.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
+
+[![Code Climate GPA](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/gpa.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
+
 [![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
+
 [![Coverage Status](https://coveralls.io/repos/github/Incarnation-p-lee/libds/badge.svg)](https://coveralls.io/github/Incarnation-p-lee/libds)
-[![Code Climate](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/gpa.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
+
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/) 
 
 [![star this repo](http://githubbadges.com/star.svg?user=Incarnation-p-lee&repo=libds&style=default)](https://github.com/Incarnation-p-lee/libds)
+
 [![fork this repo](http://githubbadges.com/fork.svg?user=Incarnation-p-lee&repo=libds&style=default)](https://github.com/Incarnation-p-lee/libds/fork)
 
 
