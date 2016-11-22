@@ -5,6 +5,7 @@
 
 bool array_queue_empty_p(s_array_queue_t *queue);
 bool array_queue_full_p(s_array_queue_t *queue);
+bool array_queue_structure_illegal_p(s_array_queue_t *queue);
 bool array_queue_structure_legal_p(s_array_queue_t *queue);
 bool doubly_end_queue_empty_p(s_doubly_end_queue_t *queue);
 bool doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue);
@@ -23,6 +24,7 @@ static inline bool array_queue_resize_data_consistant_p(s_array_queue_t *queue);
 static inline bool array_queue_resize_restore_data_p(s_array_queue_t *queue, uint32 size, void **addr);
 static inline bool array_queue_resize_rotated_p(s_array_queue_t *queue);
 static inline bool array_queue_space_structure_legal_p(s_array_queue_space_t *space);
+static inline bool array_queue_structure_illegal_ip(s_array_queue_t *queue);
 static inline bool array_queue_structure_legal_ip(s_array_queue_t *queue);
 static inline bool doubly_end_queue_empty_ip(s_doubly_end_queue_t *queue);
 static inline bool doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list);

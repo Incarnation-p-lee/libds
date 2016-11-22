@@ -120,6 +120,9 @@ enum ITER_ORDER {
 
 struct array_iterator {
     uint32                         index;
+    uint32                         limit;
+    /* indicate if touched any node of array */
+    bool                           accessed;
     f_array_iterator_initial_t     fp_index_initial;
     f_array_iterator_next_exist_t  fp_next_exist_p;
     f_array_iterator_next_obtain_t fp_next_obtain;
@@ -373,6 +376,7 @@ extern void skip_linked_list_next_set(s_skip_linked_list_t *list, s_skip_linked_
 
 extern bool array_queue_empty_p(s_array_queue_t *queue);
 extern bool array_queue_full_p(s_array_queue_t *queue);
+extern bool array_queue_structure_illegal_p(s_array_queue_t *queue);
 extern bool array_queue_structure_legal_p(s_array_queue_t *queue);
 extern bool doubly_end_queue_empty_p(s_doubly_end_queue_t *queue);
 extern bool doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue);
