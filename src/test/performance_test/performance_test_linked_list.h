@@ -286,8 +286,7 @@ ptest_##name##_linked_list_merge(uint32 count)         \
     while (count--) {                                  \
         head = TEST_LINKED_LIST_sample(0xd);           \
         list = TEST_LINKED_LIST_sample(0xf);           \
-        LINKED_LIST_merge(list, list);                 \
-        LINKED_LIST_destroy(&head);                    \
+        LINKED_LIST_merge(list, head);                 \
         LINKED_LIST_destroy(&list);                    \
     }                                                  \
                                                        \

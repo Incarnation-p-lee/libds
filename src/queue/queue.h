@@ -25,7 +25,7 @@ extern bool doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list);
     #define ARRAY_QUEUE_ILLEGAL_P(queue) array_queue_structure_illegal_ip(queue)
 #else
     #define ARRAY_QUEUE_LEGAL_P(queue)   (NON_NULL_PTR_P(queue))
-    #define ARRAY_QUEUE_ILLEGAL_P(queue) (NON_NULL_PTR_P(queue))
+    #define ARRAY_QUEUE_ILLEGAL_P(queue) (NULL_PTR_P(queue))
 #endif
 
 #endif
