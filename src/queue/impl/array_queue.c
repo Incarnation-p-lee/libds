@@ -499,3 +499,55 @@ array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *))
     }
 }
 
+static inline void
+array_queue_merge_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)
+{
+    void *element;
+    s_array_iterator_t *iterator;
+
+
+    iterator = &queue_src->iterator;
+    iterator->fp_index_initial(queue_src);
+
+    while (iterator->fp_next_exist_p(queue_src)) {
+        element = iterator->fp_next_obtain(queue_src);
+        array_queue_enter(queue_dest, element);
+    }
+
+}
+
+
+static inline void
+array_queue_copy_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)
+{
+    assert_exit(array_queue_structure_legal_ip(queue_src));
+    assert_exit(array_queue_structure_legal_ip(queue_dest));
+
+    array_queue_cleanup(queue_dest);
+    array_queue_merge_i(queue_dest, queue_src);
+}
+
+void
+array_queue_merge(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)
+{
+    if (ARRAY_QUEUE_ILLEGAL_P(queue_dest)) {
+        return;
+    } else if (ARRAY_QUEUE_ILLEGAL_P(queue_src)) {
+        return;
+    } else {
+        array_queue_merge_i(queue_dest, queue_src);
+    }
+}
+
+void
+array_queue_copy(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)
+{
+    if (ARRAY_QUEUE_ILLEGAL_P(queue_dest)) {
+        return;
+    } else if (ARRAY_QUEUE_ILLEGAL_P(queue_src)) {
+        return;
+    } else {
+        array_queue_copy_i(queue_dest, queue_src);
+    }
+}
+
