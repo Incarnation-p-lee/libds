@@ -558,14 +558,14 @@ static const struct test_layer_table array_queue[] = {
         "copy", NULL,
         {
             &utest_array_queue_copy,
-            NULL,
+            &ptest_array_queue_copy,
         },
     },
     {
         "merge", NULL,
         {
             &utest_array_queue_merge,
-            NULL,
+            &ptest_array_queue_merge,
         },
     },
     {NULL, NULL, {NULL, NULL},},
