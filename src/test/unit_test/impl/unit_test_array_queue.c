@@ -13,6 +13,8 @@
 #define QUEUE_leave            array_queue_leave
 #define QUEUE_cleanup          array_queue_cleanup
 #define QUEUE_iterate          array_queue_iterate
+#define QUEUE_copy             array_queue_copy
+#define QUEUE_merge            array_queue_merge
 
 #include "../unit_test_queue.h"
 
@@ -30,6 +32,8 @@ UT_QUEUE_rear(array)
 UT_QUEUE_cleanup(array)
 UT_QUEUE_iterate(array)
 UT_QUEUE_iterator(array)
+UT_QUEUE_copy(array)
+UT_QUEUE_merge(array)
 
 #undef QUEUE
 
@@ -46,4 +50,6 @@ UT_QUEUE_iterator(array)
 #undef QUEUE_rear
 #undef QUEUE_cleanup
 #undef QUEUE_iterate
+#undef QUEUE_copy
+#undef QUEUE_merge
 

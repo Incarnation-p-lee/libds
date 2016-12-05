@@ -38,7 +38,6 @@ open_addressing_hash_create_i(uint32 size)
     return hash;
 }
 
-
 s_open_addressing_hash_t *
 open_addressing_hash_create(uint32 size)
 {
