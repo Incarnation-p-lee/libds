@@ -13,6 +13,8 @@
 #define QUEUE_empty_p          array_queue_empty_p
 #define QUEUE_cleanup          array_queue_cleanup
 #define QUEUE_iterate          array_queue_iterate
+#define QUEUE_copy             array_queue_copy
+#define QUEUE_merge            array_queue_merge
 
 #include "../performance_test_queue.h"
 
@@ -29,6 +31,8 @@ PT_QUEUE_leave(array)
 PT_QUEUE_empty_p(array)
 PT_QUEUE_cleanup(array)
 PT_QUEUE_iterate(array)
+PT_QUEUE_copy(array)
+PT_QUEUE_merge(array)
 
 #undef QUEUE
 
@@ -45,4 +49,6 @@ PT_QUEUE_iterate(array)
 #undef QUEUE_empty_p
 #undef QUEUE_cleanup
 #undef QUEUE_iterate
+#undef QUEUE_copy
+#undef QUEUE_merge
 

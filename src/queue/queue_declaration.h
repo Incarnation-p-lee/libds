@@ -5,6 +5,7 @@
 
 bool array_queue_empty_p(s_array_queue_t *queue);
 bool array_queue_full_p(s_array_queue_t *queue);
+bool array_queue_structure_illegal_p(s_array_queue_t *queue);
 bool array_queue_structure_legal_p(s_array_queue_t *queue);
 bool doubly_end_queue_empty_p(s_doubly_end_queue_t *queue);
 bool doubly_end_queue_structure_legal_p(s_doubly_end_queue_t *queue);
@@ -23,6 +24,7 @@ static inline bool array_queue_resize_data_consistant_p(s_array_queue_t *queue);
 static inline bool array_queue_resize_restore_data_p(s_array_queue_t *queue, uint32 size, void **addr);
 static inline bool array_queue_resize_rotated_p(s_array_queue_t *queue);
 static inline bool array_queue_space_structure_legal_p(s_array_queue_space_t *space);
+static inline bool array_queue_structure_illegal_ip(s_array_queue_t *queue);
 static inline bool array_queue_structure_legal_ip(s_array_queue_t *queue);
 static inline bool doubly_end_queue_empty_ip(s_doubly_end_queue_t *queue);
 static inline bool doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list);
@@ -33,7 +35,9 @@ static inline s_doubly_end_queue_list_t * doubly_end_queue_list_previous(s_doubl
 static inline s_doubly_end_queue_list_t * doubly_end_queue_list_reflect(s_doubly_linked_list_t *list);
 static inline uint32 stacked_queue_rest_i(s_stacked_queue_t *queue);
 static inline void * array_queue_iterator_next_obtain(void *queue);
+static inline void array_queue_copy_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
 static inline void array_queue_iterator_index_initial(void *queue);
+static inline void array_queue_merge_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
 static inline void array_queue_resize_expand(s_array_queue_t *queue, uint32 size);
 static inline void array_queue_resize_i(s_array_queue_t *queue, uint32 size);
 static inline void array_queue_resize_narrow(s_array_queue_t *queue, uint32 size);
@@ -58,9 +62,11 @@ void * stacked_queue_front(s_stacked_queue_t *queue);
 void * stacked_queue_leave(s_stacked_queue_t *queue);
 void * stacked_queue_rear(s_stacked_queue_t *queue);
 void array_queue_cleanup(s_array_queue_t *queue);
+void array_queue_copy(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
 void array_queue_destroy(s_array_queue_t **queue);
 void array_queue_enter(s_array_queue_t *queue, void *member);
 void array_queue_iterate(s_array_queue_t *queue, void (*handler)(void *));
+void array_queue_merge(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
 void array_queue_resize(s_array_queue_t *queue, uint32 size);
 void doubly_end_queue_cleanup(s_doubly_end_queue_t *queue);
 void doubly_end_queue_destroy(s_doubly_end_queue_t **queue);

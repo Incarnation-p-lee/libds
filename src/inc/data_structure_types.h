@@ -91,6 +91,9 @@ typedef void * (*f_array_iterator_next_obtain_t)(void *);
 
 struct array_iterator {
     uint32                         index;
+    uint32                         limit;
+    /* indicate if touched any node of array */
+    bool                           accessed;
     f_array_iterator_initial_t     fp_index_initial;
     f_array_iterator_next_exist_t  fp_next_exist_p;
     f_array_iterator_next_obtain_t fp_next_obtain;

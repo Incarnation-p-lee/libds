@@ -44,7 +44,7 @@ array_iterator_initial(s_array_iterator_t *iterator,
         return;
     }
 
-    // pr_log_err will exit program
+    /* pr_log_err will exit program */
     if (NULL_PTR_P(fp_index_initial)) {
         pr_log_err("Function pointer 'fp_index_initial' is NULL.");
     }
@@ -57,7 +57,6 @@ array_iterator_initial(s_array_iterator_t *iterator,
         pr_log_err("Function pointer 'fp_next_obtain' is NULL.");
     }
 
-    iterator->index = 0;
     iterator->fp_index_initial = fp_index_initial;
     iterator->fp_next_exist_p = fp_next_exist_p;
     iterator->fp_next_obtain = fp_next_obtain;

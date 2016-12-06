@@ -398,5 +398,103 @@ utest_##name##_queue_iterator(void)                                    \
     UNIT_TEST_RESULT(name##_queue_iterator, pass);                     \
 }
 
+#define UT_QUEUE_copy(name)                                    \
+static void                                                    \
+utest_##name##_queue_copy(void)                                \
+{                                                              \
+    uint32 i;                                                  \
+    bool pass;                                                 \
+    QUEUE *queue, *queue_copy;                                 \
+    s_array_iterator_t *iterator, *iterator_copy;              \
+                                                               \
+    i = 0;                                                     \
+    pass = true;                                               \
+    UNIT_TEST_BEGIN(name##_queue_copy);                        \
+                                                               \
+    queue = QUEUE_create();                                    \
+    QUEUE_copy(NULL, NULL);                                    \
+    QUEUE_copy(NULL, queue);                                   \
+    QUEUE_copy(queue, NULL);                                   \
+                                                               \
+    while (QUEUE_full_p(queue)) {                              \
+        QUEUE_enter(queue, (void *)(ptr_t)i);                  \
+        i++;                                                   \
+    }                                                          \
+                                                               \
+    queue_copy = QUEUE_create();                               \
+    QUEUE_enter(queue_copy, queue_copy);                       \
+    QUEUE_copy(queue_copy, queue);                             \
+                                                               \
+    iterator = &queue->iterator;                               \
+    iterator->fp_index_initial(queue);                         \
+                                                               \
+    iterator_copy = &queue_copy->iterator;                     \
+    iterator_copy->fp_index_initial(queue_copy);               \
+                                                               \
+    while (iterator->fp_next_exist_p(queue)) {                 \
+        RESULT_CHECK_pointer(                                  \
+            iterator->fp_next_obtain(queue),                   \
+            iterator_copy->fp_next_obtain(queue_copy), &pass); \
+    }                                                          \
+                                                               \
+    RESULT_CHECK_bool(                                         \
+        false,                                                 \
+        iterator_copy->fp_next_exist_p(queue_copy), &pass);    \
+                                                               \
+    QUEUE_destroy(&queue);                                     \
+    QUEUE_destroy(&queue_copy);                                \
+    UNIT_TEST_RESULT(name##_queue_copy, pass);                 \
+}
+
+#define UT_QUEUE_merge(name)                                     \
+static void                                                      \
+utest_##name##_queue_merge(void)                                 \
+{                                                                \
+    uint32 i;                                                    \
+    bool pass;                                                   \
+    QUEUE *queue, *queue_merge;                                  \
+    s_array_iterator_t *iterator, *iterator_merge;               \
+                                                                 \
+    i = 0;                                                       \
+    pass = true;                                                 \
+    UNIT_TEST_BEGIN(name##_queue_merge);                         \
+                                                                 \
+    queue = QUEUE_create();                                      \
+    QUEUE_merge(NULL, NULL);                                     \
+    QUEUE_merge(NULL, queue);                                    \
+    QUEUE_merge(queue, NULL);                                    \
+                                                                 \
+    while (QUEUE_full_p(queue)) {                                \
+        QUEUE_enter(queue, (void *)(ptr_t)i);                    \
+        i++;                                                     \
+    }                                                            \
+                                                                 \
+    queue_merge = QUEUE_create();                                \
+    QUEUE_enter(queue_merge, (void *)0xdead);                    \
+                                                                 \
+    QUEUE_merge(queue_merge, queue);                             \
+                                                                 \
+    iterator = &queue->iterator;                                 \
+    iterator->fp_index_initial(queue);                           \
+                                                                 \
+    iterator_merge = &queue_merge->iterator;                     \
+    iterator_merge->fp_index_initial(queue_merge);               \
+    iterator_merge->fp_next_obtain(queue_merge);                 \
+                                                                 \
+    while (iterator->fp_next_exist_p(queue)) {                   \
+        RESULT_CHECK_pointer(                                    \
+            iterator->fp_next_obtain(queue),                     \
+            iterator_merge->fp_next_obtain(queue_merge), &pass); \
+    }                                                            \
+                                                                 \
+    RESULT_CHECK_bool(                                           \
+        false,                                                   \
+        iterator_merge->fp_next_exist_p(queue_merge), &pass);    \
+                                                                 \
+    QUEUE_destroy(&queue);                                       \
+    QUEUE_destroy(&queue_merge);                                 \
+    UNIT_TEST_RESULT(name##_queue_merge, pass);                  \
+}
+
 #endif
 

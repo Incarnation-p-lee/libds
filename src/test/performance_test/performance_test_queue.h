@@ -269,5 +269,66 @@ ptest_##name##_queue_iterate(uint32 count)            \
     PERFORMANCE_TEST_RESULT(name##_queue_iterate);    \
 }
 
+#define PT_QUEUE_copy(name)                     \
+static void                                     \
+ptest_##name##_queue_copy(uint32 count)         \
+{                                               \
+    ptr_t i;                                    \
+    QUEUE *queue;                               \
+    QUEUE *queue_copy;                          \
+                                                \
+    PERFORMANCE_TEST_BEGIN(name##_queue_copy);  \
+    queue = QUEUE_create();                     \
+    queue_copy = QUEUE_create();                \
+                                                \
+    i = 0;                                      \
+    while (i < 0x132) {                         \
+        QUEUE_enter(queue, (void *)i++);        \
+    }                                           \
+                                                \
+    PERFORMANCE_TEST_CHECKPOINT;                \
+                                                \
+    while (count--) {                           \
+        QUEUE_copy(queue_copy, queue);          \
+    }                                           \
+                                                \
+    PERFORMANCE_TEST_ENDPOINT;                  \
+                                                \
+    QUEUE_destroy(&queue);                      \
+    QUEUE_destroy(&queue_copy);                 \
+    PERFORMANCE_TEST_RESULT(name##_queue_copy); \
+}
+
+#define PT_QUEUE_merge(name)                     \
+static void                                      \
+ptest_##name##_queue_merge(uint32 count)         \
+{                                                \
+    ptr_t i;                                     \
+    QUEUE *queue;                                \
+    QUEUE *queue_merge;                          \
+                                                 \
+    PERFORMANCE_TEST_BEGIN(name##_queue_merge);  \
+    queue = QUEUE_create();                      \
+    queue_merge = QUEUE_create();                \
+                                                 \
+    i = 0;                                       \
+    while (i < 0x132) {                          \
+        QUEUE_enter(queue, (void *)i++);         \
+    }                                            \
+                                                 \
+    PERFORMANCE_TEST_CHECKPOINT;                 \
+                                                 \
+    while (count--) {                            \
+        QUEUE_merge(queue_merge, queue);         \
+        QUEUE_cleanup(queue_merge);              \
+    }                                            \
+                                                 \
+    PERFORMANCE_TEST_ENDPOINT;                   \
+                                                 \
+    QUEUE_destroy(&queue);                       \
+    QUEUE_destroy(&queue_merge);                 \
+    PERFORMANCE_TEST_RESULT(name##_queue_merge); \
+}
+
 #endif
 

@@ -81,6 +81,8 @@ static struct performance_test_reference performance_reference[] = {
     {"array_queue_empty_p",                              0x0u, 0x0u},
     {"array_queue_cleanup",                              0x0u, 0x0u},
     {"array_queue_iterate",                              0x0u, 0x0u},
+    {"array_queue_copy",                                 0x0u, 0x0u},
+    {"array_queue_merge",                                0x0u, 0x0u},
 
     {"stacked_queue_create",                             0x0u, 0x0u},
     {"stacked_queue_destroy",                            0x0u, 0x0u},
