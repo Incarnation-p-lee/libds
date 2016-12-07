@@ -189,7 +189,7 @@ bitmap_bit_get_i(s_bitmap_t *bitmap, native_wide_t val)
 native_wide_t
 bitmap_bit_get(s_bitmap_t *bitmap, native_wide_t val)
 {
-    if (bitmap_structure_illegal_ip(bitmap)) {
+    if (BITMAP_ILLEGAL_P(bitmap)) {
         return BITMAP_INVALID;
     } else if (val > bitmap->max) {
         return BITMAP_INVALID;
@@ -203,7 +203,7 @@ bitmap_bit_get(s_bitmap_t *bitmap, native_wide_t val)
 void
 bitmap_bit_clear(s_bitmap_t *bitmap, native_wide_t val)
 {
-    if (bitmap_structure_illegal_ip(bitmap)) {
+    if (BITMAP_ILLEGAL_P(bitmap)) {
         return;
     } else if (val > bitmap->max) {
         return;
@@ -217,7 +217,7 @@ bitmap_bit_clear(s_bitmap_t *bitmap, native_wide_t val)
 void
 bitmap_bit_set(s_bitmap_t *bitmap, native_wide_t val)
 {
-    if (bitmap_structure_illegal_ip(bitmap)) {
+    if (BITMAP_ILLEGAL_P(bitmap)) {
         return;
     } else if (val < bitmap->min) {
         return;
@@ -229,7 +229,7 @@ bitmap_bit_set(s_bitmap_t *bitmap, native_wide_t val)
 bool
 bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val)
 {
-    if (bitmap_structure_illegal_ip(bitmap)) {
+    if (BITMAP_ILLEGAL_P(bitmap)) {
         return false;
     } else if (val > bitmap->max) {
         return false;
@@ -243,7 +243,7 @@ bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val)
 bool
 bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val)
 {
-    if (bitmap_structure_illegal_ip(bitmap)) {
+    if (BITMAP_ILLEGAL_P(bitmap)) {
         return false;
     } else if (val > bitmap->max) {
         return false;
@@ -259,7 +259,7 @@ bitmap_map_cleanup(s_bitmap_t *bitmap)
 {
     uint32 bytes_count;
 
-    if (bitmap_structure_legal_ip(bitmap)) {
+    if (BITMAP_LEGAL_P(bitmap)) {
         bytes_count = bitmap_native_bytes_count(bitmap);
         dp_memset(bitmap->map, 0, bytes_count);
     }
