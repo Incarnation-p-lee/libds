@@ -65,6 +65,7 @@ static inline bool binary_search_tree_doubly_child_p(s_binary_search_tree_t *nod
 static inline bool binary_search_tree_ordered_p(struct binary_search_tree *tree);
 static inline bool binary_search_tree_structure_legal_p(s_binary_search_tree_t *tree);
 static inline bool splay_tree_contains_ip(s_splay_tree_t *tree, s_splay_tree_t *node);
+static inline bool splay_tree_contains_repeated_ip(s_splay_tree_t *tree, s_splay_tree_t *node);
 static inline bool splay_tree_doubly_child_p(s_splay_tree_t *node);
 static inline bool splay_tree_ordered_p(struct splay_tree *tree);
 static inline bool splay_tree_structure_legal_p(s_splay_tree_t *tree);
