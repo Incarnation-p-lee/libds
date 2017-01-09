@@ -506,15 +506,18 @@ splay_tree_height_i(s_splay_tree_t *tree)
         return -1;
     } else {
         height = -1;
+
         queue_master = array_queue_create();
         queue_slave = array_queue_create();
-
         array_queue_enter(queue_master, tree);
+
         while (!array_queue_empty_p(queue_master)) {
             splay_node = array_queue_leave(queue_master);
+
             if (splay_node->left) {
                 array_queue_enter(queue_slave, splay_node->left);
             }
+
             if (splay_node->right) {
                 array_queue_enter(queue_slave, splay_node->right);
             }
@@ -561,6 +564,7 @@ splay_tree_contains_repeated_ip(s_splay_tree_t *tree, s_splay_tree_t *node)
 
     while (!array_queue_empty_p(repeated_queue)) {
         node_i = array_queue_leave(repeated_queue);
+
         if (node == node_i) {
             array_queue_destroy(&repeated_queue);
             return true;
@@ -627,7 +631,7 @@ splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted,
     assert_exit(splay != inserted);
     assert_exit(splay->nice == inserted->nice);
 
-    if (path_direction > 0) { // If right is heavy, inserted to left.
+    if (path_direction > 0) { /* If right is heavy, inserted to left. */
         inserted->left = splay;
         inserted->right = splay->right;
         splay->right = NULL;
@@ -800,7 +804,7 @@ splay_tree_doubly_child_strip_from_min(s_splay_tree_t **splay_node)
 
     splay = *splay_node;
 
-    if (!splay->right->left) { // short cut here
+    if (!splay->right->left) { /* short cut here */
         *splay_node = splay->right;
         splay->right->left = splay->left;
         splay->left = splay->right = NULL;
@@ -829,7 +833,7 @@ splay_tree_doubly_child_strip_from_max(s_splay_tree_t **splay_node)
 
     splay = *splay_node;
 
-    if (!splay->left->right) { // short cut here
+    if (!splay->left->right) { /* short cut here */
         *splay_node = splay->left;
         splay->left->right = splay->right;
         splay->left = splay->right = NULL;

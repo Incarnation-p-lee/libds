@@ -266,6 +266,7 @@ trie_tree_sequence_remove_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 
     while (seq < sequence + len) {
         trie_node = trie_tree_sub_queue_find(trie_node, *seq);
+
         if (trie_node == NULL) {
             array_stack_destroy(&stack);
             return;
@@ -277,6 +278,7 @@ trie_tree_sequence_remove_i(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
 
     while (!array_stack_empty_p(stack)) {
         trie_node = array_stack_pop(stack);
+
         if (trie_tree_sub_queue_empty_p(trie_node)) {
             trie_node->is_deleted = true;
         }
@@ -338,9 +340,11 @@ trie_tree_sequence_matched_ip(s_trie_tree_t *trie, uint32 *sequence, uint32 len)
     i = 0;
     while (i < len) {
         trie_node = trie_tree_sub_queue_find(trie_node, sequence[i]);
+
         if (trie_node == NULL) {
             return false;
         }
+
         i++;
     }
 
