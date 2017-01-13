@@ -1,4 +1,4 @@
-#define HASH                       separate_chain_hash
+#define HASH                       s_separate_chain_hash_t
 #define HASH_size                  separate_chain_hash_size
 #define LOAD_FACTOR                SPT_CHN_HASH_LOAD_FTR
 #define HASH_load_factor_peak      separate_chain_hash_load_factor_peak

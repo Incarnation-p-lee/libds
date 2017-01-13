@@ -5,7 +5,7 @@
 static inline void                               \
 ptest_##name##_hash_create(uint32 count)         \
 {                                                \
-    struct HASH *hash;                           \
+    HASH *hash;                                  \
                                                  \
     PERFORMANCE_TEST_CHECKPOINT;                 \
                                                  \
@@ -23,7 +23,7 @@ ptest_##name##_hash_create(uint32 count)         \
 static inline void                                \
 ptest_##name##_hash_destroy(uint32 count)         \
 {                                                 \
-    struct HASH *hash;                            \
+    HASH *hash;                                   \
                                                   \
     PERFORMANCE_TEST_CHECKPOINT;                  \
                                                   \
@@ -41,7 +41,7 @@ ptest_##name##_hash_destroy(uint32 count)         \
 static inline void                                    \
 ptest_##name##_hash_load_factor(uint32 count)         \
 {                                                     \
-    struct HASH *hash;                                \
+    HASH *hash;                                       \
                                                       \
     hash = TEST_HASH_sample(0x18f);                   \
                                                       \
@@ -61,7 +61,7 @@ ptest_##name##_hash_load_factor(uint32 count)         \
 static inline void                               \
 ptest_##name##_hash_insert(uint32 count)         \
 {                                                \
-    struct HASH *hash;                           \
+    HASH *hash;                                  \
                                                  \
     count = count >> 5;                          \
     count = 0 == count ? 1000 : count;           \
@@ -84,7 +84,7 @@ static inline void                               \
 ptest_##name##_hash_remove(uint32 count)         \
 {                                                \
     uint32 tmp;                                  \
-    struct HASH *hash;                           \
+    HASH *hash;                                  \
                                                  \
     count = count >> 5;                          \
     count = 0 == count ? 1000 : count;           \
@@ -115,7 +115,7 @@ static inline void                             \
 ptest_##name##_hash_find(uint32 count)         \
 {                                              \
     uint32 tmp;                                \
-    struct HASH *hash;                         \
+    HASH *hash;                                \
                                                \
     count = count >> 5;                        \
     count = 0 == count ? 1000 : count;         \
@@ -145,7 +145,7 @@ ptest_##name##_hash_find(uint32 count)         \
 static inline void                                  \
 ptest_##name##_hash_rehashing(uint32 count)         \
 {                                                   \
-    struct HASH *hash;                              \
+    HASH *hash;                                     \
                                                     \
     count = count >> 13;                            \
     count = 0 == count ? 100 : count;               \

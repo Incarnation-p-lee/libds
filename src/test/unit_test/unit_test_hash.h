@@ -7,7 +7,7 @@ utest_##name##_hash_create(void)                                  \
 {                                                                 \
     bool pass;                                                    \
     uint32 tmp;                                                   \
-    struct HASH *hash;                                            \
+    HASH *hash;                                                   \
                                                                   \
     pass = true;                                                  \
                                                                   \
@@ -39,7 +39,7 @@ utest_##name##_hash_destroy(void)                \
 {                                                \
     bool pass;                                   \
     uint32 tmp;                                  \
-    struct HASH *hash;                           \
+    HASH *hash;                                  \
                                                  \
     pass = true;                                 \
     hash = NULL;                                 \
@@ -65,7 +65,7 @@ utest_##name##_hash_load_factor(void)                                  \
 {                                                                      \
     bool pass;                                                         \
     uint32 tmp;                                                        \
-    struct HASH *hash;                                                 \
+    HASH *hash;                                                        \
                                                                        \
     tmp = 0x2adeu;                                                     \
     pass = true;                                                       \
@@ -92,7 +92,7 @@ utest_##name##_hash_insert(void)                                        \
 {                                                                       \
     bool pass;                                                          \
     uint32 tmp;                                                         \
-    struct HASH *hash;                                                  \
+    HASH *hash;                                                         \
                                                                         \
     tmp = 0x2eadu;                                                      \
     pass = true;                                                        \
@@ -120,7 +120,7 @@ utest_##name##_hash_remove(void)                                       \
 {                                                                      \
     bool pass;                                                         \
     uint32 tmp;                                                        \
-    struct HASH *hash;                                                 \
+    HASH *hash;                                                        \
                                                                        \
     tmp = 0x1u;                                                        \
     pass = true;                                                       \
@@ -157,7 +157,7 @@ utest_##name##_hash_find(void)                                        \
 {                                                                     \
     bool pass;                                                        \
     uint32 tmp;                                                       \
-    struct HASH *hash;                                                \
+    HASH *hash;                                                       \
                                                                       \
     pass = true;                                                      \
     hash = NULL;                                                      \
@@ -187,7 +187,7 @@ utest_##name##_hash_rehashing(void)                        \
 {                                                          \
     bool pass;                                             \
     uint32 tmp;                                            \
-    struct HASH *hash;                                     \
+    HASH *hash;                                            \
                                                            \
     tmp = 0x1u;                                            \
     pass = true;                                           \

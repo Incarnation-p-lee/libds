@@ -1,4 +1,4 @@
-#define HASH                       open_addressing_hash
+#define HASH                       s_open_addressing_hash_t
 #define TEST_HASH_sample           test_open_addressing_hash_sample
 
 #define HASH_create                open_addressing_hash_create

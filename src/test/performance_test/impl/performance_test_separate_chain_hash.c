@@ -1,4 +1,4 @@
-#define HASH                       separate_chain_hash
+#define HASH                       s_separate_chain_hash_t
 #define TEST_HASH_sample           test_separate_chain_hash_sample
 
 #define HASH_create                separate_chain_hash_create
