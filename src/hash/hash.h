@@ -25,4 +25,12 @@ extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list)
     #define OPEN_ADDRESSING_HASH_ILLEGAL_P(h) NULL_PTR_P(h)
 #endif
 
+#if defined DEBUG
+    #define BITMAP_LEGAL_P(bitmap)       bitmap_structure_legal_ip(bitmap)
+    #define BITMAP_ILLEGAL_P(bitmap)     bitmap_structure_illegal_ip(bitmap)
+#else
+    #define BITMAP_LEGAL_P(bitmap)       NON_NULL_PTR_P(bitmap)
+    #define BITMAP_ILLEGAL_P(bitmap)     NULL_PTR_P(bitmap)
+#endif
+
 #endif
