@@ -47,6 +47,7 @@ sint64 splay_tree_nice(s_splay_tree_t *tree);
 static inline bool avl_tree_balanced_ip(s_avl_tree_t *tree);
 static inline bool avl_tree_balanced_optimize_validity_p(struct avl_tree *tree, bool expected);
 static inline bool avl_tree_contains_ip(s_avl_tree_t *tree, s_avl_tree_t *node);
+static inline bool avl_tree_contains_repeated_ip(s_avl_tree_t *tree, s_avl_tree_t *node);
 static inline bool avl_tree_doubly_child_p(s_avl_tree_t *tree);
 static inline bool avl_tree_doubly_rotate_left_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_doubly_rotate_right_precondition_p(struct avl_tree *node);
