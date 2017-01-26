@@ -55,6 +55,7 @@ static inline bool avl_tree_height_balanced_p(struct avl_tree *tree);
 static inline bool avl_tree_height_opt_validity_p(struct avl_tree *tree, sint32 expected);
 static inline bool avl_tree_height_sync_with_calculated_p(struct avl_tree *tree, sint32 left, sint32 right);
 static inline bool avl_tree_node_balanced_p(s_avl_tree_t *node);
+static inline bool avl_tree_node_unbalanced_p(s_avl_tree_t *node);
 static inline bool avl_tree_ordered_p(struct avl_tree *tree);
 static inline bool avl_tree_single_rotate_left_precondition_p(struct avl_tree *node);
 static inline bool avl_tree_single_rotate_right_precondition_p(struct avl_tree *node);

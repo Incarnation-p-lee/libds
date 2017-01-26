@@ -267,19 +267,44 @@ avl_tree_node_balanced_p(s_avl_tree_t *node)
 }
 
 static inline bool
+avl_tree_node_unbalanced_p(s_avl_tree_t *node)
+{
+    assert_exit(avl_tree_structure_legal_p(node));
+
+    return !avl_tree_height_balanced_opt_p(node);
+}
+
+static inline bool
 avl_tree_balanced_ip(s_avl_tree_t *tree)
 {
-    if (!tree) {
-        return true;
-    } else if (!avl_tree_node_balanced_p(tree)) {
-        return false;
-    } else if (!avl_tree_balanced_ip(tree->left)) {
-        return false;
-    } else if (!avl_tree_balanced_ip(tree->right)) {
-        return false;
-    } else {
-        return true;
+    s_avl_tree_t *node;
+    s_array_queue_t *node_queue;
+
+    assert_exit(avl_tree_structure_legal_p(tree));
+
+    node = tree;
+    node_queue = array_queue_create();
+    array_queue_enter(node_queue, node);
+
+    while (!array_queue_empty_p(node_queue)) {
+         node = array_queue_leave(node_queue);
+
+         if (avl_tree_node_unbalanced_p(node)) {
+             array_queue_destroy(&node_queue);
+             return false;
+         } else {
+             if (node->left) {
+                 array_queue_enter(node_queue, node->left);
+             }
+
+             if (node->right) {
+                 array_queue_enter(node_queue, node->right);
+             }
+         }
     }
+
+    array_queue_destroy(&node_queue);
+    return true;
 }
 
 bool
