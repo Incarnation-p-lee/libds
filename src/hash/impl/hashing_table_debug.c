@@ -26,6 +26,7 @@ hashing_table_load_factor_calculate(s_hashing_table_t *table)
         if (NULL != *iter) {
             load_factor++;
         }
+
         iter++;
     }
 

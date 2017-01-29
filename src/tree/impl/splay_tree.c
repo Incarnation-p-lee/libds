@@ -506,15 +506,18 @@ splay_tree_height_i(s_splay_tree_t *tree)
         return -1;
     } else {
         height = -1;
+
         queue_master = array_queue_create();
         queue_slave = array_queue_create();
-
         array_queue_enter(queue_master, tree);
+
         while (!array_queue_empty_p(queue_master)) {
             splay_node = array_queue_leave(queue_master);
+
             if (splay_node->left) {
                 array_queue_enter(queue_slave, splay_node->left);
             }
+
             if (splay_node->right) {
                 array_queue_enter(queue_slave, splay_node->right);
             }
@@ -543,11 +546,48 @@ splay_tree_height(s_splay_tree_t *tree)
 }
 
 static inline bool
+splay_tree_contains_repeated_ip(s_splay_tree_t *tree, s_splay_tree_t *node)
+{
+    sint64 nice;
+    s_splay_tree_t *node_i;
+    s_array_queue_t *repeated_queue;
+
+    assert_exit(splay_tree_structure_legal_p(tree));
+    assert_exit(splay_tree_structure_legal_p(node));
+    assert_exit(tree->nice == node->nice);
+
+    node_i = tree;
+    nice = node->nice;
+
+    repeated_queue = array_queue_create();
+    array_queue_enter(repeated_queue, node_i);
+
+    while (!array_queue_empty_p(repeated_queue)) {
+        node_i = array_queue_leave(repeated_queue);
+
+        if (node == node_i) {
+            array_queue_destroy(&repeated_queue);
+            return true;
+        } else {
+            if (node_i->left && node_i->left->nice == nice) {
+                array_queue_enter(repeated_queue, node_i->left);
+            }
+
+            if (node_i->right && node_i->right->nice == nice) {
+                array_queue_enter(repeated_queue, node_i->right);
+            }
+        }
+    }
+
+    array_queue_destroy(&repeated_queue);
+    return false;
+}
+
+static inline bool
 splay_tree_contains_ip(s_splay_tree_t *tree, s_splay_tree_t *node)
 {
     sint64 nice;
     s_splay_tree_t *node_tmp;
-    s_array_queue_t *repeated_queue;
 
     assert_exit(splay_tree_structure_legal_p(tree));
     assert_exit(splay_tree_structure_legal_p(node));
@@ -563,26 +603,7 @@ splay_tree_contains_ip(s_splay_tree_t *tree, s_splay_tree_t *node)
         } else if (node_tmp->nice > nice) {
             node_tmp = node_tmp->left;
         } else { /* take care of repeated nice */
-            repeated_queue = array_queue_create();
-            array_queue_enter(repeated_queue, node_tmp);
-
-            while (!array_queue_empty_p(repeated_queue)) {
-                node_tmp = array_queue_leave(repeated_queue);
-                if (node_tmp == node) {
-                    array_queue_destroy(&repeated_queue);
-                    return true;
-                } else {
-                    if (node_tmp->left && node_tmp->left->nice == nice) {
-                        array_queue_enter(repeated_queue, node_tmp->left);
-                    }
-                    if (node_tmp->right && node_tmp->right->nice == nice) {
-                        array_queue_enter(repeated_queue, node_tmp->right);
-                    }
-                }
-            }
-
-            array_queue_destroy(&repeated_queue);
-            return false;
+            return splay_tree_contains_repeated_ip(node_tmp, node);
         }
     }
 
@@ -610,7 +631,7 @@ splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted,
     assert_exit(splay != inserted);
     assert_exit(splay->nice == inserted->nice);
 
-    if (path_direction > 0) { // If right is heavy, inserted to left.
+    if (path_direction > 0) { /* If right is heavy, inserted to left. */
         inserted->left = splay;
         inserted->right = splay->right;
         splay->right = NULL;
@@ -783,7 +804,7 @@ splay_tree_doubly_child_strip_from_min(s_splay_tree_t **splay_node)
 
     splay = *splay_node;
 
-    if (!splay->right->left) { // short cut here
+    if (!splay->right->left) { /* short cut here */
         *splay_node = splay->right;
         splay->right->left = splay->left;
         splay->left = splay->right = NULL;
@@ -812,7 +833,7 @@ splay_tree_doubly_child_strip_from_max(s_splay_tree_t **splay_node)
 
     splay = *splay_node;
 
-    if (!splay->left->right) { // short cut here
+    if (!splay->left->right) { /* short cut here */
         *splay_node = splay->left;
         splay->left->right = splay->right;
         splay->left = splay->right = NULL;

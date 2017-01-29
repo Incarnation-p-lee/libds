@@ -182,37 +182,64 @@ avl_tree_find_max(s_avl_tree_t *tree)
 }
 
 static inline bool
+avl_tree_contains_repeated_ip(s_avl_tree_t *tree, s_avl_tree_t *node)
+{
+    sint64 nice;
+    s_avl_tree_t *node_i;
+    s_array_queue_t *repeated_queue;
+
+    assert_exit(avl_tree_structure_legal_p(tree));
+    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(tree->nice == node->nice);
+
+    node_i = tree;
+    nice = node->nice;
+
+    repeated_queue = array_queue_create();
+    array_queue_enter(repeated_queue, node_i);
+
+    while (!array_queue_empty_p(repeated_queue)) {
+        node_i = array_queue_leave(repeated_queue);
+
+        if (node == node_i) {
+            array_queue_destroy(&repeated_queue);
+            return true;
+        } else {
+            if (node_i->left && node_i->left->nice == nice) {
+                array_queue_enter(repeated_queue, node_i->left);
+            }
+
+            if (node_i->right && node_i->right->nice == nice) {
+                array_queue_enter(repeated_queue, node_i->right);
+            }
+        }
+    }
+
+    array_queue_destroy(&repeated_queue);
+    return false;
+}
+
+static inline bool
 avl_tree_contains_ip(s_avl_tree_t *tree, s_avl_tree_t *node)
 {
-    bool retval;
-    s_avl_tree_t *left;
-    s_avl_tree_t *right;
+    sint64 nice;
+    s_avl_tree_t *node_tmp;
 
     assert_exit(avl_tree_structure_legal_p(tree));
     assert_exit(avl_tree_structure_legal_p(node));
 
-    retval = false;
+    node_tmp = tree;
+    nice = node->nice;
 
-    while (tree) {
-        if (node == tree) {
+    while (node_tmp) {
+        if (node_tmp == node) {
             return true;
-        } else if (node->nice > tree->nice) {
-            tree =  tree->right;
-        } else if (node->nice < tree->nice) {
-            tree = tree->left;
+        } else if (node_tmp->nice < nice) {
+            node_tmp = node_tmp->right;
+        } else if (node_tmp->nice > nice) {
+            node_tmp = node_tmp->left;
         } else {
-            left = tree->left;
-            right = tree->right;
-
-            // Handle nice repeated node
-            if (left && node->nice == left->nice) {
-                retval = avl_tree_contains_ip(left, node);
-            }
-            if (!retval && right && node->nice == right->nice) {
-                retval = avl_tree_contains_ip(right, node);
-            }
-
-            return retval;
+            return avl_tree_contains_repeated_ip(node_tmp, node);
         }
     }
 
@@ -240,19 +267,44 @@ avl_tree_node_balanced_p(s_avl_tree_t *node)
 }
 
 static inline bool
+avl_tree_node_unbalanced_p(s_avl_tree_t *node)
+{
+    assert_exit(avl_tree_structure_legal_p(node));
+
+    return !avl_tree_height_balanced_opt_p(node);
+}
+
+static inline bool
 avl_tree_balanced_ip(s_avl_tree_t *tree)
 {
-    if (!tree) {
-        return true;
-    } else if (!avl_tree_node_balanced_p(tree)) {
-        return false;
-    } else if (!avl_tree_balanced_ip(tree->left)) {
-        return false;
-    } else if (!avl_tree_balanced_ip(tree->right)) {
-        return false;
-    } else {
-        return true;
+    s_avl_tree_t *node;
+    s_array_queue_t *node_queue;
+
+    assert_exit(avl_tree_structure_legal_p(tree));
+
+    node = tree;
+    node_queue = array_queue_create();
+    array_queue_enter(node_queue, node);
+
+    while (!array_queue_empty_p(node_queue)) {
+         node = array_queue_leave(node_queue);
+
+         if (avl_tree_node_unbalanced_p(node)) {
+             array_queue_destroy(&node_queue);
+             return false;
+         } else {
+             if (node->left) {
+                 array_queue_enter(node_queue, node->left);
+             }
+
+             if (node->right) {
+                 array_queue_enter(node_queue, node->right);
+             }
+         }
     }
+
+    array_queue_destroy(&node_queue);
+    return true;
 }
 
 bool
