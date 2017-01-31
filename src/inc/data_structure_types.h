@@ -84,6 +84,7 @@ typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
+typedef struct disjoint_set          s_disjoint_set_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -390,6 +391,12 @@ struct leftist_heap {
     s_heap_data_t    data;
     s_leftist_heap_t *left;
     s_leftist_heap_t *right;
+};
+
+
+struct disjoint_set {
+    uint32 size;
+    sint32 *set;
 };
 
 #endif

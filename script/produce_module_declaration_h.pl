@@ -16,6 +16,7 @@ my @module = (
               "$srcdir/test",
               "$srcdir/tree",
               "$srcdir/sort",
+              "$srcdir/set",
               "$srcdir/test/unit_test",
               "$srcdir/test/performance_test",
               "$srcdir/common",
