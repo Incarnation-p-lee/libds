@@ -17,6 +17,7 @@ static inline uint32 disjoint_set_size_i(s_disjoint_set_t *disjoint_set);
 static inline void disjoint_set_element_set(s_disjoint_set_t *disjoint_set, uint32 index, sint32 element);
 static inline void disjoint_set_element_top_increase(s_disjoint_set_t *disjoint_set, uint32 index_top);
 static inline void disjoint_set_initial(s_disjoint_set_t *disjoint_set);
+static inline void disjoint_set_path_compression(s_disjoint_set_t *disjoint_set, s_array_stack_t *stack, uint32 index_top);
 static inline void disjoint_set_union_by_size(s_disjoint_set_t *disjoint_set, uint32 index_fir, uint32 index_sec);
 uint32 disjoint_set_find(s_disjoint_set_t *disjoint_set, uint32 index);
 uint32 disjoint_set_size(s_disjoint_set_t *disjoint_set);

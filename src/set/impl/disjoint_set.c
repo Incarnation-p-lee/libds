@@ -102,19 +102,50 @@ disjoint_set_element_top_p(s_disjoint_set_t *disjoint_set, uint32 index)
     return disjoint_set_element_value_top_p(element);
 }
 
+static inline void
+disjoint_set_path_compression(s_disjoint_set_t *disjoint_set,
+    s_array_stack_t *stack, uint32 index_top)
+{
+    uint32 index_father;
+
+    assert_exit(array_stack_structure_legal_p(stack));
+    assert_exit(disjoint_set_structure_legal_p(disjoint_set));
+    assert_exit(index_top < disjoint_set_size_i(disjoint_set));
+    assert_exit(disjoint_set_element_top_p(disjoint_set, index_top));
+
+    while (!array_stack_empty_p(stack)) {
+        index_father = (ptr_t)array_stack_pop(stack);
+        disjoint_set_element_set(disjoint_set, index_father, index_top);
+    }
+}
+
 static inline uint32
 disjoint_set_find_i(s_disjoint_set_t *disjoint_set, uint32 index)
 {
+    void *father;
     sint32 element;
+    s_array_stack_t *stack_father;
 
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
     assert_exit(index < disjoint_set_size_i(disjoint_set));
 
     element = disjoint_set_element(disjoint_set, index);
 
-    while (!disjoint_set_element_value_top_p(element)) {
-        index = element;
-        element = disjoint_set_element(disjoint_set, index);
+    if (disjoint_set_element_value_top_p(element)) {
+        return index;
+    } else {
+        stack_father = array_stack_create();
+
+        while (!disjoint_set_element_value_top_p(element)) {
+            index = element;
+            father = (void *)(ptr_t)index;
+            array_stack_push(stack_father, father);
+            element = disjoint_set_element(disjoint_set, index);
+        }
+
+        array_stack_pop(stack_father); /* skip top node */
+        disjoint_set_path_compression(disjoint_set, stack_father, index);
+        array_stack_destroy(&stack_father);
     }
 
     return index;
