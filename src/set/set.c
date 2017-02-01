@@ -5,6 +5,7 @@
 #include "universal.h"
 
 #include "set.h"
+#include "set_define.h"
 #include "set_declaration.h"
 
 #include "impl/disjoint_set.c"

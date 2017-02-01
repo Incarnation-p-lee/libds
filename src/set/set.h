@@ -1,9 +1,5 @@
 #ifndef HAVE_DEFINED_SET_H
 #define HAVE_DEFINED_SET_H
 
-#define DISJOINT_SET_TOP       -1
-#define DISJOINT_SET_INVALID   ((sint32)0x80000000)
-#define DISJOINT_SET_ZERO_SIZE 0
-
 #endif
 

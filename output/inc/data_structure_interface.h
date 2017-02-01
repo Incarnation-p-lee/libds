@@ -74,6 +74,8 @@ enum log_level {
 #define BITMAP_ALL             ((native_wide_t)-1)
 #define BITMAP_SET             (native_wide_t)1
 #define BITMAP_CLR             (native_wide_t)0
+#define DISJOINT_ELE_INVALID   ((uint32)-1)
+#define DISJOINT_SIZE_INVALID  ((uint32)-1)
 #define PTR_INVALID            (void *)-1   // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
@@ -106,6 +108,7 @@ typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
+typedef struct disjoint_set          s_disjoint_set_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -289,6 +292,11 @@ struct leftist_heap {
     s_heap_data_t    data;
     s_leftist_heap_t *left;
     s_leftist_heap_t *right;
+};
+
+struct disjoint_set {
+    uint32 size;
+    sint32 *set;
 };
 
 
@@ -618,6 +626,13 @@ extern void insertion_sort(void *base, uint32 size, uint32 csize, sint32 (*compa
 extern void merge_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void quick_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+
+extern bool disjoint_set_equivalent_p(s_disjoint_set_t *disjoint_set, uint32 index_fir, uint32 index_sec);
+extern s_disjoint_set_t * disjoint_set_create(uint32 size);
+extern uint32 disjoint_set_find(s_disjoint_set_t *disjoint_set, uint32 index);
+extern uint32 disjoint_set_size(s_disjoint_set_t *disjoint_set);
+extern void disjoint_set_destroy(s_disjoint_set_t **disjoint_set);
+extern void disjoint_set_union(s_disjoint_set_t *disjoint_set, uint32 index_fir, uint32 index_sec);
 
 
 #endif

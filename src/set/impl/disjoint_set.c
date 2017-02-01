@@ -50,7 +50,7 @@ disjoint_set_initial(s_disjoint_set_t *disjoint_set)
     limit = disjoint_set->size;
 
     while (i < limit) {
-        disjoint_set_element_set(disjoint_set, i++, DISJOINT_SET_TOP);
+        disjoint_set_element_set(disjoint_set, i++, DISJOINT_TOP);
     }
 }
 
@@ -65,8 +65,18 @@ disjoint_set_destroy(s_disjoint_set_t **disjoint_set)
     }
 }
 
-static inline uint32
+uint32
 disjoint_set_size(s_disjoint_set_t *disjoint_set)
+{
+    if (DISJOINT_SET_ILLEGAL_P(disjoint_set)) {
+        return DISJOINT_SIZE_INVALID;
+    } else {
+        return disjoint_set_size_i(disjoint_set);
+    }
+}
+
+static inline uint32
+disjoint_set_size_i(s_disjoint_set_t *disjoint_set)
 {
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
 
@@ -74,33 +84,82 @@ disjoint_set_size(s_disjoint_set_t *disjoint_set)
 }
 
 static inline bool
-disjoint_set_element_top_p(sint32 value)
+disjoint_set_element_value_top_p(sint32 element)
 {
-    if (value < 0) {
+    return element < 0 ? true : false;
+}
+
+static inline bool
+disjoint_set_element_top_p(s_disjoint_set_t *disjoint_set, uint32 index)
+{
+    sint32 element;
+
+    assert_exit(disjoint_set_structure_legal_p(disjoint_set));
+    assert_exit(index < disjoint_set_size_i(disjoint_set));
+
+    element = disjoint_set_element(disjoint_set, index);
+
+    return disjoint_set_element_value_top_p(element);
+}
+
+static inline uint32
+disjoint_set_find_i(s_disjoint_set_t *disjoint_set, uint32 index)
+{
+    sint32 element;
+
+    assert_exit(disjoint_set_structure_legal_p(disjoint_set));
+    assert_exit(index < disjoint_set_size_i(disjoint_set));
+
+    element = disjoint_set_element(disjoint_set, index);
+
+    while (!disjoint_set_element_value_top_p(element)) {
+        index = element;
+        element = disjoint_set_element(disjoint_set, index);
+    }
+
+    return index;
+}
+
+uint32
+disjoint_set_find(s_disjoint_set_t *disjoint_set, uint32 index)
+{
+    if (disjoint_set_structure_illegal_p(disjoint_set)) {
+        return DISJOINT_ELE_INVALID;
+    } else if (index >= disjoint_set_size_i(disjoint_set)) {
+        return DISJOINT_ELE_INVALID;
+    } else {
+        return disjoint_set_find_i(disjoint_set, index);
+    }
+}
+
+static inline bool
+disjoint_set_equivalent_ip(s_disjoint_set_t *disjoint_set, uint32 index_fir,
+    uint32 index_sec)
+{
+    assert_exit(disjoint_set_structure_legal_p(disjoint_set));
+    assert_exit(index_fir < disjoint_set_size_i(disjoint_set));
+    assert_exit(index_sec < disjoint_set_size_i(disjoint_set));
+
+    if (disjoint_set_find(disjoint_set, index_fir)
+        == disjoint_set_find(disjoint_set, index_sec)) {
         return true;
     } else {
         return false;
     }
 }
 
-sint32
-disjoint_set_find(s_disjoint_set_t *disjoint_set, uint32 index)
+bool
+disjoint_set_equivalent_p(s_disjoint_set_t *disjoint_set, uint32 index_fir,
+    uint32 index_sec)
 {
-    sint32 element;
-
     if (disjoint_set_structure_illegal_p(disjoint_set)) {
-        return DISJOINT_SET_INVALID;
-    } else if (index >= disjoint_set_size(disjoint_set)) {
-        return DISJOINT_SET_INVALID;
+        return false;
+    } else if (index_fir >= disjoint_set_size_i(disjoint_set)) {
+        return false;
+    } else if (index_sec >= disjoint_set_size_i(disjoint_set)) {
+        return false;
     } else {
-        element = disjoint_set_element(disjoint_set, index);
-
-        while (!disjoint_set_element_top_p(element)) {
-            index = element;
-            element = disjoint_set_element(disjoint_set, index);
-        }
-
-        return index;
+        return disjoint_set_equivalent_ip(disjoint_set, index_fir, index_sec);
     }
 }
 
@@ -110,12 +169,12 @@ disjoint_set_element_size(s_disjoint_set_t *disjoint_set, uint32 index)
     sint32 element;
 
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
-    assert_exit(index < disjoint_set_size(disjoint_set));
+    assert_exit(index < disjoint_set_size_i(disjoint_set));
 
     element = disjoint_set_element(disjoint_set, index);
 
     if (element > 0) {
-        return DISJOINT_SET_ZERO_SIZE;
+        return DISJOINT_ZERO_SIZE;
     } else {
         return (uint32)(0 - element);
     }
@@ -125,7 +184,7 @@ static inline sint32
 disjoint_set_element(s_disjoint_set_t *disjoint_set, uint32 index)
 {
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
-    assert_exit(index < disjoint_set_size(disjoint_set));
+    assert_exit(index < disjoint_set_size_i(disjoint_set));
 
     return disjoint_set->set[index];
 }
@@ -135,32 +194,47 @@ disjoint_set_element_set(s_disjoint_set_t *disjoint_set, uint32 index,
     sint32 element)
 {
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
-    assert_exit(index < disjoint_set_size(disjoint_set));
+    assert_exit(index < disjoint_set_size_i(disjoint_set));
 
     disjoint_set->set[index] = element;
 }
 
-void
+static inline void
+disjoint_set_element_top_increase(s_disjoint_set_t *disjoint_set, uint32 index_top)
+{
+    sint32 element;
+
+    assert_exit(disjoint_set_structure_legal_p(disjoint_set));
+    assert_exit(index_top < disjoint_set_size_i(disjoint_set));
+    assert_exit(disjoint_set_element_top_p(disjoint_set, index_top));
+
+    element = disjoint_set_element(disjoint_set, index_top);
+    disjoint_set_element_set(disjoint_set, index_top, element - 1);
+}
+
+static inline void
 disjoint_set_union_by_size(s_disjoint_set_t *disjoint_set, uint32 index_fir,
     uint32 index_sec)
 {
-    sint32 element;
-    uint32 size_fir;
-    uint32 size_sec;
+    uint32 size_fir, size_sec;
+    uint32 top_fir, top_sec;
 
     assert_exit(disjoint_set_structure_legal_p(disjoint_set));
-    assert_exit(index_fir < disjoint_set_size(disjoint_set));
-    assert_exit(index_sec < disjoint_set_size(disjoint_set));
+    assert_exit(index_fir < disjoint_set_size_i(disjoint_set));
+    assert_exit(index_sec < disjoint_set_size_i(disjoint_set));
 
-    size_fir = disjoint_set_element_size(disjoint_set, index_fir);
-    size_sec = disjoint_set_element_size(disjoint_set, index_sec);
+    top_fir = disjoint_set_find_i(disjoint_set, index_fir);
+    top_sec = disjoint_set_find_i(disjoint_set, index_sec);
+
+    size_fir = disjoint_set_element_size(disjoint_set, top_fir);
+    size_sec = disjoint_set_element_size(disjoint_set, top_sec);
 
     if (size_fir > size_sec) {
-        element = disjoint_set_element(disjoint_set, index_fir);
-        disjoint_set_element_set(disjoint_set, index_sec, element);
+        disjoint_set_element_set(disjoint_set, top_sec, (sint32)top_fir);
+        disjoint_set_element_top_increase(disjoint_set, top_fir);
     } else {
-        element = disjoint_set_element(disjoint_set, index_sec);
-        disjoint_set_element_set(disjoint_set, index_fir, element);
+        disjoint_set_element_set(disjoint_set, top_fir, (sint32)top_sec);
+        disjoint_set_element_top_increase(disjoint_set, top_sec);
     }
 }
 
@@ -170,9 +244,11 @@ disjoint_set_union(s_disjoint_set_t *disjoint_set, uint32 index_fir,
 {
     if (disjoint_set_structure_illegal_p(disjoint_set)) {
         return;
-    } else if (index_fir >= disjoint_set_size(disjoint_set)) {
+    } else if (index_fir >= disjoint_set_size_i(disjoint_set)) {
         return;
-    } else if (index_sec >= disjoint_set_size(disjoint_set)) {
+    } else if (index_sec >= disjoint_set_size_i(disjoint_set)) {
+        return;
+    } else if (disjoint_set_equivalent_ip(disjoint_set, index_fir, index_sec)) {
         return;
     } else {
         disjoint_set_union_by_size(disjoint_set, index_fir, index_sec);

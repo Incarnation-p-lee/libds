@@ -9,6 +9,7 @@
 #include "performance_test_hash.c"
 #include "performance_test_heap.c"
 #include "performance_test_sort.c"
+#include "performance_test_set.c"
 
 #include "impl/performance_test_main.c"
 #include "impl/performance_test_timing.c"

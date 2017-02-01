@@ -68,7 +68,10 @@ my @delaration = ("$srcdir/common/common_declaration.h",
                   "$srcdir/tree/tree_declaration.h",
                   "$srcdir/hash/hash_declaration.h",
                   "$srcdir/heap/heap_declaration.h",
-                  "$srcdir/sort/sort_declaration.h",);
+                  "$srcdir/sort/sort_declaration.h",
+                  "$srcdir/set/set_declaration.h",
+);
+
 foreach (@delaration) {
     my @external = scan_header_file_externals($_);
     foreach (@external) {

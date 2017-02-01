@@ -248,6 +248,13 @@ static struct performance_test_reference performance_reference[] = {
     {"heap_sort",                                        0x0u, 0x0u},
     {"merge_sort",                                       0x0u, 0x0u},
     {"quick_sort",                                       0x0u, 0x0u},
+
+    {"disjoint_set_create",                              0x0u, 0x0u},
+    {"disjoint_set_destroy",                             0x0u, 0x0u},
+    {"disjoint_set_find",                                0x0u, 0x0u},
+    {"disjoint_set_union",                               0x0u, 0x0u},
+    {"disjoint_set_equivalent_p",                        0x0u, 0x0u},
+
     {NULL,                                               0x0u, 0x0u},
 };
 

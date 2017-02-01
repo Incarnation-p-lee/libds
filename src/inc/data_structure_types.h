@@ -47,6 +47,8 @@ enum ITER_ORDER {
 #define BITMAP_ALL             ((native_wide_t)-1)
 #define BITMAP_SET             (native_wide_t)1
 #define BITMAP_CLR             (native_wide_t)0
+#define DISJOINT_ELE_INVALID   ((uint32)-1)
+#define DISJOINT_SIZE_INVALID  ((uint32)-1)
 
 #define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line

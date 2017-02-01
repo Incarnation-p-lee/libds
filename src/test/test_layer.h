@@ -1659,6 +1659,45 @@ static const struct test_layer_table sort_collection[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table disjoint_set[] = {
+    {
+        "create", NULL,
+        {
+            &utest_disjoint_set_create,
+            &ptest_disjoint_set_create,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_disjoint_set_destroy,
+            &ptest_disjoint_set_destroy,
+        },
+    },
+    {
+        "find", NULL,
+        {
+            &utest_disjoint_set_find,
+            &ptest_disjoint_set_find,
+        },
+    },
+    {
+        "union", NULL,
+        {
+            &utest_disjoint_set_union,
+            &ptest_disjoint_set_union,
+        },
+    },
+    {
+        "equivalent_p", NULL,
+        {
+            &utest_disjoint_set_equivalent_p,
+            &ptest_disjoint_set_equivalent_p,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1722,6 +1761,12 @@ static const struct test_layer_table test_sort_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,   NULL,            {NULL, NULL},},
 };
+
+static const struct test_layer_table test_set_implement[] = {
+    {"disjoint", disjoint_set,    {NULL, NULL},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,       NULL,            {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1738,6 +1783,7 @@ static const struct test_layer_table test_category[] = {
     {"hash",        test_hash_implement,        {NULL, NULL},},
     {"heap",        test_heap_implement,        {NULL, NULL},},
     {"sort",        test_sort_implement,        {NULL, NULL},},
+    {"set",         test_set_implement,         {NULL, NULL},},
     /* END POINT OF CATEGORY */
     {NULL,          NULL,                       {NULL, NULL},}
 };

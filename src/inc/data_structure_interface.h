@@ -74,6 +74,8 @@ enum log_level {
 #define BITMAP_ALL             ((native_wide_t)-1)
 #define BITMAP_SET             (native_wide_t)1
 #define BITMAP_CLR             (native_wide_t)0
+#define DISJOINT_ELE_INVALID   ((uint32)-1)
+#define DISJOINT_SIZE_INVALID  ((uint32)-1)
 #define PTR_INVALID            (void *)-1   // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
@@ -624,6 +626,13 @@ extern void insertion_sort(void *base, uint32 size, uint32 csize, sint32 (*compa
 extern void merge_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void quick_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
 extern void shell_sort(void *base, uint32 size, uint32 csize, sint32 (*compare)(const void *, const void *));
+
+extern bool disjoint_set_equivalent_p(s_disjoint_set_t *disjoint_set, uint32 index_fir, uint32 index_sec);
+extern s_disjoint_set_t * disjoint_set_create(uint32 size);
+extern uint32 disjoint_set_find(s_disjoint_set_t *disjoint_set, uint32 index);
+extern uint32 disjoint_set_size(s_disjoint_set_t *disjoint_set);
+extern void disjoint_set_destroy(s_disjoint_set_t **disjoint_set);
+extern void disjoint_set_union(s_disjoint_set_t *disjoint_set, uint32 index_fir, uint32 index_sec);
 
 
 #endif
