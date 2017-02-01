@@ -61,6 +61,7 @@
     5. hash
         a. separate chain hash
         b. open addressing hash
+        c. bitmap
     6. heap
         a. minimal heap
         b. maximal heap
@@ -72,6 +73,8 @@
         c. heap sort
         d. merge sort
         e. quick sort
+    8. set
+        a. disjoint set
         
 ----- to be continue -----
 
