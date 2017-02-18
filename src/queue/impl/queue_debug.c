@@ -148,3 +148,13 @@ array_queue_resize_data_consistant_p(s_array_queue_t *queue)
     }
 }
 
+static inline bool
+doubly_end_queue_list_structure_legal_p(s_doubly_end_queue_list_t *list)
+{
+    if (NULL_PTR_P(list)) {
+        return false;
+    } else {
+        return doubly_linked_list_structure_legal_p(&list->link);
+    }
+}
+

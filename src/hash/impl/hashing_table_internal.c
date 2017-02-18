@@ -15,24 +15,6 @@ hashing_table_create(uint32 size)
     return table;
 }
 
-static inline bool
-hashing_table_structure_legal_p(s_hashing_table_t *table)
-{
-    if (NULL_PTR_P(table)) {
-        return false;
-    } else if (NULL_PTR_P(table->space)) {
-        return false;
-    } else if (NULL_PTR_P(table->func)) {
-        return false;
-    } else if (complain_zero_size_p(table->load.size)) {
-        return false;
-    } else if (table->load.peak > 100) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
 static inline void
 hashing_table_initial(s_hashing_table_t *table)
 {

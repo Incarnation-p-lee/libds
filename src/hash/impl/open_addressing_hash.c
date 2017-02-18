@@ -48,22 +48,6 @@ open_addressing_hash_create(uint32 size)
     }
 }
 
-static inline bool
-open_addressing_hash_structure_illegal_p(s_open_addressing_hash_t *hash)
-{
-    return !open_addressing_hash_structure_legal_p(hash);
-}
-
-static inline bool
-open_addressing_hash_structure_legal_p(s_open_addressing_hash_t *hash)
-{
-    if (NULL_PTR_P(hash)) {
-        return false;
-    } else {
-        return hashing_table_structure_legal_p(hash->table);
-    }
-}
-
 static inline void
 open_addressing_hash_destroy_i(s_open_addressing_hash_t *hash)
 {

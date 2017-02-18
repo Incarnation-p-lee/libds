@@ -22,14 +22,16 @@ my @module = (
               "$srcdir/common",
 );
 
-say "Produce module_declaration.h";
 
 foreach (@module) {
     my $module = $1 if /\/(\w+)$/;
     my $file_name = "$_/$module" . "_declaration.h";
+    my $basename = $1 if $file_name =~ /(\w+\.h)/;
     my $implement = "$_/impl";
     my @collection;
     my @declartion;
+
+    say "    Generate $basename";
 
     open DECLARATION, '>', $file_name or die "Failed to open file $file_name, $!";
     printf DECLARATION "#ifndef HAVE_DEFINED_$module" . "_H\n";

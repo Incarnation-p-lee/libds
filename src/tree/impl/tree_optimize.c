@@ -10,14 +10,14 @@ avl_tree_height_opt(struct avl_tree *tree)
     sint32 height;
 
     asm volatile (
-        "add          %2, %1\n\t" \
-        "mov $0xffffffff, %0\n\t" \
-        "cmp          %2, %1\n\t" \
-        // cmov can tell invalid memory
-        "cmove     %%rsp, %1\n\t" \
-        "cmovne     (%1), %0\n\t"
+        "mov $0xffffffff, %0\n\t"
+        "lea    (%1, %2), %%rbx\n\t"
+        "cmp        $0x0, %%rbx\n\t" /* cmov can tell invalid memory */
+        "cmove     %%rsp, %%rbx\n\t"
+        "cmovne  (%%rbx), %0\n\t"
         :"=&r"(height)
-        :"r"(tree), "i"(HEIGHT_OFFSET));
+        :"r"(tree), "r"(HEIGHT_OFFSET)
+        :"rbx");
         /*
          * &: means earlyclobber operand, will be modified before
          *    instruction finished. Therefore, this operand cannot
@@ -34,7 +34,7 @@ avl_tree_height_opt(struct avl_tree *tree)
 #if defined X86_32
 
 static inline sint32 ALWAYS_INLINE
-avl_tree_height_opt(struct avl_tree *tree)
+avl_tree_height_opt(struct avl_tree *tree)  /* Fix-Me */
 {
     sint32 height;
 

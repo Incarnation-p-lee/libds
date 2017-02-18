@@ -37,7 +37,6 @@ separate_chain_hash_create_i(uint32 size)
     return hash;
 }
 
-
 s_separate_chain_hash_t *
 separate_chain_hash_create(uint32 size)
 {
@@ -45,22 +44,6 @@ separate_chain_hash_create(uint32 size)
         return PTR_INVALID;
     } else {
         return separate_chain_hash_create_i(size);
-    }
-}
-
-static inline bool
-separate_chain_hash_structure_illegal_p(s_separate_chain_hash_t *hash)
-{
-    return !separate_chain_hash_structure_legal_p(hash);
-}
-
-static inline bool
-separate_chain_hash_structure_legal_p(s_separate_chain_hash_t *hash)
-{
-    if (NULL_PTR_P(hash)) {
-        return false;
-    } else {
-        return hashing_table_structure_legal_p(hash->table);
     }
 }
 
@@ -75,18 +58,6 @@ separate_chain_create(void *val)
     doubly_linked_list_initial(&chain->list);
 
     return chain;
-}
-
-static inline bool
-separate_chain_structure_legal_p(s_separate_chain_t *chain)
-{
-    if (NULL_PTR_P(chain)) {
-        return false;
-    } else if (doubly_linked_list_structure_illegal_p(&chain->list)) {
-        return false;
-    } else {
-        return true;
-    }
 }
 
 static inline s_separate_chain_t *

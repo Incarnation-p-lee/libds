@@ -8,8 +8,9 @@ use scan_source_file;
 my $header = "$ENV{'PWD'}/src/inc/universal.h";
 my $source = "$ENV{'PWD'}/src/common/common_declaration.h";
 my @result = &scan_header_file_externals($source);
+my $basename = $1 if $header =~ /(\w+\.h)/;
 
-say "Produce universal.h";
+say "    Generate $basename";
 
 open UNIVERSAL, '>', $header or die "Failed to locate $header, $!\n";
 

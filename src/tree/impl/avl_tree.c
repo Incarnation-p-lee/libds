@@ -258,7 +258,7 @@ avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node)
     }
 }
 
-static inline bool
+static __attribute__((noinline)) bool
 avl_tree_node_balanced_p(s_avl_tree_t *node)
 {
     assert_exit(avl_tree_structure_legal_p(node));
@@ -346,7 +346,6 @@ avl_tree_height_update(s_avl_tree_t *tree)
     sint32 right;
 
     assert_exit(avl_tree_structure_legal_p(tree));
-    // Also height_update_opt
 
     left = avl_tree_height_opt(tree->left);
     right = avl_tree_height_opt(tree->right);
@@ -502,7 +501,7 @@ avl_tree_doubly_rotate_right(s_avl_tree_t *node)
     return k3;
 }
 
-static inline void
+static __attribute__((noinline)) void
 avl_tree_rotate_left(s_avl_tree_t **tree)
 {
     sint32 left_height;
@@ -538,7 +537,7 @@ avl_tree_rotate_left(s_avl_tree_t **tree)
     }
 }
 
-static inline void
+static __attribute__((noinline)) void
 avl_tree_rotate_right(s_avl_tree_t **tree)
 {
     sint32 left_height;
@@ -574,8 +573,7 @@ avl_tree_rotate_right(s_avl_tree_t **tree)
     }
 }
 
-
-static inline s_avl_tree_t *
+static __attribute__((noinline)) s_avl_tree_t *
 avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
 {
     s_avl_tree_t *avl;
@@ -602,7 +600,7 @@ avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
                 avl_tree_rotate_left(tree);
             }
         }
-    } else { // node->nice > avl->nice
+    } else { /* node->nice > avl->nice */
         if (NULL == avl->right) {
             avl->right = node;
         } else {
@@ -622,6 +620,8 @@ avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
 s_avl_tree_t *
 avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
 {
+    s_avl_tree_t *t;
+
     if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (!avl_tree_structure_legal_p(*tree)) {
@@ -629,7 +629,8 @@ avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
     } else if (!avl_tree_structure_legal_p(node)) {
         return PTR_INVALID;
     } else {
-        return avl_tree_insert_i(tree, node);
+        t = avl_tree_insert_i(tree, node);
+        return t;
     }
 }
 
@@ -752,24 +753,24 @@ avl_tree_doubly_child_strip_from_max(s_avl_tree_t **node_pre)
     avl = *node_pre;
 
     if (!avl->left->right) {
-         *node_pre = avl->left;
-         tmp = avl->left->left;
+        *node_pre = avl->left;
+        tmp = avl->left->left;
 
-         avl->left->right = avl->right;
-         avl->left->left = avl;
+        avl->left->right = avl->right;
+        avl->left->left = avl;
 
-         avl->left = tmp;
-         avl->right = NULL;
+        avl->left = tmp;
+        avl->right = NULL;
     } else {
-         max_pre = avl_tree_find_ptr_to_max(&avl->left);
-         max = *max_pre;
+        max_pre = avl_tree_find_ptr_to_max(&avl->left);
+        max = *max_pre;
 
-         avl_tree_swap_child(avl, max);
-         *max_pre = avl;
-         *node_pre = max;
+        avl_tree_swap_child(avl, max);
+        *max_pre = avl;
+        *node_pre = max;
+
+        avl_tree_remove_i(&max->left, avl);
     }
-
-    avl_tree_remove_i(&max->left, avl);
 }
 
 static inline void
@@ -787,24 +788,24 @@ avl_tree_doubly_child_strip_from_min(s_avl_tree_t **node_pre)
     avl = *node_pre;
 
     if (!avl->right->left) {
-         *node_pre = avl->right;
-         tmp = avl->right->right;
+        *node_pre = avl->right;
+        tmp = avl->right->right;
 
-         avl->right->left = avl->left;
-         avl->right->right = avl;
+        avl->right->left = avl->left;
+        avl->right->right = avl;
 
-         avl->right = tmp;
-         avl->left = NULL;
+        avl->right = tmp;
+        avl->left = NULL;
     } else {
-         min_pre = avl_tree_find_ptr_to_min(&avl->right);
-         min = *min_pre;
+        min_pre = avl_tree_find_ptr_to_min(&avl->right);
+        min = *min_pre;
 
-         avl_tree_swap_child(avl, min);
-         *min_pre = avl;
-         *node_pre = min;
+        avl_tree_swap_child(avl, min);
+        *min_pre = avl;
+        *node_pre = min;
+
+        avl_tree_remove_i(&min->right, avl);
     }
-
-    avl_tree_remove_i(&min->right, avl);
 }
 
 static inline s_avl_tree_t *

@@ -5,11 +5,11 @@ use 5.010;
 use lib './script';
 use scan_source_file;
 
-my $header = "$ENV{'PWD'}/src/inc/data_structure_interface.h";
 my $srcdir = "$ENV{'PWD'}/src";
-my $inc_dir = shift @ARGV;
+my $header = "$srcdir/inc/data_structure_interface.h";
+my $basename = $1 if $header =~ /(\w+\.h)/;
 
-say "Produce data_structure_interface.h";
+say "    Generate $basename";
 
 #######################################
 ## Create data_structure_interface.h ##
@@ -83,6 +83,4 @@ foreach (@delaration) {
 printf INTERFACE "\n#endif\n\n";
 
 close INTERFACE;
-
-system("cp -v $header $inc_dir");
 
