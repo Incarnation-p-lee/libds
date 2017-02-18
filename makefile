@@ -100,12 +100,15 @@ $(obj):%.o:%.c
 	@echo "    Compile  $(notdir $<)"
 	$(CC) $(CFLAG) $< -o $@
 
-help:
-	@echo
-	@echo "  make [RELEASE]"
-	@echo
-
 clean:
 	@echo "    Clean Object"
 	@$(RM) $(obj)
+
+help:
+	@echo
+	@echo "  make            :Default debug build"
+	@echo "  make RELEASE=1  :Release build"
+	@echo "  make V=1        :Verbose build"
+	@echo "  make COVERAGE=1 :Coverage build"
+	@echo
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-lcover=-rc lcov_branch_coverage=1
+lcover="-rc lcov_branch_coverage=1"
 
-bash make clean && make COVERAGE=1
+make clean && make COVERAGE=1
 ./bin/ds.elf -u *.*.*
 lcov --directory . --capture $lcover --output-file unit_test.info
 
