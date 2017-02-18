@@ -56,11 +56,19 @@ TARGET_SO              :=$(addprefix $(out)/, libds.so)
 
 CFLAG                  +=$(addprefix -I,$(inc))
 CFLAG                  +=-DX86_64 -DLIBC
+
 CF_DEBUG               :=-DDEBUG -g
 CF_RELEASE             :=-O3 -ofast
+CF_COVERAGE            :=--coverage
+
+## RELEASE build ##
 CFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 LFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 SLFLAG                 +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
+
+## COVERAGE build ##
+CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
+lib                    +=$(if $(COVERAGE),-lgcov,)
 
 .PHONY:all help clean depend
 
