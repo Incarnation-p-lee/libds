@@ -68,6 +68,7 @@ SLFLAG                 +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 
 ## COVERAGE build ##
 CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
+LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
 lib                    +=$(if $(COVERAGE),-lgcov,)
 
 .PHONY:all help clean depend

@@ -26,7 +26,10 @@ performance_test_time_stamp_period(void)
 
     end = performance_test_time_stamp_timeval_unpack(&chk_pnt_end);
     bgn = performance_test_time_stamp_timeval_unpack(&chk_pnt_bgn);
-    assert_exit(end > bgn);
+
+    if (end <= bgn) {
+        return 1;
+    }
 
     return end - bgn;
 }
