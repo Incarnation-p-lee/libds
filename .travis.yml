@@ -8,7 +8,6 @@ compiler:
 script: 
   - ulimit -s unlimited
   - bash ./script/run_unit_test.sh
-  - ls -lR
   - bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
