@@ -22,17 +22,20 @@
 ##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
 ### build
-    1. sh script/build_libds.sh DEBUG/RELEASE
-                                X86_64/X86_32
-                                LIBC
-                                ELF/OBJ/DYN/ALL
-                                PROFILE         -optional
-                                CODE_COVERAGE   -optional
+```
+  make            :Default debug build
+  make RELEASE=1  :Release build
+  make V=1        :Verbose build
+  make COVERAGE=1 :Coverage build
+```
 
-    2. Output output/bin/ds.elf
-              output/bin/libds.a
-              output/bin/libds.so
-              output/inc/data_structure_interface.h
+### Output
+```
+  bin/ds.elf
+  bin/libds.a
+  bin/libds.so
+  src/inc/data_structure_interface.h
+```
 
 ### Design
 
