@@ -13,5 +13,4 @@ lcov --directory . --capture $lcover --output-file performance_test.info
 
 lcov --add-tracefile unit_test.info --add-tracefile performance_test.info --output-file coverage.info
 cp -v coverage.info /tmp/coverage.info
-git clean -f
 
