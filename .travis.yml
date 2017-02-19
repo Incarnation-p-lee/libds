@@ -13,9 +13,8 @@ notifications:
   email:
     - incarnation.p.lee@outlook.com
 install:
-  - mkdir lcov && cd lcov
   - wget https://github.com/linux-test-project/lcov/releases/download/v1.13/lcov-1.13.tar.gz
-  - tar zxf lcov-1.13.tar.gz
+  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13
   - sudo make install
   - gem install coveralls-lcov
   - cd -
