@@ -1,5 +1,4 @@
 # Object files
-*.o
 *.ko
 *.obj
 
@@ -29,8 +28,6 @@ core
 ds.log
 tags
 *.swp
-*.gcno
-*.gcda
 *tmp*
 performance/profile/
 performance/performance.new.ref

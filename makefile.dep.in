@@ -1,0 +1,157 @@
+main.o: src/main.c src/inc/types.h src/inc/depends.h src/inc/defines.h
+common.o: src/common/common.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/common/common.h \
+ src/common/common_declaration.h src/common/memory_cache.h \
+ src/common/impl/memory_cache.c src/common/impl/prime.c \
+ src/common/impl/random.c src/common/impl/complain.c \
+ src/common/impl/log.c src/common/impl/swap.c src/common/impl/iterator.c \
+ src/common/impl/convert.c
+hash.o: src/hash/hash.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/hash/hash.h src/hash/hash_declaration.h \
+ src/hash/impl/hashing_table_debug.c \
+ src/hash/impl/hashing_table_internal.c src/hash/impl/hashing_function.c \
+ src/hash/impl/separate_chain_hash.c src/hash/impl/open_addressing_hash.c \
+ src/hash/impl/bitmap.c
+heap.o: src/heap/heap.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/heap/heap_declaration.h src/heap/heap.h src/heap/heap_optimize.h \
+ src/heap/impl/heap_debug.c src/heap/impl/binary_heap_order.c \
+ src/heap/impl/binary_heap_internal.c src/heap/impl/minimal_heap.c \
+ src/heap/impl/maximal_heap.c src/heap/impl/min_max_heap.c \
+ src/heap/impl/leftist_heap.c
+linked_list.o: src/linked_list/linked_list.c src/inc/types.h \
+ src/inc/depends.h src/inc/defines.h src/inc/data_structure_types.h \
+ src/inc/universal.h src/linked_list/linked_list_declaration.h \
+ src/linked_list/linked_list.h src/linked_list/impl/linked_list_debug.c \
+ src/linked_list/impl/single_linked_list.c \
+ src/linked_list/impl/doubly_linked_list.c \
+ src/linked_list/impl/skip_linked_list.c \
+ src/linked_list/impl/linked_list_optimize.c
+queue.o: src/queue/queue.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/queue/queue.h src/queue/queue_optimize.h \
+ src/queue/queue_declaration.h src/queue/impl/queue_debug.c \
+ src/queue/impl/array_queue.c src/queue/impl/stacked_queue.c \
+ src/queue/impl/doubly_end_queue.c
+set.o: src/set/set.c src/inc/types.h src/inc/depends.h src/inc/defines.h \
+ src/inc/data_structure_types.h src/inc/universal.h src/set/set.h \
+ src/set/set_define.h src/set/set_declaration.h \
+ src/set/impl/disjoint_set.c
+sort.o: src/sort/sort.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/sort/sort.h src/sort/sort_declaration.h \
+ src/sort/impl/sort_internal.c src/sort/impl/insertion_sort.c \
+ src/sort/impl/shell_sort.c src/sort/impl/heap_sort.c \
+ src/sort/impl/merge_sort.c src/sort/impl/quick_sort.c
+stack.o: src/stack/stack.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/stack/stack.h src/stack/stack_declaration.h \
+ src/stack/impl/array_stack.c src/stack/impl/linked_stack.c
+test.o: src/test/test.c src/inc/depends.h src/inc/defines.h \
+ src/inc/data_structure_interface.h src/inc/universal.h src/test/test.h \
+ src/test/test_result_check.h src/test/test_declaration.h \
+ src/test/unit_test/unit_test.c src/test/unit_test/unit_test.h \
+ src/test/unit_test/unit_test_declaration.h \
+ src/test/unit_test/unit_test_linked_list.c \
+ src/test/unit_test/impl/unit_test_doubly_linked_list.c \
+ src/test/unit_test/impl/../unit_test_linked_list.h \
+ src/test/unit_test/impl/unit_test_single_linked_list.c \
+ src/test/unit_test/impl/unit_test_skip_linked_list.c \
+ src/test/unit_test/unit_test_stack.c \
+ src/test/unit_test/impl/unit_test_array_stack.c \
+ src/test/unit_test/impl/../unit_test_stack.h \
+ src/test/unit_test/impl/unit_test_linked_stack.c \
+ src/test/unit_test/unit_test_queue.c \
+ src/test/unit_test/impl/unit_test_array_queue.c \
+ src/test/unit_test/impl/../unit_test_queue.h \
+ src/test/unit_test/impl/unit_test_stacked_queue.c \
+ src/test/unit_test/impl/unit_test_doubly_end_queue.c \
+ src/test/unit_test/unit_test_tree.c \
+ src/test/unit_test/impl/unit_test_binary_search_tree.c \
+ src/test/unit_test/impl/../unit_test_tree.h \
+ src/test/unit_test/impl/unit_test_avl_tree.c \
+ src/test/unit_test/impl/unit_test_splay_tree.c \
+ src/test/unit_test/impl/unit_test_binary_indexed_tree.c \
+ src/test/unit_test/impl/unit_test_trie_tree.c \
+ src/test/unit_test/unit_test_hash.c \
+ src/test/unit_test/impl/unit_test_separate_chain_hash.c \
+ src/test/unit_test/impl/../unit_test_hash.h \
+ src/test/unit_test/impl/unit_test_open_addressing_hash.c \
+ src/test/unit_test/impl/unit_test_bitmap.c \
+ src/test/unit_test/unit_test_heap.c \
+ src/test/unit_test/impl/unit_test_minimal_heap.c \
+ src/test/unit_test/impl/../unit_test_heap.h \
+ src/test/unit_test/impl/unit_test_maximal_heap.c \
+ src/test/unit_test/impl/unit_test_min_max_heap.c \
+ src/test/unit_test/impl/unit_test_leftist_heap.c \
+ src/test/unit_test/unit_test_sort.c \
+ src/test/unit_test/impl/unit_test_insertion_sort.c \
+ src/test/unit_test/impl/../unit_test_sort.h \
+ src/test/unit_test/impl/unit_test_shell_sort.c \
+ src/test/unit_test/impl/unit_test_heap_sort.c \
+ src/test/unit_test/impl/unit_test_merge_sort.c \
+ src/test/unit_test/impl/unit_test_quick_sort.c \
+ src/test/unit_test/unit_test_set.c \
+ src/test/unit_test/impl/unit_test_disjoint_set.c \
+ src/test/unit_test/impl/unit_test_main.c \
+ src/test/performance_test/performance_test.c \
+ src/test/performance_test/performance_test.h \
+ src/test/performance_test/performance_test_declaration.h \
+ src/test/performance_test/performance_test_reference.h \
+ src/test/performance_test/performance_test_linked_list.c \
+ src/test/performance_test/impl/performance_test_single_linked_list.c \
+ src/test/performance_test/impl/../performance_test_linked_list.h \
+ src/test/performance_test/impl/performance_test_doubly_linked_list.c \
+ src/test/performance_test/impl/performance_test_skip_linked_list.c \
+ src/test/performance_test/performance_test_stack.c \
+ src/test/performance_test/impl/performance_test_array_stack.c \
+ src/test/performance_test/impl/../performance_test_stack.h \
+ src/test/performance_test/impl/performance_test_linked_stack.c \
+ src/test/performance_test/performance_test_queue.c \
+ src/test/performance_test/impl/performance_test_array_queue.c \
+ src/test/performance_test/impl/../performance_test_queue.h \
+ src/test/performance_test/impl/performance_test_stacked_queue.c \
+ src/test/performance_test/impl/performance_test_doubly_end_queue.c \
+ src/test/performance_test/performance_test_tree.c \
+ src/test/performance_test/impl/performance_test_binary_search_tree.c \
+ src/test/performance_test/impl/../performance_test_tree.h \
+ src/test/performance_test/impl/performance_test_avl_tree.c \
+ src/test/performance_test/impl/performance_test_splay_tree.c \
+ src/test/performance_test/impl/performance_test_binary_indexed_tree.c \
+ src/test/performance_test/impl/performance_test_trie_tree.c \
+ src/test/performance_test/performance_test_hash.c \
+ src/test/performance_test/impl/performance_test_open_addressing_hash.c \
+ src/test/performance_test/impl/../performance_test_hash.h \
+ src/test/performance_test/impl/performance_test_separate_chain_hash.c \
+ src/test/performance_test/impl/performance_test_bitmap.c \
+ src/test/performance_test/performance_test_heap.c \
+ src/test/performance_test/impl/performance_test_minimal_heap.c \
+ src/test/performance_test/impl/../performance_test_heap.h \
+ src/test/performance_test/impl/performance_test_maximal_heap.c \
+ src/test/performance_test/impl/performance_test_min_max_heap.c \
+ src/test/performance_test/impl/performance_test_leftist_heap.c \
+ src/test/performance_test/performance_test_sort.c \
+ src/test/performance_test/impl/performance_test_insertion_sort.c \
+ src/test/performance_test/impl/../performance_test_sort.h \
+ src/test/performance_test/impl/performance_test_shell_sort.c \
+ src/test/performance_test/impl/performance_test_heap_sort.c \
+ src/test/performance_test/impl/performance_test_merge_sort.c \
+ src/test/performance_test/impl/performance_test_quick_sort.c \
+ src/test/performance_test/performance_test_set.c \
+ src/test/performance_test/impl/performance_test_disjoint_set.c \
+ src/test/performance_test/impl/performance_test_main.c \
+ src/test/performance_test/impl/performance_test_timing.c \
+ src/test/performance_test/impl/performance_test_reference.c \
+ src/test/test_layer.h src/test/impl/test_case_list.c \
+ src/test/impl/test_main.c src/test/impl/test_sample.c \
+ src/test/impl/test_utilize.c src/test/impl/test_result_check.c \
+ src/test/impl/test_parameter.c src/test/impl/test_case_filter.c \
+ src/test/impl/test_common.c src/test/impl/test_memory_maps.c
+tree.o: src/tree/tree.c src/inc/types.h src/inc/depends.h \
+ src/inc/defines.h src/inc/data_structure_types.h src/inc/universal.h \
+ src/tree/tree.h src/tree/tree_declaration.h src/tree/tree_optimize.h \
+ src/tree/impl/tree_debug.c src/tree/impl/tree_optimize.c \
+ src/tree/impl/binary_search_tree.c src/tree/impl/avl_tree.c \
+ src/tree/impl/splay_tree.c src/tree/impl/binary_indexed_tree.c \
+ src/tree/impl/trie_tree.c

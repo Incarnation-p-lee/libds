@@ -6,8 +6,8 @@ SHELL                  :=/bin/sh
 AR                     :=ar
 CC                     :=$(if $(V), gcc, @gcc)
 LD                     :=$(CC)
-MV                     :=mv -v
-CP                     :=cp -v
+MV                     :=mv
+CP                     :=cp
 RM                     :=rm -f
 MKDIR                  :=mkdir -v
 PERL                   :=$(if $(V), perl, @perl)
@@ -32,6 +32,7 @@ script                 :=script
 script_module_decl     :=$(script)/produce_module_declaration_h.pl
 script_universal       :=$(script)/produce_universal_h.pl
 script_interface       :=$(script)/produce_data_structure_interface_h.pl
+script_dependency      :=$(script)/produce_makefile_dependency.pl
 
 vpath %.h $(inc)
 
@@ -49,10 +50,12 @@ include src/sort/makefile.mk
 include src/stack/makefile.mk
 include src/test/makefile.mk
 include src/tree/makefile.mk
+include makefile.dep.in
 
 TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
 TARGET_A               :=$(addprefix $(out)/, libds.a)
 TARGET_SO              :=$(addprefix $(out)/, libds.so)
+TARGET_DEP             :=makefile.dep.in
 
 CFLAG                  +=$(addprefix -I,$(inc))
 CFLAG                  +=-DX86_64 -DLIBC
@@ -73,28 +76,33 @@ lib                    +=$(if $(COVERAGE),-lgcov,)
 
 .PHONY:all help clean depend
 
-all:depend $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
 
-depend:
+depend:$(src)
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
 	$(PERL) $(script_module_decl) $(if $(RELEASE),"No","Yes")
 	$(PERL) $(script_universal)
 	$(PERL) $(script_interface)
 
+## depend target ##
+$(TARGET_DEP):$(src)
+	@echo "    Depend   $(notdir $@)"
+	$(CC) -MM $(CFLAG) $^ > $@.$$$$; $(MV) $@.$$$$ $@
+
 ## .elf target ##
 $(TARGET_ELF):$(obj)
 	@echo "    Link     $@"
-	$(CC) $(LFLAG) $? -o $@ $(lib)
+	$(CC) $(LFLAG) $^ -o $@ $(lib)
 
 ## .a target ##
 $(TARGET_A):$(obj_partial)
 	@echo "    Archive  $@"
-	@$(AR) $(AFLAG) $@ $?
+	@$(AR) $(AFLAG) $@ $^
 
 ## .so target ##
 $(TARGET_SO):$(obj_partial)
 	@echo "    Shared   $@"
-	$(CC) $(SLFLAG) $? -o $@ $(lib)
+	$(CC) $(SLFLAG) $^ -o $@ $(lib)
 
 ## object ##
 $(obj):%.o:%.c
