@@ -72,6 +72,12 @@ avl_tree_structure_legal_p(s_avl_tree_t *tree)
     }
 }
 
+static inline bool
+avl_tree_structure_illegal_p(s_avl_tree_t *tree)
+{
+    return !avl_tree_structure_legal_p(tree);
+}
+
 static inline void
 avl_tree_destroy_i(s_avl_tree_t *tree)
 {
@@ -249,9 +255,9 @@ avl_tree_contains_ip(s_avl_tree_t *tree, s_avl_tree_t *node)
 bool
 avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node)
 {
-    if (!avl_tree_structure_legal_p(tree)) {
+    if (avl_tree_structure_illegal_p(tree)) {
         return false;
-    } else if (!avl_tree_structure_legal_p(node)) {
+    } else if (avl_tree_structure_illegal_p(node)) {
         return false;
     } else {
         return avl_tree_contains_ip(tree, node);
@@ -310,7 +316,7 @@ avl_tree_balanced_ip(s_avl_tree_t *tree)
 bool
 avl_tree_balanced_p(s_avl_tree_t *tree)
 {
-    if (!avl_tree_structure_legal_p(tree)) {
+    if (avl_tree_structure_illegal_p(tree)) {
         return true;
     } else {
         return avl_tree_balanced_ip(tree);
@@ -332,7 +338,7 @@ avl_tree_doubly_child_p(s_avl_tree_t *tree)
 sint32
 avl_tree_height(s_avl_tree_t *tree)
 {
-    if (!avl_tree_structure_legal_p(tree)) {
+    if (avl_tree_structure_illegal_p(tree)) {
         return -1;
     } else {
         return avl_tree_height_opt(tree);
@@ -508,7 +514,7 @@ avl_tree_rotate_left(s_avl_tree_t **tree)
     sint32 right_height;
     s_avl_tree_t *left;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->left));
 
@@ -544,7 +550,7 @@ avl_tree_rotate_right(s_avl_tree_t **tree)
     sint32 right_height;
     s_avl_tree_t *right;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->right));
 
@@ -579,7 +585,7 @@ avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
     s_avl_tree_t *avl;
     s_avl_tree_t *inserted;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p(node));
     assert_exit(avl_tree_balanced_p(*tree));
@@ -624,9 +630,9 @@ avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
 
     if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
-    } else if (!avl_tree_structure_legal_p(*tree)) {
+    } else if (avl_tree_structure_illegal_p(*tree)) {
         return PTR_INVALID;
-    } else if (!avl_tree_structure_legal_p(node)) {
+    } else if (avl_tree_structure_illegal_p(node)) {
         return PTR_INVALID;
     } else {
         t = avl_tree_insert_i(tree, node);
@@ -637,7 +643,7 @@ avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
 static inline void
 avl_tree_lt_doubly_child_strip(s_avl_tree_t **pre, s_avl_tree_t *node)
 {
-    assert_exit(!NULL_PTR_P(pre));
+    assert_exit(NON_NULL_PTR_P(pre));
     assert_exit(avl_tree_structure_legal_p(*pre));
     assert_exit(avl_tree_structure_legal_p(node));
     assert_exit(*pre == node);
@@ -659,7 +665,7 @@ avl_tree_doubly_child_strip(s_avl_tree_t **node_pre)
     sint32 right_height;
     s_avl_tree_t *avl;
 
-    assert_exit(!NULL_PTR_P(node_pre));
+    assert_exit(NON_NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
 
     avl = *node_pre;
@@ -702,7 +708,7 @@ avl_tree_find_ptr_to_max(s_avl_tree_t **tree)
     s_avl_tree_t *avl;
     s_avl_tree_t **max;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_doubly_child_p(*tree));
 
@@ -723,7 +729,7 @@ avl_tree_find_ptr_to_min(s_avl_tree_t **tree)
     s_avl_tree_t *avl;
     s_avl_tree_t **min;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_doubly_child_p(*tree));
 
@@ -746,7 +752,7 @@ avl_tree_doubly_child_strip_from_max(s_avl_tree_t **node_pre)
     s_avl_tree_t *max;
     s_avl_tree_t **max_pre;
 
-    assert_exit(!NULL_PTR_P(node_pre));
+    assert_exit(NON_NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
     assert_exit(avl_tree_doubly_child_p(*node_pre));
 
@@ -781,7 +787,7 @@ avl_tree_doubly_child_strip_from_min(s_avl_tree_t **node_pre)
     s_avl_tree_t *min;
     s_avl_tree_t **min_pre;
 
-    assert_exit(!NULL_PTR_P(node_pre));
+    assert_exit(NON_NULL_PTR_P(node_pre));
     assert_exit(avl_tree_structure_legal_p(*node_pre));
     assert_exit(avl_tree_doubly_child_p(*node_pre));
 
@@ -814,7 +820,7 @@ avl_tree_remove_i(s_avl_tree_t **tree, s_avl_tree_t *node)
     s_avl_tree_t *avl;
     s_avl_tree_t *removed;
 
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_balanced_p(*tree));
     assert_exit(avl_tree_ordered_p(*tree));
@@ -878,9 +884,9 @@ avl_tree_remove(s_avl_tree_t **tree, s_avl_tree_t *node)
 {
     if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
-    } else if (!avl_tree_structure_legal_p(*tree)) {
+    } else if (avl_tree_structure_illegal_p(*tree)) {
         return PTR_INVALID;
-    } else if (!avl_tree_structure_legal_p(node)) {
+    } else if (avl_tree_structure_illegal_p(node)) {
         return PTR_INVALID;
     } else {
         return avl_tree_remove_i(tree, node);
@@ -894,7 +900,7 @@ avl_tree_iterate_i(s_avl_tree_t *tree, void (*handler)(void *))
     s_array_queue_t *queue_slave;
     s_array_queue_t *queue_master;
 
-    assert_exit(!complain_null_pointer_p(handler));
+    assert_exit(NON_NULL_PTR_P(handler));
     assert_exit(avl_tree_structure_legal_p(tree));
 
     queue_slave = array_queue_create();
@@ -925,7 +931,7 @@ avl_tree_iterate(s_avl_tree_t *tree, void (*handler)(void *))
 {
     if (NULL_PTR_P(handler)) {
         return;
-    } else if (!avl_tree_structure_legal_p(tree)) {
+    } else if (avl_tree_structure_illegal_p(tree)) {
         return;
     } else {
         avl_tree_iterate_i(tree, handler);
