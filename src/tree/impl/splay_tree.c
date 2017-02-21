@@ -651,7 +651,7 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
         } else { /* nice repeated node */
             node->left = splay_node;
             node->right = splay_node->right;
-            splay_node = NULL;
+            splay_node->right = NULL;
             break;
         }
 
