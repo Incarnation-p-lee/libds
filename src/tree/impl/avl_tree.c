@@ -264,7 +264,7 @@ avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node)
     }
 }
 
-static __attribute__((noinline)) bool
+static inline bool
 avl_tree_node_balanced_p(s_avl_tree_t *node)
 {
     assert_exit(avl_tree_structure_legal_p(node));
@@ -507,7 +507,7 @@ avl_tree_doubly_rotate_right(s_avl_tree_t *node)
     return k3;
 }
 
-static __attribute__((noinline)) void
+static inline void
 avl_tree_rotate_left(s_avl_tree_t **tree)
 {
     sint32 left_height;
@@ -543,7 +543,7 @@ avl_tree_rotate_left(s_avl_tree_t **tree)
     }
 }
 
-static __attribute__((noinline)) void
+static inline void
 avl_tree_rotate_right(s_avl_tree_t **tree)
 {
     sint32 left_height;
@@ -579,7 +579,7 @@ avl_tree_rotate_right(s_avl_tree_t **tree)
     }
 }
 
-static __attribute__((noinline)) s_avl_tree_t *
+static inline s_avl_tree_t *
 avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
 {
     s_avl_tree_t *avl;
