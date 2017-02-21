@@ -622,30 +622,9 @@ splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node)
     }
 }
 
-static inline void
-splay_tree_repeated_insert(s_splay_tree_t *splay, s_splay_tree_t *inserted,
-    sint32 path_direction)
-{
-    assert_exit(splay_tree_structure_legal_p(splay));
-    assert_exit(splay_tree_structure_legal_p(inserted));
-    assert_exit(splay != inserted);
-    assert_exit(splay->nice == inserted->nice);
-
-    if (path_direction > 0) { /* If right is heavy, inserted to left. */
-        inserted->left = splay;
-        inserted->right = splay->right;
-        splay->right = NULL;
-    } else {
-        inserted->right = splay;
-        inserted->left = splay->left;
-        splay->left = NULL;
-    }
-}
-
 static inline s_splay_tree_t *
 splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
 {
-    sint32 path_direction;
     s_array_stack_t *path_stack;
     s_splay_tree_t *splay_node, **iterator;
 
@@ -654,28 +633,28 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
     assert_exit(splay_tree_structure_legal_p(*tree));
     assert_exit(splay_tree_ordered_p(*tree));
 
-    path_direction = 0;
     iterator = tree;
-    path_stack = array_stack_create();
     splay_node = *iterator;
+    path_stack = array_stack_create();
 
     while (splay_node) {
         if (node->nice < splay_node->nice) {
-            path_direction--;
             array_stack_push(path_stack, TREE_PATH_L_ENCODE(iterator));
             iterator = &splay_node->left;
         } else if (node->nice > splay_node->nice) {
-            path_direction++;
             array_stack_push(path_stack, TREE_PATH_R_ENCODE(iterator));
             iterator = &splay_node->right;
-        } else if (splay_node == node) {
+        } else if (node == splay_node) {
             pr_log_warn("Insert node exist, nothing will be done.\n");
             array_stack_destroy(&path_stack);
             return NULL;
-        } else {
-            splay_tree_repeated_insert(splay_node, node, path_direction);
+        } else { /* nice repeated node */
+            node->left = splay_node;
+            node->right = splay_node->right;
+            splay_node = NULL;
             break;
         }
+
         splay_node = *iterator;
     }
 
@@ -685,7 +664,6 @@ splay_tree_insert_i(s_splay_tree_t **tree, s_splay_tree_t *node)
 
     assert_exit(*tree == node);
     assert_exit(splay_tree_ordered_p(*tree));
-
     return node;
 }
 
