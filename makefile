@@ -21,7 +21,7 @@ SLFLAG                 :=$(LFLAG) -shared
 ## sub-module source files ##
 src                    :=
 
-obj                    =$(subst .c,.o, $(src))       # use recursive variable here
+obj                    =$(subst .c,.o, $(src))        # use recursive variable here
 obj_partial            =$(filter-out %main.o, $(obj)) # excluded main.o
 lib                    :=-lm
 
@@ -50,7 +50,8 @@ include src/sort/makefile.mk
 include src/stack/makefile.mk
 include src/test/makefile.mk
 include src/tree/makefile.mk
-include makefile.dep.in
+
+include $(subst .c,.d,$(src))
 
 TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
 TARGET_A               :=$(addprefix $(out)/, libds.a)
@@ -76,18 +77,20 @@ lib                    +=$(if $(COVERAGE),-lgcov,)
 
 .PHONY:all help clean depend
 
-all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+all:depend $(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
 
-depend:$(src)
+depend:
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
 	$(PERL) $(script_module_decl) $(if $(RELEASE),"No","Yes")
 	$(PERL) $(script_universal)
 	$(PERL) $(script_interface)
 
 ## depend target ##
-$(TARGET_DEP):$(src)
+%.d:%.c
 	@echo "    Depend   $(notdir $@)"
-	$(CC) -MM $(CFLAG) $^ > $@.$$$$; $(MV) $@.$$$$ $@
+	$(CC) -M -MT '$(basename $<).o' $(CFLAG) $< -o $@
+
+#>> $@.$$$$; $(MV) $@.$$$$ $@
 
 ## .elf target ##
 $(TARGET_ELF):$(obj)
