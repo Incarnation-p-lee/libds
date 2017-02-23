@@ -1,13 +1,6 @@
-.SUFFIXES:
-.SUFFIXES: .o .a .so .h .c .s .S
-
 ## command define ##
-SHELL                  :=/bin/sh
 AR                     :=ar
 CC                     :=$(if $(V), gcc, @gcc)
-LD                     :=$(CC)
-MV                     :=mv
-CP                     :=cp
 RM                     :=rm -f
 MKDIR                  :=mkdir -v
 PERL                   :=$(if $(V), perl, @perl)
@@ -20,18 +13,27 @@ SLFLAG                 :=$(LFLAG) -shared
 
 ## sub-module source files ##
 src                    :=
-
 obj                    =$(subst .c,.o, $(src))        # use recursive variable here
+dep                    =$(subst .c,.d,$(src))
 obj_partial            =$(filter-out %main.o, $(obj)) # excluded main.o
+decl                   =$(subst .o,_declaration.h,$(obj_partial))
+decl_partial           =$(filter-out %test_declaration.h, $(decl))
+
 lib                    :=-lm
+lib                    +=$(if $(COVERAGE),-lgcov,)
 
 ## dependency config ##
 out                    :=bin
-inc                    :=src/inc
-script                 :=script
-dep                    =$(subst .c,.d,$(src))
-decl                   =$(subst .o,_declaration.h,$(obj_partial))
+base                   :=src
+inc                    :=$(base)/inc
 
+universal              :=$(inc)/universal.h
+interface              :=$(inc)/data_structure_interface.h
+common                 :=$(base)/common/common_declaration.h
+type                   :=$(inc)/types.h
+data_structure         :=$(inc)/data_structure_types.h
+
+script                 :=script
 script_module_decl     :=$(script)/produce_module_declaration_h.pl
 script_universal       :=$(script)/produce_universal_h.pl
 script_interface       :=$(script)/produce_data_structure_interface_h.pl
@@ -55,36 +57,40 @@ include src/tree/makefile.mk
 
 -include $(dep)
 
-TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
-TARGET_A               :=$(addprefix $(out)/, libds.a)
-TARGET_SO              :=$(addprefix $(out)/, libds.so)
-
-CFLAG                  +=$(addprefix -I,$(inc))
-CFLAG                  +=-DX86_64 -DLIBC
-
 CF_DEBUG               :=-DDEBUG -g
 CF_RELEASE             :=-O3 -ofast
 CF_COVERAGE            :=--coverage
 
-## RELEASE build ##
+CFLAG                  +=$(addprefix -I,$(inc))
+CFLAG                  +=-DX86_64 -DLIBC
 CFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
+CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
+
 LFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
+LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
 SLFLAG                 +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 
 ## COVERAGE build ##
-CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
-LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
-lib                    +=$(if $(COVERAGE),-lgcov,)
 
-.PHONY:all help clean depend
+.PHONY:all help clean
 
-all: $(TARGET_ELF) $(TARGET_A) $(TARGET_SO) $(decl)
+TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
+TARGET_A               :=$(addprefix $(out)/, libds.a)
+TARGET_SO              :=$(addprefix $(out)/, libds.so)
+TARGET_DEP             :=$(decl) $(universal) $(interface)
 
+all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+
+## declaration header files ##
 $(decl):%_declaration.h:%.c
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
 	$(PERL) $(script_module_decl) $(dir $<) $(if $(RELEASE),"No","Yes")
-#$(PERL) $(script_universal)
-#$(PERL) $(script_interface)
+
+## specific header files  ##
+$(universal):$(common)
+	$(PERL) $(script_universal) $@ $<
+$(interface):$(type) $(data_structure) $(decl_partial)
+	$(PERL) $(script_interface) $(inc) $@ $(decl_partial)
 
 ## depend target ##
 $(dep):%.d:%.c
