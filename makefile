@@ -29,10 +29,12 @@ lib                    :=-lm
 out                    :=bin
 inc                    :=src/inc
 script                 :=script
+dep                    =$(subst .c,.d,$(src))
+decl                   =$(subst .o,_declaration.h,$(obj_partial))
+
 script_module_decl     :=$(script)/produce_module_declaration_h.pl
 script_universal       :=$(script)/produce_universal_h.pl
 script_interface       :=$(script)/produce_data_structure_interface_h.pl
-script_dependency      :=$(script)/produce_makefile_dependency.pl
 
 vpath %.h $(inc)
 
@@ -51,12 +53,11 @@ include src/stack/makefile.mk
 include src/test/makefile.mk
 include src/tree/makefile.mk
 
-include $(subst .c,.d,$(src))
+-include $(dep)
 
 TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
 TARGET_A               :=$(addprefix $(out)/, libds.a)
 TARGET_SO              :=$(addprefix $(out)/, libds.so)
-TARGET_DEP             :=makefile.dep.in
 
 CFLAG                  +=$(addprefix -I,$(inc))
 CFLAG                  +=-DX86_64 -DLIBC
@@ -77,20 +78,19 @@ lib                    +=$(if $(COVERAGE),-lgcov,)
 
 .PHONY:all help clean depend
 
-all:depend $(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+all: $(TARGET_ELF) $(TARGET_A) $(TARGET_SO) $(decl)
 
-depend:
+$(decl):%_declaration.h:%.c
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
-	$(PERL) $(script_module_decl) $(if $(RELEASE),"No","Yes")
-	$(PERL) $(script_universal)
-	$(PERL) $(script_interface)
+	$(PERL) $(script_module_decl) $(dir $<) $(if $(RELEASE),"No","Yes")
+#$(PERL) $(script_universal)
+#$(PERL) $(script_interface)
 
 ## depend target ##
-%.d:%.c
+$(dep):%.d:%.c
 	@echo "    Depend   $(notdir $@)"
-	$(CC) -M -MT '$(basename $<).o' $(CFLAG) $< -o $@
-
-#>> $@.$$$$; $(MV) $@.$$$$ $@
+	$(CC) -M -MT '$(basename $<).o $(basename $<).d' $(CFLAG) $< -o $@
+	$(if $(filter %main.c, $<),,$(update_decl_depend))
 
 ## .elf target ##
 $(TARGET_ELF):$(obj)
@@ -123,4 +123,9 @@ help:
 	@echo "  make V=1        :Verbose build"
 	@echo "  make COVERAGE=1 :Coverage build"
 	@echo
+
+## define list ##
+define update_decl_depend
+	@echo "$(basename $<)_declaration.h: $(shell find $(dir $<)impl | grep "\.c$$")" >> $@
+endef
 
