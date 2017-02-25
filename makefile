@@ -58,13 +58,16 @@ include src/tree/makefile.mk
 -include $(dep)
 
 CF_DEBUG               :=-DDEBUG -g
-CF_RELEASE             :=-O3 -ofast
+CF_RELEASE             :=-O3
 CF_COVERAGE            :=--coverage
 
 CFLAG                  +=$(addprefix -I,$(inc))
 CFLAG                  +=-DX86_64 -DLIBC
 CFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
-CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
+
+ifdef COVERAGE
+    CFLAG              +=$(CF_COVERAGE)
+endif
 
 LFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
@@ -84,7 +87,7 @@ all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
 ## declaration header files ##
 $(decl):%_declaration.h:%.c
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
-	$(PERL) $(script_module_decl) $(dir $<) $(if $(RELEASE),"No","Yes")
+	$(PERL) $(script_module_decl) $(dir $<)
 
 ## specific header files  ##
 $(universal):$(common)
