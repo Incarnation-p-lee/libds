@@ -121,6 +121,8 @@ $(obj):%.o:%.c
 clean:
 	@echo "    Clean Object"
 	@$(RM) $(obj)
+	@echo "    Clean Depend"
+	@$(RM) $(dep)
 
 help:
 	@echo
