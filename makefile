@@ -1,13 +1,6 @@
-.SUFFIXES:
-.SUFFIXES: .o .a .so .h .c .s .S
-
 ## command define ##
-SHELL                  :=/bin/sh
 AR                     :=ar
 CC                     :=$(if $(V), gcc, @gcc)
-LD                     :=$(CC)
-MV                     :=mv -v
-CP                     :=cp -v
 RM                     :=rm -f
 MKDIR                  :=mkdir -v
 PERL                   :=$(if $(V), perl, @perl)
@@ -20,14 +13,26 @@ SLFLAG                 :=$(LFLAG) -shared
 
 ## sub-module source files ##
 src                    :=
-
-obj                    =$(subst .c,.o, $(src))       # use recursive variable here
+obj                    =$(subst .c,.o, $(src))        # use recursive variable here
+dep                    =$(subst .c,.d,$(src))
 obj_partial            =$(filter-out %main.o, $(obj)) # excluded main.o
+decl                   =$(subst .o,_declaration.h,$(obj_partial))
+decl_partial           =$(filter-out %test_declaration.h, $(decl))
+
 lib                    :=-lm
+lib                    +=$(if $(COVERAGE),-lgcov,)
 
 ## dependency config ##
 out                    :=bin
-inc                    :=src/inc
+base                   :=src
+inc                    :=$(base)/inc
+
+universal              :=$(inc)/universal.h
+interface              :=$(inc)/data_structure_interface.h
+common                 :=$(base)/common/common_declaration.h
+type                   :=$(inc)/types.h
+data_structure         :=$(inc)/data_structure_types.h
+
 script                 :=script
 script_module_decl     :=$(script)/produce_module_declaration_h.pl
 script_universal       :=$(script)/produce_universal_h.pl
@@ -50,51 +55,66 @@ include src/stack/makefile.mk
 include src/test/makefile.mk
 include src/tree/makefile.mk
 
-TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
-TARGET_A               :=$(addprefix $(out)/, libds.a)
-TARGET_SO              :=$(addprefix $(out)/, libds.so)
+-include $(dep)
+
+CF_DEBUG               :=-DDEBUG -g
+CF_RELEASE             :=-O3
+CF_COVERAGE            :=--coverage
 
 CFLAG                  +=$(addprefix -I,$(inc))
 CFLAG                  +=-DX86_64 -DLIBC
-
-CF_DEBUG               :=-DDEBUG -g
-CF_RELEASE             :=-O3 -ofast
-CF_COVERAGE            :=--coverage
-
-## RELEASE build ##
 CFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
+
+ifdef COVERAGE
+    CFLAG              +=$(CF_COVERAGE)
+endif
+
 LFLAG                  +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
+LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
 SLFLAG                 +=$(if $(RELEASE),$(CF_RELEASE),$(CF_DEBUG))
 
 ## COVERAGE build ##
-CFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
-LFLAG                  +=$(if $(COVERAGE),$(CF_COVERAGE),)
-lib                    +=$(if $(COVERAGE),-lgcov,)
 
-.PHONY:all help clean depend
+.PHONY:all help clean
 
-all:depend $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+TARGET_ELF             :=$(addprefix $(out)/, ds.elf)
+TARGET_A               :=$(addprefix $(out)/, libds.a)
+TARGET_SO              :=$(addprefix $(out)/, libds.so)
+TARGET_DEP             :=$(decl) $(universal) $(interface)
 
-depend:
+all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+
+## declaration header files ##
+$(decl):%_declaration.h:%.c
 	$(if $(wildcard $(out)), , $(MKDIR) $(out))
-	$(PERL) $(script_module_decl) $(if $(RELEASE),"No","Yes")
-	$(PERL) $(script_universal)
-	$(PERL) $(script_interface)
+	$(PERL) $(script_module_decl) $(dir $<)
+
+## specific header files  ##
+$(universal):$(common)
+	$(PERL) $(script_universal) $@ $<
+$(interface):$(type) $(data_structure) $(decl_partial)
+	$(PERL) $(script_interface) $(inc) $@ $(decl_partial)
+
+## depend target ##
+$(dep):%.d:%.c
+	@echo "    Depend   $(notdir $@)"
+	$(CC) -M -MT '$(basename $<).o $(basename $<).d' $(CFLAG) $< -o $@
+	$(if $(filter %main.c, $<),,$(update_decl_depend))
 
 ## .elf target ##
 $(TARGET_ELF):$(obj)
 	@echo "    Link     $@"
-	$(CC) $(LFLAG) $? -o $@ $(lib)
+	$(CC) $(LFLAG) $^ -o $@ $(lib)
 
 ## .a target ##
 $(TARGET_A):$(obj_partial)
 	@echo "    Archive  $@"
-	@$(AR) $(AFLAG) $@ $?
+	@$(AR) $(AFLAG) $@ $^
 
 ## .so target ##
 $(TARGET_SO):$(obj_partial)
 	@echo "    Shared   $@"
-	$(CC) $(SLFLAG) $? -o $@ $(lib)
+	$(CC) $(SLFLAG) $^ -o $@ $(lib)
 
 ## object ##
 $(obj):%.o:%.c
@@ -104,6 +124,8 @@ $(obj):%.o:%.c
 clean:
 	@echo "    Clean Object"
 	@$(RM) $(obj)
+	@echo "    Clean Depend"
+	@$(RM) $(dep)
 
 help:
 	@echo
@@ -112,4 +134,9 @@ help:
 	@echo "  make V=1        :Verbose build"
 	@echo "  make COVERAGE=1 :Coverage build"
 	@echo
+
+## define list ##
+define update_decl_depend
+	@echo "$(basename $<)_declaration.h: $(shell find $(dir $<)impl | grep "\.c$$")" >> $@
+endef
 
