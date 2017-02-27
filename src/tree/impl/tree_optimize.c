@@ -73,7 +73,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
     right = avl_tree_height_opt(tree->right);
 
     asm volatile (
-        // abs(left - right)
+        /* abs(left - right) */
         "mov            %1, %%eax\n\t" \
         "mov            %2, %%ecx\n\t" \
         "sub         %%ecx, %%eax\n\t" \
@@ -81,7 +81,7 @@ avl_tree_height_balanced_opt_p(struct avl_tree *tree)
         "sar         $0x1f, %%ecx\n\t" \
         "add         %%ecx, %%eax\n\t" \
         "xor         %%ecx, %%eax\n\t" \
-        // return true or false
+        /* return true or false */
         "xor         %%ecx, %%ecx\n\t" \
         "mov          $0x1, %0\n\t"    \
         "cmp          $0x1, %%eax\n\t" \

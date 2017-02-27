@@ -36,6 +36,7 @@ extern s_array_stack_t * array_stack_create(void);
 extern void array_stack_destroy(s_array_stack_t **stack);
 extern void array_stack_push(s_array_stack_t *stack, void *member);
 extern void * array_stack_pop(s_array_stack_t *stack);
+extern void * array_stack_top(s_array_stack_t *stack);
 extern bool array_stack_empty_p(s_array_stack_t *stack);
 extern bool array_stack_structure_legal_p(s_array_stack_t *queue);
 extern uint32 array_stack_size(s_array_stack_t *stack);

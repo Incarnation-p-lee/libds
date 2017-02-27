@@ -367,22 +367,22 @@ avl_tree_height_update(s_avl_tree_t *tree)
  *    k3   b               a1   b    c
  *   /
  *  a1
- * perform the singe rotation, with left hand.
  */
-static inline s_avl_tree_t *
-avl_tree_single_rotate_left(s_avl_tree_t *node)
+static inline void
+avl_tree_balance_rotate_left_to_left(s_avl_tree_t **tree)
 {
     s_avl_tree_t *k1;
     s_avl_tree_t *k2;
 
-    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(NON_NULL_PTR_P(tree));
+    assert_exit(avl_tree_structure_legal_p(*tree));
+    assert_exit(avl_tree_structure_legal_p((*tree)->left));
+    assert_exit(avl_tree_structure_legal_p((*tree)->left->left));
+    // Fix-Me unbalanced check here
 
-    k1 = node;
+    k1 = *tree;
     k2 = k1->left;
 
-    assert_exit(avl_tree_structure_legal_p(k2));
-    assert_exit(avl_tree_structure_legal_p(k2->left));
-    assert_exit(avl_tree_single_rotate_left_precondition_p(node));
 
     k1->left = k2->right;
     k2->right = k1;
@@ -390,7 +390,7 @@ avl_tree_single_rotate_left(s_avl_tree_t *node)
     avl_tree_height_update(k1);
     avl_tree_height_update(k2);
 
-    return k2;
+    *tree = k2;
 }
 
 /*
@@ -401,22 +401,21 @@ avl_tree_single_rotate_left(s_avl_tree_t *node)
  *         b    k3           c    b   a1
  *               \
  *                a1
- * perform the singe rotation, with right hand.
  */
-static inline s_avl_tree_t *
-avl_tree_single_rotate_right(s_avl_tree_t *node)
+static inline void
+avl_tree_balance_rotate_right_to_right(s_avl_tree_t **tree)
 {
     s_avl_tree_t *k1;
     s_avl_tree_t *k2;
 
-    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(NON_NULL_PTR_P(tree));
+    assert_exit(avl_tree_structure_legal_p(*tree));
+    assert_exit(avl_tree_structure_legal_p((*tree)->right));
+    assert_exit(avl_tree_structure_legal_p((*tree)->right->right));
+    // Fix-Me unbalanced check here
 
-    k1 = node;
+    k1 = *tree;
     k2 = k1->right;
-
-    assert_exit(avl_tree_structure_legal_p(k2));
-    assert_exit(avl_tree_structure_legal_p(k2->right));
-    assert_exit(avl_tree_single_rotate_right_precondition_p(node));
 
     k1->right = k2->left;
     k2->left = k1;
@@ -424,7 +423,7 @@ avl_tree_single_rotate_right(s_avl_tree_t *node)
     avl_tree_height_update(k1);
     avl_tree_height_update(k2);
 
-    return k2;
+    *tree = k2;
 }
 
 /*
@@ -435,23 +434,22 @@ avl_tree_single_rotate_right(s_avl_tree_t *node)
  *    a    k3            a   a1    b
  *        /
  *       a1
- * perform the doubly rotation, with left hand.
  */
-static inline s_avl_tree_t *
-avl_tree_doubly_rotate_left(s_avl_tree_t *node)
+static inline void
+avl_tree_balance_rotate_left_to_right(s_avl_tree_t **tree)
 {
     s_avl_tree_t *k1;
     s_avl_tree_t *k2;
     s_avl_tree_t *k3;
 
-    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(NON_NULL_PTR_P(tree));
+    assert_exit(avl_tree_structure_legal_p(*tree));
+    assert_exit(avl_tree_structure_legal_p((*tree)->left));
+    assert_exit(avl_tree_structure_legal_p((*tree)->left->right));
+    // Fix-Me unbalanced check here
 
-    k1 = node;
+    k1 = *tree;
     k2 = k1->left;
-
-    assert_exit(avl_tree_structure_legal_p(k2));
-    assert_exit(avl_tree_structure_legal_p(k2->right));
-    assert_exit(avl_tree_doubly_rotate_left_precondition_p(node));
 
     k3 = k2->right;
     k2->right = k3->left;
@@ -464,7 +462,7 @@ avl_tree_doubly_rotate_left(s_avl_tree_t *node)
     avl_tree_height_update(k2);
     avl_tree_height_update(k3);
 
-    return k3;
+    *tree = k3;
 }
 
 /*
@@ -475,23 +473,23 @@ avl_tree_doubly_rotate_left(s_avl_tree_t *node)
  *         k3  b           a   a1    b
  *        /
  *       a1
- * perform the doubly rotation, with right hand.
  */
-static inline s_avl_tree_t *
-avl_tree_doubly_rotate_right(s_avl_tree_t *node)
+static inline void
+avl_tree_balance_rotate_right_to_left(s_avl_tree_t **tree)
 {
     s_avl_tree_t *k1;
     s_avl_tree_t *k2;
     s_avl_tree_t *k3;
 
-    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(NON_NULL_PTR_P(tree));
+    assert_exit(avl_tree_structure_legal_p(*tree));
+    assert_exit(avl_tree_structure_legal_p((*tree)->right));
+    assert_exit(avl_tree_structure_legal_p((*tree)->right->left));
+    // Fix-Me unbalanced check here
 
-    k1 = node;
+
+    k1 = *tree;
     k2 = k1->right;
-
-    assert_exit(avl_tree_structure_legal_p(k2));
-    assert_exit(avl_tree_structure_legal_p(k2->left));
-    assert_exit(avl_tree_doubly_rotate_right_precondition_p(node));
 
     k3 = k2->left;
     k2->left = k3->right;
@@ -504,7 +502,7 @@ avl_tree_doubly_rotate_right(s_avl_tree_t *node)
     avl_tree_height_update(k2);
     avl_tree_height_update(k3);
 
-    return k3;
+    *tree = k3;
 }
 
 static inline void
@@ -530,7 +528,7 @@ avl_tree_rotate_left(s_avl_tree_t **tree)
          *   /  \
          *  k3   b
          */
-        *tree = avl_tree_single_rotate_left(*tree);
+        avl_tree_balance_rotate_left_to_left(tree);
     } else {
         /*
          *     k1   <== *tree
@@ -539,7 +537,7 @@ avl_tree_rotate_left(s_avl_tree_t **tree)
          *    \
          *     k3
         */
-        *tree =  avl_tree_doubly_rotate_left(*tree);
+        avl_tree_balance_rotate_left_to_right(tree);
     }
 }
 
@@ -566,7 +564,7 @@ avl_tree_rotate_right(s_avl_tree_t **tree)
          *     \
          *      k3
          */
-        *tree = avl_tree_single_rotate_right(*tree);
+        avl_tree_balance_rotate_right_to_right(tree);
     } else {
         /*
          * k1
@@ -575,49 +573,114 @@ avl_tree_rotate_right(s_avl_tree_t **tree)
          *   /
          * k3
          */
-        *tree = avl_tree_doubly_rotate_right(*tree);
+        avl_tree_balance_rotate_right_to_left(tree);
     }
 }
 
-static inline s_avl_tree_t *
-avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
+static inline void
+avl_tree_balance_rotate_i(s_avl_tree_t **tree, uint32 path_mask)
 {
-    s_avl_tree_t *avl;
-    s_avl_tree_t *inserted;
+    assert_exit(NON_NULL_PTR_P(tree));
+    assert_exit(avl_tree_structure_legal_p(*tree));
+
+    switch (path_mask) {
+        case PATH_LEFT_TO_LEFT:
+            avl_tree_balance_rotate_left_to_left(tree);
+            break;
+        case PATH_LEFT_TO_RIGHT:
+            avl_tree_balance_rotate_left_to_right(tree);
+            break;
+        case PATH_RIGHT_TO_LEFT:
+            avl_tree_balance_rotate_right_to_left(tree);
+            break;
+        case PATH_RIGHT_TO_RIGHT:
+            avl_tree_balance_rotate_right_to_right(tree);
+            break;
+        default:
+            assert_not_reached("Unexpected value of enum tree_path_type.\n");
+            break;
+    }
+}
+
+static inline void
+avl_tree_balance_rotate(s_array_stack_t *path_stack)
+{
+    uint32 path_mask;
+    s_avl_tree_t **iterator;
+
+    assert_exit(array_stack_structure_legal_p(path_stack));
+
+    while (array_stack_size(path_stack) >= 2) {
+        iterator = array_stack_pop(path_stack);
+        path_mask = TREE_PATH_MASK(iterator);
+        iterator = TREE_PATH_DECODE(iterator);
+        avl_tree_height_update(*iterator);
+
+        iterator = array_stack_top(path_stack);
+        path_mask = path_mask + (TREE_PATH_MASK(iterator) << 1);
+        iterator = TREE_PATH_DECODE(iterator);
+        avl_tree_height_update(*iterator);
+
+        if (avl_tree_node_unbalanced_p(*iterator)) {
+            avl_tree_balance_rotate_i(iterator, path_mask);
+        }
+    }
+}
+
+//static inline void
+//avl_tree_repeated_insert(s_avl_tree_t *node, s_avl_tree_t *inserted)
+//{
+//
+//    assert_exit(avl_tree_structure_legal_p(node));
+//    assert_exit(avl_tree_structure_legal_p(inserted));
+//    assert_exit(node->nice == inserted->nice);
+//
+//    inserted->left = node;
+//    inserted->right = node->right;
+//    node->right = NULL;
+//
+//    avl_tree_height_update(node);
+//    avl_tree_height_update(inserted);
+//}
+
+static inline s_avl_tree_t *
+avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *inserted)
+{
+    s_array_stack_t *path_stack;
+    s_avl_tree_t *avl_node, **iterator;
 
     assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
-    assert_exit(avl_tree_structure_legal_p(node));
+    assert_exit(avl_tree_structure_legal_p(inserted));
     assert_exit(avl_tree_balanced_p(*tree));
     assert_exit(avl_tree_ordered_p(*tree));
 
-    avl = *tree;
-    inserted = node;
+    iterator = tree;
+    avl_node = *iterator;
+    path_stack = array_stack_create();
 
-    if (avl == node) {
-        pr_log_info("Insert node exist, nothing will be done.\n");
-        return NULL;
-    } else if (node->nice <= avl->nice) { // Always inserted repeated value to left
-        if (NULL == avl->left) {
-            avl->left = node;
+    while (avl_node) {
+        if (inserted == avl_node) {
+            pr_log_warn("Insert node exist, nothing will be done.\n");
+            array_stack_destroy(&path_stack);
+            return NULL;
+        } else if (inserted->nice <= avl_node->nice) { /* involved nice equal */
+            array_stack_push(path_stack, TREE_PATH_L_ENCODE(iterator));
+            iterator = &avl_node->left;
         } else {
-            inserted = avl_tree_insert_i(&avl->left, node);
-            if (!avl_tree_node_balanced_p(avl)) {
-                avl_tree_rotate_left(tree);
-            }
+            array_stack_push(path_stack, TREE_PATH_R_ENCODE(iterator));
+            iterator = &avl_node->right;
         }
-    } else { /* node->nice > avl->nice */
-        if (NULL == avl->right) {
-            avl->right = node;
-        } else {
-            inserted = avl_tree_insert_i(&avl->right, node);
-            if (!avl_tree_node_balanced_p(avl)) {
-                avl_tree_rotate_right(tree);
-            }
-        }
+
+        avl_node = *iterator;
     }
 
-    avl_tree_height_update(avl);
+    *iterator = inserted;
+    avl_tree_height_update(inserted);
+
+    avl_tree_balance_rotate(path_stack);
+    array_stack_destroy(&path_stack);
+
     assert_exit(avl_tree_ordered_p(*tree));
     assert_exit(avl_tree_balanced_p(*tree));
     return inserted;
@@ -626,8 +689,6 @@ avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *node)
 s_avl_tree_t *
 avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
 {
-    s_avl_tree_t *t;
-
     if (NULL_PTR_P(tree)) {
         return PTR_INVALID;
     } else if (avl_tree_structure_illegal_p(*tree)) {
@@ -635,8 +696,7 @@ avl_tree_insert(s_avl_tree_t **tree, s_avl_tree_t *node)
     } else if (avl_tree_structure_illegal_p(node)) {
         return PTR_INVALID;
     } else {
-        t = avl_tree_insert_i(tree, node);
-        return t;
+        return avl_tree_insert_i(tree, node);
     }
 }
 
