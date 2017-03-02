@@ -97,5 +97,15 @@
     #define S64_MDF_X            "llx"
 #endif
 
+#if defined X86_64
+    #define SWAP(a, b)        \
+        asm volatile (        \
+            "xchg %0, %1\n\t" \
+            :"+r"(a), "+r"(b) \
+            :                 \
+        )
+
+#endif
+
 #endif
 
