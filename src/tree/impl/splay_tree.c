@@ -755,18 +755,11 @@ splay_tree_find_ptr_to_max(s_splay_tree_t **tree)
 static inline void
 splay_tree_swap_child(s_splay_tree_t *a, s_splay_tree_t *b)
 {
-    void *tmp;
-
     assert_exit(splay_tree_structure_legal_p(a));
     assert_exit(splay_tree_structure_legal_p(b));
 
-    tmp = a->left;
-    a->left = b->left;
-    b->left = tmp;
-
-    tmp = a->right;
-    a->right = b->right;
-    b->right = tmp;
+    SWAP(a->left, b->left);
+    SWAP(a->right, b->right);
 }
 
 static inline void

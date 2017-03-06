@@ -389,18 +389,11 @@ static inline void
 binary_search_tree_swap_child(s_binary_search_tree_t *a,
     s_binary_search_tree_t *b)
 {
-    void *tmp;
-
     assert_exit(binary_search_tree_structure_legal_p(a));
     assert_exit(binary_search_tree_structure_legal_p(b));
 
-    tmp = a->left;
-    a->left = b->left;
-    b->left = tmp;
-
-    tmp = a->right;
-    a->right = b->right;
-    b->right = tmp;
+    SWAP(a->left, b->left);
+    SWAP(a->right, b->right);
 }
 
 static inline void
