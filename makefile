@@ -45,6 +45,7 @@ all:
 
 include src/makefile.mk
 include src/common/makefile.mk
+include src/graph/makefile.mk
 include src/hash/makefile.mk
 include src/heap/makefile.mk
 include src/linked_list/makefile.mk

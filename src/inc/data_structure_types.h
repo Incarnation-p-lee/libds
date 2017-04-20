@@ -57,6 +57,7 @@ enum ITER_ORDER {
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
 // New-Line
 
+typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct single_linked_list    s_single_linked_list_t;
 typedef struct doubly_linked_list    s_doubly_linked_list_t;
 typedef struct skip_linked_list      s_skip_linked_list_t;
@@ -82,11 +83,16 @@ typedef struct heap_data             s_heap_data_t;
 typedef struct binary_heap           s_binary_heap_t;
 typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
-typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct edge                  s_edge_t;
+typedef struct vertex                s_vertex_t;
+typedef struct graph                 s_graph_t;
+typedef struct edge_list             s_edge_list_t;
+typedef struct vertex_array          s_vertex_array_t;
+typedef struct graph_attibute        s_graph_attibute_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -395,10 +401,60 @@ struct leftist_heap {
     s_leftist_heap_t *right;
 };
 
-
 struct disjoint_set {
     uint32 size;
     sint32 *set;
+};
+
+struct edge {
+    sint32             cost;
+    union {
+        struct {                   /* directed graph */
+            s_vertex_t *precursor;
+            s_vertex_t *successor;
+        };
+        struct {                   /* indirected graph */
+            s_vertex_t *adjacent_0;
+            s_vertex_t *adjacent_1;
+        };
+    };
+};
+
+struct vertex {
+    uint32                label;
+    void                  *value;
+    union {
+        struct {                      /* directed graph */
+            s_edge_list_t *precursor;
+            s_edge_list_t *successor;
+        };
+        s_edge_list_t     *adjacent;  /* indirected graph */
+    };
+};
+
+struct edge_list {
+    s_edge_t               edge;
+    s_doubly_linked_list_t list;
+};
+
+struct vertex_array {
+    uint32          size;
+    uint32          index;
+    s_array_queue_t *queue;
+    s_vertex_t      **array;
+};
+
+struct graph_attibute {
+    bool   is_directed;
+    uint32 vertex_count;
+    uint32 edge_count;
+    uint32 label_limit;
+};
+
+struct graph {
+    s_graph_attibute_t       attribute;
+    s_vertex_array_t         *vertex_array;
+    s_open_addressing_hash_t *hash;
 };
 
 #endif
