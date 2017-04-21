@@ -1,4 +1,4 @@
-static inline bool
+bool
 directed_graph_structure_legal_p(s_graph_t *graph)
 {
     if (graph_structure_illegal_p(graph)) {
@@ -23,10 +23,11 @@ directed_graph_create(void)
 }
 
 void
-directed_graph_destroy(s_graph_t *graph)
+directed_graph_destroy(s_graph_t **graph)
 {
-    if (directed_graph_structure_legal_p(graph)) {
-        graph_destroy(graph);
+    if (NON_NULL_PTR_P(graph) && directed_graph_structure_legal_p(*graph)) {
+        graph_destroy(*graph);
+        *graph = NULL;
     }
 }
 

@@ -131,7 +131,8 @@ graph_vertex_array_destroy(s_vertex_array_t *vertex_array)
         }
     }
 
-    memory_cache_free(vertex_array->array);
     array_queue_destroy(&vertex_array->queue);
+    memory_cache_free(vertex_array->array);
+    memory_cache_free(vertex_array);
 }
 

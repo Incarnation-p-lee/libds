@@ -386,10 +386,12 @@ extern void memory_cache_free(void *addr);
 extern void random_sequence_drop(uint32 *sequence);
 extern void swap_pointer(void **ptr_a, void **ptr_b);
 
+extern bool directed_graph_structure_legal_p(s_graph_t *graph);
+extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
 extern s_graph_t * directed_graph_create(void);
 extern s_graph_t * indirected_graph_create(void);
-extern void directed_graph_destroy(s_graph_t *graph);
-extern void indirected_graph_destroy(s_graph_t *graph);
+extern void directed_graph_destroy(s_graph_t **graph);
+extern void indirected_graph_destroy(s_graph_t **graph);
 
 extern bool bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val);
 extern bool bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val);
