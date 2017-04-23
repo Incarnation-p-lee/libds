@@ -1706,6 +1706,13 @@ static const struct test_layer_table indirected_graph[] = {
             NULL,
         },
     },
+    {
+        "link", NULL,
+        {
+            &utest_indirected_graph_link,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

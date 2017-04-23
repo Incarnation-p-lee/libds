@@ -1,27 +1,31 @@
-// static inline bool
-// graph_edge_structure_legal_p(s_edge_t *edge)
-// {
-//     if (NULL_PTR_P(edge)) {
-//         return false;
-//     } else if (NON_NULL_PTR_P(edge->precursor)) { /* include adjacent_0 */
-//         return true;
-//     } else if (NON_NULL_PTR_P(edge->successor)) { /* include adjacent_1 */
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
-
-// static inline bool
-// graph_edge_structure_illegal_p(s_edge_t *edge)
-// {
-//     return !graph_edge_structure_legal_p(edge);
-// }
+static inline bool
+graph_edge_structure_legal_p(s_edge_t *edge)
+{
+    if (NULL_PTR_P(edge)) {
+        return false;
+    } else if (NON_NULL_PTR_P(edge->precursor)) { /* include vertex_0 */
+        return true;
+    } else if (NON_NULL_PTR_P(edge->successor)) { /* include vertex_1 */
+        return true;
+    } else {
+        return false;
+    }
+}
 
 static inline bool
-graph_edge_list_structure_legal_p(s_edge_list_t *edge_list)
+graph_edge_structure_illegal_p(s_edge_t *edge)
 {
-    if (NULL_PTR_P(edge_list)) {
+    return !graph_edge_structure_legal_p(edge);
+}
+
+static inline bool
+graph_edge_array_structure_legal_p(s_edge_array_t *edge_array)
+{
+    if (NULL_PTR_P(edge_array)) {
+        return false;
+    } else if (edge_array->index > edge_array->size) {
+        return false;
+    } else if (edge_array->edge_count > edge_array->index) {
         return false;
     } else {
         return true;
@@ -39,9 +43,9 @@ graph_vertex_structure_legal_p(s_vertex_t *vertex)
 {
     if (NULL_PTR_P(vertex)) {
         return false;
-    } else if (graph_edge_list_structure_legal_p(vertex->precursor)) {
+    } else if (graph_edge_array_structure_legal_p(vertex->precursor)) {
         return true; /* include adjacent of indirected */
-    } else if (graph_edge_list_structure_legal_p(vertex->successor)) {
+    } else if (graph_edge_array_structure_legal_p(vertex->successor)) {
         return true;
     } else {
         return false;
@@ -75,7 +79,7 @@ graph_structure_legal_p(s_graph_t *graph)
 {
     if (NULL_PTR_P(graph)) {
         return false;
-    } else if (NULL_PTR_P(graph->hash)) {
+    } else if (NULL_PTR_P(graph->vertex_hash)) {
         return false;
     } else if (graph_vertex_array_structure_illegal_p(graph->vertex_array)) {
         return false;

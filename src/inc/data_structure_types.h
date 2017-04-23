@@ -49,6 +49,7 @@ enum ITER_ORDER {
 #define BITMAP_CLR             (native_wide_t)0
 #define DISJOINT_ELE_INVALID   ((uint32)-1)
 #define DISJOINT_SIZE_INVALID  ((uint32)-1)
+#define GRAPH_COST_INVALID     ((sint32)0x80000000)
 
 #define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line
@@ -90,7 +91,7 @@ typedef struct disjoint_set          s_disjoint_set_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
-typedef struct edge_list             s_edge_list_t;
+typedef struct edge_array            s_edge_array_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
 
@@ -414,27 +415,29 @@ struct edge {
             s_vertex_t *successor;
         };
         struct {                   /* indirected graph */
-            s_vertex_t *adjacent_0;
-            s_vertex_t *adjacent_1;
+            s_vertex_t *vertex_0;
+            s_vertex_t *vertex_1;
         };
     };
 };
 
 struct vertex {
-    uint32                label;
-    void                  *value;
+    uint32                 label;
+    void                   *value;
     union {
         struct {                      /* directed graph */
-            s_edge_list_t *precursor;
-            s_edge_list_t *successor;
+            s_edge_array_t *precursor;
+            s_edge_array_t *successor;
         };
-        s_edge_list_t     *adjacent;  /* indirected graph */
+        s_edge_array_t     *adjacent;  /* indirected graph */
     };
 };
 
-struct edge_list {
-    s_edge_t               edge;
-    s_doubly_linked_list_t list;
+struct edge_array {
+    uint32   index;      /* index of next edge */
+    uint32   size;       /* size of edge buf */
+    uint32   edge_count; /* count of edges */
+    s_edge_t **array;
 };
 
 struct vertex_array {
@@ -454,7 +457,7 @@ struct graph_attibute {
 struct graph {
     s_graph_attibute_t       attribute;
     s_vertex_array_t         *vertex_array;
-    s_open_addressing_hash_t *hash;
+    s_open_addressing_hash_t *vertex_hash;
 };
 
 #endif

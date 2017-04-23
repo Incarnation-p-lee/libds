@@ -190,6 +190,7 @@ test_separate_chain_hash_sample(uint32 count)
 
     iter = PTR_TO_UNSIGNED(heap->begin);
     limit = PTR_TO_UNSIGNED(heap->end);
+
     while (0 != count-- && iter < limit) {
         separate_chain_hash_insert(hash, UNSIGNED_TO_PTR(iter));
         iter += 4;
@@ -278,4 +279,26 @@ test_leftist_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
+static inline s_graph_t *
+test_indirected_graph_sample(uint64 range, uint32 size)
+{
+    uint32 i;
+    void *vertex_a;
+    void *vertex_b;
+    s_graph_t *graph;
+
+    assert_exit(size);
+
+    i = 0;
+    graph = indirected_graph_create();
+
+    while (i < size) {
+        vertex_a = (void *)(ptr_t)random_uint32_with_limit(range);
+        vertex_b = (void *)(ptr_t)random_uint32_with_limit(range);
+
+        indirected_graph_link(graph, vertex_a, vertex_b, i++);
+    }
+
+    return graph;
+}
 

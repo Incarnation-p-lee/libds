@@ -6,7 +6,7 @@ graph_create(void)
     graph = memory_cache_allocate(sizeof(*graph));
 
     graph->vertex_array = graph_vertex_array_create();
-    graph->hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
+    graph->vertex_hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
 
     graph->attribute.edge_count = 0;
     graph->attribute.vertex_count = 0;
@@ -21,36 +21,27 @@ graph_destroy(s_graph_t *graph)
 {
     assert_exit(graph_structure_legal_p(graph));
 
-    open_addressing_hash_destroy(&graph->hash);
+    open_addressing_hash_destroy(&graph->vertex_hash);
     graph_vertex_array_destroy(graph->vertex_array);
 
     memory_cache_free(graph);
 }
 
-// static inline s_edge_list_t *
-// graph_edge_list_create(void)
-// {
-//     s_edge_list_t *edge_list;
-// 
-//     edge_list = memory_cache_allocate(sizeof(*edge_list));
-//     doubly_linked_list_initial(&edge_list->list);
-// 
-//     return edge_list;
-// }
+static inline s_vertex_t *
+graph_vertex_create(s_graph_t *graph, void *value)
+{
+    s_vertex_t *vertex;
 
-// static inline s_vertex_t *
-// graph_vertex_create(void)
-// {
-//     s_vertex_t *vertex;
-// 
-//     vertex = memory_cache_allocate(sizeof(*vertex));
-// 
-//     vertex->value = NULL;
-//     vertex->label = GRAPH_LABEL_INVALID;
-//     vertex->precursor = vertex->successor = NULL;
-// 
-//     return vertex;
-// }
+    assert_exit(graph_structure_legal_p(graph));
+
+    vertex = memory_cache_allocate(sizeof(*vertex));
+
+    vertex->value = value;
+    vertex->label = graph_attibute_label_obtain(graph);
+    vertex->precursor = vertex->successor = NULL;
+
+    return vertex;
+}
 
 static inline void
 graph_vertex_destroy(s_vertex_t *vertex)
@@ -58,39 +49,14 @@ graph_vertex_destroy(s_vertex_t *vertex)
     assert_exit(graph_vertex_structure_legal_p(vertex));
 
     if (vertex->precursor) { /* include adjacent for indirected */
-        graph_edge_list_destroy(vertex->precursor);
+        graph_edge_array_destroy(vertex->precursor);
     }
 
     if (vertex->successor) {
-        graph_edge_list_destroy(vertex->successor);
+        graph_edge_array_destroy(vertex->successor);
     }
 
     memory_cache_free(vertex);
-}
-
-static inline s_edge_list_t *
-graph_edge_list_next(s_edge_list_t *edge_list)
-{
-    assert_exit(graph_edge_list_structure_legal_p(edge_list));
-
-    return CONTAINER_OF(edge_list->list.next, s_edge_list_t, list);
-}
-
-static inline void
-graph_edge_list_destroy(s_edge_list_t *edge_list)
-{
-    s_edge_list_t *edge_tmp;
-    s_edge_list_t *edge_next;
-
-    assert_exit(graph_edge_list_structure_legal_p(edge_list));
-
-    edge_tmp = edge_list;
-
-    do {
-        edge_next = graph_edge_list_next(edge_tmp);
-        memory_cache_free(edge_tmp);
-        edge_tmp = edge_next;
-    } while (edge_tmp != edge_list);
 }
 
 static inline s_vertex_array_t *
@@ -134,5 +100,84 @@ graph_vertex_array_destroy(s_vertex_array_t *vertex_array)
     array_queue_destroy(&vertex_array->queue);
     memory_cache_free(vertex_array->array);
     memory_cache_free(vertex_array);
+}
+
+static inline void
+graph_vertex_array_add(s_vertex_array_t *v_array, s_vertex_t *vertex)
+{
+    uint32 i;
+    uint32 bytes;
+    uint32 new_size;
+    s_array_queue_t *queue;
+
+    assert_exit(graph_vertex_array_structure_legal_p(v_array));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    queue = graph_vertex_array_queue(v_array);
+
+    if (!array_queue_empty_p(queue)) {
+        i = (uint32)(ptr_t)array_queue_leave(queue);
+        v_array->array[i] = vertex;
+    } else if (graph_vertex_array_full_p(v_array)) {
+        new_size = graph_vertex_array_size(v_array) * 2;
+        bytes = sizeof(*v_array->array) * new_size;
+        v_array->array = memory_cache_re_allocate(v_array->array, bytes);
+
+        graph_vertex_array_size_set(v_array, new_size);
+        v_array->array[v_array->index++] = vertex;
+    } else {
+        v_array->array[v_array->index++] = vertex;
+    }
+}
+
+static inline s_edge_t *
+graph_edge_create(sint32 cost)
+{
+    s_edge_t *edge;
+
+    edge = memory_cache_allocate(sizeof(*edge));
+
+    edge->cost = cost;
+    edge->precursor = edge->successor = NULL; /* include vertex_0 */
+
+    return edge;
+}
+
+static inline s_edge_array_t *
+graph_edge_array_create(void)
+{
+    uint32 bytes_count;
+    s_edge_array_t *edge_array;
+
+    edge_array = memory_cache_allocate(sizeof(*edge_array));
+
+    edge_array->index = edge_array->edge_count = 0;
+    edge_array->size = GRAPH_EDGE_DEFAULT;
+
+    bytes_count = sizeof(*edge_array->array) * edge_array->size;
+    edge_array->array = memory_cache_allocate(bytes_count);
+
+    return edge_array;
+}
+
+static inline void
+graph_edge_array_destroy(s_edge_array_t *edge_array)
+{
+    uint32 i;
+    uint32 limit;
+    s_edge_t *edge;
+
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    i = 0;
+    limit = graph_edge_array_limit(edge_array);
+
+    while (i < limit) {
+        edge = graph_edge_array_edge(edge_array, i++);
+
+        if (edge) {
+            memory_cache_free(edge);
+        }
+    }
 }
 

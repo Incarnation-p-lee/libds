@@ -76,6 +76,7 @@ enum log_level {
 #define BITMAP_CLR             (native_wide_t)0
 #define DISJOINT_ELE_INVALID   ((uint32)-1)
 #define DISJOINT_SIZE_INVALID  ((uint32)-1)
+#define GRAPH_COST_INVALID     ((sint32)0x80000000)
 #define PTR_INVALID            (void *)-1   // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
@@ -112,7 +113,7 @@ typedef struct disjoint_set          s_disjoint_set_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
-typedef struct edge_list             s_edge_list_t;
+typedef struct edge_array            s_edge_array_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
@@ -313,27 +314,29 @@ struct edge {
             s_vertex_t *successor;
         };
         struct {                   /* indirected graph */
-            s_vertex_t *adjacent_0;
-            s_vertex_t *adjacent_1;
+            s_vertex_t *vertex_0;
+            s_vertex_t *vertex_1;
         };
     };
 };
 
 struct vertex {
-    uint32                label;
-    void                  *value;
+    uint32                 label;
+    void                   *value;
     union {
         struct {                      /* directed graph */
-            s_edge_list_t *precursor;
-            s_edge_list_t *successor;
+            s_edge_array_t *precursor;
+            s_edge_array_t *successor;
         };
-        s_edge_list_t     *adjacent;  /* indirected graph */
+        s_edge_array_t     *adjacent;  /* indirected graph */
     };
 };
 
-struct edge_list {
-    s_edge_t               edge;
-    s_doubly_linked_list_t list;
+struct edge_array {
+    uint32   index;      /* index of next edge */
+    uint32   size;       /* size of edge buf */
+    uint32   edge_count; /* count of edges */
+    s_edge_t **array;
 };
 
 struct vertex_array {
@@ -353,7 +356,7 @@ struct graph_attibute {
 struct graph {
     s_graph_attibute_t       attribute;
     s_vertex_array_t         *vertex_array;
-    s_open_addressing_hash_t *hash;
+    s_open_addressing_hash_t *vertex_hash;
 };
 
 
@@ -387,9 +390,14 @@ extern void random_sequence_drop(uint32 *sequence);
 extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool directed_graph_structure_legal_p(s_graph_t *graph);
+extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
 extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
+extern s_edge_t * indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
 extern s_graph_t * directed_graph_create(void);
 extern s_graph_t * indirected_graph_create(void);
+extern sint32 indirected_graph_edge_cost(s_edge_t *edge);
+extern void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);
+extern void * indirected_graph_edge_vertex_1_value(s_edge_t *edge);
 extern void directed_graph_destroy(s_graph_t **graph);
 extern void indirected_graph_destroy(s_graph_t **graph);
 

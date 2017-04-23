@@ -26,6 +26,7 @@ static inline char * memory_maps_one_line_map_name(char *line);
 static inline double performance_test_reference_variance_calculate(char *name, sint64 period);
 static inline s_doubly_end_queue_t * test_doubly_end_queue_sample(uint32 count);
 static inline s_doubly_linked_list_t * test_doubly_linked_list_sample(uint32 node_count);
+static inline s_graph_t * test_indirected_graph_sample(uint64 range, uint32 size);
 static inline s_single_linked_list_t * test_single_linked_list_sample(uint32 node_count);
 static inline s_skip_linked_list_t * test_skip_linked_list_sample(uint32 node_count);
 static inline sint32 test_sort_compare_ptr(const void *a, const void *b);
