@@ -5,7 +5,7 @@
 
 #if defined DEBUG
 
-static inline bool graph_edge_array_structure_legal_p(s_edge_array_t *edge_array);
+static inline bool graph_adjacent_structure_legal_p(s_adjacent_t *adjacent);
 static inline bool graph_edge_structure_illegal_p(s_edge_t *edge);
 static inline bool graph_edge_structure_legal_p(s_edge_t *edge);
 static inline bool graph_structure_illegal_p(s_graph_t *graph);
@@ -23,14 +23,14 @@ s_edge_t * indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
 s_graph_t * directed_graph_create(void);
 s_graph_t * indirected_graph_create(void);
 sint32 indirected_graph_edge_cost(s_edge_t *edge);
+static inline bool graph_adjacent_full_p(s_adjacent_t *adjacent);
 static inline bool graph_attribute_directed_p(s_graph_t *graph);
 static inline bool graph_attribute_indirected_p(s_graph_t *graph);
-static inline bool graph_edge_array_full_p(s_edge_array_t *edge_array);
 static inline bool graph_vertex_array_full_p(s_vertex_array_t *vertex_array);
+static inline s_adjacent_t * graph_adjacent_create(void);
+static inline s_adjacent_t * indirected_graph_vertex_adjacent(s_vertex_t *vertex);
 static inline s_array_queue_t * graph_vertex_array_queue(s_vertex_array_t *vertex_array);
-static inline s_edge_array_t * graph_edge_array_create(void);
-static inline s_edge_array_t * indirected_graph_vertex_edge_array(s_vertex_t *vertex);
-static inline s_edge_t * graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);
+static inline s_edge_t * graph_adjacent_edge(s_adjacent_t *adjacent, uint32 i);
 static inline s_edge_t * graph_edge_create(sint32 cost);
 static inline s_edge_t * indirected_graph_edge_create(s_vertex_t *vertex_a, s_vertex_t *vertex_b, sint32 cost);
 static inline s_edge_t * indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
@@ -45,18 +45,18 @@ static inline s_vertex_t * graph_vertex_create(s_graph_t *graph, void *value);
 static inline s_vertex_t * indirected_graph_vertex_create(s_graph_t *graph, void *value);
 static inline sint32 graph_attibute_label_obtain(s_graph_t *graph);
 static inline sint32 graph_edge_cost(s_edge_t *edge);
-static inline uint32 graph_edge_array_limit(s_edge_array_t *edge_array);
-static inline uint32 graph_edge_array_size(s_edge_array_t *edge_array);
+static inline uint32 graph_adjacent_limit(s_adjacent_t *adjacent);
+static inline uint32 graph_adjacent_size(s_adjacent_t *adjacent);
 static inline uint32 graph_vertex_array_limit(s_vertex_array_t *vertex_array);
 static inline uint32 graph_vertex_array_size(s_vertex_array_t *vertex_array);
 static inline void * graph_edge_vertex_0_value(s_edge_t *edge);
 static inline void * graph_edge_vertex_1_value(s_edge_t *edge);
 static inline void * graph_vertex_value(s_vertex_t *vertex);
+static inline void graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge);
+static inline void graph_adjacent_destroy(s_adjacent_t *adjacent);
+static inline void graph_adjacent_size_set(s_adjacent_t *adjacent, uint32 size);
 static inline void graph_attribute_directed_set(s_graph_t *graph, bool is_directed);
 static inline void graph_destroy(s_graph_t *graph);
-static inline void graph_edge_array_append(s_edge_array_t *edge_array, s_edge_t *edge);
-static inline void graph_edge_array_destroy(s_edge_array_t *edge_array);
-static inline void graph_edge_array_size_set(s_edge_array_t *edge_array, uint32 size);
 static inline void graph_vertex_array_add(s_vertex_array_t *v_array, s_vertex_t *vertex);
 static inline void graph_vertex_array_destroy(s_vertex_array_t *vertex_array);
 static inline void graph_vertex_array_size_set(s_vertex_array_t *vertex_array, uint32 size);

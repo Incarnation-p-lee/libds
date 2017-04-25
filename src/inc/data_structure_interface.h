@@ -113,8 +113,9 @@ typedef struct disjoint_set          s_disjoint_set_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
-typedef struct edge_array            s_edge_array_t;
+typedef struct adjacent              s_adjacent_t;
 typedef struct vertex_array          s_vertex_array_t;
+typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -325,14 +326,14 @@ struct vertex {
     void                   *value;
     union {
         struct {                      /* directed graph */
-            s_edge_array_t *precursor;
-            s_edge_array_t *successor;
+            s_adjacent_t *precursor;
+            s_adjacent_t *successor;
         };
-        s_edge_array_t     *adjacent;  /* indirected graph */
+        s_adjacent_t     *adjacent;  /* indirected graph */
     };
 };
 
-struct edge_array {
+struct adjacent {
     uint32   index;      /* index of next edge */
     uint32   size;       /* size of edge buf */
     uint32   edge_count; /* count of edges */
@@ -346,6 +347,13 @@ struct vertex_array {
     s_vertex_t      **array;
 };
 
+struct edge_array {
+    uint32          size;
+    uint32          index;
+    s_array_queue_t *queue;
+    s_edge_t        **array;
+};
+
 struct graph_attibute {
     bool   is_directed;
     uint32 vertex_count;
@@ -355,8 +363,9 @@ struct graph_attibute {
 
 struct graph {
     s_graph_attibute_t       attribute;
-    s_vertex_array_t         *vertex_array;
     s_open_addressing_hash_t *vertex_hash;
+    s_vertex_array_t         *vertex_array;
+    s_edge_t                 *edge_array;
 };
 
 

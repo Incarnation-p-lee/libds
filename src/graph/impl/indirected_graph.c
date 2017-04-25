@@ -67,8 +67,8 @@ indirected_graph_destroy(s_graph_t **graph)
     }
 }
 
-static inline s_edge_array_t *
-indirected_graph_vertex_edge_array(s_vertex_t *vertex)
+static inline s_adjacent_t *
+indirected_graph_vertex_adjacent(s_vertex_t *vertex)
 {
     assert_exit(graph_vertex_structure_legal_p(vertex));
 
@@ -78,13 +78,13 @@ indirected_graph_vertex_edge_array(s_vertex_t *vertex)
 static inline void
 indirected_graph_vertex_edge_append(s_vertex_t *vertex, s_edge_t *edge)
 {
-    s_edge_array_t *edge_array;
+    s_adjacent_t *adjacent;
 
     assert_exit(graph_vertex_structure_legal_p(vertex));
     assert_exit(graph_edge_structure_legal_p(edge));
 
-    edge_array = indirected_graph_vertex_edge_array(vertex);
-    graph_edge_array_append(edge_array, edge);
+    adjacent = indirected_graph_vertex_adjacent(vertex);
+    graph_adjacent_append(adjacent, edge);
 }
 
 static inline s_edge_t *
@@ -129,7 +129,7 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
     assert_exit(indirected_graph_structure_legal_p(graph));
 
     vertex = graph_vertex_create(graph, value);
-    vertex->adjacent = graph_edge_array_create();
+    vertex->adjacent = graph_adjacent_create();
 
     graph_vertex_array_add(graph->vertex_array, vertex);
 

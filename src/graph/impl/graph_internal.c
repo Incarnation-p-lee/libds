@@ -49,11 +49,11 @@ graph_vertex_destroy(s_vertex_t *vertex)
     assert_exit(graph_vertex_structure_legal_p(vertex));
 
     if (vertex->precursor) { /* include adjacent for indirected */
-        graph_edge_array_destroy(vertex->precursor);
+        graph_adjacent_destroy(vertex->precursor);
     }
 
     if (vertex->successor) {
-        graph_edge_array_destroy(vertex->successor);
+        graph_adjacent_destroy(vertex->successor);
     }
 
     memory_cache_free(vertex);
@@ -143,37 +143,37 @@ graph_edge_create(sint32 cost)
     return edge;
 }
 
-static inline s_edge_array_t *
-graph_edge_array_create(void)
+static inline s_adjacent_t *
+graph_adjacent_create(void)
 {
     uint32 bytes_count;
-    s_edge_array_t *edge_array;
+    s_adjacent_t *adjacent;
 
-    edge_array = memory_cache_allocate(sizeof(*edge_array));
+    adjacent = memory_cache_allocate(sizeof(*adjacent));
 
-    edge_array->index = edge_array->edge_count = 0;
-    edge_array->size = GRAPH_EDGE_DEFAULT;
+    adjacent->index = adjacent->edge_count = 0;
+    adjacent->size = GRAPH_EDGE_DEFAULT;
 
-    bytes_count = sizeof(*edge_array->array) * edge_array->size;
-    edge_array->array = memory_cache_allocate(bytes_count);
+    bytes_count = sizeof(*adjacent->array) * adjacent->size;
+    adjacent->array = memory_cache_allocate(bytes_count);
 
-    return edge_array;
+    return adjacent;
 }
 
 static inline void
-graph_edge_array_destroy(s_edge_array_t *edge_array)
+graph_adjacent_destroy(s_adjacent_t *adjacent)
 {
     uint32 i;
     uint32 limit;
     s_edge_t *edge;
 
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
 
     i = 0;
-    limit = graph_edge_array_limit(edge_array);
+    limit = graph_adjacent_limit(adjacent);
 
     while (i < limit) {
-        edge = graph_edge_array_edge(edge_array, i++);
+        edge = graph_adjacent_edge(adjacent, i++);
 
         if (edge) {
             memory_cache_free(edge);

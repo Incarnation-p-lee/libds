@@ -19,13 +19,13 @@ graph_edge_structure_illegal_p(s_edge_t *edge)
 }
 
 static inline bool
-graph_edge_array_structure_legal_p(s_edge_array_t *edge_array)
+graph_adjacent_structure_legal_p(s_adjacent_t *adjacent)
 {
-    if (NULL_PTR_P(edge_array)) {
+    if (NULL_PTR_P(adjacent)) {
         return false;
-    } else if (edge_array->index > edge_array->size) {
+    } else if (adjacent->index > adjacent->size) {
         return false;
-    } else if (edge_array->edge_count > edge_array->index) {
+    } else if (adjacent->edge_count > adjacent->index) {
         return false;
     } else {
         return true;
@@ -43,9 +43,9 @@ graph_vertex_structure_legal_p(s_vertex_t *vertex)
 {
     if (NULL_PTR_P(vertex)) {
         return false;
-    } else if (graph_edge_array_structure_legal_p(vertex->precursor)) {
+    } else if (graph_adjacent_structure_legal_p(vertex->precursor)) {
         return true; /* include adjacent of indirected */
-    } else if (graph_edge_array_structure_legal_p(vertex->successor)) {
+    } else if (graph_adjacent_structure_legal_p(vertex->successor)) {
         return true;
     } else {
         return false;
