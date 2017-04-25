@@ -212,6 +212,7 @@ utest_##name##_tree_insert(void)                                        \
     UNIT_TEST_RESULT(name##_tree_insert, pass);                         \
 }
 
+
 #define UT_TREE_remove(name)                                            \
 static void                                                             \
 utest_##name##_tree_remove(void)                                        \
@@ -222,12 +223,13 @@ utest_##name##_tree_remove(void)                                        \
                                                                         \
     pass = true;                                                        \
     tree = NULL;                                                        \
+    UNIT_TEST_BEGIN(name##_tree_remove);                                \
+                                                                        \
     tmp = TREE_create();                                                \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, tmp), &pass);  \
     TREE_destroy(&tmp);                                                 \
-    UNIT_TEST_BEGIN(name##_tree_remove);                                \
                                                                         \
-    tree = TEST_tree_sample(0x3321, 0xA2B);                             \
+    tree = TEST_tree_sample(0x1321, 0x22B);                             \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(NULL, NULL), &pass);  \
     RESULT_CHECK_pointer(PTR_INVALID, TREE_remove(&tree, NULL), &pass); \
                                                                         \
@@ -236,6 +238,10 @@ utest_##name##_tree_remove(void)                                        \
     TREE_destroy(&tmp);                                                 \
                                                                         \
     tmp = TREE_find_min(tree);                                          \
+    RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tmp), &pass);          \
+    TREE_destroy(&tmp);                                                 \
+                                                                        \
+    tmp = TREE_find_max(tree);                                          \
     RESULT_CHECK_pointer(tmp, TREE_remove(&tree, tmp), &pass);          \
     TREE_destroy(&tmp);                                                 \
                                                                         \

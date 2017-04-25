@@ -477,10 +477,10 @@ splay_tree_balance_splaying(s_array_stack_t *path_stack)
 
     while (array_stack_size(path_stack) >= 2) {
         iterator = array_stack_pop(path_stack);
-        path_mask = TREE_PATH_MASK(iterator);
+        path_mask = TREE_PATH_TYPE(iterator);
 
         iterator = array_stack_pop(path_stack);
-        path_mask = path_mask + (TREE_PATH_MASK(iterator) << 1);
+        path_mask = path_mask + (TREE_PATH_TYPE(iterator) << 1);
 
         iterator = TREE_PATH_DECODE(iterator);
         splay_tree_balance_splaying_i(iterator, path_mask);
@@ -488,7 +488,7 @@ splay_tree_balance_splaying(s_array_stack_t *path_stack)
 
     if (array_stack_size(path_stack) == 1) {
         iterator = array_stack_pop(path_stack);
-        path_mask = TREE_PATH_MASK(iterator);
+        path_mask = TREE_PATH_TYPE(iterator);
 
         iterator = TREE_PATH_DECODE(iterator);
         splay_tree_balance_splaying_root(iterator, path_mask);
