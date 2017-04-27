@@ -32,4 +32,6 @@ tags
 performance/profile/
 performance/performance.new.ref
 *.log
+*.o
+*.d
 

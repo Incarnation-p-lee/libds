@@ -378,7 +378,7 @@ avl_tree_balance_rotate_left_to_left(s_avl_tree_t **tree)
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->left));
     assert_exit(avl_tree_structure_legal_p((*tree)->left->left));
-    // Fix-Me unbalanced check here
+    assert_exit(avl_tree_node_unbalanced_p(*tree));
 
     k1 = *tree;
     k2 = k1->left;
@@ -412,7 +412,7 @@ avl_tree_balance_rotate_right_to_right(s_avl_tree_t **tree)
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->right));
     assert_exit(avl_tree_structure_legal_p((*tree)->right->right));
-    // Fix-Me unbalanced check here
+    assert_exit(avl_tree_node_unbalanced_p(*tree));
 
     k1 = *tree;
     k2 = k1->right;
@@ -446,7 +446,7 @@ avl_tree_balance_rotate_left_to_right(s_avl_tree_t **tree)
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->left));
     assert_exit(avl_tree_structure_legal_p((*tree)->left->right));
-    // Fix-Me unbalanced check here
+    assert_exit(avl_tree_node_unbalanced_p(*tree));
 
     k1 = *tree;
     k2 = k1->left;
@@ -485,7 +485,7 @@ avl_tree_balance_rotate_right_to_left(s_avl_tree_t **tree)
     assert_exit(avl_tree_structure_legal_p(*tree));
     assert_exit(avl_tree_structure_legal_p((*tree)->right));
     assert_exit(avl_tree_structure_legal_p((*tree)->right->left));
-    // Fix-Me unbalanced check here
+    assert_exit(avl_tree_node_unbalanced_p(*tree));
 
 
     k1 = *tree;
@@ -627,27 +627,11 @@ avl_tree_balance_rotate(s_array_stack_t *path_stack)
     }
 }
 
-//static inline void
-//avl_tree_repeated_insert(s_avl_tree_t *node, s_avl_tree_t *inserted)
-//{
-//
-//    assert_exit(avl_tree_structure_legal_p(node));
-//    assert_exit(avl_tree_structure_legal_p(inserted));
-//    assert_exit(node->nice == inserted->nice);
-//
-//    inserted->left = node;
-//    inserted->right = node->right;
-//    node->right = NULL;
-//
-//    avl_tree_height_update(node);
-//    avl_tree_height_update(inserted);
-//}
-
 static inline s_avl_tree_t *
 avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *inserted)
 {
     s_array_stack_t *path_stack;
-    s_avl_tree_t *avl_node, **iterator;
+    s_avl_tree_t *node, **iterator;
 
     assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_p(*tree));
@@ -656,26 +640,26 @@ avl_tree_insert_i(s_avl_tree_t **tree, s_avl_tree_t *inserted)
     assert_exit(avl_tree_ordered_p(*tree));
 
     iterator = tree;
-    avl_node = *iterator;
+    node = *iterator;
     path_stack = array_stack_create();
 
-    while (avl_node) {
-        if (inserted == avl_node) {
+    while (node) {
+        if (inserted == node) {
             pr_log_warn("Insert node exist, nothing will be done.\n");
             array_stack_destroy(&path_stack);
             return NULL;
-        } else if (inserted->nice <= avl_node->nice) { /* involved nice equal */
+        } else if (inserted->nice <= node->nice) { /* involve nice repeated */
             array_stack_push(path_stack, TREE_PATH_L_ENCODE(iterator));
-            iterator = &avl_node->left;
+            iterator = &node->left;
         } else {
             array_stack_push(path_stack, TREE_PATH_R_ENCODE(iterator));
-            iterator = &avl_node->right;
+            iterator = &node->right;
         }
 
-        avl_node = *iterator;
+        node = *iterator;
     }
 
-    *iterator = inserted;
+    *iterator = inserted; /* insert the node */
     avl_tree_height_update(inserted);
 
     avl_tree_balance_rotate(path_stack);
@@ -739,27 +723,15 @@ avl_tree_doubly_child_strip(s_avl_tree_t **node_pre)
     }
 }
 
-// Fix me cmpxchange ?
 static inline void
 avl_tree_swap_child(s_avl_tree_t *a, s_avl_tree_t *b)
 {
-    void *tmp;
-    sint32 height;
-
     assert_exit(avl_tree_structure_legal_p(a));
     assert_exit(avl_tree_structure_legal_p(b));
 
-    tmp = a->left;
-    a->left = b->left;
-    b->left = tmp;
-
-    tmp = a->right;
-    a->right = b->right;
-    b->right = tmp;
-
-    height = a->height;
-    a->height = b->height;
-    b->height = height;
+    SWAP(a->height, b->height);
+    SWAP(a->left, b->left);
+    SWAP(a->right, b->right);
 }
 
 static inline s_avl_tree_t **
