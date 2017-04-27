@@ -1,28 +1,57 @@
-#define GRAPH                     s_graph_t
-#define GRAPH_edge_cost           indirected_graph_edge_cost
-#define GRAPH_edge_vertex_0_value indirected_graph_edge_vertex_0_value
-#define GRAPH_edge_vertex_1_value indirected_graph_edge_vertex_1_value
-#define TEST_GRAPH_sample         test_indirected_graph_sample
-#define TEST_graph_legal_p        indirected_graph_structure_legal_p
+static inline void
+utest_indirected_graph_create(void)
+{
+    bool pass;
+    s_graph_t *graph;
 
-#define GRAPH_create              indirected_graph_create
-#define GRAPH_destroy             indirected_graph_destroy
-#define GRAPH_link                indirected_graph_link
+    pass = true;
+    graph = indirected_graph_create();
+    UNIT_TEST_BEGIN(indirected_graph_create);
 
-#include "../utest_graph.h"
+    RESULT_CHECK_bool(true, indirected_graph_structure_legal_p(graph), &pass);
 
-UT_GRAPH_create(indirected)
-UT_GRAPH_link(indirected)
+    indirected_graph_destroy(&graph);
+    UNIT_TEST_RESULT(indirected_graph_create, pass);
+}
 
-#undef GRAPH
-#undef TEST_graph_legal_p
-#undef GRAPH_edge_cost
-#undef GRAPH_edge_vertex_0_value
-#undef GRAPH_edge_vertex_1_value
-#undef TEST_GRAPH_sample
-#undef TEST_graph_legal_p
+static inline void
+utest_indirected_graph_link(void)
+{
+    bool pass;
+    void *tmp;
+    sint32 cost;
+    void *vertex_a;
+    void *vertex_b;
+    s_edge_t *edge;
+    s_graph_t *graph;
 
-#undef GRAPH_create
-#undef GRAPH_destroy
-#undef GRAPH_link
+    pass = true;
+    cost = 0x234;
+    vertex_a = &pass;
+    vertex_b = &graph;
+    graph = test_indirected_graph_sample(0x121, 0x1e3);
+    UNIT_TEST_BEGIN(indirected_graph_link);
+
+    edge = indirected_graph_link(NULL, vertex_a, vertex_b, cost);
+    RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
+
+    edge = indirected_graph_link(graph, NULL, vertex_b, cost);
+    RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
+
+    edge = indirected_graph_link(graph, vertex_b, NULL, cost);
+    RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
+
+    edge = indirected_graph_link(graph, vertex_a, vertex_b, cost);
+    RESULT_CHECK_sint32(cost, indirected_graph_edge_cost(edge), &pass);
+
+    tmp = indirected_graph_edge_vertex_0_value(edge);
+    RESULT_CHECK_pointer(vertex_a, tmp, &pass);
+
+    tmp = indirected_graph_edge_vertex_1_value(edge);
+    RESULT_CHECK_pointer(vertex_b, tmp, &pass);
+
+    indirected_graph_destroy(&graph);
+    UNIT_TEST_RESULT(indirected_graph_link, pass);
+}
+
 

@@ -9,7 +9,9 @@
 
 #define GRAPH_LABEL_INVALID      0
 #define GRAPH_LABEL_FIRST        1
-#define GRAPH_EDGE_DEFAULT       GRAPH_VERTEX_DEFAULT
+
+#define GRAPH_ADJACENT_DEFAULT   GRAPH_VERTEX_DEFAULT
+#define GRAPH_EDGE_DEFAULT       1024
 
 
 extern bool array_queue_structure_illegal_p(s_array_queue_t *queue);

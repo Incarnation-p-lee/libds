@@ -50,6 +50,7 @@ enum ITER_ORDER {
 #define DISJOINT_ELE_INVALID   ((uint32)-1)
 #define DISJOINT_SIZE_INVALID  ((uint32)-1)
 #define GRAPH_COST_INVALID     ((sint32)0x80000000)
+#define GRAPH_INDEX_INVALID    SIZE_INVALID
 
 #define PTR_INVALID            (void *)-1   // invalid pointer
 // New-Line
@@ -409,6 +410,7 @@ struct disjoint_set {
 };
 
 struct edge {
+    uint32             index;      /* edge index in edge array */
     sint32             cost;
     union {
         struct {                   /* directed graph */
@@ -423,10 +425,11 @@ struct edge {
 };
 
 struct vertex {
-    uint32                 label;
-    void                   *value;
+    uint32               index;      /* vertex index in vertex array */
+    uint32               label;
+    void                 *value;
     union {
-        struct {                      /* directed graph */
+        struct {                     /* directed graph */
             s_adjacent_t *precursor;
             s_adjacent_t *successor;
         };
@@ -466,7 +469,7 @@ struct graph {
     s_graph_attibute_t       attribute;
     s_open_addressing_hash_t *vertex_hash;
     s_vertex_array_t         *vertex_array;
-    s_edge_t                 *edge_array;
+    s_edge_array_t           *edge_array;
 };
 
 #endif

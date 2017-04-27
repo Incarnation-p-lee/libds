@@ -19,6 +19,20 @@ graph_edge_structure_illegal_p(s_edge_t *edge)
 }
 
 static inline bool
+graph_edge_array_structure_legal_p(s_edge_array_t *edge_array)
+{
+    if (NULL_PTR_P(edge_array)) {
+        return false;
+    } else if (edge_array->index > edge_array->size) {
+        return false;
+    } else if (array_queue_structure_illegal_p(edge_array->queue)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
 graph_adjacent_structure_legal_p(s_adjacent_t *adjacent)
 {
     if (NULL_PTR_P(adjacent)) {
@@ -31,12 +45,6 @@ graph_adjacent_structure_legal_p(s_adjacent_t *adjacent)
         return true;
     }
 }
-
-// static inline bool
-// graph_edge_list_structure_illegal_p(s_edge_list_t *edge_list)
-// {
-//     return !graph_edge_list_structure_legal_p(edge_list);
-// }
 
 static inline bool
 graph_vertex_structure_legal_p(s_vertex_t *vertex)

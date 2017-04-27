@@ -86,13 +86,77 @@ graph_edge_cost(s_edge_t *edge)
 //     edge->cost = cost;
 // }
 
-static inline uint32
-graph_adjacent_limit(s_adjacent_t *adjacent)
+static inline void
+graph_edge_index_set(s_edge_t *edge, uint32 index)
 {
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+    assert_exit(graph_edge_structure_legal_p(edge));
 
-    return adjacent->index;
+    edge->index = index;
 }
+
+static inline s_array_queue_t *
+graph_edge_array_queue(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    return edge_array->queue;
+}
+
+static inline uint32
+graph_edge_array_limit(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    return edge_array->index;
+}
+
+static inline s_edge_t *
+graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(i < graph_edge_array_limit(edge_array));
+
+    return edge_array->array[i];
+}
+
+static inline uint32
+graph_edge_array_size(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    return edge_array->size;
+}
+
+static inline void
+graph_edge_array_size_set(s_edge_array_t *edge_array, uint32 size)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    edge_array->size = size;
+}
+
+static inline bool
+graph_edge_array_full_p(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    if (!array_queue_empty_p(edge_array->queue)) {
+        return false;
+    } else if (edge_array->index < edge_array->size) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+// static inline uint32
+// graph_adjacent_limit(s_adjacent_t *adjacent)
+// {
+//     assert_exit(graph_adjacent_structure_legal_p(adjacent));
+// 
+//     return adjacent->index;
+// }
 
 static inline uint32
 graph_adjacent_size(s_adjacent_t *adjacent)
@@ -111,15 +175,6 @@ graph_adjacent_size_set(s_adjacent_t *adjacent, uint32 size)
     adjacent->size = size;
 }
 
-static inline s_edge_t *
-graph_adjacent_edge(s_adjacent_t *adjacent, uint32 i)
-{
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
-    assert_exit(i < graph_adjacent_limit(adjacent));
-
-    return adjacent->array[i];
-}
-
 // static inline bool
 // graph_adjacent_empty_p(s_adjacent_t *adjacent)
 // {
@@ -134,27 +189,6 @@ graph_adjacent_full_p(s_adjacent_t *adjacent)
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
 
     return adjacent->index == adjacent->size ? true : false;
-}
-
-static inline void
-graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge)
-{
-    uint32 bytes;
-    uint32 new_size;
-
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
-    assert_exit(graph_edge_structure_legal_p(edge));
-
-    if (graph_adjacent_full_p(adjacent)) {
-        new_size = graph_adjacent_size(adjacent) * 2;
-        bytes = sizeof(*adjacent->array) * new_size;
-        adjacent->array = memory_cache_re_allocate(adjacent->array, bytes);
-
-        graph_adjacent_size_set(adjacent, new_size);
-    }
-
-    adjacent->array[adjacent->index++] = edge;
-    adjacent->edge_count++;
 }
 
 static inline s_array_queue_t *
@@ -235,4 +269,12 @@ graph_vertex_value(s_vertex_t *vertex)
 // 
 //     vertex->value = val;
 // }
+
+static inline void
+graph_vertex_index_set(s_vertex_t *vertex, uint32 index)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    vertex->index = index;
+}
 

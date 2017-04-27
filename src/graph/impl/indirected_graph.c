@@ -88,35 +88,20 @@ indirected_graph_vertex_edge_append(s_vertex_t *vertex, s_edge_t *edge)
 }
 
 static inline s_edge_t *
-indirected_graph_edge_create(s_vertex_t *vertex_a, s_vertex_t *vertex_b,
-    sint32 cost)
+indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
+    s_vertex_t *vertex_b, sint32 cost)
 {
     s_edge_t *edge;
 
+    assert_exit(graph_structure_legal_p(graph));
     assert_exit(graph_vertex_structure_legal_p(vertex_a));
     assert_exit(graph_vertex_structure_legal_p(vertex_b));
 
-    edge = graph_edge_create(cost);
-
+    edge = graph_edge_create(graph, cost);
     edge->vertex_0 = vertex_a;
     edge->vertex_1 = vertex_b;
 
-    return edge;
-}
-
-static inline s_edge_t *
-indirected_graph_vertex_link(s_vertex_t *vertex_a, s_vertex_t *vertex_b,
-    sint32 cost)
-{
-    s_edge_t *edge;
-
-    assert_exit(graph_vertex_structure_legal_p(vertex_a));
-    assert_exit(graph_vertex_structure_legal_p(vertex_b));
-
-    edge = indirected_graph_edge_create(vertex_a, vertex_b, cost);
-
-    indirected_graph_vertex_edge_append(vertex_a, edge);
-    indirected_graph_vertex_edge_append(vertex_b, edge);
+    graph_edge_array_add(graph->edge_array, edge);
 
     return edge;
 }
@@ -136,10 +121,22 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
     return vertex;
 }
 
+static inline void
+indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_a,
+    s_vertex_t *vertex_b)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex_a));
+    assert_exit(graph_vertex_structure_legal_p(vertex_b));
+
+    indirected_graph_vertex_edge_append(vertex_a, edge);
+    indirected_graph_vertex_edge_append(vertex_b, edge);
+}
+
 static inline s_edge_t *
 indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
     sint32 cost)
 {
+    s_edge_t *edge;
     s_vertex_t *vertex_a;
     s_vertex_t *vertex_b;
     s_open_addressing_hash_t *vertex_hash;
@@ -157,7 +154,10 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
         vertex_b = indirected_graph_vertex_create(graph, value_b);
     }
 
-    return indirected_graph_vertex_link(vertex_a, vertex_b, cost);
+    edge = indirected_graph_edge_create(graph, vertex_a, vertex_b, cost);
+    indirected_graph_edge_link(edge, vertex_a, vertex_b);
+
+    return edge;
 }
 
 s_edge_t *

@@ -131,6 +131,8 @@ static inline void utest_disjoint_set_equivalent_p(void);
 static inline void utest_disjoint_set_find(void);
 static inline void utest_disjoint_set_union(void);
 static inline void utest_doubly_end_queue_create(void);
+static inline void utest_indirected_graph_create(void);
+static inline void utest_indirected_graph_link(void);
 static inline void utest_maximal_heap_decrease_nice(void);
 static inline void utest_maximal_heap_increase_nice(void);
 static inline void utest_min_max_heap_decrease_nice(void);
