@@ -1,7 +1,7 @@
 bool
 directed_graph_structure_legal_p(s_graph_t *graph)
 {
-    if (graph_structure_illegal_p(graph)) {
+    if (GRAPH_ILLEGAL_P(graph)) {
         return false;
     } else if (graph_attribute_indirected_p(graph)) {
         return false;
@@ -25,7 +25,7 @@ directed_graph_create(void)
 void
 directed_graph_destroy(s_graph_t **graph)
 {
-    if (NON_NULL_PTR_P(graph) && directed_graph_structure_legal_p(*graph)) {
+    if (NON_NULL_PTR_P(graph) && DIRECTED_GRAPH_LEGAL_P(*graph)) {
         graph_destroy(*graph);
         *graph = NULL;
     }

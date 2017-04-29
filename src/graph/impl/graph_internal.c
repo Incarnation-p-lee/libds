@@ -138,6 +138,29 @@ graph_vertex_array_add(s_vertex_array_t *v_array, s_vertex_t *vertex)
     v_array->index++;
 }
 
+static inline s_vertex_t *
+graph_vertex_array_find(s_vertex_array_t *vertex_array, void *value)
+{
+    uint32 i;
+    uint32 limit;
+    s_vertex_t *vertex;
+
+    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+
+    i = 0;
+    limit = graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = graph_vertex_array_vertex(vertex_array, i++);
+
+        if (vertex && graph_vertex_value(vertex) == value) {
+            return vertex;
+        }
+    }
+
+    return NULL;
+}
+
 static inline s_edge_array_t *
 graph_edge_array_create(void)
 {
@@ -223,11 +246,9 @@ graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge)
 }
 
 static inline s_edge_t *
-graph_edge_create(s_graph_t *graph, sint32 cost)
+graph_edge_create(sint32 cost)
 {
     s_edge_t *edge;
-
-    assert_exit(graph_structure_legal_p(graph));
 
     edge = memory_cache_allocate(sizeof(*edge));
 

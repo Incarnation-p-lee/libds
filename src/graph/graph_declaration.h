@@ -6,6 +6,7 @@
 #if defined DEBUG
 
 static inline bool graph_adjacent_structure_legal_p(s_adjacent_t *adjacent);
+static inline bool graph_edge_array_structure_illegal_p(s_edge_array_t *edge_array);
 static inline bool graph_edge_array_structure_legal_p(s_edge_array_t *edge_array);
 static inline bool graph_edge_structure_illegal_p(s_edge_t *edge);
 static inline bool graph_edge_structure_legal_p(s_edge_t *edge);
@@ -35,7 +36,7 @@ static inline s_array_queue_t * graph_edge_array_queue(s_edge_array_t *edge_arra
 static inline s_array_queue_t * graph_vertex_array_queue(s_vertex_array_t *vertex_array);
 static inline s_edge_array_t * graph_edge_array_create(void);
 static inline s_edge_t * graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);
-static inline s_edge_t * graph_edge_create(s_graph_t *graph, sint32 cost);
+static inline s_edge_t * graph_edge_create(sint32 cost);
 static inline s_edge_t * indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a, s_vertex_t *vertex_b, sint32 cost);
 static inline s_edge_t * indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
 static inline s_graph_t * graph_create(void);
@@ -43,6 +44,7 @@ static inline s_open_addressing_hash_t * graph_vertex_hash(s_graph_t *graph);
 static inline s_vertex_array_t * graph_vertex_array_create(void);
 static inline s_vertex_t * graph_edge_vertex_0(s_edge_t *edge);
 static inline s_vertex_t * graph_edge_vertex_1(s_edge_t *edge);
+static inline s_vertex_t * graph_vertex_array_find(s_vertex_array_t *vertex_array, void *value);
 static inline s_vertex_t * graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 static inline s_vertex_t * graph_vertex_create(s_graph_t *graph, void *value);
 static inline s_vertex_t * indirected_graph_vertex_create(s_graph_t *graph, void *value);

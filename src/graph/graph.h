@@ -13,6 +13,25 @@
 #define GRAPH_ADJACENT_DEFAULT   GRAPH_VERTEX_DEFAULT
 #define GRAPH_EDGE_DEFAULT       1024
 
+#if defined DEBUG
+    #define GRAPH_LEGAL_P(g)              graph_structure_legal_p(g)
+    #define GRAPH_ILLEGAL_P(g)            graph_structure_illegal_p(g)
+    #define GRAPH_EDGE_LEGAL_P(e)         graph_edge_structure_legal_p(e)
+    #define GRAPH_EDGE_ILLEGAL_P(e)       graph_edge_structure_illegal_p(e)
+    #define DIRECTED_GRAPH_LEGAL_P(g)     directed_graph_structure_legal_p(g)
+    #define DIRECTED_GRAPH_ILLEGAL_P(g)   directed_graph_structure_illegal_p(g)
+    #define INDIRECTED_GRAPH_LEGAL_P(g)   indirected_graph_structure_legal_p(g)
+    #define INDIRECTED_GRAPH_ILLEGAL_P(g) indirected_graph_structure_illegal_p(g)
+#else
+    #define GRAPH_LEGAL_P(g)              NON_NULL_PTR_P(g)
+    #define GRAPH_ILLEGAL_P(g)            NULL_PTR_P(g)
+    #define GRAPH_EDGE_LEGAL_P(e)         NON_NULL_PTR_P(e)
+    #define GRAPH_EDGE_ILLEGAL_P(e)       NULL_PTR_P(e)
+    #define DIRECTED_GRAPH_LEGAL_P(g)     NON_NULL_PTR_P(g)
+    #define DIRECTED_GRAPH_ILLEGAL_P(g)   NULL_PTR_P(g)
+    #define INDIRECTED_GRAPH_LEGAL_P(g)   NON_NULL_PTR_P(g)
+    #define INDIRECTED_GRAPH_ILLEGAL_P(g) NULL_PTR_P(g)
+#endif
 
 extern bool array_queue_structure_illegal_p(s_array_queue_t *queue);
 extern bool array_queue_empty_p(s_array_queue_t *queue);

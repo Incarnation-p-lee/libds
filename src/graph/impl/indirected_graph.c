@@ -1,7 +1,7 @@
 bool
 indirected_graph_structure_legal_p(s_graph_t *graph)
 {
-    if (graph_structure_illegal_p(graph)) {
+    if (GRAPH_ILLEGAL_P(graph)) {
         return false;
     } else if (graph_attribute_directed_p(graph)) {
         return false;
@@ -19,7 +19,7 @@ indirected_graph_structure_illegal_p(s_graph_t *graph)
 sint32
 indirected_graph_edge_cost(s_edge_t *edge)
 {
-    if (graph_edge_structure_illegal_p(edge)) {
+    if (GRAPH_EDGE_ILLEGAL_P(edge)) {
         return GRAPH_COST_INVALID;
     } else {
         return graph_edge_cost(edge);
@@ -29,7 +29,7 @@ indirected_graph_edge_cost(s_edge_t *edge)
 void *
 indirected_graph_edge_vertex_0_value(s_edge_t *edge)
 {
-    if (graph_edge_structure_illegal_p(edge)) {
+    if (GRAPH_EDGE_ILLEGAL_P(edge)) {
         return PTR_INVALID;
     } else {
         return graph_edge_vertex_0_value(edge);
@@ -39,7 +39,7 @@ indirected_graph_edge_vertex_0_value(s_edge_t *edge)
 void *
 indirected_graph_edge_vertex_1_value(s_edge_t *edge)
 {
-    if (graph_edge_structure_illegal_p(edge)) {
+    if (GRAPH_EDGE_ILLEGAL_P(edge)) {
         return PTR_INVALID;
     } else {
         return graph_edge_vertex_1_value(edge);
@@ -61,7 +61,7 @@ indirected_graph_create(void)
 void
 indirected_graph_destroy(s_graph_t **graph)
 {
-    if (NON_NULL_PTR_P(graph) && indirected_graph_structure_legal_p(*graph)) {
+    if (NON_NULL_PTR_P(graph) && INDIRECTED_GRAPH_LEGAL_P(*graph)) {
         graph_destroy(*graph);
         *graph = NULL;
     }
@@ -97,7 +97,7 @@ indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
     assert_exit(graph_vertex_structure_legal_p(vertex_a));
     assert_exit(graph_vertex_structure_legal_p(vertex_b));
 
-    edge = graph_edge_create(graph, cost);
+    edge = graph_edge_create(cost);
     edge->vertex_0 = vertex_a;
     edge->vertex_1 = vertex_b;
 
@@ -148,10 +148,14 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
 
     if (open_addressing_hash_find(vertex_hash, value_a) == NULL) {
         vertex_a = indirected_graph_vertex_create(graph, value_a);
+    } else {
+        vertex_a = graph_vertex_array_find(graph->vertex_array, value_a);
     }
 
     if (open_addressing_hash_find(vertex_hash, value_b) == NULL) {
         vertex_b = indirected_graph_vertex_create(graph, value_b);
+    } else {
+        vertex_b = graph_vertex_array_find(graph->vertex_array, value_b);
     }
 
     edge = indirected_graph_edge_create(graph, vertex_a, vertex_b, cost);
@@ -164,7 +168,7 @@ s_edge_t *
 indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
     sint32 cost)
 {
-    if (indirected_graph_structure_illegal_p(graph)) {
+    if (INDIRECTED_GRAPH_ILLEGAL_P(graph)) {
         return PTR_INVALID;
     } else if (NULL_PTR_P(value_a)) {
         return PTR_INVALID;
