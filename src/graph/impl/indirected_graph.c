@@ -100,8 +100,9 @@ indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
     edge = graph_edge_create(cost);
     edge->vertex_0 = vertex_a;
     edge->vertex_1 = vertex_b;
-
     graph_edge_array_add(graph->edge_array, edge);
+
+    graph_attribute_edge_inc(graph);
 
     return edge;
 }
@@ -115,8 +116,10 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
 
     vertex = graph_vertex_create(graph, value);
     vertex->adjacent = graph_adjacent_create();
-
     graph_vertex_array_add(graph->vertex_array, vertex);
+
+    open_addressing_hash_insert(graph->vertex_hash, value);
+    graph_attribute_vertex_inc(graph);
 
     return vertex;
 }

@@ -62,6 +62,8 @@ static inline void graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge)
 static inline void graph_adjacent_destroy(s_adjacent_t *adjacent);
 static inline void graph_adjacent_size_set(s_adjacent_t *adjacent, uint32 size);
 static inline void graph_attribute_directed_set(s_graph_t *graph, bool is_directed);
+static inline void graph_attribute_edge_inc(s_graph_t *graph);
+static inline void graph_attribute_vertex_inc(s_graph_t *graph);
 static inline void graph_destroy(s_graph_t *graph);
 static inline void graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge);
 static inline void graph_edge_array_destroy(s_edge_array_t *edge_array);

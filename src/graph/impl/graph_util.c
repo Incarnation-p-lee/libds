@@ -30,6 +30,22 @@ graph_attibute_label_obtain(s_graph_t *graph)
     return graph->attribute.label_limit++;
 }
 
+static inline void
+graph_attribute_vertex_inc(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    graph->attribute.vertex_count++;
+}
+
+static inline void
+graph_attribute_edge_inc(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    graph->attribute.edge_count++;
+}
+
 static inline void *
 graph_edge_vertex_0_value(s_edge_t *edge)
 {

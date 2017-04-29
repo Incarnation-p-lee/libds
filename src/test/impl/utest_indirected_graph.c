@@ -22,14 +22,12 @@ utest_indirected_graph_link(void)
     sint32 cost;
     s_edge_t *edge;
     s_graph_t *graph;
-    void *vertex_a, *vertex_b, *vertex_c, *vertex_d;
+    void *vertex_a, *vertex_b;
 
     pass = true;
     cost = 0x234;
     vertex_a = &pass;
     vertex_b = &graph;
-    vertex_c = &cost;
-    vertex_d = &edge;
     graph = test_indirected_graph_sample(0x121, 0x1e3);
     UNIT_TEST_BEGIN(indirected_graph_link);
 
@@ -50,12 +48,6 @@ utest_indirected_graph_link(void)
 
     tmp = indirected_graph_edge_vertex_1_value(edge);
     RESULT_CHECK_pointer(vertex_b, tmp, &pass);
-
-    indirected_graph_link(graph, vertex_a, vertex_c, cost);
-    indirected_graph_link(graph, vertex_a, vertex_d, cost);
-    indirected_graph_link(graph, vertex_b, vertex_c, cost);
-    indirected_graph_link(graph, vertex_b, vertex_d, cost);
-    indirected_graph_link(graph, vertex_c, vertex_d, cost);
 
     indirected_graph_destroy(&graph);
     UNIT_TEST_RESULT(indirected_graph_link, pass);
