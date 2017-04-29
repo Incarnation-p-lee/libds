@@ -1,7 +1,6 @@
 codecov:
   branch: trunk
 
-
 coverage:
   precision: 4
   round: down
@@ -23,3 +22,4 @@ coverage:
 comment:
   layout: "header, diff, changes, suggestions"
   behavior: default
+
