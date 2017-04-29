@@ -8,7 +8,6 @@
 
 [![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
 
-[![Coverage Status](https://coveralls.io/repos/github/Incarnation-p-lee/libds/badge.svg)](https://coveralls.io/github/Incarnation-p-lee/libds)
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
 

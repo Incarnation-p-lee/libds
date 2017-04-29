@@ -13,7 +13,7 @@ notifications:
     - incarnation.p.lee@outlook.com
 install:
   - wget https://github.com/linux-test-project/lcov/releases/download/v1.13/lcov-1.13.tar.gz
-  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13 &&  - sudo make install && cd -
+  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13 && sudo make install && cd -
   - npm install --save-dev codeclimate-test-reporter
 after_success:
   - echo '=== Code Coverage of codeclimate ====' && codeclimate-test-reporter < /tmp/coverage.info
