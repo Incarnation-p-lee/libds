@@ -142,23 +142,20 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
     s_edge_t *edge;
     s_vertex_t *vertex_a;
     s_vertex_t *vertex_b;
-    s_open_addressing_hash_t *vertex_hash;
 
     assert_exit(indirected_graph_structure_legal_p(graph));
     assert_exit(value_a && value_b);
 
-    vertex_hash = graph_vertex_hash(graph);
-
-    if (open_addressing_hash_find(vertex_hash, value_a) == NULL) {
-        vertex_a = indirected_graph_vertex_create(graph, value_a);
-    } else {
+    if (graph_vertex_value_exist_p(graph, value_a)) {
         vertex_a = graph_vertex_array_find(graph->vertex_array, value_a);
+    } else {
+        vertex_a = indirected_graph_vertex_create(graph, value_a);
     }
 
-    if (open_addressing_hash_find(vertex_hash, value_b) == NULL) {
-        vertex_b = indirected_graph_vertex_create(graph, value_b);
-    } else {
+    if (graph_vertex_value_exist_p(graph, value_b)) {
         vertex_b = graph_vertex_array_find(graph->vertex_array, value_b);
+    } else {
+        vertex_b = indirected_graph_vertex_create(graph, value_b);
     }
 
     edge = indirected_graph_edge_create(graph, vertex_a, vertex_b, cost);

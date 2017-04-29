@@ -30,6 +30,7 @@ static inline bool graph_attribute_directed_p(s_graph_t *graph);
 static inline bool graph_attribute_indirected_p(s_graph_t *graph);
 static inline bool graph_edge_array_full_p(s_edge_array_t *edge_array);
 static inline bool graph_vertex_array_full_p(s_vertex_array_t *vertex_array);
+static inline bool graph_vertex_value_exist_p(s_graph_t *graph, void *value);
 static inline s_adjacent_t * graph_adjacent_create(void);
 static inline s_adjacent_t * indirected_graph_vertex_adjacent(s_vertex_t *vertex);
 static inline s_array_queue_t * graph_edge_array_queue(s_edge_array_t *edge_array);

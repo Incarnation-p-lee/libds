@@ -294,3 +294,19 @@ graph_vertex_index_set(s_vertex_t *vertex, uint32 index)
     vertex->index = index;
 }
 
+static inline bool
+graph_vertex_value_exist_p(s_graph_t *graph, void *value)
+{
+    s_open_addressing_hash_t *vertex_hash;
+
+    assert_exit(graph_structure_legal_p(graph));
+
+    vertex_hash = graph_vertex_hash(graph);
+
+    if (open_addressing_hash_find(vertex_hash, value) == NULL) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
