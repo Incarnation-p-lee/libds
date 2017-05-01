@@ -46,6 +46,60 @@ indirected_graph_edge_vertex_1_value(s_edge_t *edge)
     }
 }
 
+s_vertex_array_t *
+indirected_graph_vertex_array(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else {
+        return graph_vertex_array(graph);
+    }
+}
+
+s_edge_array_t *
+indirected_graph_edge_array(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else {
+        return graph_edge_array(graph);
+    }
+}
+
+uint32
+indirected_graph_edge_array_limit(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return SIZE_INVALID;
+    } else {
+        return graph_edge_array_limit(graph_edge_array(graph));
+    }
+}
+
+s_edge_t *
+indirected_graph_edge_array_edge(s_graph_t *graph, uint32 i)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else if (i > graph_edge_array_limit(graph_edge_array(graph))) {
+        return PTR_INVALID;
+    } else {
+        return graph_edge_array_edge(graph_edge_array(graph), i);
+    }
+}
+
+s_vertex_t *
+indirected_graph_vertex_array_vertex(s_graph_t *graph, uint32 i)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else if (i > graph_vertex_array_limit(graph_vertex_array(graph))) {
+        return PTR_INVALID;
+    } else {
+        return graph_vertex_array_vertex(graph_vertex_array(graph), i);
+    }
+}
+
 s_graph_t *
 indirected_graph_create(void)
 {
@@ -116,7 +170,7 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
 
     vertex = graph_vertex_create(graph, value);
     vertex->adjacent = graph_adjacent_create();
-    graph_vertex_array_add(graph->vertex_array, vertex);
+    graph_vertex_array_add(graph_vertex_array(graph), vertex);
 
     open_addressing_hash_insert(graph->vertex_hash, value);
     graph_attribute_vertex_inc(graph);
@@ -147,13 +201,13 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
     assert_exit(value_a && value_b);
 
     if (graph_vertex_value_exist_p(graph, value_a)) {
-        vertex_a = graph_vertex_array_find(graph->vertex_array, value_a);
+        vertex_a = graph_vertex_array_find(graph_vertex_array(graph), value_a);
     } else {
         vertex_a = indirected_graph_vertex_create(graph, value_a);
     }
 
     if (graph_vertex_value_exist_p(graph, value_b)) {
-        vertex_b = graph_vertex_array_find(graph->vertex_array, value_b);
+        vertex_b = graph_vertex_array_find(graph_vertex_array(graph), value_b);
     } else {
         vertex_b = indirected_graph_vertex_create(graph, value_b);
     }
@@ -176,6 +230,111 @@ indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
         return PTR_INVALID;
     } else {
         return indirected_graph_link_i(graph, value_a, value_b, cost);
+    }
+}
+
+static inline bool
+indirected_graph_vertex_alone_p(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return graph_adjacent_empty_p(vertex->adjacent);
+}
+
+
+static inline void
+indirected_graph_edge_vertex_remove(s_graph_t *graph,
+    s_edge_t *edge, s_vertex_t *vertex)
+{
+    uint32 index;
+    uint32 i, limit;
+    s_edge_t *edge_tmp;
+    s_vertex_t *vertex_tmp;
+    s_adjacent_t *adjacent;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    i = 0;
+    adjacent = graph_vertex_adjacent(vertex);
+    limit = graph_adjacent_limit(adjacent);
+
+    while (i < limit) {
+        edge_tmp = graph_adjacent_edge(adjacent, i);
+
+        if (edge_tmp == NULL || edge_tmp != edge) {
+            i++;
+            continue;
+        }
+
+        graph_adjacent_edge_remove(adjacent, i);
+        /* destroy alone vertex */
+        if (indirected_graph_vertex_alone_p(vertex)) {
+            index = graph_vertex_index(vertex);
+            vertex_array = graph_vertex_array(graph);
+            vertex_tmp = graph_vertex_array_vertex(vertex_array, index);
+
+            if (vertex_tmp != vertex) {
+                pr_log_warn("Inconsistency data of given vertex array.\n");
+            } else {
+                graph_vertex_array_remove(vertex_array, index);
+                graph_vertex_destroy(vertex);
+            }
+        }
+
+        return;
+    }
+
+    pr_log_warn("No such of the edge in given vertex.\n");
+}
+
+static inline s_edge_t *
+indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
+{
+    uint32 index;
+    s_edge_t *edge_tmp;
+    s_edge_array_t *edge_array;
+
+    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    index = graph_edge_index(edge);
+    edge_array = graph_edge_array(graph);
+    edge_tmp = graph_edge_array_edge(edge_array, index);
+
+    if (edge_tmp != edge) {
+        pr_log_warn("No such of the edge in given graph.\n");
+        return NULL;
+    }
+
+    indirected_graph_edge_vertex_remove(graph, edge, graph_edge_vertex_0(edge));
+    indirected_graph_edge_vertex_remove(graph, edge, graph_edge_vertex_1(edge));
+
+    graph_edge_array_remove(edge_array, index);
+
+    return edge;
+}
+
+s_edge_t *
+indirected_graph_edge_remove(s_graph_t *graph, s_edge_t *edge)
+{
+    if (INDIRECTED_GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else if (GRAPH_EDGE_ILLEGAL_P(edge)) {
+        return PTR_INVALID;
+    } else {
+        return indirected_graph_edge_remove_i(graph, edge);
+    }
+}
+
+void
+indirected_graph_edge_destroy(s_edge_t **edge)
+{
+    if (NON_NULL_PTR_P(edge) && GRAPH_EDGE_LEGAL_P(*edge)) {
+        memory_cache_free(*edge);
+        *edge = NULL;
     }
 }
 
