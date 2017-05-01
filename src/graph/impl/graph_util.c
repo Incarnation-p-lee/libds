@@ -191,11 +191,27 @@ graph_edge_array_full_p(s_edge_array_t *edge_array)
 }
 
 static inline uint32
+graph_adjacent_count(s_adjacent_t *adjacent)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    return adjacent->edge_count;
+}
+
+static inline uint32
 graph_adjacent_limit(s_adjacent_t *adjacent)
 {
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
 
     return adjacent->index;
+}
+
+static inline void
+graph_adjacent_index_set(s_adjacent_t *adjacent, uint32 index)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    adjacent->index = index;
 }
 
 static inline s_edge_t *
@@ -255,6 +271,50 @@ graph_adjacent_full_p(s_adjacent_t *adjacent)
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
 
     return adjacent->index == adjacent->size ? true : false;
+}
+
+static inline uint32
+graph_adjacent_load_factor(s_adjacent_t *adj)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adj));
+
+    return graph_adjacent_count(adj) * 100 / graph_adjacent_limit(adj);
+}
+
+static inline uint32
+graph_adjacent_rest(s_adjacent_t *adjacent)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    return graph_adjacent_size(adjacent) - graph_adjacent_limit(adjacent);
+}
+
+static inline uint32
+graph_adjacent_rest_factor(s_adjacent_t *adj)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adj));
+
+    return graph_adjacent_rest(adj) * 100 / graph_adjacent_size(adj);
+}
+
+static inline bool
+graph_adjacent_sparse_p(s_adjacent_t *adjacent)
+{
+    uint32 load_factor;
+    uint32 rest_factor;
+
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    load_factor = graph_adjacent_load_factor(adjacent);
+    rest_factor = graph_adjacent_rest_factor(adjacent);
+
+    if (load_factor >= GRAPH_ADJACENT_LOAD_FCTR) {
+        return false;
+    } else if (rest_factor >= GRAPH_ADJACENT_REST_FCTR) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 static inline s_array_queue_t *

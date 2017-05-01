@@ -11,6 +11,9 @@
 #define GRAPH_LABEL_FIRST        1
 
 #define GRAPH_ADJACENT_DEFAULT   32
+#define GRAPH_ADJACENT_LOAD_FCTR 20 /* 20% load factor of adjacent */
+#define GRAPH_ADJACENT_REST_FCTR 30 /* 30% rest space of adjacent */
+
 #define GRAPH_EDGE_DEFAULT       1024
 
 #if defined DEBUG

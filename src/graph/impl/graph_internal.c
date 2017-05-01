@@ -352,6 +352,34 @@ graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge)
 }
 
 static inline void
+graph_adjacent_compress(s_adjacent_t *adjacent)
+{
+    uint32 i;
+    uint32 k;
+    uint32 limit;
+    s_edge_t *edge;
+
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+    assert_exit(graph_adjacent_sparse_p(adjacent));
+
+    k = i = 0;
+    limit = graph_adjacent_limit(adjacent);
+
+    while (i < limit) {
+        edge = graph_adjacent_edge(adjacent, i);
+
+        if (edge) {
+            graph_adjacent_edge_set(adjacent, k, edge);
+            k++;
+        }
+
+        i++;
+    }
+
+    graph_adjacent_index_set(adjacent, k);
+}
+
+static inline void
 graph_adjacent_edge_remove(s_adjacent_t *adjacent, uint32 i)
 {
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
@@ -360,6 +388,8 @@ graph_adjacent_edge_remove(s_adjacent_t *adjacent, uint32 i)
     graph_adjacent_edge_set(adjacent, i, NULL);
     graph_adjacent_edge_count_dec(adjacent);
 
-    // Compress adjacent To-do
+    if (graph_adjacent_sparse_p(adjacent)) {
+        graph_adjacent_compress(adjacent);
+    }
 }
 
