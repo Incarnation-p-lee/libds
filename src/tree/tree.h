@@ -44,5 +44,13 @@ extern bool array_stack_empty_p(s_array_stack_t *stack);
 extern bool array_stack_structure_legal_p(s_array_stack_t *queue);
 extern uint32 array_stack_size(s_array_stack_t *stack);
 
+extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list);
+extern s_doubly_linked_list_t * doubly_linked_list_create(void);
+extern s_doubly_linked_list_t * doubly_linked_list_next(s_doubly_linked_list_t *list);
+extern void * doubly_linked_list_val(s_doubly_linked_list_t *list);
+extern void doubly_linked_list_destroy(s_doubly_linked_list_t **list);
+extern void doubly_linked_list_val_set(s_doubly_linked_list_t *list, void *val);
+extern void doubly_linked_list_insert_before(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
+
 #endif
 

@@ -18,6 +18,24 @@ doubly_linked_list_next_set(s_doubly_linked_list_t *list,
     }
 }
 
+void *
+doubly_linked_list_val(s_doubly_linked_list_t *list)
+{
+    if (doubly_linked_list_structure_illegal_p(list)) {
+        return PTR_INVALID;
+    } else {
+        return list->val;
+    }
+}
+
+void
+doubly_linked_list_val_set(s_doubly_linked_list_t *list, void *val)
+{
+    if (doubly_linked_list_structure_legal_p(list)) {
+        list->val = val;
+    }
+}
+
 bool
 doubly_linked_list_structure_legal_p(s_doubly_linked_list_t *list)
 {
@@ -71,7 +89,7 @@ doubly_linked_list_previous_set(s_doubly_linked_list_t *list,
 s_doubly_linked_list_t *
 doubly_linked_list_create(void)
 {
-    return doubly_linked_list_create_i(NULL);
+    return doubly_linked_list_create_i();
 }
 
 static inline void
@@ -92,7 +110,7 @@ doubly_linked_list_initial(s_doubly_linked_list_t *list)
 }
 
 static inline s_doubly_linked_list_t *
-doubly_linked_list_create_i()
+doubly_linked_list_create_i(void)
 {
     s_doubly_linked_list_t *list;
 

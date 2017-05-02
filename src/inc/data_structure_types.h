@@ -120,6 +120,7 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
+    void                   *val;
     s_doubly_linked_list_t *next;
     s_doubly_linked_list_t *previous;
 };
@@ -235,10 +236,11 @@ struct binary_search_tree {
  * avl tree
  */
 struct avl_tree {
-    sint32       height;
-    sint64       nice;
-    s_avl_tree_t *left;
-    s_avl_tree_t *right;
+    sint32                 height;
+    sint64                 nice;
+    s_avl_tree_t           *left;
+    s_avl_tree_t           *right;
+    s_doubly_linked_list_t *list;
 };
 
 /*

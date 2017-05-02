@@ -106,20 +106,25 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
 static inline struct avl_tree *
 test_avl_tree_sample(uint64 range, uint32 count)
 {
-    struct avl_tree *tree;
-    struct avl_tree *tmp;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
 
-    tree = avl_tree_create();
-    avl_tree_initial(tree, 0);
     i = 1;
+    tree = avl_tree_create(&nice, 0);
 
     while (i < count) {
         nice = (sint64)((rand() % range) - (range / 2));
-        tmp = avl_tree_create();
-        avl_tree_initial(tmp, nice);
-        avl_tree_insert(&tree, tmp);
+        tmp = avl_tree_create((void *)(ptr_t)i, nice);
+
+        if (avl_tree_find(tree, nice) == NULL) {
+            avl_tree_insert(&tree, tmp);
+        } else {
+            avl_tree_insert(&tree, tmp);
+            avl_tree_destroy(&tmp);
+        }
+
         i++;
     }
 

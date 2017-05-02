@@ -922,6 +922,7 @@ splay_tree_remove_i(s_splay_tree_t **tree, s_splay_tree_t *node)
             removed_node = splay_tree_repeated_remove(iterator, node, direction);
             break;
         }
+
         splay_node = *iterator;
     }
 
