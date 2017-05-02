@@ -1,5 +1,5 @@
 #!/bin/bash
 
-bash make clean && make RELEASE=1
-./bin/ds.elf -p=50000 *.*.*
+make clean && make RELEASE=1
+./bin/ds.elf -p=100000 *.*.*
 

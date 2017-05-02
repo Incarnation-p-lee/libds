@@ -4,7 +4,7 @@ utest_trie_tree_create(void)
     bool pass;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_create);
+    UNIT_TEST_BEGIN(trie_tree_create);
 
     pass = true;
     trie = trie_tree_create();
@@ -14,7 +14,7 @@ utest_trie_tree_create(void)
     RESULT_CHECK_bool(false, trie->is_terminal, &pass);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_create, pass);
+    UNIT_TEST_RESULT(trie_tree_create, pass);
 }
 
 static inline void
@@ -23,7 +23,7 @@ utest_trie_tree_destroy(void)
     bool pass;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_destroy);
+    UNIT_TEST_BEGIN(trie_tree_destroy);
 
     pass = true;
 
@@ -35,7 +35,7 @@ utest_trie_tree_destroy(void)
     trie_tree_destroy(&trie);
     RESULT_CHECK_pointer(NULL, trie, &pass);
 
-    UNIT_TEST_RESULT(utest_trie_tree_destroy, pass);
+    UNIT_TEST_RESULT(trie_tree_destroy, pass);
 }
 
 static inline void
@@ -46,7 +46,7 @@ utest_trie_tree_sequence_insert(void)
     uint32 len, limit;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_sequence_insert);
+    UNIT_TEST_BEGIN(trie_tree_sequence_insert);
 
     pass = true;
     limit = 0xfff;
@@ -61,7 +61,6 @@ utest_trie_tree_sequence_insert(void)
     len = 0x73b;
     sequence = random_sequence_uint32_limited_obtain(len, limit);
     trie_tree_sequence_insert(trie, sequence, len);
-    // RESULT_CHECK_bool(
     random_sequence_drop(sequence);
 
     len = 0x124f;
@@ -80,7 +79,7 @@ utest_trie_tree_sequence_insert(void)
     random_sequence_drop(sequence);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_sequence_insert, pass);
+    UNIT_TEST_RESULT(trie_tree_sequence_insert, pass);
 }
 
 static inline void
@@ -89,7 +88,7 @@ utest_trie_tree_string_insert(void)
     bool pass;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_string_insert);
+    UNIT_TEST_BEGIN(trie_tree_string_insert);
 
     pass = true;
     trie = trie_tree_create();
@@ -108,7 +107,7 @@ utest_trie_tree_string_insert(void)
     trie_tree_string_insert(trie, "continue");
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_string_insert, pass);
+    UNIT_TEST_RESULT(trie_tree_string_insert, pass);
 }
 
 static inline void
@@ -119,7 +118,7 @@ utest_trie_tree_sequence_matched_p(void)
     uint32 len, limit;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_sequence_matched_p);
+    UNIT_TEST_BEGIN(trie_tree_sequence_matched_p);
 
     pass = true;
     limit = 0xfff;
@@ -150,7 +149,7 @@ utest_trie_tree_sequence_matched_p(void)
     random_sequence_drop(sequence);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_sequence_matched_p, pass);
+    UNIT_TEST_RESULT(trie_tree_sequence_matched_p, pass);
 }
 
 static inline void
@@ -159,7 +158,7 @@ utest_trie_tree_string_matched_p(void)
     bool pass;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_string_matched_p);
+    UNIT_TEST_BEGIN(trie_tree_string_matched_p);
 
     pass = true;
     trie = trie_tree_create();
@@ -181,7 +180,7 @@ utest_trie_tree_string_matched_p(void)
     RESULT_CHECK_bool(false, trie_tree_string_matched_p(trie, ""), &pass);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_string_matched_p, pass);
+    UNIT_TEST_RESULT(trie_tree_string_matched_p, pass);
 }
 
 static inline void
@@ -192,7 +191,7 @@ utest_trie_tree_sequence_remove(void)
     uint32 len, limit;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_sequence_remove);
+    UNIT_TEST_BEGIN(trie_tree_sequence_remove);
 
     pass = true;
     len = 0x123;
@@ -221,7 +220,7 @@ utest_trie_tree_sequence_remove(void)
     random_sequence_drop(sequence);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_sequence_remove, pass);
+    UNIT_TEST_RESULT(trie_tree_sequence_remove, pass);
 }
 
 static inline void
@@ -230,7 +229,7 @@ utest_trie_tree_string_remove(void)
     bool pass;
     s_trie_tree_t *trie;
 
-    UNIT_TEST_BEGIN(utest_trie_tree_string_remove);
+    UNIT_TEST_BEGIN(trie_tree_string_remove);
 
     pass = true;
     trie = trie_tree_create();
@@ -256,6 +255,6 @@ utest_trie_tree_string_remove(void)
     RESULT_CHECK_bool(false, trie_tree_string_matched_p(trie, "char"), &pass);
 
     trie_tree_destroy(&trie);
-    UNIT_TEST_RESULT(utest_trie_tree_string_remove, pass);
+    UNIT_TEST_RESULT(trie_tree_string_remove, pass);
 }
 

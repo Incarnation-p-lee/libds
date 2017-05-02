@@ -7,20 +7,15 @@ compiler:
   - clang
 script: 
   - ulimit -s unlimited
-  - bash ./script/run_unit_test.sh
-  - bash <(curl -s https://codecov.io/bash)
+  - bash ./script/run_travis_ci_test.sh
 notifications:
   email:
     - incarnation.p.lee@outlook.com
 install:
   - wget https://github.com/linux-test-project/lcov/releases/download/v1.13/lcov-1.13.tar.gz
-  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13
-  - sudo make install
-  - gem install coveralls-lcov
-  - cd -
-after_success:
-  - coveralls-lcov /tmp/coverage.info
+  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13 && sudo make install && cd -
   - npm install --save-dev codeclimate-test-reporter
-  - codeclimate-test-reporter < /tmp/coverage.info
-  - bash ./script/run_performance_test.sh
+after_success:
+  - echo '=== Code Coverage of codeclimate ====' && codeclimate-test-reporter < /tmp/coverage.info
+  - echo '=== Code Coverage of codecov.io =====' && bash <(curl -s https://codecov.io/bash)
 

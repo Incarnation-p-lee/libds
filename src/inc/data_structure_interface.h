@@ -76,9 +76,12 @@ enum log_level {
 #define BITMAP_CLR             (native_wide_t)0
 #define DISJOINT_ELE_INVALID   ((uint32)-1)
 #define DISJOINT_SIZE_INVALID  ((uint32)-1)
+#define GRAPH_COST_INVALID     ((sint32)0x80000000)
+#define GRAPH_INDEX_INVALID    SIZE_INVALID
 #define PTR_INVALID            (void *)-1   // invalid pointer
 #define HEAP_IDX_CHILD_L(x)    ((x) * 2)
 #define HEAP_IDX_CHILD_R(x)    ((x) * 2 + 1)
+typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct single_linked_list    s_single_linked_list_t;
 typedef struct doubly_linked_list    s_doubly_linked_list_t;
 typedef struct skip_linked_list      s_skip_linked_list_t;
@@ -104,11 +107,17 @@ typedef struct heap_data             s_heap_data_t;
 typedef struct binary_heap           s_binary_heap_t;
 typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
-typedef enum ITER_ORDER              e_iter_order_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct edge                  s_edge_t;
+typedef struct vertex                s_vertex_t;
+typedef struct graph                 s_graph_t;
+typedef struct adjacent              s_adjacent_t;
+typedef struct vertex_array          s_vertex_array_t;
+typedef struct edge_array            s_edge_array_t;
+typedef struct graph_attibute        s_graph_attibute_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -301,6 +310,69 @@ struct disjoint_set {
     sint32 *set;
 };
 
+struct edge {
+    uint32             index;      /* edge index in edge array */
+    sint32             cost;
+    union {
+        struct {                   /* directed graph */
+            s_vertex_t *precursor;
+            s_vertex_t *successor;
+        };
+        struct {                   /* indirected graph */
+            s_vertex_t *vertex_0;
+            s_vertex_t *vertex_1;
+        };
+    };
+};
+
+struct vertex {
+    uint32               index;      /* vertex index in vertex array */
+    uint32               label;
+    void                 *value;
+    union {
+        struct {                     /* directed graph */
+            s_adjacent_t *precursor;
+            s_adjacent_t *successor;
+        };
+        s_adjacent_t     *adjacent;  /* indirected graph */
+    };
+};
+
+struct adjacent {
+    uint32   index;      /* index of next edge */
+    uint32   size;       /* size of edge buf */
+    uint32   edge_count; /* count of edges */
+    s_edge_t **array;
+};
+
+struct vertex_array {
+    uint32          size;
+    uint32          index;
+    s_array_queue_t *queue;
+    s_vertex_t      **array;
+};
+
+struct edge_array {
+    uint32          size;
+    uint32          index;
+    s_array_queue_t *queue;
+    s_edge_t        **array;
+};
+
+struct graph_attibute {
+    bool   is_directed;
+    uint32 vertex_count;
+    uint32 edge_count;
+    uint32 label_limit;
+};
+
+struct graph {
+    s_graph_attibute_t       attribute;
+    s_open_addressing_hash_t *vertex_hash;
+    s_vertex_array_t         *vertex_array;
+    s_edge_array_t           *edge_array;
+};
+
 
 extern bool array_iterator_structure_legal_p(s_array_iterator_t *iterator);
 extern bool complain_no_memory_p(void *ptr);
@@ -330,6 +402,25 @@ extern void memory_cache_cleanup(void);
 extern void memory_cache_free(void *addr);
 extern void random_sequence_drop(uint32 *sequence);
 extern void swap_pointer(void **ptr_a, void **ptr_b);
+
+extern bool directed_graph_structure_legal_p(s_graph_t *graph);
+extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
+extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
+extern s_edge_array_t * indirected_graph_edge_array(s_graph_t *graph);
+extern s_edge_t * indirected_graph_edge_array_edge(s_graph_t *graph, uint32 i);
+extern s_edge_t * indirected_graph_edge_remove(s_graph_t *graph, s_edge_t *edge);
+extern s_edge_t * indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
+extern s_graph_t * directed_graph_create(void);
+extern s_graph_t * indirected_graph_create(void);
+extern s_vertex_array_t * indirected_graph_vertex_array(s_graph_t *graph);
+extern s_vertex_t * indirected_graph_vertex_array_vertex(s_graph_t *graph, uint32 i);
+extern sint32 indirected_graph_edge_cost(s_edge_t *edge);
+extern uint32 indirected_graph_edge_array_limit(s_graph_t *graph);
+extern void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);
+extern void * indirected_graph_edge_vertex_1_value(s_edge_t *edge);
+extern void directed_graph_destroy(s_graph_t **graph);
+extern void indirected_graph_destroy(s_graph_t **graph);
+extern void indirected_graph_edge_destroy(s_edge_t **edge);
 
 extern bool bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val);
 extern bool bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val);

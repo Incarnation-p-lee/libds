@@ -1698,6 +1698,42 @@ static const struct test_layer_table disjoint_set[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table indirected_graph[] = {
+    {
+        "create", NULL,
+        {
+            &utest_indirected_graph_create,
+            NULL,
+        },
+    },
+    {
+        "link", NULL,
+        {
+            &utest_indirected_graph_link,
+            NULL,
+        },
+    },
+    {
+        "edge_remove", NULL,
+        {
+            &utest_indirected_graph_edge_remove,
+            NULL,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
+static const struct test_layer_table directed_graph[] = {
+    {
+        "create", NULL,
+        {
+            &utest_directed_graph_create,
+            NULL,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1767,6 +1803,13 @@ static const struct test_layer_table test_set_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,       NULL,            {NULL, NULL},},
 };
+
+static const struct test_layer_table test_graph_implement[] = {
+    {"indirected", indirected_graph, {NULL, NULL},},
+    {"directed",   directed_graph,   {NULL, NULL},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,       NULL,               {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1784,6 +1827,7 @@ static const struct test_layer_table test_category[] = {
     {"heap",        test_heap_implement,        {NULL, NULL},},
     {"sort",        test_sort_implement,        {NULL, NULL},},
     {"set",         test_set_implement,         {NULL, NULL},},
+    {"graph",       test_graph_implement,       {NULL, NULL},},
     /* END POINT OF CATEGORY */
     {NULL,          NULL,                       {NULL, NULL},}
 };

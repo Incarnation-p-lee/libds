@@ -13,6 +13,7 @@ static inline bool separate_chain_hash_structure_legal_p(s_separate_chain_hash_t
 static inline bool separate_chain_structure_legal_p(s_separate_chain_t *chain);
 static inline uint32 hashing_table_load_factor_calculate(s_hashing_table_t *table);
 static inline uint32 open_addressing_hash_limit(s_open_addressing_hash_t *hash);
+
 #endif
 
 bool bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val);

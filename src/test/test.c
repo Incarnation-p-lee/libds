@@ -84,5 +84,8 @@
 #include "impl/ptest_binary_indexed_tree.c"
 #include "impl/ptest_trie_tree.c"
 
+#include "impl/utest_indirected_graph.c"
+#include "impl/utest_directed_graph.c"
+
 #include "test_layer.h"
 

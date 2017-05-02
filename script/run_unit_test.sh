@@ -8,7 +8,7 @@ make clean && make COVERAGE=1
 lcov --directory . --capture $lcover --output-file unit_test.info
 
 make clean && make RELEASE=1 COVERAGE=1
-./bin/ds.elf -p=10 *.*.*
+./bin/ds.elf -p=1000 *.*.*
 lcov --directory . --capture $lcover --output-file performance_test.info
 
 ## copy *.gcno file to current ##
