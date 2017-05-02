@@ -161,28 +161,28 @@ graph_vertex_array_find(s_vertex_array_t *vertex_array, void *value)
     return NULL;
 }
 
-static inline void
-graph_vertex_array_queue_enter(s_vertex_array_t *vertex_array, void *val)
-{
-    s_array_queue_t *queue;
+// static inline void
+// graph_vertex_array_queue_enter(s_vertex_array_t *vertex_array, void *val)
+// {
+//     s_array_queue_t *queue;
+// 
+//     assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+// 
+//     queue = graph_vertex_array_queue(vertex_array);
+//     array_queue_enter(queue, val);
+// }
 
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
-
-    queue = graph_vertex_array_queue(vertex_array);
-    array_queue_enter(queue, val);
-}
-
-static inline void
-graph_vertex_array_remove(s_vertex_array_t *vertex_array, uint32 i)
-{
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
-    assert_exit(i < graph_vertex_array_limit(vertex_array));
-
-    graph_vertex_array_queue_enter(vertex_array, (void *)(ptr_t)i);
-    graph_vertex_cleanup(vertex_array->array[i]);
-
-    vertex_array->array[i] = NULL;
-}
+// static inline void
+// graph_vertex_array_remove(s_vertex_array_t *vertex_array, uint32 i)
+// {
+//     assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+//     assert_exit(i < graph_vertex_array_limit(vertex_array));
+// 
+//     graph_vertex_array_queue_enter(vertex_array, (void *)(ptr_t)i);
+//     graph_vertex_cleanup(vertex_array->array[i]);
+// 
+//     vertex_array->array[i] = NULL;
+// }
 
 static inline s_edge_array_t *
 graph_edge_array_create(void)

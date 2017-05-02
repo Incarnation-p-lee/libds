@@ -233,25 +233,21 @@ indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
     }
 }
 
-static inline bool
-indirected_graph_vertex_alone_p(s_vertex_t *vertex)
-{
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-
-    return graph_adjacent_empty_p(vertex->adjacent);
-}
-
+// static inline bool
+// indirected_graph_vertex_alone_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     return graph_adjacent_empty_p(vertex->adjacent);
+// }
 
 static inline void
 indirected_graph_edge_vertex_remove(s_graph_t *graph,
     s_edge_t *edge, s_vertex_t *vertex)
 {
-    uint32 index;
     uint32 i, limit;
     s_edge_t *edge_tmp;
-    s_vertex_t *vertex_tmp;
     s_adjacent_t *adjacent;
-    s_vertex_array_t *vertex_array;
 
     assert_exit(graph_structure_legal_p(graph));
     assert_exit(graph_edge_structure_legal_p(edge));
@@ -264,27 +260,12 @@ indirected_graph_edge_vertex_remove(s_graph_t *graph,
     while (i < limit) {
         edge_tmp = graph_adjacent_edge(adjacent, i);
 
-        if (edge_tmp == NULL || edge_tmp != edge) {
-            i++;
-            continue;
+        if (edge_tmp != NULL && edge_tmp == edge) {
+            graph_adjacent_edge_remove(adjacent, i);
+            return;
         }
 
-        graph_adjacent_edge_remove(adjacent, i);
-        /* destroy alone vertex */
-        if (indirected_graph_vertex_alone_p(vertex)) {
-            index = graph_vertex_index(vertex);
-            vertex_array = graph_vertex_array(graph);
-            vertex_tmp = graph_vertex_array_vertex(vertex_array, index);
-
-            if (vertex_tmp != vertex) {
-                pr_log_warn("Inconsistency data of given vertex array.\n");
-            } else {
-                graph_vertex_array_remove(vertex_array, index);
-                graph_vertex_destroy(vertex);
-            }
-        }
-
-        return;
+        i++;
     }
 
     pr_log_warn("No such of the edge in given vertex.\n");
