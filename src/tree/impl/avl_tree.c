@@ -650,7 +650,6 @@ avl_tree_find_ptr_to_max(s_avl_tree_t **tree)
 
     assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_ip(*tree));
-    assert_exit(avl_tree_node_doubly_child_p(*tree));
 
     max = tree;
     avl = *max;
@@ -671,7 +670,6 @@ avl_tree_find_ptr_to_min(s_avl_tree_t **tree)
 
     assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_ip(*tree));
-    assert_exit(avl_tree_node_doubly_child_p(*tree));
 
     min = tree;
     avl = *min;
@@ -727,13 +725,19 @@ avl_tree_node_doubly_child_right_swap_to_leaf(s_avl_tree_t **node,
 
     assert_exit(NON_NULL_PTR_P(node));
     assert_exit(avl_tree_structure_legal_ip(*node));
+    assert_exit(avl_tree_node_doubly_child_p(*node));
     assert_exit(array_stack_structure_legal_p(path_stack));
 
     removed = *node;
     min = avl_tree_find_ptr_to_min(&removed->right);
     avl_min = *min;
 
-    if (removed->right == avl_min) {
+    if (removed->right != avl_min) {
+        avl_tree_node_children_swap(avl_min, removed);
+
+        *node = avl_min;
+        *min = removed;
+    } else {
         /*
          *       /                    /
          *     removed              avl_min
@@ -742,18 +746,15 @@ avl_tree_node_doubly_child_right_swap_to_leaf(s_avl_tree_t **node,
          *             \                   \
          *              x                   x
          */
-         removed->right = avl_min->right;
-         avl_min->right = removed;
-         avl_min->left = removed->left;
-         removed->left = NULL;
-
-         *node = avl_min;
-    } else {
-        avl_tree_node_children_swap(avl_min, removed);
+        removed->right = avl_min->right;
+        avl_min->right = removed;
+        avl_min->left = removed->left;
+        removed->left = NULL;
 
         *node = avl_min;
-        *min = removed;
+        min = &avl_min->right;
     }
+
 
     avl_tree_node_right_swap_path_update(node, path_stack);
 
@@ -764,44 +765,37 @@ avl_tree_node_doubly_child_right_swap_to_leaf(s_avl_tree_t **node,
     }
 }
 
-static inline bool
-avl_tree_node_left_heavy_p(s_avl_tree_t *node)
-{
-    assert_exit(avl_tree_structure_legal_ip(node));
-
-    if (avl_tree_height_opt(node->left) > avl_tree_height_opt(node->right)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 static inline void
 avl_tree_remove_rotate_i(s_avl_tree_t **tree)
 {
     s_avl_tree_t *avl;
-    s_avl_tree_t *left;
-    s_avl_tree_t *right;
+    sint32 left, right;
 
     assert_exit(NON_NULL_PTR_P(tree));
     assert_exit(avl_tree_structure_legal_ip(*tree));
     assert_exit(avl_tree_node_unbalanced_p(*tree));
 
     avl = *tree;
-    left = avl->left;
-    right = avl->right;
+    left = avl_tree_height_opt(avl->left);
+    right = avl_tree_height_opt(avl->right);
 
-    if (avl_tree_node_left_heavy_p(avl)) {
-        if (avl_tree_node_left_heavy_p(left)) {
+    if (left > right) {
+        left = avl_tree_height_opt(avl->left->left);
+        right = avl_tree_height_opt(avl->left->right);
+
+        if (left >= right) {
             avl_tree_balance_rotate_left_to_left(tree);
         } else {
             avl_tree_balance_rotate_left_to_right(tree);
         }
     } else {
-        if (avl_tree_node_left_heavy_p(right)) {
-            avl_tree_balance_rotate_right_to_left(tree);
-        } else {
+        left = avl_tree_height_opt(avl->right->left);
+        right = avl_tree_height_opt(avl->right->right);
+
+        if (right >= left) {
             avl_tree_balance_rotate_right_to_right(tree);
+        } else {
+            avl_tree_balance_rotate_right_to_left(tree);
         }
     }
 }
@@ -940,13 +934,19 @@ avl_tree_node_doubly_child_left_swap_to_leaf(s_avl_tree_t **node,
 
     assert_exit(NON_NULL_PTR_P(node));
     assert_exit(avl_tree_structure_legal_ip(*node));
+    assert_exit(avl_tree_node_doubly_child_p(*node));
     assert_exit(array_stack_structure_legal_p(path_stack));
 
     removed = *node;
     max = avl_tree_find_ptr_to_max(&removed->left);
     avl_max = *max;
 
-    if (removed->left == avl_max) {
+    if (removed->left != avl_max) {
+        avl_tree_node_children_swap(avl_max, removed);
+
+        *node = avl_max;
+        *max = removed;
+    } else {
         /*
          *       \                   \
          *      removed           avl_max
@@ -961,11 +961,7 @@ avl_tree_node_doubly_child_left_swap_to_leaf(s_avl_tree_t **node,
         removed->right = NULL;
 
         *node = avl_max;
-    } else {
-        avl_tree_node_children_swap(avl_max, removed);
-
-        *node = avl_max;
-        *max = removed;
+        max = &avl_max->left;
     }
 
     avl_tree_node_left_swap_path_update(node, path_stack);
@@ -990,7 +986,7 @@ avl_tree_node_doubly_child_swap_to_leaf(s_avl_tree_t **node,
 
     avl = *node;
 
-    if (avl_tree_height_opt(avl->left) > avl_tree_height_opt(avl->right)) {
+    if (avl_tree_height_opt(avl->left) >= avl_tree_height_opt(avl->right)) {
         return avl_tree_node_doubly_child_left_swap_to_leaf(node, path_stack);
     } else {
         return avl_tree_node_doubly_child_right_swap_to_leaf(node, path_stack);

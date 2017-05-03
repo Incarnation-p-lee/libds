@@ -65,7 +65,6 @@ static inline bool avl_tree_balanced_ip(s_avl_tree_t *tree);
 static inline bool avl_tree_contains_ip(s_avl_tree_t *tree, s_avl_tree_t *node);
 static inline bool avl_tree_node_doubly_child_p(s_avl_tree_t *tree);
 static inline bool avl_tree_node_leaf_p(s_avl_tree_t *tree);
-static inline bool avl_tree_node_left_heavy_p(s_avl_tree_t *node);
 static inline bool avl_tree_node_unbalanced_p(s_avl_tree_t *node);
 static inline bool avl_tree_structure_illegal_ip(s_avl_tree_t *tree);
 static inline bool avl_tree_structure_legal_ip(s_avl_tree_t *tree);

@@ -257,7 +257,7 @@ utest_avl_tree_remove(void)
     pass = true;
     tree = NULL;
     UNIT_TEST_BEGIN(avl_tree_remove);
-    tree = test_avl_tree_sample(0x2214, 0x3632);
+    tree = test_avl_tree_sample(0x2214, 0x1632);
 
     RESULT_CHECK_pointer(PTR_INVALID, avl_tree_remove(NULL, NULL), &pass);
     RESULT_CHECK_pointer(PTR_INVALID, avl_tree_remove(&tree, NULL), &pass);
@@ -266,17 +266,18 @@ utest_avl_tree_remove(void)
     RESULT_CHECK_pointer(NULL, avl_tree_remove(&tree, tmp), &pass);
     avl_tree_destroy(&tmp);
 
-    tmp = tree;
-    RESULT_CHECK_pointer(tmp, avl_tree_remove(&tree, tree), &pass);
-    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
-    avl_tree_destroy(&tmp);
-
     tmp = avl_tree_find_min(tree);
     RESULT_CHECK_pointer(tmp, avl_tree_remove(&tree, tmp), &pass);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
     avl_tree_destroy(&tmp);
 
-    avl_tree_destroy(&tree);
+    while (tree) {
+        tmp = tree;
+        RESULT_CHECK_pointer(tmp, avl_tree_remove(&tree, tree), &pass);
+        RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+        avl_tree_destroy(&tmp);
+    }
+
     UNIT_TEST_RESULT(avl_tree_remove, pass);
 }
 
