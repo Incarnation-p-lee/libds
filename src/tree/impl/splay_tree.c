@@ -506,10 +506,11 @@ splay_tree_height_i(s_splay_tree_t *tree)
         return -1;
     } else {
         height = -1;
+        splay_node = tree;
 
-        queue_master = array_queue_create();
         queue_slave = array_queue_create();
-        array_queue_enter(queue_master, tree);
+        queue_master = array_queue_create();
+        array_queue_enter(queue_master, splay_node);
 
         while (!array_queue_empty_p(queue_master)) {
             splay_node = array_queue_leave(queue_master);

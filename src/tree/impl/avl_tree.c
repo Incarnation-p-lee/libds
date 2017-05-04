@@ -38,6 +38,14 @@ avl_tree_val_list(s_avl_tree_t *tree)
     }
 }
 
+static inline s_doubly_linked_list_t *
+avl_tree_val_list_i(s_avl_tree_t *tree)
+{
+    assert_exit(avl_tree_structure_legal_ip(tree));
+
+    return tree->list;
+}
+
 s_avl_tree_t *
 avl_tree_create(void *val, sint64 nice)
 {
@@ -54,7 +62,7 @@ avl_tree_create(void *val, sint64 nice)
 static inline void
 avl_tree_initial_i(s_avl_tree_t *tree, void *val, sint64 nice)
 {
-    assert_exit(!NULL_PTR_P(tree));
+    assert_exit(NON_NULL_PTR_P(tree));
 
     tree->height = 0;
     tree->nice = nice;
@@ -66,7 +74,7 @@ avl_tree_initial_i(s_avl_tree_t *tree, void *val, sint64 nice)
 void
 avl_tree_initial(s_avl_tree_t *tree, void *val, sint64 nice)
 {
-    if (!complain_null_pointer_p(tree)) {
+    if (NON_NULL_PTR_P(tree)) {
         avl_tree_initial_i(tree, val, nice);
     }
 }
@@ -570,7 +578,7 @@ avl_tree_node_merge(s_avl_tree_t *merged, s_avl_tree_t *node)
     assert_exit(avl_tree_structure_legal_ip(node));
     assert_exit(avl_tree_nice(merged) == avl_tree_nice(node));
 
-    node_limit = node_tmp = avl_tree_val_list(node);
+    node_limit = node_tmp = avl_tree_val_list_i(node);
 
     do {
         node_new = doubly_linked_list_create();
@@ -1091,18 +1099,20 @@ avl_tree_iterate_i(s_avl_tree_t *tree, void (*handler)(void *))
     array_queue_enter(queue_master, tree);
 
     while (!array_queue_empty_p(queue_master)) {
-        while (!array_queue_empty_p(queue_master)) {
-            avl_node = array_queue_leave(queue_master);
-            handler(avl_node);
+        avl_node = array_queue_leave(queue_master);
+        handler(avl_node);
 
-            if (avl_node->left) {
-                array_queue_enter(queue_slave, avl_node->left);
-            }
-            if (avl_node->right) {
-                array_queue_enter(queue_slave, avl_node->right);
-            }
+        if (avl_node->left) {
+            array_queue_enter(queue_slave, avl_node->left);
         }
-        swap_pointer((void **)&queue_master, (void **)&queue_slave);
+
+        if (avl_node->right) {
+            array_queue_enter(queue_slave, avl_node->right);
+        }
+
+        if (array_queue_empty_p(queue_master)) {
+            swap_pointer((void **)&queue_master, (void **)&queue_slave);
+        }
     }
 
     array_queue_destroy(&queue_slave);

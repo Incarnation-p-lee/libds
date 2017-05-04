@@ -80,23 +80,28 @@ test_doubly_end_queue_sample(uint32 count)
     return queue;
 }
 
-static inline struct binary_search_tree *
+static inline s_binary_search_tree_t *
 test_binary_search_tree_sample(uint64 range, uint32 count)
 {
     uint32 i;
     sint64 nice;
-    struct binary_search_tree *tree;
-    struct binary_search_tree *tmp;
+    s_binary_search_tree_t *tmp;
+    s_binary_search_tree_t *tree;
 
-    tree = binary_search_tree_create();
-    binary_search_tree_initial(tree, 0);
     i = 1;
+    tree = binary_search_tree_create(&nice, 0);
 
     while (i < count) {
         nice = (sint64)((rand() % range) - (range / 2));
-        tmp = binary_search_tree_create();
-        binary_search_tree_initial(tmp, nice);
-        binary_search_tree_insert(tree, tmp);
+        tmp = binary_search_tree_create((void *)(ptr_t)i, nice);
+
+        if (binary_search_tree_find(tree, nice) == NULL) {
+            binary_search_tree_insert(tree, tmp);
+        } else {
+            binary_search_tree_insert(tree, tmp);
+            binary_search_tree_destroy(&tmp);
+        }
+
         i++;
     }
 

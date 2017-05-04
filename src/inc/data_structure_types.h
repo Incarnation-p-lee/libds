@@ -239,6 +239,7 @@ struct binary_search_tree {
     sint64                 nice;
     s_binary_search_tree_t *left;
     s_binary_search_tree_t *right;
+    s_doubly_linked_list_t *list;
 };
 
 /*

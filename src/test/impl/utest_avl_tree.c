@@ -74,8 +74,8 @@ utest_avl_tree_find(void)
     s_avl_tree_t *tree;
 
     pass = true;
-    tree = test_avl_tree_sample(0x2234, 0x1DEF);
     UNIT_TEST_BEGIN(avl_tree_find);
+    tree = test_avl_tree_sample(0x2234, 0x1DEF);
 
     nice = avl_tree_nice(tree);
     RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find(NULL, nice), &pass);
@@ -102,8 +102,8 @@ utest_avl_tree_find_min(void)
     s_avl_tree_t *tree;
 
     pass = true;
-    tree = test_avl_tree_sample(0x3134, 0xABD);
     UNIT_TEST_BEGIN(avl_tree_find_min);
+    tree = test_avl_tree_sample(0x3134, 0xABD);
 
     RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find_min(NULL), &pass);
 
@@ -122,8 +122,8 @@ utest_avl_tree_find_max(void)
     s_avl_tree_t *tree;
 
     pass = true;
-    tree = test_avl_tree_sample(0x10dc, 0x73f);
     UNIT_TEST_BEGIN(avl_tree_find_max);
+    tree = test_avl_tree_sample(0x10dc, 0x73f);
 
     RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find_max(NULL), &pass);
 
