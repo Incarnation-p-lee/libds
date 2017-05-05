@@ -47,6 +47,24 @@ graph_attribute_vertex_inc(s_graph_t *graph)
 }
 
 static inline void
+graph_attribute_edge_dec(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph->attribute.edge_count);
+
+    graph->attribute.edge_count--;
+}
+
+static inline void
+graph_attribute_vertex_dec(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph->attribute.vertex_count);
+
+    graph->attribute.vertex_count--;
+}
+
+static inline void
 graph_attribute_edge_inc(s_graph_t *graph)
 {
     assert_exit(graph_structure_legal_p(graph));

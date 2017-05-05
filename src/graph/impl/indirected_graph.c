@@ -100,6 +100,16 @@ indirected_graph_vertex_array_vertex(s_graph_t *graph, uint32 i)
     }
 }
 
+uint32
+indirected_graph_vertex_array_limit(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return SIZE_INVALID;
+    } else {
+        return graph_vertex_array_limit(graph_vertex_array(graph));
+    }
+}
+
 s_graph_t *
 indirected_graph_create(void)
 {
@@ -294,6 +304,7 @@ indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
     indirected_graph_edge_vertex_remove(graph, edge, graph_edge_vertex_1(edge));
 
     graph_edge_array_remove(edge_array, index);
+    graph_attribute_edge_dec(graph);
 
     return edge;
 }
@@ -331,6 +342,7 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
 
         if (edge) {
             indirected_graph_edge_remove_i(graph, edge);
+            memory_cache_free(edge);
         }
 
         i++;
@@ -344,7 +356,8 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
         return NULL;
     } else {
         graph_vertex_array_remove(vertex_array, i);
-        graph_vertex_array_queue_enter(vertex_array, (void *)(ptr_t)i);
+        graph_attribute_vertex_dec(graph);
+        open_addressing_hash_remove(graph->vertex_hash, vertex->value);
     }
 
     return vertex;
@@ -367,7 +380,19 @@ indirected_graph_edge_destroy(s_edge_t **edge)
 {
     if (NON_NULL_PTR_P(edge) && GRAPH_EDGE_LEGAL_P(*edge)) {
         memory_cache_free(*edge);
+
         *edge = NULL;
+    }
+}
+
+void
+indirected_graph_vertex_destroy(s_vertex_t **vertex)
+{
+    if (NON_NULL_PTR_P(vertex) && GRAPH_VERTEX_LEGAL_P(*vertex)) {
+        graph_adjacent_destroy((*vertex)->adjacent);
+        memory_cache_free(*vertex);
+
+        *vertex = NULL;
     }
 }
 

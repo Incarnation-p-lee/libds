@@ -47,6 +47,7 @@ extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern void array_queue_destroy(s_array_queue_t **queue);
 extern void array_queue_enter(s_array_queue_t *queue, void *member);
 extern void open_addressing_hash_destroy(s_open_addressing_hash_t **hash);
+extern void * open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key);
 extern void * open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key);
 extern void * array_queue_leave(s_array_queue_t *queue);
 extern void * open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key);

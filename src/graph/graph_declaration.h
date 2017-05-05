@@ -89,7 +89,9 @@ static inline void graph_adjacent_edge_set(s_adjacent_t *adjacent, uint32 i, s_e
 static inline void graph_adjacent_index_set(s_adjacent_t *adjacent, uint32 index);
 static inline void graph_adjacent_size_set(s_adjacent_t *adjacent, uint32 size);
 static inline void graph_attribute_directed_set(s_graph_t *graph, bool is_directed);
+static inline void graph_attribute_edge_dec(s_graph_t *graph);
 static inline void graph_attribute_edge_inc(s_graph_t *graph);
+static inline void graph_attribute_vertex_dec(s_graph_t *graph);
 static inline void graph_attribute_vertex_inc(s_graph_t *graph);
 static inline void graph_destroy(s_graph_t *graph);
 static inline void graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge);
@@ -112,11 +114,13 @@ static inline void indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex
 static inline void indirected_graph_edge_vertex_remove(s_graph_t *graph, s_edge_t *edge, s_vertex_t *vertex);
 static inline void indirected_graph_vertex_edge_append(s_vertex_t *vertex, s_edge_t *edge);
 uint32 indirected_graph_edge_array_limit(s_graph_t *graph);
+uint32 indirected_graph_vertex_array_limit(s_graph_t *graph);
 void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);
 void * indirected_graph_edge_vertex_1_value(s_edge_t *edge);
 void directed_graph_destroy(s_graph_t **graph);
 void indirected_graph_destroy(s_graph_t **graph);
 void indirected_graph_edge_destroy(s_edge_t **edge);
+void indirected_graph_vertex_destroy(s_vertex_t **vertex);
 
 #endif
 

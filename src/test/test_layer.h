@@ -1720,6 +1720,13 @@ static const struct test_layer_table indirected_graph[] = {
             NULL,
         },
     },
+    {
+        "vertex_remove", NULL,
+        {
+            &utest_indirected_graph_vertex_remove,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

@@ -106,3 +106,44 @@ utest_indirected_graph_edge_remove(void)
     UNIT_TEST_RESULT(indirected_graph_edge_remove, pass);
 }
 
+static inline void
+utest_indirected_graph_vertex_remove(void)
+{
+    bool pass;
+    uint32 i, limit;
+    s_graph_t *graph;
+    s_vertex_t *vertex, *vertex_tmp;
+
+    pass = true;
+    UNIT_TEST_BEGIN(indirected_graph_vertex_remove);
+    graph = test_indirected_graph_sample(0x2ed, 0x10cd);
+
+    vertex = indirected_graph_vertex_remove(NULL, NULL);
+    RESULT_CHECK_pointer(PTR_INVALID, vertex, &pass);
+
+    vertex = indirected_graph_vertex_remove(graph, NULL);
+    RESULT_CHECK_pointer(PTR_INVALID, vertex, &pass);
+
+    vertex = indirected_graph_vertex_array_vertex(graph, 0);
+    vertex->index++;
+    vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
+    RESULT_CHECK_pointer(NULL, vertex_tmp, &pass);
+    vertex->index--;
+
+    i = 0;
+    limit = indirected_graph_vertex_array_limit(graph);
+
+    while (i < limit) {
+        vertex = indirected_graph_vertex_array_vertex(graph, i++);
+
+        if (vertex) {
+            vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
+            RESULT_CHECK_pointer(vertex_tmp, vertex, &pass);
+            indirected_graph_vertex_destroy(&vertex_tmp);
+        }
+    }
+
+    indirected_graph_destroy(&graph);
+    UNIT_TEST_RESULT(indirected_graph_vertex_remove, pass);
+}
+

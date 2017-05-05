@@ -134,6 +134,7 @@ static inline void utest_doubly_end_queue_create(void);
 static inline void utest_indirected_graph_create(void);
 static inline void utest_indirected_graph_edge_remove(void);
 static inline void utest_indirected_graph_link(void);
+static inline void utest_indirected_graph_vertex_remove(void);
 static inline void utest_maximal_heap_decrease_nice(void);
 static inline void utest_maximal_heap_increase_nice(void);
 static inline void utest_min_max_heap_decrease_nice(void);

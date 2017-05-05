@@ -415,11 +415,13 @@ extern s_vertex_t * indirected_graph_vertex_array_vertex(s_graph_t *graph, uint3
 extern s_vertex_t * indirected_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
 extern sint32 indirected_graph_edge_cost(s_edge_t *edge);
 extern uint32 indirected_graph_edge_array_limit(s_graph_t *graph);
+extern uint32 indirected_graph_vertex_array_limit(s_graph_t *graph);
 extern void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);
 extern void * indirected_graph_edge_vertex_1_value(s_edge_t *edge);
 extern void directed_graph_destroy(s_graph_t **graph);
 extern void indirected_graph_destroy(s_graph_t **graph);
 extern void indirected_graph_edge_destroy(s_edge_t **edge);
+extern void indirected_graph_vertex_destroy(s_vertex_t **vertex);
 
 extern bool bitmap_bit_clear_p(s_bitmap_t *bitmap, native_wide_t val);
 extern bool bitmap_bit_set_p(s_bitmap_t *bitmap, native_wide_t val);
