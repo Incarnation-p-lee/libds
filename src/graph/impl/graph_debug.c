@@ -110,3 +110,9 @@ graph_vertex_structure_legal_p(s_vertex_t *vertex)
     }
 }
 
+static inline bool
+graph_vertex_structure_illegal_p(s_vertex_t *vertex)
+{
+    return !graph_vertex_structure_legal_p(vertex);
+}
+

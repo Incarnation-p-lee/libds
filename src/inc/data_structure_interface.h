@@ -412,6 +412,7 @@ extern s_graph_t * directed_graph_create(void);
 extern s_graph_t * indirected_graph_create(void);
 extern s_vertex_array_t * indirected_graph_vertex_array(s_graph_t *graph);
 extern s_vertex_t * indirected_graph_vertex_array_vertex(s_graph_t *graph, uint32 i);
+extern s_vertex_t * indirected_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
 extern sint32 indirected_graph_edge_cost(s_edge_t *edge);
 extern uint32 indirected_graph_edge_array_limit(s_graph_t *graph);
 extern void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);

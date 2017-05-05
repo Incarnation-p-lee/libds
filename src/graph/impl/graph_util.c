@@ -405,13 +405,13 @@ graph_vertex_adjacent(s_vertex_t *vertex)
 //     vertex->value = val;
 // }
 
-// static inline uint32
-// graph_vertex_index(s_vertex_t *vertex)
-// {
-//     assert_exit(graph_vertex_structure_legal_p(vertex));
-// 
-//     return vertex->index;
-// }
+static inline uint32
+graph_vertex_index(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->index;
+}
 
 static inline void
 graph_vertex_index_set(s_vertex_t *vertex, uint32 index)
@@ -437,14 +437,14 @@ graph_vertex_value_exist_p(s_graph_t *graph, void *value)
     }
 }
 
-// static inline void
-// graph_vertex_cleanup(s_vertex_t *vertex)
-// {
-//     assert_exit(graph_vertex_structure_legal_p(vertex));
-// 
-//     vertex->index = GRAPH_INDEX_INVALID;
-//     vertex->label = GRAPH_LABEL_INVALID;
-// }
+static inline void
+graph_vertex_cleanup(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    vertex->index = GRAPH_INDEX_INVALID;
+    vertex->label = GRAPH_LABEL_INVALID;
+}
 
 static inline s_edge_array_t *
 graph_edge_array(s_graph_t *graph)

@@ -310,6 +310,58 @@ indirected_graph_edge_remove(s_graph_t *graph, s_edge_t *edge)
     }
 }
 
+static inline s_vertex_t *
+indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
+{
+    uint32 i;
+    uint32 limit;
+    s_edge_t *edge;
+    s_adjacent_t *adjacent;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    i = 0;
+    adjacent = graph_vertex_adjacent(vertex);
+    limit = graph_adjacent_limit(adjacent);
+
+    while (i < limit) { /* remove all edge connected to vertex */
+        edge = graph_adjacent_edge(adjacent, i);
+
+        if (edge) {
+            indirected_graph_edge_remove_i(graph, edge);
+        }
+
+        i++;
+    }
+
+    i = graph_vertex_index(vertex);
+    vertex_array = graph_vertex_array(graph);
+
+    if (vertex != graph_vertex_array_vertex(vertex_array, i)) {
+        pr_log_warn("Inconsistency data of given vertex array.\n");
+        return NULL;
+    } else {
+        graph_vertex_array_remove(vertex_array, i);
+        graph_vertex_array_queue_enter(vertex_array, (void *)(ptr_t)i);
+    }
+
+    return vertex;
+}
+
+s_vertex_t *
+indirected_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex)
+{
+    if (INDIRECTED_GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else if (GRAPH_VERTEX_ILLEGAL_P(vertex)) {
+        return PTR_INVALID;
+    } else {
+        return indirected_graph_vertex_remove_i(graph, vertex);
+    }
+}
+
 void
 indirected_graph_edge_destroy(s_edge_t **edge)
 {
