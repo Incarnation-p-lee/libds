@@ -49,7 +49,7 @@ static inline bool single_linked_list_structure_illegal_ip(s_single_linked_list_
 static inline bool single_linked_list_structure_legal_ip(s_single_linked_list_t *list);
 static inline bool skip_linked_list_contains_ip(s_skip_linked_list_t *list, s_skip_linked_list_t *node);
 static inline bool skip_linked_list_structure_legal_ip(s_skip_linked_list_t *list);
-static inline s_doubly_linked_list_t * doubly_linked_list_create_i();
+static inline s_doubly_linked_list_t * doubly_linked_list_create_i(void);
 static inline s_doubly_linked_list_t * doubly_linked_list_merge_i(s_doubly_linked_list_t *m, s_doubly_linked_list_t *n);
 static inline s_doubly_linked_list_t * doubly_linked_list_remove_i(s_doubly_linked_list_t **list);
 static inline s_single_linked_list_t * single_linked_list_create_i(void);
@@ -77,6 +77,7 @@ static inline void skip_linked_list_remove_on_level(s_skip_linked_list_t *list, 
 uint32 doubly_linked_list_length(s_doubly_linked_list_t *list);
 uint32 single_linked_list_length(s_single_linked_list_t *list);
 uint32 skip_linked_list_length(s_skip_linked_list_t *list);
+void * doubly_linked_list_val(s_doubly_linked_list_t *list);
 void doubly_linked_list_destroy(s_doubly_linked_list_t **list);
 void doubly_linked_list_initial(s_doubly_linked_list_t *list);
 void doubly_linked_list_insert_after(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
@@ -84,6 +85,7 @@ void doubly_linked_list_insert_before(s_doubly_linked_list_t *list, s_doubly_lin
 void doubly_linked_list_iterate(s_doubly_linked_list_t *list, void (*handler)(void *));
 void doubly_linked_list_next_set(s_doubly_linked_list_t *list, s_doubly_linked_list_t *next);
 void doubly_linked_list_previous_set(s_doubly_linked_list_t *list, s_doubly_linked_list_t *previous);
+void doubly_linked_list_val_set(s_doubly_linked_list_t *list, void *val);
 void single_linked_list_destroy(s_single_linked_list_t **list);
 void single_linked_list_initial(s_single_linked_list_t *list);
 void single_linked_list_insert_after(s_single_linked_list_t *list, s_single_linked_list_t *node);

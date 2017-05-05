@@ -145,6 +145,7 @@ struct single_linked_list {
 };
 
 struct doubly_linked_list {
+    void                   *val;
     s_doubly_linked_list_t *next;
     s_doubly_linked_list_t *previous;
 };
@@ -211,13 +212,15 @@ struct binary_search_tree {
     sint64                 nice;
     s_binary_search_tree_t *left;
     s_binary_search_tree_t *right;
+    s_doubly_linked_list_t *list;
 };
 
 struct avl_tree {
-    sint32       height;
-    sint64       nice;
-    s_avl_tree_t *left;
-    s_avl_tree_t *right;
+    sint32                 height;
+    sint64                 nice;
+    s_avl_tree_t           *left;
+    s_avl_tree_t           *right;
+    s_doubly_linked_list_t *list;
 };
 
 struct splay_tree {
@@ -560,6 +563,7 @@ extern sint32 skip_linked_list_key(s_skip_linked_list_t *list);
 extern uint32 doubly_linked_list_length(s_doubly_linked_list_t *list);
 extern uint32 single_linked_list_length(s_single_linked_list_t *list);
 extern uint32 skip_linked_list_length(s_skip_linked_list_t *list);
+extern void * doubly_linked_list_val(s_doubly_linked_list_t *list);
 extern void doubly_linked_list_destroy(s_doubly_linked_list_t **list);
 extern void doubly_linked_list_initial(s_doubly_linked_list_t *list);
 extern void doubly_linked_list_insert_after(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
@@ -567,6 +571,7 @@ extern void doubly_linked_list_insert_before(s_doubly_linked_list_t *list, s_dou
 extern void doubly_linked_list_iterate(s_doubly_linked_list_t *list, void (*handler)(void *));
 extern void doubly_linked_list_next_set(s_doubly_linked_list_t *list, s_doubly_linked_list_t *next);
 extern void doubly_linked_list_previous_set(s_doubly_linked_list_t *list, s_doubly_linked_list_t *previous);
+extern void doubly_linked_list_val_set(s_doubly_linked_list_t *list, void *val);
 extern void single_linked_list_destroy(s_single_linked_list_t **list);
 extern void single_linked_list_initial(s_single_linked_list_t *list);
 extern void single_linked_list_insert_after(s_single_linked_list_t *list, s_single_linked_list_t *node);
@@ -670,12 +675,16 @@ extern void linked_stack_resize(s_linked_stack_t *stack, uint32 dim);
 
 extern bool avl_tree_balanced_p(s_avl_tree_t *tree);
 extern bool avl_tree_contains_p(s_avl_tree_t *tree, s_avl_tree_t *node);
+extern bool avl_tree_structure_illegal_p(s_avl_tree_t *tree);
+extern bool avl_tree_structure_legal_p(s_avl_tree_t *tree);
 extern bool binary_search_tree_contains_p(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
+extern bool binary_search_tree_structure_illegal_p(s_binary_search_tree_t *tree);
+extern bool binary_search_tree_structure_legal_p(s_binary_search_tree_t *tree);
 extern bool splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node);
 extern bool trie_tree_sequence_matched_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern bool trie_tree_string_matched_p(s_trie_tree_t *trie, char *string);
 extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
-extern s_avl_tree_t * avl_tree_create(void);
+extern s_avl_tree_t * avl_tree_create(void *val, sint64 nice);
 extern s_avl_tree_t * avl_tree_find(s_avl_tree_t *tree, sint64 nice);
 extern s_avl_tree_t * avl_tree_find_max(s_avl_tree_t *tree);
 extern s_avl_tree_t * avl_tree_find_min(s_avl_tree_t *tree);
@@ -684,14 +693,16 @@ extern s_avl_tree_t * avl_tree_left(s_avl_tree_t *tree);
 extern s_avl_tree_t * avl_tree_remove(s_avl_tree_t **tree, s_avl_tree_t *node);
 extern s_avl_tree_t * avl_tree_right(s_avl_tree_t *tree);
 extern s_binary_indexed_tree_t * binary_indexed_tree_create(sint64 *data, uint32 size);
-extern s_binary_search_tree_t  * binary_search_tree_find_min(s_binary_search_tree_t *tree);
-extern s_binary_search_tree_t * binary_search_tree_create(void);
+extern s_binary_search_tree_t * binary_search_tree_create(void *val, sint64 nice);
 extern s_binary_search_tree_t * binary_search_tree_find(s_binary_search_tree_t *tree, sint64 nice);
 extern s_binary_search_tree_t * binary_search_tree_find_max(s_binary_search_tree_t *tree);
+extern s_binary_search_tree_t * binary_search_tree_find_min(s_binary_search_tree_t *tree);
 extern s_binary_search_tree_t * binary_search_tree_insert(s_binary_search_tree_t *tree, s_binary_search_tree_t *node);
 extern s_binary_search_tree_t * binary_search_tree_left(s_binary_search_tree_t *tree);
 extern s_binary_search_tree_t * binary_search_tree_remove(s_binary_search_tree_t **tree, s_binary_search_tree_t *node);
 extern s_binary_search_tree_t * binary_search_tree_right(s_binary_search_tree_t *tree);
+extern s_doubly_linked_list_t * avl_tree_val_list(s_avl_tree_t *tree);
+extern s_doubly_linked_list_t * binary_search_tree_val_list(s_binary_search_tree_t *tree);
 extern s_splay_tree_t * splay_tree_create(void);
 extern s_splay_tree_t * splay_tree_find(s_splay_tree_t **tree, sint64 nice);
 extern s_splay_tree_t * splay_tree_find_max(s_splay_tree_t **tree);
@@ -710,13 +721,13 @@ extern sint64 binary_indexed_tree_sum(s_binary_indexed_tree_t *tree, uint32 numb
 extern sint64 binary_search_tree_nice(s_binary_search_tree_t *tree);
 extern sint64 splay_tree_nice(s_splay_tree_t *tree);
 extern void avl_tree_destroy(s_avl_tree_t **tree);
-extern void avl_tree_initial(s_avl_tree_t *tree, sint64 nice);
+extern void avl_tree_initial(s_avl_tree_t *tree, void *val, sint64 nice);
 extern void avl_tree_iterate(s_avl_tree_t *tree, void (*handler)(void *));
 extern void binary_indexed_tree_add(s_binary_indexed_tree_t *tree, uint32 number, sint64 val);
 extern void binary_indexed_tree_destroy(s_binary_indexed_tree_t **tree);
 extern void binary_indexed_tree_sub(s_binary_indexed_tree_t *tree, uint32 number, sint64 val);
 extern void binary_search_tree_destroy(s_binary_search_tree_t **tree);
-extern void binary_search_tree_initial(s_binary_search_tree_t *tree, sint64 nice);
+extern void binary_search_tree_initial(s_binary_search_tree_t *tree, void *val, sint64 nice);
 extern void binary_search_tree_iterate(s_binary_search_tree_t *tree, void (*handler)(void *));
 extern void binary_search_tree_nice_set(s_binary_search_tree_t *tree, sint64 nice);
 extern void splay_tree_destroy(s_splay_tree_t **tree);

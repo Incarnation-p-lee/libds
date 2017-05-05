@@ -1,88 +1,331 @@
-#define TREE                   s_avl_tree_t
-#define TREE_nice              avl_tree_nice
-#define TREE_val               avl_tree_val
-#define TREE_left              avl_tree_left
-#define TREE_right             avl_tree_right
-#define TEST_tree_sample       test_avl_tree_sample
+static inline void
+utest_avl_tree_create(void)
+{
+    bool pass;
+    s_avl_tree_t *tree;
 
-#define TREE_create            avl_tree_create
-#define TREE_initial           avl_tree_initial
-#define TREE_destroy           avl_tree_destroy
-#define TREE_find              avl_tree_find
-#define TREE_find_min          avl_tree_find_min
-#define TREE_find_max          avl_tree_find_max
-#define TREE_height            avl_tree_height
-#define TREE_contains_p        avl_tree_contains_p
-#define TREE_insert            avl_tree_insert
-#define TREE_remove            avl_tree_remove
-#define TREE_iterate           avl_tree_iterate
+    pass = true;
+    tree = avl_tree_create(&pass, 0);
+    UNIT_TEST_BEGIN(avl_tree_create);
 
-#include "../utest_tree.h"
+    RESULT_CHECK_bool(true, avl_tree_structure_legal_p(tree), &pass);
+    RESULT_CHECK_bool(false, avl_tree_structure_illegal_p(tree), &pass);
 
-UT_TREE_create(avl)
-UT_TREE_initial(avl)
-UT_TREE_destroy(avl)
-UT_TREE_find(avl)
-UT_TREE_find_min(avl)
-UT_TREE_find_max(avl)
-UT_TREE_height(avl)
-UT_TREE_contains_p(avl)
-UT_TREE_insert(avl)
-UT_TREE_remove(avl)
-UT_TREE_iterate(avl)
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_create, pass);
+}
 
-#undef TREE
-#undef TREE_nice
-#undef TREE_val
-#undef TREE_left
-#undef TREE_right
-#undef TEST_tree_sample
+static inline void
+utest_avl_tree_initial(void)
+{
+    bool pass;
+    sint64 nice;
+    s_avl_tree_t *tree;
+    s_doubly_linked_list_t *val_list;
 
-#undef TREE_create
-#undef TREE_initial
-#undef TREE_destroy
-#undef TREE_find
-#undef TREE_find_min
-#undef TREE_find_max
-#undef TREE_height
-#undef TREE_contains_p
-#undef TREE_insert
-#undef TREE_remove
-#undef TREE_iterate
+    pass = true;
+    nice = 0xfade;
+    tree = avl_tree_create(&pass, 0);
+    UNIT_TEST_BEGIN(avl_tree_initial);
+
+    avl_tree_initial(tree, &pass, nice);
+
+    RESULT_CHECK_pointer(NULL, avl_tree_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, avl_tree_right(tree), &pass);
+    RESULT_CHECK_sint64(nice, avl_tree_nice(tree), &pass);
+
+    val_list = avl_tree_val_list(tree);
+
+    RESULT_CHECK_uint32(1, doubly_linked_list_length(val_list), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(val_list), &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_initial, pass);
+}
+
+static inline void
+utest_avl_tree_destroy(void)
+{
+    bool pass;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    tree = avl_tree_create(&pass, 0);
+    UNIT_TEST_BEGIN(avl_tree_destroy);
+
+    avl_tree_destroy(NULL);
+    avl_tree_destroy(&tree);
+    RESULT_CHECK_pointer(NULL, tree, &pass);
+
+    tree = test_avl_tree_sample(0x1234, 0x342);
+
+    avl_tree_destroy(&tree);
+    RESULT_CHECK_pointer(NULL, tree, &pass);
+
+    UNIT_TEST_RESULT(avl_tree_destroy, pass);
+}
+
+static inline void
+utest_avl_tree_find(void)
+{
+    bool pass;
+    sint64 nice;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_find);
+    tree = test_avl_tree_sample(0x2234, 0x1DEF);
+
+    nice = avl_tree_nice(tree);
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find(NULL, nice), &pass);
+    RESULT_CHECK_pointer(tree, avl_tree_find(tree, nice), &pass);
+    RESULT_CHECK_pointer(NULL, avl_tree_find(tree, 0xFFFFFFF), &pass);
+
+    tmp = avl_tree_find_min(tree);
+    nice = avl_tree_nice(tmp);
+    RESULT_CHECK_pointer(tmp, avl_tree_find(tree, nice), &pass);
+
+    tmp = avl_tree_find_max(tree);
+    nice = avl_tree_nice(tmp);
+    RESULT_CHECK_pointer(tmp, avl_tree_find(tree, nice), &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_find, pass);
+}
+
+static inline void
+utest_avl_tree_find_min(void)
+{
+    bool pass;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_find_min);
+    tree = test_avl_tree_sample(0x3134, 0xABD);
+
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find_min(NULL), &pass);
+
+    tmp = avl_tree_find_min(tree);
+    RESULT_CHECK_pointer(NULL, avl_tree_left(tmp), &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_find_min, pass);
+}
+
+static inline void
+utest_avl_tree_find_max(void)
+{
+    bool pass;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_find_max);
+    tree = test_avl_tree_sample(0x10dc, 0x73f);
+
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_find_max(NULL), &pass);
+
+    tmp = avl_tree_find_max(tree);
+    RESULT_CHECK_pointer(NULL, avl_tree_right(tmp), &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_find_max, pass);
+}
+
+static inline void
+utest_avl_tree_height(void)
+{
+    bool pass;
+    sint32 left;
+    sint32 right;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_height);
+    tree = test_avl_tree_sample(0x38f1, 0xf0C);
+
+    RESULT_CHECK_sint32(-1, avl_tree_height(NULL), &pass);
+
+    left = avl_tree_height(avl_tree_left(tree));
+    right = avl_tree_height(avl_tree_right(tree));
+
+    RESULT_CHECK_sint32(MAX_S32(left, right) + 1, avl_tree_height(tree), &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_height, pass);
+}
+
+static inline void
+utest_avl_tree_contains_p(void)
+{
+    bool pass;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+    s_avl_tree_t *fake;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_contains_p);
+    tree = test_avl_tree_sample(0x2fd7, 0x3a1d);
+
+    RESULT_CHECK_bool(false, avl_tree_contains_p(tree, NULL), &pass);
+    RESULT_CHECK_bool(false, avl_tree_contains_p(NULL, NULL), &pass);
+
+    tmp = avl_tree_create(&pass, 0);
+    RESULT_CHECK_bool(false, avl_tree_contains_p(tree, tmp), &pass);
+    avl_tree_destroy(&tmp);
+
+    tmp = avl_tree_find_max(tree);
+    RESULT_CHECK_bool(true, avl_tree_contains_p(tree, tmp), &pass);
+
+    fake = avl_tree_create(NULL, avl_tree_nice(tmp));
+    RESULT_CHECK_bool(false, avl_tree_contains_p(tree, fake), &pass);
+
+    avl_tree_destroy(&fake);
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_contains_p, pass);
+}
 
 static void
 utest_avl_tree_balanced_p(void)
 {
     bool pass;
-    s_avl_tree_t *tree;
     s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
 
     pass = true;
     UNIT_TEST_BEGIN(avl_tree_balanced_p);
+    tree = test_avl_tree_sample(0x28ea, 0x3d64);
+
     RESULT_CHECK_bool(true, avl_tree_balanced_p(NULL), &pass);
-
-    tree = test_avl_tree_sample(0x48EA, 0x3D64);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
 
-    tmp = avl_tree_create();
-    avl_tree_initial(tmp, 0x1234);
+    tmp = avl_tree_create(&pass, 0);
     RESULT_CHECK_bool(true, avl_tree_balanced_p(tmp), &pass);
+
+    tmp->left = tree;
+    RESULT_CHECK_bool(false, avl_tree_balanced_p(tmp), &pass);
+    tmp->left = NULL;
+
     avl_tree_destroy(&tmp);
-
-    tmp = avl_tree_create();
-    avl_tree_initial(tmp, 0xFFFFFFE);
-    avl_tree_insert(&tree, tmp);
-    tmp = avl_tree_create();
-    avl_tree_initial(tmp, 0xFFFFFFF);
-    avl_tree_insert(&tree, tmp);
-    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
-
-    tmp = avl_tree_create();
-    avl_tree_initial(tmp, 0xFFFFFFF);
-    avl_tree_insert(&tree, tmp);
-    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
-
     avl_tree_destroy(&tree);
     UNIT_TEST_RESULT(avl_tree_balanced_p, pass);
+}
+
+static inline void
+utest_avl_tree_insert(void)
+{
+    bool pass;
+    sint64 nice;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+    s_avl_tree_t *node;
+
+    pass = true;
+    UNIT_TEST_BEGIN(avl_tree_insert);
+    tree = test_avl_tree_sample(0x1321, 0xa2b);
+
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_insert(NULL, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_insert(&tree, NULL), &pass);
+
+    nice = 0xFFFDEA;
+    tmp = avl_tree_create(&pass, nice);
+
+    RESULT_CHECK_pointer(tmp, avl_tree_insert(&tree, tmp), &pass);
+    RESULT_CHECK_bool(true, avl_tree_contains_p(tree, tmp), &pass);
+    RESULT_CHECK_pointer(tmp, avl_tree_insert(&tree, tmp), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+
+    tmp = avl_tree_create(&pass, nice);
+    node = avl_tree_find(tree, nice);
+    RESULT_CHECK_pointer(node, avl_tree_insert(&tree, tmp), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    avl_tree_destroy(&tmp);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_insert, pass);
+}
+
+static inline void
+utest_avl_tree_remove(void)
+{
+    bool pass;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    tree = NULL;
+    UNIT_TEST_BEGIN(avl_tree_remove);
+    tree = test_avl_tree_sample(0x2214, 0x1632);
+
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_remove(NULL, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, avl_tree_remove(&tree, NULL), &pass);
+
+    tmp = avl_tree_create(&pass, 0);
+    RESULT_CHECK_pointer(NULL, avl_tree_remove(&tree, tmp), &pass);
+    avl_tree_destroy(&tmp);
+
+    tmp = avl_tree_find_min(tree);
+    RESULT_CHECK_pointer(tmp, avl_tree_remove(&tree, tmp), &pass);
+    RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+    avl_tree_destroy(&tmp);
+
+    while (tree) {
+        tmp = tree;
+        RESULT_CHECK_pointer(tmp, avl_tree_remove(&tree, tree), &pass);
+        RESULT_CHECK_bool(true, avl_tree_balanced_p(tree), &pass);
+        avl_tree_destroy(&tmp);
+    }
+
+    UNIT_TEST_RESULT(avl_tree_remove, pass);
+}
+
+static inline void
+utest_avl_tree_iterate_handler(void *val)
+{
+    uint32 *counter;
+    s_avl_tree_t *avl;
+
+    avl = val;
+
+    assert_exit(avl_tree_structure_legal_p(avl));
+
+    counter = doubly_linked_list_val(avl_tree_val_list(avl));
+
+    *counter = *counter + 1;
+}
+
+static inline void
+utest_avl_tree_iterate(void)
+{
+    uint32 i;
+    bool pass;
+    uint32 limit;
+    uint32 counter;
+    s_avl_tree_t *tmp;
+    s_avl_tree_t *tree;
+
+    pass = true;
+    limit = 0x1de2;
+    counter = i = 0;
+    UNIT_TEST_BEGIN(avl_tree_iterate);
+
+    avl_tree_iterate(NULL, NULL);
+    avl_tree_iterate(tree, NULL);
+    avl_tree_iterate(NULL, &utest_avl_tree_iterate_handler);
+
+    tree = avl_tree_create(&counter, i++);
+
+    while (i < limit) {
+        tmp = avl_tree_create(&counter, i++);
+        avl_tree_insert(&tree, tmp);
+    }
+
+    avl_tree_iterate(tree, &utest_avl_tree_iterate_handler);
+    RESULT_CHECK_uint32(limit, counter, &pass);
+
+    avl_tree_destroy(&tree);
+    UNIT_TEST_RESULT(avl_tree_iterate, pass);
 }
 

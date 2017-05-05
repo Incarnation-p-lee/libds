@@ -477,10 +477,10 @@ splay_tree_balance_splaying(s_array_stack_t *path_stack)
 
     while (array_stack_size(path_stack) >= 2) {
         iterator = array_stack_pop(path_stack);
-        path_mask = TREE_PATH_MASK(iterator);
+        path_mask = TREE_PATH_TYPE(iterator);
 
         iterator = array_stack_pop(path_stack);
-        path_mask = path_mask + (TREE_PATH_MASK(iterator) << 1);
+        path_mask = path_mask + (TREE_PATH_TYPE(iterator) << 1);
 
         iterator = TREE_PATH_DECODE(iterator);
         splay_tree_balance_splaying_i(iterator, path_mask);
@@ -488,7 +488,7 @@ splay_tree_balance_splaying(s_array_stack_t *path_stack)
 
     if (array_stack_size(path_stack) == 1) {
         iterator = array_stack_pop(path_stack);
-        path_mask = TREE_PATH_MASK(iterator);
+        path_mask = TREE_PATH_TYPE(iterator);
 
         iterator = TREE_PATH_DECODE(iterator);
         splay_tree_balance_splaying_root(iterator, path_mask);
@@ -506,10 +506,11 @@ splay_tree_height_i(s_splay_tree_t *tree)
         return -1;
     } else {
         height = -1;
+        splay_node = tree;
 
-        queue_master = array_queue_create();
         queue_slave = array_queue_create();
-        array_queue_enter(queue_master, tree);
+        queue_master = array_queue_create();
+        array_queue_enter(queue_master, splay_node);
 
         while (!array_queue_empty_p(queue_master)) {
             splay_node = array_queue_leave(queue_master);
@@ -755,18 +756,11 @@ splay_tree_find_ptr_to_max(s_splay_tree_t **tree)
 static inline void
 splay_tree_swap_child(s_splay_tree_t *a, s_splay_tree_t *b)
 {
-    void *tmp;
-
     assert_exit(splay_tree_structure_legal_p(a));
     assert_exit(splay_tree_structure_legal_p(b));
 
-    tmp = a->left;
-    a->left = b->left;
-    b->left = tmp;
-
-    tmp = a->right;
-    a->right = b->right;
-    b->right = tmp;
+    SWAP(a->left, b->left);
+    SWAP(a->right, b->right);
 }
 
 static inline void
@@ -929,6 +923,7 @@ splay_tree_remove_i(s_splay_tree_t **tree, s_splay_tree_t *node)
             removed_node = splay_tree_repeated_remove(iterator, node, direction);
             break;
         }
+
         splay_node = *iterator;
     }
 
