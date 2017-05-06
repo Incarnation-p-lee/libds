@@ -64,9 +64,9 @@ utest_indirected_graph_edge_remove(void)
 {
     bool pass;
     sint32 cost;
-    uint32 i, limit;
     s_edge_t *edge, *edge_tmp;
     s_graph_t *graph, *graph_tmp;
+    uint32 i, limit, edge_count, count;
 
     pass = true;
     cost = 0x23d;
@@ -92,10 +92,13 @@ utest_indirected_graph_edge_remove(void)
 
     i = 0;
     limit = indirected_graph_edge_array_limit(graph);
+    edge_count = indirected_graph_edge_count(graph);
 
     while (i < limit) {
         edge = indirected_graph_edge_array_edge(graph, i++);
         if (edge) {
+            count = indirected_graph_edge_count(graph);
+            RESULT_CHECK_uint32(edge_count--, count, &pass);
             edge_tmp = indirected_graph_edge_remove(graph, edge);
             RESULT_CHECK_pointer(edge_tmp, edge, &pass);
             indirected_graph_edge_destroy(&edge_tmp);
@@ -110,9 +113,9 @@ static inline void
 utest_indirected_graph_vertex_remove(void)
 {
     bool pass;
-    uint32 i, limit;
     s_graph_t *graph;
     s_vertex_t *vertex, *vertex_tmp;
+    uint32 i, limit, vertex_count, count;
 
     pass = true;
     UNIT_TEST_BEGIN(indirected_graph_vertex_remove);
@@ -132,11 +135,14 @@ utest_indirected_graph_vertex_remove(void)
 
     i = 0;
     limit = indirected_graph_vertex_array_limit(graph);
+    vertex_count = indirected_graph_vertex_count(graph);
 
     while (i < limit) {
         vertex = indirected_graph_vertex_array_vertex(graph, i++);
 
         if (vertex) {
+            count = indirected_graph_vertex_count(graph);
+            RESULT_CHECK_uint32(vertex_count--, count, &pass);
             vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
             RESULT_CHECK_pointer(vertex_tmp, vertex, &pass);
             indirected_graph_vertex_destroy(&vertex_tmp);

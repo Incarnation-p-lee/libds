@@ -110,6 +110,26 @@ indirected_graph_vertex_array_limit(s_graph_t *graph)
     }
 }
 
+uint32
+indirected_graph_vertex_count(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return SIZE_INVALID;
+    } else {
+        return graph_attribute_vertex_count(graph);
+    }
+}
+
+uint32
+indirected_graph_edge_count(s_graph_t *graph)
+{
+    if (GRAPH_ILLEGAL_P(graph)) {
+        return SIZE_INVALID;
+    } else {
+        return graph_attribute_edge_count(graph);
+    }
+}
+
 s_graph_t *
 indirected_graph_create(void)
 {

@@ -72,6 +72,22 @@ graph_attribute_edge_inc(s_graph_t *graph)
     graph->attribute.edge_count++;
 }
 
+static uint32
+graph_attribute_vertex_count(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    return graph->attribute.vertex_count;
+}
+
+static uint32
+graph_attribute_edge_count(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    return graph->attribute.edge_count;
+}
+
 static inline void *
 graph_edge_vertex_0_value(s_edge_t *edge)
 {
