@@ -67,46 +67,46 @@ indirected_graph_edge_array(s_graph_t *graph)
 }
 
 uint32
-indirected_graph_edge_array_limit(s_graph_t *graph)
+indirected_graph_edge_array_limit(s_edge_array_t *edge_array)
 {
-    if (GRAPH_ILLEGAL_P(graph)) {
+    if (GRAPH_EDGE_ARRAY_ILLEGAL_P(edge_array)) {
         return SIZE_INVALID;
     } else {
-        return graph_edge_array_limit(graph_edge_array(graph));
+        return graph_edge_array_limit(edge_array);
     }
 }
 
 s_edge_t *
-indirected_graph_edge_array_edge(s_graph_t *graph, uint32 i)
+indirected_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i)
 {
-    if (GRAPH_ILLEGAL_P(graph)) {
+    if (GRAPH_EDGE_ARRAY_ILLEGAL_P(edge_array)) {
         return PTR_INVALID;
-    } else if (i > graph_edge_array_limit(graph_edge_array(graph))) {
+    } else if (i > graph_edge_array_limit(edge_array)) {
         return PTR_INVALID;
     } else {
-        return graph_edge_array_edge(graph_edge_array(graph), i);
+        return graph_edge_array_edge(edge_array, i);
     }
 }
 
 s_vertex_t *
-indirected_graph_vertex_array_vertex(s_graph_t *graph, uint32 i)
+indirected_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i)
 {
-    if (GRAPH_ILLEGAL_P(graph)) {
+    if (GRAPH_VERTEX_ARRAY_ILLEGAL_P(vertex_array)) {
         return PTR_INVALID;
-    } else if (i > graph_vertex_array_limit(graph_vertex_array(graph))) {
+    } else if (i > graph_vertex_array_limit(vertex_array)) {
         return PTR_INVALID;
     } else {
-        return graph_vertex_array_vertex(graph_vertex_array(graph), i);
+        return graph_vertex_array_vertex(vertex_array, i);
     }
 }
 
 uint32
-indirected_graph_vertex_array_limit(s_graph_t *graph)
+indirected_graph_vertex_array_limit(s_vertex_array_t *vertex_array)
 {
-    if (GRAPH_ILLEGAL_P(graph)) {
+    if (GRAPH_VERTEX_ARRAY_ILLEGAL_P(vertex_array)) {
         return SIZE_INVALID;
     } else {
-        return graph_vertex_array_limit(graph_vertex_array(graph));
+        return graph_vertex_array_limit(vertex_array);
     }
 }
 

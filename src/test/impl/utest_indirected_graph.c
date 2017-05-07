@@ -65,6 +65,7 @@ utest_indirected_graph_edge_remove(void)
     bool pass;
     sint32 cost;
     s_edge_t *edge, *edge_tmp;
+    s_edge_array_t *edge_array;
     s_graph_t *graph, *graph_tmp;
     uint32 i, limit, edge_count, count;
 
@@ -79,11 +80,6 @@ utest_indirected_graph_edge_remove(void)
     edge = indirected_graph_edge_remove(graph, NULL);
     RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
 
-    edge = indirected_graph_link(graph, &pass, &cost, cost);
-    edge_tmp = indirected_graph_edge_remove(graph, edge);
-    RESULT_CHECK_pointer(edge_tmp, edge, &pass);
-    indirected_graph_edge_destroy(&edge_tmp);
-
     graph_tmp = indirected_graph_create();
     edge = indirected_graph_link(graph_tmp, &pass, &cost, cost);
     edge_tmp = indirected_graph_edge_remove(graph, edge);
@@ -91,11 +87,12 @@ utest_indirected_graph_edge_remove(void)
     indirected_graph_destroy(&graph_tmp);
 
     i = 0;
-    limit = indirected_graph_edge_array_limit(graph);
+    edge_array = indirected_graph_edge_array(graph);
+    limit = indirected_graph_edge_array_limit(edge_array);
     edge_count = indirected_graph_edge_count(graph);
 
     while (i < limit) {
-        edge = indirected_graph_edge_array_edge(graph, i++);
+        edge = indirected_graph_edge_array_edge(edge_array, i++);
         if (edge) {
             count = indirected_graph_edge_count(graph);
             RESULT_CHECK_uint32(edge_count--, count, &pass);
@@ -114,12 +111,14 @@ utest_indirected_graph_vertex_remove(void)
 {
     bool pass;
     s_graph_t *graph;
+    s_vertex_array_t *vertex_array;
     s_vertex_t *vertex, *vertex_tmp;
     uint32 i, limit, vertex_count, count;
 
     pass = true;
     UNIT_TEST_BEGIN(indirected_graph_vertex_remove);
     graph = test_indirected_graph_sample(0x2ed, 0x10cd);
+    vertex_array = indirected_graph_vertex_array(graph);
 
     vertex = indirected_graph_vertex_remove(NULL, NULL);
     RESULT_CHECK_pointer(PTR_INVALID, vertex, &pass);
@@ -127,18 +126,18 @@ utest_indirected_graph_vertex_remove(void)
     vertex = indirected_graph_vertex_remove(graph, NULL);
     RESULT_CHECK_pointer(PTR_INVALID, vertex, &pass);
 
-    vertex = indirected_graph_vertex_array_vertex(graph, 0);
+    vertex = indirected_graph_vertex_array_vertex(vertex_array, 0);
     vertex->index++;
     vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
     RESULT_CHECK_pointer(PTR_INVALID, vertex_tmp, &pass);
     vertex->index--;
 
     i = 0;
-    limit = indirected_graph_vertex_array_limit(graph);
+    limit = indirected_graph_vertex_array_limit(vertex_array);
     vertex_count = indirected_graph_vertex_count(graph);
 
     while (i < limit) {
-        vertex = indirected_graph_vertex_array_vertex(graph, i++);
+        vertex = indirected_graph_vertex_array_vertex(vertex_array, i++);
 
         if (vertex) {
             count = indirected_graph_vertex_count(graph);
