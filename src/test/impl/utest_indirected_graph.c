@@ -87,7 +87,7 @@ utest_indirected_graph_edge_remove(void)
     graph_tmp = indirected_graph_create();
     edge = indirected_graph_link(graph_tmp, &pass, &cost, cost);
     edge_tmp = indirected_graph_edge_remove(graph, edge);
-    RESULT_CHECK_pointer(NULL, edge_tmp, &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, edge_tmp, &pass);
     indirected_graph_destroy(&graph_tmp);
 
     i = 0;
@@ -130,7 +130,7 @@ utest_indirected_graph_vertex_remove(void)
     vertex = indirected_graph_vertex_array_vertex(graph, 0);
     vertex->index++;
     vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
-    RESULT_CHECK_pointer(NULL, vertex_tmp, &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, vertex_tmp, &pass);
     vertex->index--;
 
     i = 0;
