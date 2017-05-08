@@ -1707,6 +1707,13 @@ static const struct test_layer_table indirected_graph[] = {
         },
     },
     {
+        "destroy", NULL,
+        {
+            &utest_indirected_graph_destroy,
+            NULL,
+        },
+    },
+    {
         "link", NULL,
         {
             &utest_indirected_graph_link,

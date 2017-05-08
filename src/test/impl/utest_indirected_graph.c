@@ -15,6 +15,31 @@ utest_indirected_graph_create(void)
 }
 
 static inline void
+utest_indirected_graph_destroy(void)
+{
+    bool pass;
+    sint32 cost;
+    s_edge_t *edge;
+    s_graph_t *graph;
+
+    pass = true;
+    cost = 0x234;
+    UNIT_TEST_BEGIN(indirected_graph_destroy);
+    graph = test_indirected_graph_sample(0x1098, 0x1de3);
+
+    indirected_graph_destroy(NULL);
+    edge = indirected_graph_link(graph, &edge, &graph, cost);
+
+    indirected_graph_edge_remove(graph, edge);
+    indirected_graph_edge_destroy(&edge);
+
+    indirected_graph_destroy(&graph);
+    RESULT_CHECK_pointer(NULL, graph, &pass);
+
+    UNIT_TEST_RESULT(indirected_graph_destroy, pass);
+}
+
+static inline void
 utest_indirected_graph_link(void)
 {
     bool pass;
@@ -117,7 +142,7 @@ utest_indirected_graph_vertex_remove(void)
 
     pass = true;
     UNIT_TEST_BEGIN(indirected_graph_vertex_remove);
-    graph = test_indirected_graph_sample(0x2ed, 0x10cd);
+    graph = test_indirected_graph_sample(0x3ed, 0x12d9);
     vertex_array = indirected_graph_vertex_array(graph);
 
     vertex = indirected_graph_vertex_remove(NULL, NULL);

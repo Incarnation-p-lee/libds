@@ -1,16 +1,16 @@
-#define GRAPH                  s_graph_t
-#define TEST_graph_legal_p     directed_graph_structure_legal_p
+static inline void
+utest_directed_graph_create(void)
+{
+    bool pass;
+    s_graph_t *graph;
 
-#define GRAPH_create           directed_graph_create
-#define GRAPH_destroy          directed_graph_destroy
+    pass = true;
+    graph = directed_graph_create();
+    UNIT_TEST_BEGIN(directed_graph_create);
 
-#include "../utest_graph.h"
+    RESULT_CHECK_bool(true, directed_graph_structure_legal_p(graph), &pass);
 
-UT_GRAPH_create(directed)
-
-#undef GRAPH
-#undef TEST_graph_legal_p
-
-#undef GRAPH_create
-#undef GRAPH_destroy
+    directed_graph_destroy(&graph);
+    UNIT_TEST_RESULT(directed_graph_create, pass);
+}
 
