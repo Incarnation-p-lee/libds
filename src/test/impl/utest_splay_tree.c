@@ -197,6 +197,11 @@ utest_splay_tree_find(void)
     RESULT_CHECK_pointer(tmp, tree, &pass);
     RESULT_CHECK_pointer(tmp, splay_tree_find(&tree, nice), &pass);
 
+    tmp = tree->left;
+    nice = splay_tree_nice(tmp);
+    splay_tree_find_max(&tree);
+    RESULT_CHECK_pointer(tmp, splay_tree_find(&tree, nice), &pass);
+
     splay_tree_destroy(&tree);
     UNIT_TEST_RESULT(splay_tree_find, pass);
 }
@@ -269,6 +274,31 @@ utest_splay_tree_contains_p(void)
     UNIT_TEST_RESULT(splay_tree_contains_p, pass);
 }
 
+static inline s_splay_tree_t *
+utest_splay_random_node(s_splay_tree_t *tree)
+{
+    uint32 seed;
+    s_splay_tree_t *node, *node_tmp;
+
+    assert_exit(splay_tree_structure_legal_p(tree));
+
+    node_tmp =  node = tree;
+    seed = random_uint32_with_limit(0xfffff);
+
+    while (node->left && node->right) {
+        seed++;
+        node_tmp = node;
+
+        if (seed & 0x1) {
+            node = splay_tree_left(node);
+        } else {
+            node = splay_tree_right(node);
+        }
+    }
+
+    return node_tmp;
+}
+
 static void
 utest_splay_tree_remove(void)
 {
@@ -276,6 +306,7 @@ utest_splay_tree_remove(void)
     sint64 nice;
     s_splay_tree_t *tmp;
     s_splay_tree_t *tree;
+    s_splay_tree_t *removed;
 
     pass = true;
     tree = NULL;
@@ -283,11 +314,6 @@ utest_splay_tree_remove(void)
     RESULT_CHECK_pointer(PTR_INVALID, splay_tree_remove(&tree, NULL), &pass);
 
     tree = test_splay_tree_sample(0x2421, 0x32CD);
-    tmp = tree;
-    nice = splay_tree_nice(tmp);
-    tmp = splay_tree_remove(&tree, tree);
-    RESULT_CHECK_sint64(nice, splay_tree_nice(tmp), &pass);
-    splay_tree_destroy(&tmp);
 
     tmp = splay_tree_find_min(&tree);
     nice = splay_tree_nice(tmp);
@@ -305,15 +331,14 @@ utest_splay_tree_remove(void)
     nice = splay_tree_nice(tmp);
     RESULT_CHECK_pointer(NULL, splay_tree_remove(&tree, tmp), &pass);
     splay_tree_destroy(&tmp);
-    splay_tree_destroy(&tree);
 
-    nice = 0x7fffff;
-    tree = splay_tree_create(&tree, nice);
-    tmp = tree;
-    RESULT_CHECK_pointer(tmp, splay_tree_remove(&tree, tree), &pass);
-    RESULT_CHECK_pointer(NULL, tree, &pass);
+    while (tree) {
+        tmp = utest_splay_random_node(tree);
+        removed = splay_tree_remove(&tree, tmp);
+        RESULT_CHECK_pointer(tmp, removed, &pass);
+        splay_tree_destroy(&removed);
+    }
 
-    splay_tree_destroy(&tmp);
     UNIT_TEST_RESULT(splay_tree_remove, pass);
 }
 

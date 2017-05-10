@@ -30,6 +30,7 @@ static inline s_doubly_linked_list_t * test_doubly_linked_list_sample(uint32 nod
 static inline s_graph_t * test_indirected_graph_sample(uint64 range, uint32 size);
 static inline s_single_linked_list_t * test_single_linked_list_sample(uint32 node_count);
 static inline s_skip_linked_list_t * test_skip_linked_list_sample(uint32 node_count);
+static inline s_splay_tree_t * utest_splay_random_node(s_splay_tree_t *tree);
 static inline sint32 test_sort_compare_ptr(const void *a, const void *b);
 static inline sint32 test_sort_compare_struct(const void *a, const void *b);
 static inline sint32 test_sort_compare_u32(const void *a, const void *b);
