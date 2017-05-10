@@ -47,11 +47,45 @@ graph_attribute_vertex_inc(s_graph_t *graph)
 }
 
 static inline void
+graph_attribute_edge_dec(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph->attribute.edge_count);
+
+    graph->attribute.edge_count--;
+}
+
+static inline void
+graph_attribute_vertex_dec(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph->attribute.vertex_count);
+
+    graph->attribute.vertex_count--;
+}
+
+static inline void
 graph_attribute_edge_inc(s_graph_t *graph)
 {
     assert_exit(graph_structure_legal_p(graph));
 
     graph->attribute.edge_count++;
+}
+
+static uint32
+graph_attribute_vertex_count(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    return graph->attribute.vertex_count;
+}
+
+static uint32
+graph_attribute_edge_count(s_graph_t *graph)
+{
+    assert_exit(graph_structure_legal_p(graph));
+
+    return graph->attribute.edge_count;
 }
 
 static inline void *
@@ -134,6 +168,43 @@ graph_edge_index_set(s_edge_t *edge, uint32 index)
 
     edge->index = index;
 }
+
+static inline bool
+graph_edge_compatible_p(s_graph_t *graph, s_edge_t *edge)
+{
+    uint32 index;
+    s_edge_t *edge_tmp;
+
+    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    index = graph_edge_index(edge);
+    edge_tmp = graph_edge_array_edge(graph_edge_array(graph), index);
+
+    if (edge_tmp == edge) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline bool
+graph_edge_incompatible_p(s_graph_t *graph, s_edge_t *edge)
+{
+    return !graph_edge_compatible_p(graph, edge);
+}
+
+// static inline bool
+// graph_edge_loop_p(s_graph_t *edge)
+// {
+//     assert_exit(graph_edge_structure_legal_p(edge));
+// 
+//     if (edge->precursor == edge->successor) { /* include vertex_0 and 1 */
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
 static inline s_array_queue_t *
 graph_edge_array_queue(s_edge_array_t *edge_array)
@@ -249,13 +320,13 @@ graph_adjacent_size_set(s_adjacent_t *adjacent, uint32 size)
     adjacent->size = size;
 }
 
-static inline bool
-graph_adjacent_empty_p(s_adjacent_t *adjacent)
-{
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
-
-    return adjacent->edge_count == 0 ? true : false;
-}
+// static inline bool
+// graph_adjacent_empty_p(s_adjacent_t *adjacent)
+// {
+//     assert_exit(graph_adjacent_structure_legal_p(adjacent));
+// 
+//     return adjacent->edge_count == 0 ? true : false;
+// }
 
 static inline void
 graph_adjacent_edge_count_dec(s_adjacent_t *adjacent)
@@ -452,5 +523,30 @@ graph_edge_array(s_graph_t *graph)
     assert_exit(graph_structure_legal_p(graph));
 
     return graph->edge_array;
+}
+
+static inline bool
+graph_vertex_compatible_p(s_graph_t *graph, s_vertex_t *vertex)
+{
+    uint32 index;
+    s_vertex_t *vertex_tmp;
+
+    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    index = graph_vertex_index(vertex);
+    vertex_tmp = graph_vertex_array_vertex(graph_vertex_array(graph), index);
+
+    if (vertex_tmp == vertex) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline bool
+graph_vertex_incompatible_p(s_graph_t *graph, s_vertex_t *vertex)
+{
+    return !graph_vertex_compatible_p(graph, vertex);
 }
 

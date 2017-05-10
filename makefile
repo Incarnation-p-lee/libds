@@ -123,9 +123,9 @@ $(obj):%.o:%.c
 	$(CC) $(CFLAG) $< -o $@
 
 clean:
-	@echo "    Clean Object"
+	@echo "    Clean    Object"
 	@$(RM) $(obj)
-	@echo "    Clean Depend"
+	@echo "    Clean    Depend"
 	@$(RM) $(dep)
 
 help:
