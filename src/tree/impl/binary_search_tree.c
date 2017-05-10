@@ -319,7 +319,7 @@ binary_search_tree_height(s_binary_search_tree_t *tree)
 }
 
 static inline bool
-binary_search_tree_contains_p_i(s_binary_search_tree_t *tree,
+binary_search_tree_contains_ip(s_binary_search_tree_t *tree,
     s_binary_search_tree_t *node)
 {
     sint64 nice;
@@ -355,7 +355,7 @@ binary_search_tree_contains_p(s_binary_search_tree_t *tree,
     } else if (binary_search_tree_structure_illegal_ip(node)) {
         return false;
     } else {
-        return binary_search_tree_contains_p_i(tree, node);
+        return binary_search_tree_contains_ip(tree, node);
     }
 }
 
@@ -527,7 +527,7 @@ binary_search_tree_child_left_strip(s_binary_search_tree_t **binary_node)
 
     binary = *binary_node;
 
-    if (!binary->left->right) { // short cut here
+    if (binary->left->right == NULL) { /* short cut here */
         *binary_node = binary->left;
         binary->left->right = binary->right;
         binary->left = binary->right = NULL;
@@ -556,7 +556,7 @@ binary_search_tree_child_right_strip(s_binary_search_tree_t **binary_node)
 
     binary = *binary_node;
 
-    if (!binary->right->left) { // short cut here
+    if (binary->right->left == NULL) { /* short cut here */
         *binary_node = binary->right;
         binary->right->left = binary->left;
         binary->left = binary->right = NULL;

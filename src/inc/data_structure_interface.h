@@ -224,9 +224,10 @@ struct avl_tree {
 };
 
 struct splay_tree {
-    sint64         nice;
-    s_splay_tree_t *left;
-    s_splay_tree_t *right;
+    sint64                 nice;
+    s_splay_tree_t         *left;
+    s_splay_tree_t         *right;
+    s_doubly_linked_list_t *list;
 };
 
 struct binary_indexed_tree {
@@ -678,6 +679,8 @@ extern bool binary_search_tree_contains_p(s_binary_search_tree_t *tree, s_binary
 extern bool binary_search_tree_structure_illegal_p(s_binary_search_tree_t *tree);
 extern bool binary_search_tree_structure_legal_p(s_binary_search_tree_t *tree);
 extern bool splay_tree_contains_p(s_splay_tree_t *tree, s_splay_tree_t *node);
+extern bool splay_tree_structure_illegal_p(s_splay_tree_t *tree);
+extern bool splay_tree_structure_legal_p(s_splay_tree_t *tree);
 extern bool trie_tree_sequence_matched_p(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
 extern bool trie_tree_string_matched_p(s_trie_tree_t *trie, char *string);
 extern bool trie_tree_structure_legal_p(s_trie_tree_t *trie);
@@ -700,7 +703,8 @@ extern s_binary_search_tree_t * binary_search_tree_remove(s_binary_search_tree_t
 extern s_binary_search_tree_t * binary_search_tree_right(s_binary_search_tree_t *tree);
 extern s_doubly_linked_list_t * avl_tree_val_list(s_avl_tree_t *tree);
 extern s_doubly_linked_list_t * binary_search_tree_val_list(s_binary_search_tree_t *tree);
-extern s_splay_tree_t * splay_tree_create(void);
+extern s_doubly_linked_list_t * splay_tree_val_list(s_splay_tree_t *tree);
+extern s_splay_tree_t * splay_tree_create(void *val, sint64 nice);
 extern s_splay_tree_t * splay_tree_find(s_splay_tree_t **tree, sint64 nice);
 extern s_splay_tree_t * splay_tree_find_max(s_splay_tree_t **tree);
 extern s_splay_tree_t * splay_tree_find_min(s_splay_tree_t **tree);
@@ -728,7 +732,7 @@ extern void binary_search_tree_initial(s_binary_search_tree_t *tree, void *val, 
 extern void binary_search_tree_iterate(s_binary_search_tree_t *tree, void (*handler)(void *));
 extern void binary_search_tree_nice_set(s_binary_search_tree_t *tree, sint64 nice);
 extern void splay_tree_destroy(s_splay_tree_t **tree);
-extern void splay_tree_initial(s_splay_tree_t *tree, sint64 nice);
+extern void splay_tree_initial(s_splay_tree_t *tree, void *val, sint64 nice);
 extern void splay_tree_iterate(s_splay_tree_t *tree, void (*handler)(void *));
 extern void trie_tree_destroy(s_trie_tree_t **trie);
 extern void trie_tree_sequence_insert(s_trie_tree_t *trie, uint32 *sequence, uint32 len);
