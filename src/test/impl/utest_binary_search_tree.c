@@ -179,6 +179,9 @@ utest_binary_search_tree_contains_p(void)
     tmp = binary_search_tree_find_max(tree);
     RESULT_CHECK_bool(true, binary_search_tree_contains_p(tree, tmp), &pass);
 
+    tmp = binary_search_tree_find_min(tree);
+    RESULT_CHECK_bool(true, binary_search_tree_contains_p(tree, tmp), &pass);
+
     fake = binary_search_tree_create(NULL, binary_search_tree_nice(tmp));
     RESULT_CHECK_bool(false, binary_search_tree_contains_p(tree, fake), &pass);
 

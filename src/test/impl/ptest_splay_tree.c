@@ -1,42 +1,151 @@
-#define TREE                   s_splay_tree_t
-#define TREE_nice              splay_tree_nice
-#define TREE_val               splay_tree_val
-#define TREE_left              splay_tree_left
-#define TREE_right             splay_tree_right
-#define TEST_tree_sample       test_splay_tree_sample
+static inline void
+ptest_splay_tree_create(uint32 count)
+{
+    s_splay_tree_t *tree;
 
-#define TREE_create            splay_tree_create
-#define TREE_initial           splay_tree_initial
-#define TREE_destroy           splay_tree_destroy
-#define TREE_height            splay_tree_height
-#define TREE_contains_p        splay_tree_contains_p
-#define TREE_insert            splay_tree_insert
-#define TREE_iterate           splay_tree_iterate
+    PERFORMANCE_TEST_BEGIN(splay_tree_create);
 
-#include "../ptest_tree.h"
+    PERFORMANCE_TEST_CHECKPOINT;
 
-PT_TREE_create(splay)
-PT_TREE_initial(splay)
-PT_TREE_destroy(splay)
-PT_TREE_height(splay)
-PT_TREE_contains_p(splay)
-PT_TREE_insert(splay)
-PT_TREE_iterate(splay)
+    while (count--) {
+        tree = splay_tree_create(&count, 0);
+        splay_tree_destroy(&tree);
+    }
 
-#undef TREE
-#undef TREE_nice
-#undef TREE_val
-#undef TREE_left
-#undef TREE_right
-#undef TEST_tree_sample
+    PERFORMANCE_TEST_ENDPOINT;
 
-#undef TREE_create
-#undef TREE_initial
-#undef TREE_destroy
-#undef TREE_height
-#undef TREE_contains_p
-#undef TREE_insert
-#undef TREE_iterate
+    PERFORMANCE_TEST_RESULT(splay_tree_create);
+}
+
+static inline void
+ptest_splay_tree_initial(uint32 count)
+{
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_initial);
+
+    tree = splay_tree_create(&count, 0);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        splay_tree_initial(tree, &count, 0);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    PERFORMANCE_TEST_RESULT(splay_tree_initial);
+}
+
+static inline void
+ptest_splay_tree_destroy(uint32 count)
+{
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_destroy);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        tree = test_splay_tree_sample(0x15, 0xd);
+        splay_tree_destroy(&tree);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    PERFORMANCE_TEST_RESULT(splay_tree_destroy);
+}
+
+static inline void
+ptest_splay_tree_height(uint32 count)
+{
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_height);
+
+    tree = test_splay_tree_sample(0xa32, 0x12d);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        splay_tree_height(tree);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    splay_tree_destroy(&tree);
+    PERFORMANCE_TEST_RESULT(splay_tree_height);
+}
+
+static inline void
+ptest_splay_tree_contains_p(uint32 count)
+{
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_contains_p);
+
+    tree = test_splay_tree_sample(0xf2a32, 0xae12d);
+    tmp = splay_tree_find_max(&tree);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        splay_tree_contains_p(tree, tmp);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    splay_tree_destroy(&tree);
+    PERFORMANCE_TEST_RESULT(splay_tree_contains_p);
+}
+
+static inline void
+ptest_splay_tree_insert(uint32 count)
+{
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_insert);
+
+    count = count >> 6;
+    count = 0 == count ? 1000 : count;
+    tree = splay_tree_create(&count, 0);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        tmp = splay_tree_create(&count, count);
+        splay_tree_insert(&tree, tmp);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    splay_tree_destroy(&tree);
+    PERFORMANCE_TEST_RESULT(splay_tree_insert);
+}
+
+static inline void
+ptest_splay_tree_iterate(uint32 count)
+{
+    s_splay_tree_t *tree;
+
+    PERFORMANCE_TEST_BEGIN(splay_tree_iterate);
+
+    tree = test_splay_tree_sample(0xd3, 0x82);
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        splay_tree_iterate(tree, &tree_iterate_handler);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    splay_tree_destroy(&tree);
+    PERFORMANCE_TEST_RESULT(splay_tree_iterate);
+}
+
 
 static void
 ptest_splay_tree_find(uint32 count)
@@ -112,8 +221,7 @@ ptest_splay_tree_remove(uint32 count)
         splay_tree_remove(&tree, tmp);
         splay_tree_destroy(&tmp);
 
-        tmp = splay_tree_create();
-        splay_tree_initial(tmp, count);
+        tmp = splay_tree_create(&tmp, count);
         splay_tree_insert(&tree, tmp);
     }
 

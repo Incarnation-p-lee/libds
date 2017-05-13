@@ -257,9 +257,10 @@ struct avl_tree {
  * splay tree
  */
 struct splay_tree {
-    sint64         nice;
-    s_splay_tree_t *left;
-    s_splay_tree_t *right;
+    sint64                 nice;
+    s_splay_tree_t         *left;
+    s_splay_tree_t         *right;
+    s_doubly_linked_list_t *list;
 };
 
 /*

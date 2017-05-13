@@ -1,41 +1,175 @@
-#define TREE                   s_splay_tree_t
-#define TREE_nice              splay_tree_nice
-#define TREE_val               splay_tree_val
-#define TREE_left              splay_tree_left
-#define TREE_right             splay_tree_right
-#define TEST_tree_sample       test_splay_tree_sample
+static inline void
+utest_splay_tree_create(void)
+{
+    bool pass;
+    s_splay_tree_t *tree;
 
-#define TREE_create            splay_tree_create
-#define TREE_initial           splay_tree_initial
-#define TREE_destroy           splay_tree_destroy
-#define TREE_height            splay_tree_height
-#define TREE_contains_p        splay_tree_contains_p
-#define TREE_insert            splay_tree_insert
-#define TREE_iterate           splay_tree_iterate
+    pass = true;
+    tree = splay_tree_create(&pass, 0);
+    UNIT_TEST_BEGIN(splay_tree_create);
 
-#include "../utest_tree.h"
+    RESULT_CHECK_bool(true, splay_tree_structure_legal_p(tree), &pass);
+    RESULT_CHECK_bool(false, splay_tree_structure_illegal_p(tree), &pass);
 
-UT_TREE_create(splay)
-UT_TREE_initial(splay)
-UT_TREE_destroy(splay)
-UT_TREE_height(splay)
-UT_TREE_insert(splay)
-UT_TREE_iterate(splay)
+    splay_tree_destroy(&tree);
+    UNIT_TEST_RESULT(splay_tree_create, pass);
+}
 
-#undef TREE
-#undef TREE_nice
-#undef TREE_val
-#undef TREE_left
-#undef TREE_right
-#undef TEST_tree_sample
+static inline void
+utest_splay_tree_initial(void)
+{
+    bool pass;
+    sint64 nice;
+    s_splay_tree_t *tree;
+    s_doubly_linked_list_t *val_list;
 
-#undef TREE_create
-#undef TREE_initial
-#undef TREE_destroy
-#undef TREE_height
-#undef TREE_contains_p
-#undef TREE_insert
-#undef TREE_iterate
+    pass = true;
+    nice = 0xfade;
+    tree = splay_tree_create(&pass, 0);
+    UNIT_TEST_BEGIN(splay_tree_initial);
+
+    splay_tree_initial(tree, &pass, nice);
+
+    RESULT_CHECK_pointer(NULL, splay_tree_left(tree), &pass);
+    RESULT_CHECK_pointer(NULL, splay_tree_right(tree), &pass);
+    RESULT_CHECK_sint64(nice, splay_tree_nice(tree), &pass);
+
+    val_list = splay_tree_val_list(tree);
+
+    RESULT_CHECK_uint32(1, doubly_linked_list_length(val_list), &pass);
+    RESULT_CHECK_pointer(&pass, doubly_linked_list_val(val_list), &pass);
+
+    splay_tree_destroy(&tree);
+    UNIT_TEST_RESULT(splay_tree_initial, pass);
+}
+
+static inline void
+utest_splay_tree_destroy(void)
+{
+    bool pass;
+    s_splay_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(splay_tree_destroy);
+    tree = splay_tree_create(&pass, 0);
+
+    splay_tree_destroy(NULL);
+    splay_tree_destroy(&tree);
+    RESULT_CHECK_pointer(NULL, tree, &pass);
+
+    tree = test_splay_tree_sample(0x1234, 0x342);
+
+    splay_tree_destroy(&tree);
+    RESULT_CHECK_pointer(NULL, tree, &pass);
+
+    UNIT_TEST_RESULT(splay_tree_destroy, pass);
+}
+
+static inline void
+utest_splay_tree_height(void)
+{
+    bool pass;
+    sint32 left;
+    sint32 right;
+    s_splay_tree_t *tree;
+
+    pass = true;
+    UNIT_TEST_BEGIN(splay_tree_height);
+    tree = test_splay_tree_sample(0x38f1, 0xf0C);
+
+    RESULT_CHECK_sint32(-1, splay_tree_height(NULL), &pass);
+
+    left = splay_tree_height(splay_tree_left(tree));
+    right = splay_tree_height(splay_tree_right(tree));
+
+    RESULT_CHECK_sint32(MAX_S32(left, right) + 1, splay_tree_height(tree), &pass);
+
+    splay_tree_destroy(&tree);
+    UNIT_TEST_RESULT(splay_tree_height, pass);
+}
+
+static inline void
+utest_splay_tree_insert(void)
+{
+    bool pass;
+    sint64 nice;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
+    s_splay_tree_t *node;
+
+    pass = true;
+    UNIT_TEST_BEGIN(splay_tree_insert);
+    tree = test_splay_tree_sample(0x1321, 0xa2b);
+
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_insert(NULL, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, splay_tree_insert(&tree, NULL), &pass);
+
+    nice = 0xFFFDEA;
+    tmp = splay_tree_create(&pass, nice);
+
+    RESULT_CHECK_pointer(tmp, splay_tree_insert(&tree, tmp), &pass);
+    RESULT_CHECK_pointer(tmp, tree, &pass);
+    RESULT_CHECK_bool(true, splay_tree_contains_p(tree, tmp), &pass);
+
+    tmp = splay_tree_right(splay_tree_left(tree));
+    RESULT_CHECK_pointer(tmp, splay_tree_insert(&tree, tmp), &pass);
+
+    tmp = splay_tree_create(&pass, nice);
+    node = splay_tree_find(&tree, nice);
+    RESULT_CHECK_pointer(node, splay_tree_insert(&tree, tmp), &pass);
+    splay_tree_destroy(&tmp);
+
+    splay_tree_destroy(&tree);
+    UNIT_TEST_RESULT(splay_tree_insert, pass);
+}
+
+static inline void
+utest_splay_tree_iterate_handler(void *val)
+{
+    uint32 *counter;
+    s_splay_tree_t *binary_search;
+
+    binary_search = val;
+
+    assert_exit(splay_tree_structure_legal_p(binary_search));
+
+    counter = doubly_linked_list_val(splay_tree_val_list(binary_search));
+
+    *counter = *counter + 1;
+}
+
+static inline void
+utest_splay_tree_iterate(void)
+{
+    uint32 i;
+    bool pass;
+    uint32 limit;
+    uint32 counter;
+    s_splay_tree_t *tmp;
+    s_splay_tree_t *tree;
+
+    pass = true;
+    limit = 0x1de2;
+    counter = i = 0;
+    UNIT_TEST_BEGIN(splay_tree_iterate);
+
+    splay_tree_iterate(NULL, NULL);
+    splay_tree_iterate(tree, NULL);
+    splay_tree_iterate(NULL, &utest_splay_tree_iterate_handler);
+
+    tree = splay_tree_create(&counter, i++);
+
+    while (i < limit) {
+        tmp = splay_tree_create(&counter, i++);
+        splay_tree_insert(&tree, tmp);
+    }
+
+    splay_tree_iterate(tree, &utest_splay_tree_iterate_handler);
+    RESULT_CHECK_uint32(limit, counter, &pass);
+
+    splay_tree_destroy(&tree);
+    UNIT_TEST_RESULT(splay_tree_iterate, pass);
+}
 
 static void
 utest_splay_tree_find(void)
@@ -61,6 +195,11 @@ utest_splay_tree_find(void)
     tmp = splay_tree_find_max(&tree);
     nice = splay_tree_nice(tree);
     RESULT_CHECK_pointer(tmp, tree, &pass);
+    RESULT_CHECK_pointer(tmp, splay_tree_find(&tree, nice), &pass);
+
+    tmp = tree->left;
+    nice = splay_tree_nice(tmp);
+    splay_tree_find_max(&tree);
     RESULT_CHECK_pointer(tmp, splay_tree_find(&tree, nice), &pass);
 
     splay_tree_destroy(&tree);
@@ -117,8 +256,7 @@ utest_splay_tree_contains_p(void)
 
     pass = true;
     tree = test_splay_tree_sample(0x14F0, 0x73BD);
-    tmp = splay_tree_create();
-    splay_tree_initial(tmp, 0x1234);
+    tmp = splay_tree_create(&tmp, 0x1234);
 
     RESULT_CHECK_bool(false, splay_tree_contains_p(tree, NULL), &pass);
     RESULT_CHECK_bool(false, splay_tree_contains_p(NULL, NULL), &pass);
@@ -128,13 +266,37 @@ utest_splay_tree_contains_p(void)
     tmp = splay_tree_find_max(&tree);
     RESULT_CHECK_bool(true, splay_tree_contains_p(tree, tmp), &pass);
 
-    fake = splay_tree_create();
-    splay_tree_initial(fake, splay_tree_nice(tmp));
+    fake = splay_tree_create(&fake, splay_tree_nice(tmp));
     RESULT_CHECK_bool(false, splay_tree_contains_p(tree, fake), &pass);
 
     splay_tree_destroy(&fake);
     splay_tree_destroy(&tree);
     UNIT_TEST_RESULT(splay_tree_contains_p, pass);
+}
+
+static inline s_splay_tree_t *
+utest_splay_random_node(s_splay_tree_t *tree)
+{
+    uint32 seed;
+    s_splay_tree_t *node, *node_tmp;
+
+    assert_exit(splay_tree_structure_legal_p(tree));
+
+    node_tmp =  node = tree;
+    seed = random_uint32_with_limit(0xfffff);
+
+    while (node->left && node->right) {
+        seed++;
+        node_tmp = node;
+
+        if (seed & 0x1) {
+            node = splay_tree_left(node);
+        } else {
+            node = splay_tree_right(node);
+        }
+    }
+
+    return node_tmp;
 }
 
 static void
@@ -144,6 +306,7 @@ utest_splay_tree_remove(void)
     sint64 nice;
     s_splay_tree_t *tmp;
     s_splay_tree_t *tree;
+    s_splay_tree_t *removed;
 
     pass = true;
     tree = NULL;
@@ -151,11 +314,6 @@ utest_splay_tree_remove(void)
     RESULT_CHECK_pointer(PTR_INVALID, splay_tree_remove(&tree, NULL), &pass);
 
     tree = test_splay_tree_sample(0x2421, 0x32CD);
-    tmp = tree;
-    nice = splay_tree_nice(tmp);
-    tmp = splay_tree_remove(&tree, tree);
-    RESULT_CHECK_sint64(nice, splay_tree_nice(tmp), &pass);
-    splay_tree_destroy(&tmp);
 
     tmp = splay_tree_find_min(&tree);
     nice = splay_tree_nice(tmp);
@@ -169,21 +327,18 @@ utest_splay_tree_remove(void)
     RESULT_CHECK_sint64(nice, splay_tree_nice(tmp), &pass);
     splay_tree_destroy(&tmp);
 
-    tmp = splay_tree_create();
-    splay_tree_initial(tmp, 0x7FFFFF);
+    tmp = splay_tree_create(&tmp, 0x7FFFFF);
     nice = splay_tree_nice(tmp);
     RESULT_CHECK_pointer(NULL, splay_tree_remove(&tree, tmp), &pass);
     splay_tree_destroy(&tmp);
-    splay_tree_destroy(&tree);
 
-    tree = splay_tree_create();
-    nice = 0x7fffff;
-    splay_tree_initial(tree, nice);
-    tmp = tree;
-    RESULT_CHECK_pointer(tmp, splay_tree_remove(&tree, tree), &pass);
-    RESULT_CHECK_pointer(NULL, tree, &pass);
+    while (tree) {
+        tmp = utest_splay_random_node(tree);
+        removed = splay_tree_remove(&tree, tmp);
+        RESULT_CHECK_pointer(tmp, removed, &pass);
+        splay_tree_destroy(&removed);
+    }
 
-    splay_tree_destroy(&tmp);
     UNIT_TEST_RESULT(splay_tree_remove, pass);
 }
 
