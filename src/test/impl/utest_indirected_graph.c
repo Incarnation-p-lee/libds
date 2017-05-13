@@ -48,36 +48,36 @@ utest_indirected_graph_link(void)
     uint32 count;
     s_edge_t *edge;
     s_graph_t *graph;
-    void *vertex_a, *vertex_b;
+    void *value_a, *value_b;
 
     pass = true;
     cost = 0x234;
-    vertex_a = &pass;
-    vertex_b = &graph;
+    value_a = &pass;
+    value_b = &graph;
     UNIT_TEST_BEGIN(indirected_graph_link);
     graph = test_indirected_graph_sample(0x2121, 0x11e3);
 
-    edge = indirected_graph_link(NULL, vertex_a, vertex_b, cost);
+    edge = indirected_graph_link(NULL, value_a, value_b, cost);
     RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
 
-    edge = indirected_graph_link(graph, NULL, vertex_b, cost);
+    edge = indirected_graph_link(graph, NULL, value_b, cost);
     RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
 
-    edge = indirected_graph_link(graph, vertex_b, NULL, cost);
+    edge = indirected_graph_link(graph, value_b, NULL, cost);
     RESULT_CHECK_pointer(PTR_INVALID, edge, &pass);
 
-    edge = indirected_graph_link(graph, vertex_a, vertex_b, cost);
+    edge = indirected_graph_link(graph, value_a, value_b, cost);
     RESULT_CHECK_sint32(cost, indirected_graph_edge_cost(edge), &pass);
 
     tmp = indirected_graph_edge_vertex_0_value(edge);
-    RESULT_CHECK_pointer(vertex_a, tmp, &pass);
+    RESULT_CHECK_pointer(value_a, tmp, &pass);
 
     tmp = indirected_graph_edge_vertex_1_value(edge);
-    RESULT_CHECK_pointer(vertex_b, tmp, &pass);
+    RESULT_CHECK_pointer(value_b, tmp, &pass);
 
     count = 0x123;
     while (count--) {
-        edge = indirected_graph_link(graph, vertex_a, vertex_b, cost);
+        edge = indirected_graph_link(graph, value_a, value_b, cost);
     }
 
     indirected_graph_destroy(&graph);

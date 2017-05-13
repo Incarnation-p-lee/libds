@@ -100,12 +100,52 @@ graph_edge_vertex_0_value(s_edge_t *edge)
     return graph_vertex_value(vertex);
 }
 
+static inline void *
+graph_edge_successor_value(s_edge_t *edge)
+{
+    s_vertex_t *vertex;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    vertex = graph_edge_successor(edge);
+
+    return graph_vertex_value(vertex);
+}
+
+static inline void *
+graph_edge_precursor_value(s_edge_t *edge)
+{
+    s_vertex_t *vertex;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    vertex = graph_edge_precursor(edge);
+
+    return graph_vertex_value(vertex);
+}
+
 static inline s_vertex_t *
 graph_edge_vertex_0(s_edge_t *edge)
 {
     assert_exit(graph_edge_structure_legal_p(edge));
 
     return edge->vertex_0;
+}
+
+static inline s_vertex_t *
+graph_edge_successor(s_edge_t *edge)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    return edge->successor;
+}
+
+static inline s_vertex_t *
+graph_edge_precursor(s_edge_t *edge)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    return edge->precursor;
 }
 
 static inline void *

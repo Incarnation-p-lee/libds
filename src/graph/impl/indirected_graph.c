@@ -199,8 +199,8 @@ indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
     edge = graph_edge_create(cost);
     edge->vertex_0 = vertex_a;
     edge->vertex_1 = vertex_b;
-    graph_edge_array_add(graph->edge_array, edge);
 
+    graph_edge_array_add(graph->edge_array, edge);
     graph_attribute_edge_inc(graph);
 
     return edge;
@@ -215,9 +215,9 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
 
     vertex = graph_vertex_create(graph, value);
     vertex->adjacent = graph_adjacent_create();
-    graph_vertex_array_add(graph_vertex_array(graph), vertex);
 
-    open_addressing_hash_insert(graph->vertex_hash, value);
+    graph_vertex_array_add(graph_vertex_array(graph), vertex);
+    open_addressing_hash_insert(graph_vertex_hash(graph), value);
     graph_attribute_vertex_inc(graph);
 
     return vertex;
@@ -227,6 +227,7 @@ static inline void
 indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_a,
     s_vertex_t *vertex_b)
 {
+    assert_exit(graph_edge_structure_legal_p(edge));
     assert_exit(graph_vertex_structure_legal_p(vertex_a));
     assert_exit(graph_vertex_structure_legal_p(vertex_b));
 
@@ -234,6 +235,22 @@ indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_a,
 
     if (vertex_a != vertex_b) { /* loop edge append once */
         indirected_graph_vertex_edge_append(vertex_b, edge);
+    }
+}
+
+static inline s_vertex_t *
+indirected_graph_vertex_obtain(s_graph_t *graph, void *value)
+{
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(indirected_graph_structure_legal_p(graph));
+
+    vertex_array = graph_vertex_array(graph);
+
+    if (graph_vertex_value_exist_p(graph, value)) {
+        return graph_vertex_array_find(vertex_array, value);
+    } else {
+        return indirected_graph_vertex_create(graph, value);
     }
 }
 
@@ -248,19 +265,10 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
     assert_exit(indirected_graph_structure_legal_p(graph));
     assert_exit(value_a && value_b);
 
-    if (graph_vertex_value_exist_p(graph, value_a)) {
-        vertex_a = graph_vertex_array_find(graph_vertex_array(graph), value_a);
-    } else {
-        vertex_a = indirected_graph_vertex_create(graph, value_a);
-    }
-
-    if (graph_vertex_value_exist_p(graph, value_b)) {
-        vertex_b = graph_vertex_array_find(graph_vertex_array(graph), value_b);
-    } else {
-        vertex_b = indirected_graph_vertex_create(graph, value_b);
-    }
-
+    vertex_a = indirected_graph_vertex_obtain(graph, value_a);
+    vertex_b = indirected_graph_vertex_obtain(graph, value_b);
     edge = indirected_graph_edge_create(graph, vertex_a, vertex_b, cost);
+
     indirected_graph_edge_link(edge, vertex_a, vertex_b);
 
     return edge;

@@ -27,6 +27,7 @@ static inline double performance_test_reference_variance_calculate(char *name, s
 static inline s_binary_search_tree_t * test_binary_search_tree_sample(uint64 range, uint32 count);
 static inline s_doubly_end_queue_t * test_doubly_end_queue_sample(uint32 count);
 static inline s_doubly_linked_list_t * test_doubly_linked_list_sample(uint32 node_count);
+static inline s_graph_t * test_directed_graph_sample(uint64 range, uint32 size);
 static inline s_graph_t * test_indirected_graph_sample(uint64 range, uint32 size);
 static inline s_single_linked_list_t * test_single_linked_list_sample(uint32 node_count);
 static inline s_skip_linked_list_t * test_skip_linked_list_sample(uint32 node_count);
@@ -171,6 +172,7 @@ static inline void utest_bitmap_create(void);
 static inline void utest_bitmap_destroy(void);
 static inline void utest_bitmap_map_cleanup(void);
 static inline void utest_directed_graph_create(void);
+static inline void utest_directed_graph_link(void);
 static inline void utest_disjoint_set_create(void);
 static inline void utest_disjoint_set_destroy(void);
 static inline void utest_disjoint_set_equivalent_p(void);

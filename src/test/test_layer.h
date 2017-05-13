@@ -1745,6 +1745,13 @@ static const struct test_layer_table directed_graph[] = {
             NULL,
         },
     },
+    {
+        "link", NULL,
+        {
+            &utest_directed_graph_link,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 
