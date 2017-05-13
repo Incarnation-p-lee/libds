@@ -159,15 +159,16 @@ utest_indirected_graph_vertex_remove(void)
 
     i = 0;
     limit = indirected_graph_vertex_array_limit(vertex_array);
-    vertex_count = indirected_graph_vertex_count(graph);
 
     while (i < limit) {
         vertex = indirected_graph_vertex_array_vertex(vertex_array, i++);
 
         if (vertex) {
+            indirected_graph_link(graph, &count, vertex_tmp, 0);
             count = indirected_graph_vertex_count(graph);
-            RESULT_CHECK_uint32(vertex_count--, count, &pass);
             vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
+            vertex_count = indirected_graph_vertex_count(graph);
+            RESULT_CHECK_uint32(count - 1, vertex_count, &pass);
             RESULT_CHECK_pointer(vertex_tmp, vertex, &pass);
             indirected_graph_vertex_destroy(&vertex_tmp);
         }
