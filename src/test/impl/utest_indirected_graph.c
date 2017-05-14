@@ -164,12 +164,12 @@ utest_indirected_graph_vertex_remove(void)
         vertex = indirected_graph_vertex_array_vertex(vertex_array, i++);
 
         if (vertex) {
-            indirected_graph_link(graph, &count, vertex_tmp, 0);
             count = indirected_graph_vertex_count(graph);
             vertex_tmp = indirected_graph_vertex_remove(graph, vertex);
             vertex_count = indirected_graph_vertex_count(graph);
             RESULT_CHECK_uint32(count - 1, vertex_count, &pass);
             RESULT_CHECK_pointer(vertex_tmp, vertex, &pass);
+            indirected_graph_link(graph, &count, vertex_tmp, 0);
             indirected_graph_vertex_destroy(&vertex_tmp);
         }
     }

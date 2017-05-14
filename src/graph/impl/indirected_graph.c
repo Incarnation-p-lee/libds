@@ -279,34 +279,6 @@ indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
 //     return graph_adjacent_empty_p(vertex->adjacent);
 // }
 
-static inline void
-indirected_graph_vertex_edge_remove(s_vertex_t *vertex, s_edge_t *edge)
-{
-    uint32 i, limit;
-    s_edge_t *edge_tmp;
-    s_adjacent_t *adjacent;
-
-    assert_exit(graph_edge_structure_legal_p(edge));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-
-    i = 0;
-    adjacent = graph_vertex_adjacent(vertex);
-    limit = graph_adjacent_limit(adjacent);
-
-    while (i < limit) {
-        edge_tmp = graph_adjacent_edge(adjacent, i);
-
-        if (edge_tmp != NULL && edge_tmp == edge) {
-            graph_adjacent_edge_remove(adjacent, i);
-            return;
-        }
-
-        i++;
-    }
-
-    pr_log_warn("No such of the edge in given vertex.\n");
-}
-
 static inline s_edge_t *
 indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
 {
@@ -322,7 +294,7 @@ indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
     vertex = graph_edge_vertex_0(edge);
 
     indirected_graph_vertex_edge_disconnet(vertex, edge);
-    indirected_graph_vertex_edge_remove(vertex, edge);
+    graph_adjacent_edge_remove(graph_vertex_adjacent(vertex), edge);
 
     edge_array = graph_edge_array(graph);
     graph_edge_array_remove(edge_array, index);
@@ -374,7 +346,7 @@ indirected_graph_vertex_edge_disconnet(s_vertex_t *vertex, s_edge_t *edge)
 
     vertex_linked = indirected_graph_edge_linked_vertex(edge, vertex);
 
-    indirected_graph_vertex_edge_remove(vertex_linked, edge);
+    graph_adjacent_edge_remove(graph_vertex_adjacent(vertex_linked), edge);
 }
 
 static inline s_vertex_t *
@@ -387,7 +359,7 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
     s_edge_array_t *edge_array;
     s_vertex_array_t *vertex_array;
 
-    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(indirected_graph_structure_legal_p(graph));
     assert_exit(graph_vertex_structure_legal_p(vertex));
     assert_exit(graph_vertex_compatible_p(graph, vertex));
 
@@ -408,11 +380,13 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
         i++;
     }
 
+    graph_adjacent_cleanup(adjacent);
+
     i = graph_vertex_index(vertex);
     vertex_array = graph_vertex_array(graph);
 
     graph_vertex_array_remove(vertex_array, i);
-    open_addressing_hash_remove(graph->vertex_hash, vertex->value);
+    open_addressing_hash_remove(graph_vertex_hash(graph), vertex->value);
 
     return vertex;
 }
@@ -435,7 +409,7 @@ void
 indirected_graph_edge_destroy(s_edge_t **edge)
 {
     if (NON_NULL_PTR_P(edge) && GRAPH_EDGE_LEGAL_P(*edge)) {
-        memory_cache_free(*edge);
+        graph_edge_destroy(*edge);
 
         *edge = NULL;
     }

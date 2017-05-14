@@ -230,6 +230,16 @@ graph_edge_array_destroy(s_edge_array_t *edge_array)
 }
 
 static inline void
+graph_edge_array_edge_destroy(s_edge_array_t *edge_array, s_edge_t *edge)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    graph_edge_array_remove(edge_array, graph_edge_index(edge));
+    graph_edge_destroy(edge);
+}
+
+static inline void
 graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge)
 {
     uint32 index;
@@ -384,16 +394,35 @@ graph_adjacent_compress(s_adjacent_t *adjacent)
 }
 
 static inline void
-graph_adjacent_edge_remove(s_adjacent_t *adjacent, uint32 i)
+graph_adjacent_edge_remove(s_adjacent_t *adjacent, s_edge_t *edge)
 {
+    uint32 i, limit;
+    s_edge_t *edge_tmp;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
-    assert_exit(i < graph_adjacent_limit(adjacent));
 
-    graph_adjacent_edge_set(adjacent, i, NULL);
-    graph_adjacent_edge_count_dec(adjacent);
+    i = 0;
+    limit = graph_adjacent_limit(adjacent);
 
-    if (graph_adjacent_sparse_p(adjacent)) {
-        graph_adjacent_compress(adjacent);
+    while (i < limit) {
+        edge_tmp = graph_adjacent_edge(adjacent, i);
+
+        if (edge_tmp == NULL || edge_tmp != edge) {
+            i++;
+            continue;
+        }
+
+        graph_adjacent_edge_set(adjacent, i, NULL);
+        graph_adjacent_edge_count_dec(adjacent);
+
+        if (graph_adjacent_sparse_p(adjacent)) {
+            graph_adjacent_compress(adjacent);
+        }
+
+        return;
     }
+
+    pr_log_warn("No such of the edge in given vertex adjacent.\n");
 }
 

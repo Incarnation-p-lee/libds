@@ -165,7 +165,7 @@ graph_edge_compatible_p(s_graph_t *graph, s_edge_t *edge)
     uint32 index;
     s_edge_t *edge_tmp;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(graph_structure_legal_p(graph));
     assert_exit(graph_edge_structure_legal_p(edge));
 
     index = graph_edge_index(edge);
@@ -283,6 +283,15 @@ graph_adjacent_edge(s_adjacent_t *adjacent, uint32 i)
 
     return adjacent->array[i];
 }
+
+static inline void
+graph_adjacent_cleanup(s_adjacent_t *adjacent)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    adjacent->index = adjacent->edge_count = 0;
+}
+
 
 static inline void
 graph_adjacent_edge_set(s_adjacent_t *adjacent, uint32 i, s_edge_t *edge)
@@ -483,6 +492,21 @@ graph_vertex_adjacent(s_vertex_t *vertex)
     return vertex->adjacent;
 }
 
+static inline s_adjacent_t *
+graph_vertex_precursor(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->precursor;
+}
+
+static inline s_adjacent_t *
+graph_vertex_successor(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->successor;
+}
 
 // static inline void
 // graph_vertex_value_set(s_vertex_t *vertex, void *val)
