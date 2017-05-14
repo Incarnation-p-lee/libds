@@ -217,8 +217,8 @@ directed_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_from,
     precursor = directed_graph_vertex_precursor(vertex_to);
     successor = directed_graph_vertex_successor(vertex_from);
 
-    graph_adjacent_append(precursor, edge);
-    graph_adjacent_append(successor, edge);
+    graph_adjacent_edge_append(precursor, edge);
+    graph_adjacent_edge_append(successor, edge);
 }
 
 static inline s_vertex_t *

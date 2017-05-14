@@ -335,7 +335,7 @@ graph_adjacent_destroy(s_adjacent_t *adjacent)
 }
 
 static inline void
-graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge)
+graph_adjacent_edge_append(s_adjacent_t *adjacent, s_edge_t *edge)
 {
     uint32 bytes;
     uint32 new_size;

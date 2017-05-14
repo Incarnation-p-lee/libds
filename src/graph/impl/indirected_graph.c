@@ -166,26 +166,6 @@ indirected_graph_destroy(s_graph_t **graph)
     }
 }
 
-static inline s_adjacent_t *
-indirected_graph_vertex_adjacent(s_vertex_t *vertex)
-{
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-
-    return vertex->adjacent;
-}
-
-static inline void
-indirected_graph_vertex_edge_append(s_vertex_t *vertex, s_edge_t *edge)
-{
-    s_adjacent_t *adjacent;
-
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-    assert_exit(graph_edge_structure_legal_p(edge));
-
-    adjacent = indirected_graph_vertex_adjacent(vertex);
-    graph_adjacent_append(adjacent, edge);
-}
-
 static inline s_edge_t *
 indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
     s_vertex_t *vertex_b, sint32 cost)
@@ -225,14 +205,18 @@ static inline void
 indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_a,
     s_vertex_t *vertex_b)
 {
+    s_adjacent_t *adjacent;
+
     assert_exit(graph_edge_structure_legal_p(edge));
     assert_exit(graph_vertex_structure_legal_p(vertex_a));
     assert_exit(graph_vertex_structure_legal_p(vertex_b));
 
-    indirected_graph_vertex_edge_append(vertex_a, edge);
+    adjacent = graph_vertex_adjacent(vertex_a);
+    graph_adjacent_edge_append(adjacent, edge);
 
     if (vertex_a != vertex_b) { /* loop edge append once */
-        indirected_graph_vertex_edge_append(vertex_b, edge);
+        adjacent = graph_vertex_adjacent(vertex_b);
+        graph_adjacent_edge_append(adjacent, edge);
     }
 }
 
