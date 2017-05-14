@@ -116,7 +116,7 @@ directed_graph_vertex_count(s_graph_t *graph)
     if (GRAPH_ILLEGAL_P(graph)) {
         return SIZE_INVALID;
     } else {
-        return graph_attribute_vertex_count(graph);
+        return graph_vertex_array_count(graph_vertex_array(graph));
     }
 }
 
@@ -126,7 +126,7 @@ directed_graph_edge_count(s_graph_t *graph)
     if (GRAPH_ILLEGAL_P(graph)) {
         return SIZE_INVALID;
     } else {
-        return graph_attribute_edge_count(graph);
+        return graph_edge_array_count(graph_edge_array(graph));
     }
 }
 
@@ -164,7 +164,6 @@ directed_graph_vertex_create(s_graph_t *graph, void *value)
 
     graph_vertex_array_add(graph_vertex_array(graph), vertex);
     open_addressing_hash_insert(graph_vertex_hash(graph), value);
-    graph_attribute_vertex_inc(graph);
 
     return vertex;
 }
@@ -184,7 +183,6 @@ directed_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_from,
     edge->successor = vertex_to;
 
     graph_edge_array_add(graph_edge_array(graph), edge);
-    graph_attribute_edge_inc(graph);
 
     return edge;
 }

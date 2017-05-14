@@ -350,6 +350,7 @@ struct adjacent {
 struct vertex_array {
     uint32          size;
     uint32          index;
+    uint32          count;
     s_array_queue_t *queue;
     s_vertex_t      **array;
 };
@@ -357,14 +358,13 @@ struct vertex_array {
 struct edge_array {
     uint32          size;
     uint32          index;
+    uint32          count;
     s_array_queue_t *queue;
     s_edge_t        **array;
 };
 
 struct graph_attibute {
     bool   is_directed;
-    uint32 vertex_count;
-    uint32 edge_count;
     uint32 label_limit;
 };
 

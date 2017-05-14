@@ -116,7 +116,7 @@ indirected_graph_vertex_count(s_graph_t *graph)
     if (GRAPH_ILLEGAL_P(graph)) {
         return SIZE_INVALID;
     } else {
-        return graph_attribute_vertex_count(graph);
+        return graph_vertex_array_count(graph_vertex_array(graph));
     }
 }
 
@@ -126,7 +126,7 @@ indirected_graph_edge_count(s_graph_t *graph)
     if (GRAPH_ILLEGAL_P(graph)) {
         return SIZE_INVALID;
     } else {
-        return graph_attribute_edge_count(graph);
+        return graph_edge_array_count(graph_edge_array(graph));
     }
 }
 
@@ -201,7 +201,6 @@ indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
     edge->vertex_1 = vertex_b;
 
     graph_edge_array_add(graph->edge_array, edge);
-    graph_attribute_edge_inc(graph);
 
     return edge;
 }
@@ -218,7 +217,6 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
 
     graph_vertex_array_add(graph_vertex_array(graph), vertex);
     open_addressing_hash_insert(graph_vertex_hash(graph), value);
-    graph_attribute_vertex_inc(graph);
 
     return vertex;
 }
@@ -344,7 +342,6 @@ indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
 
     edge_array = graph_edge_array(graph);
     graph_edge_array_remove(edge_array, index);
-    graph_attribute_edge_dec(graph);
 
     return edge;
 }
@@ -422,7 +419,6 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
             indirected_graph_vertex_edge_disconnet(vertex, edge);
             graph_edge_array_remove(edge_array, graph_edge_index(edge));
             graph_edge_destroy(edge);
-            graph_attribute_edge_dec(graph);
         }
 
         i++;
@@ -432,7 +428,6 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
     vertex_array = graph_vertex_array(graph);
 
     graph_vertex_array_remove(vertex_array, i);
-    graph_attribute_vertex_dec(graph);
     open_addressing_hash_remove(graph->vertex_hash, vertex->value);
 
     return vertex;
