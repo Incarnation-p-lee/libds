@@ -38,56 +38,6 @@ graph_attibute_label_obtain(s_graph_t *graph)
     return graph->attribute.label_limit++;
 }
 
-static inline void
-graph_attribute_vertex_inc(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-
-    graph->attribute.vertex_count++;
-}
-
-static inline void
-graph_attribute_edge_dec(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-    assert_exit(graph->attribute.edge_count);
-
-    graph->attribute.edge_count--;
-}
-
-static inline void
-graph_attribute_vertex_dec(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-    assert_exit(graph->attribute.vertex_count);
-
-    graph->attribute.vertex_count--;
-}
-
-static inline void
-graph_attribute_edge_inc(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-
-    graph->attribute.edge_count++;
-}
-
-static uint32
-graph_attribute_vertex_count(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-
-    return graph->attribute.vertex_count;
-}
-
-static uint32
-graph_attribute_edge_count(s_graph_t *graph)
-{
-    assert_exit(graph_structure_legal_p(graph));
-
-    return graph->attribute.edge_count;
-}
-
 static inline void *
 graph_edge_vertex_0_value(s_edge_t *edge)
 {
@@ -100,12 +50,52 @@ graph_edge_vertex_0_value(s_edge_t *edge)
     return graph_vertex_value(vertex);
 }
 
+static inline void *
+graph_edge_successor_value(s_edge_t *edge)
+{
+    s_vertex_t *vertex;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    vertex = graph_edge_successor(edge);
+
+    return graph_vertex_value(vertex);
+}
+
+static inline void *
+graph_edge_precursor_value(s_edge_t *edge)
+{
+    s_vertex_t *vertex;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    vertex = graph_edge_precursor(edge);
+
+    return graph_vertex_value(vertex);
+}
+
 static inline s_vertex_t *
 graph_edge_vertex_0(s_edge_t *edge)
 {
     assert_exit(graph_edge_structure_legal_p(edge));
 
     return edge->vertex_0;
+}
+
+static inline s_vertex_t *
+graph_edge_successor(s_edge_t *edge)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    return edge->successor;
+}
+
+static inline s_vertex_t *
+graph_edge_precursor(s_edge_t *edge)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    return edge->precursor;
 }
 
 static inline void *
@@ -175,7 +165,7 @@ graph_edge_compatible_p(s_graph_t *graph, s_edge_t *edge)
     uint32 index;
     s_edge_t *edge_tmp;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(graph_structure_legal_p(graph));
     assert_exit(graph_edge_structure_legal_p(edge));
 
     index = graph_edge_index(edge);
@@ -295,6 +285,15 @@ graph_adjacent_edge(s_adjacent_t *adjacent, uint32 i)
 }
 
 static inline void
+graph_adjacent_cleanup(s_adjacent_t *adjacent)
+{
+    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+
+    adjacent->index = adjacent->edge_count = 0;
+}
+
+
+static inline void
 graph_adjacent_edge_set(s_adjacent_t *adjacent, uint32 i, s_edge_t *edge)
 {
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
@@ -388,6 +387,32 @@ graph_adjacent_sparse_p(s_adjacent_t *adjacent)
     }
 }
 
+static inline uint32
+graph_vertex_array_count(s_vertex_array_t *vertex_array)
+{
+    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+
+    return vertex_array->count;
+}
+
+static inline void
+graph_vertex_array_inc(s_vertex_array_t *vertex_array)
+{
+    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+
+    vertex_array->count++;
+}
+
+static inline void
+graph_vertex_array_dec(s_vertex_array_t *vertex_array)
+{
+    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+    assert_exit(vertex_array->count);
+
+    vertex_array->count--;
+}
+
+
 static inline s_array_queue_t *
 graph_vertex_array_queue(s_vertex_array_t *vertex_array)
 {
@@ -467,6 +492,21 @@ graph_vertex_adjacent(s_vertex_t *vertex)
     return vertex->adjacent;
 }
 
+static inline s_adjacent_t *
+graph_vertex_precursor(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->precursor;
+}
+
+static inline s_adjacent_t *
+graph_vertex_successor(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->successor;
+}
 
 // static inline void
 // graph_vertex_value_set(s_vertex_t *vertex, void *val)
@@ -516,6 +556,32 @@ graph_vertex_cleanup(s_vertex_t *vertex)
     vertex->index = GRAPH_INDEX_INVALID;
     vertex->label = GRAPH_LABEL_INVALID;
 }
+
+static inline uint32
+graph_edge_array_count(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    return edge_array->count;
+}
+
+static inline void
+graph_edge_array_inc(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+
+    edge_array->count++;
+}
+
+static inline void
+graph_edge_array_dec(s_edge_array_t *edge_array)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(edge_array->count);
+
+    edge_array->count--;
+}
+
 
 static inline s_edge_array_t *
 graph_edge_array(s_graph_t *graph)

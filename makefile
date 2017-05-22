@@ -2,7 +2,7 @@
 AR                     :=ar
 CC                     :=$(if $(V), gcc, @gcc)
 RM                     :=rm -f
-MKDIR                  :=mkdir -v
+MKDIR                  :=$(if $(V), mkdir, @mkdir)
 PERL                   :=$(if $(V), perl, @perl)
 
 ## compile options ##
@@ -83,11 +83,14 @@ TARGET_A               :=$(addprefix $(out)/, libds.a)
 TARGET_SO              :=$(addprefix $(out)/, libds.so)
 TARGET_DEP             :=$(decl) $(universal) $(interface)
 
-all:$(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+all:$(out) $(TARGET_DEP) $(TARGET_ELF) $(TARGET_A) $(TARGET_SO)
+
+$(out):
+	@echo "    MakeDir  $@"
+	$(MKDIR) $@
 
 ## declaration header files ##
 $(decl):%_declaration.h:%.c
-	$(if $(wildcard $(out)), , $(MKDIR) $(out))
 	$(PERL) $(script_module_decl) $(dir $<)
 
 ## specific header files  ##

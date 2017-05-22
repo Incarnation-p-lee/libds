@@ -314,3 +314,26 @@ test_indirected_graph_sample(uint64 range, uint32 size)
     return graph;
 }
 
+static inline s_graph_t *
+test_directed_graph_sample(uint64 range, uint32 size)
+{
+    uint32 i;
+    void *value_a;
+    void *value_b;
+    s_graph_t *graph;
+
+    assert_exit(size);
+
+    i = 0;
+    graph = directed_graph_create();
+
+    while (i < size) {
+        value_a = (void *)(ptr_t)random_uint32_with_limit(range);
+        value_b = (void *)(ptr_t)random_uint32_with_limit(range);
+
+        directed_graph_link(graph, value_a, value_b, i++);
+    }
+
+    return graph;
+}
+

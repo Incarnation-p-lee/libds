@@ -1707,6 +1707,13 @@ static const struct test_layer_table indirected_graph[] = {
         },
     },
     {
+        "destroy", NULL,
+        {
+            &utest_indirected_graph_destroy,
+            NULL,
+        },
+    },
+    {
         "link", NULL,
         {
             &utest_indirected_graph_link,
@@ -1735,6 +1742,34 @@ static const struct test_layer_table directed_graph[] = {
         "create", NULL,
         {
             &utest_directed_graph_create,
+            NULL,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_directed_graph_destroy,
+            NULL,
+        },
+    },
+    {
+        "link", NULL,
+        {
+            &utest_directed_graph_link,
+            NULL,
+        },
+    },
+    {
+        "edge_remove", NULL,
+        {
+            &utest_directed_graph_edge_remove,
+            NULL,
+        },
+    },
+    {
+        "vertex_remove", NULL,
+        {
+            &utest_directed_graph_vertex_remove,
             NULL,
         },
     },

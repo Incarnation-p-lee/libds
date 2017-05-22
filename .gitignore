@@ -34,4 +34,5 @@ performance/performance.new.ref
 *.log
 *.o
 *.d
+bin/*
 

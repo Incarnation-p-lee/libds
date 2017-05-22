@@ -9,8 +9,6 @@ graph_create(void)
     graph->edge_array = graph_edge_array_create();
     graph->vertex_hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
 
-    graph->attribute.edge_count = 0;
-    graph->attribute.vertex_count = 0;
     graph->attribute.is_directed = true;
     graph->attribute.label_limit = GRAPH_LABEL_FIRST;
 
@@ -71,6 +69,7 @@ graph_vertex_array_create(void)
     vertex_array = memory_cache_allocate(sizeof(*vertex_array));
 
     vertex_array->index = 0;
+    vertex_array->count = 0;
     vertex_array->size = GRAPH_VERTEX_DEFAULT;
     vertex_array->queue = array_queue_create();
 
@@ -117,6 +116,7 @@ graph_vertex_array_add(s_vertex_array_t *v_array, s_vertex_t *vertex)
     assert_exit(graph_vertex_structure_legal_p(vertex));
 
     queue = graph_vertex_array_queue(v_array);
+    graph_vertex_array_inc(v_array);
 
     if (!array_queue_empty_p(queue)) {
         index = (uint32)(ptr_t)array_queue_leave(queue);
@@ -182,6 +182,7 @@ graph_vertex_array_remove(s_vertex_array_t *vertex_array, uint32 i)
     graph_vertex_cleanup(vertex_array->array[i]);
 
     vertex_array->array[i] = NULL;
+    graph_vertex_array_dec(vertex_array);
 }
 
 static inline s_edge_array_t *
@@ -192,6 +193,7 @@ graph_edge_array_create(void)
 
     edge_array = memory_cache_allocate(sizeof(*edge_array));
 
+    edge_array->count = 0;
     edge_array->index = 0;
     edge_array->size = GRAPH_EDGE_DEFAULT;
     edge_array->queue = array_queue_create();
@@ -228,6 +230,16 @@ graph_edge_array_destroy(s_edge_array_t *edge_array)
 }
 
 static inline void
+graph_edge_array_edge_destroy(s_edge_array_t *edge_array, s_edge_t *edge)
+{
+    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    graph_edge_array_remove(edge_array, graph_edge_index(edge));
+    graph_edge_destroy(edge);
+}
+
+static inline void
 graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge)
 {
     uint32 index;
@@ -239,6 +251,7 @@ graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge)
     assert_exit(graph_edge_structure_legal_p(edge));
 
     queue = graph_edge_array_queue(edge_array);
+    graph_edge_array_inc(edge_array);
 
     if (!array_queue_empty_p(queue)) {
         index = (uint32)(ptr_t)array_queue_leave(queue);
@@ -281,6 +294,7 @@ graph_edge_array_remove(s_edge_array_t *edge_array, uint32 i)
     graph_edge_cleanup(edge_array->array[i]);
 
     edge_array->array[i] = NULL;
+    graph_edge_array_dec(edge_array);
 }
 
 static inline s_edge_t *
@@ -331,7 +345,7 @@ graph_adjacent_destroy(s_adjacent_t *adjacent)
 }
 
 static inline void
-graph_adjacent_append(s_adjacent_t *adjacent, s_edge_t *edge)
+graph_adjacent_edge_append(s_adjacent_t *adjacent, s_edge_t *edge)
 {
     uint32 bytes;
     uint32 new_size;
@@ -380,16 +394,35 @@ graph_adjacent_compress(s_adjacent_t *adjacent)
 }
 
 static inline void
-graph_adjacent_edge_remove(s_adjacent_t *adjacent, uint32 i)
+graph_adjacent_edge_remove(s_adjacent_t *adjacent, s_edge_t *edge)
 {
+    uint32 i, limit;
+    s_edge_t *edge_tmp;
+
+    assert_exit(graph_edge_structure_legal_p(edge));
     assert_exit(graph_adjacent_structure_legal_p(adjacent));
-    assert_exit(i < graph_adjacent_limit(adjacent));
 
-    graph_adjacent_edge_set(adjacent, i, NULL);
-    graph_adjacent_edge_count_dec(adjacent);
+    i = 0;
+    limit = graph_adjacent_limit(adjacent);
 
-    if (graph_adjacent_sparse_p(adjacent)) {
-        graph_adjacent_compress(adjacent);
+    while (i < limit) {
+        edge_tmp = graph_adjacent_edge(adjacent, i);
+
+        if (edge_tmp == NULL || edge_tmp != edge) {
+            i++;
+            continue;
+        }
+
+        graph_adjacent_edge_set(adjacent, i, NULL);
+        graph_adjacent_edge_count_dec(adjacent);
+
+        if (graph_adjacent_sparse_p(adjacent)) {
+            graph_adjacent_compress(adjacent);
+        }
+
+        return;
     }
+
+    pr_log_warn("No such of the edge in given vertex adjacent.\n");
 }
 
