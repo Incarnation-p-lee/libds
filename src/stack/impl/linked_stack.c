@@ -352,7 +352,7 @@ linked_stack_top(s_linked_stack_t *stack)
             stack->top = linked_stack_space_previous(stack->top);
         }
 
-        return *(stack->top->space.sp);
+        return *(stack->top->space.sp - 1);
     }
 }
 

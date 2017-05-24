@@ -20,8 +20,6 @@ $filename = "$module_dir/$module" . "_declaration.h";
 $basename = $1 if $filename =~ /(\w+\.h)/;
 $implement = "$module_dir/impl";
 
-say "    Generate $basename";
-
 open DECLARATION, '>', $filename or die "Failed to open file $filename, $!";
     printf DECLARATION "#ifndef HAVE_DEFINED_$module" . "_H\n";
     printf DECLARATION "#define HAVE_DEFINED_$module" . "_H\n\n";

@@ -13,7 +13,7 @@ SLFLAG                 :=$(LFLAG) -shared
 
 ## sub-module source files ##
 src                    :=
-obj                    =$(subst .c,.o, $(src))        # use recursive variable here
+obj                    =$(subst .c,.o,$(src))        # use recursive variable here
 dep                    =$(subst .c,.d,$(src))
 obj_partial            =$(filter-out %main.o, $(obj)) # excluded main.o
 decl                   =$(subst .o,_declaration.h,$(obj_partial))
@@ -91,6 +91,7 @@ $(out):
 
 ## declaration header files ##
 $(decl):%_declaration.h:%.c
+	@echo "    Generate $(notdir $@)";
 	$(PERL) $(script_module_decl) $(dir $<)
 
 ## specific header files  ##

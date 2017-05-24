@@ -61,6 +61,10 @@ utest_linked_stack_resize(void)
     linked_stack_resize(stack, stk_size);
     RESULT_CHECK_uint32(stk_size, linked_stack_capacity(stack), &pass);
 
+    stk_size = 1u;
+    linked_stack_resize(stack, stk_size);
+    RESULT_CHECK_uint32(stk_size, linked_stack_capacity(stack), &pass);
+
     linked_stack_destroy(&stack);
     UNIT_TEST_RESULT(linked_stack_resize, pass);
 }
@@ -123,6 +127,7 @@ static inline void
 utest_linked_stack_rest(void)
 {
     bool pass;
+    uint32 rest;
     uint32 stk_size;
     s_linked_stack_t *stack;
 
@@ -137,6 +142,11 @@ utest_linked_stack_rest(void)
 
     linked_stack_push(stack, &stk_size);
     RESULT_CHECK_uint32(stk_size, linked_stack_rest(stack) + 1u, &pass);
+
+    rest = linked_stack_rest(stack);
+    stk_size += rest * 4;
+    linked_stack_resize(stack, stk_size);
+    RESULT_CHECK_uint32(rest * 4 + rest, linked_stack_rest(stack), &pass);
 
     linked_stack_destroy(&stack);
     UNIT_TEST_RESULT(linked_stack_rest, pass);
@@ -181,12 +191,15 @@ utest_linked_stack_push(void)
 static inline void
 utest_linked_stack_pop(void)
 {
+    uint32 i;
     bool pass;
+    uint32 count;
     s_linked_stack_t *stack;
 
     UNIT_TEST_BEGIN(linked_stack_pop);
     stack = linked_stack_create();
     pass = true;
+    count = 0x1234;
 
     RESULT_CHECK_pointer(PTR_INVALID, linked_stack_pop(NULL), &pass);
     RESULT_CHECK_pointer(PTR_INVALID, linked_stack_pop(stack), &pass);
@@ -194,8 +207,15 @@ utest_linked_stack_pop(void)
     linked_stack_push(stack, stack);
     RESULT_CHECK_pointer(stack, linked_stack_pop(stack), &pass);
 
-    linked_stack_push(stack, stack);
-    linked_stack_pop(stack);
+    i = 0;
+    while (i++ < count) {
+        linked_stack_push(stack, stack);
+    }
+
+    i = 0;
+    while (i++ < count) {
+        RESULT_CHECK_pointer(stack, linked_stack_pop(stack), &pass);
+    }
 
     linked_stack_destroy(&stack);
     UNIT_TEST_RESULT(linked_stack_pop, pass);
@@ -204,19 +224,35 @@ utest_linked_stack_pop(void)
 static inline void
 utest_linked_stack_top(void)
 {
+    uint32 i;
     bool pass;
     void *tmp;
+    uint32 count;
     s_linked_stack_t *stack;
 
     UNIT_TEST_BEGIN(linked_stack_top);
     stack = linked_stack_create();
     pass = true;
+    count = 0x1c4e;
 
     RESULT_CHECK_pointer(PTR_INVALID, linked_stack_top(NULL), &pass);
     RESULT_CHECK_pointer(PTR_INVALID, linked_stack_top(stack), &pass);
 
     tmp = linked_stack_top(stack);
     RESULT_CHECK_pointer(tmp, linked_stack_pop(stack), &pass);
+
+    linked_stack_push(stack, stack);
+
+    i = 0;
+    while (i++ < count) {
+        linked_stack_push(stack, stack);
+    }
+
+    i = 0;
+    while (i++ < count) {
+        tmp = linked_stack_top(stack);
+        RESULT_CHECK_pointer(tmp, linked_stack_pop(stack), &pass);
+    }
 
     linked_stack_destroy(&stack);
     UNIT_TEST_RESULT(linked_stack_top, pass);
