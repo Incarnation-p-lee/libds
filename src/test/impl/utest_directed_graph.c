@@ -177,3 +177,49 @@ utest_directed_graph_vertex_remove(void)
     UNIT_TEST_RESULT(directed_graph_vertex_remove, pass);
 }
 
+static inline void
+utest_directed_graph_topo_sort(void)
+{
+    bool pass;
+    bool is_succ;
+    uint32 count;
+    s_graph_t *graph;
+    s_vertex_t *vertex, *v_succ;
+    s_topo_list_t *topo_list, *topo_node;
+
+    pass = true;
+    count = 0x18;
+    UNIT_TEST_BEGIN(directed_graph_topo_sort);
+
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_topo_sort(NULL), &pass);
+
+    while (count--) {
+        graph = test_directed_graph_sample(0x6d2 + count, 0x576 + count);
+        topo_list = directed_graph_topo_sort(graph);
+
+        if (topo_list) {
+            topo_node = topo_list;
+            vertex = directed_graph_topo_list_to_vertex(topo_node);
+
+            while (directed_graph_topo_list_next(topo_node) != topo_list) {
+                topo_node = directed_graph_topo_list_next(topo_node);
+                v_succ = directed_graph_topo_list_to_vertex(topo_node);
+
+                is_succ = directed_graph_vertex_successor_p(v_succ, vertex);
+                RESULT_CHECK_bool(false, is_succ, &pass);
+
+                vertex = v_succ;
+            }
+        }
+
+        directed_graph_destroy(&graph);
+    }
+
+    graph = directed_graph_create();
+    topo_list = directed_graph_topo_sort(graph);
+    RESULT_CHECK_pointer(NULL, topo_list, &pass);
+
+    directed_graph_destroy(&graph);
+    UNIT_TEST_RESULT(directed_graph_topo_sort, pass);
+}
+

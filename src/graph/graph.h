@@ -54,11 +54,16 @@ extern s_array_queue_t * array_queue_create(void);
 extern s_open_addressing_hash_t * open_addressing_hash_create(uint32 size);
 extern void array_queue_destroy(s_array_queue_t **queue);
 extern void array_queue_enter(s_array_queue_t *queue, void *member);
+extern bool array_queue_structure_legal_p(s_array_queue_t *queue);
 extern void open_addressing_hash_destroy(s_open_addressing_hash_t **hash);
 extern void * open_addressing_hash_remove(s_open_addressing_hash_t *hash, void *key);
 extern void * open_addressing_hash_find(s_open_addressing_hash_t *hash, void *key);
 extern void * array_queue_leave(s_array_queue_t *queue);
 extern void * open_addressing_hash_insert(s_open_addressing_hash_t *hash, void *key);
+extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list);
+extern void doubly_linked_list_initial(s_doubly_linked_list_t *list);
+extern void doubly_linked_list_insert_before(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
+extern s_doubly_linked_list_t * doubly_linked_list_remove(s_doubly_linked_list_t **list);
 
 #endif
 

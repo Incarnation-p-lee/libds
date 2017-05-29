@@ -116,3 +116,21 @@ graph_vertex_structure_illegal_p(s_vertex_t *vertex)
     return !graph_vertex_structure_legal_p(vertex);
 }
 
+static inline bool
+graph_topo_list_structure_legal_p(s_topo_list_t *topo_list)
+{
+    if (NULL_PTR_P(topo_list)) {
+        return false;
+    } else if (doubly_linked_list_structure_illegal_p(&topo_list->list)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+graph_topo_list_structure_illegal_p(s_topo_list_t *topo_list)
+{
+    return !graph_topo_list_structure_legal_p(topo_list);
+}
+

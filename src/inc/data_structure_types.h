@@ -96,6 +96,7 @@ typedef struct adjacent              s_adjacent_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
+typedef struct topo_list       s_topo_list_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -416,6 +417,7 @@ struct disjoint_set {
 struct edge {
     uint32             index;      /* edge index in edge array */
     sint32             cost;
+
     union {
         struct {                   /* directed graph */
             s_vertex_t *precursor;
@@ -428,10 +430,17 @@ struct edge {
     };
 };
 
+struct topo_list {
+    uint32                 indegree;
+    s_doubly_linked_list_t list;
+};
+
 struct vertex {
     uint32               index;      /* vertex index in vertex array */
     uint32               label;
     void                 *value;
+    bool                 is_visited;
+
     union {
         struct {                     /* directed graph */
             s_adjacent_t *precursor;
@@ -439,6 +448,8 @@ struct vertex {
         };
         s_adjacent_t     *adjacent;  /* indirected graph */
     };
+
+    s_topo_list_t  topo_list;
 };
 
 struct adjacent {
@@ -460,8 +471,8 @@ struct edge_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_array_queue_t *queue;
     s_edge_t        **array;
+    s_array_queue_t *queue;
 };
 
 struct graph_attibute {

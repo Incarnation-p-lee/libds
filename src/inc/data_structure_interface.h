@@ -118,6 +118,7 @@ typedef struct adjacent              s_adjacent_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
+typedef struct topo_list       s_topo_list_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -315,6 +316,7 @@ struct disjoint_set {
 struct edge {
     uint32             index;      /* edge index in edge array */
     sint32             cost;
+
     union {
         struct {                   /* directed graph */
             s_vertex_t *precursor;
@@ -327,10 +329,17 @@ struct edge {
     };
 };
 
+struct topo_list {
+    uint32                 indegree;
+    s_doubly_linked_list_t list;
+};
+
 struct vertex {
     uint32               index;      /* vertex index in vertex array */
     uint32               label;
     void                 *value;
+    bool                 is_visited;
+
     union {
         struct {                     /* directed graph */
             s_adjacent_t *precursor;
@@ -338,6 +347,8 @@ struct vertex {
         };
         s_adjacent_t     *adjacent;  /* indirected graph */
     };
+
+    s_topo_list_t  topo_list;
 };
 
 struct adjacent {
@@ -359,8 +370,8 @@ struct edge_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_array_queue_t *queue;
     s_edge_t        **array;
+    s_array_queue_t *queue;
 };
 
 struct graph_attibute {
@@ -407,6 +418,7 @@ extern void swap_pointer(void **ptr_a, void **ptr_b);
 
 extern bool directed_graph_structure_illegal_p(s_graph_t *graph);
 extern bool directed_graph_structure_legal_p(s_graph_t *graph);
+extern bool directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor);
 extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
 extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
 extern s_edge_array_t * directed_graph_edge_array(s_graph_t *graph);
@@ -419,8 +431,11 @@ extern s_edge_t * indirected_graph_edge_remove(s_graph_t *graph, s_edge_t *edge)
 extern s_edge_t * indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
 extern s_graph_t * directed_graph_create(void);
 extern s_graph_t * indirected_graph_create(void);
+extern s_topo_list_t * directed_graph_topo_list_next(s_topo_list_t *topo_list);
+extern s_topo_list_t * directed_graph_topo_sort(s_graph_t *graph);
 extern s_vertex_array_t * directed_graph_vertex_array(s_graph_t *graph);
 extern s_vertex_array_t * indirected_graph_vertex_array(s_graph_t *graph);
+extern s_vertex_t * directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list);
 extern s_vertex_t * directed_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * directed_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
 extern s_vertex_t * indirected_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);

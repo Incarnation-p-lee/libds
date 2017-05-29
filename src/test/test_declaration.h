@@ -183,6 +183,7 @@ static inline void utest_directed_graph_create(void);
 static inline void utest_directed_graph_destroy(void);
 static inline void utest_directed_graph_edge_remove(void);
 static inline void utest_directed_graph_link(void);
+static inline void utest_directed_graph_topo_sort(void);
 static inline void utest_directed_graph_vertex_remove(void);
 static inline void utest_disjoint_set_create(void);
 static inline void utest_disjoint_set_destroy(void);

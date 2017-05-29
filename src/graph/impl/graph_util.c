@@ -484,6 +484,14 @@ graph_vertex_value(s_vertex_t *vertex)
     return vertex->value;
 }
 
+static inline s_topo_list_t *
+graph_vertex_topo_list(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return &vertex->topo_list;
+}
+
 static inline s_adjacent_t *
 graph_vertex_adjacent(s_vertex_t *vertex)
 {
@@ -591,6 +599,30 @@ graph_edge_array(s_graph_t *graph)
     return graph->edge_array;
 }
 
+// static inline bool
+// graph_vertex_is_visited_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     return vertex->is_visited;
+// }
+
+// static inline void
+// graph_vertex_is_visited_set(s_vertex_t *vertex, bool is_visited)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     vertex->is_visited = is_visited;
+// }
+
+// static inline uint32
+// graph_vertex_label(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     return vertex->label;
+// }
+
 static inline bool
 graph_vertex_compatible_p(s_graph_t *graph, s_vertex_t *vertex)
 {
@@ -614,5 +646,51 @@ static inline bool
 graph_vertex_incompatible_p(s_graph_t *graph, s_vertex_t *vertex)
 {
     return !graph_vertex_compatible_p(graph, vertex);
+}
+
+static inline void
+graph_topo_list_initial(s_topo_list_t *topo_list, uint32 indegree)
+{
+    assert_exit(NON_NULL_PTR_P(topo_list));
+
+    doubly_linked_list_initial(&topo_list->list);
+    graph_topo_list_indegree_set(topo_list, indegree);
+}
+
+static inline uint32
+graph_topo_list_indegree(s_topo_list_t *topo_list)
+{
+    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+
+    return topo_list->indegree;
+}
+
+static inline void
+graph_topo_list_indegree_set(s_topo_list_t *topo_list, uint32 indegree)
+{
+    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+
+    topo_list->indegree = indegree;
+}
+
+static inline void
+graph_topo_list_indegree_dec(s_topo_list_t *topo_list)
+{
+    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+    assert_exit(graph_topo_list_indegree(topo_list) != 0u);
+
+    topo_list->indegree--;
+}
+
+static inline bool
+graph_topo_list_no_indegree_p(s_topo_list_t *topo_list)
+{
+    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+
+    if (graph_topo_list_indegree(topo_list) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 

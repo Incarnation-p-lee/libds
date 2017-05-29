@@ -1773,6 +1773,13 @@ static const struct test_layer_table directed_graph[] = {
             NULL,
         },
     },
+    {
+        "topo_sort", NULL,
+        {
+            &utest_directed_graph_topo_sort,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

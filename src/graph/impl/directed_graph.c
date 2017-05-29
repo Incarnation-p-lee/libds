@@ -66,6 +66,34 @@ directed_graph_edge_array(s_graph_t *graph)
     }
 }
 
+static inline s_vertex_t *
+directed_graph_topo_list_to_vertex_i(s_topo_list_t *topo_list)
+{
+    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+
+    return CONTAINER_OF(topo_list, s_vertex_t, topo_list);
+}
+
+s_vertex_t *
+directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list)
+{
+    if (graph_topo_list_structure_illegal_p(topo_list)) {
+        return PTR_INVALID;
+    } else {
+        return directed_graph_topo_list_to_vertex_i(topo_list);
+    }
+}
+
+s_topo_list_t *
+directed_graph_topo_list_next(s_topo_list_t *topo_list)
+{
+    if (graph_topo_list_structure_illegal_p(topo_list)) {
+        return PTR_INVALID;
+    } else {
+        return graph_topo_list_next(topo_list);
+    }
+}
+
 uint32
 directed_graph_edge_array_limit(s_edge_array_t *edge_array)
 {
@@ -401,6 +429,206 @@ directed_graph_vertex_destroy(s_vertex_t **vertex)
         memory_cache_free(*vertex);
 
         *vertex = NULL;
+    }
+}
+
+// static inline s_array_queue_t *
+// directed_graph_find_path_i(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
+// {
+//     s_adjacent_t *adjacent;
+//     s_array_queue_t *path_queue;
+//     s_open_addressing_hash_t *hash;
+// 
+//     assert_exit(graph_vertex_structure_legal_p(vertex_from));
+//     assert_exit(graph_vertex_structure_legal_p(vertex_to));
+// 
+//     path_queue = array_queue_create();
+//     hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
+//     array_queue_enter(path_queue, vertex_from);
+//     open_addressing_hash_insert(hash, graph_vertex_label(vertex_from);
+// 
+//     while (!array_queue_empty_p(path_queue)) {
+//         adjacent = array_queue_
+//     }
+// }
+
+static inline bool
+directed_graph_vertex_successor_ip(s_vertex_t *vertex, s_vertex_t *v_successor)
+{
+    s_edge_t *edge;
+    uint32 i, limit;
+    s_vertex_t *vertex_tmp;
+    s_adjacent_t *adjacent;
+
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_structure_legal_p(v_successor));
+
+    i = 0;
+    adjacent = graph_vertex_successor(vertex);
+    limit = graph_adjacent_limit(adjacent);
+
+    while (i < limit) {
+        edge = graph_adjacent_edge(adjacent, i);
+
+        if (edge) {
+            vertex_tmp = graph_edge_successor(edge);
+
+            if (vertex_tmp == v_successor) {
+                return true;
+            }
+        }
+
+        i++;
+    }
+
+    return false;
+}
+
+bool
+directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor)
+{
+    if (GRAPH_VERTEX_ILLEGAL_P(vertex)) {
+        return false;
+    } else if (GRAPH_VERTEX_ILLEGAL_P(v_successor)) {
+        return false;
+    } else {
+        return directed_graph_vertex_successor_ip(vertex, v_successor);
+    }
+}
+
+static inline void
+directed_graph_topo_sort_initial(s_graph_t *graph, s_array_queue_t *queue)
+{
+    uint32 i, limit;
+    uint32 indegree;
+    s_vertex_t *vertex;
+    s_topo_list_t *topo_list;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(array_queue_empty_p(queue));
+
+    i = 0;
+    vertex_array = graph_vertex_array(graph);
+    limit = graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = graph_vertex_array_vertex(vertex_array, i);
+
+        if (vertex) {
+            indegree = graph_adjacent_count(graph_vertex_precursor(vertex));
+
+            if (indegree == 0) {
+                array_queue_enter(queue, vertex);
+            }
+
+            topo_list = graph_vertex_topo_list(vertex);
+            graph_topo_list_initial(topo_list, indegree);
+        }
+
+        i++;
+    }
+}
+
+static inline void
+directed_graph_topo_sort_successor_process(s_array_queue_t *queue,
+    s_vertex_t *vertex)
+{
+    s_edge_t *edge;
+    uint32 i, limit;
+    s_adjacent_t *adjacent;
+    s_vertex_t *v_successor;
+    s_topo_list_t *topo_node;
+
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    i = 0;
+    adjacent = graph_vertex_successor(vertex);
+    limit = graph_adjacent_limit(adjacent);
+
+    while (i < limit) {
+        edge= graph_adjacent_edge(adjacent, i);
+
+        if (edge) {
+            v_successor = graph_edge_successor(edge);
+            topo_node = graph_vertex_topo_list(v_successor);
+            graph_topo_list_indegree_dec(topo_node);
+
+            if (graph_topo_list_no_indegree_p(topo_node)) {
+                array_queue_enter(queue, v_successor);
+            }
+        }
+
+        i++;
+    }
+}
+
+static inline s_topo_list_t *
+directed_graph_topo_sort_process(s_array_queue_t *queue, uint32 vertex_count)
+{
+    s_vertex_t *vertex;
+    s_topo_list_t fake_head, *topo_node;
+
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(!array_queue_empty_p(queue));
+
+    doubly_linked_list_initial(&fake_head.list);
+
+    while (!array_queue_empty_p(queue)) {
+        vertex = array_queue_leave(queue);
+        vertex_count--;
+
+        topo_node = graph_vertex_topo_list(vertex);
+        graph_topo_list_insert_before(&fake_head, topo_node);
+
+        directed_graph_topo_sort_successor_process(queue, vertex);
+    }
+
+    if (vertex_count != 0) {
+        pr_log_warn("Cannot topo sort directed graph with cycle.\n");
+        return NULL;
+    } else {
+        topo_node = graph_topo_list_next(&fake_head);
+        graph_topo_list_remove(&fake_head);
+        return topo_node;
+    }
+}
+
+static inline s_topo_list_t *
+directed_graph_topo_sort_i(s_graph_t *graph)
+{
+    uint32 vertex_count;
+    s_array_queue_t *queue;
+    s_topo_list_t *topo_head;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+
+    vertex_count = graph_vertex_array_count(graph_vertex_array(graph));
+
+    if (vertex_count == 0) {
+        pr_log_warn("Topo sort will do nothing for empty graph.\n");
+        return NULL;
+    } else {
+        queue = array_queue_create(); /* zero indegree vertex queue */
+
+        directed_graph_topo_sort_initial(graph, queue);
+        topo_head = directed_graph_topo_sort_process(queue, vertex_count);
+
+        array_queue_destroy(&queue);
+
+        return topo_head;
+    }
+}
+
+s_topo_list_t *
+directed_graph_topo_sort(s_graph_t *graph)
+{
+    if (DIRECTED_GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else {
+        return directed_graph_topo_sort_i(graph);
     }
 }
 

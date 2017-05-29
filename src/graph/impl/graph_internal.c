@@ -40,6 +40,7 @@ graph_vertex_create(s_graph_t *graph, void *value)
     vertex->index = GRAPH_INDEX_INVALID;
     vertex->label = graph_attibute_label_obtain(graph);
     vertex->precursor = vertex->successor = NULL;
+    vertex->is_visited = false;
 
     return vertex;
 }
@@ -424,5 +425,34 @@ graph_adjacent_edge_remove(s_adjacent_t *adjacent, s_edge_t *edge)
     }
 
     pr_log_warn("No such of the edge in given vertex adjacent.\n");
+}
+
+static inline void
+graph_topo_list_insert_before(s_topo_list_t *node, s_topo_list_t *inserted)
+{
+    assert_exit(graph_topo_list_structure_legal_p(node));
+    assert_exit(graph_topo_list_structure_legal_p(inserted));
+
+    doubly_linked_list_insert_before(&node->list, &inserted->list);
+}
+
+static inline s_topo_list_t *
+graph_topo_list_next(s_topo_list_t *node)
+{
+    assert_exit(graph_topo_list_structure_legal_p(node));
+
+    return CONTAINER_OF(node->list.next, s_topo_list_t, list);
+}
+
+static inline void
+graph_topo_list_remove(s_topo_list_t *node)
+{
+    s_doubly_linked_list_t *list;
+
+    assert_exit(graph_topo_list_structure_legal_p(node));
+
+    list = &node->list;
+
+    doubly_linked_list_remove(&list);
 }
 
