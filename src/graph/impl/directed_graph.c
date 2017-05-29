@@ -77,7 +77,7 @@ directed_graph_topo_list_to_vertex_i(s_topo_list_t *topo_list)
 s_vertex_t *
 directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list)
 {
-    if (graph_topo_list_structure_illegal_p(topo_list)) {
+    if (GRAPH_TOPO_LIST_ILLEGAL_P(topo_list)) {
         return PTR_INVALID;
     } else {
         return directed_graph_topo_list_to_vertex_i(topo_list);
@@ -87,7 +87,7 @@ directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list)
 s_topo_list_t *
 directed_graph_topo_list_next(s_topo_list_t *topo_list)
 {
-    if (graph_topo_list_structure_illegal_p(topo_list)) {
+    if (GRAPH_TOPO_LIST_ILLEGAL_P(topo_list)) {
         return PTR_INVALID;
     } else {
         return graph_topo_list_next(topo_list);
