@@ -421,6 +421,7 @@ extern bool directed_graph_structure_legal_p(s_graph_t *graph);
 extern bool directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor);
 extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
 extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
+extern s_array_queue_t * directed_graph_path_find(s_vertex_t *vertex_from, s_vertex_t *vertex_to);
 extern s_edge_array_t * directed_graph_edge_array(s_graph_t *graph);
 extern s_edge_array_t * indirected_graph_edge_array(s_graph_t *graph);
 extern s_edge_t * directed_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);

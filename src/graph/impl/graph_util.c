@@ -615,13 +615,13 @@ graph_edge_array(s_graph_t *graph)
 //     vertex->is_visited = is_visited;
 // }
 
-// static inline uint32
-// graph_vertex_label(s_vertex_t *vertex)
-// {
-//     assert_exit(graph_vertex_structure_legal_p(vertex));
-// 
-//     return vertex->label;
-// }
+static inline uint32
+graph_vertex_label(s_vertex_t *vertex)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    return vertex->label;
+}
 
 static inline bool
 graph_vertex_compatible_p(s_graph_t *graph, s_vertex_t *vertex)

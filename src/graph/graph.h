@@ -68,6 +68,13 @@ extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list)
 extern void doubly_linked_list_initial(s_doubly_linked_list_t *list);
 extern void doubly_linked_list_insert_before(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern s_doubly_linked_list_t * doubly_linked_list_remove(s_doubly_linked_list_t **list);
+extern void array_stack_push(s_array_stack_t *stack, void *member);
+extern void * array_stack_pop(s_array_stack_t *stack);
+extern void * array_stack_top(s_array_stack_t *stack);
+extern s_array_stack_t * array_stack_create(void);
+extern void array_stack_destroy(s_array_stack_t **stack);
+extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
+extern bool array_stack_empty_p(s_array_stack_t *stack);
 
 #endif
 

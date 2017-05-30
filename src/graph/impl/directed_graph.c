@@ -432,25 +432,111 @@ directed_graph_vertex_destroy(s_vertex_t **vertex)
     }
 }
 
-// static inline s_array_queue_t *
-// directed_graph_find_path_i(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
-// {
-//     s_adjacent_t *adjacent;
-//     s_array_queue_t *path_queue;
-//     s_open_addressing_hash_t *hash;
-// 
-//     assert_exit(graph_vertex_structure_legal_p(vertex_from));
-//     assert_exit(graph_vertex_structure_legal_p(vertex_to));
-// 
-//     path_queue = array_queue_create();
-//     hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
-//     array_queue_enter(path_queue, vertex_from);
-//     open_addressing_hash_insert(hash, graph_vertex_label(vertex_from);
-// 
-//     while (!array_queue_empty_p(path_queue)) {
-//         adjacent = array_queue_
-//     }
-// }
+static inline s_vertex_t *
+directed_graph_path_unvisited_succ_vertex_find(s_vertex_t *vertex,
+    s_open_addressing_hash_t *hash)
+{
+    uint32 label;
+    s_edge_t *edge;
+    uint32 i, limit;
+    s_adjacent_t *adjacent;
+    s_vertex_t *v_successor;
+
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    i = 0;
+    adjacent = graph_vertex_adjacent(vertex);
+    limit = graph_adjacent_count(adjacent);
+
+    while (i < limit) {
+        edge = graph_adjacent_edge(adjacent, i);
+
+        if (edge) {
+            v_successor = graph_edge_successor(edge);
+            label = graph_vertex_label(v_successor);
+
+            if (open_addressing_hash_find(hash, (void *)(ptr_t)label) == NULL) {
+                return v_successor;
+            }
+
+        }
+
+        i++;
+    }
+
+    return NULL; /* all successor have been visited */
+}
+
+static inline void
+directed_graph_path_stack_to_queue(s_array_queue_t *queue,
+    s_array_stack_t *stack)
+{
+    assert_exit(array_queue_structure_legal_p(queue));
+    assert_exit(array_stack_structure_legal_p(stack));
+
+    while (!array_stack_empty_p(stack)) {
+        array_queue_enter(queue, array_stack_pop(stack));
+    }
+}
+
+static inline s_array_queue_t *
+directed_graph_path_find_i(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
+{
+    s_array_queue_t *queue;
+    s_array_stack_t *stack;
+    s_vertex_t *vertex, *succ;
+    s_open_addressing_hash_t *hash;
+
+    assert_exit(graph_vertex_structure_legal_p(vertex_from));
+    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+
+    stack = array_stack_create();
+    hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
+
+    array_stack_push(stack, vertex_from);
+    open_addressing_hash_insert(hash, TO_PTR(graph_vertex_label(vertex_from)));
+
+    while (!array_stack_empty_p(stack)) {
+        vertex = array_stack_top(stack);
+        succ = directed_graph_path_unvisited_succ_vertex_find(vertex, hash);
+
+        if (succ && succ == vertex_to) {
+            array_stack_push(stack, succ);
+            break;
+        } else if (succ) {
+            array_stack_push(stack, succ);
+            open_addressing_hash_insert(hash, TO_PTR(graph_vertex_label(succ)));
+        } else {
+            array_stack_pop(stack);
+        }
+    }
+
+    if (array_stack_empty_p(stack)) {
+        pr_log_warn("Cannot find one path from given vertex.\n");
+        queue = NULL;
+    } else {
+        // To-Do add assert here.
+        queue = array_queue_create();
+        directed_graph_path_stack_to_queue(queue, stack);
+    }
+
+    open_addressing_hash_destroy(&hash);
+    array_stack_destroy(&stack);
+
+    return queue;
+}
+
+s_array_queue_t *
+directed_graph_path_find(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
+{
+    if (GRAPH_VERTEX_ILLEGAL_P(vertex_from)) {
+        return PTR_INVALID;
+    } else if (GRAPH_VERTEX_ILLEGAL_P(vertex_to)) {
+        return PTR_INVALID;
+    } else {
+        return directed_graph_path_find_i(vertex_from, vertex_to);
+    }
+}
 
 static inline bool
 directed_graph_vertex_successor_ip(s_vertex_t *vertex, s_vertex_t *v_successor)
