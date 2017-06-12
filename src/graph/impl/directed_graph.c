@@ -56,6 +56,18 @@ directed_graph_vertex_array(s_graph_t *graph)
     }
 }
 
+s_vertex_t *
+directed_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i)
+{
+    if (GRAPH_VERTEX_ARRAY_ILLEGAL_P(vertex_array)) {
+        return PTR_INVALID;
+    } else if (i >= graph_vertex_array_limit(vertex_array)) {
+        return PTR_INVALID;
+    } else {
+        return graph_vertex_array_vertex(vertex_array, i);
+    }
+}
+
 s_edge_array_t *
 directed_graph_edge_array(s_graph_t *graph)
 {
@@ -515,9 +527,10 @@ directed_graph_path_find_i(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
         pr_log_warn("Cannot find one path from given vertex.\n");
         queue = NULL;
     } else {
-        // To-Do add assert here.
         queue = array_queue_create();
         directed_graph_path_stack_to_queue(queue, stack);
+        assert_exit(vertex_from = array_queue_front(queue));
+        assert_exit(vertex_to = array_queue_rear(queue));
     }
 
     open_addressing_hash_destroy(&hash);

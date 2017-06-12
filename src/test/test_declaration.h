@@ -20,6 +20,7 @@ static inline bool test_result_check_pointer_p(void *expect, void *get, bool *pa
 static inline bool test_result_check_sint32_p(sint32 expect, sint32 get, bool *pass);
 static inline bool test_result_check_sint64_p(sint64 expect, sint64 get, bool *pass);
 static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *pass);
+static inline bool utest_directed_graph_path_exist_p(s_array_queue_t *queue);
 static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
 static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
 static inline char * memory_maps_one_line_map_name(char *line);
@@ -183,6 +184,7 @@ static inline void utest_directed_graph_create(void);
 static inline void utest_directed_graph_destroy(void);
 static inline void utest_directed_graph_edge_remove(void);
 static inline void utest_directed_graph_link(void);
+static inline void utest_directed_graph_path_find(void);
 static inline void utest_directed_graph_topo_sort(void);
 static inline void utest_directed_graph_vertex_remove(void);
 static inline void utest_disjoint_set_create(void);

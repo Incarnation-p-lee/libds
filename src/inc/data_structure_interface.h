@@ -439,6 +439,7 @@ extern s_vertex_array_t * indirected_graph_vertex_array(s_graph_t *graph);
 extern s_vertex_t * directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list);
 extern s_vertex_t * directed_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * directed_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
+extern s_vertex_t * directed_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * indirected_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * indirected_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
 extern sint32 directed_graph_edge_cost(s_edge_t *edge);

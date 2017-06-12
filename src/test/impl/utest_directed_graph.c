@@ -223,3 +223,77 @@ utest_directed_graph_topo_sort(void)
     UNIT_TEST_RESULT(directed_graph_topo_sort, pass);
 }
 
+static inline bool
+utest_directed_graph_path_exist_p(s_array_queue_t *queue)
+{
+    bool is_succ;
+    s_vertex_t *vertex;
+    s_vertex_t *v_successor;
+
+    assert_exit(queue);
+
+    vertex = array_queue_leave(queue);
+
+    while (!array_queue_empty_p(queue)) {
+        v_successor = array_queue_leave(queue);
+
+        is_succ = directed_graph_vertex_successor_p(vertex, v_successor);
+
+        if (!is_succ) {
+            return false;
+        }
+
+        vertex = v_successor;
+    }
+
+    return true;
+}
+
+static inline void
+utest_directed_graph_path_find(void)
+{
+    bool pass;
+    bool is_existed;
+    uint32 i, limit;
+    s_graph_t *graph;
+    s_array_queue_t *path;
+    s_vertex_array_t *vertex_array;
+    s_vertex_t *vertex_from, *vertex_to, *vertex;
+
+    pass = true;
+    vertex_from = vertex_to = NULL;
+    UNIT_TEST_BEGIN(directed_graph_path_find);
+
+    graph = test_directed_graph_sample(0x36d2, 0x2576);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_path_find(NULL, NULL), &pass);
+
+    i = 0;
+    vertex_array = directed_graph_vertex_array(graph);
+    limit = directed_graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = directed_vertex_array_vertex(vertex_array, i);
+
+        if (vertex && vertex_from == NULL) {
+            vertex_from = vertex;
+        } else if (vertex && vertex_to == NULL) {
+            vertex_to = vertex;
+        } else {
+            path = directed_graph_path_find(vertex_from, vertex_to);
+
+            if (path) {
+                is_existed = utest_directed_graph_path_exist_p(path);
+                RESULT_CHECK_bool(true, is_existed, &pass);
+
+                vertex_from = vertex_to;
+                vertex_to = NULL;
+            }
+        }
+
+        i++;
+    }
+
+    directed_graph_destroy(&graph);
+    UNIT_TEST_RESULT(directed_graph_path_find, pass);
+}
+
