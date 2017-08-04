@@ -32,7 +32,7 @@
             "cmove           %%rbx, %%rcx\n\t"                              \
             "mov             %%rcx, 0x8(%1)\n\t" /* %%rcx => front */       \
             "incl             (%1)\n\t"          /* rest++ */               \
-            :"=&r"(val)                                                      \
+            :"=&r"(val)                                                     \
             :"r"(queue)                                                     \
             :"rbx", "rcx", "rdx")
 

@@ -1780,6 +1780,13 @@ static const struct test_layer_table directed_graph[] = {
             NULL,
         },
     },
+    {
+        "path_find", NULL,
+        {
+            &utest_directed_graph_path_find,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

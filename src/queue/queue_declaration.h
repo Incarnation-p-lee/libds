@@ -41,6 +41,7 @@ static inline s_doubly_end_queue_list_t * doubly_end_queue_list_reflect(s_doubly
 static inline uint32 stacked_queue_rest_i(s_stacked_queue_t *queue);
 static inline void * array_queue_iterator_next_obtain(void *queue);
 static inline void array_queue_copy_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
+static inline void array_queue_enter_i(s_array_queue_t *queue, void *member);
 static inline void array_queue_iterator_index_initial(void *queue);
 static inline void array_queue_merge_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src);
 static inline void array_queue_resize_expand(s_array_queue_t *queue, uint32 size);

@@ -398,32 +398,40 @@ array_queue_rear(s_array_queue_t *queue)
     }
 }
 
+static inline void
+array_queue_enter_i(s_array_queue_t *queue, void *member)
+{
+    assert_exit(array_queue_structure_legal_ip(queue));
+
+    if (array_queue_full_ip(queue)) {
+        array_queue_resize_i(queue, queue->space.dim * 2);
+    }
+
+    assert_exit(array_queue_enter_optimize_legal_p(queue, member));
+    ARRAY_QUEUE_ENTER_I(queue, member);
+    /*
+     * *HACK* => performance
+     * ARRAY_QUEUE_ENTER_I rewrite follow code within assembly code.
+     * array_queue_enter_optimize_legal_p guarantee the correctness.
+     *
+     * uint32 dim;
+     * queue->space.rear++ = member;
+     * dim = queue->space.dim;
+     *
+     * if (queue->space.rear == queue->space.base + dim) {
+     *     pr_log_info("Reach the limitation of array, will rotate.\n");
+     *     queue->space.rear = queue->space.base;
+     * }
+     *
+     * queue->space.rest--;
+     */
+}
+
 void
 array_queue_enter(s_array_queue_t *queue, void *member)
 {
     if (ARRAY_QUEUE_LEGAL_P(queue)) {
-        if (array_queue_full_ip(queue)) {
-            array_queue_resize_i(queue, queue->space.dim * 2);
-        }
-
-        assert_exit(array_queue_enter_optimize_legal_p(queue, member));
-        ARRAY_QUEUE_ENTER_I(queue, member);
-        /*
-         * *HACK* => performance
-         * ARRAY_QUEUE_ENTER_I rewrite follow code within assembly code.
-         * array_queue_enter_optimize_legal_p guarantee the correctness.
-         *
-         * uint32 dim;
-         * queue->space.rear++ = member;
-         * dim = queue->space.dim;
-         *
-         * if (queue->space.rear == queue->space.base + dim) {
-         *     pr_log_info("Reach the limitation of array, will rotate.\n");
-         *     queue->space.rear = queue->space.base;
-         * }
-         *
-         * queue->space.rest--;
-         */
+        array_queue_enter_i(queue, member);
     }
 }
 
@@ -511,11 +519,9 @@ array_queue_merge_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)
 
     while (iterator->fp_next_exist_p(queue_src)) {
         element = iterator->fp_next_obtain(queue_src);
-        array_queue_enter(queue_dest, element);
+        array_queue_enter_i(queue_dest, element);
     }
-
 }
-
 
 static inline void
 array_queue_copy_i(s_array_queue_t *queue_dest, s_array_queue_t *queue_src)

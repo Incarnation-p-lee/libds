@@ -78,6 +78,7 @@
 
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 #define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))
+#define TO_PTR(p)               ((void *)(ptr_t)(p))
 
 #if defined X86_64
     #define PTR_TO_UNSIGNED(ptr) (uint64)(ptr)
