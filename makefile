@@ -91,7 +91,7 @@ $(out):
 
 ## declaration header files ##
 $(decl):%_declaration.h:%.c
-	@echo "    Generate $(notdir $@)";
+	@echo "    Generate $(notdir $@)"
 	$(PERL) $(script_module_decl) $(dir $<)
 
 ## specific header files  ##
