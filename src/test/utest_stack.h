@@ -111,10 +111,10 @@ utest_##name##_stack_capacity(void)                                       \
     uint32 extra;                                                         \
                                                                           \
     UNIT_TEST_BEGIN(name##_stack_capacity);                               \
-    RESULT_CHECK_uint32(STACK_SIZE_INVALID, STACK_capacity(NULL), &pass); \
                                                                           \
     pass = true;                                                          \
     stack = STACK_create();                                               \
+    RESULT_CHECK_uint32(STACK_SIZE_INVALID, STACK_capacity(NULL), &pass); \
                                                                           \
     stk_size = STACK_capacity(stack);                                     \
     RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);          \
@@ -136,12 +136,12 @@ utest_##name##_stack_rest(void)                                           \
     uint32 stk_size;                                                      \
                                                                           \
     UNIT_TEST_BEGIN(name##_stack_rest);                                   \
-    RESULT_CHECK_uint32(STACK_SIZE_INVALID, STACK_capacity(NULL), &pass); \
                                                                           \
     pass = true;                                                          \
     stack = STACK_create();                                               \
     stk_size = STACK_capacity(stack);                                     \
                                                                           \
+    RESULT_CHECK_uint32(STACK_SIZE_INVALID, STACK_capacity(NULL), &pass); \
     RESULT_CHECK_uint32(stk_size, STACK_capacity(stack), &pass);          \
                                                                           \
     STACK_push(stack, &stk_size);                                         \

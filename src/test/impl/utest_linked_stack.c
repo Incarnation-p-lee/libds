@@ -107,10 +107,11 @@ utest_linked_stack_capacity(void)
     s_linked_stack_t *stack;
 
     UNIT_TEST_BEGIN(linked_stack_capacity);
-    RESULT_CHECK_uint32(STACK_SIZE_INVALID, linked_stack_capacity(NULL), &pass);
 
     pass = true;
     stack = linked_stack_create();
+
+    RESULT_CHECK_uint32(STACK_SIZE_INVALID, linked_stack_capacity(NULL), &pass);
 
     stk_size = linked_stack_capacity(stack);
     RESULT_CHECK_uint32(stk_size, linked_stack_capacity(stack), &pass);
@@ -132,12 +133,12 @@ utest_linked_stack_rest(void)
     s_linked_stack_t *stack;
 
     UNIT_TEST_BEGIN(linked_stack_rest);
-    RESULT_CHECK_uint32(STACK_SIZE_INVALID, linked_stack_capacity(NULL), &pass);
 
     pass = true;
     stack = linked_stack_create();
     stk_size = linked_stack_capacity(stack);
 
+    RESULT_CHECK_uint32(STACK_SIZE_INVALID, linked_stack_capacity(NULL), &pass);
     RESULT_CHECK_uint32(stk_size, linked_stack_capacity(stack), &pass);
 
     linked_stack_push(stack, &stk_size);

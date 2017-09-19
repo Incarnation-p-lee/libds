@@ -35,4 +35,4 @@ performance/performance.new.ref
 *.o
 *.d
 bin/*
-
+*.gcno
