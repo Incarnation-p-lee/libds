@@ -118,7 +118,8 @@ typedef struct adjacent              s_adjacent_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
-typedef struct topo_list       s_topo_list_t;
+typedef struct topo_list             s_topo_list_t;
+typedef struct spin_lock             s_spin_lock_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -384,6 +385,10 @@ struct graph {
     s_open_addressing_hash_t *vertex_hash;
     s_vertex_array_t         *vertex_array;
     s_edge_array_t           *edge_array;
+};
+
+struct spin_lock {
+    volatile uint32 lock;
 };
 
 
