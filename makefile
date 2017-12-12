@@ -49,6 +49,7 @@ include src/graph/makefile.mk
 include src/hash/makefile.mk
 include src/heap/makefile.mk
 include src/linked_list/makefile.mk
+include src/lock/makefile.mk
 include src/queue/makefile.mk
 include src/set/makefile.mk
 include src/sort/makefile.mk

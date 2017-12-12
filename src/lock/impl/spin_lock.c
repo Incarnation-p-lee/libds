@@ -29,7 +29,7 @@ spin_lock_illegal_p(s_spin_lock_t *spin_lock)
 
 
 static inline void
-spin_lock_destroy(s_spin_lock_t *spin_lock)
+spin_lock_destroy_i(s_spin_lock_t *spin_lock)
 {
     assert_exit(spin_lock_legal_p(spin_lock));
 
@@ -70,7 +70,7 @@ spin_lock_try_i(s_spin_lock_t *spin_lock)
 {
     assert_exit(spin_lock_legal_p(spin_lock));
 
-    SPIN_LOCK_TRY(spin_lock)
+    SPIN_LOCK_TRY(spin_lock);
 }
 
 void

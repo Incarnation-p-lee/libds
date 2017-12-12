@@ -626,6 +626,11 @@ extern void skip_linked_list_iterate(s_skip_linked_list_t *list, void (*handler)
 extern void skip_linked_list_key_set(s_skip_linked_list_t *list, sint32 key);
 extern void skip_linked_list_next_set(s_skip_linked_list_t *list, s_skip_linked_list_t *next);
 
+extern s_spin_lock_t * spin_lock_create(void);
+extern void spin_lock_destroy(s_spin_lock_t **lock);
+extern void spin_lock_release(s_spin_lock_t *spin_lock);
+extern void spin_lock_try(s_spin_lock_t *spin_lock);
+
 extern bool array_queue_empty_p(s_array_queue_t *queue);
 extern bool array_queue_full_p(s_array_queue_t *queue);
 extern bool array_queue_structure_illegal_p(s_array_queue_t *queue);
