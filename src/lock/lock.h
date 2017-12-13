@@ -3,6 +3,7 @@
 
 #define SPIN_LOCK_VAL_MAX      1
 #define SPIN_LOCK_UNLOCKED     0
+#define SPIN_LOCK_LOCKED       1
 
 #if defined(X86_64)
     #define SPIN_LOCK_TRY(spin_lock)     SPIN_LOCK_TRY_X64(spin_lock)

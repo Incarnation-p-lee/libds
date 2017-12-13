@@ -87,5 +87,7 @@
 #include "impl/utest_indirected_graph.c"
 #include "impl/utest_directed_graph.c"
 
+#include "impl/utest_spin_lock.c"
+
 #include "test_layer.h"
 

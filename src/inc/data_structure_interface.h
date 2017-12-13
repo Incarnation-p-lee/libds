@@ -626,6 +626,8 @@ extern void skip_linked_list_iterate(s_skip_linked_list_t *list, void (*handler)
 extern void skip_linked_list_key_set(s_skip_linked_list_t *list, sint32 key);
 extern void skip_linked_list_next_set(s_skip_linked_list_t *list, s_skip_linked_list_t *next);
 
+extern bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
+extern bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
 extern s_spin_lock_t * spin_lock_create(void);
 extern void spin_lock_destroy(s_spin_lock_t **lock);
 extern void spin_lock_release(s_spin_lock_t *spin_lock);

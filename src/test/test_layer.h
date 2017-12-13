@@ -1790,6 +1790,16 @@ static const struct test_layer_table directed_graph[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table spin_lock[] = {
+    {
+        "create", NULL,
+        {
+            &utest_spin_lock_create,
+            NULL,
+        },
+    },
+};
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1866,6 +1876,12 @@ static const struct test_layer_table test_graph_implement[] = {
     /* END POINT OF IMPLEMENT */
     {NULL,       NULL,               {NULL, NULL},},
 };
+
+static const struct test_layer_table test_lock_implement[] = {
+    {"spin",     spin_lock,          {NULL, NULL},},
+    /* END POINT OF IMPLEMENT */
+    {NULL,       NULL,               {NULL, NULL},},
+};
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -1884,6 +1900,7 @@ static const struct test_layer_table test_category[] = {
     {"sort",        test_sort_implement,        {NULL, NULL},},
     {"set",         test_set_implement,         {NULL, NULL},},
     {"graph",       test_graph_implement,       {NULL, NULL},},
+    {"lock",        test_lock_implement,        {NULL, NULL},},
     /* END POINT OF CATEGORY */
     {NULL,          NULL,                       {NULL, NULL},}
 };
