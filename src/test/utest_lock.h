@@ -1,0 +1,15 @@
+#ifndef HAVE_UTEST_LOCK_H
+#define HAVE_UTEST_LOCK_H
+
+#define LOCK_THREAD_MAX        10
+
+static char critical_section[LOCK_THREAD_MAX + 1];
+
+typedef struct spin_lock_sample s_spin_lock_sample_t;
+struct spin_lock_sample {
+    uint32        idx;
+    s_spin_lock_t *spin_lock;
+};
+
+#endif
+

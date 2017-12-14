@@ -19,7 +19,7 @@ obj_partial            =$(filter-out %main.o, $(obj)) # excluded main.o
 decl                   =$(subst .o,_declaration.h,$(obj_partial))
 decl_partial           =$(filter-out %test_declaration.h, $(decl))
 
-lib                    :=-lm
+lib                    :=-lm -lpthread
 lib                    +=$(if $(COVERAGE),-lgcov,)
 
 ## dependency config ##

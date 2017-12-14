@@ -5,6 +5,7 @@
 
 #include "test.h"
 #include "ptest.h"
+#include "utest.h"
 #include "ptest_reference.h"
 #include "test_result_check.h"
 #include "test_declaration.h"

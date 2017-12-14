@@ -79,7 +79,9 @@ spin_lock_release_i(s_spin_lock_t *spin_lock)
 {
     assert_exit(spin_lock_legal_ip(spin_lock));
 
-    spin_lock->lock = SPIN_LOCK_UNLOCKED;
+    if (spin_lock_locked_ip(spin_lock)) {
+        spin_lock->lock = SPIN_LOCK_UNLOCKED;
+    }
 }
 
 void
