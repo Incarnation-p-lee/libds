@@ -156,7 +156,7 @@ directed_graph_vertex_count(s_graph_t *graph)
     if (GRAPH_ILLEGAL_P(graph)) {
         return SIZE_INVALID;
     } else {
-        return graph_vertex_array_count(graph_vertex_array(graph));
+        return graph_vertex_count(graph);
     }
 }
 
@@ -704,7 +704,7 @@ directed_graph_topo_sort_i(s_graph_t *graph)
 
     assert_exit(directed_graph_structure_legal_p(graph));
 
-    vertex_count = graph_vertex_array_count(graph_vertex_array(graph));
+    vertex_count = graph_vertex_count(graph);
 
     if (vertex_count == 0) {
         pr_log_warn("Topo sort will do nothing for empty graph.\n");
@@ -728,6 +728,128 @@ directed_graph_topo_sort(s_graph_t *graph)
         return PTR_INVALID;
     } else {
         return directed_graph_topo_sort_i(graph);
+    }
+}
+
+static inline s_dijkstra_table_t *
+directed_graph_dijkstra_table_create(s_graph_t *graph)
+{
+    uint32 size;
+    s_dijkstra_table_t *dj_table;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+
+    size = graph_vertex_count(graph);
+
+    dj_table = memory_cache_allocate(sizeof(*dj_table));
+    dj_table->array = memory_cache_allocate(sizeof(*dj_table->array) * size);
+    dj_table->size = size;
+
+    return dj_table;
+}
+
+static inline void
+directed_graph_dijkstra_initial(s_graph_t *graph, s_vertex_t *vertex,
+    s_minimal_heap_t *heap, s_dijkstra_table_t *dj_table)
+{
+    uint32 i, k, limit;
+    s_vertex_t *vertex_tmp;
+    s_dijkstra_entry_t *entry;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_dijkstra_table_legal_ip(dj_table));
+    assert_exit(heap != NULL);
+
+    vertex_array = graph_vertex_array(graph);
+    limit = graph_vertex_array_limit(vertex_array);
+
+    for (i = k = 0; i < limit; i++) {
+        vertex_tmp = graph_vertex_array_vertex(vertex_array, i);
+
+        if (vertex_tmp) {
+            vertex_tmp->data = GRAPH_VERTEX_DATA(k); // Fix-Me
+            entry = graph_dijkstra_table_entry(dj_table, k++);
+
+            graph_dijkstra_entry_is_known_set(entry, false);
+            graph_dijkstra_entry_distance_set(entry, GRAPH_DISTANCE_MAX);
+            graph_dijkstra_entry_vertex_set(entry, vertex_tmp);
+            graph_dijkstra_entry_vertex_pre_set(entry, NULL);
+        }
+    }
+
+    entry = graph_vertex_to_dijkstra_entry(vertex, dj_table);
+    graph_dijkstra_entry_distance_set(entry, 0);
+    graph_dijkstra_entry_vertex_pre_set(entry, vertex);
+
+    limit = graph_dijkstra_table_limit(dj_table);
+
+    for (i = 0; i < limit; i++) {
+        entry = graph_dijkstra_table_entry(dj_table, i);
+        minimal_heap_insert(heap, entry, graph_dijkstra_entry_distance(entry));
+    }
+}
+
+static inline s_dijkstra_table_t *
+directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
+{
+    s_edge_t *edge;
+    s_adjacent_t *adjacent;
+    uint32 i, limit, distance;
+    s_minimal_heap_t *min_heap;
+    s_vertex_t *v_succ, *v_tmp;
+    s_dijkstra_table_t *dj_table;
+    s_dijkstra_entry_t *entry, *entry_tmp;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    dj_table = directed_graph_dijkstra_table_create(graph);
+    min_heap = minimal_heap_create(graph_vertex_count(graph));
+
+    directed_graph_dijkstra_initial(graph, vertex, min_heap, dj_table);
+
+    while (!minimal_heap_empty_p(min_heap)) {
+        entry = minimal_heap_remove_min(min_heap);
+        graph_dijkstra_entry_is_known_set(entry, true);
+        v_tmp = graph_dijkstra_entry_vertex(entry);
+        adjacent = graph_vertex_successor(v_tmp);
+        limit = graph_adjacent_limit(adjacent);
+
+        for (i = 0; i < limit; i++) {
+            edge = graph_adjacent_edge(adjacent, i);
+
+            if (edge) {
+                v_succ = graph_edge_successor(edge);
+                entry_tmp = graph_vertex_to_dijkstra_entry(v_succ, dj_table);
+
+                if (graph_dijkstra_entry_is_unknown_p(entry_tmp)) {
+                    distance = graph_dijkstra_entry_distance(entry);
+                    distance += graph_edge_cost(edge);
+
+                    if (distance < graph_dijkstra_entry_distance(entry_tmp)) {
+                        graph_dijkstra_entry_distance_set(entry_tmp, distance);
+                        graph_dijkstra_entry_vertex_pre_set(entry_tmp, v_tmp);
+                    }
+                }
+            }
+        }
+    }
+
+    minimal_heap_destroy(&min_heap);
+    return dj_table;
+}
+
+s_dijkstra_table_t *
+directed_graph_dijkstra(s_graph_t *graph, s_vertex_t *vertex)
+{
+    if (DIRECTED_GRAPH_ILLEGAL_P(graph)) {
+        return PTR_INVALID;
+    } else if (GRAPH_VERTEX_ILLEGAL_P(vertex)) {
+        return PTR_INVALID;
+    } else {
+        return directed_graph_dijkstra_i(graph, vertex);
     }
 }
 

@@ -15,6 +15,9 @@
 #define GRAPH_ADJACENT_REST_FCTR 30 /* 30% rest space of adjacent */
 
 #define GRAPH_EDGE_DEFAULT       1024
+#define GRAPH_DISTANCE_MAX       (uint32)(-1)
+
+#define GRAPH_VERTEX_DATA(d)     ((void *)(ptr_t)d)
 
 #if defined DEBUG
     #define GRAPH_LEGAL_P(g)                graph_structure_legal_p(g)
@@ -77,6 +80,11 @@ extern s_array_stack_t * array_stack_create(void);
 extern void array_stack_destroy(s_array_stack_t **stack);
 extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
 extern bool array_stack_empty_p(s_array_stack_t *stack);
+extern void minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice);
+extern struct minimal_heap * minimal_heap_create(uint32 capacity);
+extern void minimal_heap_destroy(struct minimal_heap **heap);
+extern bool minimal_heap_empty_p(struct minimal_heap *heap);
+extern void * minimal_heap_remove_min(struct minimal_heap *heap);
 
 #endif
 

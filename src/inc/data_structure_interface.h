@@ -111,6 +111,7 @@ typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct minimal_heap          s_minimal_heap_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
@@ -118,7 +119,9 @@ typedef struct adjacent              s_adjacent_t;
 typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
-typedef struct topo_list       s_topo_list_t;
+typedef struct topo_list             s_topo_list_t;
+typedef struct dijkstra_entry    s_dijkstra_entry_t;
+typedef struct dijkstra_table    s_dijkstra_table_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -339,6 +342,7 @@ struct vertex {
     uint32               label;
     void                 *value;
     bool                 is_visited;
+    void                 *data;      /* some algorithm may need extra data */
 
     union {
         struct {                     /* directed graph */
@@ -362,7 +366,7 @@ struct vertex_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_array_queue_t *queue;
+    s_array_queue_t *queue; /* keep the empty index value of array */
     s_vertex_t      **array;
 };
 
@@ -370,7 +374,7 @@ struct edge_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_edge_t        **array;
+    s_edge_t        **array; /* keep the empty index value of array */
     s_array_queue_t *queue;
 };
 
@@ -384,6 +388,18 @@ struct graph {
     s_open_addressing_hash_t *vertex_hash;
     s_vertex_array_t         *vertex_array;
     s_edge_array_t           *edge_array;
+};
+
+struct dijkstra_entry {
+    s_vertex_t *vertex;
+    s_vertex_t *vertex_pre;
+    bool       is_known;
+    uint32     distance;
+};
+
+struct dijkstra_table {
+    s_dijkstra_entry_t *array;
+    uint32             size;
 };
 
 
@@ -419,9 +435,14 @@ extern void swap_pointer(void **ptr_a, void **ptr_b);
 extern bool directed_graph_structure_illegal_p(s_graph_t *graph);
 extern bool directed_graph_structure_legal_p(s_graph_t *graph);
 extern bool directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor);
+extern bool graph_dijkstra_entry_illegal_p(s_dijkstra_entry_t *dj_entry);
+extern bool graph_dijkstra_entry_legal_p(s_dijkstra_entry_t *dj_entry);
+extern bool graph_dijkstra_table_illegal_p(s_dijkstra_table_t *dj_table);
+extern bool graph_dijkstra_table_legal_p(s_dijkstra_table_t *dj_table);
 extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
 extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
 extern s_array_queue_t * directed_graph_path_find(s_vertex_t *vertex_from, s_vertex_t *vertex_to);
+extern s_dijkstra_table_t * directed_graph_dijkstra(s_graph_t *graph, s_vertex_t *vertex);
 extern s_edge_array_t * directed_graph_edge_array(s_graph_t *graph);
 extern s_edge_array_t * indirected_graph_edge_array(s_graph_t *graph);
 extern s_edge_t * directed_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);
