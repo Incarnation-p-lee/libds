@@ -1812,6 +1812,13 @@ static const struct test_layer_table spin_lock[] = {
             NULL,
         },
     },
+    {
+        "release", NULL,
+        {
+            &utest_spin_lock_release,
+            NULL,
+        },
+    },
 };
 
 /*-----------------------------------------------------------------*/

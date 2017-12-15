@@ -220,6 +220,7 @@ static inline void utest_minimal_heap_decrease_nice(void);
 static inline void utest_minimal_heap_increase_nice(void);
 static inline void utest_spin_lock_create(void);
 static inline void utest_spin_lock_destroy(void);
+static inline void utest_spin_lock_release(void);
 static inline void utest_spin_lock_try(void);
 static inline void utest_splay_tree_create(void);
 static inline void utest_splay_tree_destroy(void);

@@ -67,8 +67,8 @@ utest_spin_lock_try(void)
     uint32 i;
     bool pass;
     s_spin_lock_t *spin_lock;
-    s_spin_lock_sample_t sample[LOCK_THREAD_MAX];
     pthread_t threads[LOCK_THREAD_MAX];
+    s_spin_lock_sample_t sample[LOCK_THREAD_MAX];
 
     UNIT_TEST_BEGIN(spin_lock_try);
 
@@ -113,5 +113,39 @@ utest_spin_lock_try(void)
 
     spin_lock_destroy(&spin_lock);
     UNIT_TEST_RESULT(spin_lock_try, pass);
+}
+
+static inline void
+utest_spin_lock_release(void)
+{
+    bool pass;
+    pthread_t thread;
+    s_spin_lock_t *spin_lock;
+    s_spin_lock_sample_t sample;
+
+    UNIT_TEST_BEGIN(spin_lock_release);
+
+    pass = true;
+    spin_lock = spin_lock_create();
+
+    RESULT_CHECK_bool(true, spin_lock_legal_p(spin_lock), &pass);
+    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+
+    spin_lock_try(spin_lock);
+    spin_lock_release(spin_lock);
+    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+
+    sample.idx = 0;
+    sample.spin_lock = spin_lock;
+
+    pthread_create(&thread, NULL, utest_spin_lock_thread, &sample);
+
+    spin_lock_release(spin_lock);
+    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+
+    pthread_join(thread, NULL);
+
+    spin_lock_destroy(&spin_lock);
+    UNIT_TEST_RESULT(spin_lock_release, pass);
 }
 
