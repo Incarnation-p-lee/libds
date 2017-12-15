@@ -80,7 +80,7 @@
     9. Graph
         a. directed graph           [in process]
         b. indirected graph         [in process]
-   10. Lock
+    10. Lock
         a. spin lock
         
 ----- to be continue -----
