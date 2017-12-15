@@ -40,15 +40,21 @@ utest_spin_lock_destroy(void)
 static inline void *
 utest_spin_lock_thread(void *spin_lock_sample)
 {
+    uint32 i;
     s_spin_lock_sample_t *sample;
 
     assert_exit(!complain_null_pointer_p(spin_lock_sample));
 
+    i = 0;
     sample = spin_lock_sample;
 
     spin_lock_try(sample->spin_lock);
 
-    critical_section[sample->idx] = 'A' + sample->idx;
+    while (i < LOOP_COUNT) {
+        critical_section[sample->idx] = sample->idx;
+
+        i++;
+    }
 
     spin_lock_release(sample->spin_lock);
 
@@ -97,7 +103,13 @@ utest_spin_lock_try(void)
         i++;
     }
 
-    // printf("%s\n", critical_section);
+    i = 0;
+
+    while (i < LOCK_THREAD_MAX) {
+        RESULT_CHECK_uint32(critical_section[i], i, &pass);
+
+        i++;
+    }
 
     spin_lock_destroy(&spin_lock);
     UNIT_TEST_RESULT(spin_lock_try, pass);
