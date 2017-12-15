@@ -255,6 +255,11 @@ static struct performance_test_reference performance_reference[] = {
     {"disjoint_set_union",                               0x0u, 0x0u},
     {"disjoint_set_equivalent_p",                        0x0u, 0x0u},
 
+    {"spin_lock_create",                                 0x0u, 0x0u},
+    {"spin_lock_destroy",                                0x0u, 0x0u},
+    {"spin_lock_try",                                    0x0u, 0x0u},
+    {"spin_lock_release",                                0x0u, 0x0u},
+
     {NULL,                                               0x0u, 0x0u},
 };
 

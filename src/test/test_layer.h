@@ -1795,30 +1795,31 @@ static const struct test_layer_table spin_lock[] = {
         "create", NULL,
         {
             &utest_spin_lock_create,
-            NULL,
+            &ptest_spin_lock_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_spin_lock_destroy,
-            NULL,
+            &ptest_spin_lock_destroy,
         },
     },
     {
         "try", NULL,
         {
             &utest_spin_lock_try,
-            NULL,
+            &ptest_spin_lock_try,
         },
     },
     {
         "release", NULL,
         {
             &utest_spin_lock_release,
-            NULL,
+            &ptest_spin_lock_release,
         },
     },
+    {NULL, NULL, {NULL, NULL},},
 };
 
 /*-----------------------------------------------------------------*/
