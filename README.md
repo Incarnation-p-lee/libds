@@ -43,40 +43,45 @@
 ### list
 
     The following data structure implemented in this project.
-    1. linked list
+    1. Linked list
         a. single linked list
         b. doubly linked list
-        c. skip linked list.
-    2. stack
+        c. skip linked list
+    2. Stack
         a. array stack
         b. linked stack
-    3. queue
+    3. Queue
         a. array queue
         b. stacked queue
         c. doubly end queue
-    4. tree
+    4. Tree
         a. binary search tree
         b. avl tree
         c. splay tree
         d. binary indexed tree
         e. trie tree
-    5. hash
+    5. Hash
         a. separate chain hash
         b. open addressing hash
         c. bitmap
-    6. heap
+    6. Heap
         a. minimal heap
         b. maximal heap
         c. min-max heap
         d. leftist heap
-    7. sort
+    7. Sort
         a. insertion sort
         b. shell sort
         c. heap sort
         d. merge sort
         e. quick sort
-    8. set
+    8. Set
         a. disjoint set
+    9. Graph
+        a. directed graph           [in process]
+        b. indirected graph         [in process]
+   10. Lock
+        a. spin lock
         
 ----- to be continue -----
 
