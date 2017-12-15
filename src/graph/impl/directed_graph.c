@@ -56,18 +56,6 @@ directed_graph_vertex_array(s_graph_t *graph)
     }
 }
 
-s_vertex_t *
-directed_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i)
-{
-    if (GRAPH_VERTEX_ARRAY_ILLEGAL_P(vertex_array)) {
-        return PTR_INVALID;
-    } else if (i >= graph_vertex_array_limit(vertex_array)) {
-        return PTR_INVALID;
-    } else {
-        return graph_vertex_array_vertex(vertex_array, i);
-    }
-}
-
 s_edge_array_t *
 directed_graph_edge_array(s_graph_t *graph)
 {
@@ -749,6 +737,28 @@ directed_graph_dijkstra_table_create(s_graph_t *graph)
 }
 
 static inline void
+directed_graph_dijkstra_table_destroy_i(s_dijkstra_table_t *dj_table)
+{
+    assert_exit(graph_dijkstra_table_legal_ip(dj_table));
+
+    memory_cache_free(dj_table->array);
+    memory_cache_free(dj_table);
+}
+
+void
+directed_graph_dijkstra_table_destroy(s_dijkstra_table_t **dj_table)
+{
+    if (complain_null_pointer_p(dj_table)) {
+        return;
+    } else if (graph_dijkstra_table_illegal_ip(dj_table)) {
+        return;
+    } else {
+        directed_graph_dijkstra_table_destroy_i(*dj_table);
+        *dj_table = NULL;
+    }
+}
+
+static inline void
 directed_graph_dijkstra_initial(s_graph_t *graph, s_vertex_t *vertex,
     s_minimal_heap_t *heap, s_dijkstra_table_t *dj_table)
 {
@@ -791,13 +801,37 @@ directed_graph_dijkstra_initial(s_graph_t *graph, s_vertex_t *vertex,
     }
 }
 
+static inline void
+directed_graph_dijkstra_entry_update(s_dijkstra_entry_t *entry,
+    s_dijkstra_entry_t *entry_prev, s_vertex_t *v_prev, s_edge_t *e_prev,
+    s_minimal_heap_t *heap)
+{
+    uint32 dist, offset;
+
+    assert_exit(heap != NULL);
+    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_dijkstra_entry_legal_ip(entry));
+    assert_exit(graph_dijkstra_entry_legal_ip(entry_prev));
+    assert_exit(graph_vertex_structure_legal_p(vertex_prev));
+
+    dist = graph_dijkstra_entry_distance(entry_prev) + graph_edge_cost(edge);
+
+    if (dist < graph_dijkstra_entry_distance(entry)) {
+        offset = graph_dijkstra_entry_distance(entry) - dist;
+        minimal_heap_decrease_nice(heap, entry, offset);
+
+        graph_dijkstra_entry_distance_set(entry, dist);
+        graph_dijkstra_entry_vertex_pre_set(entry, v_prev);
+    }
+}
+
 static inline s_dijkstra_table_t *
 directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
 {
     s_edge_t *edge;
+    uint32 i, limit;
     s_adjacent_t *adjacent;
-    uint32 i, limit, distance;
-    s_minimal_heap_t *min_heap;
+    s_minimal_heap_t *heap;
     s_vertex_t *v_succ, *v_tmp;
     s_dijkstra_table_t *dj_table;
     s_dijkstra_entry_t *entry, *entry_tmp;
@@ -806,12 +840,12 @@ directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
     assert_exit(graph_vertex_structure_legal_p(vertex));
 
     dj_table = directed_graph_dijkstra_table_create(graph);
-    min_heap = minimal_heap_create(graph_vertex_count(graph));
+    heap = minimal_heap_create(graph_vertex_count(graph));
 
-    directed_graph_dijkstra_initial(graph, vertex, min_heap, dj_table);
+    directed_graph_dijkstra_initial(graph, vertex, heap, dj_table);
 
-    while (!minimal_heap_empty_p(min_heap)) {
-        entry = minimal_heap_remove_min(min_heap);
+    while (!minimal_heap_empty_p(heap)) {
+        entry = minimal_heap_remove_min(heap);
         graph_dijkstra_entry_is_known_set(entry, true);
         v_tmp = graph_dijkstra_entry_vertex(entry);
         adjacent = graph_vertex_successor(v_tmp);
@@ -825,6 +859,7 @@ directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
                 entry_tmp = graph_vertex_to_dijkstra_entry(v_succ, dj_table);
 
                 if (graph_dijkstra_entry_is_unknown_p(entry_tmp)) {
+                    graph_dijkstra_entry_update(entry, entry_tmp, v_tmp, heap);
                     distance = graph_dijkstra_entry_distance(entry);
                     distance += graph_edge_cost(edge);
 
@@ -837,7 +872,7 @@ directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
         }
     }
 
-    minimal_heap_destroy(&min_heap);
+    minimal_heap_destroy(&heap);
     return dj_table;
 }
 

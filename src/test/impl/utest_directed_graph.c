@@ -272,7 +272,7 @@ utest_directed_graph_path_find(void)
     limit = directed_graph_vertex_array_limit(vertex_array);
 
     while (i < limit) {
-        vertex = directed_vertex_array_vertex(vertex_array, i);
+        vertex = directed_graph_vertex_array_vertex(vertex_array, i);
 
         if (vertex && vertex_from == NULL) {
             vertex_from = vertex;
@@ -295,5 +295,40 @@ utest_directed_graph_path_find(void)
 
     directed_graph_destroy(&graph);
     UNIT_TEST_RESULT(directed_graph_path_find, pass);
+}
+
+static inline void
+utest_directed_graph_dijkstra(void)
+{
+    bool pass;
+    uint32 i, limit;
+    s_graph_t *graph;
+    s_vertex_t *vertex;
+    s_dijkstra_table_t *dj_table;
+    s_vertex_array_t *vertex_array;
+
+    UNIT_TEST_BEGIN(directed_graph_dijkstra);
+
+    pass = true;
+    graph = test_directed_graph_sample(0x10, 0x9);
+
+    i = 0;
+    vertex_array = directed_graph_vertex_array(graph);
+    limit = directed_graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = directed_graph_vertex_array_vertex(vertex_array);
+
+        if (vertex) {
+            break;
+        }
+
+        i++;
+    }
+
+    dj_table = directed_graph_dijkstra(graph, vertex);
+
+    directed_graph_destroy(&graph);
+    UNIT_TEST_RESULT(directed_graph_dijkstra, pass);
 }
 
