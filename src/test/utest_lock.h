@@ -11,7 +11,7 @@ struct spin_lock_sample {
     s_spin_lock_t *spin_lock;
 };
 
-static uint32 critical_section[LOCK_THREAD_MAX + 1];
+static uint32 critical_section[LOCK_THREAD_MAX];
 
 #endif
 
