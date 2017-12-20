@@ -489,7 +489,7 @@ struct graph {
 };
 
 struct spin_lock {
-    volatile uint32 lock;
+    volatile uint32 shared_lock;
 };
 
 #endif

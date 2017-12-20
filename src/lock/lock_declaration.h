@@ -8,14 +8,17 @@
 
 #endif
 
+bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
 s_spin_lock_t * spin_lock_create(void);
 static inline bool spin_lock_illegal_ip(s_spin_lock_t *spin_lock);
 static inline bool spin_lock_legal_ip(s_spin_lock_t *spin_lock);
 static inline bool spin_lock_locked_ip(s_spin_lock_t *spin_lock);
+static inline uint32 spin_lock_shared_lock(s_spin_lock_t *spin_lock);
 static inline void spin_lock_destroy_i(s_spin_lock_t *spin_lock);
 static inline void spin_lock_release_i(s_spin_lock_t *spin_lock);
+static inline void spin_lock_shared_lock_clear(s_spin_lock_t *spin_lock);
 static inline void spin_lock_try_i(s_spin_lock_t *spin_lock);
 void spin_lock_destroy(s_spin_lock_t **lock);
 void spin_lock_release(s_spin_lock_t *spin_lock);
