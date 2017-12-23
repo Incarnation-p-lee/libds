@@ -38,6 +38,12 @@
 #define dp_strlen              strlen
 #define dp_strncmp             strncmp
 #define dp_strncpy             strncpy
+#define dp_thread_id_t         pthread_t
+#define dp_thread_id           pthread_self
+#define dp_thread_create       pthread_create
+#define dp_thread_join         pthread_join
+#define dp_thread_signal       pthread_kill
+#define dp_sleep               pause
 
 #elif defined KERNEL
 
