@@ -12,6 +12,7 @@
 #include <stddef.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <signal.h>
 
 #define dp_atoll               atoll
 #define dp_exit                exit

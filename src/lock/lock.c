@@ -8,4 +8,5 @@
 #include "lock_declaration.h"
 
 #include "impl/spin_lock.c"
+#include "impl/semaphore.c"
 
