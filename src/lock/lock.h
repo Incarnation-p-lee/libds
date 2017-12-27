@@ -38,7 +38,7 @@
 
     #define SEMAPHORE_DOWN_X64(spin_lock) \
         asm volatile (                    \
-            "lock;decl %0\n\t"             \
+            "lock;decl %0\n\t"            \
             :"+m"(semaphore->val)         \
             :                             \
             :)
@@ -47,7 +47,7 @@
 
     #define SEMAPHORE_UP_X64(spin_lock) \
         asm volatile (                  \
-            "lock;incl %0\n\t"           \
+            "lock;incl %0\n\t"          \
             :"+m"(semaphore->val)       \
             :                           \
             :)

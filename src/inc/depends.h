@@ -44,6 +44,10 @@
 #define dp_thread_join         pthread_join
 #define dp_thread_signal       pthread_kill
 #define dp_sleep               pause
+#define dp_sigaction           sigaction
+#define DP_RESETHAND           SA_RESETHAND
+
+typedef struct sigaction       s_sigaction_t;
 
 #elif defined KERNEL
 

@@ -22,6 +22,14 @@ semaphore_val(s_semaphore_t *semaphore)
     return semaphore->val;
 }
 
+static void
+semaphore_sigcont_handler(sint32 signum)
+{
+    if (signum != SIGCONT) {
+        assert_not_reached("Other signal invoked SIGCONT handler");
+    }
+}
+
 s_semaphore_t *
 semaphore_create(uint32 val)
 {
@@ -32,6 +40,12 @@ semaphore_create(uint32 val)
     semaphore->val = val;
     semaphore->spin_lock = spin_lock_create();
     semaphore->sleep_queue = array_queue_create();
+    semaphore->action = memory_cache_allocate(sizeof(*semaphore->action));
+
+    semaphore->action->sa_flags = SA_NODEFER;
+    semaphore->action->sa_handler = semaphore_sigcont_handler;
+
+    dp_sigaction(SIGCONT, semaphore->action, NULL);
 
     return semaphore;
 }
@@ -46,7 +60,7 @@ semaphore_legal_ip(s_semaphore_t *semaphore)
     } else if (array_queue_structure_illegal_p(semaphore->sleep_queue)) {
         return false;
     } else {
-        return false;
+        return true;
     }
 }
 
@@ -59,7 +73,7 @@ semaphore_illegal_ip(s_semaphore_t *semaphore)
 bool
 semaphore_legal_p(s_semaphore_t *semaphore)
 {
-    return !semaphore_legal_ip(semaphore);
+    return semaphore_legal_ip(semaphore);
 }
 
 bool
@@ -76,6 +90,7 @@ semaphore_destroy_i(s_semaphore_t *semaphore)
     spin_lock_destroy(&semaphore->spin_lock);
     array_queue_destroy(&semaphore->sleep_queue);
 
+    memory_cache_free(semaphore->action);
     memory_cache_free(semaphore);
 }
 
@@ -140,8 +155,8 @@ semaphore_up_i(s_semaphore_t *semaphore)
     }
 
     id = (dp_thread_id_t)array_queue_leave(semaphore_sleep_queue(semaphore));
-
     spin_lock_release(semaphore_spin_lock(semaphore));
+
     dp_thread_signal(id, SIGCONT);
 }
 

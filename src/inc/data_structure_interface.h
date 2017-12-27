@@ -396,6 +396,7 @@ struct semaphore {
     volatile sint32 val;
     s_spin_lock_t   *spin_lock;
     s_array_queue_t *sleep_queue;
+    s_sigaction_t   *action;
 };
 
 

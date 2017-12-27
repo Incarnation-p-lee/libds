@@ -31,6 +31,7 @@ static inline void spin_lock_destroy_i(s_spin_lock_t *spin_lock);
 static inline void spin_lock_release_i(s_spin_lock_t *spin_lock);
 static inline void spin_lock_shared_lock_clear(s_spin_lock_t *spin_lock);
 static inline void spin_lock_try_i(s_spin_lock_t *spin_lock);
+static void semaphore_sigcont_handler(sint32 signum);
 void semaphore_destroy(s_semaphore_t **semaphore);
 void semaphore_down(s_semaphore_t *semaphore);
 void semaphore_up(s_semaphore_t *semaphore);
