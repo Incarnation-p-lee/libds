@@ -76,6 +76,8 @@
 #define MAX_S32(x, y)    ((sint32)(x) > (sint32)(y) ? (sint32)(x) : (sint32)(y))
 #define MIN_S32(x, y)    ((sint32)(x) < (sint32)(y) ? (sint32)(x) : (sint32)(y))
 
+#define U32_MAX          ((uint32)-1)
+
 #define UINT32_IDX_BIT(op, idx) ((op >> (idx)) & 1u)
 #define SINT64_ABS(x)           (((sint64)(x) > 0) ? (x) : -(x))
 #define TO_PTR(p)               ((void *)(ptr_t)(p))

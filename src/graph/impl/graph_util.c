@@ -126,13 +126,13 @@ graph_edge_cost(s_edge_t *edge)
     return edge->cost;
 }
 
-// static inline void
-// graph_edge_cost_set(s_edge_t *edge, sint32 cost)
-// {
-//     assert_exit(graph_edge_structure_legal_p(edge));
-// 
-//     edge->cost = cost;
-// }
+static inline void
+graph_edge_cost_set(s_edge_t *edge, sint32 cost)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    edge->cost = cost;
+}
 
 static inline uint32
 graph_edge_index(s_edge_t *edge)
@@ -141,6 +141,30 @@ graph_edge_index(s_edge_t *edge)
 
     return edge->index;
 }
+
+static inline void
+graph_edge_is_visited_set(s_edge_t *edge, bool is_visited)
+{
+    assert_exit(graph_edge_structure_legal_p(edge));
+
+    edge->is_visited = is_visited;
+}
+
+// static inline bool
+// graph_edge_is_visited_p(s_edge_t *edge)
+// {
+//     assert_exit(graph_edge_structure_legal_p(edge));
+// 
+//     return edge->is_visited;
+// }
+
+// static inline bool
+// graph_edge_is_unvisited_p(s_edge_t *edge)
+// {
+//     assert_exit(graph_edge_structure_legal_p(edge));
+// 
+//     return !graph_edge_is_visited_p(edge);
+// }
 
 static inline void
 graph_edge_cleanup(s_edge_t *edge)
@@ -714,10 +738,6 @@ graph_dijkstra_entry_legal_ip(s_dijkstra_entry_t *dj_entry)
 {
     if (dj_entry == NULL) {
         return false;
-    } else if (dj_entry->vertex == NULL) {
-        return false;
-    } else if (dj_entry->vertex_pre == NULL) {
-        return false;
     } else {
         return true;
     }
@@ -757,13 +777,13 @@ graph_dijkstra_entry_vertex_set(s_dijkstra_entry_t *dj_entry, s_vertex_t *v)
     dj_entry->vertex = v;
 }
 
-// static inline s_vertex_t *
-// graph_dijkstra_entry_vertex_pre(s_dijkstra_entry_t *dj_entry)
-// {
-//     assert_exit(graph_dijkstra_entry_legal_ip(dj_entry));
-// 
-//     return dj_entry->vertex_pre;
-// }
+static inline s_vertex_t *
+graph_dijkstra_entry_vertex_pre(s_dijkstra_entry_t *dj_entry)
+{
+    assert_exit(graph_dijkstra_entry_legal_ip(dj_entry));
+
+    return dj_entry->vertex_pre;
+}
 
 static inline void
 graph_dijkstra_entry_vertex_pre_set(s_dijkstra_entry_t *dj_entry,
@@ -782,11 +802,11 @@ graph_dijkstra_entry_is_known_p(s_dijkstra_entry_t *dj_entry)
     return dj_entry->is_known;
 }
 
-static inline bool
-graph_dijkstra_entry_is_unknown_p(s_dijkstra_entry_t *dj_entry)
-{
-    return !graph_dijkstra_entry_is_known_p(dj_entry);
-}
+// static inline bool
+// graph_dijkstra_entry_is_unknown_p(s_dijkstra_entry_t *dj_entry)
+// {
+//     return !graph_dijkstra_entry_is_known_p(dj_entry);
+// }
 
 static inline void
 graph_dijkstra_entry_is_known_set(s_dijkstra_entry_t *dj_entry, bool is_known)
@@ -909,5 +929,86 @@ graph_vertex_to_dijkstra_entry(s_vertex_t *vertex, s_dijkstra_table_t *dj_table)
     assert_exit(idx < graph_dijkstra_table_limit(dj_table));
 
     return graph_dijkstra_table_entry(dj_table, idx);
+}
+
+static inline bool
+graph_paths_legal_ip(s_graph_paths_t *paths)
+{
+    if (NULL_PTR_P(paths)) {
+        return false;
+    } else if (paths->vertex_from == NULL) {
+        return false;
+    } else if (paths->vertex_to == NULL) {
+        return false;
+    } else if (array_queue_structure_illegal_p(paths->queue)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+graph_paths_illegal_ip(s_graph_paths_t *paths)
+{
+    return !graph_paths_legal_ip(paths);
+}
+
+static inline s_graph_paths_t *
+graph_paths_create(s_vertex_t *vertex_from, s_vertex_t *vertex_to)
+{
+    s_graph_paths_t *paths;
+
+    assert_exit(graph_vertex_structure_legal_p(vertex_from));
+    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+
+    paths = memory_cache_allocate(sizeof(*paths));
+
+    paths->vertex_from = vertex_from;
+    paths->vertex_to = vertex_to;
+    paths->queue = array_queue_create();
+
+    return paths;
+}
+
+static inline void
+graph_paths_destroy(s_graph_paths_t *graph_paths)
+{
+    s_array_queue_t *queue_paths, *path;
+
+    assert_exit(graph_paths_legal_ip(graph_paths));
+
+    queue_paths = graph_paths_queue(graph_paths);
+
+    while (!array_queue_empty_p(queue_paths)) {
+        path = array_queue_leave(queue_paths);
+        array_queue_destroy(&path);
+    }
+
+    array_queue_destroy(&queue_paths);
+    memory_cache_free(graph_paths);
+}
+
+static inline s_vertex_t *
+graph_paths_vertex_from(s_graph_paths_t *paths)
+{
+    assert_exit(graph_paths_legal_ip(paths));
+
+    return paths->vertex_from;
+}
+
+static inline s_vertex_t *
+graph_paths_vertex_to(s_graph_paths_t *paths)
+{
+    assert_exit(graph_paths_legal_ip(paths));
+
+    return paths->vertex_to;
+}
+
+static inline s_array_queue_t *
+graph_paths_queue(s_graph_paths_t *paths)
+{
+    assert_exit(graph_paths_legal_ip(paths));
+
+    return paths->queue;
 }
 

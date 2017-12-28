@@ -224,7 +224,7 @@ utest_directed_graph_topo_sort(void)
 }
 
 static inline bool
-utest_directed_graph_path_exist_p(s_array_queue_t *queue)
+utest_directed_graph_valid_path_p(s_array_queue_t *queue)
 {
     bool is_succ;
     s_vertex_t *vertex;
@@ -249,23 +249,50 @@ utest_directed_graph_path_exist_p(s_array_queue_t *queue)
     return true;
 }
 
+static inline bool
+utest_directed_graph_paths_exist_p(s_graph_paths_t *paths)
+{
+    s_array_queue_t *path;
+    s_array_queue_t *paths_queue;
+    s_array_iterator_t *iterator;
+
+    assert_exit(directed_graph_paths_legal_p(paths));
+
+    paths_queue = directed_graph_paths_queue(paths);
+    iterator = array_queue_iterator_obtain(paths_queue);
+    assert_exit(NON_NULL_PTR_P(iterator));
+
+    iterator->fp_index_initial(paths_queue);
+
+    while (iterator->fp_next_exist_p(paths_queue)) {
+        path = iterator->fp_next_obtain(paths_queue);
+
+        if (!utest_directed_graph_valid_path_p(path)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 static inline void
-utest_directed_graph_path_find(void)
+utest_directed_graph_paths_find(void)
 {
     bool pass;
     bool is_existed;
     uint32 i, limit;
     s_graph_t *graph;
-    s_array_queue_t *path;
+    s_graph_paths_t *paths;
     s_vertex_array_t *vertex_array;
     s_vertex_t *vertex_from, *vertex_to, *vertex;
 
     pass = true;
     vertex_from = vertex_to = NULL;
-    UNIT_TEST_BEGIN(directed_graph_path_find);
+    UNIT_TEST_BEGIN(directed_graph_paths_find);
 
     graph = test_directed_graph_sample(0x36d2, 0x2576);
-    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_path_find(NULL, NULL), &pass);
+    paths = directed_graph_paths_find(graph, NULL, NULL);
+    RESULT_CHECK_pointer(PTR_INVALID, paths, &pass);
 
     i = 0;
     vertex_array = directed_graph_vertex_array(graph);
@@ -279,54 +306,128 @@ utest_directed_graph_path_find(void)
         } else if (vertex && vertex_to == NULL) {
             vertex_to = vertex;
         } else {
-            path = directed_graph_path_find(vertex_from, vertex_to);
+            paths = directed_graph_paths_find(graph, vertex_from, vertex_to);
 
-            if (path) {
-                is_existed = utest_directed_graph_path_exist_p(path);
+            if (directed_graph_paths_legal_p(paths)) {
+                is_existed = utest_directed_graph_paths_exist_p(paths);
                 RESULT_CHECK_bool(true, is_existed, &pass);
 
                 vertex_from = vertex_to;
                 vertex_to = NULL;
             }
+
+            directed_graph_paths_destroy(&paths);
         }
 
         i++;
     }
 
     directed_graph_destroy(&graph);
-    UNIT_TEST_RESULT(directed_graph_path_find, pass);
+    UNIT_TEST_RESULT(directed_graph_paths_find, pass);
+}
+
+static inline uint32
+utest_directed_graph_minimal_path(s_graph_paths_t *paths)
+{
+    uint32 len, len_tmp;
+    s_array_queue_t *path;
+    s_array_queue_t *paths_queue;
+    s_array_iterator_t *iterator;
+
+    assert_exit(directed_graph_paths_legal_p(paths));
+
+    len = U32_MAX;
+
+    paths_queue = directed_graph_paths_queue(paths);
+    iterator = array_queue_iterator_obtain(paths_queue);
+
+    iterator->fp_index_initial(paths_queue);
+
+    while (iterator->fp_next_exist_p(paths_queue)) {
+        path = iterator->fp_next_obtain(paths_queue);
+        len_tmp = directed_graph_path_length(path);
+
+        if (len_tmp < len) {
+            len = len_tmp;
+        }
+    }
+
+    return len;
+}
+
+static inline bool
+utest_directed_graph_dijkstra_valid_p(s_graph_t *graph, s_vertex_t *vertex,
+    s_dijkstra_table_t *dj_table)
+{
+    uint32 i, limit;
+    uint32 distance, len;
+    s_graph_paths_t *paths;
+    s_dijkstra_entry_t *dj_entry;
+    s_vertex_t *vertex_from, *vertex_to;
+
+    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_dijkstra_table_legal_p(dj_table));
+
+    vertex_from = vertex;
+
+    limit = directed_graph_dijkstra_table_limit(dj_table);
+
+    for (i = 0; i < limit; i++) {
+        dj_entry = directed_graph_dijkstra_table_entry(dj_table, i);
+        vertex_to = directed_graph_dijkstra_entry_vertex(dj_entry);
+
+        if (vertex_to == vertex_from) {
+            continue;
+        }
+
+        paths = directed_graph_paths_find(graph, vertex_from, vertex_to);
+
+        if (directed_graph_paths_legal_p(paths)) {
+            len = utest_directed_graph_minimal_path(paths);
+            distance = directed_graph_dijkstra_entry_distance(dj_entry);
+
+            if (len != distance) {
+                return false;
+            }
+        }
+
+        directed_graph_paths_destroy(&paths);
+    }
+
+    return true;
 }
 
 static inline void
 utest_directed_graph_dijkstra(void)
 {
-    bool pass;
     uint32 i, limit;
     s_graph_t *graph;
     s_vertex_t *vertex;
-    s_dijkstra_table_t *dj_table;
+    bool pass, is_valid;
+    s_dijkstra_table_t *table;
     s_vertex_array_t *vertex_array;
 
     UNIT_TEST_BEGIN(directed_graph_dijkstra);
 
     pass = true;
-    graph = test_directed_graph_sample(0x10, 0x9);
+    graph = test_directed_graph_connected_sample(0x20, 0x7);
 
-    i = 0;
+    vertex = NULL;
     vertex_array = directed_graph_vertex_array(graph);
     limit = directed_graph_vertex_array_limit(vertex_array);
 
-    while (i < limit) {
-        vertex = directed_graph_vertex_array_vertex(vertex_array);
+    for (i = 0; i < limit; i++) {
+        vertex = directed_graph_vertex_array_vertex(vertex_array, i);
 
-        if (vertex) {
-            break;
+        if (vertex == NULL) {
+            continue;
         }
 
-        i++;
+        table = directed_graph_dijkstra(graph, vertex);
+        is_valid = utest_directed_graph_dijkstra_valid_p(graph, vertex, table);
+        RESULT_CHECK_bool(true, is_valid, &pass);
+        directed_graph_dijkstra_table_destroy(&table);
     }
-
-    dj_table = directed_graph_dijkstra(graph, vertex);
 
     directed_graph_destroy(&graph);
     UNIT_TEST_RESULT(directed_graph_dijkstra, pass);

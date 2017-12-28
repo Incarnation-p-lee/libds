@@ -61,6 +61,30 @@ graph_vertex_destroy(s_vertex_t *vertex)
     memory_cache_free(vertex);
 }
 
+static inline void
+graph_vertex_is_visited_set(s_vertex_t *vertex, bool is_visited)
+{
+    assert_exit(graph_vertex_structure_legal_p(vertex));
+
+    vertex->is_visited = is_visited;
+}
+
+// static inline bool
+// graph_vertex_is_visited_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     return vertex->is_visited;
+// }
+
+// static inline bool
+// graph_vertex_is_unvisited_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_structure_legal_p(vertex));
+// 
+//     return !graph_vertex_is_visited_p(vertex);
+// }
+
 static inline s_vertex_array_t *
 graph_vertex_array_create(void)
 {
@@ -454,5 +478,53 @@ graph_topo_list_remove(s_topo_list_t *node)
     list = &node->list;
 
     doubly_linked_list_remove(&list);
+}
+
+static inline void
+graph_vertex_array_visited_cleanup(s_graph_t *graph)
+{
+    uint32 i, limit;
+    s_vertex_t *vertex;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(graph_structure_legal_p(graph));
+
+    i = 0;
+    vertex_array = graph_vertex_array(graph);
+    limit = graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = graph_vertex_array_vertex(vertex_array, i);
+
+        if (vertex) {
+            graph_vertex_is_visited_set(vertex, false);
+        }
+
+        i++;
+    }
+}
+
+static inline void
+graph_edge_array_visited_cleanup(s_graph_t *graph)
+{
+    uint32 i, limit;
+    s_edge_t *edge;
+    s_edge_array_t *edge_array;
+
+    assert_exit(graph_structure_legal_p(graph));
+
+    i = 0;
+    edge_array = graph_edge_array(graph);
+    limit = graph_edge_array_limit(edge_array);
+
+    while (i < limit) {
+        edge = graph_edge_array_edge(edge_array, i);
+
+        if (edge) {
+            graph_edge_is_visited_set(edge, false);
+        }
+
+        i++;
+    }
 }
 

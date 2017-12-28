@@ -425,3 +425,38 @@ binary_heap_structure_legal_p(struct binary_heap *heap)
     }
 }
 
+static inline bool
+binary_heap_structure_illegal_p(struct binary_heap *heap)
+{
+    return !binary_heap_structure_legal_p(heap);
+}
+
+static inline uint32
+binary_heap_index_limit(struct binary_heap *heap)
+{
+    assert_exit(binary_heap_structure_legal_p(heap));
+
+    return INDEX_LAST(heap) + 1;
+}
+
+static inline uint32
+binary_heap_find_index(struct binary_heap *heap, void *val)
+{
+    uint32 i, limit;
+
+    assert_exit(binary_heap_structure_legal_p(heap));
+
+    i = INDEX_ROOT;
+    limit = binary_heap_index_limit(heap);
+
+    while (i < limit) {
+        if (val == HEAP_VAL(heap, i)) {
+            return i;
+        }
+
+        i++;
+    }
+
+    return INDEX_INVALID;
+}
+

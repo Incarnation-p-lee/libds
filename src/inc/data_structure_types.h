@@ -98,8 +98,9 @@ typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
 typedef struct topo_list             s_topo_list_t;
-typedef struct dijkstra_entry    s_dijkstra_entry_t;
-typedef struct dijkstra_table    s_dijkstra_table_t;
+typedef struct graph_paths           s_graph_paths_t;
+typedef struct dijkstra_entry        s_dijkstra_entry_t;
+typedef struct dijkstra_table        s_dijkstra_table_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -420,6 +421,7 @@ struct disjoint_set {
 struct edge {
     uint32             index;      /* edge index in edge array */
     sint32             cost;
+    bool               is_visited;
 
     union {
         struct {                   /* directed graph */
@@ -447,8 +449,8 @@ struct vertex {
 
     union {
         struct {                     /* directed graph */
-            s_adjacent_t *precursor;
             s_adjacent_t *successor;
+            s_adjacent_t *precursor;
         };
         s_adjacent_t     *adjacent;  /* indirected graph */
     };
@@ -489,6 +491,12 @@ struct graph {
     s_open_addressing_hash_t *vertex_hash;
     s_vertex_array_t         *vertex_array;
     s_edge_array_t           *edge_array;
+};
+
+struct graph_paths {
+    s_vertex_t      *vertex_from;
+    s_vertex_t      *vertex_to;
+    s_array_queue_t *queue;
 };
 
 struct dijkstra_entry {
