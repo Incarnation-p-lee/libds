@@ -337,3 +337,12 @@ test_directed_graph_sample(uint64 range, uint32 size)
     return graph;
 }
 
+static inline void
+test_lock_critical_section_init(void)
+{
+    uint32 count;
+
+    count = sizeof(critical_section[0]) * LOCK_THREAD_MAX;
+    dp_memset(critical_section, 0, count);
+}
+
