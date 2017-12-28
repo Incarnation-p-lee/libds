@@ -28,9 +28,28 @@ spin_lock_create(void)
     s_spin_lock_t *spin_lock;
 
     spin_lock = memory_cache_allocate(sizeof(*spin_lock));
-    spin_lock->shared_lock = SPIN_LOCK_UNLOCKED;
+
+    spin_lock_initial_i(spin_lock);
 
     return spin_lock;
+}
+
+static inline void
+spin_lock_initial_i(s_spin_lock_t *spin_lock)
+{
+    assert_exit(NON_NULL_PTR_P(spin_lock));
+
+    spin_lock->shared_lock = SPIN_LOCK_UNLOCKED;
+}
+
+void
+spin_lock_initial(s_spin_lock_t *spin_lock)
+{
+    if (NULL_PTR_P(spin_lock)) {
+        return;
+    } else {
+        spin_lock_initial_i(spin_lock);
+    }
 }
 
 static inline bool

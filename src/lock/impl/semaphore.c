@@ -3,7 +3,7 @@ semaphore_spin_lock(s_semaphore_t *semaphore)
 {
     assert_exit(semaphore_legal_ip(semaphore));
 
-    return semaphore->spin_lock;
+    return &semaphore->spin_lock;
 }
 
 static inline s_array_queue_t *
@@ -38,14 +38,12 @@ semaphore_create(uint32 val)
     semaphore = memory_cache_allocate(sizeof(*semaphore));
 
     semaphore->val = val;
-    semaphore->spin_lock = spin_lock_create();
     semaphore->sleep_queue = array_queue_create();
-    semaphore->action = memory_cache_allocate(sizeof(*semaphore->action));
+    semaphore->act_new.sa_flags = SA_NODEFER;
+    semaphore->act_new.sa_handler = semaphore_sigcont_handler;
 
-    semaphore->action->sa_flags = SA_NODEFER;
-    semaphore->action->sa_handler = semaphore_sigcont_handler;
-
-    dp_sigaction(SIGCONT, semaphore->action, NULL);
+    spin_lock_initial(&semaphore->spin_lock);
+    dp_sigaction(SIGCONT, &semaphore->act_new, &semaphore->act_old);
 
     return semaphore;
 }
@@ -55,7 +53,7 @@ semaphore_legal_ip(s_semaphore_t *semaphore)
 {
     if (complain_null_pointer_p(semaphore)) {
         return false;
-    } else if (spin_lock_illegal_p(semaphore->spin_lock)) {
+    } else if (spin_lock_illegal_p(&semaphore->spin_lock)) {
         return false;
     } else if (array_queue_structure_illegal_p(semaphore->sleep_queue)) {
         return false;
@@ -87,10 +85,8 @@ semaphore_destroy_i(s_semaphore_t *semaphore)
 {
     assert_exit(semaphore_legal_ip(semaphore));
 
-    spin_lock_destroy(&semaphore->spin_lock);
+    dp_sigaction(SIGCONT, &semaphore->act_old, &semaphore->act_new);
     array_queue_destroy(&semaphore->sleep_queue);
-
-    memory_cache_free(semaphore->action);
     memory_cache_free(semaphore);
 }
 

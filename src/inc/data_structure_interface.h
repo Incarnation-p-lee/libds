@@ -394,9 +394,10 @@ struct spin_lock {
 
 struct semaphore {
     volatile sint32 val;
-    s_spin_lock_t   *spin_lock;
+    s_spin_lock_t   spin_lock;
     s_array_queue_t *sleep_queue;
-    s_sigaction_t   *action;
+    s_sigaction_t   act_new;
+    s_sigaction_t   act_old;
 };
 
 
@@ -645,6 +646,7 @@ extern void semaphore_destroy(s_semaphore_t **semaphore);
 extern void semaphore_down(s_semaphore_t *semaphore);
 extern void semaphore_up(s_semaphore_t *semaphore);
 extern void spin_lock_destroy(s_spin_lock_t **lock);
+extern void spin_lock_initial(s_spin_lock_t *spin_lock);
 extern void spin_lock_release(s_spin_lock_t *spin_lock);
 extern void spin_lock_try(s_spin_lock_t *spin_lock);
 
