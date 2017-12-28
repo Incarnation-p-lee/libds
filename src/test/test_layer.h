@@ -1851,6 +1851,13 @@ static const struct test_layer_table semaphore[] = {
             NULL,
         },
     },
+    {
+        "available_p", NULL,
+        {
+            &utest_semaphore_available_p,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

@@ -8,6 +8,7 @@
 
 #endif
 
+bool semaphore_available_p(s_semaphore_t *semaphore);
 bool semaphore_illegal_p(s_semaphore_t *semaphore);
 bool semaphore_legal_p(s_semaphore_t *semaphore);
 bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
@@ -15,6 +16,7 @@ bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
 s_semaphore_t * semaphore_create(uint32 val);
 s_spin_lock_t * spin_lock_create(void);
+static inline bool semaphore_available_ip(s_semaphore_t *semaphore);
 static inline bool semaphore_illegal_ip(s_semaphore_t *semaphore);
 static inline bool semaphore_legal_ip(s_semaphore_t *semaphore);
 static inline bool spin_lock_illegal_ip(s_spin_lock_t *spin_lock);

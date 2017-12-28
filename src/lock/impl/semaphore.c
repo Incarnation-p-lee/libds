@@ -165,3 +165,33 @@ semaphore_up(s_semaphore_t *semaphore)
     }
 }
 
+static inline bool
+semaphore_available_ip(s_semaphore_t *semaphore)
+{
+    bool is_available;
+
+    assert_exit(semaphore_legal_ip(semaphore));
+
+    spin_lock_try(semaphore_spin_lock(semaphore));
+
+    if (semaphore_val(semaphore) > 0) {
+        is_available = true;
+    } else {
+        is_available = false;
+    }
+
+    spin_lock_release(semaphore_spin_lock(semaphore));
+
+    return is_available;
+}
+
+bool
+semaphore_available_p(s_semaphore_t *semaphore)
+{
+    if (SEMAPHORE_ILLEGAL_P(semaphore)) {
+        return false;
+    } else {
+        return semaphore_available_ip(semaphore);
+    }
+}
+

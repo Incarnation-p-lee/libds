@@ -29,6 +29,11 @@ utest_semaphore_destroy(void)
 
     val = 4;
     pass = true;
+    semaphore = NULL;
+
+    semaphore_destroy(NULL);
+    semaphore_destroy(&semaphore);
+
     semaphore = semaphore_create(val);
 
     RESULT_CHECK_bool(true, semaphore_legal_p(semaphore), &pass);
@@ -96,7 +101,7 @@ utest_semaphore_down(void)
 
     UNIT_TEST_BEGIN(semaphore_down);
 
-    val = 0x8;
+    val = 8;
     pass = true;
     semaphore_down(NULL);
     semaphore = semaphore_create(val);
@@ -154,7 +159,7 @@ utest_semaphore_up(void)
 
     UNIT_TEST_BEGIN(semaphore_up);
 
-    val = 0x8;
+    val = 4;
     pass = true;
     semaphore_up(NULL);
     semaphore = semaphore_create(val);
@@ -195,5 +200,53 @@ utest_semaphore_up(void)
 
     semaphore_destroy(&semaphore);
     UNIT_TEST_RESULT(semaphore_up, pass);
+}
+
+static inline void
+utest_semaphore_available_p(void)
+{
+    bool pass;
+    uint32 val, i;
+    s_semaphore_t *semaphore;
+    dp_thread_id_t ids[LOCK_THREAD_MAX];
+    s_semaphore_sample_t sample[LOCK_THREAD_MAX];
+
+    UNIT_TEST_BEGIN(semaphore_available_p);
+
+    val = 3;
+    pass = true;
+    semaphore = semaphore_create(val);
+
+    RESULT_CHECK_bool(false, semaphore_available_p(NULL), &pass);
+    RESULT_CHECK_bool(true, semaphore_available_p(semaphore), &pass);
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        sample[i].idx = i;
+        sample[i].semaphore = semaphore;
+    }
+
+    for (i = 0; i < val; i++) {
+        dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
+        dp_thread_join(ids[i], NULL);
+    }
+
+    for (i = val; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
+    }
+
+    RESULT_CHECK_bool(false, semaphore_available_p(semaphore), &pass);
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        semaphore_up(semaphore);
+    }
+
+    RESULT_CHECK_bool(true, semaphore_available_p(semaphore), &pass);
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_join(ids[i], NULL);
+    }
+
+    semaphore_destroy(&semaphore);
+    UNIT_TEST_RESULT(semaphore_available_p, pass);
 }
 

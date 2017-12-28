@@ -225,6 +225,7 @@ static inline void utest_min_max_heap_depth(void);
 static inline void utest_min_max_heap_increase_nice(void);
 static inline void utest_minimal_heap_decrease_nice(void);
 static inline void utest_minimal_heap_increase_nice(void);
+static inline void utest_semaphore_available_p(void);
 static inline void utest_semaphore_create(void);
 static inline void utest_semaphore_destroy(void);
 static inline void utest_semaphore_down(void);
