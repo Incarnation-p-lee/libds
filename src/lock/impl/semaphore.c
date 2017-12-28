@@ -104,8 +104,6 @@ semaphore_destroy(s_semaphore_t **semaphore)
 static inline void
 semaphore_down_i(s_semaphore_t *semaphore)
 {
-    dp_thread_id_t id;
-
     assert_exit(semaphore_legal_ip(semaphore));
 
     spin_lock_try(semaphore_spin_lock(semaphore));
@@ -117,10 +115,10 @@ semaphore_down_i(s_semaphore_t *semaphore)
         return;
     }
 
-    id = dp_thread_id();
-    array_queue_enter(semaphore_sleep_queue(semaphore), (void *)id);
+    array_queue_enter(semaphore_sleep_queue(semaphore), (void *)dp_thread_id());
 
     spin_lock_release(semaphore_spin_lock(semaphore));
+
     dp_sleep();
 }
 
@@ -151,6 +149,7 @@ semaphore_up_i(s_semaphore_t *semaphore)
     }
 
     id = (dp_thread_id_t)array_queue_leave(semaphore_sleep_queue(semaphore));
+
     spin_lock_release(semaphore_spin_lock(semaphore));
 
     dp_thread_signal(id, SIGCONT);

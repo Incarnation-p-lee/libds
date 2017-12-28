@@ -100,11 +100,14 @@ utest_semaphore_down(void)
     pass = true;
     semaphore_down(NULL);
     semaphore = semaphore_create(val);
-    test_lock_critical_section_init();
 
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         sample[i].idx = i;
         sample[i].semaphore = semaphore;
+    }
+
+    test_lock_critical_section_init();
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
         dp_thread_create(&ids[i], NULL, utest_semaphore_thread_0, &sample[i]);
     }
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
@@ -113,7 +116,6 @@ utest_semaphore_down(void)
     }
 
     test_lock_critical_section_init();
-
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         if (i < val) {
             dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
@@ -127,7 +129,6 @@ utest_semaphore_down(void)
             count++;
         }
     }
-
     RESULT_CHECK_uint32(count, val, &pass);
 
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
@@ -140,5 +141,59 @@ utest_semaphore_down(void)
 
     semaphore_destroy(&semaphore);
     UNIT_TEST_RESULT(semaphore_down, pass);
+}
+
+static inline void
+utest_semaphore_up(void)
+{
+    bool pass;
+    uint32 val, i;
+    s_semaphore_t *semaphore;
+    dp_thread_id_t ids[LOCK_THREAD_MAX];
+    s_semaphore_sample_t sample[LOCK_THREAD_MAX];
+
+    UNIT_TEST_BEGIN(semaphore_up);
+
+    val = 0x8;
+    pass = true;
+    semaphore_up(NULL);
+    semaphore = semaphore_create(val);
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        sample[i].idx = i;
+        sample[i].semaphore = semaphore;
+    }
+
+    test_lock_critical_section_init();
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        if (i < val) {
+            dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
+            dp_thread_join(ids[i], NULL);
+        } else {
+            dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
+        }
+    }
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        semaphore_up(semaphore);
+    }
+    for (i = val; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_join(ids[i], NULL);
+        RESULT_CHECK_uint32(1, critical_section[i], &pass);
+    }
+
+    test_lock_critical_section_init();
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        semaphore_up(semaphore);
+    }
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
+    }
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_join(ids[i], NULL);
+        RESULT_CHECK_uint32(1, critical_section[i], &pass);
+    }
+
+    semaphore_destroy(&semaphore);
+    UNIT_TEST_RESULT(semaphore_up, pass);
 }
 

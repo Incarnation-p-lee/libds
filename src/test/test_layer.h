@@ -1844,6 +1844,13 @@ static const struct test_layer_table semaphore[] = {
             NULL,
         },
     },
+    {
+        "up", NULL,
+        {
+            &utest_semaphore_up,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 

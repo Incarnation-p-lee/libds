@@ -228,6 +228,7 @@ static inline void utest_minimal_heap_increase_nice(void);
 static inline void utest_semaphore_create(void);
 static inline void utest_semaphore_destroy(void);
 static inline void utest_semaphore_down(void);
+static inline void utest_semaphore_up(void);
 static inline void utest_spin_lock_create(void);
 static inline void utest_spin_lock_destroy(void);
 static inline void utest_spin_lock_release(void);
