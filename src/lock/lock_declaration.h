@@ -11,6 +11,7 @@
 bool semaphore_available_p(s_semaphore_t *semaphore);
 bool semaphore_illegal_p(s_semaphore_t *semaphore);
 bool semaphore_legal_p(s_semaphore_t *semaphore);
+bool spin_lock_available_p(s_spin_lock_t *spin_lock);
 bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_locked_p(s_spin_lock_t *spin_lock);

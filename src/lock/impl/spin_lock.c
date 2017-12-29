@@ -161,3 +161,13 @@ spin_lock_try(s_spin_lock_t *spin_lock)
     }
 }
 
+bool
+spin_lock_available_p(s_spin_lock_t *spin_lock)
+{
+    if (SPIN_LOCK_ILLEGAL_P(spin_lock)) {
+        return false;
+    } else {
+        return !spin_lock_locked_ip(spin_lock);
+    }
+}
+
