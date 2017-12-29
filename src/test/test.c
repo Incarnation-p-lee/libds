@@ -91,6 +91,7 @@
 #include "impl/utest_spin_lock.c"
 #include "impl/utest_semaphore.c"
 #include "impl/ptest_spin_lock.c"
+#include "impl/ptest_semaphore.c"
 
 #include "test_layer.h"
 

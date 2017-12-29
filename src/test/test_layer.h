@@ -1827,35 +1827,35 @@ static const struct test_layer_table semaphore[] = {
         "create", NULL,
         {
             &utest_semaphore_create,
-            NULL,
+            &ptest_semaphore_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_semaphore_destroy,
-            NULL,
+            &ptest_semaphore_destroy,
         },
     },
     {
         "down", NULL,
         {
             &utest_semaphore_down,
-            NULL,
+            &ptest_semaphore_down,
         },
     },
     {
         "up", NULL,
         {
             &utest_semaphore_up,
-            NULL,
+            &ptest_semaphore_up,
         },
     },
     {
         "available_p", NULL,
         {
             &utest_semaphore_available_p,
-            NULL,
+            &ptest_semaphore_available_p,
         },
     },
     {NULL, NULL, {NULL, NULL},},
