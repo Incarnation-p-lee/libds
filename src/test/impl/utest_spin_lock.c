@@ -8,6 +8,12 @@ utest_spin_lock_create(void)
 
     pass = true;
     spin_lock = spin_lock_create();
+    spin_lock->shared_lock = 2;
+
+    RESULT_CHECK_bool(false, spin_lock_legal_p(spin_lock), &pass);
+    RESULT_CHECK_bool(false, spin_lock_locked_p(NULL), &pass);
+
+    spin_lock_initial(spin_lock);
 
     RESULT_CHECK_bool(true, spin_lock_legal_p(spin_lock), &pass);
     RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);

@@ -4,6 +4,7 @@ utest_semaphore_create(void)
     bool pass;
     uint32 val;
     s_semaphore_t *semaphore;
+    s_array_queue_t *queue_tmp;
 
     UNIT_TEST_BEGIN(semaphore_create);
 
@@ -11,7 +12,17 @@ utest_semaphore_create(void)
     pass = true;
     semaphore = semaphore_create(val);
 
+    semaphore->spin_lock.shared_lock = 2;
+    RESULT_CHECK_bool(false, semaphore_legal_p(semaphore), &pass);
+    semaphore->spin_lock.shared_lock = 0;
+
+    queue_tmp = semaphore->sleep_queue;
+    semaphore->sleep_queue = NULL;
+    RESULT_CHECK_bool(false, semaphore_legal_p(semaphore), &pass);
+    semaphore->sleep_queue = queue_tmp;
+
     RESULT_CHECK_bool(true, semaphore_legal_p(semaphore), &pass);
+    RESULT_CHECK_bool(false, semaphore_illegal_p(semaphore), &pass);
 
     semaphore_destroy(&semaphore);
 
