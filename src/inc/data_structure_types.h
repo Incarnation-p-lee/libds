@@ -99,6 +99,7 @@ typedef struct graph_attibute        s_graph_attibute_t;
 typedef struct topo_list             s_topo_list_t;
 typedef struct spin_lock             s_spin_lock_t;
 typedef struct semaphore             s_semaphore_t;
+typedef struct mutex                 s_mutex_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -499,6 +500,10 @@ struct semaphore {
     s_array_queue_t *sleep_queue;
     s_sigaction_t   act_new;
     s_sigaction_t   act_old;
+};
+
+struct mutex {
+    s_semaphore_t *semaphore;
 };
 
 #endif

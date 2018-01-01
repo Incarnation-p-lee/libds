@@ -10,8 +10,11 @@ utest_semaphore_create(void)
 
     val = 4;
     pass = true;
-    semaphore = semaphore_create(val);
 
+    semaphore = semaphore_create(0);
+    RESULT_CHECK_pointer(PTR_INVALID, semaphore, &pass);
+
+    semaphore = semaphore_create(val);
     semaphore->spin_lock.shared_lock = 2;
     RESULT_CHECK_bool(false, semaphore_legal_p(semaphore), &pass);
     semaphore->spin_lock.shared_lock = 0;

@@ -30,10 +30,12 @@ semaphore_sigcont_handler(sint32 signum)
     }
 }
 
-s_semaphore_t *
-semaphore_create(uint32 val)
+static inline s_semaphore_t *
+semaphore_create_i(uint32 val)
 {
     s_semaphore_t *semaphore;
+
+    assert_exit(val > 0);
 
     semaphore = memory_cache_allocate(sizeof(*semaphore));
 
@@ -46,6 +48,16 @@ semaphore_create(uint32 val)
     dp_sigaction(SIGCONT, &semaphore->act_new, &semaphore->act_old);
 
     return semaphore;
+}
+
+s_semaphore_t *
+semaphore_create(uint32 val)
+{
+    if (val == 0) {
+        return PTR_INVALID;
+    } else {
+        return semaphore_create_i(val);
+    }
 }
 
 static inline bool

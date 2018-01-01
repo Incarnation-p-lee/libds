@@ -10,11 +10,15 @@
     #define SPIN_LOCK_ILLEGAL_P(s)     spin_lock_illegal_ip(s)
     #define SEMAPHORE_LEGAL_P(s)       semaphore_legal_ip(s)
     #define SEMAPHORE_ILLEGAL_P(s)     semaphore_illegal_ip(s)
+    #define MUTEX_LEGAL_P(s)           mutex_legal_ip(s)
+    #define MUTEX_ILLEGAL_P(s)         mutex_illegal_ip(s)
 #else
     #define SPIN_LOCK_LEGAL_P(s)       NON_NULL_PTR_P(s)
     #define SPIN_LOCK_ILLEGAL_P(s)     NULL_PTR_P(s)
     #define SEMAPHORE_LEGAL_P(s)       NON_NULL_PTR_P(s)
     #define SEMAPHORE_ILLEGAL_P(s)     NULL_PTR_P(s)
+    #define MUTEX_LEGAL_P(s)           NON_NULL_PTR_P(s)
+    #define MUTEX_ILLEGAL_P(s)         NULL_PTR_P(s)
 #endif
 
 #if defined(X86_64)

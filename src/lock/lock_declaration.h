@@ -8,6 +8,8 @@
 
 #endif
 
+bool mutex_illegal_p(s_mutex_t *mutex);
+bool mutex_legal_p(s_mutex_t *mutex);
 bool semaphore_available_p(s_semaphore_t *semaphore);
 bool semaphore_illegal_p(s_semaphore_t *semaphore);
 bool semaphore_legal_p(s_semaphore_t *semaphore);
@@ -15,8 +17,11 @@ bool spin_lock_available_p(s_spin_lock_t *spin_lock);
 bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
 bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
+s_mutex_t * mutex_create(void);
 s_semaphore_t * semaphore_create(uint32 val);
 s_spin_lock_t * spin_lock_create(void);
+static inline bool mutex_illegal_ip(s_mutex_t *mutex);
+static inline bool mutex_legal_ip(s_mutex_t *mutex);
 static inline bool semaphore_available_ip(s_semaphore_t *semaphore);
 static inline bool semaphore_illegal_ip(s_semaphore_t *semaphore);
 static inline bool semaphore_legal_ip(s_semaphore_t *semaphore);
@@ -24,9 +29,13 @@ static inline bool spin_lock_illegal_ip(s_spin_lock_t *spin_lock);
 static inline bool spin_lock_legal_ip(s_spin_lock_t *spin_lock);
 static inline bool spin_lock_locked_ip(s_spin_lock_t *spin_lock);
 static inline s_array_queue_t * semaphore_sleep_queue(s_semaphore_t *semaphore);
+static inline s_semaphore_t * mutex_semaphore(s_mutex_t *mutex);
+static inline s_semaphore_t * semaphore_create_i(uint32 val);
 static inline s_spin_lock_t * semaphore_spin_lock(s_semaphore_t *semaphore);
 static inline sint32 semaphore_val(s_semaphore_t *semaphore);
 static inline uint32 spin_lock_shared_lock(s_spin_lock_t *spin_lock);
+static inline void mutex_lock_i(s_mutex_t *mutex);
+static inline void mutex_unlock_i(s_mutex_t *mutex);
 static inline void semaphore_destroy_i(s_semaphore_t *semaphore);
 static inline void semaphore_down_i(s_semaphore_t *semaphore);
 static inline void semaphore_up_i(s_semaphore_t *semaphore);
@@ -36,6 +45,9 @@ static inline void spin_lock_release_i(s_spin_lock_t *spin_lock);
 static inline void spin_lock_shared_lock_clear(s_spin_lock_t *spin_lock);
 static inline void spin_lock_try_i(s_spin_lock_t *spin_lock);
 static void semaphore_sigcont_handler(sint32 signum);
+void mutex_destroy(s_mutex_t **mutex);
+void mutex_lock(s_mutex_t *mutex);
+void mutex_unlock(s_mutex_t *mutex);
 void semaphore_destroy(s_semaphore_t **semaphore);
 void semaphore_down(s_semaphore_t *semaphore);
 void semaphore_up(s_semaphore_t *semaphore);
