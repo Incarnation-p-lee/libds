@@ -43,7 +43,7 @@ utest_spin_lock_destroy(void)
 static inline void *
 utest_spin_lock_thread(void *spin_lock_sample)
 {
-    uint32 i;
+    uint32 i, tmp;
     s_spin_lock_sample_t *sample;
 
     assert_exit(!complain_null_pointer_p(spin_lock_sample));
@@ -54,10 +54,11 @@ utest_spin_lock_thread(void *spin_lock_sample)
     spin_lock_try(sample->spin_lock);
 
     while (i < LOOP_COUNT) {
-        critical_section[sample->idx] = sample->idx;
-
+        tmp = sample->idx;
         i++;
     }
+
+    critical_section[0] += tmp;
 
     spin_lock_release(sample->spin_lock);
 
@@ -68,7 +69,7 @@ static inline void
 utest_spin_lock_try(void)
 {
     bool pass;
-    uint32 i, count;
+    uint32 i, total;
     s_spin_lock_t *spin_lock;
     dp_thread_id_t ids[LOCK_THREAD_MAX];
     s_spin_lock_sample_t sample[LOCK_THREAD_MAX];
@@ -78,8 +79,7 @@ utest_spin_lock_try(void)
     pass = true;
     spin_lock = spin_lock_create();
 
-    count = sizeof(critical_section[0]) * LOCK_THREAD_MAX;
-    dp_memset(critical_section, 0, count);
+    test_lock_critical_section_init();
 
     i = 0;
     while (i < LOCK_THREAD_MAX) {
@@ -100,11 +100,13 @@ utest_spin_lock_try(void)
         i++;
     }
 
-    i = 0;
+    total = i = 0;
     while (i < LOCK_THREAD_MAX) {
-        RESULT_CHECK_uint32(critical_section[i], i, &pass);
+        total += sample[i].idx;
         i++;
     }
+
+    RESULT_CHECK_uint32(critical_section[0], total, &pass);
 
     spin_lock_destroy(&spin_lock);
     UNIT_TEST_RESULT(spin_lock_try, pass);
