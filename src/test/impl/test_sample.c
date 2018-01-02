@@ -337,3 +337,48 @@ test_directed_graph_sample(uint64 range, uint32 size)
     return graph;
 }
 
+static inline s_graph_t *
+test_directed_graph_connected_sample(uint64 range, uint32 size)
+{
+    ptr_t val;
+    sint32 cost;
+    uint32 i, k;
+    s_graph_t *graph;
+    s_vertex_array_t *vertex_array;
+    s_vertex_t *vertex_a, *vertex_b;
+    void *value_a, *value_b, *value_c;
+
+    assert_exit(size);
+
+    val = 1;
+    graph = directed_graph_create();
+
+    value_a = (void *)val++;
+    value_b = (void *)val++;
+    cost = (sint32)random_uint32_with_limit(range) + 1;
+    directed_graph_link(graph, value_a, value_b, cost);
+
+    i = 2;
+    vertex_array = directed_graph_vertex_array(graph);
+
+    while (i < size) {
+        k = (uint32)random_uint32_with_limit(i - 1);
+        vertex_a = directed_graph_vertex_array_vertex(vertex_array, k);
+        k++;
+        vertex_b = directed_graph_vertex_array_vertex(vertex_array, k);
+
+        value_c = (void *)val++;
+        value_a = directed_graph_vertex_value(vertex_a);
+        value_b = directed_graph_vertex_value(vertex_b);
+        cost = (sint32)random_uint32_with_limit(range) + 1;
+        directed_graph_link(graph, value_c, value_a, cost);
+
+        cost = (sint32)random_uint32_with_limit(range) + 1;
+        directed_graph_link(graph, value_b, value_c, cost);
+
+        i++;
+    }
+
+    return graph;
+}
+

@@ -111,6 +111,7 @@ typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct minimal_heap          s_minimal_heap_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
@@ -119,6 +120,9 @@ typedef struct vertex_array          s_vertex_array_t;
 typedef struct edge_array            s_edge_array_t;
 typedef struct graph_attibute        s_graph_attibute_t;
 typedef struct topo_list             s_topo_list_t;
+typedef struct graph_paths           s_graph_paths_t;
+typedef struct dijkstra_entry        s_dijkstra_entry_t;
+typedef struct dijkstra_table        s_dijkstra_table_t;
 typedef struct spin_lock             s_spin_lock_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -317,6 +321,7 @@ struct disjoint_set {
 struct edge {
     uint32             index;      /* edge index in edge array */
     sint32             cost;
+    bool               is_visited;
 
     union {
         struct {                   /* directed graph */
@@ -340,11 +345,12 @@ struct vertex {
     uint32               label;
     void                 *value;
     bool                 is_visited;
+    void                 *data;      /* some algorithm may need extra data */
 
     union {
         struct {                     /* directed graph */
-            s_adjacent_t *precursor;
             s_adjacent_t *successor;
+            s_adjacent_t *precursor;
         };
         s_adjacent_t     *adjacent;  /* indirected graph */
     };
@@ -363,7 +369,7 @@ struct vertex_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_array_queue_t *queue;
+    s_array_queue_t *queue; /* keep the empty index value of array */
     s_vertex_t      **array;
 };
 
@@ -371,7 +377,7 @@ struct edge_array {
     uint32          size;
     uint32          index;
     uint32          count;
-    s_edge_t        **array;
+    s_edge_t        **array; /* keep the empty index value of array */
     s_array_queue_t *queue;
 };
 
@@ -385,6 +391,24 @@ struct graph {
     s_open_addressing_hash_t *vertex_hash;
     s_vertex_array_t         *vertex_array;
     s_edge_array_t           *edge_array;
+};
+
+struct graph_paths {
+    s_vertex_t      *vertex_from;
+    s_vertex_t      *vertex_to;
+    s_array_queue_t *queue;
+};
+
+struct dijkstra_entry {
+    s_vertex_t *vertex;
+    s_vertex_t *vertex_pre;
+    bool       is_known;
+    uint32     distance;
+};
+
+struct dijkstra_table {
+    s_dijkstra_entry_t *array;
+    uint32             size;
 };
 
 struct spin_lock {
@@ -421,12 +445,23 @@ extern void memory_cache_free(void *addr);
 extern void random_sequence_drop(uint32 *sequence);
 extern void swap_pointer(void **ptr_a, void **ptr_b);
 
+extern bool directed_graph_dijkstra_table_illegal_p(s_dijkstra_table_t *dj_table);
+extern bool directed_graph_dijkstra_table_legal_p(s_dijkstra_table_t *dj_table);
+extern bool directed_graph_paths_illegal_p(s_graph_paths_t *paths);
+extern bool directed_graph_paths_legal_p(s_graph_paths_t *paths);
 extern bool directed_graph_structure_illegal_p(s_graph_t *graph);
 extern bool directed_graph_structure_legal_p(s_graph_t *graph);
 extern bool directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor);
+extern bool graph_dijkstra_entry_illegal_p(s_dijkstra_entry_t *dj_entry);
+extern bool graph_dijkstra_entry_legal_p(s_dijkstra_entry_t *dj_entry);
+extern bool graph_dijkstra_table_illegal_p(s_dijkstra_table_t *dj_table);
+extern bool graph_dijkstra_table_legal_p(s_dijkstra_table_t *dj_table);
 extern bool indirected_graph_structure_illegal_p(s_graph_t *graph);
 extern bool indirected_graph_structure_legal_p(s_graph_t *graph);
-extern s_array_queue_t * directed_graph_path_find(s_vertex_t *vertex_from, s_vertex_t *vertex_to);
+extern s_adjacent_t * directed_graph_vertex_successor(s_vertex_t *vertex);
+extern s_array_queue_t * directed_graph_paths_queue(s_graph_paths_t *paths);
+extern s_dijkstra_entry_t * directed_graph_dijkstra_table_entry(s_dijkstra_table_t *dj_table, uint32 i);
+extern s_dijkstra_table_t * directed_graph_dijkstra(s_graph_t *graph, s_vertex_t *vertex);
 extern s_edge_array_t * directed_graph_edge_array(s_graph_t *graph);
 extern s_edge_array_t * indirected_graph_edge_array(s_graph_t *graph);
 extern s_edge_t * directed_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);
@@ -435,22 +470,27 @@ extern s_edge_t * directed_graph_link(s_graph_t *graph, void *value_from, void *
 extern s_edge_t * indirected_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i);
 extern s_edge_t * indirected_graph_edge_remove(s_graph_t *graph, s_edge_t *edge);
 extern s_edge_t * indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b, sint32 cost);
+extern s_graph_paths_t * directed_graph_paths_find(s_graph_t *graph, s_vertex_t *vertex_from, s_vertex_t *vertex_to);
 extern s_graph_t * directed_graph_create(void);
 extern s_graph_t * indirected_graph_create(void);
 extern s_topo_list_t * directed_graph_topo_list_next(s_topo_list_t *topo_list);
 extern s_topo_list_t * directed_graph_topo_sort(s_graph_t *graph);
 extern s_vertex_array_t * directed_graph_vertex_array(s_graph_t *graph);
 extern s_vertex_array_t * indirected_graph_vertex_array(s_graph_t *graph);
+extern s_vertex_t * directed_graph_dijkstra_entry_vertex(s_dijkstra_entry_t *dj_entry);
 extern s_vertex_t * directed_graph_topo_list_to_vertex(s_topo_list_t *topo_list);
 extern s_vertex_t * directed_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * directed_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
-extern s_vertex_t * directed_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * indirected_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i);
 extern s_vertex_t * indirected_graph_vertex_remove(s_graph_t *graph, s_vertex_t *vertex);
 extern sint32 directed_graph_edge_cost(s_edge_t *edge);
 extern sint32 indirected_graph_edge_cost(s_edge_t *edge);
+extern uint32 directed_graph_adjacent_limit(s_adjacent_t *adjacent);
+extern uint32 directed_graph_dijkstra_entry_distance(s_dijkstra_entry_t *dj_entry);
+extern uint32 directed_graph_dijkstra_table_limit(s_dijkstra_table_t *dj_table);
 extern uint32 directed_graph_edge_array_limit(s_edge_array_t *edge_array);
 extern uint32 directed_graph_edge_count(s_graph_t *graph);
+extern uint32 directed_graph_path_length(s_array_queue_t *path);
 extern uint32 directed_graph_vertex_array_limit(s_vertex_array_t *vertex_array);
 extern uint32 directed_graph_vertex_count(s_graph_t *graph);
 extern uint32 indirected_graph_edge_array_limit(s_edge_array_t *edge_array);
@@ -459,11 +499,17 @@ extern uint32 indirected_graph_vertex_array_limit(s_vertex_array_t *vertex_array
 extern uint32 indirected_graph_vertex_count(s_graph_t *graph);
 extern void * directed_graph_edge_precursor_value(s_edge_t *edge);
 extern void * directed_graph_edge_successor_value(s_edge_t *edge);
+extern void * directed_graph_vertex_value(s_vertex_t *vertex);
 extern void * indirected_graph_edge_vertex_0_value(s_edge_t *edge);
 extern void * indirected_graph_edge_vertex_1_value(s_edge_t *edge);
 extern void directed_graph_destroy(s_graph_t **graph);
+extern void directed_graph_dijkstra_table_destroy(s_dijkstra_table_t **dj_table);
+extern void directed_graph_edge_cost_set(s_edge_t *edge, sint32 cost);
 extern void directed_graph_edge_destroy(s_edge_t **edge);
+extern void directed_graph_paths_destroy(s_graph_paths_t **paths);
 extern void directed_graph_vertex_destroy(s_vertex_t **vertex);
+extern void graph_dijkstra_table_print(s_dijkstra_table_t *dj_table);
+extern void graph_print(s_graph_t *graph);
 extern void indirected_graph_destroy(s_graph_t **graph);
 extern void indirected_graph_edge_destroy(s_edge_t **edge);
 extern void indirected_graph_vertex_destroy(s_vertex_t **vertex);
@@ -507,6 +553,8 @@ extern bool min_max_heap_empty_p_internal(struct min_max_heap *heap);
 extern bool min_max_heap_full_p(struct min_max_heap *heap);
 extern bool minimal_heap_empty_p(struct minimal_heap *heap);
 extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern bool minimal_heap_illegal_p(s_minimal_heap_t *heap);
+extern bool minimal_heap_legal_p(s_minimal_heap_t *heap);
 extern sint32 leftist_heap_npl(struct leftist_heap *heap);
 extern sint64 leftist_heap_nice(struct leftist_heap *heap);
 extern sint64 maximal_heap_nice(struct maximal_heap *heap, uint32 index);
@@ -532,6 +580,7 @@ extern uint32 min_max_heap_depth(struct min_max_heap *heap, uint32 index);
 extern uint32 min_max_heap_index_last(struct min_max_heap *heap);
 extern uint32 min_max_heap_index_limit(struct min_max_heap *heap);
 extern uint32 min_max_heap_size(struct min_max_heap *heap);
+extern uint32 minimal_heap_find_index(s_minimal_heap_t *heap, void *val);
 extern uint32 minimal_heap_index_last(struct minimal_heap *heap);
 extern uint32 minimal_heap_index_limit(struct minimal_heap *heap);
 extern uint32 minimal_heap_size(struct minimal_heap *heap);
@@ -700,6 +749,7 @@ extern bool array_stack_structure_legal_p(s_array_stack_t *stack);
 extern bool linked_stack_empty_p(s_linked_stack_t *stack);
 extern bool linked_stack_full_p(s_linked_stack_t *stack);
 extern bool linked_stack_structure_legal_p(s_linked_stack_t *stack);
+extern s_array_queue_t * array_stack_copy_to_queue(s_array_stack_t *stack);
 extern s_array_stack_t * array_stack_create(void);
 extern s_linked_stack_t * linked_stack_create(void);
 extern uint32 array_stack_capacity(s_array_stack_t *stack);

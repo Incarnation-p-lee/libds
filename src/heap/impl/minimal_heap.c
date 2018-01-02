@@ -18,6 +18,18 @@ minimal_heap_size(struct minimal_heap *heap)
     }
 }
 
+bool
+minimal_heap_legal_p(s_minimal_heap_t *heap)
+{
+    return binary_heap_structure_legal_p(heap->alias);
+}
+
+bool
+minimal_heap_illegal_p(s_minimal_heap_t *heap)
+{
+    return binary_heap_structure_illegal_p(heap->alias);
+}
+
 sint64
 minimal_heap_nice(struct minimal_heap *heap, uint32 index)
 {
@@ -289,6 +301,16 @@ minimal_heap_build(struct heap_data **hd_array, uint32 size)
         minimal_heap_build_internal(heap);
 
         return heap;
+    }
+}
+
+uint32
+minimal_heap_find_index(s_minimal_heap_t *heap, void *val)
+{
+    if (NULL_PTR_P(heap)) {
+        return INDEX_INVALID;
+    } else {
+        return binary_heap_find_index(heap->alias, val);
     }
 }
 

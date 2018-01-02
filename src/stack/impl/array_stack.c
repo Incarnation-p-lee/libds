@@ -50,6 +50,12 @@ array_stack_structure_legal_ip(s_array_stack_t *stack)
     }
 }
 
+static inline bool
+array_stack_structure_illegal_ip(s_array_stack_t *stack)
+{
+    return !array_stack_structure_legal_ip(stack);
+}
+
 s_array_stack_t *
 array_stack_create(void)
 {
@@ -227,13 +233,42 @@ array_stack_iterate(s_array_stack_t *stack, void (*handler)(void *))
 {
     void **i;
 
-    if (array_stack_structure_legal_ip(stack)
-        && !NULL_PTR_P(handler)) {
-        /* iterate from sp to bp */
-        i = stack->space.sp;
-        while(i != stack->space.bp) {
+    if (array_stack_structure_legal_ip(stack) && !NULL_PTR_P(handler)) {
+        i = stack->space.sp; /* iterate from sp to bp */
+
+        while (i != stack->space.bp) {
             handler(*(--i));
         }
+    }
+}
+
+static inline s_array_queue_t *
+array_stack_copy_to_queue_i(s_array_stack_t *stack)
+{
+    void *value;
+    void **iterator;
+    s_array_queue_t *queue;
+
+    assert_exit(array_stack_structure_legal_ip(stack));
+
+    queue = array_queue_create();
+    iterator = stack->space.bp; /* iterate from bp to sp */
+
+    while (iterator != stack->space.sp) {
+        value = *(iterator++);
+        array_queue_enter(queue, value);
+    }
+
+    return queue;
+}
+
+s_array_queue_t *
+array_stack_copy_to_queue(s_array_stack_t *stack)
+{
+    if (array_stack_structure_illegal_ip(stack)) {
+        return PTR_INVALID;
+    } else {
+        return array_stack_copy_to_queue_i(stack);
     }
 }
 
