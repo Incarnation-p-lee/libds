@@ -89,7 +89,9 @@
 #include "impl/utest_directed_graph.c"
 
 #include "impl/utest_spin_lock.c"
+#include "impl/utest_semaphore.c"
 #include "impl/ptest_spin_lock.c"
+#include "impl/ptest_semaphore.c"
 
 #include "test_layer.h"
 

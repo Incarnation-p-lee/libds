@@ -1826,6 +1826,52 @@ static const struct test_layer_table spin_lock[] = {
             &ptest_spin_lock_release,
         },
     },
+    {
+        "available_p", NULL,
+        {
+            &utest_spin_lock_available_p,
+            &ptest_spin_lock_available_p,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
+static const struct test_layer_table semaphore[] = {
+    {
+        "create", NULL,
+        {
+            &utest_semaphore_create,
+            &ptest_semaphore_create,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_semaphore_destroy,
+            &ptest_semaphore_destroy,
+        },
+    },
+    {
+        "down", NULL,
+        {
+            &utest_semaphore_down,
+            &ptest_semaphore_down,
+        },
+    },
+    {
+        "up", NULL,
+        {
+            &utest_semaphore_up,
+            &ptest_semaphore_up,
+        },
+    },
+    {
+        "available_p", NULL,
+        {
+            &utest_semaphore_available_p,
+            &ptest_semaphore_available_p,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 
@@ -1907,9 +1953,10 @@ static const struct test_layer_table test_graph_implement[] = {
 };
 
 static const struct test_layer_table test_lock_implement[] = {
-    {"spin",     spin_lock,          {NULL, NULL},},
+    {"spin",      spin_lock,          {NULL, NULL},},
+    {"semaphore", semaphore,          {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
-    {NULL,       NULL,               {NULL, NULL},},
+    {NULL,        NULL,               {NULL, NULL},},
 };
 /*-----------------------------------------------------------------*/
 /*--------------------- END OF IMPLEMENTATION LAYER OF LAYER TABLE */

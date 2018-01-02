@@ -12,6 +12,7 @@
 #include <stddef.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <signal.h>
 
 #define dp_atoll               atoll
 #define dp_exit                exit
@@ -37,6 +38,16 @@
 #define dp_strlen              strlen
 #define dp_strncmp             strncmp
 #define dp_strncpy             strncpy
+#define dp_thread_id_t         pthread_t
+#define dp_thread_id           pthread_self
+#define dp_thread_create       pthread_create
+#define dp_thread_join         pthread_join
+#define dp_thread_signal       pthread_kill
+#define dp_sleep               pause
+#define dp_sigaction           sigaction
+#define DP_RESETHAND           SA_RESETHAND
+
+typedef struct sigaction       s_sigaction_t;
 
 #elif defined KERNEL
 

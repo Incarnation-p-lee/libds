@@ -124,6 +124,7 @@ typedef struct graph_paths           s_graph_paths_t;
 typedef struct dijkstra_entry        s_dijkstra_entry_t;
 typedef struct dijkstra_table        s_dijkstra_table_t;
 typedef struct spin_lock             s_spin_lock_t;
+typedef struct semaphore             s_semaphore_t;
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
 typedef void * (*f_array_iterator_next_obtain_t)(void *);
@@ -412,7 +413,15 @@ struct dijkstra_table {
 };
 
 struct spin_lock {
-    volatile uint32 lock;
+    volatile uint32 shared_lock;
+};
+
+struct semaphore {
+    volatile sint32 val;
+    s_spin_lock_t   spin_lock;
+    s_array_queue_t *sleep_queue;
+    s_sigaction_t   act_new;
+    s_sigaction_t   act_old;
 };
 
 
@@ -675,10 +684,20 @@ extern void skip_linked_list_iterate(s_skip_linked_list_t *list, void (*handler)
 extern void skip_linked_list_key_set(s_skip_linked_list_t *list, sint32 key);
 extern void skip_linked_list_next_set(s_skip_linked_list_t *list, s_skip_linked_list_t *next);
 
+extern bool semaphore_available_p(s_semaphore_t *semaphore);
+extern bool semaphore_illegal_p(s_semaphore_t *semaphore);
+extern bool semaphore_legal_p(s_semaphore_t *semaphore);
+extern bool spin_lock_available_p(s_spin_lock_t *spin_lock);
+extern bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
 extern bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
 extern bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
+extern s_semaphore_t * semaphore_create(uint32 val);
 extern s_spin_lock_t * spin_lock_create(void);
+extern void semaphore_destroy(s_semaphore_t **semaphore);
+extern void semaphore_down(s_semaphore_t *semaphore);
+extern void semaphore_up(s_semaphore_t *semaphore);
 extern void spin_lock_destroy(s_spin_lock_t **lock);
+extern void spin_lock_initial(s_spin_lock_t *spin_lock);
 extern void spin_lock_release(s_spin_lock_t *spin_lock);
 extern void spin_lock_try(s_spin_lock_t *spin_lock);
 

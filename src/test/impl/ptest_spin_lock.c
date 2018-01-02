@@ -82,3 +82,33 @@ ptest_spin_lock_release(uint32 count)
     PERFORMANCE_TEST_RESULT(spin_lock_release);
 }
 
+static inline void
+ptest_spin_lock_available_p(uint32 count)
+{
+    s_spin_lock_t *spin_lock;
+
+    PERFORMANCE_TEST_BEGIN(spin_lock_available_p);
+
+    spin_lock = spin_lock_create();
+
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+        spin_lock_available_p(spin_lock);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    spin_lock_destroy(&spin_lock);
+    PERFORMANCE_TEST_RESULT(spin_lock_available_p);
+}
+

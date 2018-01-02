@@ -102,6 +102,7 @@ typedef struct graph_paths           s_graph_paths_t;
 typedef struct dijkstra_entry        s_dijkstra_entry_t;
 typedef struct dijkstra_table        s_dijkstra_table_t;
 typedef struct spin_lock             s_spin_lock_t;
+typedef struct semaphore             s_semaphore_t;
 
 typedef void   (*f_array_iterator_initial_t)(void *);
 typedef bool   (*f_array_iterator_next_exist_t)(void *);
@@ -513,7 +514,15 @@ struct dijkstra_table {
 };
 
 struct spin_lock {
-    volatile uint32 lock;
+    volatile uint32 shared_lock;
+};
+
+struct semaphore {
+    volatile sint32 val;
+    s_spin_lock_t   spin_lock;
+    s_array_queue_t *sleep_queue;
+    s_sigaction_t   act_new;
+    s_sigaction_t   act_old;
 };
 
 #endif
