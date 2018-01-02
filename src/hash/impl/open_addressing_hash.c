@@ -175,7 +175,6 @@ open_addressing_hash_find_index(s_open_addressing_hash_t *hash, void *key)
         }
     } while (hash->table->space[index]);
 
-    pr_log_info("Not such a key in given hash.\n");
     return HASH_IDX_INVALID;
 }
 

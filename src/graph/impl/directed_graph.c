@@ -717,6 +717,7 @@ directed_graph_path_length_i(s_array_queue_t *path)
     assert_exit(array_queue_structure_legal_p(path));
 
     length = 0;
+    edge = NULL;
     iterator = array_queue_iterator_obtain(path);
     iterator->fp_index_initial(path);
 

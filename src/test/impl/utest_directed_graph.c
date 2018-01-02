@@ -410,7 +410,7 @@ utest_directed_graph_dijkstra(void)
     UNIT_TEST_BEGIN(directed_graph_dijkstra);
 
     pass = true;
-    graph = test_directed_graph_connected_sample(0x20, 0x7);
+    graph = test_directed_graph_connected_sample(0x120, 0x27);
 
     vertex = NULL;
     vertex_array = directed_graph_vertex_array(graph);
