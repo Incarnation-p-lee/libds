@@ -77,7 +77,7 @@ semaphore_legal_p(s_semaphore_t *semaphore)
 bool
 semaphore_illegal_p(s_semaphore_t *semaphore)
 {
-    return !semaphore_illegal_ip(semaphore);
+    return semaphore_illegal_ip(semaphore);
 }
 
 static inline void
