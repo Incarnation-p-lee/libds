@@ -1,5 +1,5 @@
 bool
-directed_graph_structure_legal_p(s_graph_t *graph)
+directed_graph_legal_p(s_graph_t *graph)
 {
     if (GRAPH_ILLEGAL_P(graph)) {
         return false;
@@ -11,9 +11,9 @@ directed_graph_structure_legal_p(s_graph_t *graph)
 }
 
 bool
-directed_graph_structure_illegal_p(s_graph_t *graph)
+directed_graph_illegal_p(s_graph_t *graph)
 {
-    return !directed_graph_structure_legal_p(graph);
+    return !directed_graph_legal_p(graph);
 }
 
 sint32
@@ -79,7 +79,7 @@ directed_graph_edge_array(s_graph_t *graph)
 static inline s_vertex_t *
 directed_graph_topo_list_to_vertex_i(s_topo_list_t *topo_list)
 {
-    assert_exit(graph_topo_list_structure_legal_p(topo_list));
+    assert_exit(graph_topo_list_legal_p(topo_list));
 
     return CONTAINER_OF(topo_list, s_vertex_t, topo_list);
 }
@@ -313,7 +313,7 @@ directed_graph_vertex_create(s_graph_t *graph, void *value)
 {
     s_vertex_t *vertex;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
 
     vertex = graph_vertex_create(graph, value);
     vertex->precursor = graph_adjacent_create();
@@ -331,9 +331,9 @@ directed_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_from,
 {
     s_edge_t *edge;
 
-    assert_exit(graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex_from));
-    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+    assert_exit(graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex_from));
+    assert_exit(graph_vertex_legal_p(vertex_to));
 
     edge = graph_edge_create(cost);
     edge->precursor = vertex_from;
@@ -351,9 +351,9 @@ directed_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_from,
     s_adjacent_t *precursor;
     s_adjacent_t *successor;
 
-    assert_exit(graph_edge_structure_legal_p(edge));
-    assert_exit(graph_vertex_structure_legal_p(vertex_from));
-    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+    assert_exit(graph_edge_legal_p(edge));
+    assert_exit(graph_vertex_legal_p(vertex_from));
+    assert_exit(graph_vertex_legal_p(vertex_to));
 
     precursor = graph_vertex_precursor(vertex_to);
     successor = graph_vertex_successor(vertex_from);
@@ -367,7 +367,7 @@ directed_graph_vertex_obtain(s_graph_t *graph, void *value)
 {
     s_vertex_array_t *vertex_array;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
 
     vertex_array = graph_vertex_array(graph);
 
@@ -386,7 +386,7 @@ directed_graph_link_i(s_graph_t *graph, void *value_from, void *value_to,
     s_vertex_t *vertex_to;
     s_vertex_t *vertex_from;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
     assert_exit(value_from && value_to);
 
     vertex_from = directed_graph_vertex_obtain(graph, value_from);
@@ -421,8 +421,8 @@ directed_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
     s_edge_array_t *edge_array;
     s_vertex_t *v_precursor, *v_successor;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(directed_graph_legal_p(graph));
+    assert_exit(graph_edge_legal_p(edge));
     assert_exit(graph_edge_compatible_p(graph, edge));
 
     v_precursor = graph_edge_precursor(edge);
@@ -462,8 +462,8 @@ directed_graph_vertex_cleanup(s_vertex_t *vertex, s_edge_array_t *edge_array)
     uint32 i, limit;
     s_adjacent_t *adj_precursor, *adj_successor, *adjacent;
 
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_vertex_legal_p(vertex));
+    assert_exit(graph_edge_array_legal_p(edge_array));
 
     adj_precursor = graph_vertex_precursor(vertex);
     adj_successor = graph_vertex_successor(vertex);
@@ -509,8 +509,8 @@ directed_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
     s_edge_array_t *edge_array;
     s_vertex_array_t *vertex_array;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(directed_graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex));
     assert_exit(graph_vertex_compatible_p(graph, vertex));
 
     edge_array = graph_edge_array(graph);
@@ -586,7 +586,7 @@ directed_graph_paths_stack_push(s_array_stack_t *stack, s_vertex_t *vertex,
     uint32 label;
 
     assert_exit(array_stack_structure_legal_p(stack));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_legal_p(vertex));
     assert_exit(NON_NULL_PTR_P(hash));
 
     label = graph_vertex_label(vertex);
@@ -623,7 +623,7 @@ directed_graph_paths_find_dfs(s_vertex_t *vertex_to, s_array_stack_t *stack,
     s_vertex_t *vertex, *vertex_succ;
 
     assert_exit(array_stack_structure_legal_p(stack));
-    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+    assert_exit(graph_vertex_legal_p(vertex_to));
     assert_exit(graph_paths_legal_ip(paths));
     assert_exit(NON_NULL_PTR_P(hash));
 
@@ -669,9 +669,9 @@ directed_graph_paths_find_i(s_graph_t *graph, s_vertex_t *vertex_from,
     s_array_stack_t *stack;
     s_open_addressing_hash_t *hash;
 
-    assert_exit(graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex_from));
-    assert_exit(graph_vertex_structure_legal_p(vertex_to));
+    assert_exit(graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex_from));
+    assert_exit(graph_vertex_legal_p(vertex_to));
 
     stack = array_stack_create();
     hash = open_addressing_hash_create(GRAPH_VERTEX_HASH_SIZE);
@@ -783,8 +783,8 @@ directed_graph_vertex_successor_ip(s_vertex_t *vertex, s_vertex_t *v_successor)
     s_vertex_t *vertex_tmp;
     s_adjacent_t *adjacent;
 
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-    assert_exit(graph_vertex_structure_legal_p(v_successor));
+    assert_exit(graph_vertex_legal_p(vertex));
+    assert_exit(graph_vertex_legal_p(v_successor));
 
     i = 0;
     adjacent = graph_vertex_successor(vertex);
@@ -828,7 +828,7 @@ directed_graph_topo_sort_initial(s_graph_t *graph, s_array_queue_t *queue)
     s_topo_list_t *topo_list;
     s_vertex_array_t *vertex_array;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
     assert_exit(array_queue_structure_legal_p(queue));
     assert_exit(array_queue_empty_p(queue));
 
@@ -865,7 +865,7 @@ directed_graph_topo_sort_successor_process(s_array_queue_t *queue,
     s_topo_list_t *topo_node;
 
     assert_exit(array_queue_structure_legal_p(queue));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_legal_p(vertex));
 
     i = 0;
     adjacent = graph_vertex_successor(vertex);
@@ -926,7 +926,7 @@ directed_graph_topo_sort_i(s_graph_t *graph)
     s_array_queue_t *queue;
     s_topo_list_t *topo_head;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
 
     vertex_count = graph_vertex_count(graph);
 
@@ -961,7 +961,7 @@ directed_graph_dijkstra_table_create(s_graph_t *graph)
     uint32 size;
     s_dijkstra_table_t *dj_table;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
 
     size = graph_vertex_count(graph);
 
@@ -1003,8 +1003,8 @@ directed_graph_dijkstra_initial(s_graph_t *graph, s_vertex_t *vertex,
     s_dijkstra_entry_t *entry;
     s_vertex_array_t *vertex_array;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(directed_graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex));
     assert_exit(graph_dijkstra_table_legal_ip(dj_table));
     assert_exit(heap != NULL);
 
@@ -1045,10 +1045,10 @@ directed_graph_dijkstra_entry_update(s_dijkstra_entry_t *entry,
     uint32 dist, offset, index;
 
     assert_exit(minimal_heap_legal_p(heap));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_edge_legal_p(edge));
     assert_exit(graph_dijkstra_entry_legal_ip(entry));
     assert_exit(graph_dijkstra_entry_legal_ip(entry_prev));
-    assert_exit(graph_vertex_structure_legal_p(v_prev));
+    assert_exit(graph_vertex_legal_p(v_prev));
 
     dist = graph_dijkstra_entry_distance(entry_prev) + graph_edge_cost(edge);
 
@@ -1073,8 +1073,8 @@ directed_graph_dijkstra_i(s_graph_t *graph, s_vertex_t *vertex)
     s_dijkstra_table_t *dj_table;
     s_dijkstra_entry_t *e, *e_tmp;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(directed_graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex));
 
     dj_table = directed_graph_dijkstra_table_create(graph);
     heap = minimal_heap_create(graph_vertex_count(graph));

@@ -1,4 +1,40 @@
 static inline void
+utest_directed_graph_util(void)
+{
+    bool pass;
+    s_graph_t *graph;
+
+    pass = true;
+    graph = test_directed_graph_sample(0xa, 0x6);
+
+    UNIT_TEST_BEGIN(directed_graph_util);
+
+    RESULT_CHECK_bool(true, directed_graph_legal_p(graph), &pass);
+    RESULT_CHECK_bool(false, directed_graph_legal_p(NULL), &pass);
+    RESULT_CHECK_bool(false, directed_graph_illegal_p(graph), &pass);
+
+    graph->attribute.is_directed = false;
+    RESULT_CHECK_bool(false, directed_graph_legal_p(graph), &pass);
+    RESULT_CHECK_bool(true, directed_graph_illegal_p(graph), &pass);
+    graph->attribute.is_directed = true;
+
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_edge_array(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, directed_graph_edge_array_limit(NULL), &pass);
+    RESULT_CHECK_sint32(GRAPH_COST_INVALID, directed_graph_edge_cost(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_edge_precursor_value(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_edge_successor_value(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_edge_array_edge(NULL, 0), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_vertex_array(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, directed_graph_vertex_array_vertex(NULL, 0), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, directed_graph_vertex_array_limit(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, directed_graph_edge_array_limit(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, directed_graph_edge_count(NULL), &pass);
+
+    directed_graph_destroy(&graph);
+    UNIT_TEST_RESULT(directed_graph_util, pass);
+}
+
+static inline void
 utest_directed_graph_create(void)
 {
     bool pass;
@@ -8,7 +44,7 @@ utest_directed_graph_create(void)
     graph = directed_graph_create();
     UNIT_TEST_BEGIN(directed_graph_create);
 
-    RESULT_CHECK_bool(true, directed_graph_structure_legal_p(graph), &pass);
+    RESULT_CHECK_bool(true, directed_graph_legal_p(graph), &pass);
 
     directed_graph_destroy(&graph);
     UNIT_TEST_RESULT(directed_graph_create, pass);
@@ -365,7 +401,7 @@ utest_directed_graph_dijkstra_valid_p(s_graph_t *graph, s_vertex_t *vertex,
     s_dijkstra_entry_t *dj_entry;
     s_vertex_t *vertex_from, *vertex_to;
 
-    assert_exit(directed_graph_structure_legal_p(graph));
+    assert_exit(directed_graph_legal_p(graph));
     assert_exit(directed_graph_dijkstra_table_legal_p(dj_table));
 
     vertex_from = vertex;

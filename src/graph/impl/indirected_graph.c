@@ -1,5 +1,5 @@
 bool
-indirected_graph_structure_legal_p(s_graph_t *graph)
+indirected_graph_legal_p(s_graph_t *graph)
 {
     if (GRAPH_ILLEGAL_P(graph)) {
         return false;
@@ -11,9 +11,9 @@ indirected_graph_structure_legal_p(s_graph_t *graph)
 }
 
 bool
-indirected_graph_structure_illegal_p(s_graph_t *graph)
+indirected_graph_illegal_p(s_graph_t *graph)
 {
-    return !indirected_graph_structure_legal_p(graph);
+    return !indirected_graph_legal_p(graph);
 }
 
 sint32
@@ -81,8 +81,6 @@ indirected_graph_edge_array_edge(s_edge_array_t *edge_array, uint32 i)
 {
     if (GRAPH_EDGE_ARRAY_ILLEGAL_P(edge_array)) {
         return PTR_INVALID;
-    } else if (i > graph_edge_array_limit(edge_array)) {
-        return PTR_INVALID;
     } else {
         return graph_edge_array_edge(edge_array, i);
     }
@@ -92,8 +90,6 @@ s_vertex_t *
 indirected_graph_vertex_array_vertex(s_vertex_array_t *vertex_array, uint32 i)
 {
     if (GRAPH_VERTEX_ARRAY_ILLEGAL_P(vertex_array)) {
-        return PTR_INVALID;
-    } else if (i > graph_vertex_array_limit(vertex_array)) {
         return PTR_INVALID;
     } else {
         return graph_vertex_array_vertex(vertex_array, i);
@@ -133,8 +129,8 @@ indirected_graph_edge_count(s_graph_t *graph)
 static inline bool
 indirected_graph_edge_vertex_contains_p(s_edge_t *edge, s_vertex_t *vertex)
 {
-    assert_exit(graph_edge_structure_legal_p(edge));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_edge_legal_p(edge));
+    assert_exit(graph_vertex_legal_p(vertex));
 
     if (vertex == graph_edge_vertex_0(edge)) {
         return true;
@@ -172,9 +168,9 @@ indirected_graph_edge_create(s_graph_t *graph, s_vertex_t *vertex_a,
 {
     s_edge_t *edge;
 
-    assert_exit(graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex_a));
-    assert_exit(graph_vertex_structure_legal_p(vertex_b));
+    assert_exit(graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex_a));
+    assert_exit(graph_vertex_legal_p(vertex_b));
 
     edge = graph_edge_create(cost);
     edge->vertex_0 = vertex_a;
@@ -190,7 +186,7 @@ indirected_graph_vertex_create(s_graph_t *graph, void *value)
 {
     s_vertex_t *vertex;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(indirected_graph_legal_p(graph));
 
     vertex = graph_vertex_create(graph, value);
     vertex->adjacent = graph_adjacent_create();
@@ -207,9 +203,9 @@ indirected_graph_edge_link(s_edge_t *edge, s_vertex_t *vertex_a,
 {
     s_adjacent_t *adjacent;
 
-    assert_exit(graph_edge_structure_legal_p(edge));
-    assert_exit(graph_vertex_structure_legal_p(vertex_a));
-    assert_exit(graph_vertex_structure_legal_p(vertex_b));
+    assert_exit(graph_edge_legal_p(edge));
+    assert_exit(graph_vertex_legal_p(vertex_a));
+    assert_exit(graph_vertex_legal_p(vertex_b));
 
     adjacent = graph_vertex_adjacent(vertex_a);
     graph_adjacent_edge_append(adjacent, edge);
@@ -225,7 +221,7 @@ indirected_graph_vertex_obtain(s_graph_t *graph, void *value)
 {
     s_vertex_array_t *vertex_array;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(indirected_graph_legal_p(graph));
 
     vertex_array = graph_vertex_array(graph);
 
@@ -244,7 +240,7 @@ indirected_graph_link_i(s_graph_t *graph, void *value_a, void *value_b,
     s_vertex_t *vertex_a;
     s_vertex_t *vertex_b;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
+    assert_exit(indirected_graph_legal_p(graph));
     assert_exit(value_a && value_b);
 
     vertex_a = indirected_graph_vertex_obtain(graph, value_a);
@@ -274,7 +270,7 @@ indirected_graph_link(s_graph_t *graph, void *value_a, void *value_b,
 // static inline bool
 // indirected_graph_vertex_alone_p(s_vertex_t *vertex)
 // {
-//     assert_exit(graph_vertex_structure_legal_p(vertex));
+//     assert_exit(graph_vertex_legal_p(vertex));
 // 
 //     return graph_adjacent_empty_p(vertex->adjacent);
 // }
@@ -286,8 +282,8 @@ indirected_graph_edge_remove_i(s_graph_t *graph, s_edge_t *edge)
     s_vertex_t *vertex;
     s_edge_array_t *edge_array;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(indirected_graph_legal_p(graph));
+    assert_exit(graph_edge_legal_p(edge));
     assert_exit(graph_edge_compatible_p(graph, edge));
 
     index = graph_edge_index(edge);
@@ -322,7 +318,7 @@ indirected_graph_edge_linked_vertex(s_edge_t *edge, s_vertex_t *vertex)
     s_vertex_t *vertex_0;
     s_vertex_t *vertex_1;
 
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_legal_p(vertex));
     assert_exit(indirected_graph_edge_vertex_contains_p(edge, vertex));
 
     vertex_0 = graph_edge_vertex_0(edge);
@@ -340,8 +336,8 @@ indirected_graph_vertex_edge_disconnet(s_vertex_t *vertex, s_edge_t *edge)
 {
     s_vertex_t *vertex_linked;
 
-    assert_exit(graph_vertex_structure_legal_p(vertex));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_vertex_legal_p(vertex));
+    assert_exit(graph_edge_legal_p(edge));
     assert_exit(indirected_graph_edge_vertex_contains_p(edge, vertex));
 
     vertex_linked = indirected_graph_edge_linked_vertex(edge, vertex);
@@ -359,8 +355,8 @@ indirected_graph_vertex_remove_i(s_graph_t *graph, s_vertex_t *vertex)
     s_edge_array_t *edge_array;
     s_vertex_array_t *vertex_array;
 
-    assert_exit(indirected_graph_structure_legal_p(graph));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(indirected_graph_legal_p(graph));
+    assert_exit(graph_vertex_legal_p(vertex));
     assert_exit(graph_vertex_compatible_p(graph, vertex));
 
     i = 0;

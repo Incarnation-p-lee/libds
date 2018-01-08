@@ -5,20 +5,20 @@
 
 #if defined DEBUG
 
-static inline bool graph_adjacent_structure_illegal_p(s_adjacent_t *adjacent);
-static inline bool graph_adjacent_structure_legal_p(s_adjacent_t *adjacent);
-static inline bool graph_edge_array_structure_illegal_p(s_edge_array_t *edge_array);
-static inline bool graph_edge_array_structure_legal_p(s_edge_array_t *edge_array);
-static inline bool graph_edge_structure_illegal_p(s_edge_t *edge);
-static inline bool graph_edge_structure_legal_p(s_edge_t *edge);
-static inline bool graph_structure_illegal_p(s_graph_t *graph);
-static inline bool graph_structure_legal_p(s_graph_t *graph);
-static inline bool graph_topo_list_structure_illegal_p(s_topo_list_t *topo_list);
-static inline bool graph_topo_list_structure_legal_p(s_topo_list_t *topo_list);
-static inline bool graph_vertex_array_structure_illegal_p(s_vertex_array_t *vertex_array);
-static inline bool graph_vertex_array_structure_legal_p(s_vertex_array_t *vertex_array);
-static inline bool graph_vertex_structure_illegal_p(s_vertex_t *vertex);
-static inline bool graph_vertex_structure_legal_p(s_vertex_t *vertex);
+static inline bool graph_adjacent_illegal_p(s_adjacent_t *adjacent);
+static inline bool graph_adjacent_legal_p(s_adjacent_t *adjacent);
+static inline bool graph_edge_array_illegal_p(s_edge_array_t *edge_array);
+static inline bool graph_edge_array_legal_p(s_edge_array_t *edge_array);
+static inline bool graph_edge_illegal_p(s_edge_t *edge);
+static inline bool graph_edge_legal_p(s_edge_t *edge);
+static inline bool graph_illegal_p(s_graph_t *graph);
+static inline bool graph_legal_p(s_graph_t *graph);
+static inline bool graph_topo_list_illegal_p(s_topo_list_t *topo_list);
+static inline bool graph_topo_list_legal_p(s_topo_list_t *topo_list);
+static inline bool graph_vertex_array_illegal_p(s_vertex_array_t *vertex_array);
+static inline bool graph_vertex_array_legal_p(s_vertex_array_t *vertex_array);
+static inline bool graph_vertex_illegal_p(s_vertex_t *vertex);
+static inline bool graph_vertex_legal_p(s_vertex_t *vertex);
 static inline void graph_dijkstra_table_print_i(s_dijkstra_table_t *dj_table);
 static inline void graph_print_i(s_graph_t *graph);
 static inline void graph_vertex_print(s_vertex_t *vertex);
@@ -29,17 +29,17 @@ void graph_print(s_graph_t *graph);
 
 bool directed_graph_dijkstra_table_illegal_p(s_dijkstra_table_t *dj_table);
 bool directed_graph_dijkstra_table_legal_p(s_dijkstra_table_t *dj_table);
+bool directed_graph_illegal_p(s_graph_t *graph);
+bool directed_graph_legal_p(s_graph_t *graph);
 bool directed_graph_paths_illegal_p(s_graph_paths_t *paths);
 bool directed_graph_paths_legal_p(s_graph_paths_t *paths);
-bool directed_graph_structure_illegal_p(s_graph_t *graph);
-bool directed_graph_structure_legal_p(s_graph_t *graph);
 bool directed_graph_vertex_successor_p(s_vertex_t *vertex, s_vertex_t *v_successor);
 bool graph_dijkstra_entry_illegal_p(s_dijkstra_entry_t *dj_entry);
 bool graph_dijkstra_entry_legal_p(s_dijkstra_entry_t *dj_entry);
 bool graph_dijkstra_table_illegal_p(s_dijkstra_table_t *dj_table);
 bool graph_dijkstra_table_legal_p(s_dijkstra_table_t *dj_table);
-bool indirected_graph_structure_illegal_p(s_graph_t *graph);
-bool indirected_graph_structure_legal_p(s_graph_t *graph);
+bool indirected_graph_illegal_p(s_graph_t *graph);
+bool indirected_graph_legal_p(s_graph_t *graph);
 s_adjacent_t * directed_graph_vertex_successor(s_vertex_t *vertex);
 s_array_queue_t * directed_graph_paths_queue(s_graph_paths_t *paths);
 s_dijkstra_entry_t * directed_graph_dijkstra_table_entry(s_dijkstra_table_t *dj_table, uint32 i);

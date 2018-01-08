@@ -1700,6 +1700,13 @@ static const struct test_layer_table disjoint_set[] = {
 
 static const struct test_layer_table indirected_graph[] = {
     {
+        "util", NULL,
+        {
+            &utest_indirected_graph_util,
+            NULL,
+        },
+    },
+    {
         "create", NULL,
         {
             &utest_indirected_graph_create,
@@ -1738,6 +1745,13 @@ static const struct test_layer_table indirected_graph[] = {
 };
 
 static const struct test_layer_table directed_graph[] = {
+    {
+        "util", NULL,
+        {
+            &utest_directed_graph_util,
+            NULL,
+        },
+    },
     {
         "create", NULL,
         {
