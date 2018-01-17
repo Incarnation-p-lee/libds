@@ -11,7 +11,7 @@ binary_heap_minimal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
@@ -46,7 +46,7 @@ binary_heap_minimal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 small_child;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     small_child = binary_heap_child_min_nice_index(heap, index);
@@ -78,7 +78,7 @@ binary_heap_maximal_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 next;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
@@ -113,7 +113,7 @@ binary_heap_maximal_percolate_down(struct binary_heap *heap,
     uint32 next;
     uint32 big_child;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     big_child = binary_heap_child_max_nice_index(heap, index);
@@ -141,7 +141,7 @@ binary_heap_min_max_up_ordered_p(struct binary_heap *heap,
     uint32 parent;
     uint32 gdp_randparent;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     parent = INDEX_PARENT(index);
@@ -193,7 +193,7 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
     uint32 depth;
     uint32 child_index;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
@@ -201,17 +201,17 @@ binary_heap_min_max_down_ordered_p(struct binary_heap *heap,
     if (INDEX_L_CHILD(index) > INDEX_LAST(heap)) {
         return true;
     } else {
-        if (depth % 2) {
-            // max level
+        if (depth % 2) { /* max level */
             child_index = binary_heap_gdp_randchild_max_nice_index(heap, index);
+
             if (nice < HEAP_NICE(heap, child_index)) {
                 tgt = child_index;
             } else {
                 return true;
             }
-        } else {
-            // min level
+        } else { /* min level */
             child_index = binary_heap_gdp_randchild_min_nice_index(heap, index);
+
             if (nice > HEAP_NICE(heap, child_index)) {
                 tgt = child_index;
             } else {

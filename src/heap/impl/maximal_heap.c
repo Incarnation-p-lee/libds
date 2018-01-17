@@ -8,7 +8,7 @@ uint32
 maximal_heap_index_limit(struct maximal_heap *heap)
 {
     if (NULL_PTR_P(heap)) {
-        return HEAP_CPCT_INVALID;
+        return INDEX_INVALID;
     } else {
         return heap->alias->capacity + 1;
     }
@@ -18,7 +18,7 @@ uint32
 maximal_heap_size(struct maximal_heap *heap)
 {
     if (NULL_PTR_P(heap)) {
-        return HEAP_SIZE_INVALID;
+        return SIZE_INVALID;
     } else {
         return heap->alias->size;
     }
@@ -63,8 +63,9 @@ void
 maximal_heap_destroy(struct maximal_heap **heap)
 {
     if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
-        binary_heap_destroy(&(*heap)->alias);
+        binary_heap_destroy(HEAP_ALIAS(*heap));
         memory_cache_free(*heap);
+
         *heap = NULL;
     }
 }
@@ -127,7 +128,7 @@ maximal_heap_remove_internal(struct maximal_heap *heap, uint32 index)
 
     assert_exit(!NULL_PTR_P(heap));
     assert_exit(!binary_heap_empty_p(heap->alias));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
+    assert_exit(binary_heap_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
@@ -185,7 +186,7 @@ maximal_heap_nice_alter(struct maximal_heap *heap, uint32 index,
     struct binary_heap *alias;
 
     assert_exit(!NULL_PTR_P(heap));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
+    assert_exit(binary_heap_legal_p(heap->alias));
     assert_exit(binary_heap_index_legal_p(heap->alias, index));
 
     alias = heap->alias;
@@ -247,7 +248,7 @@ maximal_heap_build_internal(struct maximal_heap *heap)
 
     assert_exit(!NULL_PTR_P(heap));
     assert_exit(binary_heap_full_p(heap->alias));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
+    assert_exit(binary_heap_legal_p(heap->alias));
 
     alias = heap->alias;
     iter = HEAP_SIZE(alias) / 2;

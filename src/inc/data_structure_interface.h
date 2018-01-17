@@ -49,8 +49,6 @@ enum log_level {
 #define HASH_SIZE_INVALID      SIZE_INVALID
 #define HASH_IDX_INVALID       0xffffffffu
 #define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
-#define HEAP_SIZE_INVALID      SIZE_INVALID
-#define HEAP_CPCT_INVALID      SIZE_INVALID
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
 #define HEAP_CPCT_DFT          4097u        // heap default capacity
 #define HEAP_IDX_INVALID       0u           // heap invalid index
@@ -103,15 +101,17 @@ typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 typedef struct binary_search_tree    s_binary_search_tree_t;
 typedef struct avl_tree              s_avl_tree_t;
 typedef struct splay_tree            s_splay_tree_t;
-typedef struct heap_data             s_heap_data_t;
-typedef struct binary_heap           s_binary_heap_t;
-typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct heap_data             s_heap_data_t;
+typedef struct binary_heap           s_binary_heap_t;
 typedef struct minimal_heap          s_minimal_heap_t;
+typedef struct maximal_heap          s_maximal_heap_t;
+typedef struct min_max_heap          s_min_max_heap_t;
+typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;
@@ -560,15 +560,17 @@ extern bool maximal_heap_full_p(struct maximal_heap *heap);
 extern bool min_max_heap_empty_p(struct min_max_heap *heap);
 extern bool min_max_heap_empty_p_internal(struct min_max_heap *heap);
 extern bool min_max_heap_full_p(struct min_max_heap *heap);
-extern bool minimal_heap_empty_p(struct minimal_heap *heap);
-extern bool minimal_heap_full_p(struct minimal_heap *heap);
+extern bool minimal_heap_empty_p(s_minimal_heap_t *heap);
+extern bool minimal_heap_full_p(s_minimal_heap_t *heap);
 extern bool minimal_heap_illegal_p(s_minimal_heap_t *heap);
 extern bool minimal_heap_legal_p(s_minimal_heap_t *heap);
+extern s_minimal_heap_t * minimal_heap_build(s_heap_data_t **hd_array, uint32 size);
+extern s_minimal_heap_t * minimal_heap_create(uint32 capacity);
 extern sint32 leftist_heap_npl(struct leftist_heap *heap);
 extern sint64 leftist_heap_nice(struct leftist_heap *heap);
 extern sint64 maximal_heap_nice(struct maximal_heap *heap, uint32 index);
 extern sint64 min_max_heap_nice(struct min_max_heap *heap, uint32 index);
-extern sint64 minimal_heap_nice(struct minimal_heap *heap, uint32 index);
+extern sint64 minimal_heap_nice(s_minimal_heap_t *heap, uint32 index);
 extern struct doubly_linked_list * min_max_heap_remove(struct min_max_heap *heap, uint32 index);
 extern struct leftist_heap * leftist_heap_create(void);
 extern struct leftist_heap * leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice);
@@ -580,8 +582,6 @@ extern struct leftist_heap * leftist_heap_right(struct leftist_heap *heap);
 extern struct maximal_heap * maximal_heap_build(struct heap_data **hd_array, uint32 size);
 extern struct maximal_heap * maximal_heap_create(uint32 capacity);
 extern struct min_max_heap * min_max_heap_create(uint32 capacity);
-extern struct minimal_heap * minimal_heap_build(struct heap_data **hd_array, uint32 size);
-extern struct minimal_heap * minimal_heap_create(uint32 capacity);
 extern uint32 maximal_heap_index_last(struct maximal_heap *heap);
 extern uint32 maximal_heap_index_limit(struct maximal_heap *heap);
 extern uint32 maximal_heap_size(struct maximal_heap *heap);
@@ -590,9 +590,9 @@ extern uint32 min_max_heap_index_last(struct min_max_heap *heap);
 extern uint32 min_max_heap_index_limit(struct min_max_heap *heap);
 extern uint32 min_max_heap_size(struct min_max_heap *heap);
 extern uint32 minimal_heap_find_index(s_minimal_heap_t *heap, void *val);
-extern uint32 minimal_heap_index_last(struct minimal_heap *heap);
-extern uint32 minimal_heap_index_limit(struct minimal_heap *heap);
-extern uint32 minimal_heap_size(struct minimal_heap *heap);
+extern uint32 minimal_heap_index_last(s_minimal_heap_t *heap);
+extern uint32 minimal_heap_index_limit(s_minimal_heap_t *heap);
+extern uint32 minimal_heap_size(s_minimal_heap_t *heap);
 extern void * leftist_heap_get_min(struct leftist_heap *heap);
 extern void * leftist_heap_val(struct leftist_heap *heap);
 extern void * maximal_heap_get_max(struct maximal_heap *heap);
@@ -604,10 +604,10 @@ extern void * min_max_heap_get_min(struct min_max_heap *heap);
 extern void * min_max_heap_remove_max(struct min_max_heap *heap);
 extern void * min_max_heap_remove_min(struct min_max_heap *heap);
 extern void * min_max_heap_val(struct min_max_heap *heap, uint32 index);
-extern void * minimal_heap_get_min(struct minimal_heap *heap);
-extern void * minimal_heap_remove(struct minimal_heap *heap, uint32 index);
-extern void * minimal_heap_remove_min(struct minimal_heap *heap);
-extern void * minimal_heap_val(struct minimal_heap *heap, uint32 index);
+extern void * minimal_heap_get_min(s_minimal_heap_t *heap);
+extern void * minimal_heap_remove(s_minimal_heap_t *heap, uint32 index);
+extern void * minimal_heap_remove_min(s_minimal_heap_t *heap);
+extern void * minimal_heap_val(s_minimal_heap_t *heap, uint32 index);
 extern void leftist_heap_destroy(struct leftist_heap **heap);
 extern void leftist_heap_nice_set(struct leftist_heap *heap, sint64 nice);
 extern void leftist_heap_npl_set(struct leftist_heap *heap, sint32 npl);
@@ -623,11 +623,11 @@ extern void min_max_heap_decrease_nice(struct min_max_heap *heap, uint32 index, 
 extern void min_max_heap_destroy(struct min_max_heap **heap);
 extern void min_max_heap_increase_nice(struct min_max_heap *heap, uint32 index, uint32 offset);
 extern void min_max_heap_insert(struct min_max_heap *heap, void *val, sint64 nice);
-extern void minimal_heap_cleanup(struct minimal_heap *heap);
-extern void minimal_heap_decrease_nice(struct minimal_heap *heap, uint32 index, uint32 offset);
-extern void minimal_heap_destroy(struct minimal_heap **heap);
-extern void minimal_heap_increase_nice(struct minimal_heap *heap, uint32 index, uint32 offset);
-extern void minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice);
+extern void minimal_heap_cleanup(s_minimal_heap_t *heap);
+extern void minimal_heap_decrease_nice(s_minimal_heap_t *heap, uint32 index, uint32 offset);
+extern void minimal_heap_destroy(s_minimal_heap_t **heap);
+extern void minimal_heap_increase_nice(s_minimal_heap_t *heap, uint32 index, uint32 offset);
+extern void minimal_heap_insert(s_minimal_heap_t *heap, void *val, sint64 nice);
 
 extern bool doubly_linked_list_contains_p(s_doubly_linked_list_t *list, s_doubly_linked_list_t *node);
 extern bool doubly_linked_list_structure_illegal_p(s_doubly_linked_list_t *list);

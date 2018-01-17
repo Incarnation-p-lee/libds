@@ -22,8 +22,6 @@ enum ITER_ORDER {
 #define HASH_SIZE_INVALID      SIZE_INVALID
 #define HASH_IDX_INVALID       0xffffffffu
 #define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
-#define HEAP_SIZE_INVALID      SIZE_INVALID
-#define HEAP_CPCT_INVALID      SIZE_INVALID
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
 #define HEAP_CPCT_DFT          4097u        // heap default capacity
 #define HEAP_IDX_INVALID       0u           // heap invalid index
@@ -81,15 +79,17 @@ typedef struct doubly_end_queue_list s_doubly_end_queue_list_t;
 typedef struct binary_search_tree    s_binary_search_tree_t;
 typedef struct avl_tree              s_avl_tree_t;
 typedef struct splay_tree            s_splay_tree_t;
-typedef struct heap_data             s_heap_data_t;
-typedef struct binary_heap           s_binary_heap_t;
-typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct binary_indexed_tree   s_binary_indexed_tree_t;
 typedef struct trie_tree             s_trie_tree_t;
 typedef struct array_iterator        s_array_iterator_t;
 typedef struct bitmap                s_bitmap_t;
 typedef struct disjoint_set          s_disjoint_set_t;
+typedef struct heap_data             s_heap_data_t;
+typedef struct binary_heap           s_binary_heap_t;
 typedef struct minimal_heap          s_minimal_heap_t;
+typedef struct maximal_heap          s_maximal_heap_t;
+typedef struct min_max_heap          s_min_max_heap_t;
+typedef struct leftist_heap          s_leftist_heap_t;
 typedef struct edge                  s_edge_t;
 typedef struct vertex                s_vertex_t;
 typedef struct graph                 s_graph_t;

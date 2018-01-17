@@ -20,7 +20,7 @@ binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
@@ -33,7 +33,7 @@ binary_heap_depth_odd_p(struct binary_heap *heap, uint32 index)
 {
     uint32 depth;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     depth = binary_heap_depth(index);
@@ -47,7 +47,7 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
     uint32 index;
     bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_valid_ordered_func_ptr_p(heap_order));
 
     index = INDEX_ROOT;

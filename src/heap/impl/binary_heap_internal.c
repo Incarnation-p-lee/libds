@@ -1,8 +1,8 @@
-static inline struct binary_heap *
+static inline s_binary_heap_t *
 binary_heap_create(uint32 capacity)
 {
-    struct binary_heap *heap;
-    register struct heap_data **iterator;
+    s_binary_heap_t *heap;
+    struct heap_data **iterator;
 
     if (complain_zero_size_p(capacity)) {
         capacity = DEFAULT_BINARY_HEAP_SIZE;
@@ -23,40 +23,45 @@ binary_heap_create(uint32 capacity)
 }
 
 static inline void
-binary_heap_destroy(struct binary_heap **heap)
+binary_heap_destroy(s_binary_heap_t *heap)
 {
-    assert_exit(NULL != heap);
-    assert_exit(binary_heap_structure_legal_p(*heap));
+    assert_exit(binary_heap_legal_p(heap));
 
-    binary_heap_cleanup(*heap);
-    memory_cache_free((*heap)->base);
-    memory_cache_free(*heap);
-
-    *heap = NULL;
+    binary_heap_cleanup(heap);
+    memory_cache_free(ALIAS_BASE(heap));
+    memory_cache_free(heap);
 }
 
 static inline bool
-binary_heap_empty_p(struct binary_heap *heap)
+binary_heap_empty_p(s_binary_heap_t *heap)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     return heap->size == 0 ? true : false;
 }
 
-static inline bool
-binary_heap_full_p(struct binary_heap *heap)
+static inline uint32
+binary_heap_size(s_binary_heap_t *heap)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
+
+    return heap->size;
+}
+
+static inline bool
+binary_heap_full_p(s_binary_heap_t *heap)
+{
+    assert_exit(binary_heap_legal_p(heap));
 
     return heap->size == heap->capacity ? true : false;
 }
 
 static inline void
-binary_heap_cleanup(struct binary_heap *heap)
+binary_heap_cleanup(s_binary_heap_t *heap)
 {
     register uint32 index;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     index = INDEX_FIRST;
 
@@ -70,20 +75,20 @@ binary_heap_cleanup(struct binary_heap *heap)
 }
 
 static inline void *
-binary_heap_root(struct binary_heap *heap)
+binary_heap_root(s_binary_heap_t *heap)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     return HEAP_VAL(heap, INDEX_ROOT);
 }
 
 static inline void
-binary_heap_capacity_extend(struct binary_heap *heap)
+binary_heap_capacity_extend(s_binary_heap_t *heap)
 {
     struct heap_data **new;
     uint32 size;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     size = sizeof(heap->base[0]) * u_offset(heap->capacity * 2, 1);
     new = memory_cache_allocate(size);
@@ -96,17 +101,17 @@ binary_heap_capacity_extend(struct binary_heap *heap)
     memory_cache_free(heap->base);
     heap->base = new;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 }
 
 static inline void
-binary_heap_node_create_by_index(struct binary_heap *heap, uint32 index,
+binary_heap_node_create_by_index(s_binary_heap_t *heap, uint32 index,
     sint64 nice, void *val)
 {
     assert_exit(NULL_PTR_P(heap->base[index]));
     assert_exit(binary_heap_nice_legal_p(nice));
     assert_exit(binary_heap_index_legal_p(heap, index));
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     HEAP_DATA(heap, index) = binary_heap_node_create(nice, val);
 }
@@ -133,13 +138,13 @@ binary_heap_node_create(sint64 nice, void *val)
  * RETURN the re-ordered index of heap with that nice.
  */
 static inline uint32
-binary_heap_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
+binary_heap_reorder(s_binary_heap_t *heap, uint32 index, sint64 nice,
     void *heap_order)
 {
     uint32 index_next;
-    bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
+    bool (*order)(s_binary_heap_t *, uint32, sint64, uint32 *);
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_nice_legal_p(nice));
 
@@ -155,18 +160,18 @@ binary_heap_reorder(struct binary_heap *heap, uint32 index, sint64 nice,
 }
 
 static inline bool
-binary_heap_child_exist_p(struct binary_heap *heap, uint32 index)
+binary_heap_child_exist_p(s_binary_heap_t *heap, uint32 index)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     return INDEX_L_CHILD(index) <= INDEX_LAST(heap) ? true : false;
 }
 
 static inline uint32
-binary_heap_child_min_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_child_min_nice_index(s_binary_heap_t *heap, uint32 index)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     if (!binary_heap_child_exist_p(heap, index)) {
@@ -181,9 +186,9 @@ binary_heap_child_min_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_child_max_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_child_max_nice_index(s_binary_heap_t *heap, uint32 index)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     if (!binary_heap_child_exist_p(heap, index)) {
@@ -198,12 +203,12 @@ binary_heap_child_max_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_gdp_randchild_min_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_gdp_randchild_min_nice_index(s_binary_heap_t *heap, uint32 index)
 {
     uint32 begin;
     uint32 ret_index;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_depth_even_p(heap, index));
 
@@ -225,12 +230,12 @@ binary_heap_gdp_randchild_min_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_gdp_randchild_max_nice_index(struct binary_heap *heap, uint32 index)
+binary_heap_gdp_randchild_max_nice_index(s_binary_heap_t *heap, uint32 index)
 {
     uint32 begin;
     uint32 ret_index;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_depth_odd_p(heap, index));
 
@@ -252,14 +257,14 @@ binary_heap_gdp_randchild_max_nice_index(struct binary_heap *heap, uint32 index)
 }
 
 static inline uint32
-binary_heap_serial_small_nice_index(struct binary_heap *heap,
+binary_heap_serial_small_nice_index(s_binary_heap_t *heap,
     uint32 index, uint32 count)
 {
     uint32 small_index;
     uint32 rest;
 
     assert_exit(!complain_zero_size_p(count));
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     small_index = index;
@@ -277,14 +282,14 @@ binary_heap_serial_small_nice_index(struct binary_heap *heap,
 }
 
 static inline uint32
-binary_heap_serial_big_nice_index(struct binary_heap *heap,
+binary_heap_serial_big_nice_index(s_binary_heap_t *heap,
     uint32 index, uint32 count)
 {
     uint32 big_index;
     uint32 rest;
 
     assert_exit(!complain_zero_size_p(count));
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
     big_index = index;
@@ -302,13 +307,13 @@ binary_heap_serial_big_nice_index(struct binary_heap *heap,
 }
 
 static inline void
-binary_heap_insert(struct binary_heap *heap, void *val, sint64 nice,
+binary_heap_insert(s_binary_heap_t *heap, void *val, sint64 nice,
     void *ordering)
 {
     uint32 index;
 
     assert_exit(binary_heap_nice_legal_p(nice));
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_valid_ordered_func_ptr_p(ordering));
 
     if (binary_heap_full_p(heap)) {
@@ -339,7 +344,7 @@ binary_heap_data_destroy(struct heap_data *data)
 }
 
 static inline void *
-binary_heap_remove_root(struct binary_heap *heap, void *order)
+binary_heap_remove_root(s_binary_heap_t *heap, void *order)
 {
     sint64 nice;
     uint32 index;
@@ -348,7 +353,7 @@ binary_heap_remove_root(struct binary_heap *heap, void *order)
     void *retval;
 
     assert_exit(!binary_heap_empty_p(heap));
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_valid_ordered_func_ptr_p(order));
 
     index_last = INDEX_LAST(heap);
@@ -393,18 +398,22 @@ binary_heap_nice_legal_p(sint64 nice)
     if (nice > HEAP_NICE_LOWER_LMT && nice < HEAP_NICE_UPPER_LMT) {
         return true;
     } else {
-        pr_log_warn("Nice specificed reach the limit.\n");
         return false;
     }
 }
 
 static inline bool
-binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
+binary_heap_nice_illegal_p(sint64 nice)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    return !binary_heap_nice_legal_p(nice);
+}
+
+static inline bool
+binary_heap_index_legal_p(s_binary_heap_t *heap, uint32 index)
+{
+    assert_exit(binary_heap_legal_p(heap));
 
     if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
-        pr_log_warn("Illegal index value of heap.\n");
         return false;
     } else {
         return true;
@@ -412,7 +421,13 @@ binary_heap_index_legal_p(struct binary_heap *heap, uint32 index)
 }
 
 static inline bool
-binary_heap_structure_legal_p(struct binary_heap *heap)
+binary_heap_index_illegal_p(s_binary_heap_t *heap, uint32 index)
+{
+    return !binary_heap_index_legal_p(heap, index);
+}
+
+static inline bool
+binary_heap_legal_p(s_binary_heap_t *heap)
 {
     if (NULL_PTR_P(heap)) {
         return false;
@@ -426,25 +441,33 @@ binary_heap_structure_legal_p(struct binary_heap *heap)
 }
 
 static inline bool
-binary_heap_structure_illegal_p(struct binary_heap *heap)
+binary_heap_illegal_p(s_binary_heap_t *heap)
 {
-    return !binary_heap_structure_legal_p(heap);
+    return !binary_heap_legal_p(heap);
 }
 
 static inline uint32
-binary_heap_index_limit(struct binary_heap *heap)
+binary_heap_index_limit(s_binary_heap_t *heap)
 {
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     return INDEX_LAST(heap) + 1;
 }
 
 static inline uint32
-binary_heap_find_index(struct binary_heap *heap, void *val)
+binary_heap_index_last(s_binary_heap_t *heap)
+{
+    assert_exit(binary_heap_legal_p(heap));
+
+    return heap->size;
+}
+
+static inline uint32
+binary_heap_find_index(s_binary_heap_t *heap, void *val)
 {
     uint32 i, limit;
 
-    assert_exit(binary_heap_structure_legal_p(heap));
+    assert_exit(binary_heap_legal_p(heap));
 
     i = INDEX_ROOT;
     limit = binary_heap_index_limit(heap);

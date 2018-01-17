@@ -194,45 +194,45 @@ utest_##name##_heap_insert(void)                               \
     UNIT_TEST_RESULT(name##_heap_insert, pass);                \
 }
 
-#define UT_HEAP_remove(name)                                     \
-static inline void                                               \
-utest_##name##_heap_remove(void)                                 \
-{                                                                \
-    bool pass;                                                   \
-    void *val;                                                   \
-    uint32 index;                                                \
-    struct HEAP *heap;                                           \
-                                                                 \
-    pass = true;                                                 \
-    heap = NULL;                                                 \
-    HEAP_remove(heap, 0);                                        \
-                                                                 \
-    index = 0x12345;                                             \
-    heap = TEST_HEAP_sample(0x942, 0x73a);                       \
-    RESULT_CHECK_pointer(NULL, HEAP_remove(heap, index), &pass); \
-                                                                 \
-    index = 0x2;                                                 \
-    val = HEAP_val(heap, index);                                 \
-    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
-                                                                 \
-    index = 0x323;                                               \
-    val = HEAP_val(heap, index);                                 \
-    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
-                                                                 \
-    index = 0x423;                                               \
-    val = HEAP_val(heap, index);                                 \
-    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
-                                                                 \
-    index = 0x6;                                                 \
-    val = HEAP_val(heap, index);                                 \
-    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
-                                                                 \
-    index = 0x212;                                               \
-    val = HEAP_val(heap, index);                                 \
-    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);  \
-                                                                 \
-    HEAP_destroy(&heap);                                         \
-    UNIT_TEST_RESULT(name##_heap_remove, pass);                  \
+#define UT_HEAP_remove(name)                                            \
+static inline void                                                      \
+utest_##name##_heap_remove(void)                                        \
+{                                                                       \
+    bool pass;                                                          \
+    void *val;                                                          \
+    uint32 index;                                                       \
+    struct HEAP *heap;                                                  \
+                                                                        \
+    pass = true;                                                        \
+    heap = NULL;                                                        \
+    HEAP_remove(heap, 0);                                               \
+                                                                        \
+    index = 0x12345;                                                    \
+    heap = TEST_HEAP_sample(0x942, 0x73a);                              \
+    RESULT_CHECK_pointer(PTR_INVALID, HEAP_remove(heap, index), &pass); \
+                                                                        \
+    index = 0x2;                                                        \
+    val = HEAP_val(heap, index);                                        \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);         \
+                                                                        \
+    index = 0x323;                                                      \
+    val = HEAP_val(heap, index);                                        \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);         \
+                                                                        \
+    index = 0x423;                                                      \
+    val = HEAP_val(heap, index);                                        \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);         \
+                                                                        \
+    index = 0x6;                                                        \
+    val = HEAP_val(heap, index);                                        \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);         \
+                                                                        \
+    index = 0x212;                                                      \
+    val = HEAP_val(heap, index);                                        \
+    RESULT_CHECK_pointer(val, HEAP_remove(heap, index), &pass);         \
+                                                                        \
+    HEAP_destroy(&heap);                                                \
+    UNIT_TEST_RESULT(name##_heap_remove, pass);                         \
 }
 
 #define UT_HEAP_remove_min(name)                             \
@@ -277,40 +277,40 @@ utest_##name##_heap_remove_max(void)                         \
     UNIT_TEST_RESULT(name##_heap_remove_max, pass);          \
 }
 
-#define UT_HEAP_build(name)                                                 \
-static inline void                                                          \
-utest_##name##_heap_build(void)                                             \
-{                                                                           \
-    bool pass;                                                              \
-    uint32 size;                                                            \
-    struct HEAP *heap;                                                      \
-    struct HEAP *build;                                                     \
-    struct heap_data **hd_array;                                            \
-                                                                            \
-    pass = true;                                                            \
-    heap = NULL;                                                            \
-    hd_array = NULL;                                                        \
-                                                                            \
-    RESULT_CHECK_pointer(NULL, HEAP_build(hd_array, 2), &pass);             \
-    heap = TEST_HEAP_sample(0x122f, 0x32a);                                 \
-    RESULT_CHECK_pointer(NULL, HEAP_build(hd_array, 0), &pass);             \
-                                                                            \
-    size = HEAP_size(heap) + 1;                                             \
-    hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));           \
-                                                                            \
-    hd_array[0] = NULL;                                                     \
-    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0]));        \
-                                                                            \
-    test_binary_heap_data_randomization(hd_array, INDEX_LAST(heap)); \
-    build = HEAP_build(hd_array, size);                                     \
-                                                                            \
-    RESULT_CHECK_bool(true, TEST_HEAP_ordered_p(build), &pass);             \
-                                                                            \
-    memory_cache_free(build->alias);                                        \
-    memory_cache_free(build);                                               \
-    memory_cache_free(hd_array);                                            \
-    HEAP_destroy(&heap);                                                    \
-    UNIT_TEST_RESULT(name##_heap_build, pass);                              \
+#define UT_HEAP_build(name)                                             \
+static inline void                                                      \
+utest_##name##_heap_build(void)                                         \
+{                                                                       \
+    bool pass;                                                          \
+    uint32 size;                                                        \
+    struct HEAP *heap;                                                  \
+    struct HEAP *build;                                                 \
+    struct heap_data **hd_array;                                        \
+                                                                        \
+    pass = true;                                                        \
+    heap = NULL;                                                        \
+    hd_array = NULL;                                                    \
+                                                                        \
+    RESULT_CHECK_pointer(PTR_INVALID, HEAP_build(hd_array, 2), &pass);  \
+    heap = TEST_HEAP_sample(0x122f, 0x32a);                             \
+    RESULT_CHECK_pointer(PTR_INVALID, HEAP_build(hd_array, 0), &pass);  \
+                                                                        \
+    size = HEAP_size(heap) + 1;                                         \
+    hd_array = memory_cache_allocate(size * sizeof(hd_array[0]));       \
+                                                                        \
+    hd_array[0] = NULL;                                                 \
+    dp_memcpy(hd_array, heap->alias->base, size * sizeof(hd_array[0])); \
+                                                                        \
+    test_binary_heap_data_randomization(hd_array, INDEX_LAST(heap));    \
+    build = HEAP_build(hd_array, size);                                 \
+                                                                        \
+    RESULT_CHECK_bool(true, TEST_HEAP_ordered_p(build), &pass);         \
+                                                                        \
+    memory_cache_free(build->alias);                                    \
+    memory_cache_free(build);                                           \
+    memory_cache_free(hd_array);                                        \
+    HEAP_destroy(&heap);                                                \
+    UNIT_TEST_RESULT(name##_heap_build, pass);                          \
 }
 
 #endif
