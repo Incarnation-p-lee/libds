@@ -48,9 +48,13 @@
 #if defined DEBUG
     #define MINIMAL_HEAP_LEGAL_P(h)     minimal_heap_legal_ip(h)
     #define MINIMAL_HEAP_ILLEGAL_P(h)   minimal_heap_illegal_ip(h)
+    #define MAXIMAL_HEAP_LEGAL_P(h)     maximal_heap_legal_ip(h)
+    #define MAXIMAL_HEAP_ILLEGAL_P(h)   maximal_heap_illegal_ip(h)
 #else
     #define MINIMAL_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
     #define MINIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
+    #define MAXIMAL_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
+    #define MAXIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
 #endif
 
 /* EXTERNAL FUNCTIONS */
