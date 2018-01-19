@@ -15,9 +15,9 @@ utest_semaphore_create(void)
     RESULT_CHECK_pointer(PTR_INVALID, semaphore, &pass);
 
     semaphore = semaphore_create(val);
-    semaphore->spin_lock.shared_lock = 2;
+    semaphore->lock.shared_lock = 2;
     RESULT_CHECK_bool(false, semaphore_legal_p(semaphore), &pass);
-    semaphore->spin_lock.shared_lock = 0;
+    semaphore->lock.shared_lock = 0;
 
     queue_tmp = semaphore->sleep_queue;
     semaphore->sleep_queue = NULL;

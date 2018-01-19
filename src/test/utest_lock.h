@@ -9,7 +9,7 @@ typedef struct semaphore_sample s_semaphore_sample_t;
 
 struct spin_lock_sample {
     uint32        idx;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
 };
 
 struct semaphore_sample {

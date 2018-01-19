@@ -5,6 +5,8 @@
 #define SPIN_LOCK_UNLOCKED     0
 #define SPIN_LOCK_LOCKED       1
 
+#define SPIN_SHARED_LOCK(s)            (s)->shared_lock
+
 #if defined(DEBUG)
     #define SPIN_LOCK_LEGAL_P(s)       spin_lock_legal_ip(s)
     #define SPIN_LOCK_ILLEGAL_P(s)     spin_lock_illegal_ip(s)
@@ -22,9 +24,9 @@
 #endif
 
 #if defined(X86_64)
-    #define SPIN_LOCK_TRY(spin_lock)     SPIN_LOCK_TRY_X64(spin_lock)
+    #define SPIN_LOCK(s)               SPIN_LOCK_X64(s)
 
-    #define SPIN_LOCK_TRY_X64(spin_lock)    \
+    #define SPIN_LOCK_X64(lock)        \
         asm volatile (                      \
             "mov           $0x1, %%edx\n\t" \
             "LOOP:                    \n\t" \
@@ -34,13 +36,13 @@
             "pause                 \n\t"    \
             "jmp LOOP              \n\t"    \
             "END:                  \n\t"    \
-            :"+m"(spin_lock->shared_lock)   \
+            :"+m"(lock->shared_lock)   \
             :                               \
             :"eax", "edx")
 
     #define SEMAPHORE_DOWN(semaphore)    SEMAPHORE_DOWN_X64(semaphore)
 
-    #define SEMAPHORE_DOWN_X64(spin_lock) \
+    #define SEMAPHORE_DOWN_X64(lock) \
         asm volatile (                    \
             "lock;decl %0\n\t"            \
             :"+m"(semaphore->val)         \
@@ -49,7 +51,7 @@
 
     #define SEMAPHORE_UP(semaphore)      SEMAPHORE_UP_X64(semaphore)
 
-    #define SEMAPHORE_UP_X64(spin_lock) \
+    #define SEMAPHORE_UP_X64(lock) \
         asm volatile (                  \
             "lock;incl %0\n\t"          \
             :"+m"(semaphore->val)       \

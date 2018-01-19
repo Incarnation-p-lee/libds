@@ -395,7 +395,7 @@ struct spin_lock {
 
 struct semaphore {
     volatile sint32 val;
-    s_spin_lock_t   spin_lock;
+    s_spin_lock_t   lock;
     s_array_queue_t *sleep_queue;
     s_sigaction_t   act_new;
     s_sigaction_t   act_old;
@@ -645,10 +645,10 @@ extern bool mutex_legal_p(s_mutex_t *mutex);
 extern bool semaphore_available_p(s_semaphore_t *semaphore);
 extern bool semaphore_illegal_p(s_semaphore_t *semaphore);
 extern bool semaphore_legal_p(s_semaphore_t *semaphore);
-extern bool spin_lock_available_p(s_spin_lock_t *spin_lock);
-extern bool spin_lock_illegal_p(s_spin_lock_t *spin_lock);
-extern bool spin_lock_legal_p(s_spin_lock_t *spin_lock);
-extern bool spin_lock_locked_p(s_spin_lock_t *spin_lock);
+extern bool spin_lock_illegal_p(s_spin_lock_t *lock);
+extern bool spin_lock_legal_p(s_spin_lock_t *lock);
+extern bool spin_locked_p(s_spin_lock_t *lock);
+extern bool spin_unlocked_p(s_spin_lock_t *lock);
 extern s_mutex_t * mutex_create(void);
 extern s_semaphore_t * semaphore_create(uint32 val);
 extern s_spin_lock_t * spin_lock_create(void);
@@ -658,10 +658,10 @@ extern void mutex_unlock(s_mutex_t *mutex);
 extern void semaphore_destroy(s_semaphore_t **semaphore);
 extern void semaphore_down(s_semaphore_t *semaphore);
 extern void semaphore_up(s_semaphore_t *semaphore);
+extern void spin_lock(s_spin_lock_t *lock);
 extern void spin_lock_destroy(s_spin_lock_t **lock);
-extern void spin_lock_initial(s_spin_lock_t *spin_lock);
-extern void spin_lock_release(s_spin_lock_t *spin_lock);
-extern void spin_lock_try(s_spin_lock_t *spin_lock);
+extern void spin_lock_initial(s_spin_lock_t *lock);
+extern void spin_unlock(s_spin_lock_t *lock);
 
 extern bool array_queue_empty_p(s_array_queue_t *queue);
 extern bool array_queue_full_p(s_array_queue_t *queue);

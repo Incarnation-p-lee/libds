@@ -1,9 +1,9 @@
 static inline s_spin_lock_t *
-semaphore_spin_lock(s_semaphore_t *semaphore)
+semaphore_lock(s_semaphore_t *semaphore)
 {
     assert_exit(semaphore_legal_ip(semaphore));
 
-    return &semaphore->spin_lock;
+    return &semaphore->lock;
 }
 
 static inline s_array_queue_t *
@@ -44,7 +44,7 @@ semaphore_create_i(uint32 val)
     semaphore->act_new.sa_flags = SA_NODEFER;
     semaphore->act_new.sa_handler = semaphore_sigcont_handler;
 
-    spin_lock_initial(&semaphore->spin_lock);
+    spin_lock_initial(&semaphore->lock);
     dp_sigaction(SIGCONT, &semaphore->act_new, &semaphore->act_old);
 
     return semaphore;
@@ -65,7 +65,7 @@ semaphore_legal_ip(s_semaphore_t *semaphore)
 {
     if (complain_null_pointer_p(semaphore)) {
         return false;
-    } else if (spin_lock_illegal_p(&semaphore->spin_lock)) {
+    } else if (spin_lock_illegal_p(&semaphore->lock)) {
         return false;
     } else if (array_queue_structure_illegal_p(semaphore->sleep_queue)) {
         return false;
@@ -118,18 +118,18 @@ semaphore_down_i(s_semaphore_t *semaphore)
 {
     assert_exit(semaphore_legal_ip(semaphore));
 
-    spin_lock_try(semaphore_spin_lock(semaphore));
+    spin_lock(semaphore_lock(semaphore));
 
     SEMAPHORE_DOWN(semaphore);
 
     if (semaphore_val(semaphore) >= 0) {
-        spin_lock_release(semaphore_spin_lock(semaphore));
+        spin_unlock(semaphore_lock(semaphore));
         return;
     }
 
     array_queue_enter(semaphore_sleep_queue(semaphore), (void *)dp_thread_id());
 
-    spin_lock_release(semaphore_spin_lock(semaphore));
+    spin_unlock(semaphore_lock(semaphore));
 
     dp_sleep();
 }
@@ -151,18 +151,18 @@ semaphore_up_i(s_semaphore_t *semaphore)
 
     assert_exit(semaphore_legal_ip(semaphore));
 
-    spin_lock_try(semaphore_spin_lock(semaphore));
+    spin_lock(semaphore_lock(semaphore));
 
     SEMAPHORE_UP(semaphore);
 
     if (semaphore_val(semaphore) > 0) {
-        spin_lock_release(semaphore_spin_lock(semaphore));
+        spin_unlock(semaphore_lock(semaphore));
         return;
     }
 
     id = (dp_thread_id_t)array_queue_leave(semaphore_sleep_queue(semaphore));
 
-    spin_lock_release(semaphore_spin_lock(semaphore));
+    spin_unlock(semaphore_lock(semaphore));
 
     dp_thread_signal(id, SIGCONT);
 }
@@ -184,7 +184,7 @@ semaphore_available_ip(s_semaphore_t *semaphore)
 
     assert_exit(semaphore_legal_ip(semaphore));
 
-    spin_lock_try(semaphore_spin_lock(semaphore));
+    spin_lock(semaphore_lock(semaphore));
 
     if (semaphore_val(semaphore) > 0) {
         is_available = true;
@@ -192,7 +192,7 @@ semaphore_available_ip(s_semaphore_t *semaphore)
         is_available = false;
     }
 
-    spin_lock_release(semaphore_spin_lock(semaphore));
+    spin_unlock(semaphore_lock(semaphore));
 
     return is_available;
 }

@@ -2,23 +2,23 @@ static inline void
 utest_spin_lock_create(void)
 {
     bool pass;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
 
     UNIT_TEST_BEGIN(spin_lock_create);
 
     pass = true;
-    spin_lock = spin_lock_create();
-    spin_lock->shared_lock = 2;
+    lock = spin_lock_create();
+    lock->shared_lock = 2;
 
-    RESULT_CHECK_bool(false, spin_lock_legal_p(spin_lock), &pass);
-    RESULT_CHECK_bool(false, spin_lock_locked_p(NULL), &pass);
+    RESULT_CHECK_bool(false, spin_lock_legal_p(lock), &pass);
+    RESULT_CHECK_bool(false, spin_locked_p(NULL), &pass);
 
-    spin_lock_initial(spin_lock);
+    spin_lock_initial(lock);
 
-    RESULT_CHECK_bool(true, spin_lock_legal_p(spin_lock), &pass);
-    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+    RESULT_CHECK_bool(true, spin_lock_legal_p(lock), &pass);
+    RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
 
-    spin_lock_destroy(&spin_lock);
+    spin_lock_destroy(&lock);
 
     UNIT_TEST_RESULT(spin_lock_create, pass);
 }
@@ -27,31 +27,31 @@ static inline void
 utest_spin_lock_destroy(void)
 {
     bool pass;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
 
     UNIT_TEST_BEGIN(spin_lock_destroy);
 
     pass = true;
-    spin_lock = spin_lock_create();
+    lock = spin_lock_create();
 
-    spin_lock_destroy(&spin_lock);
-    RESULT_CHECK_pointer(NULL, spin_lock, &pass);
+    spin_lock_destroy(&lock);
+    RESULT_CHECK_pointer(NULL, lock, &pass);
 
     UNIT_TEST_RESULT(spin_lock_destroy, pass);
 }
 
 static inline void *
-utest_spin_lock_thread(void *spin_lock_sample)
+utest_spin_lock_thread(void *lock_sample)
 {
     uint32 i;
     s_spin_lock_sample_t *sample;
 
-    assert_exit(!complain_null_pointer_p(spin_lock_sample));
+    assert_exit(!complain_null_pointer_p(lock_sample));
 
     i = 0;
-    sample = spin_lock_sample;
+    sample = lock_sample;
 
-    spin_lock_try(sample->spin_lock);
+    spin_lock(sample->lock);
 
     while (i < LOOP_COUNT) {
         critical_section[sample->idx] = sample->idx;
@@ -59,24 +59,24 @@ utest_spin_lock_thread(void *spin_lock_sample)
         i++;
     }
 
-    spin_lock_release(sample->spin_lock);
+    spin_unlock(sample->lock);
 
     return NULL;
 }
 
 static inline void
-utest_spin_lock_try(void)
+utest_spin_lock(void)
 {
     bool pass;
     uint32 i, count;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
     dp_thread_id_t ids[LOCK_THREAD_MAX];
     s_spin_lock_sample_t sample[LOCK_THREAD_MAX];
 
-    UNIT_TEST_BEGIN(spin_lock_try);
+    UNIT_TEST_BEGIN(spin_lock);
 
     pass = true;
-    spin_lock = spin_lock_create();
+    lock = spin_lock_create();
 
     count = sizeof(critical_section[0]) * LOCK_THREAD_MAX;
     dp_memset(critical_section, 0, count);
@@ -84,7 +84,7 @@ utest_spin_lock_try(void)
     i = 0;
     while (i < LOCK_THREAD_MAX) {
         sample[i].idx = i;
-        sample[i].spin_lock = spin_lock;
+        sample[i].lock = lock;
         i++;
     }
 
@@ -106,64 +106,90 @@ utest_spin_lock_try(void)
         i++;
     }
 
-    spin_lock_destroy(&spin_lock);
-    UNIT_TEST_RESULT(spin_lock_try, pass);
+    spin_lock_destroy(&lock);
+    UNIT_TEST_RESULT(spin_lock, pass);
 }
 
 static inline void
-utest_spin_lock_release(void)
+utest_spin_unlock(void)
 {
     bool pass;
     dp_thread_id_t id;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
     s_spin_lock_sample_t sample;
 
-    UNIT_TEST_BEGIN(spin_lock_release);
+    UNIT_TEST_BEGIN(spin_unlock);
 
     pass = true;
-    spin_lock = spin_lock_create();
+    lock = spin_lock_create();
 
-    spin_lock_try(spin_lock);
-    spin_lock_release(spin_lock);
-    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+    spin_lock(lock);
+    spin_unlock(lock);
+    RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
 
     sample.idx = 0;
-    sample.spin_lock = spin_lock;
+    sample.lock = lock;
 
     dp_thread_create(&id, NULL, utest_spin_lock_thread, &sample);
 
-    spin_lock_release(spin_lock);
-    RESULT_CHECK_bool(false, spin_lock_locked_p(spin_lock), &pass);
+    spin_unlock(lock);
+    RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
 
     dp_thread_join(id, NULL);
 
-    spin_lock_destroy(&spin_lock);
-    UNIT_TEST_RESULT(spin_lock_release, pass);
+    spin_lock_destroy(&lock);
+    UNIT_TEST_RESULT(spin_unlock, pass);
 }
 
 static inline void
-utest_spin_lock_available_p(void)
+utest_spin_unlocked_p(void)
 {
     bool pass;
-    s_spin_lock_t *spin_lock;
+    s_spin_lock_t *lock;
 
-    UNIT_TEST_BEGIN(spin_lock_available_p);
+    UNIT_TEST_BEGIN(spin_unlocked_p);
 
     pass = true;
-    spin_lock = spin_lock_create();
+    lock = spin_lock_create();
 
-    RESULT_CHECK_bool(false, spin_lock_available_p(NULL), &pass);
-    RESULT_CHECK_bool(true, spin_lock_available_p(spin_lock), &pass);
+    RESULT_CHECK_bool(false, spin_unlocked_p(NULL), &pass);
+    RESULT_CHECK_bool(true, spin_unlocked_p(lock), &pass);
 
-    spin_lock_try(spin_lock);
+    spin_lock(lock);
 
-    RESULT_CHECK_bool(false, spin_lock_available_p(spin_lock), &pass);
+    RESULT_CHECK_bool(false, spin_unlocked_p(lock), &pass);
 
-    spin_lock_release(spin_lock);
+    spin_unlock(lock);
 
-    RESULT_CHECK_bool(true, spin_lock_available_p(spin_lock), &pass);
+    RESULT_CHECK_bool(true, spin_unlocked_p(lock), &pass);
 
-    spin_lock_destroy(&spin_lock);
-    UNIT_TEST_RESULT(spin_lock_available_p, pass);
+    spin_lock_destroy(&lock);
+    UNIT_TEST_RESULT(spin_unlocked_p, pass);
+}
+
+static inline void
+utest_spin_locked_p(void)
+{
+    bool pass;
+    s_spin_lock_t *lock;
+
+    UNIT_TEST_BEGIN(spin_locked_p);
+
+    pass = true;
+    lock = spin_lock_create();
+
+    RESULT_CHECK_bool(false, spin_locked_p(NULL), &pass);
+    RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
+
+    spin_lock(lock);
+
+    RESULT_CHECK_bool(true, spin_locked_p(lock), &pass);
+
+    spin_unlock(lock);
+
+    RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
+
+    spin_lock_destroy(&lock);
+    UNIT_TEST_RESULT(spin_locked_p, pass);
 }
 
