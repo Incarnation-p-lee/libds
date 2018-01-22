@@ -44,7 +44,7 @@ maximal_heap_size(s_maximal_heap_t *heap)
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_size(HEAP_ALIAS(heap));
+        return ALIAS_SIZE(HEAP_ALIAS(heap));
     }
 }
 
@@ -128,7 +128,7 @@ maximal_heap_index_last(s_maximal_heap_t *heap)
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_index_last(HEAP_ALIAS(heap));
+        return INDEX_LAST(HEAP_ALIAS(heap));
     }
 }
 

@@ -44,7 +44,7 @@ min_max_heap_size(s_min_max_heap_t *heap)
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_size(HEAP_ALIAS(heap));
+        return ALIAS_SIZE(HEAP_ALIAS(heap));
     }
 }
 
@@ -128,7 +128,7 @@ min_max_heap_index_last(s_min_max_heap_t *heap)
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_index_last(HEAP_ALIAS(heap));
+        return INDEX_LAST(HEAP_ALIAS(heap));
     }
 }
 
@@ -341,7 +341,7 @@ min_max_heap_nice_alter(s_min_max_heap_t *heap, uint32 index, sint64 new)
 
     k = ALIAS_SIZE(alias);
     k = binary_heap_reorder(alias, k, new, &binary_heap_min_max_up_ordered_p);
-    HEAP_DATA(alias, k) = data_tmp;
+    ALIAS_DATA(alias, k) = data_tmp;
 
     assert_exit(min_max_heap_ordered_p(heap));
 }

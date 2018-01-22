@@ -1,22 +1,23 @@
 static inline s_binary_heap_t *
 binary_heap_create(uint32 capacity)
 {
+    s_heap_data_t **i;
     s_binary_heap_t *heap;
-    struct heap_data **iterator;
 
     if (complain_zero_size_p(capacity)) {
         capacity = DEFAULT_BINARY_HEAP_SIZE;
     }
 
     heap = memory_cache_allocate(sizeof(*heap));
-    heap->base = memory_cache_allocate(sizeof(*iterator) * (capacity + 1));
 
-    heap->capacity = capacity;
-    heap->size = 0;
+    ALIAS_BASE(heap) = memory_cache_allocate(sizeof(*i) * (capacity + 1));
+    ALIAS_CAPACITY(heap) = capacity;
+    ALIAS_SIZE(heap) = 0;
 
-    iterator = heap->base;
-    while (iterator < heap->base + u_offset(capacity, 1)) {
-        *iterator++ = NULL;
+    i = ALIAS_BASE(heap);
+
+    while (i < heap->base + u_offset(capacity, 1)) {
+        *i++ = NULL;
     }
 
     return heap;
@@ -37,15 +38,11 @@ binary_heap_empty_p(s_binary_heap_t *heap)
 {
     assert_exit(binary_heap_legal_p(heap));
 
-    return heap->size == 0 ? true : false;
-}
-
-static inline uint32
-binary_heap_size(s_binary_heap_t *heap)
-{
-    assert_exit(binary_heap_legal_p(heap));
-
-    return heap->size;
+    if (ALIAS_SIZE(heap) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 static inline bool
@@ -53,25 +50,30 @@ binary_heap_full_p(s_binary_heap_t *heap)
 {
     assert_exit(binary_heap_legal_p(heap));
 
-    return heap->size == heap->capacity ? true : false;
+    if (ALIAS_SIZE(heap) == ALIAS_CAPACITY(heap)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 static inline void
 binary_heap_cleanup(s_binary_heap_t *heap)
 {
-    register uint32 index;
+    uint32 index;
 
     assert_exit(binary_heap_legal_p(heap));
 
     index = INDEX_FIRST;
 
     while (index <= INDEX_LAST(heap)) {
-        memory_cache_free(HEAP_DATA(heap, index));
-        HEAP_DATA(heap, index) = NULL;
+        memory_cache_free(ALIAS_DATA(heap, index));
+        ALIAS_DATA(heap, index) = NULL;
+
         index++;
     }
 
-    heap->size = 0;
+    ALIAS_SIZE(heap) = 0;
 }
 
 static inline void *
@@ -79,27 +81,27 @@ binary_heap_root(s_binary_heap_t *heap)
 {
     assert_exit(binary_heap_legal_p(heap));
 
-    return HEAP_VAL(heap, INDEX_ROOT);
+    return ALIAS_VAL(heap, INDEX_ROOT);
 }
 
 static inline void
 binary_heap_capacity_extend(s_binary_heap_t *heap)
 {
-    struct heap_data **new;
     uint32 size;
+    s_heap_data_t **new;
 
     assert_exit(binary_heap_legal_p(heap));
 
-    size = sizeof(heap->base[0]) * u_offset(heap->capacity * 2, 1);
+    size = sizeof(ALIAS_DATA(heap, 0)) * u_offset(ALIAS_CAPACITY(heap) * 2, 1);
     new = memory_cache_allocate(size);
-    memset(new, 0, size);
+    dp_memset(new, 0, size);
 
-    size = sizeof(heap->base[0]) * u_offset(heap->capacity, 1);
-    dp_memcpy(new, heap->base, size);
+    size = sizeof(ALIAS_DATA(heap, 0)) * u_offset(ALIAS_CAPACITY(heap), 1);
+    dp_memcpy(new, ALIAS_BASE(heap), size);
+    memory_cache_free(ALIAS_BASE(heap));
 
-    heap->capacity = heap->capacity * 2;
-    memory_cache_free(heap->base);
-    heap->base = new;
+    ALIAS_BASE(heap) = new;
+    ALIAS_CAPACITY(heap) *= 2;
 
     assert_exit(binary_heap_legal_p(heap));
 }
@@ -108,26 +110,27 @@ static inline void
 binary_heap_node_create_by_index(s_binary_heap_t *heap, uint32 index,
     sint64 nice, void *val)
 {
-    assert_exit(NULL_PTR_P(heap->base[index]));
+    assert_exit(NULL_PTR_P(ALIAS_DATA(heap, index)));
     assert_exit(binary_heap_nice_legal_p(nice));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_legal_p(heap));
 
-    HEAP_DATA(heap, index) = binary_heap_node_create(nice, val);
+    ALIAS_DATA(heap, index) = binary_heap_node_create(nice, val);
 }
 
-static inline struct heap_data *
+static inline s_heap_data_t *
 binary_heap_node_create(sint64 nice, void *val)
 {
-    struct heap_data *retval;
+    s_heap_data_t *data;
 
     assert_exit(binary_heap_nice_legal_p(nice));
 
-    retval = memory_cache_allocate(sizeof(*retval));
-    retval->nice = nice;
-    retval->val = val;
+    data = memory_cache_allocate(sizeof(*data));
 
-    return retval;
+    DATA_VAL(data) = val;
+    DATA_NICE(data) = nice;
+
+    return data;
 }
 
 /*
@@ -150,12 +153,14 @@ binary_heap_reorder(s_binary_heap_t *heap, uint32 index, sint64 nice,
 
     order = heap_order;
 
-    while (!(*order)(heap, index, nice, &index_next)) {
-        HEAP_DATA(heap, index) = HEAP_DATA(heap, index_next);
+    while ((*order)(heap, index, nice, &index_next) == false) {
+        ALIAS_DATA(heap, index) = ALIAS_DATA(heap, index_next);
+
         index = index_next;
     }
 
-    HEAP_DATA(heap, index) = NULL;
+    ALIAS_DATA(heap, index) = NULL;
+
     return index;
 }
 
@@ -165,7 +170,17 @@ binary_heap_child_exist_p(s_binary_heap_t *heap, uint32 index)
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
-    return INDEX_L_CHILD(index) <= INDEX_LAST(heap) ? true : false;
+    if (INDEX_LEFT(index) <= INDEX_LAST(heap)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline bool
+binary_heap_child_not_exist_p(s_binary_heap_t *heap, uint32 index)
+{
+    return !binary_heap_child_exist_p(heap, index);
 }
 
 static inline uint32
@@ -174,14 +189,14 @@ binary_heap_child_min_nice_index(s_binary_heap_t *heap, uint32 index)
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
-    if (!binary_heap_child_exist_p(heap, index)) {
+    if (binary_heap_child_not_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
-        return INDEX_L_CHILD(index);
-    } else if (HEAP_L_CHILD_NICE(heap, index) > HEAP_R_CHILD_NICE(heap, index)) {
-        return INDEX_R_CHILD(index);
+    } else if (INDEX_RIGHT(index) > INDEX_LAST(heap)) {
+        return INDEX_LEFT(index);
+    } else if (ALIAS_LEFT_NICE(heap, index) > ALIAS_RIGHT_NICE(heap, index)) {
+        return INDEX_RIGHT(index);
     } else {
-        return INDEX_L_CHILD(index);
+        return INDEX_LEFT(index);
     }
 }
 
@@ -191,14 +206,14 @@ binary_heap_child_max_nice_index(s_binary_heap_t *heap, uint32 index)
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
-    if (!binary_heap_child_exist_p(heap, index)) {
+    if (binary_heap_child_not_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_R_CHILD(index) > INDEX_LAST(heap)) {
-        return INDEX_L_CHILD(index);
-    } else if (HEAP_L_CHILD_NICE(heap, index) < HEAP_R_CHILD_NICE(heap, index)) {
-        return INDEX_R_CHILD(index);
+    } else if (INDEX_RIGHT(index) > INDEX_LAST(heap)) {
+        return INDEX_LEFT(index);
+    } else if (ALIAS_LEFT_NICE(heap, index) < ALIAS_RIGHT_NICE(heap, index)) {
+        return INDEX_RIGHT(index);
     } else {
-        return INDEX_L_CHILD(index);
+        return INDEX_LEFT(index);
     }
 }
 
@@ -206,25 +221,24 @@ static inline uint32
 binary_heap_gdp_randchild_min_nice_index(s_binary_heap_t *heap, uint32 index)
 {
     uint32 begin;
-    uint32 ret_index;
+    uint32 retval;
 
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
     assert_exit(binary_heap_depth_even_p(heap, index));
 
-    if (!binary_heap_child_exist_p(heap, index)) {
+    if (binary_heap_child_not_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
+    } else if (INDEX_L_LEFT(index) > INDEX_LAST(heap)) {
         return binary_heap_child_min_nice_index(heap, index);
     } else {
-        begin = INDEX_LL_CHILD(index);
-        ret_index = binary_heap_serial_small_nice_index(heap, begin, 4);
+        begin = INDEX_L_LEFT(index);
+        retval = binary_heap_serial_small_nice_index(heap, begin, 4);
 
-        if (HEAP_NICE(heap, INDEX_R_CHILD(index))
-            < HEAP_NICE(heap, ret_index)) {
-            return INDEX_R_CHILD(index);
+        if (ALIAS_NICE(heap, INDEX_RIGHT(index)) < ALIAS_NICE(heap, retval)) {
+            return INDEX_RIGHT(index);
         } else {
-            return ret_index;
+            return retval;
         }
     }
 }
@@ -233,7 +247,7 @@ static inline uint32
 binary_heap_gdp_randchild_max_nice_index(s_binary_heap_t *heap, uint32 index)
 {
     uint32 begin;
-    uint32 ret_index;
+    uint32 retval;
 
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
@@ -241,27 +255,25 @@ binary_heap_gdp_randchild_max_nice_index(s_binary_heap_t *heap, uint32 index)
 
     if (!binary_heap_child_exist_p(heap, index)) {
         return INDEX_INVALID;
-    } else if (INDEX_LL_CHILD(index) > INDEX_LAST(heap)) {
+    } else if (INDEX_L_LEFT(index) > INDEX_LAST(heap)) {
         return binary_heap_child_max_nice_index(heap, index);
     } else {
-        begin = INDEX_LL_CHILD(index);
-        ret_index = binary_heap_serial_big_nice_index(heap, begin, 4);
+        begin = INDEX_L_LEFT(index);
+        retval = binary_heap_serial_big_nice_index(heap, begin, 4);
 
-        if (HEAP_NICE(heap, INDEX_R_CHILD(index))
-            > HEAP_NICE(heap, ret_index)) {
-            return INDEX_R_CHILD(index);
+        if (ALIAS_NICE(heap, INDEX_RIGHT(index)) > ALIAS_NICE(heap, retval)) {
+            return INDEX_RIGHT(index);
         } else {
-            return ret_index;
+            return retval;
         }
     }
 }
 
 static inline uint32
-binary_heap_serial_small_nice_index(s_binary_heap_t *heap,
-    uint32 index, uint32 count)
+binary_heap_serial_small_nice_index(s_binary_heap_t *heap, uint32 index,
+    uint32 count)
 {
-    uint32 small_index;
-    uint32 rest;
+    uint32 small_index, rest;
 
     assert_exit(!complain_zero_size_p(count));
     assert_exit(binary_heap_legal_p(heap));
@@ -272,9 +284,10 @@ binary_heap_serial_small_nice_index(s_binary_heap_t *heap,
     count = count > rest ? rest : count;
 
     while (count--) {
-        if (HEAP_NICE(heap, index) < HEAP_NICE(heap, small_index)) {
+        if (ALIAS_NICE(heap, index) < ALIAS_NICE(heap, small_index)) {
             small_index = index;
         }
+
         index++;
     }
 
@@ -282,11 +295,10 @@ binary_heap_serial_small_nice_index(s_binary_heap_t *heap,
 }
 
 static inline uint32
-binary_heap_serial_big_nice_index(s_binary_heap_t *heap,
-    uint32 index, uint32 count)
+binary_heap_serial_big_nice_index(s_binary_heap_t *heap, uint32 index,
+    uint32 count)
 {
-    uint32 big_index;
-    uint32 rest;
+    uint32 big_index, rest;
 
     assert_exit(!complain_zero_size_p(count));
     assert_exit(binary_heap_legal_p(heap));
@@ -297,9 +309,10 @@ binary_heap_serial_big_nice_index(s_binary_heap_t *heap,
     count = count > rest ? rest : count;
 
     while (count--) {
-        if (HEAP_NICE(heap, index) > HEAP_NICE(heap, big_index)) {
+        if (ALIAS_NICE(heap, index) > ALIAS_NICE(heap, big_index)) {
             big_index = index;
         }
+
         index++;
     }
 
@@ -307,31 +320,29 @@ binary_heap_serial_big_nice_index(s_binary_heap_t *heap,
 }
 
 static inline void
-binary_heap_insert(s_binary_heap_t *heap, void *val, sint64 nice,
-    void *ordering)
+binary_heap_insert(s_binary_heap_t *heap, void *val, sint64 nice, void *order)
 {
     uint32 index;
 
     assert_exit(binary_heap_nice_legal_p(nice));
     assert_exit(binary_heap_legal_p(heap));
-    assert_exit(binary_heap_valid_ordered_func_ptr_p(ordering));
+    assert_exit(binary_heap_valid_ordered_func_ptr_p(order));
 
     if (binary_heap_full_p(heap)) {
-        pr_log_warn("Binary heap is full, will rebuild for percolate up.\n");
         binary_heap_capacity_extend(heap);
     }
 
-    heap->size++;
-    HEAP_DATA(heap, heap->size) = NULL;
+    ALIAS_SIZE(heap) += 1;
+    ALIAS_DATA(heap, ALIAS_SIZE(heap)) = NULL;
 
-    index = binary_heap_reorder(heap, heap->size, nice, ordering);
+    index = binary_heap_reorder(heap, ALIAS_SIZE(heap), nice, order);
     binary_heap_node_create_by_index(heap, index, nice, val);
 
-    assert_exit(binary_heap_ordered_p(heap, ordering));
+    assert_exit(binary_heap_ordered_p(heap, order));
 }
 
 static inline void
-binary_heap_data_destroy(struct heap_data *data)
+binary_heap_data_destroy(s_heap_data_t *data)
 {
     assert_exit(NON_NULL_PTR_P(data));
 
@@ -342,33 +353,33 @@ static inline void *
 binary_heap_remove_root(s_binary_heap_t *heap, void *order)
 {
     sint64 nice;
-    uint32 index;
-    uint32 index_last;
-    struct heap_data *last;
     void *retval;
+    s_heap_data_t *last;
+    uint32 index, index_last;
 
     assert_exit(!binary_heap_empty_p(heap));
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_valid_ordered_func_ptr_p(order));
 
     index_last = INDEX_LAST(heap);
-    retval = DATA_VAL(HEAP_DATA(heap, INDEX_ROOT));
-    binary_heap_data_destroy(HEAP_DATA(heap, INDEX_ROOT));
-    heap->size--;
+    retval = DATA_VAL(ALIAS_DATA(heap, INDEX_ROOT));
+    binary_heap_data_destroy(ALIAS_DATA(heap, INDEX_ROOT));
+    ALIAS_SIZE(heap) -= 1;
 
-    if (INDEX_ROOT != index_last) {
-        nice = HEAP_NICE(heap, index_last);
-        last = HEAP_DATA(heap, index_last);
+    if (index_last != INDEX_ROOT) {
+        nice = ALIAS_NICE(heap, index_last);
+        last = ALIAS_DATA(heap, index_last);
 
-        HEAP_DATA(heap, index_last) = NULL;
+        ALIAS_DATA(heap, index_last) = NULL;
 
         index = binary_heap_reorder(heap, INDEX_ROOT, nice, order);
-        assert_exit(NULL == HEAP_DATA(heap, index));
+        assert_exit(ALIAS_DATA(heap, index) == NULL);
 
-        HEAP_DATA(heap, index) = last;
+        ALIAS_DATA(heap, index) = last;
     }
 
     assert_exit(binary_heap_ordered_p(heap, order));
+
     return retval;
 }
 
@@ -377,7 +388,7 @@ binary_heap_depth(uint32 index)
 {
     uint32 depth;
 
-    assert_exit(INDEX_INVALID != index);
+    assert_exit(index != INDEX_INVALID);
 
     depth = 0;
 
@@ -409,7 +420,7 @@ binary_heap_index_legal_p(s_binary_heap_t *heap, uint32 index)
 {
     assert_exit(binary_heap_legal_p(heap));
 
-    if (INDEX_INVALID == index || index > INDEX_LAST(heap)) {
+    if (index == INDEX_INVALID  || index > INDEX_LAST(heap)) {
         return false;
     } else {
         return true;
@@ -427,9 +438,9 @@ binary_heap_legal_p(s_binary_heap_t *heap)
 {
     if (NULL_PTR_P(heap)) {
         return false;
-    } else if (NULL_PTR_P(heap->base)) {
+    } else if (NULL_PTR_P(ALIAS_BASE(heap))) {
         return false;
-    } else if (complain_zero_size_p(heap->capacity)) {
+    } else if (complain_zero_size_p(ALIAS_CAPACITY(heap))) {
         return false;
     } else {
         return true;
@@ -451,14 +462,6 @@ binary_heap_index_limit(s_binary_heap_t *heap)
 }
 
 static inline uint32
-binary_heap_index_last(s_binary_heap_t *heap)
-{
-    assert_exit(binary_heap_legal_p(heap));
-
-    return heap->size;
-}
-
-static inline uint32
 binary_heap_find_index(s_binary_heap_t *heap, void *val)
 {
     uint32 i, limit;
@@ -469,7 +472,7 @@ binary_heap_find_index(s_binary_heap_t *heap, void *val)
     limit = binary_heap_index_limit(heap);
 
     while (i < limit) {
-        if (val == HEAP_VAL(heap, i)) {
+        if (val == ALIAS_VAL(heap, i)) {
             return i;
         }
 

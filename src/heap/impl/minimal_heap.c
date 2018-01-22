@@ -44,7 +44,7 @@ minimal_heap_size(s_minimal_heap_t *heap)
     if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_size(HEAP_ALIAS(heap));
+        return ALIAS_SIZE(HEAP_ALIAS(heap));
     }
 }
 
@@ -128,7 +128,7 @@ minimal_heap_index_last(s_minimal_heap_t *heap)
     if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return SIZE_INVALID;
     } else {
-        return binary_heap_index_last(HEAP_ALIAS(heap));
+        return INDEX_LAST(HEAP_ALIAS(heap));
     }
 }
 

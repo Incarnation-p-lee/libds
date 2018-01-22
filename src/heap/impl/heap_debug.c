@@ -1,13 +1,14 @@
 static inline bool
 binary_heap_valid_ordered_func_ptr_p(void *func_ptr)
 {
-    void **iter;
+    void **i;
 
-    assert_exit(NULL != func_ptr);
+    assert_exit(NON_NULL_PTR_P(func_ptr));
 
-    iter = heap_order_func;
-    while (iter < heap_order_func + array_sizeof(heap_order_func)) {
-        if (*iter++ == func_ptr) {
+    i = heap_order_func;
+
+    while (i < heap_order_func + array_sizeof(heap_order_func)) {
+        if (*i++ == func_ptr) {
             return true;
         }
     }
@@ -16,7 +17,7 @@ binary_heap_valid_ordered_func_ptr_p(void *func_ptr)
 }
 
 static inline bool
-binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
+binary_heap_depth_even_p(s_binary_heap_t *heap, uint32 index)
 {
     uint32 depth;
 
@@ -25,27 +26,27 @@ binary_heap_depth_even_p(struct binary_heap *heap, uint32 index)
 
     depth = binary_heap_depth(index);
 
-    return 0u == (depth & 0x1u) ? true : false;
+    if ((depth & 0x1u) == 0u) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 static inline bool
-binary_heap_depth_odd_p(struct binary_heap *heap, uint32 index)
+binary_heap_depth_odd_p(s_binary_heap_t *heap, uint32 index)
 {
-    uint32 depth;
-
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_index_legal_p(heap, index));
 
-    depth = binary_heap_depth(index);
-
-    return 1u == (depth & 0x1u) ? true : false;
+    return !binary_heap_depth_even_p(heap, index);
 }
 
 static inline bool
-binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
+binary_heap_ordered_p(s_binary_heap_t *heap, void *heap_order)
 {
     uint32 index;
-    bool (*order)(struct binary_heap *, uint32, sint64, uint32 *);
+    bool (*order)(s_binary_heap_t *, uint32, sint64, uint32 *);
 
     assert_exit(binary_heap_legal_p(heap));
     assert_exit(binary_heap_valid_ordered_func_ptr_p(heap_order));
@@ -54,9 +55,10 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
     order = heap_order;
 
     while (index <= INDEX_LAST(heap)) {
-        if (!(*order)(heap, index, HEAP_NICE(heap, index), NULL)) {
+        if ((*order)(heap, index, ALIAS_NICE(heap, index), NULL) == false) {
             return false;
         }
+
         index++;
     }
 
@@ -88,26 +90,28 @@ maximal_heap_ordered_p(s_maximal_heap_t *heap)
 }
 
 static inline bool
-min_max_heap_ordered_p(struct min_max_heap *heap)
+min_max_heap_ordered_p(s_min_max_heap_t *heap)
 {
     sint64 nice;
     uint32 index;
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
 
-    assert_exit(!NULL_PTR_P(heap));
-    assert_exit(!NULL_PTR_P(heap->alias));
+    assert_exit(NON_NULL_PTR_P(heap));
+    assert_exit(NON_NULL_PTR_P(heap->alias));
 
     index = INDEX_ROOT;
     alias = heap->alias;
 
     while (index <= INDEX_LAST(alias)) {
-        nice = HEAP_NICE(alias, index);
+        nice = ALIAS_NICE(alias, index);
+
         if (!binary_heap_min_max_up_ordered_p(alias, index, nice, NULL)) {
             return false;
         } else if (!binary_heap_min_max_down_ordered_p(alias, index, nice,
             NULL)) {
             return false;
         }
+
         index++;
     }
 
@@ -115,9 +119,9 @@ min_max_heap_ordered_p(struct min_max_heap *heap)
 }
 
 static inline bool
-leftist_heap_structure_legal_p(struct leftist_heap *heap)
+leftist_heap_structure_legal_p(s_leftist_heap_t *heap)
 {
-    if (NULL == heap) {
+    if (NULL_PTR_P(heap)) {
         return false;
     } else if (NULL != heap->left && heap->left == heap->right) {
         return false;
