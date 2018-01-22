@@ -64,6 +64,30 @@ binary_heap_ordered_p(struct binary_heap *heap, void *heap_order)
 }
 
 static inline bool
+minimal_heap_ordered_p(s_minimal_heap_t *heap)
+{
+    s_binary_heap_t *alias;
+
+    assert_exit(minimal_heap_legal_ip(heap));
+
+    alias = HEAP_ALIAS(heap);
+
+    return binary_heap_ordered_p(alias, &binary_heap_minimal_ordered_p);
+}
+
+static inline bool
+maximal_heap_ordered_p(s_maximal_heap_t *heap)
+{
+    s_binary_heap_t *alias;
+
+    assert_exit(maximal_heap_legal_ip(heap));
+
+    alias = HEAP_ALIAS(heap);
+
+    return binary_heap_ordered_p(alias, &binary_heap_maximal_ordered_p);
+}
+
+static inline bool
 min_max_heap_ordered_p(struct min_max_heap *heap)
 {
     sint64 nice;

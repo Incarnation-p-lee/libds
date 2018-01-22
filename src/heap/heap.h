@@ -32,6 +32,8 @@
 #define HEAP_DATA(heap, index)          (heap)->base[index]
 
 #define HEAP_ALIAS(heap)                (heap)->alias
+#define DATA_NICE(data)                 (data)->nice
+#define DATA_VAL(data)                  (data)->val
 #define ALIAS_CAPACITY(a)               (a)->capacity
 #define ALIAS_SIZE(a)                   (a)->size
 #define ALIAS_BASE(a)                   (a)->base
@@ -50,11 +52,15 @@
     #define MINIMAL_HEAP_ILLEGAL_P(h)   minimal_heap_illegal_ip(h)
     #define MAXIMAL_HEAP_LEGAL_P(h)     maximal_heap_legal_ip(h)
     #define MAXIMAL_HEAP_ILLEGAL_P(h)   maximal_heap_illegal_ip(h)
+    #define MIN_MAX_HEAP_LEGAL_P(h)     min_max_heap_legal_ip(h)
+    #define MIN_MAX_HEAP_ILLEGAL_P(h)   min_max_heap_illegal_ip(h)
 #else
     #define MINIMAL_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
     #define MINIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
     #define MAXIMAL_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
     #define MAXIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
+    #define MIN_MAX_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
+    #define MIN_MAX_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
 #endif
 
 /* EXTERNAL FUNCTIONS */

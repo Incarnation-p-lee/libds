@@ -146,7 +146,7 @@ void *
 minimal_heap_get_min(s_minimal_heap_t *heap)
 {
     if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         return binary_heap_root(HEAP_ALIAS(heap));
     }
@@ -238,6 +238,8 @@ minimal_heap_nice_alter(s_minimal_heap_t *heap, uint32 idx, sint64 new)
 
     ALIAS_DATA(alias, idx) = data_tmp;
     ALIAS_NICE(alias, idx) = new;
+
+    assert_exit(minimal_heap_ordered_p(heap));
 }
 
 void

@@ -330,17 +330,12 @@ binary_heap_insert(s_binary_heap_t *heap, void *val, sint64 nice,
     assert_exit(binary_heap_ordered_p(heap, ordering));
 }
 
-static inline void *
+static inline void
 binary_heap_data_destroy(struct heap_data *data)
 {
-    void * retval;
+    assert_exit(NON_NULL_PTR_P(data));
 
-    assert_exit(!NULL_PTR_P(data));
-
-    retval = data->val;
     memory_cache_free(data);
-
-    return retval;
 }
 
 static inline void *
@@ -357,7 +352,8 @@ binary_heap_remove_root(s_binary_heap_t *heap, void *order)
     assert_exit(binary_heap_valid_ordered_func_ptr_p(order));
 
     index_last = INDEX_LAST(heap);
-    retval = binary_heap_data_destroy(HEAP_DATA(heap, INDEX_ROOT));
+    retval = DATA_VAL(HEAP_DATA(heap, INDEX_ROOT));
+    binary_heap_data_destroy(HEAP_DATA(heap, INDEX_ROOT));
     heap->size--;
 
     if (INDEX_ROOT != index_last) {

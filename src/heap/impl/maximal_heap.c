@@ -146,7 +146,7 @@ void *
 maximal_heap_get_max(s_maximal_heap_t *heap)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         return binary_heap_root(HEAP_ALIAS(heap));
     }
@@ -155,13 +155,15 @@ maximal_heap_get_max(s_maximal_heap_t *heap)
 void
 maximal_heap_insert(s_maximal_heap_t *heap, void *val, sint64 nice)
 {
+    s_binary_heap_t *alias;
+
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
         return;
     } if (binary_heap_nice_illegal_p(nice)) {
         return;
     } else {
-        binary_heap_insert(HEAP_ALIAS(heap), val, nice,
-            &binary_heap_maximal_ordered_p);
+        alias = HEAP_ALIAS(heap);
+        binary_heap_insert(alias, val, nice, &binary_heap_maximal_ordered_p);
     }
 }
 
@@ -172,6 +174,7 @@ maximal_heap_remove_i(s_maximal_heap_t *heap, uint32 idx)
     s_binary_heap_t *alias;
     s_heap_data_t *data_tmp;
 
+    assert_exit(idx != INDEX_ROOT);
     assert_exit(maximal_heap_legal_ip(heap));
     assert_exit(!binary_heap_empty_p(HEAP_ALIAS(heap)));
     assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), idx));
@@ -238,6 +241,8 @@ maximal_heap_nice_alter(s_maximal_heap_t *heap, uint32 idx, sint64 new)
 
     ALIAS_DATA(alias, idx) = data_tmp;
     ALIAS_NICE(alias, idx) = new;
+
+    assert_exit(maximal_heap_ordered_p(heap));
 }
 
 void
