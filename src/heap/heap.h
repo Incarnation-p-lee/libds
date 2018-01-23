@@ -9,6 +9,8 @@
 
 #define DEFAULT_BINARY_HEAP_SIZE        4097
 #define DEPTH_INVALID                   0xffffffffu
+#define NPL_NULL                       -1
+#define NPL_INVALID                     0x7fffffff
 
 #define INDEX_INVALID                   0u
 #define INDEX_ROOT                      0x1u
@@ -36,7 +38,11 @@
 #define ALIAS_VAL(a, index)             (a)->base[index]->val
 #define ALIAS_DATA(a, index)            (a)->base[index]
 
-#define NPL_NULL                       -1
+#define LEFTIST_NPL(l)                  (l)->npl
+#define LEFTIST_DATA(l)                 (&(l)->data)
+#define LEFTIST_LEFT(l)                 (l)->left
+#define LEFTIST_RIGHT(l)                (l)->right
+
 #define u_offset(n, offset)            (n + offset)
 
 #if defined DEBUG
@@ -46,6 +52,8 @@
     #define MAXIMAL_HEAP_ILLEGAL_P(h)   maximal_heap_illegal_ip(h)
     #define MIN_MAX_HEAP_LEGAL_P(h)     min_max_heap_legal_ip(h)
     #define MIN_MAX_HEAP_ILLEGAL_P(h)   min_max_heap_illegal_ip(h)
+    #define LEFTIST_HEAP_LEGAL_P(h)     leftist_heap_legal_ip(h)
+    #define LEFTIST_HEAP_ILLEGAL_P(h)   leftist_heap_illegal_ip(h)
 #else
     #define MINIMAL_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
     #define MINIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
@@ -53,6 +61,8 @@
     #define MAXIMAL_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
     #define MIN_MAX_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
     #define MIN_MAX_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
+    #define LEFTIST_HEAP_LEGAL_P(h)     NON_NULL_PTR_P(h)
+    #define LEFTIST_HEAP_ILLEGAL_P(h)   NULL_PTR_P(h)
 #endif
 
 /* BINARY HEAP DEBUG */
@@ -68,4 +78,11 @@ static void *heap_order_func[] = {
 #endif
 /* END OF BINARY HEAP DEBUG */
 
+extern s_array_queue_t * array_queue_create(void);
+extern void array_queue_enter(s_array_queue_t *queue, void *member);
+extern void * array_queue_leave(s_array_queue_t *queue);
+extern void array_queue_destroy(s_array_queue_t **queue);
+extern bool array_queue_empty_p(s_array_queue_t *queue);
+
 #endif
+

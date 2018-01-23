@@ -118,18 +118,6 @@ min_max_heap_ordered_p(s_min_max_heap_t *heap)
     return true;
 }
 
-static inline bool
-leftist_heap_structure_legal_p(s_leftist_heap_t *heap)
-{
-    if (NULL_PTR_P(heap)) {
-        return false;
-    } else if (NULL != heap->left && heap->left == heap->right) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
 static inline sint32
 leftist_heap_npl_internal_default(struct leftist_heap *node)
 {
