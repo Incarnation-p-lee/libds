@@ -12,9 +12,6 @@
 #define NPL_NULL                       -1
 #define NPL_INVALID                     0x7fffffff
 
-#define INDEX_INVALID                   0u
-#define INDEX_ROOT                      0x1u
-#define INDEX_FIRST                     INDEX_ROOT
 #define INDEX_LEFT(index)               (index) * 2
 #define INDEX_RIGHT(index)              ((index) * 2 + 1)
 #define INDEX_PARENT(index)             ((index) / 2)
@@ -42,6 +39,8 @@
 #define LEFTIST_DATA(l)                 (&(l)->data)
 #define LEFTIST_LEFT(l)                 (l)->left
 #define LEFTIST_RIGHT(l)                (l)->right
+#define LEFTIST_NICE(l)                 DATA_NICE(LEFTIST_DATA(l))
+#define LEFTIST_VAL(l)                  DATA_VAL(LEFTIST_DATA(l))
 
 #define u_offset(n, offset)            (n + offset)
 

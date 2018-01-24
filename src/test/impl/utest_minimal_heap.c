@@ -1,11 +1,13 @@
 #define HEAP                   minimal_heap
-#define INDEX_LAST             minimal_heap_index_last
 #define HEAP_val               minimal_heap_val
 #define HEAP_nice              minimal_heap_nice
 #define HEAP_size              minimal_heap_size
-#define HEAP_structure_legal_p utest_minimal_heap_structure_legal_p
+#define HEAP_legal_p           minimal_heap_legal_p
+#define HEAP_illegal_p         minimal_heap_illegal_p
+#define HEAP_ordered_p         minimal_heap_ordered_p
+#define HEAP_index_last        minimal_heap_index_last
+#define HEAP_index_limit       minimal_heap_index_limit
 #define TEST_HEAP_sample       test_minimal_heap_sample
-#define TEST_HEAP_ordered_p    utest_minimal_heap_ordered_p
 
 #define HEAP_create            minimal_heap_create
 #define HEAP_destroy           minimal_heap_destroy
@@ -17,10 +19,10 @@
 #define HEAP_remove            minimal_heap_remove
 #define HEAP_remove_min        minimal_heap_remove_min
 #define HEAP_build             minimal_heap_build
+#define HEAP_find_index        minimal_heap_find_index
 
 #include "../utest_heap.h"
 
-UT_HEAP_structure_legal_p(minimal)
 UT_HEAP_create(minimal)
 UT_HEAP_destroy(minimal)
 UT_HEAP_empty_p(minimal)
@@ -31,13 +33,17 @@ UT_HEAP_insert(minimal)
 UT_HEAP_remove(minimal)
 UT_HEAP_remove_min(minimal)
 UT_HEAP_build(minimal)
+UT_HEAP_find_index(minimal)
 
 #undef HEAP
-#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
-#undef HEAP_structure_legal_p
+#undef HEAP_legal_p
+#undef HEAP_illegal_p
+#undef HEAP_ordered_p
+#undef HEAP_index_last
+#undef HEAP_index_limit
 #undef TEST_HEAP_sample
 #undef TEST_HEAP_ordered_p
 
@@ -51,40 +57,8 @@ UT_HEAP_build(minimal)
 #undef HEAP_remove
 #undef HEAP_remove_min
 #undef HEAP_build
+#undef HEAP_find_index
 
-
-static inline bool
-utest_minimal_heap_ordered_p(struct minimal_heap *heap)
-{
-    uint32 index;
-    uint32 index_last;
-    uint32 index_left;
-    uint32 index_right;
-
-    assert_exit(utest_minimal_heap_structure_legal_p(heap));
-
-    index = HEAP_IDX_ROOT;
-    index_last = minimal_heap_index_last(heap);
-
-    while (index <= index_last) {
-        index_left = HEAP_IDX_CHILD_L(index);
-        index_right = HEAP_IDX_CHILD_R(index);
-
-        if (index_left <= index_last &&
-            minimal_heap_nice(heap, index) > minimal_heap_nice(heap, index_left)) {
-            return false;
-        }
-
-        if (index_right <= index_last &&
-            minimal_heap_nice(heap, index) > minimal_heap_nice(heap, index_right)) {
-            return false;
-        }
-
-	index++;
-    }
-
-    return true;
-}
 
 static inline void
 utest_minimal_heap_decrease_nice(void)
@@ -93,7 +67,7 @@ utest_minimal_heap_decrease_nice(void)
     sint64 nice;
     uint32 index;
     uint32 offset;
-    struct minimal_heap *heap;
+    s_minimal_heap_t *heap;
 
     pass = true;
     heap = NULL;
@@ -109,7 +83,7 @@ utest_minimal_heap_decrease_nice(void)
     nice = minimal_heap_nice(heap, index);
 
     minimal_heap_decrease_nice(heap, index, offset);
-    RESULT_CHECK_sint64(nice - offset, minimal_heap_nice(heap, HEAP_IDX_ROOT),
+    RESULT_CHECK_sint64(nice - offset, minimal_heap_nice(heap, HEAP_INDEX_ROOT),
         &pass);
 
     minimal_heap_destroy(&heap);
@@ -123,7 +97,7 @@ utest_minimal_heap_increase_nice(void)
     sint64 nice;
     uint32 index;
     uint32 offset;
-    struct minimal_heap *heap;
+    s_minimal_heap_t *heap;
 
     pass = true;
     heap = NULL;

@@ -24,7 +24,7 @@ leftist_heap_nice_set(s_leftist_heap_t *heap, sint64 nice)
     if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
         return;
     } else {
-        DATA_NICE(LEFTIST_DATA(heap)) = nice;
+        LEFTIST_NICE(heap) = nice;
     }
 }
 
@@ -44,7 +44,7 @@ leftist_heap_nice(s_leftist_heap_t *heap)
     if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
         return HEAP_NICE_INVALID;
     } else {
-        return DATA_NICE(LEFTIST_DATA(heap));
+        return LEFTIST_NICE(heap);
     }
 }
 
@@ -64,7 +64,7 @@ leftist_heap_val(s_leftist_heap_t *heap)
     if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
     } else {
-        return DATA_VAL(LEFTIST_DATA(heap));
+        return LEFTIST_VAL(heap);
     }
 }
 
@@ -74,7 +74,7 @@ leftist_heap_val_set(s_leftist_heap_t *heap, void *val)
     if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
         return;
     } else {
-        DATA_VAL(LEFTIST_DATA(heap)) = val;
+        LEFTIST_VAL(heap) = val;
     }
 }
 
@@ -112,19 +112,17 @@ leftist_heap_illegal_p(s_leftist_heap_t *heap)
 static inline s_leftist_heap_t *
 leftist_heap_create_i(void *val, sint32 npl, sint64 nice)
 {
-    s_heap_data_t *data;
     s_leftist_heap_t *heap;
 
     assert_exit(npl != NPL_NULL);
 
     heap = memory_cache_allocate(sizeof(*heap));
-    data = LEFTIST_DATA(heap);
 
     LEFTIST_NPL(heap) = npl;
     LEFTIST_LEFT(heap) = LEFTIST_RIGHT(heap) = NULL;
 
-    DATA_VAL(data) = val;
-    DATA_NICE(data) = nice;
+    LEFTIST_VAL(heap) = val;
+    LEFTIST_NICE(heap) = nice;
 
     return heap;
 }
@@ -196,7 +194,7 @@ leftist_heap_get_min_i(s_leftist_heap_t *heap)
 {
     assert_exit(leftist_heap_legal_p(heap));
 
-    return DATA_VAL(LEFTIST_DATA(heap));
+    return LEFTIST_VAL(heap);
 }
 
 void *
@@ -284,7 +282,7 @@ leftist_heap_merge_from_right(s_leftist_heap_t *heap, s_leftist_heap_t *merge)
     assert_exit(leftist_heap_legal_ip(heap));
     assert_exit(leftist_heap_legal_ip(merge));
 
-    if (DATA_NICE(LEFTIST_DATA(heap)) <= DATA_NICE(LEFTIST_DATA(merge))) {
+    if (LEFTIST_NICE(heap) <= LEFTIST_NICE(merge)) {
         retval = heap;
         major = &heap;
         minor = merge;
@@ -300,7 +298,7 @@ leftist_heap_merge_from_right(s_leftist_heap_t *heap, s_leftist_heap_t *merge)
             break;
         }
 
-        if (DATA_NICE(LEFTIST_DATA(*major)) <= DATA_NICE(LEFTIST_DATA(minor))) {
+        if (LEFTIST_NICE(*major) <= LEFTIST_NICE(minor)) {
             major = &(*major)->right;
         } else {
             tmp = *major;

@@ -224,7 +224,7 @@ test_minimal_heap_sample(uint64 range, uint32 size)
     i = 0;
     while (i < size) {
         nice = (sint64)((dp_rand() % range) - (range / 2));
-        minimal_heap_insert(heap, &heap, nice);
+        minimal_heap_insert(heap, (void *)(ptr_t)i, nice);
         i++;
     }
 
@@ -244,7 +244,7 @@ test_maximal_heap_sample(uint64 range, uint32 size)
     i = 0;
     while (i < size) {
         nice = (sint64)((dp_rand() % range) - (range / 2));
-        maximal_heap_insert(heap, &heap, nice);
+        maximal_heap_insert(heap, (void *)(ptr_t)i, nice);
         i++;
     }
 
@@ -264,7 +264,7 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     i = 0;
     while (i < size) {
         nice = (sint64)((dp_rand() % range) - (range / 2));
-        min_max_heap_insert(heap, &heap, nice);
+        min_max_heap_insert(heap, (void *)(ptr_t)i, nice);
         i++;
     }
 

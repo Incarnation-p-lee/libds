@@ -1360,6 +1360,13 @@ static const struct test_layer_table minimal_heap[] = {
             &ptest_minimal_heap_build,
         },
     },
+    {
+        "build", NULL,
+        {
+            &utest_minimal_heap_find_index,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 
@@ -1446,6 +1453,13 @@ static const struct test_layer_table maximal_heap[] = {
         {
             &utest_maximal_heap_build,
             &ptest_maximal_heap_build,
+        },
+    },
+    {
+        "build", NULL,
+        {
+            &utest_maximal_heap_find_index,
+            NULL,
         },
     },
     {NULL, NULL, {NULL, NULL},},

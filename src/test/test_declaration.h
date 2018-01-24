@@ -23,8 +23,6 @@ static inline bool test_result_check_uint32_p(uint32 expect, uint32 get, bool *p
 static inline bool utest_directed_graph_dijkstra_valid_p(s_graph_t *graph, s_vertex_t *vertex, s_dijkstra_table_t *dj_table);
 static inline bool utest_directed_graph_paths_exist_p(s_graph_paths_t *paths);
 static inline bool utest_directed_graph_valid_path_p(s_array_queue_t *queue);
-static inline bool utest_maximal_heap_ordered_p(struct maximal_heap *heap);
-static inline bool utest_minimal_heap_ordered_p(struct minimal_heap *heap);
 static inline char * memory_maps_one_line_map_name(char *line);
 static inline double performance_test_reference_variance_calculate(char *name, sint64 period);
 static inline s_binary_search_tree_t * test_binary_search_tree_sample(uint64 range, uint32 count);
@@ -235,6 +233,7 @@ static inline void utest_maximal_heap_decrease_nice(void);
 static inline void utest_maximal_heap_increase_nice(void);
 static inline void utest_min_max_heap_decrease_nice(void);
 static inline void utest_min_max_heap_depth(void);
+static inline void utest_min_max_heap_get_max(void);
 static inline void utest_min_max_heap_increase_nice(void);
 static inline void utest_minimal_heap_decrease_nice(void);
 static inline void utest_minimal_heap_increase_nice(void);

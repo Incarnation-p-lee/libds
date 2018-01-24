@@ -50,11 +50,9 @@ enum log_level {
 #define HASH_IDX_INVALID       0xffffffffu
 #define HASH_LD_FTR_INVALID    101u         // load factor max is 100u
 #define HEAP_NICE_INVALID      (sint64)(1ull << 63)
-#define HEAP_CPCT_DFT          4097u        // heap default capacity
-#define HEAP_IDX_INVALID       0u           // heap invalid index
-#define HEAP_IDX_ROOT          1u           // heap root index
-#define HEAP_NPL_NULL          -1           // heap NPL value of NULL
-#define HEAP_DEPTH_INVALID     SIZE_INVALID
+#define HEAP_INDEX_INVALID     0u
+#define HEAP_INDEX_ROOT        0x1u
+#define HEAP_INDEX_FIRST       HEAP_INDEX_ROOT
 #define QUEUE_SIZE_DFT         1024         // queue size default
 #define QUEUE_EXPD_SIZE_MIN    128          // queue expand size minimal
 #define QUEUE_REST_INVALID     SIZE_INVALID
@@ -561,6 +559,7 @@ extern bool maximal_heap_empty_p(s_maximal_heap_t *heap);
 extern bool maximal_heap_full_p(s_maximal_heap_t *heap);
 extern bool maximal_heap_illegal_p(s_maximal_heap_t *heap);
 extern bool maximal_heap_legal_p(s_maximal_heap_t *heap);
+extern bool maximal_heap_ordered_p(s_maximal_heap_t *heap);
 extern bool min_max_heap_empty_p(s_min_max_heap_t *heap);
 extern bool min_max_heap_full_p(s_min_max_heap_t *heap);
 extern bool min_max_heap_illegal_p(s_min_max_heap_t *heap);
@@ -569,6 +568,7 @@ extern bool minimal_heap_empty_p(s_minimal_heap_t *heap);
 extern bool minimal_heap_full_p(s_minimal_heap_t *heap);
 extern bool minimal_heap_illegal_p(s_minimal_heap_t *heap);
 extern bool minimal_heap_legal_p(s_minimal_heap_t *heap);
+extern bool minimal_heap_ordered_p(s_minimal_heap_t *heap);
 extern s_leftist_heap_t * leftist_heap_create(void);
 extern s_leftist_heap_t * leftist_heap_insert(s_leftist_heap_t *heap, void *val, sint64 nice);
 extern s_leftist_heap_t * leftist_heap_left(s_leftist_heap_t *heap);

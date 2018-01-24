@@ -32,7 +32,7 @@ uint32
 min_max_heap_index_limit(s_min_max_heap_t *heap)
 {
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
-        return INDEX_INVALID;
+        return HEAP_INDEX_INVALID;
     } else {
         return binary_heap_index_limit(HEAP_ALIAS(heap));
     }
@@ -53,7 +53,7 @@ min_max_heap_nice(s_min_max_heap_t *heap, uint32 index)
 {
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return HEAP_NICE_INVALID;
-    } else if (index == HEAP_IDX_INVALID) {
+    } else if (index == HEAP_INDEX_INVALID) {
         return HEAP_NICE_INVALID;
     } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return HEAP_NICE_INVALID;
@@ -67,7 +67,7 @@ min_max_heap_val(s_min_max_heap_t *heap, uint32 index)
 {
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
-    } else if (index == HEAP_IDX_INVALID) {
+    } else if (index == HEAP_INDEX_INVALID) {
         return PTR_INVALID;
     } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return PTR_INVALID;
@@ -126,7 +126,7 @@ uint32
 min_max_heap_index_last(s_min_max_heap_t *heap)
 {
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
-        return SIZE_INVALID;
+        return HEAP_INDEX_INVALID;
     } else {
         return INDEX_LAST(HEAP_ALIAS(heap));
     }
@@ -171,11 +171,11 @@ min_max_heap_get_max(s_min_max_heap_t *heap)
 
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
-    } else if (INDEX_ROOT == INDEX_LAST(heap->alias)) {
-        return ALIAS_VAL(HEAP_ALIAS(heap), INDEX_ROOT);
+    } else if (HEAP_INDEX_ROOT == INDEX_LAST(HEAP_ALIAS(heap))) {
+        return ALIAS_VAL(HEAP_ALIAS(heap), HEAP_INDEX_ROOT);
     } else {
-        index = binary_heap_child_max_nice_index(HEAP_ALIAS(heap), INDEX_ROOT);
-        assert_exit(index != INDEX_INVALID);
+        index = binary_heap_child_max_nice_index(HEAP_ALIAS(heap), HEAP_INDEX_ROOT);
+        assert_exit(index != HEAP_INDEX_INVALID);
 
         return ALIAS_VAL(HEAP_ALIAS(heap), index);
     }
@@ -300,9 +300,9 @@ min_max_heap_remove_max_i(s_min_max_heap_t *heap)
     assert_exit(min_max_heap_legal_p(heap));
 
     alias = HEAP_ALIAS(heap);
-    max_index = binary_heap_child_max_nice_index(alias, INDEX_ROOT);
+    max_index = binary_heap_child_max_nice_index(alias, HEAP_INDEX_ROOT);
 
-    if (max_index == INDEX_INVALID) {
+    if (max_index == HEAP_INDEX_INVALID) {
         v = binary_heap_remove_root(alias, &binary_heap_min_max_down_ordered_p);
     } else {
         v = min_max_heap_remove_i(heap, max_index);

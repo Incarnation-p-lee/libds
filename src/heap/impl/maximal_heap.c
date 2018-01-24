@@ -32,7 +32,7 @@ uint32
 maximal_heap_index_limit(s_maximal_heap_t *heap)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
-        return INDEX_INVALID;
+        return HEAP_INDEX_INVALID;
     } else {
         return binary_heap_index_limit(HEAP_ALIAS(heap));
     }
@@ -53,7 +53,7 @@ maximal_heap_nice(s_maximal_heap_t *heap, uint32 index)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
         return HEAP_NICE_INVALID;
-    } else if (index == HEAP_IDX_INVALID) {
+    } else if (index == HEAP_INDEX_INVALID) {
         return HEAP_NICE_INVALID;
     } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return HEAP_NICE_INVALID;
@@ -67,12 +67,34 @@ maximal_heap_val(s_maximal_heap_t *heap, uint32 index)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
-    } else if (index == HEAP_IDX_INVALID) {
+    } else if (index == HEAP_INDEX_INVALID) {
         return PTR_INVALID;
     } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return PTR_INVALID;
     } else {
         return ALIAS_VAL(HEAP_ALIAS(heap), index);
+    }
+}
+
+static inline bool
+maximal_heap_ordered_ip(s_maximal_heap_t *heap)
+{
+    s_binary_heap_t *alias;
+
+    assert_exit(maximal_heap_legal_ip(heap));
+
+    alias = HEAP_ALIAS(heap);
+
+    return binary_heap_ordered_p(alias, &binary_heap_maximal_ordered_p);
+}
+
+bool
+maximal_heap_ordered_p(s_maximal_heap_t *heap)
+{
+    if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
+        return false;
+    } else {
+        return maximal_heap_ordered_ip(heap);
     }
 }
 
@@ -126,7 +148,7 @@ uint32
 maximal_heap_index_last(s_maximal_heap_t *heap)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
-        return SIZE_INVALID;
+        return HEAP_INDEX_INVALID;
     } else {
         return INDEX_LAST(HEAP_ALIAS(heap));
     }
@@ -174,7 +196,7 @@ maximal_heap_remove_i(s_maximal_heap_t *heap, uint32 idx)
     s_binary_heap_t *alias;
     s_heap_data_t *data_tmp;
 
-    assert_exit(idx != INDEX_ROOT);
+    assert_exit(idx != HEAP_INDEX_ROOT);
     assert_exit(maximal_heap_legal_ip(heap));
     assert_exit(!binary_heap_empty_p(HEAP_ALIAS(heap)));
     assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), idx));
@@ -184,13 +206,13 @@ maximal_heap_remove_i(s_maximal_heap_t *heap, uint32 idx)
     ALIAS_DATA(alias, idx) = NULL;
 
     /* Percolate current index node to root, then remove the root. */
-    nice = ALIAS_NICE(alias, INDEX_ROOT) + 1;
+    nice = ALIAS_NICE(alias, HEAP_INDEX_ROOT) + 1;
     idx = binary_heap_reorder(alias, idx, nice, &binary_heap_maximal_ordered_p);
 
-    assert_exit(idx == INDEX_ROOT);
-    assert_exit(NULL_PTR_P(ALIAS_DATA(alias, INDEX_ROOT)));
+    assert_exit(idx == HEAP_INDEX_ROOT);
+    assert_exit(NULL_PTR_P(ALIAS_DATA(alias, HEAP_INDEX_ROOT)));
 
-    ALIAS_DATA(alias, INDEX_ROOT) = data_tmp;
+    ALIAS_DATA(alias, HEAP_INDEX_ROOT) = data_tmp;
 
     return binary_heap_remove_root(alias, &binary_heap_maximal_ordered_p);
 }
@@ -202,7 +224,7 @@ maximal_heap_remove(s_maximal_heap_t *heap, uint32 index)
         return PTR_INVALID;
     } else if (binary_heap_index_illegal_p(HEAP_ALIAS(heap), index)) {
         return PTR_INVALID;
-    } else if (index == INDEX_ROOT) {
+    } else if (index == HEAP_INDEX_ROOT) {
         return binary_heap_remove_root(HEAP_ALIAS(heap),
             &binary_heap_maximal_ordered_p);
     } else {
@@ -295,7 +317,7 @@ maximal_heap_build_i(s_maximal_heap_t *heap)
 
     alias = HEAP_ALIAS(heap);
 
-    for (i = ALIAS_SIZE(alias) / 2; i != INDEX_INVALID; i--) {
+    for (i = ALIAS_SIZE(alias) / 2; i != HEAP_INDEX_INVALID; i--) {
         nice = ALIAS_NICE(alias, i);
         data_tmp = ALIAS_DATA(alias, i);
         ALIAS_DATA(alias, i) = NULL;
@@ -336,7 +358,7 @@ uint32
 maximal_heap_find_index(s_maximal_heap_t *heap, void *val)
 {
     if (MAXIMAL_HEAP_ILLEGAL_P(heap)) {
-        return INDEX_INVALID;
+        return HEAP_INDEX_INVALID;
     } else {
         return binary_heap_find_index(HEAP_ALIAS(heap), val);
     }
