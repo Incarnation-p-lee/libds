@@ -108,7 +108,7 @@ test_binary_search_tree_sample(uint64 range, uint32 count)
     return tree;
 }
 
-static inline struct avl_tree *
+static inline s_avl_tree_t *
 test_avl_tree_sample(uint64 range, uint32 count)
 {
     uint32 i;
@@ -136,13 +136,13 @@ test_avl_tree_sample(uint64 range, uint32 count)
     return tree;
 }
 
-static inline struct splay_tree *
+static inline s_splay_tree_t *
 test_splay_tree_sample(uint64 range, uint32 node_count)
 {
-    struct splay_tree *tree;
-    struct splay_tree *tmp;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_splay_tree_t *tree;
+    s_splay_tree_t *tmp;
 
     tree = splay_tree_create(&nice, 0);
     i = 1;
@@ -161,13 +161,13 @@ test_splay_tree_sample(uint64 range, uint32 node_count)
     return tree;
 }
 
-static inline struct open_addressing_hash *
+static inline s_open_addressing_hash_t *
 test_open_addressing_hash_sample(uint32 count)
 {
-    struct open_addressing_hash *hash;
-    struct memory_maps *heap;
     uint64 iter;
     uint64 limit;
+    struct memory_maps *heap;
+    s_open_addressing_hash_t *hash;
 
     hash = open_addressing_hash_create(0x11u);
     heap = memory_maps_entry_find("[heap]");
@@ -186,13 +186,13 @@ test_open_addressing_hash_sample(uint32 count)
     return hash;
 }
 
-static inline struct separate_chain_hash *
+static inline s_separate_chain_hash_t *
 test_separate_chain_hash_sample(uint32 count)
 {
-    struct separate_chain_hash *hash;
-    struct memory_maps *heap;
     uint64 iter;
     uint64 limit;
+    struct memory_maps *heap;
+    s_separate_chain_hash_t *hash;
 
     hash = separate_chain_hash_create(0x11u);
     heap = memory_maps_entry_find("[heap]");
@@ -211,12 +211,12 @@ test_separate_chain_hash_sample(uint32 count)
     return hash;
 }
 
-static inline struct minimal_heap *
+static inline s_minimal_heap_t *
 test_minimal_heap_sample(uint64 range, uint32 size)
 {
-    struct minimal_heap *heap;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_minimal_heap_t *heap;
 
     assert_exit(0 != size);
 
@@ -231,12 +231,12 @@ test_minimal_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
-static inline struct maximal_heap *
+static inline s_maximal_heap_t *
 test_maximal_heap_sample(uint64 range, uint32 size)
 {
-    struct maximal_heap *heap;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_maximal_heap_t *heap;
 
     assert_exit(0 != size);
 
@@ -251,12 +251,12 @@ test_maximal_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
-static inline struct min_max_heap *
+static inline s_min_max_heap_t *
 test_min_max_heap_sample(uint64 range, uint32 size)
 {
-    struct min_max_heap *heap;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_min_max_heap_t *heap;
 
     assert_exit(0 != size);
 
@@ -271,12 +271,12 @@ test_min_max_heap_sample(uint64 range, uint32 size)
     return heap;
 }
 
-static inline struct leftist_heap *
+static inline s_leftist_heap_t *
 test_leftist_heap_sample(uint64 range, uint32 size)
 {
-    struct leftist_heap *heap;
-    sint64 nice;
     uint32 i;
+    sint64 nice;
+    s_leftist_heap_t *heap;
 
     assert_exit(0 != size);
 

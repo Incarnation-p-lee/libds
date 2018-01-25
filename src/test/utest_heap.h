@@ -26,7 +26,7 @@ utest_##name##_heap_create(void)                                             \
     RESULT_CHECK_uint32(HEAP_size(heap) + 1, HEAP_index_limit(heap), &pass); \
     RESULT_CHECK_uint32(HEAP_size(heap), HEAP_index_last(heap), &pass);      \
                                                                              \
-    i = HEAP_INDEX_INVALID;                                                    \
+    i = HEAP_INDEX_INVALID;                                                  \
     RESULT_CHECK_sint64(HEAP_NICE_INVALID, HEAP_nice(heap, i), &pass);       \
     RESULT_CHECK_pointer(PTR_INVALID, HEAP_val(heap, i), &pass);             \
     i = HEAP_index_limit(heap);                                              \

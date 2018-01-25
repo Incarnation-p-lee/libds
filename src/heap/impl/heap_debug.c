@@ -118,7 +118,7 @@ leftist_heap_node_heap_unordered_p(s_leftist_heap_t *node)
 static inline bool
 leftist_heap_validity_p(s_leftist_heap_t *heap)
 {
-    if (NON_NULL_PTR_P(heap)) {
+    if (NULL_PTR_P(heap)) {
         return true;
     } else if (leftist_heap_node_heap_unordered_p(heap)) {
         return false;
