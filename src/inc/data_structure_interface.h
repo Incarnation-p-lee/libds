@@ -647,6 +647,7 @@ extern bool semaphore_illegal_p(s_semaphore_t *semaphore);
 extern bool semaphore_legal_p(s_semaphore_t *semaphore);
 extern bool spin_lock_illegal_p(s_spin_lock_t *lock);
 extern bool spin_lock_legal_p(s_spin_lock_t *lock);
+extern bool spin_lock_try(s_spin_lock_t *lock);
 extern bool spin_locked_p(s_spin_lock_t *lock);
 extern bool spin_unlocked_p(s_spin_lock_t *lock);
 extern s_mutex_t * mutex_create(void);

@@ -1813,6 +1813,13 @@ static const struct test_layer_table spin[] = {
         },
     },
     {
+        "lock_try", NULL,
+        {
+            &utest_spin_lock_try,
+            &ptest_spin_lock_try,
+        },
+    },
+    {
         "unlock", NULL,
         {
             &utest_spin_unlock,

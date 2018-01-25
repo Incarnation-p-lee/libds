@@ -46,7 +46,7 @@ utest_spin_lock_thread(void *lock_sample)
     uint32 i;
     s_spin_lock_sample_t *sample;
 
-    assert_exit(!complain_null_pointer_p(lock_sample));
+    assert_exit(NON_NULL_PTR_P(lock_sample));
 
     i = 0;
     sample = lock_sample;
@@ -81,29 +81,21 @@ utest_spin_lock(void)
     count = sizeof(critical_section[0]) * LOCK_THREAD_MAX;
     dp_memset(critical_section, 0, count);
 
-    i = 0;
-    while (i < LOCK_THREAD_MAX) {
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
         sample[i].idx = i;
         sample[i].lock = lock;
-        i++;
     }
 
-    i = 0;
-    while (i < LOCK_THREAD_MAX) {
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
         dp_thread_create(&ids[i], NULL, utest_spin_lock_thread, &sample[i]);
-        i++;
     }
 
-    i = 0;
-    while (i < LOCK_THREAD_MAX) {
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
         dp_thread_join(ids[i], NULL);
-        i++;
     }
 
-    i = 0;
-    while (i < LOCK_THREAD_MAX) {
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
         RESULT_CHECK_uint32(critical_section[i], i, &pass);
-        i++;
     }
 
     spin_lock_destroy(&lock);
@@ -191,5 +183,75 @@ utest_spin_locked_p(void)
 
     spin_lock_destroy(&lock);
     UNIT_TEST_RESULT(spin_locked_p, pass);
+}
+
+static inline void *
+utest_spin_lock_try_thread(void *lock_sample)
+{
+    uint32 i;
+    bool is_succ;
+    s_spin_lock_sample_t *sample;
+
+    assert_exit(NON_NULL_PTR_P(lock_sample));
+
+    sample = lock_sample;
+
+    is_succ = spin_lock_try(sample->lock);
+
+    if (is_succ == false) {
+        return NULL;
+    }
+
+    for (i = 0; i < 10000000; i++) {
+        ;
+    }
+
+    critical_section[0] += 1;
+
+    spin_unlock(sample->lock);
+
+    return (void *)(ptr_t)i;
+}
+
+static inline void
+utest_spin_lock_try(void)
+{
+    bool pass;
+    uint32 i, count;
+    s_spin_lock_t *lock;
+    dp_thread_id_t ids[LOCK_THREAD_MAX];
+    s_spin_lock_sample_t sample[LOCK_THREAD_MAX];
+
+    UNIT_TEST_BEGIN(spin_lock);
+
+    pass = true;
+    lock = spin_lock_create();
+
+    RESULT_CHECK_bool(false, spin_lock_try(NULL), &pass);
+
+    count = sizeof(critical_section[0]) * LOCK_THREAD_MAX;
+    dp_memset(critical_section, 0, count);
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        sample[i].idx = i;
+        sample[i].lock = lock;
+    }
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_create(&ids[i], NULL, utest_spin_lock_try_thread, &sample[i]);
+    }
+
+    for (i = 0; i < LOCK_THREAD_MAX; i++) {
+        dp_thread_join(ids[i], NULL);
+    }
+
+    RESULT_CHECK_uint32(critical_section[0], 1, &pass);
+
+    for (i = 1; i < LOCK_THREAD_MAX; i++) {
+        RESULT_CHECK_uint32(critical_section[i], 0, &pass);
+    }
+
+    spin_lock_destroy(&lock);
+    UNIT_TEST_RESULT(spin_lock, pass);
 }
 

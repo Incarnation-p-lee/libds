@@ -163,3 +163,29 @@ spin_lock(s_spin_lock_t *lock)
     }
 }
 
+static inline bool
+spin_lock_try_i(s_spin_lock_t *lock)
+{
+    uint32 status;
+
+    assert_exit(spin_lock_legal_ip(lock));
+
+    SPIN_LOCK_TRY(lock, status);
+
+    if (status == SPIN_LOCK_SUCCESS) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool
+spin_lock_try(s_spin_lock_t *lock)
+{
+    if (SPIN_LOCK_ILLEGAL_P(lock)) {
+        return false;
+    } else {
+        return spin_lock_try_i(lock);
+    }
+}
+

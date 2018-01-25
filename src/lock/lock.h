@@ -5,6 +5,9 @@
 #define SPIN_LOCK_UNLOCKED     0
 #define SPIN_LOCK_LOCKED       1
 
+#define SPIN_LOCK_SUCCESS      0
+#define SPIN_LOCK_FAIL         1
+
 #define SPIN_SHARED_LOCK(s)            (s)->shared_lock
 
 #if defined(DEBUG)
@@ -24,9 +27,10 @@
 #endif
 
 #if defined(X86_64)
-    #define SPIN_LOCK(s)               SPIN_LOCK_X64(s)
+    #define SPIN_LOCK(l)               SPIN_LOCK_X64(l)
+    #define SPIN_LOCK_TRY(l, s)        SPIN_LOCK_TRY_X64(l, s)
 
-    #define SPIN_LOCK_X64(lock)        \
+    #define SPIN_LOCK_X64(lock)             \
         asm volatile (                      \
             "mov           $0x1, %%edx\n\t" \
             "LOOP:                    \n\t" \
@@ -36,8 +40,19 @@
             "pause                 \n\t"    \
             "jmp LOOP              \n\t"    \
             "END:                  \n\t"    \
-            :"+m"(lock->shared_lock)   \
+            :"+m"(lock->shared_lock)        \
             :                               \
+            :"eax", "edx")
+
+    /* The status is a stack variable, for thread safy */
+    #define SPIN_LOCK_TRY_X64(lock, status)        \
+        asm volatile (                             \
+            "mov           $0x1, %%edx\n\t"        \
+            "mov           $0x0, %%eax\n\t"        \
+            "lock;cmpxchg %%edx, %0\n\t"           \
+            "mov          %%eax, %1\n\t"           \
+            :"+m"(lock->shared_lock), "=m"(status) \
+            :                                      \
             :"eax", "edx")
 
     #define SEMAPHORE_DOWN(semaphore)    SEMAPHORE_DOWN_X64(semaphore)
