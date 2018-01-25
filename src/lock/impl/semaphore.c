@@ -89,7 +89,7 @@ semaphore_legal_p(s_semaphore_t *semaphore)
 bool
 semaphore_illegal_p(s_semaphore_t *semaphore)
 {
-    return !semaphore_illegal_ip(semaphore);
+    return !semaphore_legal_ip(semaphore);
 }
 
 static inline void
@@ -141,6 +141,39 @@ semaphore_down(s_semaphore_t *semaphore)
         return;
     } else {
         semaphore_down_i(semaphore);
+    }
+}
+
+static inline bool
+semaphore_down_try_i(s_semaphore_t *semaphore)
+{
+    bool is_success;
+
+    assert_exit(semaphore_legal_ip(semaphore));
+
+    spin_lock(semaphore_lock(semaphore));
+
+    SEMAPHORE_DOWN(semaphore);
+
+    if (semaphore_val(semaphore) < 0) {
+        is_success = false;
+        SEMAPHORE_UP(semaphore);
+    } else {
+        is_success = true;
+    }
+
+    spin_unlock(semaphore_lock(semaphore));
+
+    return is_success;
+}
+
+bool
+semaphore_down_try(s_semaphore_t *semaphore)
+{
+    if (SEMAPHORE_ILLEGAL_P(semaphore)) {
+        return false;
+    } else {
+        return semaphore_down_try_i(semaphore);
     }
 }
 
@@ -204,6 +237,16 @@ semaphore_available_p(s_semaphore_t *semaphore)
         return false;
     } else {
         return semaphore_available_ip(semaphore);
+    }
+}
+
+bool
+semaphore_unavailable_p(s_semaphore_t *semaphore)
+{
+    if (SEMAPHORE_ILLEGAL_P(semaphore)) {
+        return false;
+    } else {
+        return !semaphore_available_ip(semaphore);
     }
 }
 

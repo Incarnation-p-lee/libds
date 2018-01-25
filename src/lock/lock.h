@@ -58,19 +58,19 @@
     #define SEMAPHORE_DOWN(semaphore)    SEMAPHORE_DOWN_X64(semaphore)
 
     #define SEMAPHORE_DOWN_X64(lock) \
-        asm volatile (                    \
-            "lock;decl %0\n\t"            \
-            :"+m"(semaphore->val)         \
-            :                             \
+        asm volatile (               \
+            "lock;decl %0\n\t"       \
+            :"+m"(semaphore->val)    \
+            :                        \
             :)
 
     #define SEMAPHORE_UP(semaphore)      SEMAPHORE_UP_X64(semaphore)
 
     #define SEMAPHORE_UP_X64(lock) \
-        asm volatile (                  \
-            "lock;incl %0\n\t"          \
-            :"+m"(semaphore->val)       \
-            :                           \
+        asm volatile (             \
+            "lock;incl %0\n\t"     \
+            :"+m"(semaphore->val)  \
+            :                      \
             :)
 
 #endif

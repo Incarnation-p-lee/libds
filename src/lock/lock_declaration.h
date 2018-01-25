@@ -11,8 +11,10 @@
 bool mutex_illegal_p(s_mutex_t *mutex);
 bool mutex_legal_p(s_mutex_t *mutex);
 bool semaphore_available_p(s_semaphore_t *semaphore);
+bool semaphore_down_try(s_semaphore_t *semaphore);
 bool semaphore_illegal_p(s_semaphore_t *semaphore);
 bool semaphore_legal_p(s_semaphore_t *semaphore);
+bool semaphore_unavailable_p(s_semaphore_t *semaphore);
 bool spin_lock_illegal_p(s_spin_lock_t *lock);
 bool spin_lock_legal_p(s_spin_lock_t *lock);
 bool spin_lock_try(s_spin_lock_t *lock);
@@ -24,6 +26,7 @@ s_spin_lock_t * spin_lock_create(void);
 static inline bool mutex_illegal_ip(s_mutex_t *mutex);
 static inline bool mutex_legal_ip(s_mutex_t *mutex);
 static inline bool semaphore_available_ip(s_semaphore_t *semaphore);
+static inline bool semaphore_down_try_i(s_semaphore_t *semaphore);
 static inline bool semaphore_illegal_ip(s_semaphore_t *semaphore);
 static inline bool semaphore_legal_ip(s_semaphore_t *semaphore);
 static inline bool spin_lock_illegal_ip(s_spin_lock_t *lock);
