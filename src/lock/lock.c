@@ -9,4 +9,5 @@
 
 #include "impl/spin_lock.c"
 #include "impl/semaphore.c"
+#include "impl/mutex.c"
 

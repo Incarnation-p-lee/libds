@@ -257,15 +257,19 @@ static struct performance_test_reference performance_reference[] = {
 
     {"spin_lock_create",                                 0x0u, 0x0u},
     {"spin_lock_destroy",                                0x0u, 0x0u},
+    {"spin_lock",                                        0x0u, 0x0u},
     {"spin_lock_try",                                    0x0u, 0x0u},
-    {"spin_lock_release",                                0x0u, 0x0u},
-    {"spin_lock_available_p",                            0x0u, 0x0u},
+    {"spin_unlock",                                      0x0u, 0x0u},
+    {"spin_unlocked_p",                                  0x0u, 0x0u},
+    {"spin_locked_p",                                    0x0u, 0x0u},
 
     {"semaphore_create",                                 0x0u, 0x0u},
     {"semaphore_destroy",                                0x0u, 0x0u},
     {"semaphore_down",                                   0x0u, 0x0u},
+    {"semaphore_down_try",                               0x0u, 0x0u},
     {"semaphore_up",                                     0x0u, 0x0u},
     {"semaphore_available_p",                            0x0u, 0x0u},
+    {"semaphore_unavailable_p",                          0x0u, 0x0u},
 
     {NULL,                                               0x0u, 0x0u},
 };
