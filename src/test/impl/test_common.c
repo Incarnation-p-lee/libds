@@ -9,13 +9,13 @@ test_binary_heap_data_randomization(struct heap_data **hd_array,
     assert_exit(NULL != hd_array);
     assert_exit(NULL == hd_array[0]);
 
-    idx = HEAP_IDX_ROOT;
+    idx = HEAP_INDEX_ROOT;
 
     while (idx <= last) {
         rand_idx = dp_rand() % idx;
 
-        if (HEAP_IDX_INVALID == rand_idx) {
-            rand_idx = HEAP_IDX_ROOT;
+        if (HEAP_INDEX_INVALID == rand_idx) {
+            rand_idx = HEAP_INDEX_ROOT;
         }
 
         bk = hd_array[rand_idx];

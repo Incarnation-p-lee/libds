@@ -1,294 +1,363 @@
-uint32
-minimal_heap_index_limit(struct minimal_heap *heap)
+static inline bool
+minimal_heap_legal_ip(s_minimal_heap_t *heap)
 {
     if (NULL_PTR_P(heap)) {
-        return HEAP_CPCT_INVALID;
+        return false;
+    } else if (binary_heap_illegal_p(HEAP_ALIAS(heap))) {
+        return false;
     } else {
-        return heap->alias->capacity + 1;
+        return true;
+    }
+}
+
+static inline bool
+minimal_heap_illegal_ip(s_minimal_heap_t *heap)
+{
+    return !minimal_heap_legal_ip(heap);
+}
+
+bool
+minimal_heap_legal_p(s_minimal_heap_t *heap)
+{
+    return minimal_heap_legal_ip(heap);
+}
+
+bool
+minimal_heap_illegal_p(s_minimal_heap_t *heap)
+{
+    return minimal_heap_illegal_ip(heap);
+}
+
+uint32
+minimal_heap_index_limit(s_minimal_heap_t *heap)
+{
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return HEAP_INDEX_INVALID;
+    } else {
+        return binary_heap_index_limit(HEAP_ALIAS(heap));
     }
 }
 
 uint32
-minimal_heap_size(struct minimal_heap *heap)
+minimal_heap_size(s_minimal_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
-        return HEAP_SIZE_INVALID;
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return SIZE_INVALID;
     } else {
-        return heap->alias->size;
+        return ALIAS_SIZE(HEAP_ALIAS(heap));
     }
 }
 
 sint64
-minimal_heap_nice(struct minimal_heap *heap, uint32 index)
+minimal_heap_nice(s_minimal_heap_t *heap, uint32 index)
 {
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return HEAP_NICE_INVALID;
-    } else if (index == HEAP_IDX_INVALID || index >= minimal_heap_index_limit(heap)) {
+    } else if (index == HEAP_INDEX_INVALID) {
+        return HEAP_NICE_INVALID;
+    } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return HEAP_NICE_INVALID;
     } else {
-        return heap->alias->base[index]->nice;
+        return ALIAS_NICE(HEAP_ALIAS(heap), index);
     }
 }
 
 void *
-minimal_heap_val(struct minimal_heap *heap, uint32 index)
+minimal_heap_val(s_minimal_heap_t *heap, uint32 index)
 {
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
-    } else if (index == HEAP_IDX_INVALID || index >= minimal_heap_index_limit(heap)) {
+    } else if (index == HEAP_INDEX_INVALID) {
+        return PTR_INVALID;
+    } else if (index >= binary_heap_index_limit(HEAP_ALIAS(heap))) {
         return PTR_INVALID;
     } else {
-        return heap->alias->base[index]->val;
+        return ALIAS_VAL(HEAP_ALIAS(heap), index);
     }
 }
 
-struct minimal_heap *
+static inline bool
+minimal_heap_ordered_ip(s_minimal_heap_t *heap)
+{
+    s_binary_heap_t *alias;
+
+    assert_exit(minimal_heap_legal_ip(heap));
+
+    alias = HEAP_ALIAS(heap);
+
+    return binary_heap_ordered_p(alias, &binary_heap_minimal_ordered_p);
+}
+
+bool
+minimal_heap_ordered_p(s_minimal_heap_t *heap)
+{
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return false;
+    } else {
+        return minimal_heap_ordered_ip(heap);
+    }
+}
+
+s_minimal_heap_t *
 minimal_heap_create(uint32 capacity)
 {
-    struct minimal_heap *heap;
+    s_minimal_heap_t *heap;
 
     heap = memory_cache_allocate(sizeof(*heap));
-    heap->alias = binary_heap_create(capacity);
+    HEAP_ALIAS(heap) = binary_heap_create(capacity);
 
     return heap;
 }
 
 void
-minimal_heap_destroy(struct minimal_heap **heap)
+minimal_heap_destroy(s_minimal_heap_t **heap)
 {
-    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
-        binary_heap_destroy(&(*heap)->alias);
+    if (NULL_PTR_P(heap)) {
+        return;
+    } else if (MINIMAL_HEAP_ILLEGAL_P(*heap)) {
+        return;
+    } else {
+        binary_heap_destroy(HEAP_ALIAS(*heap));
         memory_cache_free(*heap);
+
         *heap = NULL;
     }
 }
 
 bool
-minimal_heap_empty_p(struct minimal_heap *heap)
+minimal_heap_empty_p(s_minimal_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return false;
     } else {
-        return binary_heap_empty_p(heap->alias);
+        return binary_heap_empty_p(HEAP_ALIAS(heap));
     }
 }
 
 bool
-minimal_heap_full_p(struct minimal_heap *heap)
+minimal_heap_full_p(s_minimal_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return true;
     } else {
-        return binary_heap_full_p(heap->alias);
+        return binary_heap_full_p(HEAP_ALIAS(heap));
     }
 }
 
 uint32
-minimal_heap_index_last(struct minimal_heap *heap)
+minimal_heap_index_last(s_minimal_heap_t *heap)
 {
-    return heap->alias->size;
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return HEAP_INDEX_INVALID;
+    } else {
+        return INDEX_LAST(HEAP_ALIAS(heap));
+    }
 }
 
 void
-minimal_heap_cleanup(struct minimal_heap *heap)
+minimal_heap_cleanup(s_minimal_heap_t *heap)
 {
-    if (!NULL_PTR_P(heap)) {
-        binary_heap_cleanup(heap->alias);
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return;
+    } else {
+        binary_heap_cleanup(HEAP_ALIAS(heap));
     }
 }
 
 void *
-minimal_heap_get_min(struct minimal_heap *heap)
+minimal_heap_get_min(s_minimal_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
-        return NULL;
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
     } else {
-        return binary_heap_root(heap->alias);
+        return binary_heap_root(HEAP_ALIAS(heap));
     }
 }
 
 void
-minimal_heap_insert(struct minimal_heap *heap, void *val, sint64 nice)
+minimal_heap_insert(s_minimal_heap_t *heap, void *val, sint64 nice)
 {
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return;
-    } if (binary_heap_nice_legal_p(nice)) {
-        binary_heap_insert(heap->alias, val, nice,
+    } if (binary_heap_nice_illegal_p(nice)) {
+        return;
+    } else {
+        binary_heap_insert(HEAP_ALIAS(heap), val, nice,
             &binary_heap_minimal_ordered_p);
     }
 }
 
 static inline void *
-minimal_heap_remove_internal(struct minimal_heap *heap, uint32 index)
+minimal_heap_remove_i(s_minimal_heap_t *heap, uint32 idx)
 {
     sint64 nice;
-    struct heap_data *tmp;
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
+    s_heap_data_t *data_tmp;
 
-    assert_exit(!NULL_PTR_P(heap));
-    assert_exit(!binary_heap_empty_p(heap->alias));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
-    assert_exit(binary_heap_index_legal_p(heap->alias, index));
+    assert_exit(minimal_heap_legal_ip(heap));
+    assert_exit(!binary_heap_empty_p(HEAP_ALIAS(heap)));
+    assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), idx));
 
-    alias = heap->alias;
+    alias = HEAP_ALIAS(heap);
+    data_tmp = ALIAS_DATA(alias, idx);
+    ALIAS_DATA(alias, idx) = NULL;
 
-    tmp = HEAP_DATA(alias, index);
-    HEAP_DATA(alias, index) = NULL;
-    nice = HEAP_NICE(alias, INDEX_ROOT) - 1;
+    /* Percolate current index node to root, then remove the root. */
+    nice = ALIAS_NICE(alias, HEAP_INDEX_ROOT) - 1;
+    idx = binary_heap_reorder(alias, idx, nice, &binary_heap_minimal_ordered_p);
 
-    /*
-     * percolate current index node to root, then remove the root.
-     */
-    index = binary_heap_reorder(alias, index, nice, &binary_heap_minimal_ordered_p);
+    assert_exit(idx == HEAP_INDEX_ROOT);
+    assert_exit(NULL_PTR_P(ALIAS_DATA(alias, HEAP_INDEX_ROOT)));
 
-    assert_exit(INDEX_ROOT == index);
-    assert_exit(NULL_PTR_P(HEAP_DATA(alias, INDEX_ROOT)));
+    ALIAS_DATA(alias, HEAP_INDEX_ROOT) = data_tmp;
 
-    HEAP_DATA(alias, INDEX_ROOT) = tmp;
     return binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
 }
 
 void *
-minimal_heap_remove(struct minimal_heap *heap, uint32 index)
+minimal_heap_remove(s_minimal_heap_t *heap, uint32 index)
 {
-    if (NULL_PTR_P(heap)) {
-        return NULL;
-    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
-        return NULL;
-    } else if (INDEX_ROOT == index) {
-        return binary_heap_remove_root(heap->alias,
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
+    } else if (binary_heap_index_illegal_p(HEAP_ALIAS(heap), index)) {
+        return PTR_INVALID;
+    } else if (index == HEAP_INDEX_ROOT) {
+        return binary_heap_remove_root(HEAP_ALIAS(heap),
             &binary_heap_minimal_ordered_p);
     } else {
-        return minimal_heap_remove_internal(heap, index);
+        return minimal_heap_remove_i(heap, index);
     }
 }
 
 void *
-minimal_heap_remove_min(struct minimal_heap *heap)
+minimal_heap_remove_min(s_minimal_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
-        return NULL;
-    } else if (binary_heap_empty_p(heap->alias)) {
-        pr_log_warn("Attempt to remove node in empty heap.\n");
-        return NULL;
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
+    } else if (binary_heap_empty_p(HEAP_ALIAS(heap))) {
+        return PTR_INVALID;
     } else {
-        return binary_heap_remove_root(heap->alias,
+        return binary_heap_remove_root(HEAP_ALIAS(heap),
             &binary_heap_minimal_ordered_p);
     }
 }
 
 static inline void
-minimal_heap_nice_alter(struct minimal_heap *heap, uint32 index,
-    sint64 new_nice)
+minimal_heap_nice_alter(s_minimal_heap_t *heap, uint32 idx, sint64 new)
 {
-    struct heap_data *tmp;
-    struct binary_heap *alias;
+    s_binary_heap_t *alias;
+    s_heap_data_t *data_tmp;
 
-    assert_exit(!NULL_PTR_P(heap));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
-    assert_exit(binary_heap_index_legal_p(heap->alias, index));
+    assert_exit(minimal_heap_legal_ip(heap));
+    assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), idx));
 
-    alias = heap->alias;
-    tmp = HEAP_DATA(alias, index);
-    HEAP_DATA(alias, index) = NULL;
+    alias = HEAP_ALIAS(heap);
+    data_tmp = ALIAS_DATA(alias, idx);
+    ALIAS_DATA(alias, idx) = NULL;
 
-    index = binary_heap_reorder(alias, index, new_nice,
-        &binary_heap_minimal_ordered_p);
-    assert_exit(NULL == HEAP_DATA(alias, index));
+    idx = binary_heap_reorder(alias, idx, new, &binary_heap_minimal_ordered_p);
+    assert_exit(NULL == ALIAS_DATA(alias, idx));
 
-    tmp->nice = new_nice;
-    HEAP_DATA(alias, index) = tmp;
+    ALIAS_DATA(alias, idx) = data_tmp;
+    ALIAS_NICE(alias, idx) = new;
+
+    assert_exit(minimal_heap_ordered_p(heap));
 }
 
 void
-minimal_heap_decrease_nice(struct minimal_heap *heap, uint32 index,
+minimal_heap_decrease_nice(s_minimal_heap_t *heap, uint32 index,
     uint32 offset)
 {
     sint64 nice;
 
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
-    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
+    } else if (binary_heap_index_illegal_p(HEAP_ALIAS(heap), index)) {
         return;
     } else {
-        nice = HEAP_NICE(heap->alias, index) - offset;
+        nice = ALIAS_NICE(HEAP_ALIAS(heap), index) - offset;
         minimal_heap_nice_alter(heap, index, nice);
     }
 }
 
 void
-minimal_heap_increase_nice(struct minimal_heap *heap, uint32 index,
+minimal_heap_increase_nice(s_minimal_heap_t *heap, uint32 index,
     uint32 offset)
 {
     sint64 nice;
 
-    if (NULL_PTR_P(heap)) {
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return;
     } else if (complain_zero_size_p(offset)) {
         return;
-    } else if (!binary_heap_index_legal_p(heap->alias, index)) {
+    } else if (binary_heap_index_illegal_p(HEAP_ALIAS(heap), index)) {
         return;
     } else {
-        nice = HEAP_NICE(heap->alias, index) + offset;
+        nice = ALIAS_NICE(HEAP_ALIAS(heap), index) + offset;
         minimal_heap_nice_alter(heap, index, nice);
     }
 }
 
 static inline void
-minimal_heap_build_internal(struct minimal_heap *heap)
+minimal_heap_build_i(s_minimal_heap_t *heap)
 {
-    uint32 iter;
-    uint32 index;
     sint64 nice;
-    struct heap_data *tmp;
-    struct binary_heap *alias;
+    uint32 i, index;
+    s_binary_heap_t *alias;
+    s_heap_data_t *data_tmp;
 
-    assert_exit(!NULL_PTR_P(heap));
-    assert_exit(binary_heap_full_p(heap->alias));
-    assert_exit(binary_heap_structure_legal_p(heap->alias));
+    assert_exit(minimal_heap_legal_ip(heap));
+    assert_exit(binary_heap_full_p(HEAP_ALIAS(heap)));
+    assert_exit(binary_heap_legal_p(HEAP_ALIAS(heap)));
 
-    alias = heap->alias;
-    iter = HEAP_SIZE(alias) / 2;
+    alias = HEAP_ALIAS(heap);
 
-    while (iter != INDEX_INVALID) {
-        index = iter;
-        tmp = HEAP_DATA(alias, index);
-        nice = HEAP_NICE(alias, index);
-        HEAP_DATA(alias, index) = NULL;
+    for (i = ALIAS_SIZE(alias) / 2; i != HEAP_INDEX_INVALID; i--) {
+        nice = ALIAS_NICE(alias, i);
+        data_tmp = ALIAS_DATA(alias, i);
+        ALIAS_DATA(alias, i) = NULL;
 
-        index = binary_heap_reorder(alias, index, nice,
+        index = binary_heap_reorder(alias, i, nice,
             &binary_heap_minimal_percolate_down);
 
-        assert_exit(NULL == HEAP_DATA(alias, index));
-        HEAP_DATA(alias, index) = tmp;
-
-        iter--;
+        assert_exit(ALIAS_DATA(alias, index) == NULL);
+        ALIAS_DATA(alias, index) = data_tmp;
     }
 }
 
-struct minimal_heap *
-minimal_heap_build(struct heap_data **hd_array, uint32 size)
+s_minimal_heap_t *
+minimal_heap_build(s_heap_data_t **hd_array, uint32 size)
 {
-    struct minimal_heap *heap;
+    s_minimal_heap_t *heap;
 
     if (NULL_PTR_P(hd_array)) {
-        return NULL;
+        return PTR_INVALID;
     } else if (complain_zero_size_p(size)) {
-        return NULL;
+        return PTR_INVALID;
     } else {
         heap = memory_cache_allocate(sizeof(*heap));
-        heap->alias = memory_cache_allocate(sizeof(*heap->alias));
+        HEAP_ALIAS(heap) = memory_cache_allocate(sizeof(*HEAP_ALIAS(heap)));
 
-        heap->alias->base = hd_array;
-        heap->alias->capacity = size - 1;
-        heap->alias->size = size - 1;
+        ALIAS_BASE(HEAP_ALIAS(heap)) = hd_array;
+        ALIAS_CAPACITY(HEAP_ALIAS(heap)) = size - 1;
+        ALIAS_SIZE(HEAP_ALIAS(heap)) = size - 1;
+        ALIAS_DATA(HEAP_ALIAS(heap), 0) = NULL;
 
-        hd_array[0] = NULL;
-        minimal_heap_build_internal(heap);
+        minimal_heap_build_i(heap);
 
         return heap;
+    }
+}
+
+uint32
+minimal_heap_find_index(s_minimal_heap_t *heap, void *val)
+{
+    if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
+        return HEAP_INDEX_INVALID;
+    } else {
+        return binary_heap_find_index(HEAP_ALIAS(heap), val);
     }
 }
 

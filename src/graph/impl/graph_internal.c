@@ -18,7 +18,7 @@ graph_create(void)
 static inline void
 graph_destroy(s_graph_t *graph)
 {
-    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph_legal_p(graph));
 
     graph_vertex_array_destroy(graph->vertex_array);
     graph_edge_array_destroy(graph->edge_array);
@@ -32,7 +32,7 @@ graph_vertex_create(s_graph_t *graph, void *value)
 {
     s_vertex_t *vertex;
 
-    assert_exit(graph_structure_legal_p(graph));
+    assert_exit(graph_legal_p(graph));
 
     vertex = memory_cache_allocate(sizeof(*vertex));
 
@@ -48,7 +48,7 @@ graph_vertex_create(s_graph_t *graph, void *value)
 static inline void
 graph_vertex_destroy(s_vertex_t *vertex)
 {
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_legal_p(vertex));
 
     if (vertex->precursor) { /* include indirected graph adjacent */
         graph_adjacent_destroy(vertex->precursor);
@@ -60,6 +60,30 @@ graph_vertex_destroy(s_vertex_t *vertex)
 
     memory_cache_free(vertex);
 }
+
+static inline void
+graph_vertex_is_visited_set(s_vertex_t *vertex, bool is_visited)
+{
+    assert_exit(graph_vertex_legal_p(vertex));
+
+    vertex->is_visited = is_visited;
+}
+
+// static inline bool
+// graph_vertex_is_visited_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_legal_p(vertex));
+// 
+//     return vertex->is_visited;
+// }
+
+// static inline bool
+// graph_vertex_is_unvisited_p(s_vertex_t *vertex)
+// {
+//     assert_exit(graph_vertex_legal_p(vertex));
+// 
+//     return !graph_vertex_is_visited_p(vertex);
+// }
 
 static inline s_vertex_array_t *
 graph_vertex_array_create(void)
@@ -87,7 +111,7 @@ graph_vertex_array_destroy(s_vertex_array_t *vertex_array)
     uint32 limit;
     s_vertex_t *vertex;
 
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+    assert_exit(graph_vertex_array_legal_p(vertex_array));
 
     i = 0;
     limit = graph_vertex_array_limit(vertex_array);
@@ -113,8 +137,8 @@ graph_vertex_array_add(s_vertex_array_t *v_array, s_vertex_t *vertex)
     uint32 new_size;
     s_array_queue_t *queue;
 
-    assert_exit(graph_vertex_array_structure_legal_p(v_array));
-    assert_exit(graph_vertex_structure_legal_p(vertex));
+    assert_exit(graph_vertex_array_legal_p(v_array));
+    assert_exit(graph_vertex_legal_p(vertex));
 
     queue = graph_vertex_array_queue(v_array);
     graph_vertex_array_inc(v_array);
@@ -146,7 +170,7 @@ graph_vertex_array_find(s_vertex_array_t *vertex_array, void *value)
     uint32 limit;
     s_vertex_t *vertex;
 
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+    assert_exit(graph_vertex_array_legal_p(vertex_array));
 
     i = 0;
     limit = graph_vertex_array_limit(vertex_array);
@@ -167,7 +191,7 @@ graph_vertex_array_queue_enter(s_vertex_array_t *vertex_array, void *val)
 {
     s_array_queue_t *queue;
 
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+    assert_exit(graph_vertex_array_legal_p(vertex_array));
 
     queue = graph_vertex_array_queue(vertex_array);
     array_queue_enter(queue, val);
@@ -176,7 +200,7 @@ graph_vertex_array_queue_enter(s_vertex_array_t *vertex_array, void *val)
 static inline void
 graph_vertex_array_remove(s_vertex_array_t *vertex_array, uint32 i)
 {
-    assert_exit(graph_vertex_array_structure_legal_p(vertex_array));
+    assert_exit(graph_vertex_array_legal_p(vertex_array));
     assert_exit(i < graph_vertex_array_limit(vertex_array));
 
     graph_vertex_array_queue_enter(vertex_array, (void *)(ptr_t)i);
@@ -212,7 +236,7 @@ graph_edge_array_destroy(s_edge_array_t *edge_array)
     uint32 limit;
     s_edge_t *edge;
 
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_edge_array_legal_p(edge_array));
 
     i = 0;
     limit = graph_edge_array_limit(edge_array);
@@ -233,8 +257,8 @@ graph_edge_array_destroy(s_edge_array_t *edge_array)
 static inline void
 graph_edge_array_edge_destroy(s_edge_array_t *edge_array, s_edge_t *edge)
 {
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_edge_array_legal_p(edge_array));
+    assert_exit(graph_edge_legal_p(edge));
 
     graph_edge_array_remove(edge_array, graph_edge_index(edge));
     graph_edge_destroy(edge);
@@ -248,8 +272,8 @@ graph_edge_array_add(s_edge_array_t *edge_array, s_edge_t *edge)
     uint32 new_size;
     s_array_queue_t *queue;
 
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_edge_array_legal_p(edge_array));
+    assert_exit(graph_edge_legal_p(edge));
 
     queue = graph_edge_array_queue(edge_array);
     graph_edge_array_inc(edge_array);
@@ -279,7 +303,7 @@ graph_edge_array_queue_enter(s_edge_array_t *edge_array, void *val)
 {
     s_array_queue_t *queue;
 
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_edge_array_legal_p(edge_array));
 
     queue = graph_edge_array_queue(edge_array);
     array_queue_enter(queue, val);
@@ -288,7 +312,7 @@ graph_edge_array_queue_enter(s_edge_array_t *edge_array, void *val)
 static inline void
 graph_edge_array_remove(s_edge_array_t *edge_array, uint32 i)
 {
-    assert_exit(graph_edge_array_structure_legal_p(edge_array));
+    assert_exit(graph_edge_array_legal_p(edge_array));
     assert_exit(i < graph_edge_array_limit(edge_array));
 
     graph_edge_array_queue_enter(edge_array, (void *)(ptr_t)i);
@@ -314,7 +338,7 @@ graph_edge_create(sint32 cost)
 static inline void
 graph_edge_destroy(s_edge_t *edge)
 {
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_edge_legal_p(edge));
 
     memory_cache_free(edge);
 }
@@ -339,7 +363,7 @@ graph_adjacent_create(void)
 static inline void
 graph_adjacent_destroy(s_adjacent_t *adjacent)
 {
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+    assert_exit(graph_adjacent_legal_p(adjacent));
 
     memory_cache_free(adjacent->array);
     memory_cache_free(adjacent);
@@ -351,8 +375,8 @@ graph_adjacent_edge_append(s_adjacent_t *adjacent, s_edge_t *edge)
     uint32 bytes;
     uint32 new_size;
 
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
-    assert_exit(graph_edge_structure_legal_p(edge));
+    assert_exit(graph_adjacent_legal_p(adjacent));
+    assert_exit(graph_edge_legal_p(edge));
 
     if (graph_adjacent_full_p(adjacent)) {
         new_size = graph_adjacent_size(adjacent) * 2;
@@ -374,7 +398,7 @@ graph_adjacent_compress(s_adjacent_t *adjacent)
     uint32 limit;
     s_edge_t *edge;
 
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+    assert_exit(graph_adjacent_legal_p(adjacent));
     assert_exit(graph_adjacent_sparse_p(adjacent));
 
     k = i = 0;
@@ -400,8 +424,8 @@ graph_adjacent_edge_remove(s_adjacent_t *adjacent, s_edge_t *edge)
     uint32 i, limit;
     s_edge_t *edge_tmp;
 
-    assert_exit(graph_edge_structure_legal_p(edge));
-    assert_exit(graph_adjacent_structure_legal_p(adjacent));
+    assert_exit(graph_edge_legal_p(edge));
+    assert_exit(graph_adjacent_legal_p(adjacent));
 
     i = 0;
     limit = graph_adjacent_limit(adjacent);
@@ -430,8 +454,8 @@ graph_adjacent_edge_remove(s_adjacent_t *adjacent, s_edge_t *edge)
 static inline void
 graph_topo_list_insert_before(s_topo_list_t *node, s_topo_list_t *inserted)
 {
-    assert_exit(graph_topo_list_structure_legal_p(node));
-    assert_exit(graph_topo_list_structure_legal_p(inserted));
+    assert_exit(graph_topo_list_legal_p(node));
+    assert_exit(graph_topo_list_legal_p(inserted));
 
     doubly_linked_list_insert_before(&node->list, &inserted->list);
 }
@@ -439,7 +463,7 @@ graph_topo_list_insert_before(s_topo_list_t *node, s_topo_list_t *inserted)
 static inline s_topo_list_t *
 graph_topo_list_next(s_topo_list_t *node)
 {
-    assert_exit(graph_topo_list_structure_legal_p(node));
+    assert_exit(graph_topo_list_legal_p(node));
 
     return CONTAINER_OF(node->list.next, s_topo_list_t, list);
 }
@@ -449,10 +473,58 @@ graph_topo_list_remove(s_topo_list_t *node)
 {
     s_doubly_linked_list_t *list;
 
-    assert_exit(graph_topo_list_structure_legal_p(node));
+    assert_exit(graph_topo_list_legal_p(node));
 
     list = &node->list;
 
     doubly_linked_list_remove(&list);
+}
+
+static inline void
+graph_vertex_array_visited_cleanup(s_graph_t *graph)
+{
+    uint32 i, limit;
+    s_vertex_t *vertex;
+    s_vertex_array_t *vertex_array;
+
+    assert_exit(graph_legal_p(graph));
+
+    i = 0;
+    vertex_array = graph_vertex_array(graph);
+    limit = graph_vertex_array_limit(vertex_array);
+
+    while (i < limit) {
+        vertex = graph_vertex_array_vertex(vertex_array, i);
+
+        if (vertex) {
+            graph_vertex_is_visited_set(vertex, false);
+        }
+
+        i++;
+    }
+}
+
+static inline void
+graph_edge_array_visited_cleanup(s_graph_t *graph)
+{
+    uint32 i, limit;
+    s_edge_t *edge;
+    s_edge_array_t *edge_array;
+
+    assert_exit(graph_legal_p(graph));
+
+    i = 0;
+    edge_array = graph_edge_array(graph);
+    limit = graph_edge_array_limit(edge_array);
+
+    while (i < limit) {
+        edge = graph_edge_array_edge(edge_array, i);
+
+        if (edge) {
+            graph_edge_is_visited_set(edge, false);
+        }
+
+        i++;
+    }
 }
 

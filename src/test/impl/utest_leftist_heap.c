@@ -4,7 +4,7 @@ unit_test_leftist_heap_struct_field(void)
     bool pass;
     sint32 npl;
     sint64 nice;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     npl = 0xfead;
@@ -31,7 +31,7 @@ static void
 unit_test_leftist_heap_create(void)
 {
     bool pass;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     heap = leftist_heap_create();
@@ -53,7 +53,7 @@ unit_test_leftist_heap_node_create(void)
     bool pass;
     sint32 npl;
     sint64 nice;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     npl = 0x123;
@@ -75,14 +75,14 @@ static void
 unit_test_leftist_heap_destroy(void)
 {
     bool pass;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     heap = NULL;
 
     leftist_heap_destroy(&heap);
 
-    heap = test_leftist_heap_sample(0x3742, 0x2134);
+    heap = test_leftist_heap_sample(0x742, 0x134);
     leftist_heap_destroy(&heap);
     RESULT_CHECK_pointer(NULL, heap, &pass);
 
@@ -93,15 +93,15 @@ static void
 unit_test_leftist_heap_get_min(void)
 {
     bool pass;
-    struct leftist_heap *heap;
-    struct leftist_heap *tmp;
+    s_leftist_heap_t *heap;
+    s_leftist_heap_t *tmp;
 
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_pointer(NULL, leftist_heap_get_min(heap), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, leftist_heap_get_min(heap), &pass);
 
-    heap = test_leftist_heap_sample(0xad22, 0x1ec2);
+    heap = test_leftist_heap_sample(0xd22, 0xec2);
     tmp = heap;
     RESULT_CHECK_pointer(leftist_heap_val(tmp), leftist_heap_get_min(heap), &pass);
 
@@ -114,15 +114,15 @@ unit_test_leftist_heap_insert(void)
 {
     bool pass;
     sint64 nice;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     heap = NULL;
     nice = -0x893e;
 
-    RESULT_CHECK_pointer(NULL, leftist_heap_insert(heap, NULL, 0), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, leftist_heap_insert(heap, NULL, 0), &pass);
 
-    heap = test_leftist_heap_sample(0x49b2, 0x20f2);
+    heap = test_leftist_heap_sample(0x9b2, 0x2f2);
     heap = leftist_heap_insert(heap, &pass, nice);
     RESULT_CHECK_pointer(&pass, leftist_heap_val(heap), &pass);
     RESULT_CHECK_sint64(nice, leftist_heap_nice(heap), &pass);
@@ -141,15 +141,15 @@ unit_test_leftist_heap_merge(void)
     bool pass;
     sint64 nice;
     void *val;
-    struct leftist_heap *heap;
-    struct leftist_heap *tmp;
+    s_leftist_heap_t *heap;
+    s_leftist_heap_t *tmp;
 
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_pointer(NULL, leftist_heap_merge(heap, NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, leftist_heap_merge(heap, NULL), &pass);
 
-    heap = test_leftist_heap_sample(0x49b2, 0x20f2);
+    heap = test_leftist_heap_sample(0x4b2, 0x2f2);
     RESULT_CHECK_pointer(heap, leftist_heap_merge(heap, NULL), &pass);
     RESULT_CHECK_pointer(heap, leftist_heap_merge(NULL, heap), &pass);
 
@@ -172,15 +172,15 @@ unit_test_leftist_heap_remove_min(void)
 {
     bool pass;
     void *min;
-    struct leftist_heap *heap;
-    struct leftist_heap *removed;
+    s_leftist_heap_t *heap;
+    s_leftist_heap_t *removed;
 
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_pointer(NULL, leftist_heap_remove_min(&heap), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, leftist_heap_remove_min(&heap), &pass);
 
-    heap = test_leftist_heap_sample(0x39b2, 0x10f2);
+    heap = test_leftist_heap_sample(0x3b2, 0x1f2);
     min = leftist_heap_get_min(heap);
     removed = leftist_heap_remove_min(&heap);
     RESULT_CHECK_pointer(leftist_heap_val(removed), min, &pass);
@@ -202,14 +202,14 @@ static void
 unit_test_leftist_heap_remove_min_and_destroy(void)
 {
     bool pass;
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     pass = true;
     heap = NULL;
 
     leftist_heap_remove_min_and_destroy(&heap);
 
-    heap = test_leftist_heap_sample(0x39b2, 0x10f2);
+    heap = test_leftist_heap_sample(0x392, 0x1f2);
     leftist_heap_remove_min_and_destroy(&heap);
     leftist_heap_destroy(&heap);
 

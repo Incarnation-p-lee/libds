@@ -1,190 +1,288 @@
-static inline struct leftist_heap *
-leftist_heap_create_internal(void *val, sint32 npl, sint64 nice)
+s_leftist_heap_t *
+leftist_heap_left(s_leftist_heap_t *heap)
 {
-    struct leftist_heap *heap;
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
+    } else {
+        return LEFTIST_LEFT(heap);
+    }
+}
 
-    assert_exit(NPL_NULL != npl);
+s_leftist_heap_t *
+leftist_heap_right(s_leftist_heap_t *heap)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
+    } else {
+        return LEFTIST_RIGHT(heap);
+    }
+}
+
+void
+leftist_heap_nice_set(s_leftist_heap_t *heap, sint64 nice)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return;
+    } else {
+        LEFTIST_NICE(heap) = nice;
+    }
+}
+
+void
+leftist_heap_npl_set(s_leftist_heap_t *heap, sint32 npl)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return;
+    } else {
+        LEFTIST_NPL(heap) = npl;
+    }
+}
+
+sint64
+leftist_heap_nice(s_leftist_heap_t *heap)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return HEAP_NICE_INVALID;
+    } else {
+        return LEFTIST_NICE(heap);
+    }
+}
+
+sint32
+leftist_heap_npl(s_leftist_heap_t *heap)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return NPL_INVALID;
+    } else {
+        return LEFTIST_NPL(heap);
+    }
+}
+
+void *
+leftist_heap_val(s_leftist_heap_t *heap)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
+    } else {
+        return LEFTIST_VAL(heap);
+    }
+}
+
+void
+leftist_heap_val_set(s_leftist_heap_t *heap, void *val)
+{
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return;
+    } else {
+        LEFTIST_VAL(heap) = val;
+    }
+}
+
+static inline bool
+leftist_heap_legal_ip(s_leftist_heap_t *heap)
+{
+    if (NULL_PTR_P(heap)) {
+        return false;
+    } else if (LEFTIST_LEFT(heap) != NULL
+        && LEFTIST_LEFT(heap) == LEFTIST_RIGHT(heap)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+static inline bool
+leftist_heap_illegal_ip(s_leftist_heap_t *heap)
+{
+    return !leftist_heap_legal_ip(heap);
+}
+
+bool
+leftist_heap_legal_p(s_leftist_heap_t *heap)
+{
+    return leftist_heap_legal_ip(heap);
+}
+
+bool
+leftist_heap_illegal_p(s_leftist_heap_t *heap)
+{
+    return leftist_heap_illegal_ip(heap);
+}
+
+static inline s_leftist_heap_t *
+leftist_heap_create_i(void *val, sint32 npl, sint64 nice)
+{
+    s_leftist_heap_t *heap;
+
+    assert_exit(npl != NPL_NULL);
 
     heap = memory_cache_allocate(sizeof(*heap));
 
-    if (!complain_no_memory_p(heap)) {
-        heap->npl = npl;
-        heap->data.nice = nice;
-        heap->data.val = val;
+    LEFTIST_NPL(heap) = npl;
+    LEFTIST_LEFT(heap) = LEFTIST_RIGHT(heap) = NULL;
 
-        heap->left = NULL;
-        heap->right = NULL;
-    }
+    LEFTIST_VAL(heap) = val;
+    LEFTIST_NICE(heap) = nice;
 
     return heap;
 }
 
-struct leftist_heap *
-leftist_heap_left(struct leftist_heap *heap)
-{
-    return heap->left;
-}
-
-struct leftist_heap *
-leftist_heap_right(struct leftist_heap *heap)
-{
-    return heap->right;
-}
-
-void
-leftist_heap_nice_set(struct leftist_heap *heap, sint64 nice)
-{
-    heap->data.nice = nice;
-}
-
-void
-leftist_heap_npl_set(struct leftist_heap *heap, sint32 npl)
-{
-    heap->npl = npl;
-}
-
-sint64
-leftist_heap_nice(struct leftist_heap *heap)
-{
-    return heap->data.nice;
-}
-
-sint32
-leftist_heap_npl(struct leftist_heap *heap)
-{
-    return heap->npl;
-}
-
-void *
-leftist_heap_val(struct leftist_heap *heap)
-{
-    return heap->data.val;
-}
-
-void
-leftist_heap_val_set(struct leftist_heap *heap, void *val)
-{
-    heap->data.val = val;
-}
-
-struct leftist_heap *
+s_leftist_heap_t *
 leftist_heap_create(void)
 {
-    return leftist_heap_create_internal(NULL, 0, 0);
+    return leftist_heap_create_i(NULL, 0, 0);
 }
 
-struct leftist_heap *
+s_leftist_heap_t *
 leftist_heap_node_create(void *val, sint32 nlp, sint64 nice)
 {
-    return leftist_heap_create_internal(val, nlp, nice);
+    return leftist_heap_create_i(val, nlp, nice);
 }
 
 static inline void
-leftist_heap_destroy_internal(struct leftist_heap *heap)
+leftist_heap_node_destroy(s_leftist_heap_t *heap)
 {
-    if (heap) {
-        leftist_heap_destroy_internal(heap->left);
-        leftist_heap_destroy_internal(heap->right);
+    assert_exit(leftist_heap_legal_ip(heap));
 
-        memory_cache_free(heap);
+    memory_cache_free(heap);
+}
+
+static inline void
+leftist_heap_destroy_i(s_leftist_heap_t *heap)
+{
+    s_array_queue_t *queue;
+    s_leftist_heap_t *node;
+
+    assert_exit(leftist_heap_legal_ip(heap));
+
+    queue = array_queue_create();
+    array_queue_enter(queue, heap);
+
+    while (!array_queue_empty_p(queue)) {
+        node = array_queue_leave(queue);
+
+        if (LEFTIST_LEFT(node) != NULL) {
+            array_queue_enter(queue, LEFTIST_LEFT(node));
+        }
+
+        if (LEFTIST_RIGHT(node) != NULL) {
+            array_queue_enter(queue, LEFTIST_RIGHT(node));
+        }
+
+        leftist_heap_node_destroy(node);
     }
+
+    array_queue_destroy(&queue);
 }
 
 void
-leftist_heap_destroy(struct leftist_heap **heap)
+leftist_heap_destroy(s_leftist_heap_t **heap)
 {
-    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
-        leftist_heap_destroy_internal(*heap);
+    if (NULL_PTR_P(heap)) {
+        return;
+    } else if (LEFTIST_HEAP_ILLEGAL_P(*heap)) {
+        return;
+    } else {
+        leftist_heap_destroy_i(*heap);
+
         *heap = NULL;
     }
 }
 
 static inline void *
-leftist_heap_get_min_internal(struct leftist_heap *heap)
+leftist_heap_get_min_i(s_leftist_heap_t *heap)
 {
-    assert_exit(leftist_heap_structure_legal_p(heap));
+    assert_exit(leftist_heap_legal_p(heap));
 
-    return heap->data.val;
+    return LEFTIST_VAL(heap);
 }
 
 void *
-leftist_heap_get_min(struct leftist_heap *heap)
+leftist_heap_get_min(s_leftist_heap_t *heap)
 {
-    if (NULL_PTR_P(heap)) {
-        return NULL;
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
     } else {
-        return leftist_heap_get_min_internal(heap);
+        return leftist_heap_get_min_i(heap);
     }
 }
 
 /*
  * _RETURN_ the new leftist heap.
  */
-struct leftist_heap *
-leftist_heap_insert(struct leftist_heap *heap, void *val, sint64 nice)
+s_leftist_heap_t *
+leftist_heap_insert(s_leftist_heap_t *heap, void *val, sint64 nice)
 {
-    struct leftist_heap *node;
+    s_leftist_heap_t *node;
 
-    if (NULL_PTR_P(heap)) {
-        return NULL;
+    if (LEFTIST_HEAP_ILLEGAL_P(heap)) {
+        return PTR_INVALID;
     } else {
-        node = leftist_heap_create_internal(val, 0, nice);
-        return leftist_heap_merge_internal(heap, node);
+        node = leftist_heap_create_i(val, 0, nice);
+
+        return leftist_heap_merge_i(heap, node);
     }
 }
 
 static inline void
-leftist_heap_node_npl_update(struct leftist_heap *node)
+leftist_heap_node_npl_update(s_leftist_heap_t *node)
 {
-    sint32 npl_l;
-    sint32 npl_r;
+    sint32 left;
+    sint32 right;
 
-    assert_exit(leftist_heap_structure_legal_p(node));
+    assert_exit(leftist_heap_legal_p(node));
 
-    npl_l = leftist_heap_npl_internal(node->left);
-    npl_r = leftist_heap_npl_internal(node->right);
+    left = leftist_heap_npl_i(LEFTIST_LEFT(node));
+    right = leftist_heap_npl_i(LEFTIST_RIGHT(node));
 
-    node->npl = MIN_S32(npl_l, npl_r) + 1;
+    LEFTIST_NPL(node) = MIN_S32(left, right) + 1;
 }
 
 static inline bool
-leftist_heap_node_npl_ordered_p(struct leftist_heap *node)
+leftist_heap_node_npl_ordered_p(s_leftist_heap_t *node)
 {
-    assert_exit(NULL != node);
+    s_leftist_heap_t *left, *right;
 
-    if (leftist_heap_npl_internal(node->left)
-        >= leftist_heap_npl_internal(node->right)) {
+    assert_exit(NON_NULL_PTR_P(node));
+
+    left = LEFTIST_LEFT(node);
+    right = LEFTIST_RIGHT(node);
+
+    if (leftist_heap_npl_i(left) >= leftist_heap_npl_i(right)) {
         return true;
     } else {
         return false;
     }
 }
 
-static inline void
-leftist_heap_node_child_swap(struct leftist_heap *node)
+static inline bool
+leftist_heap_node_npl_unordered_p(s_leftist_heap_t *node)
 {
-    struct leftist_heap *tmp;
-
-    assert_exit(NULL != node);
-
-    tmp = node->left;
-    node->left = node->right;
-    node->right = tmp;
+    return !leftist_heap_node_npl_ordered_p(node);
 }
 
-static inline struct leftist_heap *
-leftist_heap_merge_from_right(struct leftist_heap *heap,
-    struct leftist_heap *merge)
+static inline void
+leftist_heap_node_child_swap(s_leftist_heap_t *node)
 {
-    struct leftist_heap *retval;
-    struct leftist_heap *tmp;
-    struct leftist_heap **major;
-    struct leftist_heap *minor;
+    s_leftist_heap_t *tmp;
 
-    assert_exit(leftist_heap_structure_legal_p(heap));
-    assert_exit(leftist_heap_structure_legal_p(merge));
+    assert_exit(leftist_heap_legal_ip(node));
 
-    if (heap->data.nice <= merge->data.nice) {
+    tmp = LEFTIST_LEFT(node);
+    LEFTIST_LEFT(node) = LEFTIST_RIGHT(node);
+    LEFTIST_RIGHT(node) = tmp;
+}
+
+static inline s_leftist_heap_t *
+leftist_heap_merge_from_right(s_leftist_heap_t *heap, s_leftist_heap_t *merge)
+{
+    s_leftist_heap_t **major;
+    s_leftist_heap_t *retval, *tmp, *minor;
+
+    assert_exit(leftist_heap_legal_ip(heap));
+    assert_exit(leftist_heap_legal_ip(merge));
+
+    if (LEFTIST_NICE(heap) <= LEFTIST_NICE(merge)) {
         retval = heap;
         major = &heap;
         minor = merge;
@@ -195,15 +293,17 @@ leftist_heap_merge_from_right(struct leftist_heap *heap,
     }
 
     while (minor) {
-        if (!*major) {
+        if (*major == NULL) {
             *major = minor;
             break;
-        } else if ((*major)->data.nice <= minor->data.nice) {
+        }
+
+        if (LEFTIST_NICE(*major) <= LEFTIST_NICE(minor)) {
             major = &(*major)->right;
         } else {
             tmp = *major;
             *major = minor;
-            major = &minor->right;
+            major = &LEFTIST_RIGHT(minor);
             minor = tmp;
         }
     }
@@ -212,25 +312,27 @@ leftist_heap_merge_from_right(struct leftist_heap *heap,
 }
 
 static inline void
-leftist_heap_reorder_from_right(struct leftist_heap *heap)
+leftist_heap_reorder_from_right(s_leftist_heap_t *heap)
 {
-    if (heap) {
-        leftist_heap_reorder_from_right(heap->right);
-        leftist_heap_node_npl_update(heap);
-        if (!leftist_heap_node_npl_ordered_p(heap)) {
-            leftist_heap_node_child_swap(heap);
-        }
+    if (heap == NULL) {
+        return;
+    }
+
+    leftist_heap_reorder_from_right(heap->right);
+    leftist_heap_node_npl_update(heap);
+
+    if (leftist_heap_node_npl_unordered_p(heap)) {
+        leftist_heap_node_child_swap(heap);
     }
 }
 
-static inline struct leftist_heap *
-leftist_heap_merge_internal(struct leftist_heap *heap,
-    struct leftist_heap *merge)
+static inline s_leftist_heap_t *
+leftist_heap_merge_i(s_leftist_heap_t *heap, s_leftist_heap_t *merge)
 {
-    struct leftist_heap *retval;
+    s_leftist_heap_t *retval;
 
-    assert_exit(NULL != heap);
-    assert_exit(NULL != merge);
+    assert_exit(leftist_heap_legal_ip(heap));
+    assert_exit(leftist_heap_legal_ip(merge));
     assert_exit(leftist_heap_validity_p(heap));
     assert_exit(leftist_heap_validity_p(merge));
 
@@ -245,74 +347,80 @@ leftist_heap_merge_internal(struct leftist_heap *heap,
 /*
  * _RETURN_ the new leftist heap.
  */
-struct leftist_heap *
-leftist_heap_merge(struct leftist_heap *heap, struct leftist_heap *merge)
+s_leftist_heap_t *
+leftist_heap_merge(s_leftist_heap_t *heap, s_leftist_heap_t *merge)
 {
-    if (NULL_PTR_P(heap) && NULL_PTR_P(merge)) {
-        return NULL;
-    } else if (NULL == heap) {
+    if (LEFTIST_HEAP_ILLEGAL_P(heap) && LEFTIST_HEAP_ILLEGAL_P(merge)) {
+        return PTR_INVALID;
+    } else if (heap == NULL) {
         return merge;
-    } else if (NULL == merge) {
+    } else if (merge == NULL) {
         return heap;
     } else {
-        return leftist_heap_merge_internal(heap, merge);
+        return leftist_heap_merge_i(heap, merge);
     }
 }
 
-static inline struct leftist_heap *
-leftist_heap_remove_min_internal(struct leftist_heap **heap)
+static inline s_leftist_heap_t *
+leftist_heap_remove_min_i(s_leftist_heap_t **heap)
 {
-    struct leftist_heap *removed;
-    struct leftist_heap *left;
-    struct leftist_heap *right;
+    s_leftist_heap_t *removed, *left, *right;
 
-    assert_exit(NULL != heap);
-    assert_exit(leftist_heap_structure_legal_p(*heap));
+    assert_exit(NON_NULL_PTR_P(heap));
+    assert_exit(leftist_heap_legal_p(*heap));
 
     removed = *heap;
-    left = removed->left;
-    right = removed->right;
+    left = LEFTIST_LEFT(removed);
+    right = LEFTIST_RIGHT(removed);
 
-    if (NULL == left) {
+    if (left == NULL) {
         *heap = right;
-    } else if (NULL == right) {
+    } else if (right == NULL) {
         *heap = left;
     } else {
-        *heap = leftist_heap_merge_internal(left, right);
+        *heap = leftist_heap_merge_i(left, right);
     }
 
-    removed->left = NULL;
-    removed->right = NULL;
+    LEFTIST_LEFT(removed) = LEFTIST_RIGHT(removed) = NULL;
+
     return removed;
 }
 
 /*
  * _RETURN_ the removed leftist heap node.
  */
-struct leftist_heap *
-leftist_heap_remove_min(struct leftist_heap **heap)
+s_leftist_heap_t *
+leftist_heap_remove_min(s_leftist_heap_t **heap)
 {
-    if (NULL_PTR_P(heap) || NULL_PTR_P(*heap)) {
-        return NULL;
+    if (NULL_PTR_P(heap) || LEFTIST_HEAP_ILLEGAL_P(*heap)) {
+        return PTR_INVALID;
     } else {
-        return leftist_heap_remove_min_internal(heap);
+        return leftist_heap_remove_min_i(heap);
     }
 }
 
 void
-leftist_heap_remove_min_and_destroy(struct leftist_heap **heap)
+leftist_heap_remove_min_and_destroy(s_leftist_heap_t **heap)
 {
-    if (!NULL_PTR_P(heap) && !NULL_PTR_P(*heap)) {
-        memory_cache_free(leftist_heap_remove_min_internal(heap));
+    s_leftist_heap_t *node;
+
+    if (NULL_PTR_P(heap)) {
+        return;
+    } else if (LEFTIST_HEAP_ILLEGAL_P(*heap)) {
+        return;
+    } else {
+        node = leftist_heap_remove_min_i(heap);
+        leftist_heap_node_destroy(node);
     }
 }
 
 static inline sint32
-leftist_heap_npl_internal(struct leftist_heap *node)
+leftist_heap_npl_i(s_leftist_heap_t *node)
 {
     sint32 npl;
 
     leftist_heap_npl_optimize(node, npl);
+
     assert_exit(leftist_heap_npl_optimize_validity_p(node, npl));
 
     return npl;

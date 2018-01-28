@@ -1360,6 +1360,13 @@ static const struct test_layer_table minimal_heap[] = {
             &ptest_minimal_heap_build,
         },
     },
+    {
+        "build", NULL,
+        {
+            &utest_minimal_heap_find_index,
+            NULL,
+        },
+    },
     {NULL, NULL, {NULL, NULL},},
 };
 
@@ -1446,6 +1453,13 @@ static const struct test_layer_table maximal_heap[] = {
         {
             &utest_maximal_heap_build,
             &ptest_maximal_heap_build,
+        },
+    },
+    {
+        "build", NULL,
+        {
+            &utest_maximal_heap_find_index,
+            NULL,
         },
     },
     {NULL, NULL, {NULL, NULL},},
@@ -1700,6 +1714,13 @@ static const struct test_layer_table disjoint_set[] = {
 
 static const struct test_layer_table indirected_graph[] = {
     {
+        "util", NULL,
+        {
+            &utest_indirected_graph_util,
+            NULL,
+        },
+    },
+    {
         "create", NULL,
         {
             &utest_indirected_graph_create,
@@ -1738,6 +1759,13 @@ static const struct test_layer_table indirected_graph[] = {
 };
 
 static const struct test_layer_table directed_graph[] = {
+    {
+        "util", NULL,
+        {
+            &utest_directed_graph_util,
+            NULL,
+        },
+    },
     {
         "create", NULL,
         {
@@ -1781,9 +1809,16 @@ static const struct test_layer_table directed_graph[] = {
         },
     },
     {
-        "path_find", NULL,
+        "paths_find", NULL,
         {
-            &utest_directed_graph_path_find,
+            &utest_directed_graph_paths_find,
+            NULL,
+        },
+    },
+    {
+        "dijkstra", NULL,
+        {
+            &utest_directed_graph_dijkstra,
             NULL,
         },
     },

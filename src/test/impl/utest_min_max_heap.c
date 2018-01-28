@@ -1,9 +1,11 @@
 #define HEAP                   min_max_heap
-#define INDEX_LAST             min_max_heap_index_last
 #define HEAP_val               min_max_heap_val
 #define HEAP_nice              min_max_heap_nice
 #define HEAP_size              min_max_heap_size
-#define HEAP_structure_legal_p utest_min_max_heap_structure_legal_p
+#define HEAP_legal_p           min_max_heap_legal_p
+#define HEAP_illegal_p         min_max_heap_illegal_p
+#define HEAP_index_last        min_max_heap_index_last
+#define HEAP_index_limit       min_max_heap_index_limit
 #define TEST_HEAP_sample       test_min_max_heap_sample
 
 #define HEAP_create            min_max_heap_create
@@ -20,25 +22,25 @@
 
 #include "../utest_heap.h"
 
-UT_HEAP_structure_legal_p(min_max)
 UT_HEAP_create(min_max)
 UT_HEAP_destroy(min_max)
 UT_HEAP_empty_p(min_max)
 UT_HEAP_full_p(min_max)
 UT_HEAP_cleanup(min_max)
 UT_HEAP_get_min(min_max)
-UT_HEAP_get_max(min_max)
 UT_HEAP_insert(min_max)
 UT_HEAP_remove(min_max)
 UT_HEAP_remove_min(min_max)
 UT_HEAP_remove_max(min_max)
 
 #undef HEAP
-#undef INDEX_LAST
 #undef HEAP_val
 #undef HEAP_nice
 #undef HEAP_size
-#undef HEAP_structure_legal_p
+#undef HEAP_legal_p
+#undef HEAP_illegal_p
+#undef HEAP_index_last
+#undef HEAP_index_limit
 #undef TEST_HEAP_sample
 
 #undef HEAP_create
@@ -55,24 +57,58 @@ UT_HEAP_remove_max(min_max)
 
 
 static inline void
+utest_min_max_heap_get_max(void)
+{
+    bool pass;
+    void *val, *val_tmp;
+    s_min_max_heap_t *heap;
+
+    pass = true;
+    heap = NULL;
+
+    UNIT_TEST_BEGIN(min_max_heap_get_max);
+
+    RESULT_CHECK_pointer(PTR_INVALID, min_max_heap_get_max(heap), &pass);
+
+    heap = test_min_max_heap_sample(0x732, 1);
+    val = min_max_heap_val(heap, HEAP_INDEX_ROOT);
+    RESULT_CHECK_pointer(val, min_max_heap_get_max(heap), &pass);
+    min_max_heap_destroy(&heap);
+
+    heap = test_min_max_heap_sample(0x1022, 0x83a);
+    val = min_max_heap_val(heap, HEAP_INDEX_ROOT + 1);
+    val_tmp = min_max_heap_val(heap, HEAP_INDEX_ROOT + 2);
+
+    if (min_max_heap_nice(heap, HEAP_INDEX_ROOT + 1)
+        < min_max_heap_nice(heap, HEAP_INDEX_ROOT + 2)) {
+        val = val_tmp;
+    }
+
+    RESULT_CHECK_pointer(val, min_max_heap_get_max(heap), &pass);
+
+    min_max_heap_destroy(&heap);
+    UNIT_TEST_RESULT(min_max_heap_get_max, pass);
+}
+
+static inline void
 utest_min_max_heap_depth(void)
 {
     bool pass;
     uint32 index;
-    struct min_max_heap *heap;
+    s_min_max_heap_t *heap;
 
     index = 3u;
     pass = true;
     heap = NULL;
 
-    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, min_max_heap_depth(heap, index), &pass);
 
     heap = test_min_max_heap_sample(0x1345, 0x104E);
-    index = HEAP_IDX_INVALID;
-    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    index = HEAP_INDEX_INVALID;
+    RESULT_CHECK_uint32(SIZE_INVALID, min_max_heap_depth(heap, index), &pass);
 
     index = min_max_heap_index_last(heap) + 1;
-    RESULT_CHECK_uint32(HEAP_DEPTH_INVALID, min_max_heap_depth(heap, index), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, min_max_heap_depth(heap, index), &pass);
 
     index = 1 << 7;
     RESULT_CHECK_uint32(7, min_max_heap_depth(heap, index), &pass);
@@ -84,11 +120,11 @@ utest_min_max_heap_depth(void)
 static inline void
 utest_min_max_heap_decrease_nice(void)
 {
+    void *val;
     bool pass;
     uint32 count;
     uint32 offset;
-    void *val;
-    struct min_max_heap *heap;
+    s_min_max_heap_t *heap;
 
     pass = true;
     heap = NULL;
@@ -115,11 +151,11 @@ utest_min_max_heap_decrease_nice(void)
 static inline void
 utest_min_max_heap_increase_nice(void)
 {
+    void *val;
     bool pass;
     uint32 count;
     uint32 offset;
-    void *val;
-    struct min_max_heap *heap;
+    s_min_max_heap_t *heap;
 
     pass = true;
     heap = NULL;

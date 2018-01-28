@@ -1,13 +1,8 @@
 [![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
 
-[![Codeclimate Test Coverage](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/coverage.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds/coverage)
-
-[![Codeclimate Issue Count](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/issue_count.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
-
-[![Code Climate GPA](https://codeclimate.com/github/Incarnation-p-lee/libds/badges/gpa.svg)](https://codeclimate.com/github/Incarnation-p-lee/libds)
+[ ![Codeship Status for Incarnation-p-lee/libds](https://app.codeship.com/projects/2cba2150-2287-0134-4afd-4ef69db363d6/status?branch=master)](https://app.codeship.com/projects/161167)
 
 [![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
-
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
 
@@ -18,7 +13,7 @@
 [![fork this repo](http://githubbadges.com/fork.svg?user=Incarnation-p-lee&repo=libds&style=default)](https://github.com/Incarnation-p-lee/libds/fork)
 
 
-##UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
+## UNIFIED DATA STRUCTURE IMPLEMENTATION LIB OF C LANGUAGE
 
 ### build
 ```
@@ -40,7 +35,7 @@
 
     This project export sorts of API of data structure with libds.so or libds.a.
 
-### list
+### List
 
     The following data structure implemented in this project.
     1. Linked list

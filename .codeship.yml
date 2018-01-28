@@ -1,6 +1,6 @@
 script:
-    - make clean && make
-    - ./bin/ds.elf *.*.* -u -l
-    - make clean && make RELEASE=1
-    - ./bin/ds.elf *.*.* -p -l
+  - make clean && make
+  - ./bin/ds.elf *.*.* -u -l
+  - make clean && make RELEASE=1
+  - ./bin/ds.elf *.*.* -p -l
 

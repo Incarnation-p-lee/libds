@@ -1,4 +1,40 @@
 static inline void
+utest_indirected_graph_util(void)
+{
+    bool pass;
+    s_graph_t *graph;
+
+    pass = true;
+    graph = test_indirected_graph_sample(0xa, 0x6);
+
+    UNIT_TEST_BEGIN(indirected_graph_util);
+
+    RESULT_CHECK_bool(true, indirected_graph_legal_p(graph), &pass);
+    RESULT_CHECK_bool(false, indirected_graph_legal_p(NULL), &pass);
+    RESULT_CHECK_bool(false, indirected_graph_illegal_p(graph), &pass);
+
+    graph->attribute.is_directed = true;
+    RESULT_CHECK_bool(false, indirected_graph_legal_p(graph), &pass);
+    RESULT_CHECK_bool(true, indirected_graph_illegal_p(graph), &pass);
+    graph->attribute.is_directed = false;
+
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_edge_array(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, indirected_graph_edge_array_limit(NULL), &pass);
+    RESULT_CHECK_sint32(GRAPH_COST_INVALID, indirected_graph_edge_cost(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_edge_vertex_0_value(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_edge_vertex_1_value(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_edge_array_edge(NULL, 0), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_vertex_array(NULL), &pass);
+    RESULT_CHECK_pointer(PTR_INVALID, indirected_graph_vertex_array_vertex(NULL, 0), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, indirected_graph_vertex_array_limit(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, indirected_graph_edge_array_limit(NULL), &pass);
+    RESULT_CHECK_uint32(SIZE_INVALID, indirected_graph_edge_count(NULL), &pass);
+
+    indirected_graph_destroy(&graph);
+    UNIT_TEST_RESULT(indirected_graph_util, pass);
+}
+
+static inline void
 utest_indirected_graph_create(void)
 {
     bool pass;
@@ -8,7 +44,7 @@ utest_indirected_graph_create(void)
     graph = indirected_graph_create();
     UNIT_TEST_BEGIN(indirected_graph_create);
 
-    RESULT_CHECK_bool(true, indirected_graph_structure_legal_p(graph), &pass);
+    RESULT_CHECK_bool(true, indirected_graph_legal_p(graph), &pass);
 
     indirected_graph_destroy(&graph);
     UNIT_TEST_RESULT(indirected_graph_create, pass);

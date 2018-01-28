@@ -252,7 +252,7 @@ ptest_##name##_heap_decrease_nice(uint32 count)         \
     uint32 index;                                       \
     struct HEAP *heap;                                  \
                                                         \
-    index = HEAP_IDX_ROOT;                              \
+    index = HEAP_INDEX_ROOT;                            \
     count = count >> 6;                                 \
     count = 0 == count ? 1000 : count;                  \
     heap = TEST_HEAP_sample(count * 4, count * 2);      \
