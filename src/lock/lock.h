@@ -9,6 +9,11 @@
 #define SPIN_LOCK_FAIL         1
 
 #define SPIN_SHARED_LOCK(s)            (s)->shared_lock
+#define SEMAPHORE_VAL(s)               (s)->val
+#define SEMAPHORE_LOCK(s)              (&(s)->lock)
+#define SEMAPHORE_SLEEP_QUEUE(s)       (s)->sleep_queue
+#define SEMAPHORE_ACT_NEW(s)           (&(s)->act_new)
+#define SEMAPHORE_ACT_OLD(s)           (&(s)->act_old)
 
 #if defined(DEBUG)
     #define SPIN_LOCK_LEGAL_P(s)       spin_lock_legal_ip(s)
