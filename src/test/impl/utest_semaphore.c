@@ -353,7 +353,7 @@ utest_semaphore_unavailable_p(void)
     pass = true;
     semaphore = semaphore_create(val);
 
-    RESULT_CHECK_bool(false, semaphore_unavailable_p(NULL), &pass);
+    RESULT_CHECK_bool(true, semaphore_unavailable_p(NULL), &pass);
     RESULT_CHECK_bool(false, semaphore_unavailable_p(semaphore), &pass);
 
     for (i = 0; i < LOCK_THREAD_MAX; i++) {

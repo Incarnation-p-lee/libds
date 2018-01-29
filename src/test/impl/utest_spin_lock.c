@@ -11,7 +11,7 @@ utest_spin_lock_create(void)
     lock->shared_lock = 2;
 
     RESULT_CHECK_bool(false, spin_lock_legal_p(lock), &pass);
-    RESULT_CHECK_bool(false, spin_locked_p(NULL), &pass);
+    RESULT_CHECK_bool(true, spin_locked_p(NULL), &pass);
 
     spin_lock_initial(lock);
 
@@ -174,7 +174,7 @@ utest_spin_locked_p(void)
     pass = true;
     lock = spin_lock_create();
 
-    RESULT_CHECK_bool(false, spin_locked_p(NULL), &pass);
+    RESULT_CHECK_bool(true, spin_locked_p(NULL), &pass);
     RESULT_CHECK_bool(false, spin_locked_p(lock), &pass);
 
     spin_lock(lock);
