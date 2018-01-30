@@ -77,7 +77,8 @@
         b. indirected graph         [in process]
     10. Lock
         a. spin lock
-        a. semaphore
+        b. semaphore
+        c. mutex
         
 ----- to be continue -----
 
