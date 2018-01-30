@@ -251,13 +251,13 @@ utest_semaphore_up(void)
     pass = true;
     semaphore_up(NULL);
     semaphore = semaphore_create(val);
+    test_lock_critical_section_init();
 
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         sample[i].idx = i;
         sample[i].semaphore = semaphore;
     }
 
-    test_lock_critical_section_init();
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         if (i < val) {
             dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
@@ -266,21 +266,26 @@ utest_semaphore_up(void)
             dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
         }
     }
+
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         semaphore_up(semaphore);
     }
+
     for (i = val; i < LOCK_THREAD_MAX; i++) {
         dp_thread_join(ids[i], NULL);
         RESULT_CHECK_uint32(1, critical_section[i], &pass);
     }
 
     test_lock_critical_section_init();
+
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         semaphore_up(semaphore);
     }
+
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         dp_thread_create(&ids[i], NULL, utest_semaphore_thread_1, &sample[i]);
     }
+
     for (i = 0; i < LOCK_THREAD_MAX; i++) {
         dp_thread_join(ids[i], NULL);
         RESULT_CHECK_uint32(1, critical_section[i], &pass);
