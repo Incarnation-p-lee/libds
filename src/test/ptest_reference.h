@@ -271,6 +271,14 @@ static struct performance_test_reference performance_reference[] = {
     {"semaphore_available_p",                            0x0u, 0x0u},
     {"semaphore_unavailable_p",                          0x0u, 0x0u},
 
+    {"mutex_create",                                     0x0u, 0x0u},
+    {"mutex_destroy",                                    0x0u, 0x0u},
+    {"mutex_lock",                                       0x0u, 0x0u},
+    {"mutex_lock_try",                                   0x0u, 0x0u},
+    {"mutex_unlock",                                     0x0u, 0x0u},
+    {"mutex_unlocked_p",                                 0x0u, 0x0u},
+    {"mutex_locked_p",                                   0x0u, 0x0u},
+
     {NULL,                                               0x0u, 0x0u},
 };
 

@@ -93,6 +93,7 @@
 #include "impl/utest_mutex.c"
 #include "impl/ptest_spin_lock.c"
 #include "impl/ptest_semaphore.c"
+#include "impl/ptest_mutex.c"
 
 #include "test_layer.h"
 

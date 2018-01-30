@@ -1936,49 +1936,49 @@ static const struct test_layer_table mutex[] = {
         "create", NULL,
         {
             &utest_mutex_create,
-            NULL,
+            &ptest_mutex_create,
         },
     },
     {
         "destroy", NULL,
         {
             &utest_mutex_destroy,
-            NULL,
+            &ptest_mutex_destroy,
         },
     },
     {
         "lock_try", NULL,
         {
             &utest_mutex_lock_try,
-            NULL,
+            &ptest_mutex_lock_try,
         },
     },
     {
         "lock", NULL,
         {
             &utest_mutex_lock,
-            NULL,
+            &ptest_mutex_lock,
         },
     },
     {
         "unlock", NULL,
         {
             &utest_mutex_unlock,
-            NULL,
+            &ptest_mutex_unlock,
         },
     },
     {
         "locked_p", NULL,
         {
             &utest_mutex_locked_p,
-            NULL,
+            &ptest_mutex_locked_p,
         },
     },
     {
         "unlocked_p", NULL,
         {
             &utest_mutex_unlocked_p,
-            NULL,
+            &ptest_mutex_unlocked_p,
         },
     },
     {NULL, NULL, {NULL, NULL},},
