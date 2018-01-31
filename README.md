@@ -4,6 +4,8 @@
 
 [![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
 
+[![Coverage Status](https://coveralls.io/repos/github/Incarnation-p-lee/libds/badge.svg?branch=master)](https://coveralls.io/github/Incarnation-p-lee/libds?branch=master)
+
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/Incarnation-p-lee/libds/) 
 
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/) 
