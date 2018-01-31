@@ -211,18 +211,12 @@ min_max_heap_depth(s_min_max_heap_t *heap, uint32 index)
 void *
 min_max_heap_remove_min(s_min_max_heap_t *heap)
 {
-    void *v;
-    s_binary_heap_t *alias;
-
     if (MIN_MAX_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
     } else if (binary_heap_empty_p(HEAP_ALIAS(heap))) {
         return PTR_INVALID;
     } else {
-        alias = HEAP_ALIAS(heap);
-        v = binary_heap_remove_root(alias, &binary_heap_min_max_down_ordered_p);
-
-        return v;
+        return min_max_heap_remove_i(heap, HEAP_INDEX_ROOT);
     }
 }
 
@@ -271,9 +265,11 @@ min_max_heap_remove_i(s_min_max_heap_t *heap, uint32 index)
     assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), index));
 
     data_tmp = min_max_heap_remove_isolate(heap, index);
-    val = DATA_VAL(data_tmp);
 
+    val = DATA_VAL(data_tmp);
     binary_heap_data_destroy(data_tmp);
+
+    assert_exit(min_max_heap_ordered_p(heap));
 
     return val;
 }
@@ -304,6 +300,7 @@ min_max_heap_remove_max_i(s_min_max_heap_t *heap)
 
     if (max_index == HEAP_INDEX_INVALID) {
         v = binary_heap_remove_root(alias, &binary_heap_min_max_down_ordered_p);
+        assert_exit(min_max_heap_ordered_p(heap));
     } else {
         v = min_max_heap_remove_i(heap, max_index);
     }

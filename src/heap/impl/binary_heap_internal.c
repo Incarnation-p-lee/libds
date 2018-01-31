@@ -378,8 +378,6 @@ binary_heap_remove_root(s_binary_heap_t *heap, void *order)
         ALIAS_DATA(heap, index) = last;
     }
 
-    assert_exit(binary_heap_ordered_p(heap, order));
-
     return retval;
 }
 

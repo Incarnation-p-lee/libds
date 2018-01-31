@@ -177,19 +177,22 @@ minimal_heap_get_min(s_minimal_heap_t *heap)
 void
 minimal_heap_insert(s_minimal_heap_t *heap, void *val, sint64 nice)
 {
+    s_binary_heap_t *alias;
+
     if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return;
     } if (binary_heap_nice_illegal_p(nice)) {
         return;
     } else {
-        binary_heap_insert(HEAP_ALIAS(heap), val, nice,
-            &binary_heap_minimal_ordered_p);
+        alias = HEAP_ALIAS(heap);
+        binary_heap_insert(alias, val, nice, &binary_heap_minimal_ordered_p);
     }
 }
 
 static inline void *
 minimal_heap_remove_i(s_minimal_heap_t *heap, uint32 idx)
 {
+    void *val;
     sint64 nice;
     s_binary_heap_t *alias;
     s_heap_data_t *data_tmp;
@@ -199,6 +202,13 @@ minimal_heap_remove_i(s_minimal_heap_t *heap, uint32 idx)
     assert_exit(binary_heap_index_legal_p(HEAP_ALIAS(heap), idx));
 
     alias = HEAP_ALIAS(heap);
+
+    if (idx == HEAP_INDEX_ROOT) {
+        val = binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
+        assert_exit(minimal_heap_ordered_p(heap));
+        return val;
+    }
+
     data_tmp = ALIAS_DATA(alias, idx);
     ALIAS_DATA(alias, idx) = NULL;
 
@@ -211,7 +221,10 @@ minimal_heap_remove_i(s_minimal_heap_t *heap, uint32 idx)
 
     ALIAS_DATA(alias, HEAP_INDEX_ROOT) = data_tmp;
 
-    return binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
+    val = binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
+    assert_exit(minimal_heap_ordered_p(heap));
+
+    return val;
 }
 
 void *
@@ -221,9 +234,6 @@ minimal_heap_remove(s_minimal_heap_t *heap, uint32 index)
         return PTR_INVALID;
     } else if (binary_heap_index_illegal_p(HEAP_ALIAS(heap), index)) {
         return PTR_INVALID;
-    } else if (index == HEAP_INDEX_ROOT) {
-        return binary_heap_remove_root(HEAP_ALIAS(heap),
-            &binary_heap_minimal_ordered_p);
     } else {
         return minimal_heap_remove_i(heap, index);
     }
@@ -232,13 +242,19 @@ minimal_heap_remove(s_minimal_heap_t *heap, uint32 index)
 void *
 minimal_heap_remove_min(s_minimal_heap_t *heap)
 {
+    void *val;
+    s_binary_heap_t *alias;
+
     if (MINIMAL_HEAP_ILLEGAL_P(heap)) {
         return PTR_INVALID;
     } else if (binary_heap_empty_p(HEAP_ALIAS(heap))) {
         return PTR_INVALID;
     } else {
-        return binary_heap_remove_root(HEAP_ALIAS(heap),
-            &binary_heap_minimal_ordered_p);
+        alias = HEAP_ALIAS(heap);
+        val = binary_heap_remove_root(alias, &binary_heap_minimal_ordered_p);
+        assert_exit(minimal_heap_ordered_p(heap));
+
+        return val;
     }
 }
 

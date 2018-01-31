@@ -34,6 +34,7 @@ ptest_splay_tree_initial(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
+    splay_tree_destroy(&tree);
     PERFORMANCE_TEST_RESULT(splay_tree_initial);
 }
 
@@ -85,7 +86,7 @@ ptest_splay_tree_contains_p(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(splay_tree_contains_p);
 
-    tree = test_splay_tree_sample(0xf2a32, 0xae12d);
+    tree = test_splay_tree_sample(0xf2a2, 0x12d);
     tmp = splay_tree_find_max(&tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -110,7 +111,7 @@ ptest_splay_tree_insert(uint32 count)
 
     count = count >> 6;
     count = 0 == count ? 1000 : count;
-    tree = splay_tree_create(&count, 0);
+    tree = splay_tree_create(&count, count + 1);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -153,7 +154,7 @@ ptest_splay_tree_find(uint32 count)
     struct splay_tree *tree;
     struct splay_tree *tmp;
 
-    tree = test_splay_tree_sample(0x21352, 0x12de2);
+    tree = test_splay_tree_sample(0x2352, 0xde2);
     tmp = splay_tree_find_max(&tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -173,7 +174,7 @@ ptest_splay_tree_find_min(uint32 count)
 {
     struct splay_tree *tree;
 
-    tree = test_splay_tree_sample(0x51352, 0x42de2);
+    tree = test_splay_tree_sample(0x5352, 0x4e2);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -192,7 +193,7 @@ ptest_splay_tree_find_max(uint32 count)
 {
     struct splay_tree *tree;
 
-    tree = test_splay_tree_sample(0x51352, 0x42de2);
+    tree = test_splay_tree_sample(0x5132, 0xde2);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -212,7 +213,7 @@ ptest_splay_tree_remove(uint32 count)
     struct splay_tree *tree;
     struct splay_tree *tmp;
 
-    tree = test_splay_tree_sample(0x4234, 0x2823);
+    tree = test_splay_tree_sample(0x4234, 0x223);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -221,8 +222,9 @@ ptest_splay_tree_remove(uint32 count)
         splay_tree_remove(&tree, tmp);
         splay_tree_destroy(&tmp);
 
-        tmp = splay_tree_create(&tmp, count);
-        splay_tree_insert(&tree, tmp);
+        if (!tree) {
+            tree = test_splay_tree_sample(0xa33, 0x382);
+        }
     }
 
     PERFORMANCE_TEST_ENDPOINT;

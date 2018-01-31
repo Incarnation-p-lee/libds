@@ -308,6 +308,7 @@ static void ptest_skip_linked_list_contains_p(uint32 count);
 static void ptest_skip_linked_list_create_with_key(uint32 count);
 static void ptest_skip_linked_list_find_key(uint32 count);
 static void ptest_skip_linked_list_insert(uint32 count);
+static void ptest_skip_linked_list_merge(uint32 count);
 static void ptest_skip_linked_list_remove(uint32 count);
 static void ptest_splay_tree_find(uint32 count);
 static void ptest_splay_tree_find_max(uint32 count);

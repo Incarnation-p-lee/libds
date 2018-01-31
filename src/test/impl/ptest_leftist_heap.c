@@ -1,7 +1,7 @@
 static inline void
 performance_test_leftist_heap_struct_field(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     heap = test_leftist_heap_sample(0x2a1, 0x1d3);
 
@@ -22,7 +22,7 @@ performance_test_leftist_heap_struct_field(uint32 count)
 static inline void
 performance_test_leftist_heap_create(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -39,7 +39,7 @@ performance_test_leftist_heap_create(uint32 count)
 static inline void
 performance_test_leftist_heap_node_create(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -56,7 +56,7 @@ performance_test_leftist_heap_node_create(uint32 count)
 static inline void
 performance_test_leftist_heap_destroy(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -73,9 +73,9 @@ performance_test_leftist_heap_destroy(uint32 count)
 static inline void
 performance_test_leftist_heap_get_min(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
-    heap = test_leftist_heap_sample(0x2123, 0x1ec7);
+    heap = test_leftist_heap_sample(0x2123, 0x1c7);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -92,14 +92,14 @@ performance_test_leftist_heap_get_min(uint32 count)
 static inline void
 performance_test_leftist_heap_insert(uint32 count)
 {
-    struct leftist_heap *heap;
+    s_leftist_heap_t *heap;
 
     heap = leftist_heap_create();
     /*
      * For sometime too deep nested loop may reach the limit of stack 8KB.
      */
-    count = count >> 2;
-    count = count == 0 ? 10000 : count;
+    count = count >> 4;
+    count = count == 0 ? 1000 : count;
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -116,8 +116,8 @@ performance_test_leftist_heap_insert(uint32 count)
 static inline void
 performance_test_leftist_heap_merge(uint32 count)
 {
-    struct leftist_heap *heap;
-    struct leftist_heap *tmp;
+    s_leftist_heap_t *heap;
+    s_leftist_heap_t *tmp;
 
     heap = test_leftist_heap_sample(0xf, 0xa);
 
@@ -137,10 +137,10 @@ performance_test_leftist_heap_merge(uint32 count)
 static inline void
 performance_test_leftist_heap_remove_min(uint32 count)
 {
-    struct leftist_heap *heap;
-    struct leftist_heap *tmp;
+    s_leftist_heap_t *heap;
+    s_leftist_heap_t *tmp;
 
-    heap = test_leftist_heap_sample(0xf2d8, 0xa32a);
+    heap = test_leftist_heap_sample(0xf2d8, 0xa2a);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -160,10 +160,10 @@ performance_test_leftist_heap_remove_min(uint32 count)
 static inline void
 performance_test_leftist_heap_remove_min_and_destroy(uint32 count)
 {
-    struct leftist_heap *heap;
-    struct leftist_heap *tmp;
+    s_leftist_heap_t *tmp;
+    s_leftist_heap_t *heap;
 
-    heap = test_leftist_heap_sample(0xf2d8, 0xa32a);
+    heap = test_leftist_heap_sample(0xf2d8, 0x32a);
 
     PERFORMANCE_TEST_CHECKPOINT;
 

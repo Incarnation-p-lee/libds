@@ -112,6 +112,7 @@ ptest_##name##_heap_depth(uint32 count)         \
                                                 \
     PERFORMANCE_TEST_ENDPOINT;                  \
                                                 \
+    HEAP_destroy(&heap);                        \
     PERFORMANCE_TEST_RESULT(name##_heap_depth); \
 }
 

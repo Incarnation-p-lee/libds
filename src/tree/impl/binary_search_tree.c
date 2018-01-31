@@ -404,7 +404,7 @@ binary_search_tree_insert_i(s_binary_search_tree_t *tree,
             iterator = &binary->left;
         } else if (inserted->nice > binary->nice) {
             iterator= &binary->right;
-        } else { /* the same nice, merge to avl node */
+        } else { /* the same nice, merge to one node */
             binary_search_tree_node_merge(binary, inserted);
             return binary;
         }

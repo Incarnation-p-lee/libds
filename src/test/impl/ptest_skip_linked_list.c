@@ -20,7 +20,6 @@ PT_LINKED_LIST_destroy(skip)
 PT_LINKED_LIST_length(skip)
 PT_LINKED_LIST_node_by_index(skip)
 PT_LINKED_LIST_iterate(skip)
-PT_LINKED_LIST_merge(skip)
 
 #undef LINKED_LIST
 #undef LINKED_LIST_next
@@ -150,5 +149,29 @@ ptest_skip_linked_list_remove(uint32 count)
 
     skip_linked_list_destroy(&list);
     PERFORMANCE_TEST_RESULT(skip_linked_list_remove);
+}
+
+static void
+ptest_skip_linked_list_merge(uint32 count)
+{
+    s_skip_linked_list_t *list;
+    s_skip_linked_list_t *head;
+
+    PERFORMANCE_TEST_BEGIN(skip_linked_list_merge);
+    PERFORMANCE_TEST_CHECKPOINT;
+
+    while (count--) {
+        head = test_skip_linked_list_sample(0xd);
+        list = test_skip_linked_list_sample(0xf);
+
+        skip_linked_list_merge(list, head);
+
+        skip_linked_list_destroy(&list);
+        skip_linked_list_destroy(&head);
+    }
+
+    PERFORMANCE_TEST_ENDPOINT;
+
+    PERFORMANCE_TEST_RESULT(skip_linked_list_merge);
 }
 

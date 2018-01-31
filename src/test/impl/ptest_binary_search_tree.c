@@ -34,6 +34,7 @@ ptest_binary_search_tree_initial(uint32 count)
 
     PERFORMANCE_TEST_ENDPOINT;
 
+    binary_search_tree_destroy(&tree);
     PERFORMANCE_TEST_RESULT(binary_search_tree_initial);
 }
 
@@ -64,7 +65,7 @@ ptest_binary_search_tree_find(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_find);
 
-    tree = test_binary_search_tree_sample(0x93915, 0x7282d);
+    tree = test_binary_search_tree_sample(0x3915, 0x28d);
     nice = binary_search_tree_nice(binary_search_tree_find_max(tree));
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -86,7 +87,7 @@ ptest_binary_search_tree_find_min(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_find_min);
 
-    tree = test_binary_search_tree_sample(0x93915, 0x7282d);
+    tree = test_binary_search_tree_sample(0x9915, 0x72d);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -107,7 +108,7 @@ ptest_binary_search_tree_find_max(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_find_max);
 
-    tree = test_binary_search_tree_sample(0x93915, 0x7282d);
+    tree = test_binary_search_tree_sample(0x93915, 0x72d);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -128,7 +129,7 @@ ptest_binary_search_tree_height(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_height);
 
-    tree = test_binary_search_tree_sample(0xa32, 0x12d);
+    tree = test_binary_search_tree_sample(0xa32, 0x62d);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -150,7 +151,7 @@ ptest_binary_search_tree_contains_p(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_contains_p);
 
-    tree = test_binary_search_tree_sample(0xf2a32, 0xae12d);
+    tree = test_binary_search_tree_sample(0xf32, 0x12d);
     tmp = binary_search_tree_find_max(tree);
 
     PERFORMANCE_TEST_CHECKPOINT;
@@ -175,7 +176,7 @@ ptest_binary_search_tree_insert(uint32 count)
 
     count = count >> 6;
     count = 0 == count ? 1000 : count;
-    tree = binary_search_tree_create(&count, 0);
+    tree = binary_search_tree_create(&count, count + 1);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
@@ -198,16 +199,17 @@ ptest_binary_search_tree_remove(uint32 count)
 
     PERFORMANCE_TEST_BEGIN(binary_search_tree_remove);
 
-    tree = test_binary_search_tree_sample(0xa3d3, 0x3f82);
+    tree = test_binary_search_tree_sample(0xa3d3, 0x3f2);
 
     PERFORMANCE_TEST_CHECKPOINT;
 
     while (count--) {
         tmp = binary_search_tree_find_max(tree);
         binary_search_tree_remove(&tree, tmp);
+        binary_search_tree_destroy(&tmp);
 
         if (!tree) {
-            tree = test_binary_search_tree_sample(0xa3d3, 0x3f82);
+            tree = test_binary_search_tree_sample(0xa33, 0x382);
         }
     }
 
