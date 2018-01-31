@@ -90,7 +90,7 @@ bool
 spin_locked_p(s_spin_lock_t *lock)
 {
     if (SPIN_LOCK_ILLEGAL_P(lock)) {
-        return false; // Should be true ?
+        return true;
     } else {
         return spin_locked_ip(lock);
     }

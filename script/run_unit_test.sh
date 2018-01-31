@@ -12,12 +12,12 @@ make clean && make RELEASE=1 COVERAGE=1
 lcov --directory . --capture $lcover --output-file performance_test.info
 
 ## copy *.gcno file to current ##
-gcno_list=`find src/ | grep -E "(gcno|gcda)$"`
-for gcno in ${gcno_list[@]}
-do
-    cp $gcno .
-done
+## gcno_list=`find src/ | grep -E "(gcno|gcda)$"`
+## for gcno in ${gcno_list[@]}
+## do
+##     cp $gcno .
+## done
 
-lcov --add-tracefile unit_test.info --add-tracefile performance_test.info --output-file coverage.info
-cp -v coverage.info /tmp/coverage.info
+## lcov --add-tracefile unit_test.info --add-tracefile performance_test.info --output-file coverage.info
+## cp -v coverage.info /tmp/coverage.info
 

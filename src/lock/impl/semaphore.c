@@ -221,7 +221,7 @@ bool
 semaphore_unavailable_p(s_semaphore_t *semaphore)
 {
     if (SEMAPHORE_ILLEGAL_P(semaphore)) {
-        return false;
+        return true;
     } else {
         return !semaphore_available_ip(semaphore);
     }
