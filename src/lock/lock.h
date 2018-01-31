@@ -14,6 +14,7 @@
 #define SEMAPHORE_SLEEP_QUEUE(s)       (s)->sleep_queue
 #define SEMAPHORE_ACT_NEW(s)           (&(s)->act_new)
 #define SEMAPHORE_ACT_OLD(s)           (&(s)->act_old)
+#define MUTEX_SEMAPHORE(m)             ((m)->semaphore)
 
 #if defined(DEBUG)
     #define SPIN_LOCK_LEGAL_P(s)       spin_lock_legal_ip(s)

@@ -697,6 +697,9 @@ extern void skip_linked_list_next_set(s_skip_linked_list_t *list, s_skip_linked_
 
 extern bool mutex_illegal_p(s_mutex_t *mutex);
 extern bool mutex_legal_p(s_mutex_t *mutex);
+extern bool mutex_lock_try(s_mutex_t *mutex);
+extern bool mutex_locked_p(s_mutex_t *mutex);
+extern bool mutex_unlocked_p(s_mutex_t *mutex);
 extern bool semaphore_available_p(s_semaphore_t *semaphore);
 extern bool semaphore_down_try(s_semaphore_t *semaphore);
 extern bool semaphore_illegal_p(s_semaphore_t *semaphore);

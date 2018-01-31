@@ -1931,6 +1931,59 @@ static const struct test_layer_table semaphore[] = {
     {NULL, NULL, {NULL, NULL},},
 };
 
+static const struct test_layer_table mutex[] = {
+    {
+        "create", NULL,
+        {
+            &utest_mutex_create,
+            &ptest_mutex_create,
+        },
+    },
+    {
+        "destroy", NULL,
+        {
+            &utest_mutex_destroy,
+            &ptest_mutex_destroy,
+        },
+    },
+    {
+        "lock_try", NULL,
+        {
+            &utest_mutex_lock_try,
+            &ptest_mutex_lock_try,
+        },
+    },
+    {
+        "lock", NULL,
+        {
+            &utest_mutex_lock,
+            &ptest_mutex_lock,
+        },
+    },
+    {
+        "unlock", NULL,
+        {
+            &utest_mutex_unlock,
+            &ptest_mutex_unlock,
+        },
+    },
+    {
+        "locked_p", NULL,
+        {
+            &utest_mutex_locked_p,
+            &ptest_mutex_locked_p,
+        },
+    },
+    {
+        "unlocked_p", NULL,
+        {
+            &utest_mutex_unlocked_p,
+            &ptest_mutex_unlocked_p,
+        },
+    },
+    {NULL, NULL, {NULL, NULL},},
+};
+
 /*-----------------------------------------------------------------*/
 /*-------------------------- END OF INTERFACE LAYER OF LAYER TABLE */
 /*-----------------------------------------------------------------*/
@@ -2011,6 +2064,7 @@ static const struct test_layer_table test_graph_implement[] = {
 static const struct test_layer_table test_lock_implement[] = {
     {"spin",      spin,              {NULL, NULL},},
     {"semaphore", semaphore,         {NULL, NULL},},
+    {"mutex",     mutex,             {NULL, NULL},},
     /* END POINT OF IMPLEMENT */
     {NULL,        NULL,              {NULL, NULL},},
 };
