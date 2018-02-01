@@ -1,5 +1,5 @@
 #!/bin/bash
 
-bash ./script/run_unit_test.sh
-bash ./script/run_performance_test.sh
+make clean && make COVERAGE=1
+./bin/ds.elf -l -u -p=1000 *.*.*
 

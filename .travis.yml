@@ -1,24 +1,17 @@
 language: c
 compiler:
   - gcc
-addons:
-  code_climate:
-    repo_token: e1f9e1cd7d84e24b8b15139e1feb931257cba1785307a8a326399bace5738d86
 compiler:
   - gcc
   - clang
 script: 
-  - ulimit -s unlimited
   - bash ./script/run_travis_ci_test.sh
 notifications:
   email:
     - incarnation.p.lee@outlook.com
 install:
-  - npm install codecov --save-dev
   - pip install --user cpp-coveralls
-  - wget https://github.com/linux-test-project/lcov/releases/download/v1.13/lcov-1.13.tar.gz
-  - tar zxf lcov-1.13.tar.gz && cd lcov-1.13 && sudo make install && cd -
 after_success:
   - echo '=== Code Coverage of codecov.io =====' && bash <(curl -s https://codecov.io/bash)
-  - echo '=== Code Coverage of coveralls =====' && coveralls --exclude src/test --gcov-options '\-lp'
+  - echo '=== Code Coverage of coveralls =====' && coveralls --gcov-options '\-lp'
 
