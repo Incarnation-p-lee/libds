@@ -10,7 +10,6 @@
 #define LINKED_LIST_length             skip_linked_list_length
 #define LINKED_LIST_node_by_index      skip_linked_list_node_by_index
 #define LINKED_LIST_iterate            skip_linked_list_iterate
-#define LINKED_LIST_merge              skip_linked_list_merge
 
 #include "../ptest_linked_list.h"
 
@@ -33,7 +32,6 @@ PT_LINKED_LIST_iterate(skip)
 #undef LINKED_LIST_length
 #undef LINKED_LIST_node_by_index
 #undef LINKED_LIST_iterate
-#undef LINKED_LIST_merge
 
 static void
 ptest_skip_linked_list_create_with_key(uint32 count)
@@ -164,7 +162,7 @@ ptest_skip_linked_list_merge(uint32 count)
         head = test_skip_linked_list_sample(0xd);
         list = test_skip_linked_list_sample(0xf);
 
-        skip_linked_list_merge(list, head);
+        list = skip_linked_list_merge(list, head);
 
         skip_linked_list_destroy(&list);
         skip_linked_list_destroy(&head);
