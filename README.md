@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=trunk)](https://travis-ci.org/Incarnation-p-lee/libds)
+[![Build Status](https://travis-ci.org/Incarnation-p-lee/libds.svg?branch=master)](https://travis-ci.org/Incarnation-p-lee/libds)
 
 [ ![Codeship Status for Incarnation-p-lee/libds](https://app.codeship.com/projects/2cba2150-2287-0134-4afd-4ef69db363d6/status?branch=master)](https://app.codeship.com/projects/161167)
 
-[![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/trunk/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
+[![codecov](https://codecov.io/gh/Incarnation-p-lee/libds/branch/master/graph/badge.svg)](https://codecov.io/gh/Incarnation-p-lee/libds)
 
 [![Coverage Status](https://coveralls.io/repos/github/Incarnation-p-lee/libds/badge.svg?branch=master)](https://coveralls.io/github/Incarnation-p-lee/libds?branch=master)
 
